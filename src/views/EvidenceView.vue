@@ -23,6 +23,8 @@ const areaLabels: Record<ProjectAreaKey, string> = {
   competition: 'Competition',
 }
 
+const areaEntries = Object.entries(areaLabels) as Array<[ProjectAreaKey, string]>
+
 const classificationLabels: Record<ProjectEvidence['classification'], string> = {
   fact: 'Fakt',
   customer_statement: 'Kundenaussage',
@@ -281,7 +283,7 @@ function saveProject() {
               <fieldset class="field field--full evidence-area-fieldset">
                 <legend>MEDDPICC-Bezug</legend>
                 <div class="evidence-area-grid">
-                  <label v-for="(label, area) in areaLabels" :key="area" class="evidence-area-option">
+                  <label v-for="[area, label] in areaEntries" :key="area" class="evidence-area-option">
                     <input
                       type="checkbox"
                       :checked="form.relatedAreas.includes(area)"
