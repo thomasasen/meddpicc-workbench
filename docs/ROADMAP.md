@@ -68,13 +68,15 @@ Acceptance Criteria:
 
 **Ziel:** bereichsübergreifende Objekte für alle MEDDPICC-Bereiche implementieren.
 
+**Aktueller Stand:** aktiv. Das projektweite Evidenzregister ist über PR #23 produktiv nutzbar. Als nächster Slice folgen Risiken und nächste Aktionen als gemeinsame, validierte Arbeitsobjekte.
+
 Deliverables:
 
 - Projektmetadaten
 - Evidenzregister ✅ *(zentrale Liste + Anlegen mit Klassifikation, Verifikation, Qualität, Quelle und MEDDPICC-Bezug)*
 - Referenzen
-- Risiken
-- nächste Aktionen
+- Risiken *(nächster Slice)*
+- nächste Aktionen *(nächster Slice)*
 - Historie *(Basis vorhanden; `evidence_added` wird beim Anlegen automatisch geschrieben)*
 - gemeinsames Statusmodell
 - Dashboard-Zusammenfassung
@@ -85,6 +87,8 @@ Acceptance Criteria:
 - Annahmen und Unbekanntes sind visuell und textlich von bestätigter Evidenz unterscheidbar ✅
 - Risiken/Aktionen verlinken auf MEDDPICC-Bereich oder Prozessschritt
 - Dashboard Findings sind auf Source Data zurückführbar
+
+Fortschritt und Handoff: `docs/PROGRESS.md`
 
 ## Phase 3 – MEDDPICC-Kernmodule
 
