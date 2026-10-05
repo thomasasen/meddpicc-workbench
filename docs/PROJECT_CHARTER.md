@@ -1,157 +1,163 @@
-# Project Charter
+# Projektauftrag
 
-## Working title
+## Arbeitstitel
 
 **MEDDPICC Workbench**
 
 ## Problem
 
-Complex B2B opportunities accumulate a large amount of qualification knowledge over time. Most CRM implementations capture only a compressed snapshot: a name for the Economic Buyer, a Champion field, a close date, a competitor, or a few notes.
+Komplexe B2B-Opportunities sammeln im Laufe eines Sales Cycles große Mengen an Qualifizierungswissen. Viele CRM-Implementierungen speichern davon nur eine stark komprimierte Momentaufnahme: einen Economic Buyer, einen Champion, ein Close Date, einen Wettbewerber oder wenige Notizen.
 
-That loses the information that matters most for rigorous qualification:
+Dabei gehen genau die Informationen verloren, die für belastbare Qualifizierung wichtig sind:
 
-- where a statement came from
-- whether it is a fact, customer statement, interpretation, or assumption
-- what is still unknown
-- which evidence supports a conclusion
-- what changed over time
-- which gap creates deal risk
-- what action should close that gap
-- how decision, paper, and implementation timelines interact
+- Woher stammt eine Aussage?
+- Ist sie Fakt, Kundenaussage, Interpretation oder Annahme?
+- Was ist noch unbekannt?
+- Welche Evidenz stützt eine Schlussfolgerung?
+- Was hat sich über die Zeit verändert?
+- Welches Gap erzeugt Deal-Risiko?
+- Welche Aktion schließt dieses Gap?
+- Wie greifen Decision Process, Paper Process und Implementierungszeitplan ineinander?
 
-At the same time, doing this well by hand creates repetitive administrative work.
+Gute Pflege per Hand erzeugt gleichzeitig viel repetitive administrative Arbeit.
 
 ## Vision
 
-Create a **local-first MEDDPICC workspace** that makes rigorous qualification practical enough to use continuously throughout a complex sales cycle.
+Eine **local-first MEDDPICC Workbench**, die rigorose Qualifizierung so praktikabel macht, dass sie während des gesamten komplexen Sales Cycles kontinuierlich genutzt werden kann.
 
-The application should take over mechanical work while leaving judgment with the seller.
+Die Anwendung übernimmt mechanische Arbeit. Die fachliche Beurteilung bleibt beim Seller.
 
-Examples of mechanical work:
+Beispiele für mechanische Arbeit:
 
-- calculate ROI, payback, and cost of delay
-- maintain a structured evidence register
-- map decision and paper-process steps
-- calculate backwards from a target go-live date
-- identify missing owners, dates, dependencies, and confirmations
-- maintain deterministic evidence/confidence scores
-- produce consistent deal-review outputs
-- preserve the history of qualification changes
+- ROI, Payback und Cost of Delay berechnen
+- strukturiertes Evidenzregister pflegen
+- Decision Process und Paper Process abbilden
+- rückwärts von einem Target Go-Live planen
+- fehlende Owner, Termine, Abhängigkeiten und Bestätigungen erkennen
+- deterministische Evidence-/Confidence-Bewertungen pflegen
+- konsistente Deal Reviews erzeugen
+- Entwicklung der Qualifizierung historisieren
 
-## Product promise
+## Produktversprechen
 
-Given a portable `.meddpicc` project file, the Workbench should let a seller reopen an opportunity at any time and immediately understand:
+Nach dem Öffnen einer portablen `.meddpicc`-Projektdatei soll ein Seller sofort verstehen:
 
-1. what is confirmed
-2. what is partial
-3. what is assumption
-4. what is unknown
-5. what is risky
-6. what should happen next
+1. was bestätigt ist
+2. was nur teilweise belegt ist
+3. was Annahme ist
+4. was unbekannt ist
+5. was riskant ist
+6. was als Nächstes passieren sollte
 
-## Primary users
+## Projektsprache
+
+Die Projektsprache ist Deutsch.
+
+MEDDPICC-Fachbegriffe wie `Economic Buyer`, `Decision Process`, `Paper Process`, `Champion` oder `Competition` bleiben im Original. Code und technische Identifier bleiben Englisch.
+
+## Primäre Nutzer
 
 ### Account Executive / Strategic Account Manager
 
-Needs a reliable working file for a complex opportunity without maintaining parallel spreadsheets and documents.
+Benötigt eine belastbare Arbeitsdatei für eine komplexe Opportunity, ohne parallele Tabellen und Dokumente pflegen zu müssen.
 
 ### Sales Manager
 
-Needs to inspect a deal based on evidence instead of seller optimism and identify the few gaps that matter most.
+Möchte einen Deal anhand Evidenz statt Seller-Optimismus prüfen und die wenigen wirklich kritischen Gaps erkennen.
 
-### Deal team
+### Deal Team
 
-Needs a shared, portable representation of qualification, process, value, risks, and next actions.
+Benötigt eine gemeinsame, portable Darstellung von Qualifizierung, Prozess, Value, Risiken und nächsten Aktionen.
 
-## Primary use cases
+## Primäre Use Cases
 
-### Open an existing opportunity
+### Bestehende Opportunity öffnen
 
-A user downloads a `.meddpicc` file from a CRM or shared location, opens it in the Workbench, updates the deal, and saves it again.
+Eine `.meddpicc`-Datei wird aus CRM oder Ablage geladen, in der Workbench bearbeitet und anschließend wieder gespeichert.
 
-### Inspect qualification
+### Qualifizierung prüfen
 
-The dashboard shows the status of each MEDDPICC element together with evidence quality, open gaps, and risk.
+Das Dashboard zeigt den Zustand jedes MEDDPICC-Elements zusammen mit Evidenzqualität, offenen Gaps und Risiken.
 
-### Prepare a deal review
+### Deal Review vorbereiten
 
-The Workbench generates a structured review from the current project state rather than requiring a separate presentation to be rebuilt manually.
+Die Workbench erzeugt einen strukturierten Deal Review direkt aus dem aktuellen Projektstand.
 
-### Maintain the business case
+### Business Case pflegen
 
-The seller updates assumptions or customer-confirmed values and receives deterministic recalculations of value, ROI, payback, and delay cost.
+Annahmen oder kundenseitig bestätigte Werte werden aktualisiert und Value, ROI, Payback und Cost of Delay deterministisch neu berechnet.
 
-### Protect the close date
+### Close Date schützen
 
-Decision Process, Paper Process, and Go-Live Plan are combined to expose impossible dates, missing steps, and dependencies.
+Decision Process, Paper Process und Go-Live-Planung werden kombiniert, um unrealistische Termine, fehlende Schritte und Abhängigkeiten sichtbar zu machen.
 
-## Product principles
+## Produktprinzipien
 
-### Evidence is a first-class object
+### Evidenz ist ein First-Class-Objekt
 
-A qualification statement without provenance is weaker than the same statement with a named source, date, context, and classification.
+Eine Qualifizierungsaussage ohne Provenienz ist schwächer als dieselbe Aussage mit Quelle, Datum, Kontext und Klassifikation.
 
-### Unknown is a valid state
+### Unbekannt ist ein gültiger Zustand
 
-The tool must never force a seller to invent data simply to complete a score.
+Das Tool darf niemals dazu zwingen, Daten zu erfinden, nur um einen Score zu vervollständigen.
 
-### Scoring must explain itself
+### Scoring muss erklärbar sein
 
-A score without the underlying evidence is not useful. Every derived status should be traceable to explicit project data and deterministic rules.
+Ein Score ohne zugrunde liegende Evidenz ist nicht hilfreich. Jeder abgeleitete Status muss auf konkrete Projektdaten und deterministische Regeln zurückführbar sein.
 
-### Calculations must be reproducible
+### Berechnungen müssen reproduzierbar sein
 
-Given the same project file, the same application version should produce the same calculated result.
+Gleiche Projektdatei und gleiche App-Version müssen zum gleichen berechneten Ergebnis führen.
 
-### Project files must remain portable
+### Projektdateien müssen portabel bleiben
 
-A project should not depend on one browser profile, one machine, or a proprietary backend.
+Ein Projekt darf nicht von Browserprofil, einzelner Maschine oder proprietärem Backend abhängen.
 
-### The tool is not a CRM
+### Das Tool ist kein CRM
 
-Account master data, email, activity capture, pipeline rollups, and contact management remain outside the core scope.
+Account-Stammdaten, E-Mail, Activity Capture, Pipeline Rollups und Contact Management liegen außerhalb des Kernscopes.
 
-## Success criteria for v1
+## Erfolgskriterien für v1
 
-A v1 release is successful when a user can:
+v1 ist erfolgreich, wenn ein Nutzer:
 
-- create a new project
-- open an existing `.meddpicc` file
-- validate and migrate its schema
-- maintain all MEDDPICC elements
-- attach evidence to qualification statements
-- maintain risks and next actions
-- calculate value / ROI / payback / cost of delay
-- build a decision process and paper process
-- create a go-live / critical-path plan
-- see a deal-health dashboard based on deterministic rules
-- export a usable deal review
-- save the complete project back into one portable file
-- perform all of the above without sending opportunity data to a backend
+- ein neues Projekt erstellen kann
+- eine vorhandene `.meddpicc`-Datei öffnen kann
+- Schema validieren und migrieren kann
+- alle MEDDPICC-Elemente pflegen kann
+- Evidenz mit Qualifizierungsaussagen verknüpfen kann
+- Risiken und nächste Aktionen pflegen kann
+- Value / ROI / Payback / Cost of Delay berechnen kann
+- Decision Process und Paper Process abbilden kann
+- Go-Live-/Critical-Path-Planung erstellen kann
+- ein Deal-Health-Dashboard auf Basis deterministischer Regeln nutzen kann
+- einen verwendbaren Deal Review exportieren kann
+- den vollständigen Projektstand wieder in einer portablen Datei speichern kann
+- all das ohne Übertragung von Opportunity-Daten an ein Backend tun kann
 
-## Non-goals for v1
+## Nichtziele für v1
 
-- AI-generated recommendations
-- automatic meeting transcription
-- automatic CRM synchronization
-- email/calendar integration
-- multi-user real-time collaboration
-- cloud-hosted project storage
-- enterprise identity management
-- embedded document archive
-- full pipeline management
+- AI-generierte Empfehlungen
+- automatische Meeting-Transkription
+- automatische CRM-Synchronisation
+- E-Mail-/Kalender-Integration
+- Multi-User-Echtzeit-Kollaboration
+- Cloud-Projektspeicher
+- Enterprise Identity Management
+- eingebettetes Dokumentarchiv
+- vollständiges Pipeline Management
 
-These may be evaluated later, but none should be allowed to complicate the v1 architecture.
+Diese Themen können später bewertet werden, dürfen aber v1 nicht architektonisch belasten.
 
-## Quality bar
+## Qualitätsstandard
 
-The application should be safe to use with real opportunity data in the following limited sense:
+Die Anwendung soll für reale Opportunity-Daten in folgendem begrenztem Sinn geeignet sein:
 
-- no deliberate runtime upload of project data
-- no analytics dependency that receives project content
-- clear distinction between persisted file data and temporary browser state
-- validation before opening or saving a project
-- deterministic calculations covered by tests
-- schema migration covered by tests
-- no silent data loss
-- explicit warning when an unsupported future schema is opened
+- kein absichtlicher Runtime-Upload von Projektdaten
+- keine Analytics-Abhängigkeit mit Zugriff auf Projektinhalte
+- klare Trennung von gespeicherter Datei und temporärem Browser-State
+- Validierung vor Öffnen und Speichern
+- Tests für deterministische Berechnungen
+- Tests für Schema-Migration
+- kein stiller Datenverlust
+- klare Warnung bei nicht unterstützter zukünftiger Schema-Version
