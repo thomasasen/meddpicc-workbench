@@ -147,13 +147,7 @@
     },
     "qualificationStatus": {
       "type": "string",
-      "enum": [
-        "confirmed",
-        "partial",
-        "assumption",
-        "unknown",
-        "risk"
-      ]
+      "enum": ["confirmed", "partial", "assumption", "unknown", "risk"]
     },
     "confidence": {
       "type": "integer",
@@ -177,13 +171,7 @@
     },
     "qualificationBase": {
       "type": "object",
-      "required": [
-        "status",
-        "confidence",
-        "summary",
-        "evidenceIds",
-        "gaps"
-      ],
+      "required": ["status", "confidence", "summary", "evidenceIds", "gaps"],
       "properties": {
         "status": {
           "$ref": "#/$defs/qualificationStatus"
@@ -230,17 +218,11 @@
           "maxLength": 300
         },
         "opportunityId": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 200
         },
         "owner": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 200
         },
         "currency": {
@@ -248,10 +230,7 @@
           "pattern": "^[A-Z]{3}$"
         },
         "dealValue": {
-          "type": [
-            "number",
-            "null"
-          ],
+          "type": ["number", "null"],
           "minimum": 0
         },
         "targetCloseDate": {
@@ -262,13 +241,7 @@
         },
         "forecastCategory": {
           "type": "string",
-          "enum": [
-            "pipeline",
-            "best-case",
-            "commit",
-            "closed",
-            "unknown"
-          ]
+          "enum": ["pipeline", "best-case", "commit", "closed", "unknown"]
         },
         "notes": {
           "type": "string",
@@ -330,36 +303,19 @@
         },
         "influence": {
           "type": "string",
-          "enum": [
-            "unknown",
-            "low",
-            "medium",
-            "high"
-          ]
+          "enum": ["unknown", "low", "medium", "high"]
         },
         "dealPosition": {
           "type": "string",
-          "enum": [
-            "unknown",
-            "supporter",
-            "neutral",
-            "detractor"
-          ]
+          "enum": ["unknown", "supporter", "neutral", "detractor"]
         },
         "personalWin": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 2000
         },
         "status": {
           "type": "string",
-          "enum": [
-            "unknown",
-            "active",
-            "inactive"
-          ]
+          "enum": ["unknown", "active", "inactive"]
         },
         "notes": {
           "type": "string",
@@ -370,17 +326,10 @@
     },
     "metricValue": {
       "type": "object",
-      "required": [
-        "value",
-        "unit",
-        "period"
-      ],
+      "required": ["value", "unit", "period"],
       "properties": {
         "value": {
-          "type": [
-            "number",
-            "null"
-          ]
+          "type": ["number", "null"]
         },
         "unit": {
           "type": "string",
@@ -388,10 +337,7 @@
           "maxLength": 200
         },
         "period": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 200
         }
       },
@@ -399,16 +345,7 @@
     },
     "metric": {
       "type": "object",
-      "required": [
-        "id",
-        "name",
-        "current",
-        "target",
-        "economicImpact",
-        "evidenceIds",
-        "customerConfirmed",
-        "notes"
-      ],
+      "required": ["id", "name", "current", "target", "economicImpact", "evidenceIds", "customerConfirmed", "notes"],
       "properties": {
         "id": {
           "$ref": "#/$defs/id"
@@ -426,39 +363,21 @@
         },
         "economicImpact": {
           "type": "object",
-          "required": [
-            "value",
-            "currency",
-            "period",
-            "derivation",
-            "assumptions"
-          ],
+          "required": ["value", "currency", "period", "derivation", "assumptions"],
           "properties": {
             "value": {
-              "type": [
-                "number",
-                "null"
-              ]
+              "type": ["number", "null"]
             },
             "currency": {
-              "type": [
-                "string",
-                "null"
-              ],
+              "type": ["string", "null"],
               "pattern": "^[A-Z]{3}$"
             },
             "period": {
-              "type": [
-                "string",
-                "null"
-              ],
+              "type": ["string", "null"],
               "maxLength": 200
             },
             "derivation": {
-              "type": [
-                "string",
-                "null"
-              ],
+              "type": ["string", "null"],
               "maxLength": 5000
             },
             "assumptions": {
@@ -491,9 +410,7 @@
         },
         {
           "type": "object",
-          "required": [
-            "metrics"
-          ],
+          "required": ["metrics"],
           "properties": {
             "metrics": {
               "type": "array",
@@ -524,39 +441,22 @@
         },
         "identityStatus": {
           "type": "string",
-          "enum": [
-            "assumed",
-            "confirmed"
-          ]
+          "enum": ["assumed", "confirmed"]
         },
         "authorityStatus": {
           "type": "string",
-          "enum": [
-            "unknown",
-            "reported",
-            "confirmed"
-          ]
+          "enum": ["unknown", "reported", "confirmed"]
         },
         "directAccess": {
           "type": "boolean"
         },
         "engagementStatus": {
           "type": "string",
-          "enum": [
-            "none",
-            "indirect",
-            "direct"
-          ]
+          "enum": ["none", "indirect", "direct"]
         },
         "priorityStatus": {
           "type": "string",
-          "enum": [
-            "unknown",
-            "low",
-            "medium",
-            "high",
-            "confirmed"
-          ]
+          "enum": ["unknown", "low", "medium", "high", "confirmed"]
         },
         "decisionCriteria": {
           "type": "array",
@@ -582,9 +482,7 @@
         },
         {
           "type": "object",
-          "required": [
-            "candidates"
-          ],
+          "required": ["candidates"],
           "properties": {
             "candidates": {
               "type": "array",
@@ -598,15 +496,7 @@
     },
     "decisionCriterion": {
       "type": "object",
-      "required": [
-        "id",
-        "name",
-        "importance",
-        "category",
-        "ourPosition",
-        "evidenceIds",
-        "notes"
-      ],
+      "required": ["id", "name", "importance", "category", "ourPosition", "evidenceIds", "notes"],
       "properties": {
         "id": {
           "$ref": "#/$defs/id"
@@ -618,35 +508,15 @@
         },
         "importance": {
           "type": "string",
-          "enum": [
-            "unknown",
-            "low",
-            "medium",
-            "high",
-            "must-have"
-          ]
+          "enum": ["unknown", "low", "medium", "high", "must-have"]
         },
         "category": {
           "type": "string",
-          "enum": [
-            "capability",
-            "technical",
-            "business",
-            "value",
-            "commercial",
-            "risk",
-            "partner",
-            "other"
-          ]
+          "enum": ["capability", "technical", "business", "value", "commercial", "risk", "partner", "other"]
         },
         "ourPosition": {
           "type": "string",
-          "enum": [
-            "unknown",
-            "weak",
-            "medium",
-            "strong"
-          ]
+          "enum": ["unknown", "weak", "medium", "strong"]
         },
         "evidenceIds": {
           "$ref": "#/$defs/evidenceIdArray"
@@ -665,9 +535,7 @@
         },
         {
           "type": "object",
-          "required": [
-            "criteria"
-          ],
+          "required": ["criteria"],
           "properties": {
             "criteria": {
               "type": "array",
@@ -714,14 +582,7 @@
         },
         "status": {
           "type": "string",
-          "enum": [
-            "unknown",
-            "planned",
-            "confirmed",
-            "completed",
-            "blocked",
-            "skipped"
-          ]
+          "enum": ["unknown", "planned", "confirmed", "completed", "blocked", "skipped"]
         },
         "plannedDate": {
           "$ref": "#/$defs/nullableDate"
@@ -730,10 +591,7 @@
           "$ref": "#/$defs/nullableDate"
         },
         "durationBusinessDays": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "minimum": 0
         },
         "predecessorIds": {
@@ -750,10 +608,7 @@
           "$ref": "#/$defs/evidenceIdArray"
         },
         "parallelGroup": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 200
         },
         "notes": {
@@ -770,9 +625,7 @@
         },
         {
           "type": "object",
-          "required": [
-            "steps"
-          ],
+          "required": ["steps"],
           "properties": {
             "steps": {
               "type": "array",
@@ -786,15 +639,7 @@
     },
     "painItem": {
       "type": "object",
-      "required": [
-        "id",
-        "statement",
-        "businessImpact",
-        "consequenceOfInaction",
-        "priority",
-        "evidenceIds",
-        "notes"
-      ],
+      "required": ["id", "statement", "businessImpact", "consequenceOfInaction", "priority", "evidenceIds", "notes"],
       "properties": {
         "id": {
           "$ref": "#/$defs/id"
@@ -814,13 +659,7 @@
         },
         "priority": {
           "type": "string",
-          "enum": [
-            "unknown",
-            "low",
-            "medium",
-            "high",
-            "critical"
-          ]
+          "enum": ["unknown", "low", "medium", "high", "critical"]
         },
         "evidenceIds": {
           "$ref": "#/$defs/evidenceIdArray"
@@ -839,9 +678,7 @@
         },
         {
           "type": "object",
-          "required": [
-            "items"
-          ],
+          "required": ["items"],
           "properties": {
             "items": {
               "type": "array",
@@ -869,11 +706,7 @@
     },
     "championBehavior": {
       "type": "object",
-      "required": [
-        "type",
-        "evidenceIds",
-        "notes"
-      ],
+      "required": ["type", "evidenceIds", "notes"],
       "properties": {
         "type": {
           "$ref": "#/$defs/championBehaviorType"
@@ -890,41 +723,22 @@
     },
     "championPerson": {
       "type": "object",
-      "required": [
-        "stakeholderId",
-        "status",
-        "personalWin",
-        "influence",
-        "behaviors",
-        "notes"
-      ],
+      "required": ["stakeholderId", "status", "personalWin", "influence", "behaviors", "notes"],
       "properties": {
         "stakeholderId": {
           "$ref": "#/$defs/id"
         },
         "status": {
           "type": "string",
-          "enum": [
-            "candidate",
-            "confirmed",
-            "disqualified"
-          ]
+          "enum": ["candidate", "confirmed", "disqualified"]
         },
         "personalWin": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 2000
         },
         "influence": {
           "type": "string",
-          "enum": [
-            "unknown",
-            "low",
-            "medium",
-            "high"
-          ]
+          "enum": ["unknown", "low", "medium", "high"]
         },
         "behaviors": {
           "type": "array",
@@ -946,9 +760,7 @@
         },
         {
           "type": "object",
-          "required": [
-            "people"
-          ],
+          "required": ["people"],
           "properties": {
             "people": {
               "type": "array",
@@ -962,14 +774,7 @@
     },
     "competitionAlternative": {
       "type": "object",
-      "required": [
-        "id",
-        "name",
-        "type",
-        "status",
-        "evidenceIds",
-        "notes"
-      ],
+      "required": ["id", "name", "type", "status", "evidenceIds", "notes"],
       "properties": {
         "id": {
           "$ref": "#/$defs/id"
@@ -981,15 +786,7 @@
         },
         "type": {
           "type": "string",
-          "enum": [
-            "direct_vendor",
-            "status_quo",
-            "internal_build",
-            "budget_shift",
-            "do_nothing",
-            "unknown",
-            "other"
-          ]
+          "enum": ["direct_vendor", "status_quo", "internal_build", "budget_shift", "do_nothing", "unknown", "other"]
         },
         "status": {
           "$ref": "#/$defs/qualificationStatus"
@@ -1011,9 +808,7 @@
         },
         {
           "type": "object",
-          "required": [
-            "knownAlternatives"
-          ],
+          "required": ["knownAlternatives"],
           "properties": {
             "knownAlternatives": {
               "type": "array",
@@ -1086,23 +881,11 @@
         },
         "classification": {
           "type": "string",
-          "enum": [
-            "fact",
-            "customer_statement",
-            "seller_interpretation",
-            "assumption",
-            "confirmed_evidence",
-            "unknown"
-          ]
+          "enum": ["fact", "customer_statement", "seller_interpretation", "assumption", "confirmed_evidence", "unknown"]
         },
         "quality": {
           "type": "string",
-          "enum": [
-            "unknown",
-            "low",
-            "medium",
-            "high"
-          ]
+          "enum": ["unknown", "low", "medium", "high"]
         },
         "statement": {
           "type": "string",
@@ -1116,10 +899,7 @@
           "$ref": "#/$defs/nullableDate"
         },
         "context": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 2000
         },
         "referenceId": {
@@ -1127,13 +907,7 @@
         },
         "verification": {
           "type": "string",
-          "enum": [
-            "unconfirmed",
-            "single_source",
-            "corroborated",
-            "confirmed",
-            "observed"
-          ]
+          "enum": ["unconfirmed", "single_source", "corroborated", "confirmed", "observed"]
         },
         "relatedAreas": {
           "type": "array",
@@ -1174,21 +948,11 @@
         },
         "severity": {
           "type": "string",
-          "enum": [
-            "low",
-            "medium",
-            "high",
-            "critical"
-          ]
+          "enum": ["low", "medium", "high", "critical"]
         },
         "status": {
           "type": "string",
-          "enum": [
-            "open",
-            "mitigating",
-            "closed",
-            "accepted"
-          ]
+          "enum": ["open", "mitigating", "closed", "accepted"]
         },
         "relatedArea": {
           "$ref": "#/$defs/projectArea"
@@ -1205,17 +969,11 @@
           "maxLength": 5000
         },
         "mitigation": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 5000
         },
         "owner": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 300
         },
         "dueDate": {
@@ -1252,17 +1010,10 @@
         },
         "status": {
           "type": "string",
-          "enum": [
-            "open",
-            "completed",
-            "cancelled"
-          ]
+          "enum": ["open", "completed", "cancelled"]
         },
         "owner": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 300
         },
         "dueDate": {
@@ -1275,10 +1026,7 @@
           "$ref": "#/$defs/nullableId"
         },
         "relatedGap": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 2000
         },
         "desiredEvidence": {
@@ -1304,53 +1052,32 @@
       ],
       "properties": {
         "affectedSalesEmployees": {
-          "type": [
-            "number",
-            "null"
-          ],
+          "type": ["number", "null"],
           "minimum": 0
         },
         "hoursLostPerEmployeePerWeek": {
-          "type": [
-            "number",
-            "null"
-          ],
+          "type": ["number", "null"],
           "minimum": 0
         },
         "workingWeeksPerYear": {
-          "type": [
-            "number",
-            "null"
-          ],
+          "type": ["number", "null"],
           "minimum": 0
         },
         "loadedHourlyCost": {
-          "type": [
-            "number",
-            "null"
-          ],
+          "type": ["number", "null"],
           "minimum": 0
         },
         "expectedEfficiencyImprovementPercent": {
-          "type": [
-            "number",
-            "null"
-          ],
+          "type": ["number", "null"],
           "minimum": 0,
           "maximum": 100
         },
         "oneTimeInvestment": {
-          "type": [
-            "number",
-            "null"
-          ],
+          "type": ["number", "null"],
           "minimum": 0
         },
         "annualRecurringCost": {
-          "type": [
-            "number",
-            "null"
-          ],
+          "type": ["number", "null"],
           "minimum": 0
         }
       },
@@ -1361,14 +1088,7 @@
       "properties": {
         "businessCase": {
           "type": "object",
-          "required": [
-            "currency",
-            "inputs",
-            "evidenceIds",
-            "assumptions",
-            "customerConfirmed",
-            "notes"
-          ],
+          "required": ["currency", "inputs", "evidenceIds", "assumptions", "customerConfirmed", "notes"],
           "properties": {
             "currency": {
               "type": "string",
@@ -1402,28 +1122,17 @@
     },
     "planning": {
       "type": "object",
-      "required": [
-        "targetGoLiveDate",
-        "implementation",
-        "notes"
-      ],
+      "required": ["targetGoLiveDate", "implementation", "notes"],
       "properties": {
         "targetGoLiveDate": {
           "$ref": "#/$defs/nullableDate"
         },
         "implementation": {
           "type": "object",
-          "required": [
-            "estimatedBusinessDays",
-            "assumption",
-            "evidenceIds"
-          ],
+          "required": ["estimatedBusinessDays", "assumption", "evidenceIds"],
           "properties": {
             "estimatedBusinessDays": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": ["integer", "null"],
               "minimum": 0
             },
             "assumption": {
@@ -1444,30 +1153,14 @@
     },
     "reference": {
       "type": "object",
-      "required": [
-        "id",
-        "type",
-        "title",
-        "date",
-        "externalId",
-        "url",
-        "notes"
-      ],
+      "required": ["id", "type", "title", "date", "externalId", "url", "notes"],
       "properties": {
         "id": {
           "$ref": "#/$defs/id"
         },
         "type": {
           "type": "string",
-          "enum": [
-            "meeting",
-            "crm",
-            "document",
-            "email",
-            "rfp",
-            "contract",
-            "other"
-          ]
+          "enum": ["meeting", "crm", "document", "email", "rfp", "contract", "other"]
         },
         "title": {
           "type": "string",
@@ -1478,10 +1171,7 @@
           "$ref": "#/$defs/nullableDate"
         },
         "externalId": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 500
         },
         "url": {
@@ -1505,14 +1195,7 @@
     },
     "historyEvent": {
       "type": "object",
-      "required": [
-        "id",
-        "timestamp",
-        "type",
-        "area",
-        "entityId",
-        "summary"
-      ],
+      "required": ["id", "timestamp", "type", "area", "entityId", "summary"],
       "properties": {
         "id": {
           "$ref": "#/$defs/id"

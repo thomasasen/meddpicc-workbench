@@ -7,8 +7,7 @@ const schemaPath = 'schema/meddpicc-project.schema.json'
 const outputPath = 'src/domain/project.generated.ts'
 
 const output = await compileFromFile(schemaPath, {
-  bannerComment:
-    '/* Diese Datei wird aus schema/meddpicc-project.schema.json generiert. Nicht manuell bearbeiten. */',
+  bannerComment: '/* Diese Datei wird aus schema/meddpicc-project.schema.json generiert. Nicht manuell bearbeiten. */',
 })
 
 await mkdir(dirname(outputPath), { recursive: true })

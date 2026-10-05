@@ -30,9 +30,7 @@ describe('Domain Validation', () => {
     const result = validateProject(project)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(
-        result.issues.some((issue) => issue.code === 'missing_stakeholder_reference'),
-      ).toBe(true)
+      expect(result.issues.some((issue) => issue.code === 'missing_stakeholder_reference')).toBe(true)
     }
   })
 

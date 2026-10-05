@@ -1,12 +1,6 @@
 import type { MeddpiccProject } from './project'
 
-export const qualificationStatusKeys = [
-  'confirmed',
-  'partial',
-  'assumption',
-  'unknown',
-  'risk',
-] as const
+export const qualificationStatusKeys = ['confirmed', 'partial', 'assumption', 'unknown', 'risk'] as const
 
 export type QualificationStatusKey = (typeof qualificationStatusKeys)[number]
 

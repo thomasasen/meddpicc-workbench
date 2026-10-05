@@ -18,12 +18,10 @@ export type ProjectValidationIssue = {
 }
 
 export type ProjectParseResult =
-  | { success: true; value: unknown }
-  | { success: false; issues: ProjectValidationIssue[] }
+  { success: true; value: unknown } | { success: false; issues: ProjectValidationIssue[] }
 
 export type ProjectValidationResult =
-  | { success: true; project: MeddpiccProject }
-  | { success: false; issues: ProjectValidationIssue[] }
+  { success: true; project: MeddpiccProject } | { success: false; issues: ProjectValidationIssue[] }
 
 const ajv = new Ajv2020({
   allErrors: true,

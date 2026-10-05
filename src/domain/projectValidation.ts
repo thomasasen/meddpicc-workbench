@@ -1,7 +1,4 @@
-import {
-  projectAreaKeys,
-  type MeddpiccProject,
-} from './project'
+import { projectAreaKeys, type MeddpiccProject } from './project'
 
 export type DomainValidationIssue = {
   code: string
@@ -62,13 +59,7 @@ function validateProcess(
       })
     }
 
-    addMissingReferences(
-      issues,
-      step.predecessorIds,
-      stepIds,
-      `${stepPath}/predecessorIds`,
-      'Vorgänger-Step-ID',
-    )
+    addMissingReferences(issues, step.predecessorIds, stepIds, `${stepPath}/predecessorIds`, 'Vorgänger-Step-ID')
     validateEvidenceCarrier(issues, step, evidenceIds, stepPath)
   }
 
@@ -162,12 +153,7 @@ export function validateProjectDomain(project: MeddpiccProject): DomainValidatio
   }
 
   for (const area of projectAreaKeys) {
-    validateEvidenceCarrier(
-      issues,
-      project.meddpicc[area] as EvidenceCarrier,
-      evidenceIds,
-      `/meddpicc/${area}`,
-    )
+    validateEvidenceCarrier(issues, project.meddpicc[area] as EvidenceCarrier, evidenceIds, `/meddpicc/${area}`)
   }
 
   project.meddpicc.metrics.metrics.forEach((metric, index) =>
@@ -182,21 +168,11 @@ export function validateProjectDomain(project: MeddpiccProject): DomainValidatio
         message: `Stakeholder-ID "${candidate.stakeholderId}" existiert nicht.`,
       })
     }
-    validateEvidenceCarrier(
-      issues,
-      candidate,
-      evidenceIds,
-      `/meddpicc/economicBuyer/candidates/${index}`,
-    )
+    validateEvidenceCarrier(issues, candidate, evidenceIds, `/meddpicc/economicBuyer/candidates/${index}`)
   })
 
   project.meddpicc.decisionCriteria.criteria.forEach((criterion, index) =>
-    validateEvidenceCarrier(
-      issues,
-      criterion,
-      evidenceIds,
-      `/meddpicc/decisionCriteria/criteria/${index}`,
-    ),
+    validateEvidenceCarrier(issues, criterion, evidenceIds, `/meddpicc/decisionCriteria/criteria/${index}`),
   )
 
   validateProcess(
@@ -206,13 +182,7 @@ export function validateProjectDomain(project: MeddpiccProject): DomainValidatio
     evidenceIds,
     '/meddpicc/decisionProcess',
   )
-  validateProcess(
-    issues,
-    project.meddpicc.paperProcess.steps,
-    stakeholderIds,
-    evidenceIds,
-    '/meddpicc/paperProcess',
-  )
+  validateProcess(issues, project.meddpicc.paperProcess.steps, stakeholderIds, evidenceIds, '/meddpicc/paperProcess')
 
   project.meddpicc.pain.items.forEach((pain, index) =>
     validateEvidenceCarrier(issues, pain, evidenceIds, `/meddpicc/pain/items/${index}`),
@@ -238,12 +208,7 @@ export function validateProjectDomain(project: MeddpiccProject): DomainValidatio
   })
 
   project.meddpicc.competition.knownAlternatives.forEach((alternative, index) =>
-    validateEvidenceCarrier(
-      issues,
-      alternative,
-      evidenceIds,
-      `/meddpicc/competition/knownAlternatives/${index}`,
-    ),
+    validateEvidenceCarrier(issues, alternative, evidenceIds, `/meddpicc/competition/knownAlternatives/${index}`),
   )
 
   project.evidence.forEach((evidence, index) => {
@@ -286,20 +251,10 @@ export function validateProjectDomain(project: MeddpiccProject): DomainValidatio
   })
 
   if (project.calculators.businessCase) {
-    validateEvidenceCarrier(
-      issues,
-      project.calculators.businessCase,
-      evidenceIds,
-      '/calculators/businessCase',
-    )
+    validateEvidenceCarrier(issues, project.calculators.businessCase, evidenceIds, '/calculators/businessCase')
   }
 
-  validateEvidenceCarrier(
-    issues,
-    project.planning.implementation,
-    evidenceIds,
-    '/planning/implementation',
-  )
+  validateEvidenceCarrier(issues, project.planning.implementation, evidenceIds, '/planning/implementation')
 
   project.history.forEach((event, index) => {
     if (event.entityId && !seen.has(event.entityId)) {

@@ -3,12 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import { defaultProject } from '../data/defaultProject'
 import { projectAreaKeys } from './project'
-import {
-  CURRENT_SCHEMA_VERSION,
-  loadProject,
-  serializeProject,
-  validateProject,
-} from './projectSchema'
+import { CURRENT_SCHEMA_VERSION, loadProject, serializeProject, validateProject } from './projectSchema'
 import { qualificationStatusKeys } from './qualificationStatus'
 
 function cloneProject() {
