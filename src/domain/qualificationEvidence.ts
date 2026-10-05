@@ -10,6 +10,13 @@ export type QualificationEvidenceTargetInfo = QualificationEvidenceTarget & {
   evidenceIds: string[]
 }
 
+export type QualificationEvidenceLinkInfo = {
+  area: ProjectAreaKey
+  label: string
+  editable: boolean
+  target?: QualificationEvidenceTarget
+}
+
 export type QualificationEvidenceTargetGroup = {
   area: ProjectAreaKey
   label: string
@@ -26,6 +33,21 @@ export const qualificationAreaLabels: Record<ProjectAreaKey, string> = {
   pain: 'Pain',
   champions: 'Champion',
   competition: 'Competition',
+}
+
+type ChampionBehaviorType =
+  MeddpiccProject['meddpicc']['champions']['people'][number]['behaviors'][number]['type']
+
+const championBehaviorLabels: Record<ChampionBehaviorType, string> = {
+  provided_internal_information: 'Interne Informationen geliefert',
+  created_access: 'Zugang hergestellt',
+  sold_internally: 'Intern verkauft',
+  shared_bad_news: 'Schlechte Nachrichten geteilt',
+  supported_procurement: 'Procurement unterstützt',
+  enabled_economic_buyer_access: 'Economic-Buyer-Zugang ermöglicht',
+  confirmed_personal_win: 'Personal Win bestätigt',
+  challenged_internal_process: 'Internen Prozess herausgefordert',
+  other: 'Weiteres beobachtbares Champion-Verhalten',
 }
 
 type EvidenceCarrier = {
@@ -117,6 +139,38 @@ export function qualificationTargetsForEvidence(
       label: carrier.label,
       evidenceIds: [...new Set(carrier.evidenceIds)],
     }))
+}
+
+export function qualificationEvidenceLinksForEvidence(
+  project: MeddpiccProject,
+  evidenceId: string,
+): QualificationEvidenceLinkInfo[] {
+  const stableLinks = qualificationTargetsForEvidence(project, evidenceId).map((target) => ({
+    area: target.area,
+    label: target.label,
+    editable: true,
+    target: {
+      area: target.area,
+      entityId: target.entityId,
+    },
+  }))
+
+  const championLinks = project.meddpicc.champions.people.flatMap((person) => {
+    const stakeholder = stakeholderLabel(project, person.stakeholderId)
+
+    return person.behaviors
+      .filter((behavior) => behavior.evidenceIds.includes(evidenceId))
+      .map((behavior) => ({
+        area: 'champions' as const,
+        label: `${stakeholder} · ${championBehaviorLabels[behavior.type]}`,
+        editable: false,
+      }))
+  })
+
+  return [
+    ...stableLinks,
+    ...new Map(championLinks.map((link) => [`${link.area}::${link.label}`, link])).values(),
+  ]
 }
 
 export function evidenceForQualificationTarget(
