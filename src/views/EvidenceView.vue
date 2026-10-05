@@ -237,7 +237,9 @@ function saveProject() {
               <label class="field">
                 <span>Klassifikation</span>
                 <select v-model="form.classification">
-                  <option v-for="(label, value) in classificationLabels" :key="value" :value="value">{{ label }}</option>
+                  <option v-for="(label, value) in classificationLabels" :key="value" :value="value">
+                    {{ label }}
+                  </option>
                 </select>
               </label>
 
@@ -284,11 +286,7 @@ function saveProject() {
                 <legend>MEDDPICC-Bezug</legend>
                 <div class="evidence-area-grid">
                   <label v-for="[area, label] in areaEntries" :key="area" class="evidence-area-option">
-                    <input
-                      type="checkbox"
-                      :checked="form.relatedAreas.includes(area)"
-                      @change="toggleArea(area)"
-                    />
+                    <input type="checkbox" :checked="form.relatedAreas.includes(area)" @change="toggleArea(area)" />
                     <span>{{ label }}</span>
                   </label>
                 </div>

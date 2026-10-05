@@ -250,7 +250,6 @@ function saveProject() {
     ]
   }
 }
-
 </script>
 
 <template>

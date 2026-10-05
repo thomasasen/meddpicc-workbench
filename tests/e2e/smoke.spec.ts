@@ -15,7 +15,6 @@ test('lädt die Standard-Demo ohne offensichtlichen Runtime-Fehler', async ({ pa
   expect(runtimeErrors).toEqual([])
 })
 
-
 test('erfasst Evidenz im zentralen Register', async ({ page }) => {
   await page.goto('/meddpicc-workbench/')
 

@@ -6,7 +6,13 @@ import { createNewProject, type NewProjectInput, type NewProjectOptions } from '
 import type { MeddpiccProject, ProjectMeta, ProjectHistoryEvent } from '../domain/project'
 import { createEvidence, type EvidenceCreateOptions, type EvidenceDraft } from '../domain/evidence'
 import { prepareProjectForSave, suggestProjectFileName } from '../domain/projectPersistence'
-import { loadProject, serializeProject, validateProject, ProjectValidationError, type ProjectLoadResult } from '../domain/projectSchema'
+import {
+  loadProject,
+  serializeProject,
+  validateProject,
+  ProjectValidationError,
+  type ProjectLoadResult,
+} from '../domain/projectSchema'
 
 export type ProjectSource = 'demo' | 'file' | 'new'
 
