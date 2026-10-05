@@ -16,7 +16,7 @@ Der gemeinsame Qualifizierungs-Layer umfasst inzwischen:
 - sichtbare Source-Traceability für Risk-/Action-Findings im Dashboard
 - relevante History-Events für die bisher implementierten Workflows
 
-Der Source-/Reference-Slice wird über PR #27 qualitätsgesichert. Das bestehende Dateiformat bleibt bei `schemaVersion: 0.2.0`, weil die benötigten Reference-Felder und `evidence.referenceId` bereits Bestandteil des kanonischen Vertrags sind.
+Der Source-/Reference-Slice wurde mit PR #27 vollständig qualitätsgesichert und per Squash auf `main` gemergt. Der Merge-Commit ist `c5b2e1282db3603478301cffcfb00908bcc4a5a7`; der finale PR-Quality-Gate einschließlich Desktop-/Mobile-Playwright war grün, ebenso der anschließende schlanke `main`-Integritätscheck und die GitHub-Pages-Bereitstellung. Das bestehende Dateiformat bleibt bei `schemaVersion: 0.2.0`, weil die benötigten Reference-Felder und `evidence.referenceId` bereits Bestandteil des kanonischen Vertrags sind.
 
 ## Abgeschlossen
 
@@ -95,7 +95,7 @@ Unterstützt werden:
 
 ### Source-/Reference-Records und Source-Traceability
 
-PR #27 ergänzt den Source-Layer ohne Schemaänderung.
+PR #27 hat den Source-Layer ohne Schemaänderung abgeschlossen.
 
 Unterstützt werden:
 
@@ -130,7 +130,7 @@ Issue #4 bleibt offen und bildet diesen Fortschritt ab.
 
 ### Projektmetadaten + konkrete Evidence-to-Entity-Verknüpfung
 
-Nach dem Source-Layer sollte Phase 2 die verbleibenden gemeinsamen Grundlagen vor den acht MEDDPICC-Modulen schließen:
+Nach dem erfolgreich gemergten Source-Layer soll Phase 2 jetzt die verbleibenden gemeinsamen Grundlagen vor den acht MEDDPICC-Modulen schließen:
 
 1. Projektmetadaten vollständig editierbar machen.
 2. Eine belastbare, bidirektional nachvollziehbare Zuordnung zwischen Evidenz und konkreten Qualification-Entities ermöglichen.
