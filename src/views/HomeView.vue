@@ -8,13 +8,14 @@ import {
   FolderOpen,
   ListChecks,
   ListTodo,
+  Pencil,
   Save,
   TriangleAlert,
 } from '@lucide/vue'
 import { storeToRefs } from 'pinia'
 import { computed, nextTick, ref, type Component } from 'vue'
 
-import type { ProjectAction, ProjectAreaKey, ProjectRisk } from '../domain/project'
+import type { ProjectAction, ProjectAreaKey, ProjectMeta, ProjectRisk } from '../domain/project'
 import { loadProject, ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
 import { downloadTextFile } from '../services/browserFile'
 import { useProjectStore } from '../stores/projectStore'
@@ -40,6 +41,34 @@ const newProjectForm = ref({
   name: '',
   owner: '',
   currency: 'EUR',
+})
+
+type ProjectMetaForm = {
+  name: string
+  accountName: string
+  opportunityId: string
+  owner: string
+  currency: string
+  dealValue: string
+  targetCloseDate: string
+  targetGoLiveDate: string
+  forecastCategory: ProjectMeta['forecastCategory']
+  notes: string
+}
+
+const showProjectMetaForm = ref(false)
+const projectMetaIssues = ref<ProjectValidationIssue[]>([])
+const projectMetaForm = ref<ProjectMetaForm>({
+  name: '',
+  accountName: '',
+  opportunityId: '',
+  owner: '',
+  currency: 'EUR',
+  dealValue: '',
+  targetCloseDate: '',
+  targetGoLiveDate: '',
+  forecastCategory: 'unknown',
+  notes: '',
 })
 
 const projectStateLabel = computed(() => {
@@ -69,6 +98,7 @@ const forecastLabels: Record<string, string> = {
   'best-case': 'Best Case',
   commit: 'Commit',
   closed: 'Closed',
+  unknown: 'Unbekannt',
 }
 
 const statusIcons: Record<QualificationStatusKey, Component> = {
@@ -162,6 +192,73 @@ function forecastLabel(value: string): string {
   return forecastLabels[value] ?? value
 }
 
+function fillProjectMetaForm() {
+  const meta = project.value.project
+  projectMetaForm.value = {
+    name: meta.name,
+    accountName: meta.accountName,
+    opportunityId: meta.opportunityId ?? '',
+    owner: meta.owner ?? '',
+    currency: meta.currency,
+    dealValue: meta.dealValue === null ? '' : String(meta.dealValue),
+    targetCloseDate: meta.targetCloseDate ?? '',
+    targetGoLiveDate: meta.targetGoLiveDate ?? '',
+    forecastCategory: meta.forecastCategory,
+    notes: meta.notes,
+  }
+}
+
+function openProjectMetaForm() {
+  fillProjectMetaForm()
+  projectMetaIssues.value = []
+  statusMessage.value = ''
+  showProjectMetaForm.value = true
+}
+
+function cancelProjectMetaEdit() {
+  fillProjectMetaForm()
+  projectMetaIssues.value = []
+  showProjectMetaForm.value = false
+}
+
+function submitProjectMeta() {
+  projectMetaIssues.value = []
+  statusMessage.value = ''
+
+  try {
+    const rawDealValue = projectMetaForm.value.dealValue.trim()
+    projectStore.updateProjectMeta({
+      name: projectMetaForm.value.name.trim(),
+      accountName: projectMetaForm.value.accountName.trim(),
+      opportunityId: projectMetaForm.value.opportunityId.trim() || null,
+      owner: projectMetaForm.value.owner.trim() || null,
+      currency: projectMetaForm.value.currency.trim().toUpperCase(),
+      dealValue: rawDealValue === '' ? null : Number(rawDealValue),
+      targetCloseDate: projectMetaForm.value.targetCloseDate || null,
+      targetGoLiveDate: projectMetaForm.value.targetGoLiveDate || null,
+      forecastCategory: projectMetaForm.value.forecastCategory,
+      notes: projectMetaForm.value.notes,
+    })
+
+    showProjectMetaForm.value = false
+    statusMessage.value = 'Projektmetadaten wurden validiert aktualisiert. Der Stand ist noch nicht gespeichert.'
+  } catch (error) {
+    if (error instanceof ProjectValidationError) {
+      projectMetaIssues.value = error.issues
+      return
+    }
+
+    projectMetaIssues.value = [
+      {
+        source: 'domain',
+        code: 'project_meta_update_failed',
+        path: '/project',
+        message: 'Die Projektmetadaten konnten nicht aktualisiert werden.',
+      },
+    ]
+  }
+}
+
 function confirmDiscardUnsavedChanges(): boolean {
   if (!dirty.value) return true
 
@@ -169,6 +266,8 @@ function confirmDiscardUnsavedChanges(): boolean {
 }
 
 async function openNewProjectForm() {
+  showProjectMetaForm.value = false
+  projectMetaIssues.value = []
   importIssues.value = []
   statusMessage.value = ''
   showNewProjectForm.value = true
@@ -239,6 +338,8 @@ async function handleProjectFileChange(event: Event) {
 
     const migrated = result.migration !== null
     projectStore.replaceProject(result.project, 'file', file.name, migrated)
+    showProjectMetaForm.value = false
+    projectMetaIssues.value = []
     importIssues.value = []
     statusMessage.value = migrated
       ? `${file.name} wurde von Schema ${result.migration?.fromVersion} auf ${result.migration?.toVersion} migriert. Bitte speichern, um die Migration zu übernehmen.`
@@ -451,9 +552,15 @@ function saveProject() {
                 <h2 id="opportunity-title">{{ project.project.accountName }}</h2>
                 <p class="opportunity-name">{{ project.project.name }}</p>
               </div>
-              <span class="deal-value">
-                {{ formatCurrency(project.project.dealValue) }}
-              </span>
+              <div class="opportunity-header-actions">
+                <span class="deal-value">
+                  {{ formatCurrency(project.project.dealValue) }}
+                </span>
+                <button class="button button-secondary button-with-icon compact-button" type="button" @click="openProjectMetaForm">
+                  <Pencil :size="15" :stroke-width="2" aria-hidden="true" />
+                  <span>Projekt bearbeiten</span>
+                </button>
+              </div>
             </div>
 
             <dl class="opportunity-meta">
@@ -470,6 +577,92 @@ function saveProject() {
                 <dd>{{ formatDate(project.project.targetGoLiveDate) }}</dd>
               </div>
             </dl>
+
+            <section v-if="showProjectMetaForm" class="project-meta-editor" aria-labelledby="project-meta-title">
+              <form @submit.prevent="submitProjectMeta">
+                <div class="project-meta-editor-heading">
+                  <div>
+                    <p class="panel-kicker">Projektmetadaten</p>
+                    <h3 id="project-meta-title">Opportunity-Daten bearbeiten</h3>
+                  </div>
+                  <p>Änderungen werden erst nach vollständiger Schema- und Domain-Validierung übernommen.</p>
+                </div>
+
+                <div class="project-meta-grid">
+                  <label class="field">
+                    <span>Account</span>
+                    <input v-model="projectMetaForm.accountName" type="text" maxlength="300" autocomplete="organization" required />
+                  </label>
+                  <label class="field">
+                    <span>Projektname</span>
+                    <input v-model="projectMetaForm.name" type="text" maxlength="300" required />
+                  </label>
+                  <label class="field">
+                    <span>Opportunity ID <small>optional</small></span>
+                    <input v-model="projectMetaForm.opportunityId" type="text" maxlength="200" />
+                  </label>
+                  <label class="field">
+                    <span>Owner <small>optional</small></span>
+                    <input v-model="projectMetaForm.owner" type="text" maxlength="200" autocomplete="name" />
+                  </label>
+                  <label class="field">
+                    <span>Währung</span>
+                    <input
+                      v-model="projectMetaForm.currency"
+                      type="text"
+                      minlength="3"
+                      maxlength="3"
+                      pattern="[A-Za-z]{3}"
+                      autocomplete="off"
+                      required
+                    />
+                  </label>
+                  <label class="field">
+                    <span>Deal Value <small>optional</small></span>
+                    <input v-model="projectMetaForm.dealValue" type="number" min="0" step="any" inputmode="decimal" />
+                  </label>
+                  <label class="field">
+                    <span>Target Close <small>optional</small></span>
+                    <input v-model="projectMetaForm.targetCloseDate" type="date" />
+                  </label>
+                  <label class="field">
+                    <span>Target Go-Live <small>optional</small></span>
+                    <input v-model="projectMetaForm.targetGoLiveDate" type="date" />
+                  </label>
+                  <label class="field">
+                    <span>Forecast Category</span>
+                    <select v-model="projectMetaForm.forecastCategory">
+                      <option value="unknown">Unbekannt</option>
+                      <option value="pipeline">Pipeline</option>
+                      <option value="best-case">Best Case</option>
+                      <option value="commit">Commit</option>
+                      <option value="closed">Closed</option>
+                    </select>
+                  </label>
+                  <label class="field field--full">
+                    <span>Notizen</span>
+                    <textarea v-model="projectMetaForm.notes" maxlength="10000" rows="3" />
+                  </label>
+                </div>
+
+                <div class="form-actions project-meta-actions">
+                  <button class="button button-primary" type="submit">Änderungen speichern</button>
+                  <button class="button button-secondary" type="button" @click="cancelProjectMetaEdit">Abbrechen</button>
+                </div>
+              </form>
+
+              <div v-if="projectMetaIssues.length" class="project-message project-message--error" role="alert">
+                <TriangleAlert :size="19" :stroke-width="2" aria-hidden="true" />
+                <div>
+                  <strong>Projektmetadaten wurden nicht geändert.</strong>
+                  <ul>
+                    <li v-for="issue in projectMetaIssues" :key="`${issue.code}-${issue.path}-${issue.message}`">
+                      {{ issue.message }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </section>
 
             <div class="workbench-grid">
               <section class="workbench-block" aria-labelledby="gaps-title">
