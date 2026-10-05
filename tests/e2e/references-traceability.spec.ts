@@ -5,7 +5,7 @@ test('pflegt Source-Records und zeigt die Traceability bis ins Dashboard', async
   page.on('pageerror', (error) => runtimeErrors.push(error.message))
 
   await page.goto('/meddpicc-workbench/')
-  await page.getByRole('link', { name: 'Quellen' }).click()
+  await page.getByRole('link', { name: 'Quellen', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Quellen & Referenzen' })).toBeVisible()
 
   const referenceForm = page.getByRole('region', { name: 'Quelleneintrag pflegen' })
