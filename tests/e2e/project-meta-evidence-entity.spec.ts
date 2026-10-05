@@ -19,7 +19,9 @@ test('bearbeitet Projektmetadaten und verknüpft Evidence konkret mit einer Qual
   await metaEditor.getByRole('button', { name: 'Änderungen speichern', exact: true }).click()
 
   await expect(page.getByRole('heading', { name: 'Beispielwerke Industrie SE' })).toBeVisible()
-  await expect(page.locator('.project-toolbar')).toContainText('Beispielwerke Industrie SE · CRM & Service Transformation 2027')
+  await expect(page.locator('.project-toolbar')).toContainText(
+    'Beispielwerke Industrie SE · CRM & Service Transformation 2027',
+  )
   await expect(page.locator('.project-toolbar')).toContainText('Ungespeicherte Änderungen')
   await expect(page.getByText('15.08.2027', { exact: true })).toBeVisible()
   await expect(page.getByText('Commit', { exact: true })).toBeVisible()
@@ -48,7 +50,9 @@ test('bearbeitet Projektmetadaten und verknüpft Evidence konkret mit einer Qual
 
   const evidenceCard = page
     .getByRole('article')
-    .filter({ hasText: 'Die CFO bestätigt die Investitionspriorität und die wirtschaftliche Freigabe für das Vorhaben.' })
+    .filter({
+      hasText: 'Die CFO bestätigt die Investitionspriorität und die wirtschaftliche Freigabe für das Vorhaben.',
+    })
   await expect(evidenceCard).toBeVisible()
   await expect(evidenceCard).toContainText('Discovery Workshop Vertrieb')
   await expect(evidenceCard).toContainText('Dr. Julia Berger · CFO')
