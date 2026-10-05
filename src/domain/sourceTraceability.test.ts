@@ -18,9 +18,24 @@ describe('source traceability', () => {
     expect(risk).toBeDefined()
     if (!risk) return
 
+    project.evidence.push({
+      id: 'ev_unrelated_pp',
+      classification: 'customer_statement',
+      quality: 'medium',
+      statement: 'Allgemeine Paper-Process-Aussage ohne Entity-Link.',
+      sourceStakeholderId: 'st_procurement',
+      sourceDate: '2026-10-05',
+      context: null,
+      referenceId: 'ref_discovery_01',
+      verification: 'single_source',
+      relatedAreas: ['paperProcess'],
+      createdAt: '2026-10-05T20:00:00.000Z',
+    })
+
     const trace = traceRiskSources(project, risk)
 
     expect(trace.evidence.map((item) => item.id)).toContain('ev_pp_01')
+    expect(trace.evidence.map((item) => item.id)).not.toContain('ev_unrelated_pp')
     expect(trace.references.map((item) => item.id)).toContain('ref_procurement_call')
   })
 
