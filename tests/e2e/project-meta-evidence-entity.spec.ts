@@ -9,6 +9,12 @@ test('bearbeitet Projektmetadaten und verknüpft Evidence konkret mit einer Qual
   await page.getByRole('button', { name: 'Projekt bearbeiten', exact: true }).click()
   const metaEditor = page.getByRole('region', { name: 'Opportunity-Daten bearbeiten' })
   await expect(metaEditor).toBeVisible()
+  await metaEditor.getByLabel('Account').fill('Nicht speichern AG')
+  await metaEditor.getByRole('button', { name: 'Abbrechen', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Beispielwerke Industrie GmbH' })).toBeVisible()
+  await expect(page.locator('.project-toolbar')).toContainText('Demo · unverändert')
+
+  await page.getByRole('button', { name: 'Projekt bearbeiten', exact: true }).click()
   await metaEditor.getByLabel('Account').fill('Beispielwerke Industrie SE')
   await metaEditor.getByLabel('Opportunity ID').fill('DEMO-OPP-2027-QUALIFIED')
   await metaEditor.getByLabel('Owner').fill('Strategic AE')
