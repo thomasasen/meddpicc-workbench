@@ -7,6 +7,7 @@ import { RouterLink } from 'vue-router'
 import type { ProjectAreaKey, ProjectEvidence, ProjectReference } from '../domain/project'
 import {
   listQualificationEvidenceTargets,
+  qualificationAreaLabels,
   qualificationEvidenceLinksForEvidence,
   qualificationTargetsForEvidence,
   type QualificationEvidenceTarget,
@@ -18,17 +19,7 @@ import { useProjectStore } from '../stores/projectStore'
 const projectStore = useProjectStore()
 const { project, dirty, fileName } = storeToRefs(projectStore)
 
-const areaLabels: Record<ProjectAreaKey, string> = {
-  metrics: 'Metrics',
-  economicBuyer: 'Economic Buyer',
-  decisionCriteria: 'Decision Criteria',
-  decisionProcess: 'Decision Process',
-  paperProcess: 'Paper Process',
-  pain: 'Pain',
-  champions: 'Champion',
-  competition: 'Competition',
-}
-
+const areaLabels = qualificationAreaLabels
 const areaEntries = Object.entries(areaLabels) as Array<[ProjectAreaKey, string]>
 
 const classificationLabels: Record<ProjectEvidence['classification'], string> = {
