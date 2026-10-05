@@ -458,8 +458,8 @@ function saveProject() {
             <article
               v-for="evidence in sortedEvidence"
               :key="evidence.id"
-              class="evidence-card"
               :id="`evidence-${evidence.id}`"
+              class="evidence-card"
               :class="evidenceTone(evidence)"
             >
               <div class="evidence-card-meta">
