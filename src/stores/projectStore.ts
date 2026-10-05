@@ -5,6 +5,7 @@ import { defaultProject } from '../data/defaultProject'
 import { createNewProject, type NewProjectInput, type NewProjectOptions } from '../data/newProject'
 import type { MeddpiccProject, ProjectMeta, ProjectHistoryEvent, ProjectRisk, ProjectAction } from '../domain/project'
 import { createEvidence, type EvidenceCreateOptions, type EvidenceDraft } from '../domain/evidence'
+import { createReference, updateReference, type ReferenceCreateOptions, type ReferenceDraft } from '../domain/reference'
 import {
   createAction,
   createRisk,
@@ -124,6 +125,35 @@ export const useProjectStore = defineStore('project', () => {
       ...event,
     }
     nextProject.history.push(historyEvent)
+  }
+
+  function addReference(draft: ReferenceDraft, options: ReferenceCreateOptions = {}) {
+    const reference = createReference(draft, options)
+    const nextProject = structuredClone(toRaw(project.value))
+    nextProject.references.push(reference)
+    commitValidatedProject(nextProject)
+    return reference
+  }
+
+  function updateReferenceRecord(referenceId: string, draft: ReferenceDraft) {
+    const nextProject = structuredClone(toRaw(project.value))
+    const index = nextProject.references.findIndex((reference) => reference.id === referenceId)
+
+    if (index < 0) {
+      throw new ProjectValidationError('Die Quelle existiert nicht.', [
+        {
+          source: 'domain',
+          code: 'missing_reference_record',
+          path: '/references',
+          message: `Reference-ID "${referenceId}" existiert nicht.`,
+        },
+      ])
+    }
+
+    const updated = updateReference(nextProject.references[index], draft)
+    nextProject.references[index] = updated
+    commitValidatedProject(nextProject)
+    return updated
   }
 
   function addRisk(draft: RiskDraft, options: RiskMutationOptions = {}) {
@@ -339,6 +369,8 @@ export const useProjectStore = defineStore('project', () => {
     importProjectText,
     updateProjectMeta,
     addEvidence,
+    addReference,
+    updateReference: updateReferenceRecord,
     addRisk,
     updateRisk: updateRiskRecord,
     setRiskStatus,
