@@ -84,7 +84,9 @@ const openActions = computed(() =>
 
 const dateFormatter = new Intl.DateTimeFormat('de-DE')
 
-function formatCurrency(value: number): string {
+function formatCurrency(value: number | null): string {
+  if (value === null) return 'Noch offen'
+
   return new Intl.NumberFormat('de-DE', {
     style: 'currency',
     currency: project.value.project.currency,
