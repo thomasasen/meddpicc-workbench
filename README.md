@@ -163,6 +163,7 @@ Die visuelle Richtung ist bewusst **Enterprise Workbench** und nicht Marketing-S
 - minimale dekorative Bewegung
 - System-/lokale Fonts und gebündelte Assets
 - keine MEDDPICC-Statusbedeutung ausschließlich über Farbe
+- konsistente lokale SVG-Icons über Lucide
 
 Das Projekt nutzt [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) ausschließlich als **externe Entwicklungsreferenz**. Es ist kein Bestandteil der Produktions-Runtime.
 
@@ -208,11 +209,13 @@ Siehe die ausführliche [Roadmap](docs/ROADMAP.md).
 - [Architektur](docs/ARCHITECTURE.md)
 - [Spezifikation der Projektdatei](docs/PROJECT_FILE_SPEC.md)
 - [Design System](docs/DESIGN_SYSTEM.md)
+- [Icon System](docs/ICON_SYSTEM.md)
 - [UI/UX-Entwicklungsreferenz](docs/UI_UX_REFERENCE.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Beitragen](CONTRIBUTING.md)
 - [Security & Privacy](SECURITY.md)
 - [Agent-Anweisungen](AGENTS.md)
+- [Third-Party Notices](THIRD_PARTY_NOTICES.md)
 
 ## Methodik und Inhalte
 
