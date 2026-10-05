@@ -149,14 +149,17 @@ Business Rules dürfen nicht versteckt in Komponenten liegen.
 
 ### Öffnen
 
-1. Nutzer wählt `.meddpicc`-Datei.
-2. Datei als Text lesen.
-3. JSON parsen.
-4. Envelope und Schema-Version validieren.
-5. Falls unterstützt migrieren.
-6. Migriertes Projekt erneut validieren.
-7. In Application State laden.
-8. Projekt als unverändert markieren.
+Die Baseline ist implementiert:
+
+1. Nutzer wählt lokal eine `.meddpicc`-Datei.
+2. Datei wird ausschließlich im Browser als Text gelesen.
+3. JSON wird geparst.
+4. Envelope und Schema-Version werden validiert.
+5. Domain Validation prüft Referenzintegrität.
+6. Nur ein vollständig valides Projekt wird in den Application State übernommen.
+7. Das geladene Projekt wird als unverändert markiert.
+
+Sobald unterstützte ältere Versionen existieren, wird zwischen Versionsprüfung und finaler Validierung das dokumentierte Migrationsframework eingeschoben. Ungültige Dateien ersetzen den aktuellen State niemals.
 
 ### Bearbeiten
 
@@ -167,18 +170,34 @@ Business Rules dürfen nicht versteckt in Komponenten liegen.
 
 ### Speichern
 
-1. aktuellen Projektstand validieren
-2. Felder normalisieren
-3. `updatedAt` und `revision` aktualisieren
-4. stabiles JSON serialisieren
-5. `.meddpicc` speichern/downloaden
-6. erst nach erfolgreichem Save als clean markieren
+Die browserbasierte Baseline ist implementiert:
+
+1. aktuellen Projektstand als JSON-sicheren Snapshot erzeugen
+2. `updatedAt` aktualisieren und `revision` monoton erhöhen
+3. Snapshot erneut vollständig validieren
+4. stabiles, menschenlesbares JSON serialisieren
+5. als `.meddpicc`-Datei per Browser-Download ausgeben
+6. erst nach ausgelöstem Download den In-Memory-State auf diesen Save-Snapshot setzen und als clean markieren
+
+Direktes Überschreiben einer zuvor geöffneten Datei über die File System Access API ist bewusst nur ein optionales Progressive Enhancement.
 
 ## Browser File APIs
 
 Die Basis muss mit normalem File Upload + Download funktionieren.
 
 Die File System Access API darf als Progressive Enhancement für Browser mit direktem Reopen/Save dienen. Sie darf keine harte Abhängigkeit sein.
+
+## Unsaved-Changes- und Recovery-Baseline
+
+Der aktuelle Lifecycle führt einen expliziten Dirty State.
+
+- Ein neu erzeugtes oder über Store-Aktionen bearbeitetes Projekt ist `dirty`.
+- Vor dem Ersetzen eines dirty Projekts durch Neu/Öffnen muss der Nutzer den Datenverlust bestätigen.
+- Bei Verlassen/Neuladen der Seite wird über `beforeunload` eine Browser-Warnung ausgelöst.
+- Nach einem validierten Download wird der gespeicherte Snapshot als clean markiert.
+- Browser Storage wird aktuell **nicht** still als Recovery-Kopie verwendet.
+
+Ein späteres echtes Crash-Recovery darf zusätzliche lokale Persistenz verwenden, aber nur als klar gekennzeichnete Recovery-Ebene; die `.meddpicc`-Datei bleibt Source of Truth.
 
 ## Browser Persistence
 
