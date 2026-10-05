@@ -1,66 +1,92 @@
 ---
 name: meddpicc-ui-ux
-description: Apply the MEDDPICC Workbench design system and UI/UX quality rules when creating or reviewing screens, components, forms, tables, dashboards, charts, navigation, responsive behavior, or accessibility.
+description: Wendet das MEDDPICC-Workbench-Designsystem und die UI/UX-Qualitätsregeln bei Screens, Komponenten, Formularen, Tabellen, Dashboards, Charts, Navigation, Responsive-Verhalten und Accessibility an.
 ---
 
 # MEDDPICC Workbench UI/UX Skill
 
-Use this skill for every user-interface implementation or review in this repository.
+Diesen Skill bei jeder UI-Implementierung oder UI-Review in diesem Repository verwenden.
 
-## 1. Load project context
+## 1. Projektkontext laden
 
-Read:
+Lesen:
 
 - `docs/DESIGN_SYSTEM.md`
 - `docs/ARCHITECTURE.md`
 - `docs/PROJECT_CHARTER.md`
 
-If the task touches project-file content or evidence semantics, also read:
+Wenn die Aufgabe Projektdatei-Inhalte oder Evidenz-Semantik betrifft, zusätzlich:
 
 - `docs/PROJECT_FILE_SPEC.md`
 
-## 2. Apply the product design model
+## 2. Projektsprache beachten
 
-Treat the product as an **enterprise sales workbench**, not a marketing site.
+Die Projektsprache ist Deutsch.
 
-Primary design influences:
+Normale UI-Texte, Labels, Buttons, Hilfetexte, Fehlermeldungen und Beschreibungen sind deutsch.
+
+MEDDPICC-Fachbegriffe bleiben im Original, z. B.:
+
+- Metrics
+- Economic Buyer
+- Decision Criteria
+- Decision Process
+- Paper Process
+- Champion
+- Competition
+
+Technische Namen und Code-Identifier bleiben Englisch.
+
+Statuslabels im UI:
+
+- Bestätigt
+- Teilweise
+- Annahme
+- Unbekannt
+- Risiko
+
+## 3. Produktdesign anwenden
+
+Das Produkt ist eine **Enterprise Sales Workbench**, keine Marketing-Site.
+
+Primäre Design-Einflüsse:
 
 - Accessible & Ethical
 - Minimalism / Swiss-style hierarchy
 - Data-Dense Dashboard
 - Drill-Down Analytics
 
-The Workbench should feel calm, precise, professional, and operational.
+Die Workbench soll ruhig, präzise, professionell und operativ wirken.
 
-Do not use decorative glassmorphism, neon/AI gradients, oversized marketing hero sections, parallax, decorative motion, or visually impressive charts that do not improve a sales decision.
+Kein dekoratives Glassmorphism, keine Neon-/AI-Gradienten, keine übergroßen Marketing-Hero-Bereiche, kein Parallax, keine dekorative Bewegung und keine optisch beeindruckenden Charts ohne echten Nutzen für eine Sales-Entscheidung.
 
-## 3. Preserve MEDDPICC semantics
+## 4. MEDDPICC-Semantik schützen
 
-Qualification status must be understandable without color.
+Qualifizierungsstatus muss ohne Farbe verständlich sein.
 
-Use explicit labels/icons for:
+Explizite Labels/Icons verwenden für:
 
-- Confirmed
-- Partial
-- Assumption
-- Unknown
-- Risk
+- Bestätigt
+- Teilweise
+- Annahme
+- Unbekannt
+- Risiko
 
-Do not turn evidence confidence into win probability.
+Evidence Confidence niemals als Win Probability darstellen.
 
-Every derived warning or score should expose the underlying reason or input when practical.
+Jede abgeleitete Warnung oder Bewertung soll die zugrunde liegende Begründung bzw. Eingabe nachvollziehbar machen.
 
-## 4. Information architecture
+## 5. Informationsarchitektur
 
-Default hierarchy:
+Standardhierarchie:
 
 ```text
 Opportunity
-├── Overview
-│   ├── Deal health
-│   ├── Critical gaps
-│   ├── Risks
-│   └── Next actions
+├── Übersicht
+│   ├── Deal Health
+│   ├── Kritische Gaps
+│   ├── Risiken
+│   └── Nächste Aktionen
 ├── MEDDPICC
 │   ├── Metrics
 │   ├── Economic Buyer
@@ -70,149 +96,150 @@ Opportunity
 │   ├── Pain
 │   ├── Champion
 │   └── Competition
-├── Evidence
-├── Risks
-├── Actions
+├── Evidenz
+├── Risiken
+├── Aktionen
 ├── Tools
-└── History / Export
+└── Historie / Export
 ```
 
-Use overview → detail → evidence drill-down. Preserve context and make return navigation obvious.
+Overview → Detail → Evidenz als Drill-Down nutzen. Kontext erhalten und Rücknavigation eindeutig machen.
 
-## 5. Component rules
+## 6. Komponentenregeln
 
-### Forms
+### Formulare
 
-- visible labels
-- sensible grouping
-- clear required/optional distinction
-- validation next to the problem
-- do not rely on placeholder text as a label
-- preserve entered data on validation failure
-- destructive actions require clear confirmation
+- sichtbare Labels
+- sinnvolle fachliche Gruppierung
+- klare Unterscheidung zwischen Pflichtfeld und optional
+- Validierung direkt am Problem
+- Placeholder nicht als Ersatz für Label
+- Eingaben bei Validierungsfehlern erhalten
+- destruktive Aktionen eindeutig bestätigen
 
-### Tables
+### Tabellen
 
-- keep column meaning explicit
-- support horizontal overflow or responsive alternate layout instead of clipping
-- sticky headers only when they materially help
-- sorting must expose current sort state
-- long account/person/document names must wrap or have an accessible full-value path
-- provide useful empty states
+- Spaltenbedeutung eindeutig
+- horizontalen Overflow oder bewusstes Responsive-Layout statt Clipping
+- Sticky Header nur bei echtem Nutzen
+- Sortierzustand semantisch ausweisen
+- lange Account-, Personen- und Dokumentnamen umbrechen oder vollständig zugänglich machen
+- sinnvolle Empty States
 
-### Status and badges
+### Status und Badges
 
-- text/icon + color
-- never color alone
-- do not overuse pills/badges
-- keep status vocabulary stable across modules
+- Text/Icon + Farbe
+- niemals Farbe allein
+- Pills/Badges sparsam einsetzen
+- Statusvokabular über alle Module stabil halten
 
-### Dialogs and overlays
+### Dialoge und Overlays
 
-- trap and restore focus correctly
-- Escape closes when safe
-- do not obscure the user's current context unnecessarily
-- avoid nested dialogs
+- Fokus korrekt binden und anschließend zurückgeben
+- Escape schließt, wenn fachlich sicher
+- aktuellen Kontext nicht unnötig verdecken
+- verschachtelte Dialoge vermeiden
 
 ### Navigation
 
-- current section must be visually and programmatically identifiable
-- keyboard navigation must work
-- keep the loaded opportunity visible in the application chrome
+- aktuelle Sektion visuell und programmatisch erkennbar
+- Tastaturnavigation vollständig
+- geladene Opportunity im Application Chrome sichtbar halten
 
-## 6. Charts and visualizations
+## 7. Charts und Visualisierungen
 
-First ask: would a direct value, table, list, or timeline communicate this better?
+Zuerst prüfen: Kommuniziert ein Direktwert, eine Tabelle, Liste oder Timeline die Information besser?
 
-Preferred cases:
+Bevorzugte Fälle:
 
-- bullet/progress-style comparison for several evidence/confidence measures
-- simple bars for comparisons
-- timeline/process visualization for Decision/Paper/Go-Live dependencies
-- line chart only for meaningful time-series data
+- Bullet-/Progress-Vergleich für mehrere Evidence-/Confidence-Werte
+- einfache Balken für Vergleiche
+- Timeline/Prozessdarstellung für Decision-/Paper-/Go-Live-Abhängigkeiten
+- Line Chart nur bei echten Zeitreihen
 
-Avoid defaulting to:
+Nicht standardmäßig verwenden:
 
-- gauges
-- donut charts
-- radar/spider charts
-- 3D charts
-- decorative heat maps
+- Gauges
+- Donut Charts
+- Radar-/Spider-Charts
+- 3D-Charts
+- dekorative Heatmaps
 
-For material chart information, provide an accessible text/table alternative.
+Für wesentliche Chart-Informationen immer eine zugängliche Text-/Tabellenalternative anbieten.
 
-## 7. Accessibility review
+## 8. Accessibility Review
 
-Verify:
+Prüfen:
 
-- semantic HTML
-- keyboard reachability
-- visible focus
-- accessible names
-- correct state attributes
-- contrast
-- no color-only meaning
+- semantisches HTML
+- vollständige Tastaturbedienung
+- sichtbarer Fokus
+- zugängliche Namen
+- korrekte Zustandsattribute
+- Kontrast
+- keine Bedeutung nur durch Farbe
 - `prefers-reduced-motion`
-- no hover-only information
-- zoom/text scaling does not clip essential content
-- touch targets remain usable
-- errors are announced/associated with controls where appropriate
+- keine essenziellen Hover-only-Informationen
+- Zoom/Textskalierung ohne Clipping
+- ausreichend große Touch Targets
+- Fehler korrekt Controls zugeordnet/angekündigt
 
-## 8. Responsive review
+## 9. Responsive Review
 
-Check representative widths around:
+Ungefähr prüfen bei:
 
 - 375 px
 - 768 px
 - 1024 px
 - 1440 px
 
-Do not build a separate mobile product unless necessary. Prefer reflow:
+Kein separates Mobile-Produkt bauen, wenn Reflow genügt:
 
-- sidebar → drawer/compact navigation
-- multi-column panels → stacked sections
-- tables → scroll or deliberate responsive view
-- action bars → wrap without losing labels
+- Sidebar → Drawer/kompakte Navigation
+- mehrspaltige Panels → gestapelte Bereiche
+- Tabellen → Scroll oder bewusstes Responsive-Layout
+- Action Bars → umbrechen, ohne Labels zu verlieren
 
-## 9. Vue implementation review
+## 10. Vue-Implementierung
 
-Prefer:
+Bevorzugen:
 
 - Vue 3 Composition API
 - `<script setup lang="ts">`
-- computed values for derived UI
-- Pinia only for shared application state
-- route-level lazy loading where beneficial
-- semantic native elements
-- typed props and emits
-- test behavior, not component internals
+- `computed` für abgeleitete UI-Werte
+- Pinia nur für geteilten Application State
+- Route-Level Lazy Loading, wenn sinnvoll
+- semantische native Elemente
+- typisierte Props und Emits
+- Verhalten testen, nicht interne Implementierungsdetails
 
-## 10. External UI/UX reference
+## 11. Externe UI/UX-Referenz
 
-The project may consult:
+Das Projekt darf konsultieren:
 
 `nextlevelbuilder/ui-ux-pro-max-skill`
 
-Use the pinned reference and provenance documented in `docs/UI_UX_REFERENCE.md`.
+Den gepinnten Stand und die Provenienz aus `docs/UI_UX_REFERENCE.md` verwenden.
 
-Useful upstream areas include:
+Besonders nützliche Upstream-Bereiche:
 
-- Vue stack guidance
-- UX/accessibility rules
-- data-dense dashboard patterns
-- drill-down patterns
-- chart selection/accessibility guidance
+- Vue-Guidance
+- UX-/Accessibility-Regeln
+- Data-Dense-Dashboard-Muster
+- Drill-Down-Muster
+- Chart-Auswahl und Chart-Accessibility
 
-Do not copy the entire upstream skill into this repository. Do not add it as a production/runtime dependency.
+Nicht den gesamten Upstream-Skill kopieren und nicht als Produktions-/Runtime-Abhängigkeit hinzufügen.
 
-## Definition of done
+## Definition of Done
 
-A UI change is not done until it is:
+Eine UI-Änderung ist erst fertig, wenn sie:
 
-- consistent with `docs/DESIGN_SYSTEM.md`
-- keyboard-operable
-- responsive
-- explicit about MEDDPICC status semantics
-- free of unnecessary runtime network dependencies
-- readable with realistic dense B2B data
-- tested at least at the appropriate unit/component/browser level
+- `docs/DESIGN_SYSTEM.md` entspricht
+- per Tastatur bedienbar ist
+- responsive funktioniert
+- MEDDPICC-Statussemantik explizit darstellt
+- keine unnötigen Runtime-Netzwerkabhängigkeiten enthält
+- mit realistischen, dichten B2B-Daten lesbar bleibt
+- normale UI-Sprache auf Deutsch verwendet
+- auf geeigneter Unit-/Component-/Browser-Ebene getestet wurde
