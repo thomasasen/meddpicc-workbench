@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { projectAreaKeys } from '../domain/project'
 import { defaultProject } from './defaultProject'
 
 describe('defaultProject', () => {
@@ -10,7 +11,7 @@ describe('defaultProject', () => {
   })
 
   it('enthält alle acht MEDDPICC-Bereiche mit gültigem Evidenzgrad', () => {
-    const sections = Object.values(defaultProject.meddpicc)
+    const sections = projectAreaKeys.map((area) => defaultProject.meddpicc[area])
 
     expect(sections).toHaveLength(8)
 
