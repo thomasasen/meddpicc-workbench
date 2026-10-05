@@ -72,6 +72,42 @@ describe('projectStore', () => {
     expect(store.dirty).toBe(true)
   })
 
+  it('legt Evidenz atomar mit History-Eintrag an und markiert das Projekt dirty', () => {
+    const store = useProjectStore()
+    const evidenceCount = store.project.evidence.length
+    const historyCount = store.project.history.length
+
+    const evidence = store.addEvidence(
+      {
+        statement: 'Economic Buyer bestätigt Priorität im Steering.',
+        classification: 'confirmed_evidence',
+        quality: 'high',
+        verification: 'confirmed',
+        sourceStakeholderId: null,
+        sourceDate: '2026-10-05',
+        context: 'Steering Committee',
+        referenceId: null,
+        relatedAreas: ['economicBuyer'],
+      },
+      {
+        id: 'evidence_store_001',
+        now: new Date('2026-10-05T17:30:00.000Z'),
+      },
+    )
+
+    expect(store.project.evidence).toHaveLength(evidenceCount + 1)
+    expect(store.project.history).toHaveLength(historyCount + 1)
+    expect(store.project.evidence.at(-1)).toEqual(evidence)
+    expect(store.project.history.at(-1)).toMatchObject({
+      type: 'evidence_added',
+      area: 'economicBuyer',
+      entityId: 'evidence_store_001',
+    })
+    expect(store.dirty).toBe(true)
+
+    expect(() => serializeProject(store.project)).not.toThrow()
+  })
+
   it('setzt bei Bearbeitung dirty und erst nach bestätigtem Download wieder clean', () => {
     const store = useProjectStore()
 
