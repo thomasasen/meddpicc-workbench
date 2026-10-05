@@ -44,7 +44,7 @@ describe('qualification evidence', () => {
 
     const champions = groups.find((group) => group.area === 'champions')
     expect(champions?.targets).toEqual([])
-    expect(champions?.unsupportedReason).toContain('keine eigene stabile ID')
+    expect(champions?.unsupportedReason).toContain('ohne eigene stabile ID')
   })
 
   it('liefert fachlich gleiche Target-Adressen auch bei mehrfachen Carriern nur einmal', () => {
