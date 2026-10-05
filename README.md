@@ -4,7 +4,7 @@ A local-first browser application for managing and qualifying complex B2B sales 
 
 The core idea is simple: **the project file is the source of truth**. The application opens a portable `.meddpicc` file, helps the user structure and evaluate the opportunity with deterministic tools, and saves the updated project back to that file. No AI, backend, account, or external database is required at runtime.
 
-> **Project status:** foundation / pre-alpha. The repository currently defines the product scope, architecture, project-file concept, and implementation roadmap. The application itself is not implemented yet.
+> **Project status:** foundation / pre-alpha. The repository currently defines the product scope, architecture, project-file concept, UI/UX system, and implementation roadmap. The application itself is not implemented yet.
 
 ## Why this project exists
 
@@ -48,6 +48,7 @@ The application should be usable directly through GitHub Pages and run entirely 
 - **One data model** — every module reads and writes the same project state.
 - **CRM companion, not CRM replacement** — the Workbench manages MEDDPICC depth, not the entire sales process.
 - **Backward compatible files** — schema versioning and migrations are first-class requirements.
+- **Accessible by design** — keyboard, focus, contrast, responsive behavior, and non-color-only status semantics are baseline requirements.
 
 ## Planned workspace
 
@@ -131,6 +132,31 @@ Browser storage may be used for recovery or convenience, but must never silently
 
 See [Architecture](docs/ARCHITECTURE.md).
 
+## UI/UX engineering
+
+The application has a repository-specific design system before implementation begins.
+
+The visual direction is deliberately **enterprise-workbench**, not marketing-SaaS:
+
+- accessible and semantic
+- minimal / Swiss-style hierarchy
+- data-dense but readable
+- overview → drill-down → evidence
+- restrained semantic color
+- minimal decorative motion
+- system/local fonts and bundled assets
+- no color-only MEDDPICC status meaning
+
+The project uses [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) as an **external development reference only**. It is not part of the production runtime.
+
+Repository guidance for coding assistants is provided through:
+
+- `AGENTS.md`
+- `.github/copilot-instructions.md`
+- `.agents/skills/meddpicc-ui-ux/SKILL.md`
+
+See [Design System](docs/DESIGN_SYSTEM.md) and [UI/UX Development Reference](docs/UI_UX_REFERENCE.md).
+
 ## Scope boundaries
 
 MEDDPICC Workbench is **not** intended to become:
@@ -149,7 +175,7 @@ Keeping these boundaries is important. The product should remain a focused quali
 
 The implementation is split into small, testable phases:
 
-1. Project foundation and technical skeleton
+1. Project foundation, design system, and technical skeleton
 2. `.meddpicc` file lifecycle and schema validation
 3. Dashboard, evidence, risks, actions, and history
 4. Core MEDDPICC modules
@@ -164,9 +190,12 @@ See the detailed [Roadmap](docs/ROADMAP.md).
 - [Project Charter](docs/PROJECT_CHARTER.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Project File Specification](docs/PROJECT_FILE_SPEC.md)
+- [Design System](docs/DESIGN_SYSTEM.md)
+- [UI/UX Development Reference](docs/UI_UX_REFERENCE.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security & Privacy](SECURITY.md)
+- [Agent Instructions](AGENTS.md)
 
 ## Methodology and content
 
