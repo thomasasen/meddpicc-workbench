@@ -409,5 +409,28 @@ describe('projectStore', () => {
     ).toThrow()
     expect(store.project).toEqual(before)
     expect(store.dirty).toBe(false)
+
+    expect(() =>
+      store.addEvidence(
+        {
+          statement: 'Diese Evidence darf wegen des ungültigen Targets nicht committed werden.',
+          classification: 'customer_statement',
+          quality: 'medium',
+          verification: 'single_source',
+          sourceStakeholderId: 'st_champion',
+          sourceDate: '2026-10-05',
+          context: null,
+          referenceId: 'ref_discovery_01',
+          relatedAreas: ['metrics'],
+        },
+        {
+          id: 'evidence_invalid_target',
+          now: new Date('2026-10-05T22:30:00.000Z'),
+          entityTargets: [{ area: 'metrics', entityId: 'metric_missing' }],
+        },
+      ),
+    ).toThrow()
+    expect(store.project).toEqual(before)
+    expect(store.dirty).toBe(false)
   })
 })
