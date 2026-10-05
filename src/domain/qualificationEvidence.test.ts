@@ -49,9 +49,7 @@ describe('qualification evidence', () => {
 
   it('liefert fachlich gleiche Target-Adressen auch bei mehrfachen Carriern nur einmal', () => {
     const project = structuredClone(defaultProject)
-    project.meddpicc.economicBuyer.candidates.push(
-      structuredClone(project.meddpicc.economicBuyer.candidates[0]),
-    )
+    project.meddpicc.economicBuyer.candidates.push(structuredClone(project.meddpicc.economicBuyer.candidates[0]))
 
     const group = listQualificationEvidenceTargets(project).find((item) => item.area === 'economicBuyer')
     const reverse = qualificationTargetsForEvidence(project, 'ev_eb_01')

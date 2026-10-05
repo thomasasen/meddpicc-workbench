@@ -35,8 +35,7 @@ export const qualificationAreaLabels: Record<ProjectAreaKey, string> = {
   competition: 'Competition',
 }
 
-type ChampionBehaviorType =
-  MeddpiccProject['meddpicc']['champions']['people'][number]['behaviors'][number]['type']
+type ChampionBehaviorType = MeddpiccProject['meddpicc']['champions']['people'][number]['behaviors'][number]['type']
 
 const championBehaviorLabels: Record<ChampionBehaviorType, string> = {
   provided_internal_information: 'Interne Informationen geliefert',
@@ -189,10 +188,7 @@ export function qualificationEvidenceLinksForEvidence(
       }))
   })
 
-  return [
-    ...stableLinks,
-    ...new Map(championLinks.map((link) => [`${link.area}::${link.label}`, link])).values(),
-  ]
+  return [...stableLinks, ...new Map(championLinks.map((link) => [`${link.area}::${link.label}`, link])).values()]
 }
 
 export function evidenceForQualificationTarget(

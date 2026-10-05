@@ -49,9 +49,7 @@ test('bearbeitet Projektmetadaten und verknüpft Evidence konkret mit einer Qual
   await evidenceForm.getByLabel('Evidenzqualität').selectOption('high')
   await evidenceForm.getByLabel('Quelle / Stakeholder').selectOption('st_eb')
   await evidenceForm.getByLabel('Quelldatum').fill('2026-10-05')
-  await evidenceForm
-    .getByLabel('Quellenreferenz')
-    .selectOption({ label: 'Discovery Workshop Vertrieb · Meeting' })
+  await evidenceForm.getByLabel('Quellenreferenz').selectOption({ label: 'Discovery Workshop Vertrieb · Meeting' })
   await evidenceForm.getByLabel('Economic Buyer', { exact: true }).check()
 
   const entitySelector = evidenceForm.getByRole('group', { name: /Konkrete Qualification-Entities/ })
@@ -59,11 +57,9 @@ test('bearbeitet Projektmetadaten und verknüpft Evidence konkret mit einer Qual
   await entitySelector.getByLabel('Dr. Julia Berger · CFO', { exact: true }).check()
   await evidenceForm.getByRole('button', { name: 'Evidenz hinzufügen', exact: true }).click()
 
-  const evidenceCard = page
-    .getByRole('article')
-    .filter({
-      hasText: 'Die CFO bestätigt die Investitionspriorität und die wirtschaftliche Freigabe für das Vorhaben.',
-    })
+  const evidenceCard = page.getByRole('article').filter({
+    hasText: 'Die CFO bestätigt die Investitionspriorität und die wirtschaftliche Freigabe für das Vorhaben.',
+  })
   await expect(evidenceCard).toBeVisible()
   await expect(evidenceCard).toContainText('Discovery Workshop Vertrieb')
   await expect(evidenceCard).toContainText('Dr. Julia Berger · CFO')
@@ -87,9 +83,7 @@ test('bearbeitet Projektmetadaten und verknüpft Evidence konkret mit einer Qual
 
   await economicBuyerRisk.getByRole('link', { name: /Quellenbasis:/ }).click()
   await expect(page.getByRole('heading', { name: 'Quellen & Referenzen' })).toBeVisible()
-  await expect(
-    page.locator('[id^="reference-"]').filter({ hasText: 'Discovery Workshop Vertrieb' }),
-  ).toBeVisible()
+  await expect(page.locator('[id^="reference-"]').filter({ hasText: 'Discovery Workshop Vertrieb' })).toBeVisible()
 
   expect(runtimeErrors).toEqual([])
 })

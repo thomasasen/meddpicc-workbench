@@ -537,11 +537,7 @@ function saveProject() {
                       </p>
                       <div v-else class="entity-option-list">
                         <label v-for="target in group.targets" :key="targetKey(target)" class="evidence-area-option">
-                          <input
-                            v-model="editEntityTargetKeys"
-                            type="checkbox"
-                            :value="targetKey(target)"
-                          />
+                          <input v-model="editEntityTargetKeys" type="checkbox" :value="targetKey(target)" />
                           <span>{{ target.label }}</span>
                         </label>
                       </div>

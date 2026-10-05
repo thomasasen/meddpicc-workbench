@@ -633,13 +633,7 @@ function saveProject() {
                   </label>
                   <label class="field">
                     <span>Deal Value <small>optional</small></span>
-                    <input
-                      v-model="projectMetaForm.dealValue"
-                      type="number"
-                      min="0"
-                      step="any"
-                      inputmode="decimal"
-                    />
+                    <input v-model="projectMetaForm.dealValue" type="number" min="0" step="any" inputmode="decimal" />
                   </label>
                   <label class="field">
                     <span>Target Close <small>optional</small></span>

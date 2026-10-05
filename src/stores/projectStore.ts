@@ -5,10 +5,7 @@ import { defaultProject } from '../data/defaultProject'
 import { createNewProject, type NewProjectInput, type NewProjectOptions } from '../data/newProject'
 import type { MeddpiccProject, ProjectMeta, ProjectHistoryEvent, ProjectRisk, ProjectAction } from '../domain/project'
 import { createEvidence, type EvidenceCreateOptions, type EvidenceDraft } from '../domain/evidence'
-import {
-  replaceEvidenceQualificationLinks,
-  type QualificationEvidenceTarget,
-} from '../domain/qualificationEvidence'
+import { replaceEvidenceQualificationLinks, type QualificationEvidenceTarget } from '../domain/qualificationEvidence'
 import { createReference, updateReference, type ReferenceCreateOptions, type ReferenceDraft } from '../domain/reference'
 import {
   createAction,
@@ -334,10 +331,7 @@ export const useProjectStore = defineStore('project', () => {
     )
   }
 
-  function setEvidenceQualificationLinks(
-    evidenceId: string,
-    targets: readonly QualificationEvidenceTarget[],
-  ) {
+  function setEvidenceQualificationLinks(evidenceId: string, targets: readonly QualificationEvidenceTarget[]) {
     const nextProject = structuredClone(toRaw(project.value))
     replaceEvidenceQualificationLinks(nextProject, evidenceId, targets)
     commitValidatedProject(nextProject)
