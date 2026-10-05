@@ -663,7 +663,9 @@ function saveProject() {
 
                 <div class="form-actions project-meta-actions">
                   <button class="button button-primary" type="submit">Änderungen speichern</button>
-                  <button class="button button-secondary" type="button" @click="cancelProjectMetaEdit">Abbrechen</button>
+                  <button class="button button-secondary" type="button" @click="cancelProjectMetaEdit">
+                    Abbrechen
+                  </button>
                 </div>
               </form>
 
