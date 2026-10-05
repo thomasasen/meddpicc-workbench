@@ -123,6 +123,74 @@ describe('projectStore', () => {
     expect(store.source).toBe('file')
     expect(store.project.updatedAt).toBe('2026-10-05T17:00:00.000Z')
   })
+
+  it('legt und aktualisiert Reference-Records atomar und verknüpft neue Evidenz damit', () => {
+    const store = useProjectStore()
+
+    const reference = store.addReference(
+      {
+        type: 'meeting',
+        title: 'CFO Steering',
+        date: '2026-10-05',
+        externalId: 'CRM-4711',
+        url: 'https://example.test/cfo-steering',
+        notes: 'Kundentermin',
+      },
+      { id: 'ref_store_001' },
+    )
+
+    expect(store.project.references.at(-1)).toEqual(reference)
+    expect(store.dirty).toBe(true)
+
+    store.updateReference('ref_store_001', {
+      type: 'meeting',
+      title: 'CFO Steering final',
+      date: '2026-10-05',
+      externalId: 'CRM-4711',
+      url: 'https://example.test/cfo-steering',
+      notes: 'Priorität bestätigt',
+    })
+
+    const evidence = store.addEvidence(
+      {
+        statement: 'CFO bestätigt die Investitionspriorität.',
+        classification: 'confirmed_evidence',
+        quality: 'high',
+        verification: 'confirmed',
+        sourceStakeholderId: 'st_eb',
+        sourceDate: '2026-10-05',
+        context: 'Steering Committee',
+        referenceId: 'ref_store_001',
+        relatedAreas: ['economicBuyer'],
+      },
+      { id: 'evidence_reference_link', now: new Date('2026-10-05T20:30:00.000Z') },
+    )
+
+    expect(evidence.referenceId).toBe('ref_store_001')
+    expect(store.project.references.find((item) => item.id === 'ref_store_001')?.title).toBe('CFO Steering final')
+    expect(() => serializeProject(store.project)).not.toThrow()
+  })
+
+  it('verwirft ungültige Reference-Änderungen ohne Partial State', () => {
+    const store = useProjectStore()
+    const before = JSON.parse(JSON.stringify(store.project))
+
+    expect(() =>
+      store.addReference(
+        {
+          type: 'document',
+          title: 'Ungültige Quelle',
+          url: 'ftp://example.test/file',
+          notes: '',
+        },
+        { id: 'ref_invalid_url' },
+      ),
+    ).toThrow()
+
+    expect(store.project).toEqual(before)
+    expect(store.dirty).toBe(false)
+  })
+
   it('legt und schließt ein Risk atomar mit eindeutiger History an', () => {
     const store = useProjectStore()
     const historyCount = store.project.history.length
