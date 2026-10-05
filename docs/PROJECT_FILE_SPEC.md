@@ -114,6 +114,8 @@ Die Metadaten enthalten nur für Qualification und Deal Planning relevante Felde
 
 Unbekannte Werte dürfen `null` sein, wo das Schema dies zulässt. Das System soll keine erfundenen Default-Werte erzwingen.
 
+Für Bearbeitungen über die Projektmetadaten-Oberfläche ist `project.targetGoLiveDate` die kanonische Eingabe. Die atomare Metadaten-Mutation synchronisiert denselben Wert nach `planning.targetGoLiveDate`. Diese Synchronisierung ist Anwendungslogik und keine nachträglich verschärfte Import-Invariante für bestehende Schema-0.2.0-Dateien.
+
 ## Stakeholder
 
 Stakeholder besitzen stabile IDs und können mehrere Beziehungen zum Deal gleichzeitig haben.
@@ -282,6 +284,24 @@ unknown
 ```
 
 Eine `customer_statement` ist eine Kundenaussage und nicht automatisch objektiver Fakt.
+
+### Konkrete Evidence-to-Entity-Verknüpfung
+
+Das Schema 0.2.0 speichert keine redundante Liste wie `evidence.relatedEntityIds`. Die kanonische konkrete Beziehung liegt auf den bereits vorhandenen Qualification-Entities in deren `evidenceIds`.
+
+Stabil adressierbar und damit im aktuellen Slice editierbar sind:
+
+- Metrics über ihre `id`
+- Economic-Buyer-Candidates über `stakeholderId`
+- Decision Criteria über ihre `id`
+- Decision-Process-Steps über ihre `id`
+- Paper-Process-Steps über ihre `id`
+- Pain Items über ihre `id`
+- Competition Alternatives über ihre `id`
+
+Evidence → Entity wird deterministisch als Reverse-Lookup aus diesen Carriern abgeleitet. Dadurch existiert nur eine persistierte Wahrheit für die konkrete Beziehung.
+
+Champion-Evidence ist im Schema 0.2.0 an verschachtelte Behavior-Einträge gebunden. Diese Behaviors besitzen keine eigene stabile ID. Bestehende Champion-Behavior-Links können deshalb gelesen und angezeigt werden, werden aber nicht über eine künstliche oder redundante Adresse editierbar gemacht. Eine spätere Änderung dieser Modellgrenze benötigt einen eigenen fachlichen Use Case und gegebenenfalls Schema-Versionierung.
 
 ## Risiken
 

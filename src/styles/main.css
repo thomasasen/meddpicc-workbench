@@ -1695,3 +1695,239 @@ h3 {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Roadmap 2: Projektmetadaten und konkrete Evidence-Entity-Verknüpfung */
+.opportunity-header-actions {
+  display: grid;
+  justify-items: end;
+  gap: var(--space-2);
+}
+
+.project-meta-editor {
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
+  padding: var(--space-4) var(--space-5);
+}
+
+.project-meta-editor-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.8fr);
+  gap: var(--space-5);
+  align-items: end;
+  margin-bottom: var(--space-4);
+}
+
+.project-meta-editor-heading h3,
+.project-meta-editor-heading p {
+  margin-bottom: 0;
+}
+
+.project-meta-editor-heading > p {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
+.project-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.project-meta-actions {
+  margin-top: var(--space-4);
+}
+
+.project-meta-editor .project-message {
+  margin-top: var(--space-4);
+  margin-bottom: 0;
+}
+
+.evidence-entity-fieldset {
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  padding: var(--space-3);
+}
+
+.evidence-entity-fieldset legend {
+  padding-inline: var(--space-1);
+  color: var(--color-text);
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.evidence-entity-fieldset small,
+.evidence-area-fieldset small {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.field-help,
+.entity-target-note {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.field-help {
+  margin: 0 0 var(--space-3);
+}
+
+.entity-target-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.entity-target-group {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+}
+
+.entity-target-group summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.entity-target-group summary small {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.entity-target-group summary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.entity-target-group .entity-option-list,
+.entity-target-group .entity-target-note {
+  margin: 0;
+  border-top: 1px solid var(--color-divider);
+  padding: var(--space-3);
+}
+
+.evidence-entity-links {
+  margin-top: var(--space-3);
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--space-3);
+}
+
+.evidence-entity-links-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.evidence-entity-links-heading strong,
+.evidence-entity-links-heading p {
+  margin-bottom: 0;
+}
+
+.evidence-entity-links-heading p {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+}
+
+.evidence-entity-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.evidence-entity-chip {
+  display: grid;
+  gap: 0.1rem;
+  max-width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-muted);
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.72rem;
+}
+
+.evidence-entity-chip strong {
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+}
+
+.evidence-entity-chip span,
+.evidence-entity-chip small {
+  overflow-wrap: anywhere;
+}
+
+.evidence-entity-chip small {
+  color: var(--color-text-muted);
+}
+
+.evidence-link-editor {
+  margin-top: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-bg);
+  padding: var(--space-3);
+}
+
+.evidence-link-actions {
+  margin-top: var(--space-3);
+}
+
+.evidence-link-editor .project-message {
+  grid-template-columns: 1fr;
+  margin-top: var(--space-3);
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .project-meta-editor-heading,
+  .project-meta-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-meta-editor-heading > p {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .opportunity-header-actions {
+    justify-items: start;
+  }
+
+  .project-meta-editor {
+    padding-inline: var(--space-4);
+  }
+
+  .project-meta-editor-heading,
+  .project-meta-grid,
+  .entity-target-groups {
+    grid-template-columns: 1fr;
+  }
+
+  .project-meta-grid .field--full {
+    grid-column: auto;
+  }
+
+  .evidence-entity-links-heading,
+  .evidence-link-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .evidence-entity-links-heading .compact-button,
+  .evidence-link-actions .compact-button {
+    align-self: flex-start;
+  }
+}

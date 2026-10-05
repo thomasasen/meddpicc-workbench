@@ -310,4 +310,139 @@ describe('projectStore', () => {
       JSON.parse(download.content).actions.some((action: { id: string }) => action.id === 'action_roundtrip'),
     ).toBe(true)
   })
+  it('ändert Projektmetadaten atomar und hält Target Go-Live mit Planning synchron', () => {
+    const store = useProjectStore()
+
+    store.updateProjectMeta({
+      name: 'CRM Transformation 2027 · qualifiziert',
+      accountName: 'Beispielwerke Industrie SE',
+      opportunityId: 'DEMO-OPP-2027-QUALIFIED',
+      owner: 'Strategic AE',
+      currency: 'CHF',
+      dealValue: 510000,
+      targetCloseDate: '2027-04-15',
+      targetGoLiveDate: '2027-08-15',
+      forecastCategory: 'commit',
+      notes: 'Metadaten im Roadmap-2-Slice validiert bearbeitet.',
+    })
+
+    expect(store.project.project.name).toBe('CRM Transformation 2027 · qualifiziert')
+    expect(store.project.project.accountName).toBe('Beispielwerke Industrie SE')
+    expect(store.project.project.opportunityId).toBe('DEMO-OPP-2027-QUALIFIED')
+    expect(store.project.project.owner).toBe('Strategic AE')
+    expect(store.project.project.currency).toBe('CHF')
+    expect(store.project.project.dealValue).toBe(510000)
+    expect(store.project.project.targetCloseDate).toBe('2027-04-15')
+    expect(store.project.project.targetGoLiveDate).toBe('2027-08-15')
+    expect(store.project.planning.targetGoLiveDate).toBe('2027-08-15')
+    expect(store.project.project.forecastCategory).toBe('commit')
+    expect(store.project.project.notes).toBe('Metadaten im Roadmap-2-Slice validiert bearbeitet.')
+    expect(store.dirty).toBe(true)
+    expect(() => serializeProject(store.project)).not.toThrow()
+  })
+
+  it('verwirft ungültige Projektmetadaten ohne Partial State', () => {
+    const store = useProjectStore()
+    const before = JSON.parse(JSON.stringify(store.project))
+
+    expect(() => store.updateProjectMeta({ accountName: '', currency: 'EURO' })).toThrow()
+
+    expect(store.project).toEqual(before)
+    expect(store.dirty).toBe(false)
+  })
+
+  it('verknüpft und entfernt konkrete Evidence-Entity-Links atomar', () => {
+    const store = useProjectStore()
+
+    store.setEvidenceQualificationLinks('ev_metric_02', [
+      { area: 'metrics', entityId: 'metric_01' },
+      { area: 'decisionCriteria', entityId: 'dc_01' },
+    ])
+
+    expect(store.project.meddpicc.metrics.metrics[0].evidenceIds).toContain('ev_metric_02')
+    expect(store.project.meddpicc.metrics.metrics[1].evidenceIds).not.toContain('ev_metric_02')
+    expect(store.project.meddpicc.decisionCriteria.criteria[0].evidenceIds).toContain('ev_metric_02')
+
+    store.setEvidenceQualificationLinks('ev_metric_02', [{ area: 'decisionCriteria', entityId: 'dc_01' }])
+
+    expect(store.project.meddpicc.metrics.metrics[0].evidenceIds).not.toContain('ev_metric_02')
+    expect(
+      store.project.meddpicc.decisionCriteria.criteria[0].evidenceIds.filter((id) => id === 'ev_metric_02'),
+    ).toHaveLength(1)
+    expect(() => serializeProject(store.project)).not.toThrow()
+  })
+
+  it('legt neue Evidence und konkrete Entity-Links in derselben validierten Mutation an', () => {
+    const store = useProjectStore()
+
+    const evidence = store.addEvidence(
+      {
+        statement: 'CFO bestätigt das Integrationskriterium als kaufentscheidend.',
+        classification: 'confirmed_evidence',
+        quality: 'high',
+        verification: 'confirmed',
+        sourceStakeholderId: 'st_eb',
+        sourceDate: '2026-10-05',
+        context: 'CFO Steering',
+        referenceId: 'ref_discovery_01',
+        relatedAreas: ['economicBuyer', 'decisionCriteria'],
+      },
+      {
+        id: 'evidence_entity_create',
+        now: new Date('2026-10-05T22:15:00.000Z'),
+        entityTargets: [
+          { area: 'economicBuyer', entityId: 'st_eb' },
+          { area: 'decisionCriteria', entityId: 'dc_01' },
+        ],
+      },
+    )
+
+    expect(evidence.id).toBe('evidence_entity_create')
+    expect(store.project.meddpicc.economicBuyer.candidates[0].evidenceIds).toContain('evidence_entity_create')
+    expect(store.project.meddpicc.decisionCriteria.criteria[0].evidenceIds).toContain('evidence_entity_create')
+    expect(store.project.history.at(-1)).toMatchObject({
+      type: 'evidence_added',
+      entityId: 'evidence_entity_create',
+    })
+  })
+
+  it('verwirft ungültige Evidence- oder Entity-Targets ohne Partial State', () => {
+    const store = useProjectStore()
+    const before = JSON.parse(JSON.stringify(store.project))
+
+    expect(() =>
+      store.setEvidenceQualificationLinks('ev_missing', [{ area: 'metrics', entityId: 'metric_01' }]),
+    ).toThrow()
+    expect(store.project).toEqual(before)
+    expect(store.dirty).toBe(false)
+
+    expect(() =>
+      store.setEvidenceQualificationLinks('ev_metric_01', [{ area: 'metrics', entityId: 'metric_missing' }]),
+    ).toThrow()
+    expect(store.project).toEqual(before)
+    expect(store.dirty).toBe(false)
+
+    expect(() =>
+      store.addEvidence(
+        {
+          statement: 'Diese Evidence darf wegen des ungültigen Targets nicht committed werden.',
+          classification: 'customer_statement',
+          quality: 'medium',
+          verification: 'single_source',
+          sourceStakeholderId: 'st_champion',
+          sourceDate: '2026-10-05',
+          context: null,
+          referenceId: 'ref_discovery_01',
+          relatedAreas: ['metrics'],
+        },
+        {
+          id: 'evidence_invalid_target',
+          now: new Date('2026-10-05T22:30:00.000Z'),
+          entityTargets: [{ area: 'metrics', entityId: 'metric_missing' }],
+        },
+      ),
+    ).toThrow()
+    expect(store.project).toEqual(before)
+    expect(store.dirty).toBe(false)
+  })
 })

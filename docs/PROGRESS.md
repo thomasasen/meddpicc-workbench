@@ -13,6 +13,9 @@ Der gemeinsame Qualifizierungs-Layer umfasst inzwischen:
 - Risk → Action-Verknüpfung
 - projektweite Source-/Reference-Records
 - Evidence → Reference-Verknüpfung
+- vollständige Bearbeitung der vorhandenen Projektmetadaten
+- konkrete Evidence-Verknüpfung zu stabil adressierbaren Qualification-Entities
+- deterministischer Reverse-Lookup Evidence → Qualification-Entity
 - sichtbare Source-Traceability für Risk-/Action-Findings im Dashboard
 - relevante History-Events für die bisher implementierten Workflows
 
@@ -115,10 +118,32 @@ Fachliche Grenze:
 
 Ein Risk besitzt im aktuellen Schema keine direkte `evidenceIds`-Liste. Die Workbench behauptet deshalb keine direkte Risk→Evidence-Beziehung. Die sichtbare Quellenbasis wird aus den bereits modellierten MEDDPICC-/Entity-Referenzen hergeleitet.
 
+### Projektmetadaten und konkrete Evidence-to-Entity-Verknüpfung
+
+PR #28 ergänzt den nächsten Roadmap-2-Slice auf Basis des bestehenden Schema 0.2.0.
+
+Unterstützt werden:
+
+- alle vorhandenen Project-Meta-Felder direkt im Dashboard bearbeiten
+- Save/Cancel mit lokalem Form-State; der Projekt-State ändert sich erst nach vollständiger Validierung
+- `updateProjectMeta` arbeitet wie die neueren Store-Mutationen atomar auf einem Snapshot
+- `project.targetGoLiveDate` ist für Metadatenänderungen die kanonische Eingabe; die Mutation synchronisiert `planning.targetGoLiveDate`
+- bestehende Schema-0.2.0-Dateien werden wegen dieser Synchronisierung nicht durch eine neue Import-Invariante nachträglich abgewiesen
+- konkrete Qualification-Entities werden zentral über eine Domain-Abstraktion adressiert
+- kanonische Persistenz bleibt `Qualification-Entity.evidenceIds`; Evidence → Entity wird daraus deterministisch abgeleitet
+- neue Evidence kann direkt mit stabil adressierbaren Qualification-Entities verknüpft werden
+- bestehende konkrete Links können im Evidenzregister bearbeitet und entfernt werden
+- `relatedAreas` bleibt davon getrennt die gröbere fachliche Bereichszuordnung
+- Risk-Traceability nutzt konkrete Entity-Evidence plus explizite Section-Evidence; Evidence anderer Entities desselben Bereichs wird nicht zugemischt
+- vorhandene Reference-Traceability und Action-Traceability bleiben erhalten
+
+Bewusste Modellgrenze:
+
+Champion-Evidence hängt im Schema 0.2.0 an verschachtelten Behavior-Einträgen ohne eigene stabile ID. Bestehende Champion-Behavior-Links werden im Evidenzregister deshalb sichtbar gemacht, aber in diesem Slice nicht künstlich als editierbare Entity-Adresse modelliert. Dafür wurde weder eine redundante Evidence→Entity-Relation noch eine Schemaänderung eingeführt.
+
 ### Noch offen in Phase 2
 
-- Projektmetadaten als vollständige editierbare Arbeitsoberfläche
-- Evidenz gezielt mit konkreten Qualification-Entities bzw. -Aussagen verknüpfen
+- Champion-Behavior-Verknüpfungen erst dann editierbar machen, wenn dafür eine fachlich stabile Identität modelliert wird
 - weitere History-/Status-Nutzung außerhalb der bereits implementierten Events
 - gemeinsames Statusmodell vollständig in späteren Arbeitsoberflächen nutzen
 - Source-Traceability für weitere künftig hinzukommende abgeleitete Dashboard-Findings
@@ -128,17 +153,9 @@ Issue #4 bleibt offen und bildet diesen Fortschritt ab.
 
 ## Nächster empfohlener Slice
 
-### Projektmetadaten + konkrete Evidence-to-Entity-Verknüpfung
+Nach Abschluss des Projektmetadaten-/Evidence-Entity-Slices bleibt Phase 2 bewusst klein: gemeinsame History-/Status-Nutzung dort vervollständigen, wo sie für die bereits vorhandenen Roadmap-2-Arbeitsobjekte fachlich sinnvoll ist. Eine Schemaänderung für Champion-Behaviors soll erst erfolgen, wenn Phase 3 einen belastbaren Use Case und eine stabile fachliche Identität dafür verlangt.
 
-Nach dem erfolgreich gemergten Source-Layer soll Phase 2 jetzt die verbleibenden gemeinsamen Grundlagen vor den acht MEDDPICC-Modulen schließen:
-
-1. Projektmetadaten vollständig editierbar machen.
-2. Eine belastbare, bidirektional nachvollziehbare Zuordnung zwischen Evidenz und konkreten Qualification-Entities ermöglichen.
-3. Die daraus entstehenden Status-/Dashboard-Findings über denselben Source-Traceability-Pfad erklären.
-
-Dabei darf eine UI-Vereinfachung keine neue Schema-Semantik vortäuschen. Falls für Evidence-to-Entity tatsächlich eine Modelllücke besteht, ist sie zuerst fachlich zu begründen und erst dann über Schema-Versionierung/Migration zu ergänzen.
-
-Bewusst weiterhin nicht Teil dieses nächsten Slices:
+Bewusst weiterhin nicht Teil von Phase 2:
 
 - generative AI
 - automatische Risk-/Action-Generierung
@@ -147,6 +164,7 @@ Bewusst weiterhin nicht Teil dieses nächsten Slices:
 - Critical Path
 - CRM-Integration
 - Cloud Sync
+- vollständige acht MEDDPICC-Moduloberflächen
 
 ## Qualitätsregel
 
@@ -171,6 +189,7 @@ Ein Slice gilt erst als abgeschlossen, wenn:
 - `src/domain/projectValidation.ts`
 - `src/domain/evidence.ts`
 - `src/domain/reference.ts`
+- `src/domain/qualificationEvidence.ts`
 - `src/domain/sourceTraceability.ts`
 - `src/domain/riskAction.ts`
 - `src/stores/projectStore.ts`

@@ -53,4 +53,50 @@ describe('source traceability', () => {
       expect.arrayContaining(['ref_service_report', 'ref_discovery_01']),
     )
   })
+  it('ordnet einem Entity-Risk keine Evidence einer anderen Entity desselben Bereichs zu, behält Section-Evidence aber bei', () => {
+    const project = structuredClone(defaultProject)
+    const risk = project.risks.find((item) => item.id === 'risk_comp_01')
+    const otherAlternative = project.meddpicc.competition.knownAlternatives.find((item) => item.id === 'comp_02')
+    expect(risk).toBeDefined()
+    expect(otherAlternative).toBeDefined()
+    if (!risk || !otherAlternative) return
+
+    project.evidence.push(
+      {
+        id: 'ev_comp_other_entity',
+        classification: 'customer_statement',
+        quality: 'medium',
+        statement: 'Budget könnte in ein anderes Projekt verschoben werden.',
+        sourceStakeholderId: 'st_champion',
+        sourceDate: '2026-10-05',
+        context: null,
+        referenceId: 'ref_discovery_01',
+        verification: 'single_source',
+        relatedAreas: ['competition'],
+        createdAt: '2026-10-05T21:00:00.000Z',
+      },
+      {
+        id: 'ev_comp_section',
+        classification: 'customer_statement',
+        quality: 'medium',
+        statement: 'Der Kunde bewertet Competition weiterhin als offenen Bereich.',
+        sourceStakeholderId: 'st_champion',
+        sourceDate: '2026-10-05',
+        context: null,
+        referenceId: 'ref_discovery_01',
+        verification: 'single_source',
+        relatedAreas: ['competition'],
+        createdAt: '2026-10-05T21:01:00.000Z',
+      },
+    )
+    otherAlternative.evidenceIds.push('ev_comp_other_entity')
+    project.meddpicc.competition.evidenceIds.push('ev_comp_section')
+
+    const trace = traceRiskSources(project, risk)
+    const evidenceIds = trace.evidence.map((item) => item.id)
+
+    expect(evidenceIds).toContain('ev_comp_01')
+    expect(evidenceIds).toContain('ev_comp_section')
+    expect(evidenceIds).not.toContain('ev_comp_other_entity')
+  })
 })
