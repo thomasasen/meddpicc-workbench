@@ -25,6 +25,8 @@ export default [
     rules: {
       'no-undef': 'off',
       'vue/multi-word-component-names': 'off',
+      'vue/max-attributes-per-line': 'off',
+      'vue/singleline-html-element-content-newline': 'off',
     },
   },
   {
@@ -36,7 +38,7 @@ export default [
     },
   },
   {
-    files: ['tests/**/*.ts', 'playwright.config.ts', 'vite.config.ts'],
+    files: ['tests/**/*.ts', 'playwright.config.ts', 'vite.config.ts', 'vitest.config.ts'],
     languageOptions: {
       globals: {
         ...globals.browser,
