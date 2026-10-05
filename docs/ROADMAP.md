@@ -41,28 +41,28 @@ Acceptance Criteria:
 
 **Ziel:** Projekte zuverlässig erstellen, öffnen, validieren, migrieren, bearbeiten und speichern.
 
-**Bereits umgesetzt:** formales Schema 0.2.0, Runtime-Validator, strukturierte Fehler, zukünftige Major-Versionen blockieren, Domain Validation, Round-Trip-Baseline und migriertes Demo-Fixture. Öffnen-/Speichern-UI, Migration älterer Versionen und Dirty-State bleiben offen.
+**Bereits umgesetzt:** formales Schema 0.2.0, Runtime-Validator, strukturierte Fehler, zukünftige Major-Versionen blockieren, Domain Validation, Round-Trip-Baseline, bereinigtes Demo-Fixture sowie der browserbasierte Project File Lifecycle für Neu/Öffnen/Speichern. Migration unterstützter älterer Versionen und die optionale File System Access API bleiben offen.
 
 Deliverables:
 
-- Neues-Projekt-Flow
-- Projekt-öffnen-Flow
-- Validierungsfehler
-- Handling nicht unterstützter Versionen
+- Neues-Projekt-Flow ✅
+- Projekt-öffnen-/Import-Flow ✅
+- Validierungsfehler im UI ✅
+- Handling nicht unterstützter Versionen ✅
 - Migrationsframework
-- Dirty-State-Tracking
-- Save As / Download
+- Dirty-State-Tracking ✅
+- Save As / Download ✅
 - optionale File System Access API
-- Crash-/Unsaved-Recovery-Konzept
-- bereinigtes Demo-Projekt
+- Crash-/Unsaved-Recovery-Konzept ✅
+- bereinigtes Demo-Projekt ✅
 
 Acceptance Criteria:
 
-- gültige Dateien round-trippen ohne Datenverlust
-- ungültige Datei wird niemals teilweise geladen
-- zukünftige nicht unterstützte Schema-Version wird nicht überschrieben
+- gültige Dateien round-trippen ohne Datenverlust ✅
+- ungültige Datei wird niemals teilweise geladen ✅
+- zukünftige nicht unterstützte Schema-Version wird nicht überschrieben ✅
 - unterstütztes altes Fixture migriert deterministisch
-- Nutzer wird vor Verlust ungespeicherter Änderungen gewarnt
+- Nutzer wird vor Verlust ungespeicherter Änderungen gewarnt ✅
 
 ## Phase 2 – Gemeinsames Qualifizierungsmodell
 
