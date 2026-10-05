@@ -64,10 +64,11 @@ Vor der Umsetzung eines Features sind zu lesen:
 Bei jeder Aufgabe, die Screens, Navigation, Formulare, Tabellen, Charts, Statusanzeigen, Responsive-Verhalten oder Interaktionsmuster erstellt oder verändert:
 
 1. `docs/DESIGN_SYSTEM.md` lesen und befolgen.
-2. Den lokalen Skill `.agents/skills/meddpicc-ui-ux/SKILL.md` als UI/UX-Checkliste verwenden.
-3. `nextlevelbuilder/ui-ux-pro-max-skill` nur als **Entwicklungsreferenz**, niemals als Runtime-Abhängigkeit behandeln.
-4. Bei Nutzung der Upstream-Referenz den in `docs/UI_UX_REFERENCE.md` dokumentierten Stand bevorzugen.
-5. Keine Upstream-Datensätze oder größeren Textmengen kopieren, außer dies wurde bewusst geprüft und die Lizenzhinweise werden erhalten.
+2. Bei Icon-Nutzung zusätzlich `docs/ICON_SYSTEM.md` lesen und die dort festgelegten Lucide-Zuordnungen verwenden.
+3. Den lokalen Skill `.agents/skills/meddpicc-ui-ux/SKILL.md` als UI/UX-Checkliste verwenden.
+4. `nextlevelbuilder/ui-ux-pro-max-skill` nur als **Entwicklungsreferenz**, niemals als Runtime-Abhängigkeit behandeln.
+5. Bei Nutzung der Upstream-Referenz den in `docs/UI_UX_REFERENCE.md` dokumentierten Stand bevorzugen.
+6. Keine Upstream-Datensätze oder größeren Textmengen kopieren, außer dies wurde bewusst geprüft und die Lizenzhinweise werden erhalten.
 
 Das MEDDPICC-spezifische Design System hat Vorrang vor generischen Upstream-Empfehlungen.
 
