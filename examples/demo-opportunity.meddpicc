@@ -24,7 +24,6 @@
       "name": "Dr. Julia Berger",
       "role": "CFO",
       "organization": "Beispielwerke Industrie GmbH",
-      "relationship": "economic_buyer_candidate",
       "relationships": [
         "economic_buyer_candidate",
         "business_stakeholder"
@@ -40,7 +39,6 @@
       "name": "Markus Stein",
       "role": "Leiter Vertrieb",
       "organization": "Beispielwerke Industrie GmbH",
-      "relationship": "champion",
       "relationships": [
         "champion_candidate",
         "business_stakeholder"
@@ -56,7 +54,6 @@
       "name": "Aylin Demir",
       "role": "CIO",
       "organization": "Beispielwerke Industrie GmbH",
-      "relationship": "technical_stakeholder",
       "relationships": [
         "technical_stakeholder"
       ],
@@ -71,7 +68,6 @@
       "name": "Martin Vogel",
       "role": "Strategischer Einkauf",
       "organization": "Beispielwerke Industrie GmbH",
-      "relationship": "procurement",
       "relationships": [
         "procurement"
       ],
