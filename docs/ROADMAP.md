@@ -16,14 +16,14 @@ Deliverables:
 - Vue 3 + TypeScript + Vite
 - Repository-Struktur
 - zentrale Design Tokens
-- Formatting/Linting
+- Formatting/Linting ✅
 - Vitest
-- Playwright-Baseline
+- Playwright-Baseline ✅
 - GitHub Actions CI
 - GitHub Pages Deployment
 - minimale accessible Application Shell
-- Architekturentscheidung zum Runtime-Schema-Validator
-- erstes formales `.meddpicc`-Schema
+- Architekturentscheidung zum Runtime-Schema-Validator ✅
+- erstes formales `.meddpicc`-Schema ✅
 
 Acceptance Criteria:
 
@@ -40,6 +40,8 @@ Acceptance Criteria:
 ## Phase 1 – Project File Lifecycle
 
 **Ziel:** Projekte zuverlässig erstellen, öffnen, validieren, migrieren, bearbeiten und speichern.
+
+**Bereits umgesetzt:** formales Schema 0.2.0, Runtime-Validator, strukturierte Fehler, zukünftige Major-Versionen blockieren, Domain Validation, Round-Trip-Baseline und migriertes Demo-Fixture. Öffnen-/Speichern-UI, Migration älterer Versionen und Dirty-State bleiben offen.
 
 Deliverables:
 
