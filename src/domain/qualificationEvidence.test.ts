@@ -47,6 +47,19 @@ describe('qualification evidence', () => {
     expect(champions?.unsupportedReason).toContain('keine eigene stabile ID')
   })
 
+  it('liefert fachlich gleiche Target-Adressen auch bei mehrfachen Carriern nur einmal', () => {
+    const project = structuredClone(defaultProject)
+    project.meddpicc.economicBuyer.candidates.push(
+      structuredClone(project.meddpicc.economicBuyer.candidates[0]),
+    )
+
+    const group = listQualificationEvidenceTargets(project).find((item) => item.area === 'economicBuyer')
+    const reverse = qualificationTargetsForEvidence(project, 'ev_eb_01')
+
+    expect(group?.targets.map((item) => item.entityId)).toEqual(['st_eb'])
+    expect(reverse.map((item) => item.entityId)).toEqual(['st_eb'])
+  })
+
   it('leitet Evidence zu allen konkret verknüpften unterstützten Entities rückwärts ab', () => {
     const project = structuredClone(defaultProject)
     const targets = qualificationTargetsForEvidence(project, 'ev_dc_02')
