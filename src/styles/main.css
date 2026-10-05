@@ -443,6 +443,21 @@ h3 {
   margin-bottom: 0;
 }
 
+.heading-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.section-icon {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+}
+
+.section-icon--risk {
+  color: var(--color-risk);
+}
+
 .block-heading p {
   color: var(--color-text-muted);
   font-size: 0.72rem;
@@ -450,7 +465,7 @@ h3 {
 
 .risk-item {
   display: grid;
-  grid-template-columns: 10px minmax(0, 1fr);
+  grid-template-columns: 18px minmax(0, 1fr);
   gap: var(--space-3);
   border: 1px solid var(--color-risk-border);
   border-radius: var(--radius-panel);
@@ -469,20 +484,9 @@ h3 {
   color: var(--color-warning-text);
 }
 
-.risk-indicator,
-.warning-indicator {
-  width: 8px;
-  height: 8px;
-  margin-top: 0.38rem;
-  border-radius: 2px;
-}
-
-.risk-indicator {
-  background: var(--color-risk);
-}
-
-.warning-indicator {
-  background: var(--color-partial);
+.risk-item-icon {
+  margin-top: 0.08rem;
+  color: currentColor;
 }
 
 .risk-item strong {
@@ -579,37 +583,35 @@ h3 {
 
 .status-summary {
   display: inline-grid;
-  grid-template-columns: 8px minmax(68px, auto) 36px;
+  grid-template-columns: 16px minmax(68px, auto) 36px;
   align-items: center;
   gap: var(--space-2);
   color: var(--color-text-muted);
   white-space: nowrap;
 }
 
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.status-icon {
+  flex: 0 0 auto;
 }
 
-.status-dot--confirmed {
-  background: var(--color-confirmed);
+.status-icon--confirmed {
+  color: var(--color-confirmed);
 }
 
-.status-dot--partial {
-  background: var(--color-partial);
+.status-icon--partial {
+  color: var(--color-partial);
 }
 
-.status-dot--assumption {
-  background: var(--color-assumption);
+.status-icon--assumption {
+  color: var(--color-assumption);
 }
 
-.status-dot--unknown {
-  background: var(--color-unknown);
+.status-icon--unknown {
+  color: var(--color-unknown);
 }
 
-.status-dot--risk {
-  background: var(--color-risk);
+.status-icon--risk {
+  color: var(--color-risk);
 }
 
 .confidence {
@@ -856,7 +858,7 @@ h3 {
 
   .status-summary {
     width: 100%;
-    grid-template-columns: 8px 1fr 36px;
+    grid-template-columns: 16px 1fr 36px;
   }
 
   .capability-list article {
