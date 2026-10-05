@@ -138,7 +138,11 @@ const openActions = computed(() =>
     .slice(0, 2),
 )
 
-const dateFormatter = new Intl.DateTimeFormat('de-DE')
+const dateFormatter = new Intl.DateTimeFormat('de-DE', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+})
 
 function formatCurrency(value: number | null): string {
   if (value === null) return 'Noch offen'
