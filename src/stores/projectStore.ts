@@ -3,9 +3,10 @@ import { ref } from 'vue'
 
 import { defaultProject } from '../data/defaultProject'
 import { createNewProject, type NewProjectInput, type NewProjectOptions } from '../data/newProject'
-import type { MeddpiccProject, ProjectMeta } from '../domain/project'
+import type { MeddpiccProject, ProjectMeta, ProjectHistoryEvent } from '../domain/project'
+import { createEvidence, type EvidenceCreateOptions, type EvidenceDraft } from '../domain/evidence'
 import { prepareProjectForSave, suggestProjectFileName } from '../domain/projectPersistence'
-import { loadProject, serializeProject, type ProjectLoadResult } from '../domain/projectSchema'
+import { loadProject, serializeProject, validateProject, ProjectValidationError, type ProjectLoadResult } from '../domain/projectSchema'
 
 export type ProjectSource = 'demo' | 'file' | 'new'
 
@@ -52,6 +53,35 @@ export const useProjectStore = defineStore('project', () => {
     return result
   }
 
+  function commitValidatedProject(nextProject: MeddpiccProject) {
+    const validation = validateProject(nextProject)
+    if (!validation.success) {
+      throw new ProjectValidationError('Die Änderung würde einen ungültigen Projektstand erzeugen.', validation.issues)
+    }
+
+    project.value = structuredClone(validation.project)
+    dirty.value = true
+  }
+
+  function addEvidence(draft: EvidenceDraft, options: EvidenceCreateOptions = {}) {
+    const evidence = createEvidence(draft, options)
+    const nextProject = structuredClone(project.value)
+    nextProject.evidence.push(evidence)
+
+    const historyEvent: ProjectHistoryEvent = {
+      id: `history_${evidence.id}`,
+      timestamp: evidence.createdAt,
+      type: 'evidence_added',
+      area: evidence.relatedAreas.length === 1 ? evidence.relatedAreas[0] : null,
+      entityId: evidence.id,
+      summary: `Evidenz hinzugefügt: ${evidence.statement}`,
+    }
+    nextProject.history.push(historyEvent)
+
+    commitValidatedProject(nextProject)
+    return evidence
+  }
+
   function updateProjectMeta(patch: Partial<ProjectMeta>) {
     project.value.project = {
       ...project.value.project,
@@ -94,6 +124,7 @@ export const useProjectStore = defineStore('project', () => {
     createProject,
     importProjectText,
     updateProjectMeta,
+    addEvidence,
     markDirty,
     prepareDownload,
     confirmDownloaded,
