@@ -56,7 +56,9 @@ test('pflegt Source-Records und zeigt die Traceability bis ins Dashboard', async
   const traceLink = economicBuyerRisk.getByRole('link', { name: /Quellenbasis:/ })
   await traceLink.click()
   await expect(page.getByRole('heading', { name: 'Quellen & Referenzen' })).toBeVisible()
-  await expect(page.locator('[id^="reference-"]').filter({ hasText: 'Discovery Workshop Vertrieb – geprüft' })).toBeVisible()
+  await expect(
+    page.locator('[id^="reference-"]').filter({ hasText: 'Discovery Workshop Vertrieb – geprüft' }),
+  ).toBeVisible()
 
   expect(runtimeErrors).toEqual([])
 })

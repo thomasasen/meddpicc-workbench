@@ -48,7 +48,9 @@ function entityEvidenceIds(project: MeddpiccProject, area: ProjectAreaKey, entit
         .filter((item) => ids.has(item.id))
         .flatMap((item) => item.evidenceIds)
     case 'decisionProcess':
-      return project.meddpicc.decisionProcess.steps.filter((item) => ids.has(item.id)).flatMap((item) => item.evidenceIds)
+      return project.meddpicc.decisionProcess.steps
+        .filter((item) => ids.has(item.id))
+        .flatMap((item) => item.evidenceIds)
     case 'paperProcess':
       return project.meddpicc.paperProcess.steps.filter((item) => ids.has(item.id)).flatMap((item) => item.evidenceIds)
     case 'pain':
@@ -75,7 +77,8 @@ export function traceAreaSources(project: MeddpiccProject, area: ProjectAreaKey)
 export function traceRiskSources(project: MeddpiccProject, risk: ProjectRisk): SourceTrace {
   const sectionEvidence = evidenceByIds(project, project.meddpicc[risk.relatedArea].evidenceIds)
   const linkedEvidence = evidenceByIds(project, entityEvidenceIds(project, risk.relatedArea, risk.relatedEntityIds))
-  const fallbackAreaEvidence = risk.relatedEntityIds.length === 0 ? traceAreaSources(project, risk.relatedArea).evidence : []
+  const fallbackAreaEvidence =
+    risk.relatedEntityIds.length === 0 ? traceAreaSources(project, risk.relatedArea).evidence : []
 
   return referenceTrace(project, uniqueEvidence([...linkedEvidence, ...sectionEvidence, ...fallbackAreaEvidence]))
 }

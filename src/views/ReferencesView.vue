@@ -35,7 +35,9 @@ const form = ref({
 })
 
 const sortedReferences = computed(() =>
-  [...project.value.references].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? '') || a.title.localeCompare(b.title)),
+  [...project.value.references].sort(
+    (a, b) => (b.date ?? '').localeCompare(a.date ?? '') || a.title.localeCompare(b.title),
+  ),
 )
 
 function evidenceCount(referenceId: string): number {
@@ -195,7 +197,11 @@ function saveProject() {
           </ul>
         </div>
       </div>
-      <div v-else-if="statusMessage" class="container project-message project-message--success workbench-message" role="status">
+      <div
+        v-else-if="statusMessage"
+        class="container project-message project-message--success workbench-message"
+        role="status"
+      >
         <strong>{{ statusMessage }}</strong>
       </div>
 
@@ -222,7 +228,12 @@ function saveProject() {
 
               <label class="field field--full">
                 <span>Titel</span>
-                <input v-model="form.title" required maxlength="500" placeholder="Zum Beispiel CFO Steering Committee" />
+                <input
+                  v-model="form.title"
+                  required
+                  maxlength="500"
+                  placeholder="Zum Beispiel CFO Steering Committee"
+                />
               </label>
 
               <label class="field field--full">
@@ -266,13 +277,22 @@ function saveProject() {
               Noch keine Quelle hinterlegt. Lege zuerst ein Meeting, Dokument oder einen anderen Reference-Record an.
             </p>
 
-            <article v-for="reference in sortedReferences" :id="`reference-${reference.id}`" :key="reference.id" class="reference-card">
+            <article
+              v-for="reference in sortedReferences"
+              :id="`reference-${reference.id}`"
+              :key="reference.id"
+              class="reference-card"
+            >
               <div class="work-object-card-heading">
                 <div>
                   <strong>{{ reference.title }}</strong>
                   <span>{{ typeLabels[reference.type] }} · {{ reference.date ?? 'Datum offen' }}</span>
                 </div>
-                <button class="button button-secondary button-with-icon compact-button" type="button" @click="editReference(reference)">
+                <button
+                  class="button button-secondary button-with-icon compact-button"
+                  type="button"
+                  @click="editReference(reference)"
+                >
                   <Pencil :size="14" aria-hidden="true" />
                   <span>Bearbeiten</span>
                 </button>
