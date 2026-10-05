@@ -51,7 +51,7 @@ Die Anwendung läuft vollständig im Browser und wird automatisch über GitHub P
 
 Beim Öffnen der Anwendung wird derzeit eine vollständig fiktive Demo-Opportunity aus `examples/demo-opportunity.meddpicc` geladen. Die Startseite liest Account, Deal Value, Termine, MEDDPICC-Status, Risiken und nächste Aktionen direkt aus dieser Datei.
 
-Die Demo dient gleichzeitig als frühes Regression-Fixture für das geplante Dateiformat. Ihr `schemaVersion: 0.1.0` ist ausdrücklich **Pre-Alpha** und noch kein langfristiger Kompatibilitätsvertrag.
+Die Demo dient gleichzeitig als Regression-Fixture für das formalisierte Pre-Alpha-Dateiformat. Sie verwendet `schemaVersion: 0.2.0`. Der kanonische Vertrag liegt in `schema/meddpicc-project.schema.json`; Pre-Alpha-Versionen sind weiterhin noch kein langfristiger Kompatibilitätsvertrag.
 
 ## Kernprinzipien
 
@@ -139,9 +139,11 @@ Technische Basis:
 - Vite
 - Pinia
 - Vue Router
-- Schema-Validierung für `.meddpicc`-Dateien
+- JSON Schema als kanonischer `.meddpicc`-Dateiformatvertrag
+- Ajv für Runtime-Validierung plus zusätzliche Domain Validation
+- TypeScript-Typen werden beim Build aus dem JSON Schema generiert
 - Vitest für Unit Tests
-- Playwright für zentrale Browser-Flows
+- Playwright für zentrale Browser-Flows und Smoke Tests
 - GitHub Actions für Build/Test/Deployment
 - GitHub Pages für Hosting
 
