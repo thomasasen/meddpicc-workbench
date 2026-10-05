@@ -35,10 +35,11 @@ TypeScript-Projekttypen werden mit `json-schema-to-typescript` aus dem JSON Sche
 Der Ladepfad ist getrennt in:
 
 1. Dateigröße und JSON-Parsing
-2. Schema-Version
-3. JSON-Schema-Validierung
-4. Domain Validation
-5. vollständiges Laden des Projekts
+2. Schema-Version erkennen
+3. falls unterstützt: deterministische Migration
+4. JSON-Schema-Validierung
+5. Domain Validation
+6. vollständiges Laden des Projekts
 
 Ungültige Projekte werden nicht teilweise geladen.
 
@@ -81,6 +82,16 @@ Unbekannte Zusatzfelder innerhalb einer unterstützten Schema-Version werden nic
 Während Pre-Alpha kann sich das Modell noch ändern. Trotzdem ist jede unterstützte Version explizit.
 
 Eine unbekannte zukünftige Major-Version wird vollständig abgelehnt und darf nicht still überschrieben werden.
+
+Aktuell unterstützte Dateiversionen:
+
+| Eingabe | Verhalten |
+| --- | --- |
+| `0.2.0` | direkt validieren und laden |
+| `0.1.0` | deterministisch auf `0.2.0` migrieren, erneut validieren und als ungespeichert markieren |
+| andere Version | explizit als nicht unterstützt ablehnen |
+
+Die Migration `0.1.0 → 0.2.0` basiert auf dem echten historischen Pre-Alpha-Dateiformat des Projekts.
 
 `appVersion` ist Diagnosemetadatum und nicht die Kompatibilitätsinstanz.
 
@@ -366,7 +377,26 @@ Die aktuelle Baseline unterstützt ohne Backend:
 - Warnung vor dem Verwerfen ungespeicherter Änderungen
 - validierten Save-Snapshot als `.meddpicc` herunterladen
 
-Direktes Reopen/Save über die File System Access API bleibt optional. Migration unterstützter älterer Schema-Versionen ist der nächste noch offene Kompatibilitätsbaustein.
+Direktes Reopen/Save über die File System Access API bleibt optional.
+
+### Migration 0.1.0 → 0.2.0
+
+Die Migration folgt dem Prinzip „Daten erhalten, Wissen nicht erfinden“.
+
+Beispiele:
+
+- singuläre Stakeholder-`relationship` wird in die neue Relationship-Liste überführt
+- alte Metric-`currentValue`-/`targetValue`-Felder werden in strukturierte Current-/Target-Werte übertragen
+- der alte singuläre Economic-Buyer-Verweis wird zu einem Kandidaten, aber Authority und direkter Zugang bleiben `unknown` bzw. `false`
+- ein alter getesteter Champion bleibt nur `candidate`; es werden keine neuen Champion-Behaviors erfunden
+- fehlende Evidence Quality wird `unknown`
+- Evidence-`relatedAreas` werden nur aus expliziten alten Section-`evidenceIds` abgeleitet
+- neue Risk-/Action-/Planning-Felder erhalten neutrale `null`-/Leerwerte
+- ein deterministisches `schema_migrated`-History-Event wird ergänzt
+
+Als `createdAt`-Fallback für alte Evidence-Einträge wird der bestehende Projekt-`createdAt` verwendet, weil Schema 0.1.0 keinen eigenen Evidence-Erstellzeitpunkt gespeichert hat. Dieser technische Fallback darf nicht als Aussage über das tatsächliche Entstehungsdatum der Evidenz interpretiert werden.
+
+Eine migrierte Datei bleibt im UI dirty, bis der Nutzer den neuen 0.2.0-Stand bewusst speichert.
 
 ## Round Trip
 
@@ -398,10 +428,16 @@ Aktuelle Regeln:
 
 ## Beispiel-Fixture
 
-Das vollständig fiktive Regression-Fixture liegt unter:
+Das aktuelle vollständig fiktive Regression-Fixture liegt unter:
 
 ```text
 examples/demo-opportunity.meddpicc
 ```
 
-Es enthält bewusst unterschiedliche Qualifizierungszustände, Gaps, Risiken, mehrere Stakeholder, Evidence, Decision-/Paper-Process, Business-Case-Inputs, References und History.
+Das echte historische Legacy-Fixture für die Migration liegt unter:
+
+```text
+examples/legacy/demo-opportunity-0.1.0.meddpicc
+```
+
+Beide Fixtures werden für Regressionstests genutzt. Das aktuelle Fixture enthält bewusst unterschiedliche Qualifizierungszustände, Gaps, Risiken, mehrere Stakeholder, Evidence, Decision-/Paper-Process, Business-Case-Inputs, References und History.

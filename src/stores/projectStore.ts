@@ -5,7 +5,7 @@ import { defaultProject } from '../data/defaultProject'
 import { createNewProject, type NewProjectInput, type NewProjectOptions } from '../data/newProject'
 import type { MeddpiccProject, ProjectMeta } from '../domain/project'
 import { prepareProjectForSave, suggestProjectFileName } from '../domain/projectPersistence'
-import { loadProject, serializeProject, type ProjectValidationResult } from '../domain/projectSchema'
+import { loadProject, serializeProject, type ProjectLoadResult } from '../domain/projectSchema'
 
 export type ProjectSource = 'demo' | 'file' | 'new'
 
@@ -42,11 +42,11 @@ export const useProjectStore = defineStore('project', () => {
     replaceProject(nextProject, 'new', suggestProjectFileName(nextProject), true)
   }
 
-  function importProjectText(raw: string, importedFileName: string): ProjectValidationResult {
+  function importProjectText(raw: string, importedFileName: string): ProjectLoadResult {
     const result = loadProject(raw)
 
     if (result.success) {
-      replaceProject(result.project, 'file', importedFileName, false)
+      replaceProject(result.project, 'file', importedFileName, result.migration !== null)
     }
 
     return result

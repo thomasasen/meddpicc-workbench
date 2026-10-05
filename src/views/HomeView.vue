@@ -207,9 +207,12 @@ async function handleProjectFileChange(event: Event) {
 
     if (!confirmDiscardUnsavedChanges()) return
 
-    projectStore.replaceProject(result.project, 'file', file.name, false)
+    const migrated = result.migration !== null
+    projectStore.replaceProject(result.project, 'file', file.name, migrated)
     importIssues.value = []
-    statusMessage.value = `${file.name} wurde vollständig validiert und geladen.`
+    statusMessage.value = migrated
+      ? `${file.name} wurde von Schema ${result.migration?.fromVersion} auf ${result.migration?.toVersion} migriert. Bitte speichern, um die Migration zu übernehmen.`
+      : `${file.name} wurde vollständig validiert und geladen.`
   } catch {
     importIssues.value = [
       {

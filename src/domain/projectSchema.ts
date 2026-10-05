@@ -3,12 +3,13 @@ import addFormats from 'ajv-formats'
 
 import projectSchema from '../../schema/meddpicc-project.schema.json'
 import type { MeddpiccProject } from './project'
+import { migrateProjectToCurrent, type ProjectMigrationMetadata } from './projectMigration'
 import { validateProjectDomain } from './projectValidation'
 
 export const CURRENT_SCHEMA_VERSION = '0.2.0'
 export const MAX_PROJECT_FILE_BYTES = 5 * 1024 * 1024
 
-export type ProjectValidationSource = 'file' | 'parse' | 'version' | 'schema' | 'domain'
+export type ProjectValidationSource = 'file' | 'parse' | 'version' | 'migration' | 'schema' | 'domain'
 
 export type ProjectValidationIssue = {
   source: ProjectValidationSource
@@ -22,6 +23,10 @@ export type ProjectParseResult =
 
 export type ProjectValidationResult =
   { success: true; project: MeddpiccProject } | { success: false; issues: ProjectValidationIssue[] }
+
+export type ProjectLoadResult =
+  | { success: true; project: MeddpiccProject; migration: ProjectMigrationMetadata | null }
+  | { success: false; issues: ProjectValidationIssue[] }
 
 const ajv = new Ajv2020({
   allErrors: true,
@@ -168,11 +173,26 @@ export function validateProject(value: unknown): ProjectValidationResult {
   return { success: true, project: value }
 }
 
-export function loadProject(raw: string): ProjectValidationResult {
+export function loadProject(raw: string): ProjectLoadResult {
   const parsed = parseProjectJson(raw)
   if (!parsed.success) return parsed
 
-  return validateProject(parsed.value)
+  const migrated = migrateProjectToCurrent(parsed.value)
+  if (!migrated.success) {
+    return {
+      success: false,
+      issues: migrated.issues.map((issue) => ({ source: 'migration' as const, ...issue })),
+    }
+  }
+
+  const validation = validateProject(migrated.value)
+  if (!validation.success) return validation
+
+  return {
+    success: true,
+    project: validation.project,
+    migration: migrated.migration,
+  }
 }
 
 export class ProjectValidationError extends Error {

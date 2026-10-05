@@ -41,7 +41,7 @@ Acceptance Criteria:
 
 **Ziel:** Projekte zuverlässig erstellen, öffnen, validieren, migrieren, bearbeiten und speichern.
 
-**Bereits umgesetzt:** formales Schema 0.2.0, Runtime-Validator, strukturierte Fehler, zukünftige Major-Versionen blockieren, Domain Validation, Round-Trip-Baseline, bereinigtes Demo-Fixture sowie der browserbasierte Project File Lifecycle für Neu/Öffnen/Speichern. Migration unterstützter älterer Versionen und die optionale File System Access API bleiben offen.
+**Core abgeschlossen:** formales Schema 0.2.0, Runtime-Validator, strukturierte Fehler, zukünftige Major-Versionen blockieren, Domain Validation, Round-Trip-Baseline, bereinigtes Demo-Fixture, browserbasierter Project File Lifecycle sowie eine deterministische Migration des historischen Schema-0.1.0-Fixtures auf 0.2.0. Die File System Access API bleibt ein optionales Progressive Enhancement.
 
 Deliverables:
 
@@ -49,10 +49,10 @@ Deliverables:
 - Projekt-öffnen-/Import-Flow ✅
 - Validierungsfehler im UI ✅
 - Handling nicht unterstützter Versionen ✅
-- Migrationsframework
+- Migrationsframework ✅
 - Dirty-State-Tracking ✅
 - Save As / Download ✅
-- optionale File System Access API
+- optionale File System Access API *(Progressive Enhancement, nicht blockierend)*
 - Crash-/Unsaved-Recovery-Konzept ✅
 - bereinigtes Demo-Projekt ✅
 
@@ -61,7 +61,7 @@ Acceptance Criteria:
 - gültige Dateien round-trippen ohne Datenverlust ✅
 - ungültige Datei wird niemals teilweise geladen ✅
 - zukünftige nicht unterstützte Schema-Version wird nicht überschrieben ✅
-- unterstütztes altes Fixture migriert deterministisch
+- unterstütztes altes Fixture migriert deterministisch ✅
 - Nutzer wird vor Verlust ungespeicherter Änderungen gewarnt ✅
 
 ## Phase 2 – Gemeinsames Qualifizierungsmodell

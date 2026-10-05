@@ -85,3 +85,33 @@ test('öffnet eine valide .meddpicc-Datei und schützt ungespeicherte Änderunge
   await expect(page.locator('.project-toolbar')).toContainText('demo-opportunity.meddpicc')
   await expect(page.locator('.project-toolbar')).toContainText('Gespeicherter Stand')
 })
+
+test('migriert eine historische 0.1.0-Datei sichtbar und speichert sie als 0.2.0', async ({ page }) => {
+  await page.goto('/meddpicc-workbench/')
+
+  await page.locator('input[type="file"]').setInputFiles('examples/legacy/demo-opportunity-0.1.0.meddpicc')
+
+  await expect(page.getByRole('status')).toContainText('wurde von Schema 0.1.0 auf 0.2.0 migriert')
+  await expect(page.getByRole('status')).toContainText('Bitte speichern')
+  await expect(page.locator('.project-toolbar')).toContainText('Ungespeicherte Änderungen')
+  await expect(page.getByRole('heading', { name: 'Beispielwerke Industrie GmbH' })).toBeVisible()
+
+  const downloadPromise = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Projekt speichern' }).click()
+  const download = await downloadPromise
+
+  const downloadPath = await download.path()
+  expect(downloadPath).not.toBeNull()
+
+  const raw = await readFile(downloadPath as string, 'utf8')
+  const saved = JSON.parse(raw) as {
+    schemaVersion: string
+    history: Array<{ type: string; summary: string }>
+  }
+
+  expect(saved.schemaVersion).toBe('0.2.0')
+  expect(saved.history.some((entry) => entry.type === 'schema_migrated')).toBe(true)
+  expect(saved.history.some((entry) => entry.summary.includes('0.1.0 auf 0.2.0'))).toBe(true)
+
+  await expect(page.locator('.project-toolbar')).toContainText('Gespeicherter Stand')
+})

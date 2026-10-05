@@ -1,6 +1,8 @@
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it } from 'vitest'
 
+import legacyProjectRaw from '../../examples/legacy/demo-opportunity-0.1.0.meddpicc?raw'
+
 import { defaultProject } from '../data/defaultProject'
 import { serializeProject } from '../domain/projectSchema'
 import { useProjectStore } from './projectStore'
@@ -54,6 +56,20 @@ describe('projectStore', () => {
     expect(store.source).toBe('file')
     expect(store.fileName).toBe('deal.meddpicc')
     expect(store.dirty).toBe(false)
+  })
+
+  it('markiert ein automatisch migriertes Legacy-Projekt bis zum Speichern als dirty', () => {
+    const store = useProjectStore()
+
+    const result = store.importProjectText(legacyProjectRaw, 'legacy.meddpicc')
+
+    expect(result.success).toBe(true)
+    if (!result.success) return
+
+    expect(result.migration?.fromVersion).toBe('0.1.0')
+    expect(store.project.schemaVersion).toBe('0.2.0')
+    expect(store.fileName).toBe('legacy.meddpicc')
+    expect(store.dirty).toBe(true)
   })
 
   it('setzt bei Bearbeitung dirty und erst nach bestätigtem Download wieder clean', () => {
