@@ -12,7 +12,7 @@ import {
   TriangleAlert,
 } from '@lucide/vue'
 import { storeToRefs } from 'pinia'
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, type Component } from 'vue'
+import { computed, nextTick, ref, type Component } from 'vue'
 
 import type { ProjectAreaKey, ProjectRisk } from '../domain/project'
 import { loadProject, ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
@@ -251,14 +251,6 @@ function saveProject() {
   }
 }
 
-function handleBeforeUnload(event: BeforeUnloadEvent) {
-  if (!dirty.value) return
-  event.preventDefault()
-  event.returnValue = ''
-}
-
-onMounted(() => window.addEventListener('beforeunload', handleBeforeUnload))
-onBeforeUnmount(() => window.removeEventListener('beforeunload', handleBeforeUnload))
 </script>
 
 <template>
@@ -277,6 +269,7 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', handleBeforeUnl
 
         <div class="header-actions">
           <span class="release-badge">Pre-Alpha</span>
+          <RouterLink class="icon-link" to="/evidence">Evidenzregister</RouterLink>
           <a class="icon-link" href="https://github.com/thomasasen/meddpicc-workbench" target="_blank" rel="noreferrer">
             GitHub
           </a>
