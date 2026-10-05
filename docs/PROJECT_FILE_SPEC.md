@@ -4,6 +4,8 @@
 
 Die `.meddpicc`-Datei ist die portable Source of Truth für eine Opportunity.
 
+Die Spezifikation befindet sich noch in der Pre-Alpha-Phase. Das aktuell mitgelieferte Demo-Projekt verwendet `schemaVersion: 0.1.0`. Erst ein späterer stabiler Schema-Stand wird als langfristiger Kompatibilitätsvertrag behandelt.
+
 Version 1 bleibt bewusst einfach:
 
 - UTF-8
@@ -367,10 +369,23 @@ Anforderungen:
 
 ## Beispiel-Fixture
 
-Nach Definition des ersten formalen Schemas wird ein bereinigtes Beispielprojekt ergänzt:
+Ein vollständig fiktives Pre-Alpha-Beispielprojekt liegt bereits vor:
 
 ```text
 examples/demo-opportunity.meddpicc
 ```
 
-Nur fiktive Unternehmen und Personen verwenden.
+Es wird aktuell beim Start der Anwendung als Standard-Demo geladen und deckt bewusst unterschiedliche Qualifizierungszustände ab: bestätigte Bereiche, Teilqualifizierung, Annahmen, unbekannte Informationen und Risiken.
+
+Das Fixture enthält unter anderem:
+
+- alle acht MEDDPICC-Bereiche
+- gemeinsame Stakeholder
+- Evidenz und Referenzen
+- Risiken und nächste Aktionen
+- Decision- und Paper-Process-Schritte
+- Business-Case-Inputs
+- Planning-Metadaten
+- History Events
+
+Alle Unternehmen, Personen und Inhalte im Fixture sind fiktiv. Das Fixture dient der Produktdemo und als frühe Regression-Basis; sein Schema ist noch nicht als stabil anzusehen.
