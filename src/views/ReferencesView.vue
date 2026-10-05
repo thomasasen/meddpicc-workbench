@@ -204,7 +204,7 @@ function saveProject() {
           <section class="evidence-form-panel" aria-labelledby="reference-form-title">
             <div>
               <p class="eyebrow">{{ editingReferenceId ? 'Quelle bearbeiten' : 'Neue Quelle' }}</p>
-              <h2 id="reference-form-title">Source-Record pflegen</h2>
+              <h2 id="reference-form-title">Quelleneintrag pflegen</h2>
             </div>
 
             <form class="evidence-form" @submit.prevent="submitReference">
@@ -266,7 +266,7 @@ function saveProject() {
               Noch keine Quelle hinterlegt. Lege zuerst ein Meeting, Dokument oder einen anderen Reference-Record an.
             </p>
 
-            <article v-for="reference in sortedReferences" :key="reference.id" class="reference-card">
+            <article v-for="reference in sortedReferences" :id="`reference-${reference.id}`" :key="reference.id" class="reference-card">
               <div class="work-object-card-heading">
                 <div>
                   <strong>{{ reference.title }}</strong>
