@@ -138,9 +138,9 @@ async function assertPublishedRootMatchesSource() {
 
     try {
       const index = await readFile(publishedIndex, 'utf8')
-      const referencedAssets = [
-        ...index.matchAll(/(?:src|href)="\/meddpicc-workbench\/assets\/([^"]+)"/g),
-      ].map((match) => match[1])
+      const referencedAssets = [...index.matchAll(/(?:src|href)="\/meddpicc-workbench\/assets\/([^"]+)"/g)].map(
+        (match) => match[1],
+      )
 
       if (referencedAssets.length === 0) {
         mismatches.push('index.html enthält keine veröffentlichten Asset-Referenzen')
