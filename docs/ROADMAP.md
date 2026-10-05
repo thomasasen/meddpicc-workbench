@@ -68,25 +68,25 @@ Acceptance Criteria:
 
 **Ziel:** bereichsübergreifende Objekte für alle MEDDPICC-Bereiche implementieren.
 
-**Aktueller Stand:** aktiv. Das projektweite Evidenzregister sowie projektweite Risiken und nächste Aktionen sind als gemeinsame, validierte Arbeitsobjekte nutzbar. Als nächstes fehlen insbesondere Source-/Reference-Records und vollständige Source-Traceability des Dashboards.
+**Aktueller Stand:** aktiv. Evidenz, Risiken, nächste Aktionen und Source-/Reference-Records sind als gemeinsame, validierte Arbeitsobjekte nutzbar. Sichtbare Risk-/Action-Findings im Dashboard zeigen eine deterministisch abgeleitete Quellenbasis mit Drill-down. Offen bleiben insbesondere die vollständige Projektmetadaten-Bearbeitung und konkrete Evidence-to-Entity-Verknüpfungen.
 
 Deliverables:
 
 - Projektmetadaten
 - Evidenzregister ✅ *(zentrale Liste + Anlegen mit Klassifikation, Verifikation, Qualität, Quelle und MEDDPICC-Bezug)*
-- Referenzen
+- Referenzen ✅ *(projektweit anlegen/bearbeiten; Evidence kann einen Reference-Record referenzieren)*
 - Risiken ✅ *(projektweit anlegen/bearbeiten, Severity/Status, Bereichs- und Entity-/Process-Verknüpfung)*
 - nächste Aktionen ✅ *(projektweit anlegen/bearbeiten, Risk-/Gap-/Evidence-Verknüpfung und Desired Evidence)*
 - Historie *(Basis vorhanden; `evidence_added`, `risk_opened`, `risk_closed` und `action_completed` werden in den implementierten Flows geschrieben; weitere Nutzung bleibt offen)*
 - gemeinsames Statusmodell
-- Dashboard-Zusammenfassung
+- Dashboard-Zusammenfassung *(Risk-/Action-Findings mit Source-Traceability umgesetzt; weitere Findings folgen mit späteren Modulen)*
 
 Acceptance Criteria:
 
 - ein Evidenzobjekt kann mehrere Aussagen stützen
 - Annahmen und Unbekanntes sind visuell und textlich von bestätigter Evidenz unterscheidbar ✅
 - Risiken und Aktionen verlinken auf MEDDPICC-Bereiche; Risiken können zusätzlich sicher auf konkrete Entities bzw. Process Steps verweisen ✅
-- Dashboard Findings sind auf Source Data zurückführbar
+- sichtbare Risk-/Action-Findings im Dashboard sind auf Evidence und Reference-Records zurückführbar ✅
 
 Fortschritt und Handoff: `docs/PROGRESS.md`
 

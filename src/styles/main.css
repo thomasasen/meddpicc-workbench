@@ -1003,6 +1003,20 @@ h3 {
 }
 
 @media (max-width: 768px) {
+  .header-inner {
+    min-height: auto;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-block: var(--space-3);
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+  }
+
   .compact-section-grid {
     grid-template-columns: 1fr;
     gap: var(--space-6);
@@ -1360,7 +1374,7 @@ h3 {
 
 .evidence-details {
   display: grid;
-  grid-template-columns: 1fr 0.7fr 1.3fr;
+  grid-template-columns: 1fr 0.7fr 1fr 1.3fr;
   gap: var(--space-3);
   margin: 0;
   border-top: 1px solid var(--color-divider);
@@ -1606,5 +1620,78 @@ h3 {
 
   .compact-button {
     align-self: flex-start;
+  }
+}
+
+
+/* Roadmap 2: Source-/Reference-Records und Traceability */
+.reference-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  padding: var(--space-4);
+}
+
+.reference-card + .reference-card {
+  margin-top: var(--space-3);
+}
+
+.reference-details {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 0.7fr;
+  gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--space-3);
+}
+
+.reference-details div {
+  min-width: 0;
+}
+
+.reference-details dt {
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  font-weight: 650;
+}
+
+.reference-details dd {
+  margin: 0.15rem 0 0;
+  overflow-wrap: anywhere;
+  font-size: 0.78rem;
+}
+
+.reference-link,
+.source-trace-link {
+  color: var(--color-accent);
+  font-size: 0.72rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.reference-link {
+  display: inline-flex;
+  margin-top: var(--space-3);
+}
+
+.reference-link:hover,
+.source-trace-link:hover {
+  text-decoration: underline;
+}
+
+.risk-item .source-trace-link {
+  display: inline-block;
+  margin-top: var(--space-2);
+  color: currentColor;
+  opacity: 0.82;
+}
+
+.action-list .source-trace-link {
+  margin-top: 0.1rem;
+}
+
+@media (max-width: 640px) {
+  .reference-details {
+    grid-template-columns: 1fr;
   }
 }

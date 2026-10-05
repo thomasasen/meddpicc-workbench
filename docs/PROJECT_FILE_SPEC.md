@@ -324,7 +324,7 @@ Planning hält derzeit Target Go-Live und Implementierungsannahmen. Berechnete C
 
 ## Referenzen
 
-References verweisen auf externen Kontext, ohne ihn einzubetten.
+References verweisen auf externen Kontext, ohne ihn einzubetten. Ein Reference-Record besitzt eine stabile ID und kann insbesondere Typ, Titel, Datum, externe ID, URL und Notizen enthalten.
 
 Unterstützte Typen sind unter anderem:
 
@@ -336,7 +336,20 @@ Unterstützte Typen sind unter anderem:
 - contract
 - other
 
-URLs sind nur Metadaten. Projektdateiinhalte dürfen keine automatischen Netzwerkaufrufe auslösen.
+Evidenz kann über `referenceId` genau einen solchen Record referenzieren. Die Domain Validation stellt sicher, dass eine gesetzte Reference-ID tatsächlich existiert.
+
+Die Workbench nutzt diese Beziehung für Source-Traceability:
+
+```text
+Dashboard Finding
+→ Evidence
+→ Reference-Record
+→ optional nutzerinitiierte externe URL
+```
+
+Für Risks ohne direkte Evidence-IDs wird keine direkte Risk→Evidence-Beziehung erfunden. Die Quellenbasis wird deterministisch aus bereits modellierten MEDDPICC-/Entity-Verknüpfungen abgeleitet. Bei konkreten `relatedEntityIds` bleibt die Ableitung auf diese Entities und explizite Section-Evidence begrenzt.
+
+URLs sind ausschließlich Metadaten. Projektdateiinhalte dürfen keine automatischen Netzwerkaufrufe auslösen; externe Links werden nur durch eine bewusste Nutzeraktion geöffnet.
 
 ## Historie
 

@@ -14,11 +14,12 @@ import {
 import { storeToRefs } from 'pinia'
 import { computed, nextTick, ref, type Component } from 'vue'
 
-import type { ProjectAreaKey, ProjectRisk } from '../domain/project'
+import type { ProjectAction, ProjectAreaKey, ProjectRisk } from '../domain/project'
 import { loadProject, ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
 import { downloadTextFile } from '../services/browserFile'
 import { useProjectStore } from '../stores/projectStore'
 import { qualificationStatusLabels, type QualificationStatusKey } from '../domain/qualificationStatus'
+import { traceActionSources, traceRiskSources, type SourceTrace } from '../domain/sourceTraceability'
 
 type SnapshotItem = {
   label: string
@@ -126,6 +127,35 @@ function formatDate(value: string | null): string {
 
 function riskClass(risk: ProjectRisk): string {
   return risk.severity === 'critical' || risk.severity === 'high' ? 'risk-item' : 'risk-item risk-item--warning'
+}
+
+function riskTrace(risk: ProjectRisk): SourceTrace {
+  return traceRiskSources(project.value, risk)
+}
+
+function actionTrace(action: ProjectAction): SourceTrace {
+  return traceActionSources(project.value, action)
+}
+
+function sourceTraceLabel(trace: SourceTrace): string {
+  if (trace.evidence.length === 0) return 'Quellenbasis: keine verknüpfte Evidenz'
+
+  const evidenceLabel = `${trace.evidence.length} ${trace.evidence.length === 1 ? 'Evidenz' : 'Evidenzen'}`
+  if (trace.references.length === 0) return `Quellenbasis: ${evidenceLabel} · ohne Quellenreferenz`
+
+  const titles = trace.references.slice(0, 2).map((reference) => reference.title)
+  const remaining = trace.references.length - titles.length
+  const sourceLabel = titles.join(', ') + (remaining > 0 ? ` +${remaining}` : '')
+  const missingLabel =
+    trace.evidenceWithoutReference > 0 ? ` · ${trace.evidenceWithoutReference} ohne Quellenreferenz` : ''
+
+  return `Quellenbasis: ${evidenceLabel} · ${sourceLabel}${missingLabel}`
+}
+
+function sourceTraceTarget(trace: SourceTrace): string {
+  if (trace.references[0]) return `/references#reference-${trace.references[0].id}`
+  if (trace.evidence[0]) return `/evidence#evidence-${trace.evidence[0].id}`
+  return '/evidence'
 }
 
 function forecastLabel(value: string): string {
@@ -269,6 +299,7 @@ function saveProject() {
         <div class="header-actions">
           <span class="release-badge">Pre-Alpha</span>
           <RouterLink class="icon-link" to="/evidence">Evidenzregister</RouterLink>
+          <RouterLink class="icon-link" to="/references">Quellen</RouterLink>
           <RouterLink class="icon-link" to="/risks-actions">Risiken &amp; Aktionen</RouterLink>
           <a class="icon-link" href="https://github.com/thomasasen/meddpicc-workbench" target="_blank" rel="noreferrer">
             GitHub
@@ -460,6 +491,9 @@ function saveProject() {
                   <div>
                     <strong>{{ risk.title }}</strong>
                     <p>{{ risk.impact }}</p>
+                    <RouterLink class="source-trace-link" :to="sourceTraceTarget(riskTrace(risk))">
+                      {{ sourceTraceLabel(riskTrace(risk)) }}
+                    </RouterLink>
                   </div>
                 </div>
               </section>
@@ -478,6 +512,9 @@ function saveProject() {
                     <div>
                       <strong>{{ action.title }}</strong>
                       <span>{{ areaLabels[action.relatedArea] }}</span>
+                      <RouterLink class="source-trace-link" :to="sourceTraceTarget(actionTrace(action))">
+                        {{ sourceTraceLabel(actionTrace(action)) }}
+                      </RouterLink>
                     </div>
                     <span class="action-due">{{ formatDate(action.dueDate) }}</span>
                   </li>

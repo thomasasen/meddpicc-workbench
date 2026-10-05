@@ -263,6 +263,7 @@ function saveProject() {
             ><ArrowLeft :size="16" aria-hidden="true" /><span>Dashboard</span></RouterLink
           >
           <RouterLink class="icon-link" to="/evidence">Evidenzregister</RouterLink>
+          <RouterLink class="icon-link" to="/references">Quellen</RouterLink>
           <button class="button button-primary button-with-icon" type="button" @click="saveProject">
             <Save :size="16" aria-hidden="true" /><span>Projekt speichern</span>
           </button>
