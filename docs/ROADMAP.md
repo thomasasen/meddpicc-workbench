@@ -2,7 +2,7 @@
 
 Die Roadmap priorisiert ein belastbares portables Projektmodell vor Feature-Breite. Alle späteren Tools hängen von einem verlässlichen File Lifecycle und gemeinsamen Domain Model ab.
 
-## Phase 0 – Foundation
+## Phase 0 – Foundation ✅
 
 **Ziel:** stabile Entwicklungs-, Design- und Deployment-Basis schaffen.
 
@@ -37,7 +37,7 @@ Acceptance Criteria:
 - Keine externe Webfont-/CDN-Abhängigkeit ist für das UI erforderlich.
 - Normale UI-Sprache ist Deutsch.
 
-## Phase 1 – Project File Lifecycle
+## Phase 1 – Project File Lifecycle ✅
 
 **Ziel:** Projekte zuverlässig erstellen, öffnen, validieren, migrieren, bearbeiten und speichern.
 
@@ -71,18 +71,18 @@ Acceptance Criteria:
 Deliverables:
 
 - Projektmetadaten
-- Evidenzregister
+- Evidenzregister ✅ *(zentrale Liste + Anlegen mit Klassifikation, Verifikation, Qualität, Quelle und MEDDPICC-Bezug)*
 - Referenzen
 - Risiken
 - nächste Aktionen
-- Historie
+- Historie *(Basis vorhanden; `evidence_added` wird beim Anlegen automatisch geschrieben)*
 - gemeinsames Statusmodell
 - Dashboard-Zusammenfassung
 
 Acceptance Criteria:
 
 - ein Evidenzobjekt kann mehrere Aussagen stützen
-- Annahmen und Unbekanntes sind visuell von bestätigter Evidenz unterscheidbar
+- Annahmen und Unbekanntes sind visuell und textlich von bestätigter Evidenz unterscheidbar ✅
 - Risiken/Aktionen verlinken auf MEDDPICC-Bereich oder Prozessschritt
 - Dashboard Findings sind auf Source Data zurückführbar
 
