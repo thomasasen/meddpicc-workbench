@@ -84,7 +84,7 @@ Eine unbekannte zukünftige Major-Version wird vollständig abgelehnt und darf n
 
 `appVersion` ist Diagnosemetadatum und nicht die Kompatibilitätsinstanz.
 
-`revision` wird beim späteren Save-Lifecycle monoton erhöht; sie ist kein verteiltes Conflict-Resolution-Protokoll.
+`revision` wird beim Save-/Download-Lifecycle monoton erhöht; sie ist kein verteiltes Conflict-Resolution-Protokoll. Gleichzeitig wird `updatedAt` auf den Zeitpunkt des erzeugten Save-Snapshots gesetzt.
 
 ## Projektmetadaten
 
@@ -354,6 +354,19 @@ Zusätzlich geprüft werden insbesondere:
 - existierende Process-Predecessors
 - keine Process Dependency Cycles
 - gültige History-Entity-Referenzen
+
+## Browserbasierter File Lifecycle
+
+Die aktuelle Baseline unterstützt ohne Backend:
+
+- fachlich leeres neues Projekt erzeugen
+- lokale `.meddpicc`-Datei auswählen und vollständig validieren
+- ungültige Dateien vollständig ablehnen, ohne den aktuellen Projektstand zu ersetzen
+- Dirty State für neue bzw. bearbeitete Projekte
+- Warnung vor dem Verwerfen ungespeicherter Änderungen
+- validierten Save-Snapshot als `.meddpicc` herunterladen
+
+Direktes Reopen/Save über die File System Access API bleibt optional. Migration unterstützter älterer Schema-Versionen ist der nächste noch offene Kompatibilitätsbaustein.
 
 ## Round Trip
 

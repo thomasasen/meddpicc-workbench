@@ -4,7 +4,7 @@ Eine local-first Browser-Anwendung zur Verwaltung und Qualifizierung komplexer B
 
 Die Grundidee ist einfach: **Die Projektdatei ist die Source of Truth.** Die Anwendung öffnet eine portable `.meddpicc`-Datei, unterstützt bei der strukturierten Bewertung der Opportunity mit deterministischen Werkzeugen und speichert das aktualisierte Projekt wieder in dieser Datei. Zur Runtime werden weder AI, Backend, Benutzerkonto noch externe Datenbank benötigt.
 
-> **Projektstatus:** Pre-Alpha. Die technische Basis und eine erste responsive Startseite sind implementiert und werden automatisch über GitHub Pages deployt. Die fachlichen MEDDPICC-Funktionen und der `.meddpicc`-Dateilifecycle folgen schrittweise.
+> **Projektstatus:** Pre-Alpha. Die technische Basis, eine responsive Startseite und der browserbasierte `.meddpicc`-Lifecycle für neues Projekt, Öffnen/Validieren, Dirty-State und Save/Download sind implementiert. Die fachlichen MEDDPICC-Bearbeitungsmodule und Migration älterer Dateiversionen folgen schrittweise.
 
 [![Live-Anwendung öffnen](https://img.shields.io/badge/MEDDPICC%20Workbench-Live--Anwendung%20%C3%B6ffnen-2563EB?style=for-the-badge)](https://thomasasen.github.io/meddpicc-workbench/)
 
@@ -49,7 +49,7 @@ Die Anwendung läuft vollständig im Browser und wird automatisch über GitHub P
 
 ### Standard-Demo
 
-Beim Öffnen der Anwendung wird derzeit eine vollständig fiktive Demo-Opportunity aus `examples/demo-opportunity.meddpicc` geladen. Die Startseite liest Account, Deal Value, Termine, MEDDPICC-Status, Risiken und nächste Aktionen direkt aus dieser Datei.
+Beim Öffnen der Anwendung wird zunächst eine vollständig fiktive Demo-Opportunity aus `examples/demo-opportunity.meddpicc` geladen. Über die Projektleiste können Nutzer ein fachlich leeres Projekt anlegen, eine lokale `.meddpicc`-Datei vollständig validiert öffnen und den aktuellen Stand wieder als `.meddpicc` herunterladen. Die Startseite liest Account, Deal Value, Termine, MEDDPICC-Status, Risiken und nächste Aktionen direkt aus dem aktuell geladenen Projekt.
 
 Die Demo dient gleichzeitig als Regression-Fixture für das formalisierte Pre-Alpha-Dateiformat. Sie verwendet `schemaVersion: 0.2.0`. Der kanonische Vertrag liegt in `schema/meddpicc-project.schema.json`; Pre-Alpha-Versionen sind weiterhin noch kein langfristiger Kompatibilitätsvertrag.
 

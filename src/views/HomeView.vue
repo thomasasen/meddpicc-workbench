@@ -4,14 +4,19 @@ import {
   CircleDashed,
   CircleDot,
   CircleQuestionMark,
+  FilePlus,
+  FolderOpen,
   ListChecks,
   ListTodo,
+  Save,
   TriangleAlert,
 } from '@lucide/vue'
 import { storeToRefs } from 'pinia'
-import { computed, type Component } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, type Component } from 'vue'
 
 import type { ProjectAreaKey, ProjectRisk } from '../domain/project'
+import { loadProject, ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
+import { downloadTextFile } from '../services/browserFile'
 import { useProjectStore } from '../stores/projectStore'
 import { qualificationStatusLabels, type QualificationStatusKey } from '../domain/qualificationStatus'
 
@@ -22,7 +27,30 @@ type SnapshotItem = {
 }
 
 const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project, source, fileName, dirty } = storeToRefs(projectStore)
+
+const fileInput = ref<HTMLInputElement | null>(null)
+const accountNameInput = ref<HTMLInputElement | null>(null)
+const showNewProjectForm = ref(false)
+const importIssues = ref<ProjectValidationIssue[]>([])
+const statusMessage = ref('')
+const newProjectForm = ref({
+  accountName: '',
+  name: '',
+  owner: '',
+  currency: 'EUR',
+})
+
+const projectStateLabel = computed(() => {
+  if (dirty.value) return 'Ungespeicherte Änderungen'
+  if (source.value === 'demo') return 'Demo · unverändert'
+  return 'Gespeicherter Stand'
+})
+
+const projectFileLabel = computed(() => {
+  if (fileName.value) return fileName.value
+  return source.value === 'demo' ? 'Eingebettete Demo' : 'Noch nicht gespeichert'
+})
 
 const areaLabels: Record<ProjectAreaKey, string> = {
   metrics: 'Metrics',
@@ -103,6 +131,131 @@ function riskClass(risk: ProjectRisk): string {
 function forecastLabel(value: string): string {
   return forecastLabels[value] ?? value
 }
+
+function confirmDiscardUnsavedChanges(): boolean {
+  if (!dirty.value) return true
+
+  return window.confirm('Es gibt ungespeicherte Änderungen. Wenn du fortfährst, gehen diese Änderungen verloren.')
+}
+
+async function openNewProjectForm() {
+  importIssues.value = []
+  statusMessage.value = ''
+  showNewProjectForm.value = true
+  await nextTick()
+  accountNameInput.value?.focus()
+}
+
+function closeNewProjectForm() {
+  showNewProjectForm.value = false
+}
+
+function submitNewProject() {
+  if (!confirmDiscardUnsavedChanges()) return
+
+  projectStore.createProject({
+    accountName: newProjectForm.value.accountName,
+    name: newProjectForm.value.name,
+    owner: newProjectForm.value.owner,
+    currency: newProjectForm.value.currency,
+  })
+
+  showNewProjectForm.value = false
+  importIssues.value = []
+  statusMessage.value = 'Neues Projekt erstellt. Der Stand ist noch nicht gespeichert.'
+  newProjectForm.value = {
+    accountName: '',
+    name: '',
+    owner: '',
+    currency: 'EUR',
+  }
+}
+
+function triggerProjectOpen() {
+  importIssues.value = []
+  statusMessage.value = ''
+  fileInput.value?.click()
+}
+
+async function handleProjectFileChange(event: Event) {
+  const input = event.currentTarget as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+
+  if (!file) return
+
+  if (!file.name.toLowerCase().endsWith('.meddpicc')) {
+    importIssues.value = [
+      {
+        source: 'file',
+        code: 'invalid_file_extension',
+        path: '/',
+        message: 'Bitte eine Projektdatei mit der Endung .meddpicc auswählen.',
+      },
+    ]
+    return
+  }
+
+  try {
+    const raw = await file.text()
+    const result = loadProject(raw)
+
+    if (!result.success) {
+      importIssues.value = result.issues
+      return
+    }
+
+    if (!confirmDiscardUnsavedChanges()) return
+
+    projectStore.replaceProject(result.project, 'file', file.name, false)
+    importIssues.value = []
+    statusMessage.value = `${file.name} wurde vollständig validiert und geladen.`
+  } catch {
+    importIssues.value = [
+      {
+        source: 'file',
+        code: 'file_read_failed',
+        path: '/',
+        message: 'Die ausgewählte Projektdatei konnte nicht gelesen werden.',
+      },
+    ]
+  }
+}
+
+function saveProject() {
+  importIssues.value = []
+  statusMessage.value = ''
+
+  try {
+    const download = projectStore.prepareDownload()
+    downloadTextFile(download.content, download.fileName)
+    projectStore.confirmDownloaded(download)
+    statusMessage.value = `${download.fileName} wurde als validierte Projektdatei heruntergeladen.`
+  } catch (error) {
+    if (error instanceof ProjectValidationError) {
+      importIssues.value = error.issues
+      return
+    }
+
+    importIssues.value = [
+      {
+        source: 'file',
+        code: 'download_failed',
+        path: '/',
+        message: 'Das Projekt konnte nicht als Datei gespeichert werden.',
+      },
+    ]
+  }
+}
+
+function handleBeforeUnload(event: BeforeUnloadEvent) {
+  if (!dirty.value) return
+  event.preventDefault()
+  event.returnValue = ''
+}
+
+onMounted(() => window.addEventListener('beforeunload', handleBeforeUnload))
+onBeforeUnmount(() => window.removeEventListener('beforeunload', handleBeforeUnload))
 </script>
 
 <template>
@@ -128,6 +281,111 @@ function forecastLabel(value: string): string {
       </div>
     </header>
 
+    <section class="project-toolbar" aria-label="Projektdatei">
+      <div class="container project-toolbar-inner">
+        <div class="project-context">
+          <span class="project-context-label">Aktuelles Projekt</span>
+          <strong>{{ project.project.accountName }} · {{ project.project.name }}</strong>
+          <span class="project-file-name">{{ projectFileLabel }}</span>
+          <span class="project-save-state" :class="{ 'project-save-state--dirty': dirty }">
+            {{ projectStateLabel }}
+          </span>
+        </div>
+
+        <div class="project-actions" aria-label="Projektaktionen">
+          <button class="button button-secondary button-with-icon" type="button" @click="openNewProjectForm">
+            <FilePlus :size="17" :stroke-width="2" aria-hidden="true" />
+            <span>Neues Projekt</span>
+          </button>
+          <button class="button button-secondary button-with-icon" type="button" @click="triggerProjectOpen">
+            <FolderOpen :size="17" :stroke-width="2" aria-hidden="true" />
+            <span>Projekt öffnen</span>
+          </button>
+          <button class="button button-primary button-with-icon" type="button" @click="saveProject">
+            <Save :size="17" :stroke-width="2" aria-hidden="true" />
+            <span>Projekt speichern</span>
+          </button>
+          <input
+            ref="fileInput"
+            class="project-file-input"
+            type="file"
+            accept=".meddpicc"
+            aria-label="MEDDPICC-Projektdatei auswählen"
+            @change="handleProjectFileChange"
+          />
+        </div>
+      </div>
+
+      <div v-if="showNewProjectForm" class="container project-flow-panel">
+        <form class="new-project-form" @submit.prevent="submitNewProject">
+          <div class="project-flow-heading">
+            <div>
+              <p class="eyebrow">Project File Lifecycle</p>
+              <h2>Neues Projekt erstellen</h2>
+            </div>
+            <p>Das Projekt startet bewusst leer. Alle MEDDPICC-Bereiche stehen auf „Unbekannt“.</p>
+          </div>
+
+          <div class="new-project-fields">
+            <label>
+              <span>Account</span>
+              <input
+                ref="accountNameInput"
+                v-model.trim="newProjectForm.accountName"
+                type="text"
+                maxlength="300"
+                autocomplete="organization"
+                required
+              />
+            </label>
+            <label>
+              <span>Projektname</span>
+              <input v-model.trim="newProjectForm.name" type="text" maxlength="300" required />
+            </label>
+            <label>
+              <span>Owner <small>optional</small></span>
+              <input v-model.trim="newProjectForm.owner" type="text" maxlength="200" autocomplete="name" />
+            </label>
+            <label>
+              <span>Währung</span>
+              <select v-model="newProjectForm.currency">
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+                <option value="GBP">GBP</option>
+                <option value="CHF">CHF</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="project-flow-actions">
+            <button class="button button-primary" type="submit">Projekt erstellen</button>
+            <button class="button button-secondary" type="button" @click="closeNewProjectForm">Abbrechen</button>
+          </div>
+        </form>
+      </div>
+
+      <div v-if="importIssues.length" class="container project-message project-message--error" role="alert">
+        <TriangleAlert :size="19" :stroke-width="2" aria-hidden="true" />
+        <div>
+          <strong>Projektdatei wurde nicht geladen.</strong>
+          <p>Das aktuell geöffnete Projekt bleibt unverändert.</p>
+          <ul>
+            <li v-for="issue in importIssues.slice(0, 8)" :key="`${issue.code}-${issue.path}-${issue.message}`">
+              <code>{{ issue.path }}</code> {{ issue.message }}
+            </li>
+          </ul>
+          <p v-if="importIssues.length > 8">
+            Weitere {{ importIssues.length - 8 }} Validierungsfehler wurden ausgeblendet.
+          </p>
+        </div>
+      </div>
+
+      <div v-else-if="statusMessage" class="container project-message project-message--success" role="status">
+        <CircleCheck :size="19" :stroke-width="2" aria-hidden="true" />
+        <span>{{ statusMessage }}</span>
+      </div>
+    </section>
+
     <main id="main-content">
       <section class="intro">
         <div class="container intro-grid">
@@ -143,7 +401,9 @@ function forecastLabel(value: string): string {
             <div class="release-panel" aria-label="Aktueller Funktionsstand">
               <div>
                 <span class="release-panel-label">Aktueller Stand</span>
-                <strong>Eine fiktive Demo-Projektdatei ist standardmäßig geladen.</strong>
+                <strong v-if="source === 'demo'">Eine fiktive Demo-Projektdatei ist standardmäßig geladen.</strong>
+                <strong v-else-if="dirty">Das aktuelle Projekt enthält ungespeicherte Änderungen.</strong>
+                <strong v-else>Eine validierte Projektdatei ist geladen.</strong>
               </div>
               <a class="button button-secondary" href="#arbeitsweise"> Arbeitsweise ansehen </a>
             </div>
@@ -158,7 +418,9 @@ function forecastLabel(value: string): string {
           <section class="opportunity-panel" aria-labelledby="opportunity-title">
             <div class="panel-header">
               <div>
-                <p class="panel-kicker">Standard-Demo · vollständig fiktiv</p>
+                <p class="panel-kicker">
+                  {{ source === 'demo' ? 'Standard-Demo · vollständig fiktiv' : projectStateLabel }}
+                </p>
                 <h2 id="opportunity-title">{{ project.project.accountName }}</h2>
                 <p class="opportunity-name">{{ project.project.name }}</p>
               </div>
@@ -239,7 +501,7 @@ function forecastLabel(value: string): string {
                 <span class="status-scale">0–10</span>
               </div>
 
-              <div class="status-list" aria-label="MEDDPICC-Status der Standard-Demo">
+              <div class="status-list" aria-label="MEDDPICC-Status des aktuellen Projekts">
                 <div v-for="item in snapshot" :key="item.label" class="status-row">
                   <span class="status-label">{{ item.label }}</span>
                   <span class="status-summary">
@@ -361,9 +623,8 @@ function forecastLabel(value: string): string {
             <h2 id="privacy-title">Projektverarbeitung ohne verpflichtendes Backend.</h2>
           </div>
           <p>
-            Die Standard-Demo wird beim Build in die Anwendung eingebettet und lokal im Browser verarbeitet. Für echte
-            Projektdateien wird kein verpflichtendes Backend benötigt; spätere externe Integrationen wären ausdrücklich
-            optional.
+            Demo und echte Projektdateien werden lokal im Browser verarbeitet. Öffnen, Validieren und Speichern benötigt
+            kein verpflichtendes Backend; Projektinhalte werden für diesen Lifecycle nicht an einen Server übertragen.
           </p>
         </div>
       </section>
