@@ -16,9 +16,12 @@ test('bearbeitet Projektmetadaten und verknüpft Evidence konkret mit einer Qual
 
   await page.getByRole('button', { name: 'Projekt bearbeiten', exact: true }).click()
   await metaEditor.getByLabel('Account').fill('Beispielwerke Industrie SE')
+  await metaEditor.getByLabel('Projektname').fill('CRM Transformation 2027 · qualifiziert')
   await metaEditor.getByLabel('Opportunity ID').fill('DEMO-OPP-2027-QUALIFIED')
   await metaEditor.getByLabel('Owner').fill('Strategic AE')
+  await metaEditor.getByLabel('Währung').fill('CHF')
   await metaEditor.getByLabel('Deal Value').fill('520000')
+  await metaEditor.getByLabel('Target Close').fill('2027-04-15')
   await metaEditor.getByLabel('Target Go-Live').fill('2027-08-15')
   await metaEditor.getByLabel('Forecast Category').selectOption('commit')
   await metaEditor.getByLabel('Notizen').fill('Metadaten im Roadmap-2-Slice validiert bearbeitet.')
@@ -26,11 +29,13 @@ test('bearbeitet Projektmetadaten und verknüpft Evidence konkret mit einer Qual
 
   await expect(page.getByRole('heading', { name: 'Beispielwerke Industrie SE' })).toBeVisible()
   await expect(page.locator('.project-toolbar')).toContainText(
-    'Beispielwerke Industrie SE · CRM & Service Transformation 2027',
+    'Beispielwerke Industrie SE · CRM Transformation 2027 · qualifiziert',
   )
   await expect(page.locator('.project-toolbar')).toContainText('Ungespeicherte Änderungen')
+  await expect(page.getByText('15.04.2027', { exact: true })).toBeVisible()
   await expect(page.getByText('15.08.2027', { exact: true })).toBeVisible()
   await expect(page.getByText('Commit', { exact: true })).toBeVisible()
+  await expect(page.getByText(/520\.000.*CHF/)).toBeVisible()
 
   await page.getByRole('link', { name: 'Evidenzregister', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Evidenzregister' })).toBeVisible()
