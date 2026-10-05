@@ -162,7 +162,7 @@ const nextActions = [
               <div class="block-heading block-heading--status">
                 <div>
                   <h3 id="status-title">MEDDPICC-Status</h3>
-                  <p>Evidenz-Confidence, keine Win Probability</p>
+                  <p>Evidenzgrad, keine Gewinnwahrscheinlichkeit</p>
                 </div>
                 <span class="status-scale">0–10</span>
               </div>
@@ -179,7 +179,7 @@ const nextActions = [
                     <span>{{ qualificationStatusLabels[item.status] }}</span>
                     <span
                       class="confidence"
-                      :aria-label="`${item.confidence} von 10 Evidenz-Confidence`"
+                      :aria-label="`${item.confidence} von 10 Evidenzgrad`"
                     >
                       {{ item.confidence }}/10
                     </span>
