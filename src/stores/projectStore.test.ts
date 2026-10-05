@@ -42,7 +42,7 @@ describe('projectStore', () => {
 
   it('lädt nur vollständig valide importierte Projekte', () => {
     const store = useProjectStore()
-    const before = structuredClone(store.project)
+    const before = JSON.parse(JSON.stringify(store.project))
 
     const invalidResult = store.importProjectText('{ invalid', 'kaputt.meddpicc')
     expect(invalidResult.success).toBe(false)
