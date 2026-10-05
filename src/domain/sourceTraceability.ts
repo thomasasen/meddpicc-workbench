@@ -62,6 +62,8 @@ function entityEvidenceIds(project: MeddpiccProject, area: ProjectAreaKey, entit
         .filter((item) => ids.has(item.id))
         .flatMap((item) => item.evidenceIds)
   }
+
+  return []
 }
 
 export function traceAreaSources(project: MeddpiccProject, area: ProjectAreaKey): SourceTrace {
