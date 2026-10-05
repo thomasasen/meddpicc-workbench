@@ -34,6 +34,8 @@ export type HistoryMutationOptions = {
 export type RiskMutationOptions = RiskCreateOptions & HistoryMutationOptions
 export type ActionMutationOptions = ActionCreateOptions & HistoryMutationOptions
 
+type HistoryEventDraft = Pick<ProjectHistoryEvent, 'type' | 'area' | 'entityId' | 'summary'>
+
 function createHistoryId(type: ProjectHistoryEvent['type'], entityId: string): string {
   return `history_${type}_${entityId}_${globalThis.crypto.randomUUID().replaceAll('-', '_')}`
 }
@@ -112,15 +114,16 @@ export const useProjectStore = defineStore('project', () => {
 
   function appendHistory(
     nextProject: MeddpiccProject,
-    event: Omit<ProjectHistoryEvent, 'id' | 'timestamp'>,
+    event: HistoryEventDraft,
     options: HistoryMutationOptions = {},
     timestamp?: string,
   ) {
-    nextProject.history.push({
+    const historyEvent: ProjectHistoryEvent = {
       id: options.historyId ?? createHistoryId(event.type, event.entityId ?? 'project'),
       timestamp: timestamp ?? (options.now ?? new Date()).toISOString(),
       ...event,
-    })
+    }
+    nextProject.history.push(historyEvent)
   }
 
   function addRisk(draft: RiskDraft, options: RiskMutationOptions = {}) {
