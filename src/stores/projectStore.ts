@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, toRaw } from 'vue'
 
 import { defaultProject } from '../data/defaultProject'
 import { createNewProject, type NewProjectInput, type NewProjectOptions } from '../data/newProject'
@@ -71,7 +71,7 @@ export const useProjectStore = defineStore('project', () => {
 
   function addEvidence(draft: EvidenceDraft, options: EvidenceCreateOptions = {}) {
     const evidence = createEvidence(draft, options)
-    const nextProject = structuredClone(project.value)
+    const nextProject = structuredClone(toRaw(project.value))
     nextProject.evidence.push(evidence)
 
     const historyEvent: ProjectHistoryEvent = {
