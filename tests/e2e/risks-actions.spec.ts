@@ -16,7 +16,7 @@ test('pflegt projektweite Risiken und Aktionen inklusive Risk-Verknüpfung', asy
   await riskSection.getByLabel('Due Date').fill('2026-10-06')
   await riskSection.getByRole('button', { name: 'Risiko anlegen' }).click()
 
-  await expect(page.getByText('Economic Buyer Priorität ungeklärt', { exact: true }).last()).toBeVisible()
+  await expect(riskSection.getByRole('article').filter({ hasText: 'Economic Buyer Priorität ungeklärt' })).toBeVisible()
 
   const actionSection = page.getByRole('region', { name: 'Nächste Aktionen' })
   await actionSection.getByLabel('Titel').fill('CFO-Gespräch vorbereiten')
@@ -29,8 +29,9 @@ test('pflegt projektweite Risiken und Aktionen inklusive Risk-Verknüpfung', asy
     .fill('CFO bestätigt Entscheidungsautorität, Business-Priorität und Investitionsrahmen.')
   await actionSection.getByRole('button', { name: 'Aktion anlegen' }).click()
 
-  await expect(page.getByText('CFO-Gespräch vorbereiten', { exact: true }).last()).toBeVisible()
-  await expect(page.getByText(/Verknüpftes Risiko:/).last()).toContainText('Economic Buyer Priorität ungeklärt')
+  const createdAction = actionSection.getByRole('article').filter({ hasText: 'CFO-Gespräch vorbereiten' })
+  await expect(createdAction).toBeVisible()
+  await expect(createdAction).toContainText('Verknüpftes Risiko: Economic Buyer Priorität ungeklärt')
   await expect(page.getByText('Ungespeicherte Änderungen')).toBeVisible()
 
   await page.getByRole('link', { name: 'Dashboard' }).click()
