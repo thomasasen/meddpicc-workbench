@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import { ArrowLeft, CircleCheck, Plus, Save } from '@lucide/vue'
+import { ArrowLeft, CircleCheck, Pencil, Plus, Save } from '@lucide/vue'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import type { ProjectAreaKey, ProjectEvidence, ProjectReference } from '../domain/project'
+import {
+  listQualificationEvidenceTargets,
+  qualificationEvidenceLinksForEvidence,
+  qualificationTargetsForEvidence,
+  type QualificationEvidenceTarget,
+} from '../domain/qualificationEvidence'
 import { ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
 import { downloadTextFile } from '../services/browserFile'
 import { useProjectStore } from '../stores/projectStore'
@@ -69,11 +75,16 @@ const form = ref({
   referenceId: '',
   context: '',
   relatedAreas: [] as ProjectAreaKey[],
+  entityTargetKeys: [] as string[],
 })
 
 const statusMessage = ref('')
 const issues = ref<ProjectValidationIssue[]>([])
+const linkIssues = ref<ProjectValidationIssue[]>([])
+const editingEvidenceId = ref<string | null>(null)
+const editEntityTargetKeys = ref<string[]>([])
 
+const targetGroups = computed(() => listQualificationEvidenceTargets(project.value))
 const sortedEvidence = computed(() =>
   [...project.value.evidence].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
 )
@@ -86,6 +97,72 @@ function stakeholderName(id: string | null): string {
 function referenceTitle(id: string | null): string {
   if (!id) return 'Keine Reference hinterlegt'
   return project.value.references.find((reference) => reference.id === id)?.title ?? id
+}
+
+function targetKey(target: QualificationEvidenceTarget): string {
+  return `${target.area}::${target.entityId}`
+}
+
+function targetsFromKeys(keys: readonly string[]): QualificationEvidenceTarget[] {
+  const byKey = new Map(
+    targetGroups.value.flatMap((group) =>
+      group.targets.map((target) => [
+        targetKey(target),
+        {
+          area: target.area,
+          entityId: target.entityId,
+        } satisfies QualificationEvidenceTarget,
+      ]),
+    ),
+  )
+
+  return [...new Set(keys)].flatMap((key) => {
+    const target = byKey.get(key)
+    return target ? [target] : []
+  })
+}
+
+function linkedEntityLabels(evidenceId: string) {
+  return qualificationEvidenceLinksForEvidence(project.value, evidenceId)
+}
+
+function startLinkEdit(evidenceId: string) {
+  editingEvidenceId.value = evidenceId
+  editEntityTargetKeys.value = qualificationTargetsForEvidence(project.value, evidenceId).map(targetKey)
+  linkIssues.value = []
+  statusMessage.value = ''
+}
+
+function cancelLinkEdit() {
+  editingEvidenceId.value = null
+  editEntityTargetKeys.value = []
+  linkIssues.value = []
+}
+
+function saveEvidenceLinks(evidenceId: string) {
+  linkIssues.value = []
+  statusMessage.value = ''
+
+  try {
+    projectStore.setEvidenceQualificationLinks(evidenceId, targetsFromKeys(editEntityTargetKeys.value))
+    editingEvidenceId.value = null
+    editEntityTargetKeys.value = []
+    statusMessage.value = 'Konkrete Qualification-Entity-Verknüpfungen wurden aktualisiert.'
+  } catch (error) {
+    if (error instanceof ProjectValidationError) {
+      linkIssues.value = error.issues
+      return
+    }
+
+    linkIssues.value = [
+      {
+        source: 'domain',
+        code: 'evidence_entity_link_failed',
+        path: '/meddpicc',
+        message: 'Die konkreten Qualification-Entity-Verknüpfungen konnten nicht aktualisiert werden.',
+      },
+    ]
+  }
 }
 
 function evidenceTone(evidence: ProjectEvidence): string {
@@ -116,6 +193,7 @@ function resetForm() {
     referenceId: '',
     context: '',
     relatedAreas: [],
+    entityTargetKeys: [],
   }
 }
 
@@ -134,6 +212,8 @@ function submitEvidence() {
       context: form.value.context || null,
       referenceId: form.value.referenceId || null,
       relatedAreas: form.value.relatedAreas,
+    }, {
+      entityTargets: targetsFromKeys(form.value.entityTargetKeys),
     })
 
     statusMessage.value = `Evidenz „${evidence.statement}“ wurde angelegt.`
@@ -311,12 +391,38 @@ function saveProject() {
               </label>
 
               <fieldset class="field field--full evidence-area-fieldset">
-                <legend>MEDDPICC-Bezug</legend>
+                <legend>MEDDPICC-Bereiche <small>grobe Zuordnung</small></legend>
                 <div class="evidence-area-grid">
                   <label v-for="[area, label] in areaEntries" :key="area" class="evidence-area-option">
                     <input type="checkbox" :checked="form.relatedAreas.includes(area)" @change="toggleArea(area)" />
                     <span>{{ label }}</span>
                   </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="field field--full evidence-entity-fieldset">
+                <legend>Konkrete Qualification-Entities <small>optional</small></legend>
+                <p class="field-help">
+                  Diese Links sagen konkret, welche Metric, welcher Process Step oder welche andere Qualification-Entity
+                  durch die Evidenz gestützt wird. Sie sind nicht dasselbe wie die grobe Bereichszuordnung oben.
+                </p>
+                <div class="entity-target-groups">
+                  <details v-for="group in targetGroups" :key="group.area" class="entity-target-group">
+                    <summary>
+                      <span>{{ group.label }}</span>
+                      <small>{{ group.targets.length }} verfügbar</small>
+                    </summary>
+                    <p v-if="group.unsupportedReason" class="entity-target-note">{{ group.unsupportedReason }}</p>
+                    <p v-else-if="group.targets.length === 0" class="entity-target-note">
+                      In diesem Projekt ist noch keine konkrete Entity vorhanden.
+                    </p>
+                    <div v-else class="entity-option-list">
+                      <label v-for="target in group.targets" :key="targetKey(target)" class="evidence-area-option">
+                        <input v-model="form.entityTargetKeys" type="checkbox" :value="targetKey(target)" />
+                        <span>{{ target.label }}</span>
+                      </label>
+                    </div>
+                  </details>
                 </div>
               </fieldset>
 
@@ -385,7 +491,7 @@ function saveProject() {
                   <dd>{{ referenceTitle(evidence.referenceId) }}</dd>
                 </div>
                 <div>
-                  <dt>MEDDPICC</dt>
+                  <dt>MEDDPICC-Bereiche</dt>
                   <dd>
                     {{
                       evidence.relatedAreas.length
@@ -395,6 +501,81 @@ function saveProject() {
                   </dd>
                 </div>
               </dl>
+
+              <section class="evidence-entity-links" :aria-label="`Konkrete Verknüpfungen für ${evidence.statement}`">
+                <div class="evidence-entity-links-heading">
+                  <div>
+                    <strong>Konkrete Qualification-Entities</strong>
+                    <p>Explizite Evidence-Links, getrennt von der groben MEDDPICC-Bereichszuordnung.</p>
+                  </div>
+                  <button
+                    class="button button-secondary button-with-icon compact-button"
+                    type="button"
+                    @click="startLinkEdit(evidence.id)"
+                  >
+                    <Pencil :size="14" aria-hidden="true" />
+                    <span>Links bearbeiten</span>
+                  </button>
+                </div>
+
+                <div v-if="linkedEntityLabels(evidence.id).length" class="evidence-entity-chip-list">
+                  <span
+                    v-for="link in linkedEntityLabels(evidence.id)"
+                    :key="`${link.area}-${link.label}`"
+                    class="evidence-entity-chip"
+                  >
+                    <strong>{{ areaLabels[link.area] }}</strong>
+                    <span>{{ link.label }}</span>
+                    <small v-if="!link.editable">bestehender Behavior-Link · nur lesbar</small>
+                  </span>
+                </div>
+                <p v-else class="entity-target-note">Noch keine konkrete Qualification-Entity verknüpft.</p>
+
+                <div v-if="editingEvidenceId === evidence.id" class="evidence-link-editor">
+                  <div class="entity-target-groups">
+                    <details v-for="group in targetGroups" :key="group.area" class="entity-target-group">
+                      <summary>
+                        <span>{{ group.label }}</span>
+                        <small>{{ group.targets.length }} verfügbar</small>
+                      </summary>
+                      <p v-if="group.unsupportedReason" class="entity-target-note">{{ group.unsupportedReason }}</p>
+                      <p v-else-if="group.targets.length === 0" class="entity-target-note">
+                        In diesem Projekt ist noch keine konkrete Entity vorhanden.
+                      </p>
+                      <div v-else class="entity-option-list">
+                        <label v-for="target in group.targets" :key="targetKey(target)" class="evidence-area-option">
+                          <input
+                            v-model="editEntityTargetKeys"
+                            type="checkbox"
+                            :value="targetKey(target)"
+                          />
+                          <span>{{ target.label }}</span>
+                        </label>
+                      </div>
+                    </details>
+                  </div>
+
+                  <div class="form-actions evidence-link-actions">
+                    <button class="button button-primary compact-button" type="button" @click="saveEvidenceLinks(evidence.id)">
+                      Links speichern
+                    </button>
+                    <button class="button button-secondary compact-button" type="button" @click="cancelLinkEdit">
+                      Abbrechen
+                    </button>
+                  </div>
+
+                  <div v-if="linkIssues.length" class="project-message project-message--error" role="alert">
+                    <div>
+                      <strong>Verknüpfungen wurden nicht geändert.</strong>
+                      <ul>
+                        <li v-for="issue in linkIssues" :key="`${issue.code}-${issue.path}`">
+                          {{ issue.message }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </section>
 
               <p v-if="evidence.context" class="evidence-context">{{ evidence.context }}</p>
             </article>
