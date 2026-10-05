@@ -71,7 +71,8 @@ Der Ladepfad ist bewusst getrennt:
 ```text
 Text
 → Größenlimit / JSON parse
-→ Schema-Version prüfen
+→ Schema-Version erkennen
+→ falls unterstützt: deterministische Migration zur aktuellen Version
 → JSON-Schema-Validierung
 → Domain Validation
 → vollständig validiertes Projekt laden
@@ -154,12 +155,13 @@ Die Baseline ist implementiert:
 1. Nutzer wählt lokal eine `.meddpicc`-Datei.
 2. Datei wird ausschließlich im Browser als Text gelesen.
 3. JSON wird geparst.
-4. Envelope und Schema-Version werden validiert.
-5. Domain Validation prüft Referenzintegrität.
-6. Nur ein vollständig valides Projekt wird in den Application State übernommen.
-7. Das geladene Projekt wird als unverändert markiert.
+4. Envelope und Schema-Version werden erkannt.
+5. Aktuell unterstützte Legacy-Versionen werden über eine explizite Migrationskette auf die aktuelle Version transformiert.
+6. Das migrierte bzw. bereits aktuelle Projekt wird vollständig per JSON Schema und Domain Validation geprüft.
+7. Nur ein vollständig valides Projekt wird in den Application State übernommen.
+8. Aktuelle Dateien werden als clean geladen; automatisch migrierte Dateien bleiben dirty, bis der Nutzer sie als aktuelle `.meddpicc`-Datei speichert.
 
-Sobald unterstützte ältere Versionen existieren, wird zwischen Versionsprüfung und finaler Validierung das dokumentierte Migrationsframework eingeschoben. Ungültige Dateien ersetzen den aktuellen State niemals.
+Aktuell existiert eine explizite Migration `0.1.0 → 0.2.0`. Die Migration ist deterministisch und konservativ: vorhandene Daten werden erhalten, neue semantische Informationen werden nicht erfunden. Wo das alte Modell keine Aussage kannte, entstehen `unknown`, `null` oder leere Strukturen. Ungültige oder nicht sicher migrierbare Legacy-Dateien ersetzen den aktuellen State niemals.
 
 ### Bearbeiten
 
@@ -180,6 +182,23 @@ Die browserbasierte Baseline ist implementiert:
 6. erst nach ausgelöstem Download den In-Memory-State auf diesen Save-Snapshot setzen und als clean markieren
 
 Direktes Überschreiben einer zuvor geöffneten Datei über die File System Access API ist bewusst nur ein optionales Progressive Enhancement.
+
+## Schema-Migrationen
+
+Migrationen liegen im Domain Layer und sind unabhängig von Vue-Komponenten.
+
+Regeln:
+
+- jede unterstützte Ausgangsversion besitzt einen expliziten Migrationsschritt
+- dieselbe Eingabedatei erzeugt immer dasselbe Ergebnis
+- Migrationen verwenden keine aktuelle Uhrzeit und keine externen Daten
+- fachlich fehlende Informationen werden nicht aus Titeln, Rollen oder Freitexten „erraten“
+- nach jeder Migration folgt die vollständige Validierung des Zielschemas
+- ein `schema_migrated`-History-Event dokumentiert die Transformation
+- die ursprüngliche Datei wird beim Öffnen niemals überschrieben
+- erst ein bewusster Save/Download persistiert den migrierten Stand
+
+Für `0.1.0 → 0.2.0` wird das echte historische Pre-Alpha-Fixture unter `examples/legacy/demo-opportunity-0.1.0.meddpicc` als Regressionstest verwendet.
 
 ## Browser File APIs
 
