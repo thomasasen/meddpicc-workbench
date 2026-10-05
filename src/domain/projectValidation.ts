@@ -1,4 +1,4 @@
-import { projectAreaKeys, type MeddpiccProject } from './project'
+import { projectAreaKeys, type MeddpiccProject, type ProjectAreaKey } from './project'
 
 export type DomainValidationIssue = {
   code: string
@@ -131,12 +131,26 @@ function collectEntityIds(project: MeddpiccProject): Array<{ id: string; path: s
   return ids
 }
 
+function riskRelatedEntityIdsByArea(project: MeddpiccProject): Record<ProjectAreaKey, ReadonlySet<string>> {
+  return {
+    metrics: new Set(project.meddpicc.metrics.metrics.map((item) => item.id)),
+    economicBuyer: new Set(project.meddpicc.economicBuyer.candidates.map((item) => item.stakeholderId)),
+    decisionCriteria: new Set(project.meddpicc.decisionCriteria.criteria.map((item) => item.id)),
+    decisionProcess: new Set(project.meddpicc.decisionProcess.steps.map((item) => item.id)),
+    paperProcess: new Set(project.meddpicc.paperProcess.steps.map((item) => item.id)),
+    pain: new Set(project.meddpicc.pain.items.map((item) => item.id)),
+    champions: new Set(project.meddpicc.champions.people.map((item) => item.stakeholderId)),
+    competition: new Set(project.meddpicc.competition.knownAlternatives.map((item) => item.id)),
+  }
+}
+
 export function validateProjectDomain(project: MeddpiccProject): DomainValidationIssue[] {
   const issues: DomainValidationIssue[] = []
   const stakeholderIds = new Set(project.stakeholders.map((item) => item.id))
   const evidenceIds = new Set(project.evidence.map((item) => item.id))
   const referenceIds = new Set(project.references.map((item) => item.id))
   const riskIds = new Set(project.risks.map((item) => item.id))
+  const riskEntityIds = riskRelatedEntityIdsByArea(project)
 
   const seen = new Map<string, string>()
   for (const entity of collectEntityIds(project)) {
@@ -233,9 +247,9 @@ export function validateProjectDomain(project: MeddpiccProject): DomainValidatio
     addMissingReferences(
       issues,
       risk.relatedEntityIds,
-      new Set(seen.keys()),
+      riskEntityIds[risk.relatedArea],
       `/risks/${index}/relatedEntityIds`,
-      'Related-Entity-ID',
+      `Related-Entity-ID für ${risk.relatedArea}`,
     )
   })
 
