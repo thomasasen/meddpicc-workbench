@@ -11,8 +11,8 @@
     "test": "npm run schema:generate && vitest run",
     "test:e2e": "npm run schema:generate && playwright test",
     "lint": "npm run schema:generate && eslint .",
-    "format": "prettier --write \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"examples/*.meddpicc\" \"*.{ts,js,json}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"examples/*.meddpicc\" \"*.{ts,js,json}\""
+    "format": "prettier --write \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --write --parser json \"examples/*.meddpicc\"",
+    "format:check": "prettier --check \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --check --parser json \"examples/*.meddpicc\""
   },
   "dependencies": {
     "@lucide/vue": "1.51.0",
