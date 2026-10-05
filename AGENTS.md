@@ -130,3 +130,17 @@ Vor Abschluss einer UI-Arbeit prüfen:
 - Wurde eine unnötige Runtime-Netzwerkabhängigkeit eingeführt?
 - Entspricht das Design weiterhin `docs/DESIGN_SYSTEM.md`?
 - Sind alle normalen UI-Texte deutsch und nur echte Fachbegriffe Englisch?
+
+
+## GitHub-Actions-Ressourcen
+
+GitHub Actions sparsam verwenden.
+
+- Feature-PRs während aktiver Implementierung als **Draft** führen. Erst nach abgeschlossenem fachlichem und technischem Review auf „Ready for review“ setzen.
+- Keine temporären Push-Workflows für Formatierung, generierte Dateien oder einmalige Hilfsaufgaben anlegen.
+- Mehrere kleine Zwischencommits dürfen nicht absichtlich jeweils eine vollständige Browser-CI auslösen.
+- Vor „Ready for review“ möglichst lokal bzw. mit den verfügbaren Entwicklungswerkzeugen formatieren und prüfen.
+- Die vollständige Playwright-Matrix ist ein PR-Gate und wird nach dem Merge auf `main` nicht redundant wiederholt.
+- Superseded CI-Runs müssen über Workflow-Concurrency automatisch abgebrochen werden.
+- Dokumentations-only Änderungen sollen keine vollständige CI starten.
+- Einen fehlgeschlagenen Workflow nicht pauschal vollständig erneut starten, wenn gezielt nur der fehlerhafte Teil geprüft werden kann.
