@@ -52,8 +52,9 @@ Empfohlen:
 3. Tests für Domain-Verhalten ergänzen/aktualisieren
 4. bei Schema-Änderungen Migrationsdokumentation aktualisieren
 5. UI-Änderungen gegen Design-System-Checkliste prüfen
-6. Pull Request mit Verhalten und Kompatibilitätsauswirkung erstellen
-7. nicht mit fehlschlagenden Tests mergen
+6. Pull Request während aktiver Umsetzung als Draft führen
+7. erst nach abgeschlossenem Review auf „Ready for review“ setzen und damit die vollständige CI auslösen
+8. nicht mit fehlschlagenden Tests mergen
 
 ## Commit-Stil
 
@@ -150,3 +151,16 @@ Mindestens:
 Jede Funktion, die Runtime-Netzwerkverkehr mit Projektdaten einführt, benötigt explizites Design Review und Dokumentation.
 
 Siehe [SECURITY.md](SECURITY.md).
+
+
+## CI- und Actions-Ressourcen
+
+Die CI soll Qualität sichern, nicht jeden Zwischenschritt teuer duplizieren.
+
+- Draft-PRs führen keine vollständige CI aus.
+- Neue Commits auf demselben aktiven PR ersetzen ältere CI-Runs; veraltete Runs werden automatisch abgebrochen.
+- Reine Markdown-/Lizenzänderungen lösen keine vollständige CI aus.
+- Playwright Desktop + Mobile läuft als PR-Gate. Nach einem bereits grünen PR wird die Browsermatrix auf `main` nicht nochmals ausgeführt.
+- Der bereits erzeugte Production Build wird für Playwright wiederverwendet.
+- Abhängigkeiten werden reproduzierbar mit `npm ci` installiert und über den npm-Cache von `setup-node` wiederverwendet.
+- Keine temporären GitHub-Actions-Workflows für einmalige Formatierungs- oder Sync-Aufgaben anlegen.
