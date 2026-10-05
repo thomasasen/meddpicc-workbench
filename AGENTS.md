@@ -140,7 +140,7 @@ GitHub Actions sparsam verwenden.
 - Keine temporären Push-Workflows für Formatierung, generierte Dateien oder einmalige Hilfsaufgaben anlegen.
 - Mehrere kleine Zwischencommits dürfen nicht absichtlich jeweils eine vollständige Browser-CI auslösen.
 - Vor „Ready for review“ möglichst lokal bzw. mit den verfügbaren Entwicklungswerkzeugen formatieren und prüfen.
-- Die vollständige Playwright-Matrix ist ein PR-Gate und wird nach dem Merge auf `main` nicht redundant wiederholt.
+- Die vollständigen Quality Gates einschließlich Playwright sind ein PR-Gate. Nach dem Merge auf `main` nur Production Build und Pages-Integrität erneut prüfen.
 - Superseded CI-Runs müssen über Workflow-Concurrency automatisch abgebrochen werden.
 - Dokumentations-only Änderungen sollen keine vollständige CI starten.
 - Einen fehlgeschlagenen Workflow nicht pauschal vollständig erneut starten, wenn gezielt nur der fehlerhafte Teil geprüft werden kann.
