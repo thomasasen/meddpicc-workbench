@@ -123,4 +123,123 @@ describe('projectStore', () => {
     expect(store.source).toBe('file')
     expect(store.project.updatedAt).toBe('2026-10-05T17:00:00.000Z')
   })
+  it('legt und schließt ein Risk atomar mit eindeutiger History an', () => {
+    const store = useProjectStore()
+    const historyCount = store.project.history.length
+
+    store.addRisk(
+      {
+        title: 'Economic Buyer nicht validiert',
+        severity: 'high',
+        status: 'open',
+        relatedArea: 'economicBuyer',
+        relatedEntityIds: ['st_eb'],
+        impact: 'Priorität ist nicht direkt bestätigt.',
+      },
+      { id: 'risk_store_001', now: new Date('2026-10-05T18:00:00.000Z'), historyId: 'history_risk_store_open' },
+    )
+
+    expect(store.project.risks.some((risk) => risk.id === 'risk_store_001')).toBe(true)
+    expect(store.project.history.slice(historyCount).filter((event) => event.type === 'risk_opened')).toHaveLength(1)
+    expect(store.dirty).toBe(true)
+
+    store.setRiskStatus('risk_store_001', 'closed', {
+      now: new Date('2026-10-05T19:00:00.000Z'),
+      historyId: 'history_risk_store_closed',
+    })
+    store.setRiskStatus('risk_store_001', 'closed', { now: new Date('2026-10-05T19:30:00.000Z') })
+
+    expect(store.project.risks.find((risk) => risk.id === 'risk_store_001')?.status).toBe('closed')
+    expect(
+      store.project.history.filter((event) => event.entityId === 'risk_store_001' && event.type === 'risk_closed'),
+    ).toHaveLength(1)
+  })
+
+  it('verknüpft eine Action mit Risk und protokolliert completed genau einmal', () => {
+    const store = useProjectStore()
+    store.addRisk(
+      {
+        title: 'Test Risk',
+        severity: 'medium',
+        status: 'open',
+        relatedArea: 'competition',
+        relatedEntityIds: [],
+        impact: 'Alternative ist unklar.',
+      },
+      { id: 'risk_action_link', now: new Date('2026-10-05T18:00:00.000Z'), historyId: 'history_risk_action_link' },
+    )
+
+    store.addAction(
+      {
+        title: 'Alternativen validieren',
+        status: 'open',
+        owner: 'Test Seller',
+        relatedArea: 'competition',
+        relatedRiskId: 'risk_action_link',
+        relatedGap: 'Competition unbekannt',
+        desiredEvidence: 'Champion benennt aktive Alternativen.',
+        evidenceIds: [],
+      },
+      { id: 'action_store_001' },
+    )
+
+    expect(store.project.actions.find((action) => action.id === 'action_store_001')?.relatedRiskId).toBe(
+      'risk_action_link',
+    )
+    expect(() => serializeProject(store.project)).not.toThrow()
+
+    store.setActionStatus('action_store_001', 'completed', {
+      now: new Date('2026-10-05T20:00:00.000Z'),
+      historyId: 'history_action_store_completed',
+    })
+    store.setActionStatus('action_store_001', 'completed')
+
+    expect(
+      store.project.history.filter(
+        (event) => event.entityId === 'action_store_001' && event.type === 'action_completed',
+      ),
+    ).toHaveLength(1)
+  })
+
+  it('lehnt ungültige Risk-Referenzen atomar ab', () => {
+    const store = useProjectStore()
+    const before = JSON.parse(JSON.stringify(store.project))
+
+    expect(() =>
+      store.addRisk(
+        {
+          title: 'Ungültiges Risk',
+          severity: 'high',
+          status: 'open',
+          relatedArea: 'economicBuyer',
+          relatedEntityIds: ['pp_01'],
+          impact: 'Test',
+        },
+        { id: 'risk_invalid_ref', now: new Date('2026-10-05T18:00:00.000Z') },
+      ),
+    ).toThrow()
+
+    expect(store.project).toEqual(before)
+    expect(store.dirty).toBe(false)
+  })
+
+  it('bleibt nach Risk- und Action-Änderungen im Save-Round-Trip valide', () => {
+    const store = useProjectStore()
+    store.addAction(
+      {
+        title: 'Discovery vertiefen',
+        status: 'open',
+        relatedArea: 'metrics',
+        desiredEvidence: 'Kunde bestätigt wirtschaftliche Wirkung.',
+        evidenceIds: [],
+      },
+      { id: 'action_roundtrip' },
+    )
+
+    const download = store.prepareDownload(new Date('2026-10-05T21:00:00.000Z'))
+    expect(() => serializeProject(download.project)).not.toThrow()
+    expect(
+      JSON.parse(download.content).actions.some((action: { id: string }) => action.id === 'action_roundtrip'),
+    ).toBe(true)
+  })
 })

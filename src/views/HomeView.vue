@@ -269,6 +269,7 @@ function saveProject() {
         <div class="header-actions">
           <span class="release-badge">Pre-Alpha</span>
           <RouterLink class="icon-link" to="/evidence">Evidenzregister</RouterLink>
+          <RouterLink class="icon-link" to="/risks-actions">Risiken &amp; Aktionen</RouterLink>
           <a class="icon-link" href="https://github.com/thomasasen/meddpicc-workbench" target="_blank" rel="noreferrer">
             GitHub
           </a>

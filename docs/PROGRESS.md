@@ -4,22 +4,26 @@ Stand: 05.10.2026
 
 Dieses Dokument ist der kompakte Handoff-Stand für die Weiterentwicklung von MEDDPICC Workbench. Es ergänzt die Roadmap um den tatsächlich implementierten Zustand und den nächsten empfohlenen Arbeitsschritt.
 
-## Aktueller Stand auf `main`
+## Aktueller qualitätsgesicherter Stand
 
-Letzter fachlicher Merge:
+Der aktuelle Roadmap-2-Slice wird über PR #25 umgesetzt:
 
-- PR #23 – `feat: zentrales Evidenzregister für Roadmap 2`
-- Merge-Commit: `8ba42aadee40b3ebb1f365145fce4dc459511af2`
+- projektweites Evidenzregister
+- projektweite Risiken
+- projektweite nächste Aktionen
+- Risk → Action-Verknüpfung
+- relevante History-Events für diese Workflows
 
-Für diesen Stand liefen auf `main` erfolgreich:
+Für den finalen Implementierungsstand vor der Dokumentationsaktualisierung liefen in der PR-CI erfolgreich:
 
 - Formatting
 - ESLint
-- Unit Tests
+- 43 Unit Tests
 - Production Build
 - Pages-Root-Synchronitätsprüfung
-- Playwright Browser Smoke Tests für Desktop und Mobile
-- GitHub Pages Build und Deployment
+- 14 Playwright-Ausführungen auf Desktop und Mobile
+
+Der Merge erfolgt weiterhin erst nach einer vollständig grünen finalen PR-CI einschließlich dieser Dokumentationsänderungen.
 
 ## Abgeschlossen
 
@@ -66,7 +70,7 @@ Issue #3 ist abgeschlossen.
 
 ## Phase 2 – Gemeinsames Qualifizierungsmodell
 
-Phase 2 ist aktiv.
+Phase 2 ist aktiv und bleibt bewusst offen.
 
 ### Bereits umgesetzt
 
@@ -76,40 +80,54 @@ PR #23 hat den ersten produktiv nutzbaren Roadmap-2-Slice geliefert.
 
 Unterstützt werden:
 
-- Evidenz projektweit anzeigen
-- neue Evidenz anlegen
-- Classification:
-  - `fact`
-  - `customer_statement`
-  - `seller_interpretation`
-  - `assumption`
-  - `confirmed_evidence`
-  - `unknown`
-- Quality getrennt von Classification
-- Verification getrennt von Classification und Quality
-- Source Stakeholder
-- Source Date
-- Context
+- Evidenz projektweit anzeigen und anlegen
+- Classification, Quality und Verification getrennt modellieren
+- Source Stakeholder, Source Date und Context
 - Zuordnung zu einem oder mehreren MEDDPICC-Bereichen
 - visuelle und textliche Unterscheidung von Annahmen, Unbekanntem und bestätigter Evidenz
 - vollständige Validierung vor Übernahme in den Projektstate
-- Dirty-State beim Anlegen
+- Dirty-State
 - automatisches `evidence_added`-History-Event
 - Speichern/Download direkt aus dem Evidenzregister
 - Desktop- und Mobile-Browsertests
 
+#### Projektweite Risiken und nächste Aktionen
+
+PR #25 ergänzt die gemeinsamen Arbeitsobjekte für Deal Risk und konkrete Qualification-/Execution-Aktionen.
+
+Unterstützt werden:
+
+- Risiken projektweit anlegen und bearbeiten
+- Severity und Risk-Status pflegen
+- Risk auf einen MEDDPICC-Bereich beziehen
+- Risk sicher auf zum Bereich gehörende Entities bzw. Process Steps referenzieren
+- Impact, Mitigation, Owner und Due Date pflegen
+- nächste Aktionen projektweit anlegen und bearbeiten
+- Action auf MEDDPICC-Bereich sowie optional Risk und Gap beziehen
+- `desiredEvidence` als erwartetes Wissen bzw. erwarteten Nachweis explizit pflegen
+- vorhandene Evidence IDs mit Actions verknüpfen
+- Risk → Action im UI nachvollziehbar anzeigen
+- `risk_opened`, `risk_closed` und `action_completed` nur bei passenden Ereignissen bzw. Statusübergängen schreiben
+- keine erfundenen History-Events für Action-Erstellung
+- atomare, vollständig validierte Store-Mutationen
+- Dirty-State und valider Save-/Round-Trip
+- Dashboard liest neue/geänderte Risks und Actions aus demselben Projektmodell
+- Desktop- und Mobile-Browsertests
+
+Fachliche Entscheidung:
+
+Das bestehende Schema 0.2.0 reicht für diesen Slice aus. Es wurde nicht aus UI-Bequemlichkeit erweitert. Stattdessen wurde die Domain-Validierung für Risk-`relatedEntityIds` verschärft: Eine vorhandene ID reicht nicht; die referenzierte Entity muss zum gewählten MEDDPICC-Bereich gehören.
+
 Technische Besonderheit:
 
-Vor atomaren Store-Änderungen wird ein reaktiver Pinia/Vue-State mit `toRaw()` entpackt, bevor ein sicherer Snapshot erzeugt wird. Dadurch werden `DataCloneError`-Fehler durch Vue-Proxies verhindert.
+Vor atomaren Store-Änderungen wird ein reaktiver Pinia/Vue-State mit `toRaw()` entpackt, bevor ein sicherer Snapshot erzeugt wird. Dadurch werden Proxy-Probleme vermieden und ein ungültiger Zwischenstand kann nicht teilweise in den Store gelangen.
 
 ### Noch offen in Phase 2
 
 - Projektmetadaten als vollständige editierbare Arbeitsoberfläche
 - Source-/Reference-Records als editierbare Arbeitsoberfläche
-- Risiken als editierbare gemeinsame Objekte
-- nächste Aktionen als editierbare gemeinsame Objekte
-- weitere History-Events
-- gemeinsames Statusmodell vollständig in den Arbeitsoberflächen nutzen
+- weitere noch benötigte History-/Status-Nutzung außerhalb der bereits implementierten Events
+- gemeinsames Statusmodell vollständig in allen späteren Arbeitsoberflächen nutzen
 - Dashboard Findings mit expliziter Source-Traceability
 - Evidenz gezielt mit mehreren konkreten Qualifizierungsaussagen/Entities verknüpfen
 
@@ -117,73 +135,27 @@ Issue #4 bleibt offen und bildet diesen Fortschritt ab.
 
 ## Nächster empfohlener Slice
 
-### Risiken + nächste Aktionen
+### Source-/Reference-Records + Source-Traceability
 
-Der nächste Schritt soll nicht bereits die acht MEDDPICC-Kernmodule bauen. Zuerst werden die beiden gemeinsamen, bereichsübergreifenden Arbeitsobjekte vollständig nutzbar gemacht:
-
-1. Risiken
-2. nächste Aktionen
+Als nächstes sollten die bereits im Projektmodell vorhandenen Reference-Records als gemeinsame Arbeitsobjekte nutzbar gemacht und die Source-Traceability bis in die Dashboard-Findings vervollständigt werden.
 
 Warum dieser Schritt jetzt sinnvoll ist:
 
-- Das Schema enthält Risk und Action bereits.
-- Dashboard und Demo lesen diese Objekte bereits.
-- Das Evidenzregister schafft die Grundlage für nachvollziehbare Qualification-Arbeit.
-- Gaps sollen künftig nicht nur sichtbar sein, sondern in konkrete Aktionen übersetzt werden.
-- Risiken und Aktionen werden später von allen acht MEDDPICC-Modulen gemeinsam genutzt und dürfen daher nicht in einzelnen Modulen dupliziert werden.
+- Evidenz, Risiken und Aktionen sind als gemeinsame Objekte nutzbar.
+- Evidenz besitzt bereits `referenceId`, aber References sind noch nicht über eine Arbeitsoberfläche pflegbar.
+- Das Dashboard kann Risks/Actions anzeigen, aber Findings sind noch nicht vollständig bis zur zugrunde liegenden Source nachvollziehbar.
+- Diese Traceability sollte vor den acht MEDDPICC-Kernmodulen stabil sein, damit spätere Module dieselbe Source-of-Truth verwenden.
 
-### Zielbild des nächsten Slices
+Bewusst weiterhin nicht Teil dieses nächsten Slices:
 
-Risiken sollen mindestens erfassen und bearbeiten können:
-
-- Titel
-- Severity
-- Status
-- MEDDPICC-Bereich
-- Related Entity IDs, soweit sinnvoll nutzbar
-- Impact
-- Mitigation
-- Owner
-- Due Date
-- Opened At
-
-Aktionen sollen mindestens erfassen und bearbeiten können:
-
-- Titel
-- Status
-- Owner
-- Due Date
-- MEDDPICC-Bereich
-- Related Risk
-- Related Gap
-- Desired Evidence
-- bereits gewonnene Evidence IDs
-
-Zusätzlich:
-
-- atomare, validierte Store-Operationen
-- Dirty-State
-- History Events für Risk Open/Close und Action Complete
-- klare Verlinkung Risk → Action
-- UI für projektweite Risiken und Aktionen
-- Tests auf Domain-, Store- und Browser-Ebene
-- keine Duplikation der Daten in MEDDPICC-Modulen
-- keine generative AI zur Runtime
-
-## Nicht Teil des nächsten Slices
-
-Bewusst noch nicht umsetzen:
-
-- vollständige Metrics-/Economic-Buyer-/Champion-Module
-- automatische Risk- oder Action-Generierung
+- vollständige acht MEDDPICC-Bearbeitungsmodule
+- generative AI
+- automatische Risk-/Action-Generierung
 - Scoring Engine
-- ROI-/Payback-Tools
+- ROI/Payback/Cost of Delay
 - Critical Path
 - CRM-Integration
 - Cloud Sync
-- generative AI
-- File System Access API
-- umfassendes Reference-Register, außer wenn minimal für Risk/Action-Integrität nötig
 
 ## Qualitätsregel
 
@@ -208,8 +180,10 @@ Ein Slice gilt erst als abgeschlossen, wenn:
 - `src/domain/project.ts`
 - `src/domain/projectValidation.ts`
 - `src/domain/evidence.ts`
+- `src/domain/riskAction.ts`
 - `src/stores/projectStore.ts`
 - `src/views/EvidenceView.vue`
+- `src/views/RisksActionsView.vue`
 - `src/views/HomeView.vue`
-- `tests/e2e/smoke.spec.ts`
+- `tests/e2e/risks-actions.spec.ts`
 - `examples/demo-opportunity.meddpicc`

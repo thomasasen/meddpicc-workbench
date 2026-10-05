@@ -1420,3 +1420,191 @@ h3 {
     flex-direction: column;
   }
 }
+
+
+/* Roadmap 2: projektweite Risiken und nächste Aktionen */
+.workbench-message {
+  margin-top: var(--space-5);
+}
+
+.risk-action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.risk-action-column {
+  min-width: 0;
+}
+
+.risk-action-heading,
+.work-object-card-heading,
+.form-actions,
+.inline-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.risk-action-heading {
+  margin-bottom: var(--space-4);
+}
+
+.risk-action-heading h2,
+.risk-action-heading p {
+  margin-bottom: 0;
+}
+
+.work-object-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  padding: var(--space-4);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  color: var(--color-text);
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.field small,
+.evidence-area-fieldset small {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+.field input,
+.field select,
+.field textarea,
+.inline-status select {
+  min-width: 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 0.5rem 0.65rem;
+}
+
+.field input,
+.field select,
+.inline-status select {
+  min-height: 40px;
+}
+
+.field textarea {
+  resize: vertical;
+  font: inherit;
+}
+
+.entity-option-list {
+  display: grid;
+  gap: var(--space-2);
+  max-height: 220px;
+  overflow: auto;
+}
+
+.form-actions {
+  justify-content: flex-start;
+}
+
+.work-object-list {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.work-object-card {
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-risk);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  padding: var(--space-4);
+}
+
+.work-object-card.action-card {
+  border-left-color: var(--color-accent);
+}
+
+.work-object-card-heading {
+  align-items: flex-start;
+}
+
+.work-object-card-heading > div {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.work-object-card-heading strong {
+  overflow-wrap: anywhere;
+}
+
+.work-object-card-heading span,
+.work-object-card p,
+.inline-status {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
+.work-object-card p {
+  margin: var(--space-3) 0;
+}
+
+.compact-button {
+  min-height: 34px;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.76rem;
+}
+
+.inline-status {
+  justify-content: flex-start;
+}
+
+.inline-status span {
+  color: var(--color-text);
+  font-weight: 650;
+}
+
+.inline-status select {
+  min-height: 34px;
+  padding-block: 0.3rem;
+}
+
+@media (max-width: 900px) {
+  .risk-action-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .work-object-form {
+    grid-template-columns: 1fr;
+  }
+
+  .field--full {
+    grid-column: auto;
+  }
+
+  .work-object-card-heading,
+  .form-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .compact-button {
+    align-self: flex-start;
+  }
+}
