@@ -4,7 +4,7 @@ Eine local-first Browser-Anwendung zur Verwaltung und Qualifizierung komplexer B
 
 Die Grundidee ist einfach: **Die Projektdatei ist die Source of Truth.** Die Anwendung öffnet eine portable `.meddpicc`-Datei, unterstützt bei der strukturierten Bewertung der Opportunity mit deterministischen Werkzeugen und speichert das aktualisierte Projekt wieder in dieser Datei. Zur Runtime werden weder AI, Backend, Benutzerkonto noch externe Datenbank benötigt.
 
-> **Projektstatus:** Foundation / Pre-Alpha. Das Repository definiert aktuell Produktscope, Architektur, Projektdateikonzept, UI/UX-System und Umsetzungs-Roadmap. Die eigentliche Anwendung ist noch nicht implementiert.
+> **Projektstatus:** Pre-Alpha. Die technische Basis und eine erste responsive Startseite sind implementiert und werden automatisch über GitHub Pages deployt. Die fachlichen MEDDPICC-Funktionen und der `.meddpicc`-Dateilifecycle folgen schrittweise.
 
 ## Projektsprache
 
@@ -41,7 +41,9 @@ aktualisierte .meddpicc-Projektdatei
 Ablage bei der Opportunity, z. B. im CRM
 ```
 
-Die Anwendung soll direkt über GitHub Pages nutzbar sein und vollständig im Browser laufen.
+Die Anwendung läuft vollständig im Browser und wird automatisch über GitHub Pages bereitgestellt.
+
+**Live:** https://thomasasen.github.io/meddpicc-workbench/
 
 ## Kernprinzipien
 
@@ -120,7 +122,7 @@ Die erste Version bettet bewusst keine Binäranhänge ein. Dokumente können üb
 
 Siehe [Spezifikation der Projektdatei](docs/PROJECT_FILE_SPEC.md).
 
-## Geplante Architektur
+## Technische Architektur
 
 Technische Basis:
 
