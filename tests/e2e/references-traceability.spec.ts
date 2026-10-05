@@ -8,7 +8,7 @@ test('pflegt Source-Records und zeigt die Traceability bis ins Dashboard', async
   await page.getByRole('link', { name: 'Quellen' }).click()
   await expect(page.getByRole('heading', { name: 'Quellen & Referenzen' })).toBeVisible()
 
-  const referenceForm = page.getByRole('region', { name: 'Source-Record pflegen' })
+  const referenceForm = page.getByRole('region', { name: 'Quelleneintrag pflegen' })
   await referenceForm.getByLabel('Typ').selectOption('meeting')
   await referenceForm.getByLabel('Datum').fill('2026-10-05')
   await referenceForm.getByLabel('Titel').fill('CFO Steering 05.10.2026')
@@ -31,7 +31,7 @@ test('pflegt Source-Records und zeigt die Traceability bis ins Dashboard', async
   await evidenceForm.getByLabel('Verifikation').selectOption('confirmed')
   await evidenceForm.getByLabel('Evidenzqualität').selectOption('high')
   await evidenceForm.getByLabel('Quelldatum').fill('2026-10-05')
-  await evidenceForm.getByLabel('Reference-Record').selectOption({ label: /CFO Steering 05\.10\.2026/ })
+  await evidenceForm.getByLabel('Quellenreferenz').selectOption({ label: /CFO Steering 05\.10\.2026/ })
   await evidenceForm.getByLabel('Economic Buyer').check()
   await evidenceForm.getByRole('button', { name: 'Evidenz hinzufügen' }).click()
 
@@ -46,6 +46,11 @@ test('pflegt Source-Records und zeigt die Traceability bis ins Dashboard', async
     .getByText('Priorität beim Economic Buyer ist nur indirekt belegt', { exact: true })
     .locator('..')
   await expect(economicBuyerRisk).toContainText('CFO Steering 05.10.2026')
+
+  const traceLink = economicBuyerRisk.getByRole('link', { name: /Quellenbasis:/ })
+  await traceLink.click()
+  await expect(page.getByRole('heading', { name: 'Quellen & Referenzen' })).toBeVisible()
+  await expect(page.locator('[id^="reference-"]').filter({ hasText: 'Discovery Workshop Vertrieb' })).toBeVisible()
 
   expect(runtimeErrors).toEqual([])
 })
