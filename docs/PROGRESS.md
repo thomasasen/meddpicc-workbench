@@ -4,34 +4,19 @@ Stand: 05.10.2026
 
 Dieses Dokument ist der kompakte Handoff-Stand für die Weiterentwicklung von MEDDPICC Workbench. Es ergänzt die Roadmap um den tatsächlich implementierten Zustand und den nächsten empfohlenen Arbeitsschritt.
 
-## Aktueller qualitätsgesicherter Stand auf `main`
+## Aktueller Roadmap-2-Stand
 
-Der aktuelle Roadmap-2-Slice wurde über PR #25 gemerged.
+Der gemeinsame Qualifizierungs-Layer umfasst inzwischen:
 
-Fachlicher Merge:
-
-- PR #25 – `feat: projektweite Risiken und nächste Aktionen bearbeiten`
-- Squash-Commit: `62ebf1612cbecdb4e75395123209275eba34fd35`
-
-Damit sind projektweit nutzbar:
-
-- Evidenzregister
-- Risiken
-- nächste Aktionen
+- projektweites Evidenzregister
+- projektweite Risiken und nächste Aktionen
 - Risk → Action-Verknüpfung
-- relevante History-Events für diese Workflows
+- projektweite Source-/Reference-Records
+- Evidence → Reference-Verknüpfung
+- sichtbare Source-Traceability für Risk-/Action-Findings im Dashboard
+- relevante History-Events für die bisher implementierten Workflows
 
-Für den gemergten Stand liefen erfolgreich:
-
-- finale PR-CI
-- Formatting
-- ESLint
-- 43 Unit Tests
-- Production Build
-- Pages-Root-Synchronitätsprüfung
-- 14 Playwright-Ausführungen auf Desktop und Mobile
-- `main`-CI nach dem Merge
-- GitHub Pages Build und Deployment
+Der Source-/Reference-Slice wird über PR #27 qualitätsgesichert. Das bestehende Dateiformat bleibt bei `schemaVersion: 0.2.0`, weil die benötigten Reference-Felder und `evidence.referenceId` bereits Bestandteil des kanonischen Vertrags sind.
 
 ## Abgeschlossen
 
@@ -60,19 +45,15 @@ Im Core abgeschlossen.
 Wesentliche Ergebnisse:
 
 - `schemaVersion: 0.2.0`
-- neues fachlich leeres Projekt
+- fachlich leeres neues Projekt
 - lokale `.meddpicc`-Dateien öffnen
 - vollständige Schema- und Domain-Validierung
 - ungültige Dateien ersetzen niemals teilweise den aktuellen State
-- Dirty-State
-- Warnung vor Verlust ungespeicherter Änderungen
-- `beforeunload`-Schutz
-- validierter Save/Download
-- Revision und `updatedAt` beim Speichern
+- Dirty-State und Warnung vor Datenverlust
+- validierter Save/Download mit Revision und `updatedAt`
 - Round-Trip-Tests
 - deterministische Migration `0.1.0 → 0.2.0`
 - historisches Regression-Fixture
-- migrierte Dateien bleiben bis zum Speichern dirty
 
 Issue #3 ist abgeschlossen.
 
@@ -80,11 +61,9 @@ Issue #3 ist abgeschlossen.
 
 Phase 2 ist aktiv und bleibt bewusst offen.
 
-### Bereits umgesetzt
+### Gemeinsames Evidenzregister
 
-#### Gemeinsames Evidenzregister
-
-PR #23 hat den ersten produktiv nutzbaren Roadmap-2-Slice geliefert.
+PR #23 hat den ersten Roadmap-2-Slice geliefert.
 
 Unterstützt werden:
 
@@ -92,71 +71,75 @@ Unterstützt werden:
 - Classification, Quality und Verification getrennt modellieren
 - Source Stakeholder, Source Date und Context
 - Zuordnung zu einem oder mehreren MEDDPICC-Bereichen
-- visuelle und textliche Unterscheidung von Annahmen, Unbekanntem und bestätigter Evidenz
+- visuelle und textliche Trennung von Annahmen, Unbekanntem und bestätigter Evidenz
 - vollständige Validierung vor Übernahme in den Projektstate
-- Dirty-State
-- automatisches `evidence_added`-History-Event
+- Dirty-State und `evidence_added`-History-Event
 - Speichern/Download direkt aus dem Evidenzregister
-- Desktop- und Mobile-Browsertests
 
-#### Projektweite Risiken und nächste Aktionen
+### Projektweite Risiken und nächste Aktionen
 
-PR #25 ergänzt die gemeinsamen Arbeitsobjekte für Deal Risk und konkrete Qualification-/Execution-Aktionen.
+PR #25 hat gemeinsame Deal-Risiken und Qualification-/Execution-Aktionen ergänzt.
 
 Unterstützt werden:
 
 - Risiken projektweit anlegen und bearbeiten
-- Severity und Risk-Status pflegen
-- Risk auf einen MEDDPICC-Bereich beziehen
-- Risk sicher auf zum Bereich gehörende Entities bzw. Process Steps referenzieren
-- Impact, Mitigation, Owner und Due Date pflegen
+- Severity und Risk-Status
+- MEDDPICC-Bereich und passende Entity-/Process-Step-Referenzen
+- Impact, Mitigation, Owner und Due Date
 - nächste Aktionen projektweit anlegen und bearbeiten
-- Action auf MEDDPICC-Bereich sowie optional Risk und Gap beziehen
-- `desiredEvidence` als erwartetes Wissen bzw. erwarteten Nachweis explizit pflegen
-- vorhandene Evidence IDs mit Actions verknüpfen
-- Risk → Action im UI nachvollziehbar anzeigen
-- `risk_opened`, `risk_closed` und `action_completed` nur bei passenden Ereignissen bzw. Statusübergängen schreiben
-- keine erfundenen History-Events für Action-Erstellung
+- Action → Risk, Gap und Evidence
+- `desiredEvidence`
+- `risk_opened`, `risk_closed` und `action_completed` ohne Doppel-Events
 - atomare, vollständig validierte Store-Mutationen
-- Dirty-State und valider Save-/Round-Trip
-- Dashboard liest neue/geänderte Risks und Actions aus demselben Projektmodell
-- Desktop- und Mobile-Browsertests
+- Dashboard liest Risks und Actions aus demselben Projektmodell
 
-Fachliche Entscheidung:
+### Source-/Reference-Records und Source-Traceability
 
-Das bestehende Schema 0.2.0 reicht für diesen Slice aus. Es wurde nicht aus UI-Bequemlichkeit erweitert. Stattdessen wurde die Domain-Validierung für Risk-`relatedEntityIds` verschärft: Eine vorhandene ID reicht nicht; die referenzierte Entity muss zum gewählten MEDDPICC-Bereich gehören.
+PR #27 ergänzt den Source-Layer ohne Schemaänderung.
 
-Technische Besonderheit:
+Unterstützt werden:
 
-Vor atomaren Store-Änderungen wird ein reaktiver Pinia/Vue-State mit `toRaw()` entpackt, bevor ein sicherer Snapshot erzeugt wird. Dadurch werden Proxy-Probleme vermieden und ein ungültiger Zwischenstand kann nicht teilweise in den Store gelangen.
+- Reference-Records projektweit anlegen und bearbeiten
+- Typ, Titel, Datum, externe ID, URL und Notizen
+- Evidence kann auf genau einen vorhandenen Reference-Record verweisen
+- Evidenzkarten zeigen die konkrete Quellenreferenz
+- Dashboard-Risiken und -Aktionen zeigen ihre deterministisch abgeleitete Quellenbasis
+- Drill-down vom Dashboard zu einem konkreten Reference- bzw. Evidence-Eintrag
+- fehlende Quellenreferenzen werden sichtbar benannt statt implizit ergänzt
+- Risk-Traceability bleibt bei vorhandenen `relatedEntityIds` auf die verknüpften Entities sowie explizite Section-Evidence begrenzt
+- Action-Traceability nutzt direkte Evidence-IDs und gegebenenfalls die Quellenbasis des verknüpften Risks
+- Reference-Mutationen sind atomar validiert; ungültige Änderungen erzeugen keinen Partial State
+- keine erfundenen History-Events für Reference-Erstellung oder -Bearbeitung
+
+Fachliche Grenze:
+
+Ein Risk besitzt im aktuellen Schema keine direkte `evidenceIds`-Liste. Die Workbench behauptet deshalb keine direkte Risk→Evidence-Beziehung. Die sichtbare Quellenbasis wird aus den bereits modellierten MEDDPICC-/Entity-Referenzen hergeleitet.
 
 ### Noch offen in Phase 2
 
 - Projektmetadaten als vollständige editierbare Arbeitsoberfläche
-- Source-/Reference-Records als editierbare Arbeitsoberfläche
-- weitere noch benötigte History-/Status-Nutzung außerhalb der bereits implementierten Events
-- gemeinsames Statusmodell vollständig in allen späteren Arbeitsoberflächen nutzen
-- Dashboard Findings mit expliziter Source-Traceability
-- Evidenz gezielt mit mehreren konkreten Qualifizierungsaussagen/Entities verknüpfen
+- Evidenz gezielt mit konkreten Qualification-Entities bzw. -Aussagen verknüpfen
+- weitere History-/Status-Nutzung außerhalb der bereits implementierten Events
+- gemeinsames Statusmodell vollständig in späteren Arbeitsoberflächen nutzen
+- Source-Traceability für weitere künftig hinzukommende abgeleitete Dashboard-Findings
+- vollständige acht MEDDPICC-Bearbeitungsmodule bleiben Phase 3
 
 Issue #4 bleibt offen und bildet diesen Fortschritt ab.
 
 ## Nächster empfohlener Slice
 
-### Source-/Reference-Records + Source-Traceability
+### Projektmetadaten + konkrete Evidence-to-Entity-Verknüpfung
 
-Als nächstes sollten die bereits im Projektmodell vorhandenen Reference-Records als gemeinsame Arbeitsobjekte nutzbar gemacht und die Source-Traceability bis in die Dashboard-Findings vervollständigt werden.
+Nach dem Source-Layer sollte Phase 2 die verbleibenden gemeinsamen Grundlagen vor den acht MEDDPICC-Modulen schließen:
 
-Warum dieser Schritt jetzt sinnvoll ist:
+1. Projektmetadaten vollständig editierbar machen.
+2. Eine belastbare, bidirektional nachvollziehbare Zuordnung zwischen Evidenz und konkreten Qualification-Entities ermöglichen.
+3. Die daraus entstehenden Status-/Dashboard-Findings über denselben Source-Traceability-Pfad erklären.
 
-- Evidenz, Risiken und Aktionen sind als gemeinsame Objekte nutzbar.
-- Evidenz besitzt bereits `referenceId`, aber References sind noch nicht über eine Arbeitsoberfläche pflegbar.
-- Das Dashboard kann Risks/Actions anzeigen, aber Findings sind noch nicht vollständig bis zur zugrunde liegenden Source nachvollziehbar.
-- Diese Traceability sollte vor den acht MEDDPICC-Kernmodulen stabil sein, damit spätere Module dieselbe Source-of-Truth verwenden.
+Dabei darf eine UI-Vereinfachung keine neue Schema-Semantik vortäuschen. Falls für Evidence-to-Entity tatsächlich eine Modelllücke besteht, ist sie zuerst fachlich zu begründen und erst dann über Schema-Versionierung/Migration zu ergänzen.
 
 Bewusst weiterhin nicht Teil dieses nächsten Slices:
 
-- vollständige acht MEDDPICC-Bearbeitungsmodule
 - generative AI
 - automatische Risk-/Action-Generierung
 - Scoring Engine
@@ -185,13 +168,15 @@ Ein Slice gilt erst als abgeschlossen, wenn:
 - `docs/ARCHITECTURE.md`
 - `docs/PROJECT_FILE_SPEC.md`
 - `schema/meddpicc-project.schema.json`
-- `src/domain/project.ts`
 - `src/domain/projectValidation.ts`
 - `src/domain/evidence.ts`
+- `src/domain/reference.ts`
+- `src/domain/sourceTraceability.ts`
 - `src/domain/riskAction.ts`
 - `src/stores/projectStore.ts`
 - `src/views/EvidenceView.vue`
+- `src/views/ReferencesView.vue`
 - `src/views/RisksActionsView.vue`
 - `src/views/HomeView.vue`
+- `tests/e2e/references-traceability.spec.ts`
 - `tests/e2e/risks-actions.spec.ts`
-- `examples/demo-opportunity.meddpicc`
