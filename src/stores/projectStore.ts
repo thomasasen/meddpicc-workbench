@@ -5,6 +5,10 @@ import { defaultProject } from '../data/defaultProject'
 import { createNewProject, type NewProjectInput, type NewProjectOptions } from '../data/newProject'
 import type { MeddpiccProject, ProjectMeta, ProjectHistoryEvent, ProjectRisk, ProjectAction } from '../domain/project'
 import { createEvidence, type EvidenceCreateOptions, type EvidenceDraft } from '../domain/evidence'
+import {
+  replaceEvidenceQualificationLinks,
+  type QualificationEvidenceTarget,
+} from '../domain/qualificationEvidence'
 import { createReference, updateReference, type ReferenceCreateOptions, type ReferenceDraft } from '../domain/reference'
 import {
   createAction,
@@ -32,6 +36,9 @@ export type HistoryMutationOptions = {
   historyId?: string
 }
 
+export type EvidenceMutationOptions = EvidenceCreateOptions & {
+  entityTargets?: readonly QualificationEvidenceTarget[]
+}
 export type RiskMutationOptions = RiskCreateOptions & HistoryMutationOptions
 export type ActionMutationOptions = ActionCreateOptions & HistoryMutationOptions
 
@@ -94,10 +101,11 @@ export const useProjectStore = defineStore('project', () => {
     dirty.value = true
   }
 
-  function addEvidence(draft: EvidenceDraft, options: EvidenceCreateOptions = {}) {
+  function addEvidence(draft: EvidenceDraft, options: EvidenceMutationOptions = {}) {
     const evidence = createEvidence(draft, options)
     const nextProject = structuredClone(toRaw(project.value))
     nextProject.evidence.push(evidence)
+    replaceEvidenceQualificationLinks(nextProject, evidence.id, options.entityTargets ?? [])
 
     const historyEvent: ProjectHistoryEvent = {
       id: `history_${evidence.id}`,
@@ -326,17 +334,27 @@ export const useProjectStore = defineStore('project', () => {
     )
   }
 
+  function setEvidenceQualificationLinks(
+    evidenceId: string,
+    targets: readonly QualificationEvidenceTarget[],
+  ) {
+    const nextProject = structuredClone(toRaw(project.value))
+    replaceEvidenceQualificationLinks(nextProject, evidenceId, targets)
+    commitValidatedProject(nextProject)
+  }
+
   function updateProjectMeta(patch: Partial<ProjectMeta>) {
-    project.value.project = {
-      ...project.value.project,
+    const nextProject = structuredClone(toRaw(project.value))
+    nextProject.project = {
+      ...nextProject.project,
       ...patch,
     }
 
     if ('targetGoLiveDate' in patch) {
-      project.value.planning.targetGoLiveDate = patch.targetGoLiveDate ?? null
+      nextProject.planning.targetGoLiveDate = patch.targetGoLiveDate ?? null
     }
 
-    dirty.value = true
+    commitValidatedProject(nextProject)
   }
 
   function markDirty() {
@@ -369,6 +387,7 @@ export const useProjectStore = defineStore('project', () => {
     importProjectText,
     updateProjectMeta,
     addEvidence,
+    setEvidenceQualificationLinks,
     addReference,
     updateReference: updateReferenceRecord,
     addRisk,
