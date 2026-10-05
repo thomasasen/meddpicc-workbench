@@ -30,7 +30,9 @@ test('erfasst Evidenz im zentralen Register', async ({ page }) => {
   await page.getByLabel('Economic Buyer').check()
   await page.getByRole('button', { name: 'Evidenz hinzufügen' }).click()
 
-  await expect(page.getByText('Testaussage für den browserbasierten Evidenz-Flow.', { exact: true })).toBeVisible()
+  await expect(
+    page.getByText('Testaussage für den browserbasierten Evidenz-Flow.', { exact: true }),
+  ).toBeVisible()
   await expect(page.getByText('Annahme', { exact: true }).last()).toBeVisible()
   await expect(page.getByText('Ungespeicherte Änderungen')).toBeVisible()
 })
