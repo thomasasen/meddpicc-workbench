@@ -14,11 +14,12 @@ import {
 import { storeToRefs } from 'pinia'
 import { computed, nextTick, ref, type Component } from 'vue'
 
-import type { ProjectAreaKey, ProjectRisk } from '../domain/project'
+import type { ProjectAction, ProjectAreaKey, ProjectRisk } from '../domain/project'
 import { loadProject, ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
 import { downloadTextFile } from '../services/browserFile'
 import { useProjectStore } from '../stores/projectStore'
 import { qualificationStatusLabels, type QualificationStatusKey } from '../domain/qualificationStatus'
+import { traceActionSources, traceRiskSources, type SourceTrace } from '../domain/sourceTraceability'
 
 type SnapshotItem = {
   label: string
@@ -126,6 +127,27 @@ function formatDate(value: string | null): string {
 
 function riskClass(risk: ProjectRisk): string {
   return risk.severity === 'critical' || risk.severity === 'high' ? 'risk-item' : 'risk-item risk-item--warning'
+}
+
+function riskTrace(risk: ProjectRisk): SourceTrace {
+  return traceRiskSources(project.value, risk)
+}
+
+function actionTrace(action: ProjectAction): SourceTrace {
+  return traceActionSources(project.value, action)
+}
+
+function sourceTraceLabel(trace: SourceTrace): string {
+  if (trace.evidence.length === 0) return 'Keine verknüpfte Evidenz'
+
+  const evidenceLabel = `${trace.evidence.length} ${trace.evidence.length === 1 ? 'Evidenz' : 'Evidenzen'}`
+  if (trace.references.length === 0) return `${evidenceLabel} · ohne Reference-Record`
+
+  const titles = trace.references.slice(0, 2).map((reference) => reference.title)
+  const remaining = trace.references.length - titles.length
+  const sourceLabel = titles.join(', ') + (remaining > 0 ? ` +${remaining}` : '')
+
+  return `${evidenceLabel} · Quellen: ${sourceLabel}`
 }
 
 function forecastLabel(value: string): string {
@@ -461,6 +483,9 @@ function saveProject() {
                   <div>
                     <strong>{{ risk.title }}</strong>
                     <p>{{ risk.impact }}</p>
+                    <RouterLink class="source-trace-link" to="/evidence">
+                      {{ sourceTraceLabel(riskTrace(risk)) }}
+                    </RouterLink>
                   </div>
                 </div>
               </section>
@@ -479,6 +504,9 @@ function saveProject() {
                     <div>
                       <strong>{{ action.title }}</strong>
                       <span>{{ areaLabels[action.relatedArea] }}</span>
+                      <RouterLink class="source-trace-link" to="/evidence">
+                        {{ sourceTraceLabel(actionTrace(action)) }}
+                      </RouterLink>
                     </div>
                     <span class="action-due">{{ formatDate(action.dueDate) }}</span>
                   </li>
