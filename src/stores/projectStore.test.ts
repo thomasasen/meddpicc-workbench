@@ -354,9 +354,9 @@ describe('projectStore', () => {
     store.setEvidenceQualificationLinks('ev_metric_02', [{ area: 'decisionCriteria', entityId: 'dc_01' }])
 
     expect(store.project.meddpicc.metrics.metrics[0].evidenceIds).not.toContain('ev_metric_02')
-    expect(store.project.meddpicc.decisionCriteria.criteria[0].evidenceIds.filter((id) => id === 'ev_metric_02')).toHaveLength(
-      1,
-    )
+    expect(
+      store.project.meddpicc.decisionCriteria.criteria[0].evidenceIds.filter((id) => id === 'ev_metric_02'),
+    ).toHaveLength(1)
     expect(() => serializeProject(store.project)).not.toThrow()
   })
 
@@ -410,5 +410,4 @@ describe('projectStore', () => {
     expect(store.project).toEqual(before)
     expect(store.dirty).toBe(false)
   })
-
 })
