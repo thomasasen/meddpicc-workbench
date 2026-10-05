@@ -9,6 +9,12 @@ test('pflegt Source-Records und zeigt die Traceability bis ins Dashboard', async
   await expect(page.getByRole('heading', { name: 'Quellen & Referenzen' })).toBeVisible()
 
   const referenceForm = page.getByRole('region', { name: 'Quelleneintrag pflegen' })
+  const discoveryReference = page.getByRole('article').filter({ hasText: 'Discovery Workshop Vertrieb' })
+  await discoveryReference.getByRole('button', { name: 'Bearbeiten' }).click()
+  await referenceForm.getByLabel('Titel').fill('Discovery Workshop Vertrieb – geprüft')
+  await referenceForm.getByRole('button', { name: 'Quelle speichern' }).click()
+  await expect(page.getByRole('article').filter({ hasText: 'Discovery Workshop Vertrieb – geprüft' })).toBeVisible()
+
   await referenceForm.getByLabel('Typ').selectOption('meeting')
   await referenceForm.getByLabel('Datum').fill('2026-10-05')
   await referenceForm.getByLabel('Titel').fill('CFO Steering 05.10.2026')
@@ -45,12 +51,12 @@ test('pflegt Source-Records und zeigt die Traceability bis ins Dashboard', async
   const economicBuyerRisk = page
     .getByText('Priorität beim Economic Buyer ist nur indirekt belegt', { exact: true })
     .locator('..')
-  await expect(economicBuyerRisk).toContainText('CFO Steering 05.10.2026')
+  await expect(economicBuyerRisk).toContainText('Discovery Workshop Vertrieb – geprüft')
 
   const traceLink = economicBuyerRisk.getByRole('link', { name: /Quellenbasis:/ })
   await traceLink.click()
   await expect(page.getByRole('heading', { name: 'Quellen & Referenzen' })).toBeVisible()
-  await expect(page.locator('[id^="reference-"]').filter({ hasText: 'Discovery Workshop Vertrieb' })).toBeVisible()
+  await expect(page.locator('[id^="reference-"]').filter({ hasText: 'Discovery Workshop Vertrieb – geprüft' })).toBeVisible()
 
   expect(runtimeErrors).toEqual([])
 })
