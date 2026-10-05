@@ -4,7 +4,7 @@ Eine local-first Browser-Anwendung zur Verwaltung und Qualifizierung komplexer B
 
 Die Grundidee ist einfach: **Die Projektdatei ist die Source of Truth.** Die Anwendung öffnet eine portable `.meddpicc`-Datei, unterstützt bei der strukturierten Bewertung der Opportunity mit deterministischen Werkzeugen und speichert das aktualisierte Projekt wieder in dieser Datei. Zur Runtime werden weder AI, Backend, Benutzerkonto noch externe Datenbank benötigt.
 
-> **Projektstatus:** Pre-Alpha. Die technische Basis und der browserbasierte `.meddpicc`-Lifecycle für neues Projekt, Öffnen/Validieren, Dirty-State und Save/Download sind implementiert. Historische Schema-0.1.0-Dateien werden deterministisch auf 0.2.0 migriert. Die fachlichen MEDDPICC-Bearbeitungsmodule folgen schrittweise.
+> **Projektstatus:** Pre-Alpha. Foundation und Project File Lifecycle sind im Core abgeschlossen. Das erste gemeinsame Roadmap-2-Arbeitsobjekt ist mit dem projektweiten Evidenzregister produktiv nutzbar. Als nächster Slice folgen Risiken und nächste Aktionen. Historische Schema-0.1.0-Dateien werden deterministisch auf 0.2.0 migriert.
 
 [![Live-Anwendung öffnen](https://img.shields.io/badge/MEDDPICC%20Workbench-Live--Anwendung%20%C3%B6ffnen-2563EB?style=for-the-badge)](https://thomasasen.github.io/meddpicc-workbench/)
 
@@ -214,6 +214,7 @@ Siehe die ausführliche [Roadmap](docs/ROADMAP.md).
 - [Icon System](docs/ICON_SYSTEM.md)
 - [UI/UX-Entwicklungsreferenz](docs/UI_UX_REFERENCE.md)
 - [Roadmap](docs/ROADMAP.md)
+- [Aktueller Projektfortschritt / Handoff](docs/PROGRESS.md)
 - [Beitragen](CONTRIBUTING.md)
 - [Security & Privacy](SECURITY.md)
 - [Agent-Anweisungen](AGENTS.md)
