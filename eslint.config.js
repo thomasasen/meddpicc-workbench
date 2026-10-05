@@ -5,7 +5,7 @@ import pluginVue from 'eslint-plugin-vue'
 
 export default [
   {
-    ignores: ['dist/**', 'playwright-report/**', 'test-results/**', 'src/domain/project.generated.ts'],
+    ignores: ['dist/**', 'assets/**', 'playwright-report/**', 'test-results/**', 'src/domain/project.generated.ts'],
   },
   {
     ...js.configs.recommended,

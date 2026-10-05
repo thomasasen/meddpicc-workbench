@@ -37,6 +37,9 @@ jobs:
       - name: Produktionsbuild prüfen
         run: npm run build
 
+      - name: veröffentlichten Pages-Root prüfen
+        run: npm run pages:check
+
       - name: Playwright Chromium installieren
         run: npx playwright install --with-deps chromium
 
