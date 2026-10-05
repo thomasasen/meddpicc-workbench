@@ -99,5 +99,4 @@ describe('source traceability', () => {
     expect(evidenceIds).toContain('ev_comp_section')
     expect(evidenceIds).not.toContain('ev_comp_other_entity')
   })
-
 })
