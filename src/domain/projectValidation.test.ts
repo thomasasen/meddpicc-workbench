@@ -77,4 +77,13 @@ describe('Domain Validation', () => {
       expect(result.issues.some((issue) => issue.code === 'dependency_cycle')).toBe(true)
     }
   })
+  it('lehnt bereichsfremde Related-Entity-IDs in Risiken ab', () => {
+    const project = cloneProject()
+    project.risks[0]!.relatedArea = 'economicBuyer'
+    project.risks[0]!.relatedEntityIds = ['pp_01']
+
+    const result = validateProject(project)
+    expect(result.success).toBe(false)
+    if (!result.success) expect(result.issues.some((issue) => issue.code === 'missing_reference')).toBe(true)
+  })
 })
