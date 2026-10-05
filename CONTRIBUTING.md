@@ -13,6 +13,8 @@ A change should answer at least one of these questions:
 
 If not, it may belong outside the core product.
 
+Before coding, read `AGENTS.md`. For UI/UX changes also read `docs/DESIGN_SYSTEM.md`.
+
 ## Architecture constraints
 
 Do not introduce:
@@ -34,8 +36,9 @@ Recommended workflow:
 2. Keep commits small and descriptive.
 3. Add or update tests for domain behavior.
 4. Update schema/migration documentation when file structure changes.
-5. Open a pull request describing behavior and compatibility impact.
-6. Do not merge with failing tests.
+5. For UI changes, validate against the design-system checklist.
+6. Open a pull request describing behavior and compatibility impact.
+7. Do not merge with failing tests.
 
 ## Commit style
 
@@ -81,6 +84,31 @@ Prefer pure functions for:
 
 UI components should not contain hidden methodology rules.
 
+## UI/UX contributions
+
+UI work must follow:
+
+- `docs/DESIGN_SYSTEM.md`
+- `.agents/skills/meddpicc-ui-ux/SKILL.md`
+- repository-wide rules in `AGENTS.md`
+
+The project uses `nextlevelbuilder/ui-ux-pro-max-skill` only as an external development reference. The reviewed upstream snapshot and usage boundaries are documented in `docs/UI_UX_REFERENCE.md`.
+
+Do not add the upstream skill as a runtime dependency.
+
+UI pull requests should consider:
+
+- semantic HTML
+- complete keyboard operation
+- visible focus
+- non-color-only status meaning
+- responsive behavior around 375/768/1024/1440 px
+- long German/English labels
+- browser zoom and text scaling
+- reduced motion
+- chart/table accessibility
+- local/bundled assets rather than external runtime fonts/scripts
+
 ## Methodology content
 
 Use original wording.
@@ -96,6 +124,7 @@ At minimum:
 - deterministic calculations need unit tests
 - schema changes need valid/invalid/migration fixtures
 - file open/save needs browser-flow coverage
+- meaningful UI workflows need keyboard/responsive checks
 - bug fixes should receive a regression test when practical
 
 ## Security and privacy
