@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import type { ProjectAreaKey, ProjectEvidence } from '../domain/project'
+import type { ProjectAreaKey, ProjectEvidence, ProjectReference } from '../domain/project'
 import { ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
 import { downloadTextFile } from '../services/browserFile'
 import { useProjectStore } from '../stores/projectStore'
@@ -47,6 +47,16 @@ const verificationLabels: Record<ProjectEvidence['verification'], string> = {
   corroborated: 'Mehrfach gestützt',
   confirmed: 'Bestätigt',
   observed: 'Beobachtet',
+}
+
+const referenceTypeLabels: Record<ProjectReference['type'], string> = {
+  meeting: 'Meeting',
+  crm: 'CRM',
+  document: 'Dokument',
+  email: 'E-Mail',
+  rfp: 'RFP',
+  contract: 'Vertrag',
+  other: 'Sonstige Quelle',
 }
 
 const form = ref({
@@ -281,11 +291,11 @@ function saveProject() {
               </label>
 
               <label class="field field--full">
-                <span>Reference-Record <small>optional</small></span>
+                <span>Quellenreferenz <small>optional</small></span>
                 <select v-model="form.referenceId">
                   <option value="">Keine Reference hinterlegt</option>
                   <option v-for="reference in project.references" :key="reference.id" :value="reference.id">
-                    {{ reference.title }} · {{ reference.type }}
+                    {{ reference.title }} · {{ referenceTypeLabels[reference.type] }}
                   </option>
                 </select>
               </label>
@@ -350,6 +360,7 @@ function saveProject() {
               v-for="evidence in sortedEvidence"
               :key="evidence.id"
               class="evidence-card"
+              :id="`evidence-${evidence.id}`"
               :class="evidenceTone(evidence)"
             >
               <div class="evidence-card-meta">
