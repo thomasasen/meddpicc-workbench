@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
-import { defaultProject } from '../data/defaultProject'
 import type { ProjectAreaKey, ProjectRisk } from '../domain/project'
+import { useProjectStore } from '../stores/projectStore'
 import {
   qualificationStatusLabels,
   type QualificationStatusKey,
@@ -14,7 +15,8 @@ type SnapshotItem = {
   confidence: number
 }
 
-const project = defaultProject
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
 
 const areaLabels: Record<ProjectAreaKey, string> = {
   metrics: 'Metrics',
@@ -37,8 +39,8 @@ const forecastLabels: Record<string, string> = {
 const snapshot = computed<SnapshotItem[]>(() =>
   (Object.entries(areaLabels) as Array<[ProjectAreaKey, string]>).map(([key, label]) => ({
     label,
-    status: project.meddpicc[key].status,
-    confidence: project.meddpicc[key].confidence,
+    status: project.value.meddpicc[key].status,
+    confidence: project.value.meddpicc[key].confidence,
   })),
 )
 
@@ -50,26 +52,28 @@ const severityWeight: Record<ProjectRisk['severity'], number> = {
 }
 
 const openRisks = computed(() =>
-  project.risks
+  project.value.risks
     .filter((risk) => risk.status === 'open' || risk.status === 'mitigating')
     .sort((a, b) => severityWeight[b.severity] - severityWeight[a.severity])
     .slice(0, 2),
 )
 
 const openActions = computed(() =>
-  project.actions
+  project.value.actions
     .filter((action) => action.status === 'open')
     .sort((a, b) => (a.dueDate ?? '9999-12-31').localeCompare(b.dueDate ?? '9999-12-31'))
     .slice(0, 2),
 )
 
-const currencyFormatter = new Intl.NumberFormat('de-DE', {
-  style: 'currency',
-  currency: project.project.currency,
-  maximumFractionDigits: 0,
-})
-
 const dateFormatter = new Intl.DateTimeFormat('de-DE')
+
+function formatCurrency(value: number): string {
+  return new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: project.value.project.currency,
+    maximumFractionDigits: 0,
+  }).format(value)
+}
 
 function formatDate(value: string | null): string {
   if (!value) return 'Noch offen'
@@ -152,7 +156,7 @@ function forecastLabel(value: string): string {
                 <p class="opportunity-name">{{ project.project.name }}</p>
               </div>
               <span class="deal-value">
-                {{ currencyFormatter.format(project.project.dealValue) }}
+                {{ formatCurrency(project.project.dealValue) }}
               </span>
             </div>
 
