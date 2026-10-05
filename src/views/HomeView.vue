@@ -52,14 +52,14 @@ const severityWeight: Record<ProjectRisk['severity'], number> = {
 const openRisks = computed(() =>
   project.risks
     .filter((risk) => risk.status === 'open' || risk.status === 'mitigating')
-    .toSorted((a, b) => severityWeight[b.severity] - severityWeight[a.severity])
+    .sort((a, b) => severityWeight[b.severity] - severityWeight[a.severity])
     .slice(0, 2),
 )
 
 const openActions = computed(() =>
   project.actions
     .filter((action) => action.status === 'open')
-    .toSorted((a, b) => (a.dueDate ?? '9999-12-31').localeCompare(b.dueDate ?? '9999-12-31'))
+    .sort((a, b) => (a.dueDate ?? '9999-12-31').localeCompare(b.dueDate ?? '9999-12-31'))
     .slice(0, 2),
 )
 
