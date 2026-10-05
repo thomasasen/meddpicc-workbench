@@ -556,7 +556,11 @@ function saveProject() {
                 <span class="deal-value">
                   {{ formatCurrency(project.project.dealValue) }}
                 </span>
-                <button class="button button-secondary button-with-icon compact-button" type="button" @click="openProjectMetaForm">
+                <button
+                  class="button button-secondary button-with-icon compact-button"
+                  type="button"
+                  @click="openProjectMetaForm"
+                >
                   <Pencil :size="15" :stroke-width="2" aria-hidden="true" />
                   <span>Projekt bearbeiten</span>
                 </button>
@@ -591,7 +595,13 @@ function saveProject() {
                 <div class="project-meta-grid">
                   <label class="field">
                     <span>Account</span>
-                    <input v-model="projectMetaForm.accountName" type="text" maxlength="300" autocomplete="organization" required />
+                    <input
+                      v-model="projectMetaForm.accountName"
+                      type="text"
+                      maxlength="300"
+                      autocomplete="organization"
+                      required
+                    />
                   </label>
                   <label class="field">
                     <span>Projektname</span>
@@ -619,7 +629,13 @@ function saveProject() {
                   </label>
                   <label class="field">
                     <span>Deal Value <small>optional</small></span>
-                    <input v-model="projectMetaForm.dealValue" type="number" min="0" step="any" inputmode="decimal" />
+                    <input
+                      v-model="projectMetaForm.dealValue"
+                      type="number"
+                      min="0"
+                      step="any"
+                      inputmode="decimal"
+                    />
                   </label>
                   <label class="field">
                     <span>Target Close <small>optional</small></span>
