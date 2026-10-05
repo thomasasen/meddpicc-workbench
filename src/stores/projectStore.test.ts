@@ -314,24 +314,36 @@ describe('projectStore', () => {
     const store = useProjectStore()
 
     store.updateProjectMeta({
+      name: 'CRM Transformation 2027 · qualifiziert',
+      accountName: 'Beispielwerke Industrie SE',
+      opportunityId: 'DEMO-OPP-2027-QUALIFIED',
       owner: 'Strategic AE',
+      currency: 'CHF',
       dealValue: 510000,
+      targetCloseDate: '2027-04-15',
       targetGoLiveDate: '2027-08-15',
       forecastCategory: 'commit',
+      notes: 'Metadaten im Roadmap-2-Slice validiert bearbeitet.',
     })
 
+    expect(store.project.project.name).toBe('CRM Transformation 2027 · qualifiziert')
+    expect(store.project.project.accountName).toBe('Beispielwerke Industrie SE')
+    expect(store.project.project.opportunityId).toBe('DEMO-OPP-2027-QUALIFIED')
     expect(store.project.project.owner).toBe('Strategic AE')
+    expect(store.project.project.currency).toBe('CHF')
     expect(store.project.project.dealValue).toBe(510000)
+    expect(store.project.project.targetCloseDate).toBe('2027-04-15')
     expect(store.project.project.targetGoLiveDate).toBe('2027-08-15')
     expect(store.project.planning.targetGoLiveDate).toBe('2027-08-15')
     expect(store.project.project.forecastCategory).toBe('commit')
+    expect(store.project.project.notes).toBe('Metadaten im Roadmap-2-Slice validiert bearbeitet.')
     expect(store.dirty).toBe(true)
     expect(() => serializeProject(store.project)).not.toThrow()
   })
 
   it('verwirft ungültige Projektmetadaten ohne Partial State', () => {
     const store = useProjectStore()
-    const before = structuredClone(store.project)
+    const before = JSON.parse(JSON.stringify(store.project))
 
     expect(() => store.updateProjectMeta({ accountName: '', currency: 'EURO' })).toThrow()
 
@@ -396,7 +408,7 @@ describe('projectStore', () => {
 
   it('verwirft ungültige Evidence- oder Entity-Targets ohne Partial State', () => {
     const store = useProjectStore()
-    const before = structuredClone(store.project)
+    const before = JSON.parse(JSON.stringify(store.project))
 
     expect(() =>
       store.setEvidenceQualificationLinks('ev_missing', [{ area: 'metrics', entityId: 'metric_01' }]),
