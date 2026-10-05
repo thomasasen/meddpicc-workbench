@@ -68,25 +68,28 @@ Acceptance Criteria:
 
 **Ziel:** bereichsübergreifende Objekte für alle MEDDPICC-Bereiche implementieren.
 
-**Aktueller Stand:** aktiv. Die Slices für Evidenz (PR #23), Risiken/Aktionen (PR #25) und Source-/Reference-Records samt Dashboard-Traceability (PR #27) sind auf `main` gemergt. Der PR-#27-Quality-Gate einschließlich Desktop-/Mobile-Playwright sowie `main`-Integritätscheck und GitHub-Pages-Deployment waren grün. Offen bleiben insbesondere die vollständige Projektmetadaten-Bearbeitung und konkrete Evidence-to-Entity-Verknüpfungen.
+**Aktueller Stand:** aktiv. Die Slices für Evidenz (PR #23), Risiken/Aktionen (PR #25) und Source-/Reference-Records samt Dashboard-Traceability (PR #27) sind auf `main` gemergt. Der aktuelle PR #28 ergänzt die vollständige Projektmetadaten-Bearbeitung sowie konkrete Evidence-to-Entity-Verknüpfungen auf Basis der bestehenden `evidenceIds`, ohne das Schema 0.2.0 zu erweitern.
 
 Deliverables:
 
-- Projektmetadaten *(nächster Slice: vollständige editierbare Arbeitsoberfläche)*
-- Evidenzregister ✅ *(zentrale Liste + Anlegen mit Klassifikation, Verifikation, Qualität, Quelle und MEDDPICC-Bezug)*
+- Projektmetadaten ✅ *(alle vorhandenen Felder editierbar; Save/Cancel; atomar validierte Mutation; Target-Go-Live wird mit Planning synchronisiert)*
+- Evidenzregister ✅ *(zentrale Liste + Anlegen mit Klassifikation, Verifikation, Qualität, Quelle, MEDDPICC-Bezug und konkreten stabil adressierbaren Qualification-Entities)*
 - Referenzen ✅ *(projektweit anlegen/bearbeiten; Evidence kann einen Reference-Record referenzieren)*
 - Risiken ✅ *(projektweit anlegen/bearbeiten, Severity/Status, Bereichs- und Entity-/Process-Verknüpfung)*
 - nächste Aktionen ✅ *(projektweit anlegen/bearbeiten, Risk-/Gap-/Evidence-Verknüpfung und Desired Evidence)*
 - Historie *(Basis vorhanden; `evidence_added`, `risk_opened`, `risk_closed` und `action_completed` werden in den implementierten Flows geschrieben; weitere Nutzung bleibt offen)*
-- gemeinsames Statusmodell *(weitere Nutzung folgt mit konkreter Evidence-to-Entity-Verknüpfung und späteren Modulen)*
-- Dashboard-Zusammenfassung *(Risk-/Action-Findings mit Source-Traceability umgesetzt; weitere Findings folgen mit späteren Modulen)*
+- gemeinsames Statusmodell *(weitere Nutzung folgt mit späteren Arbeitsoberflächen und Modulen)*
+- Dashboard-Zusammenfassung *(Risk-/Action-Findings mit konkreter Entity-Traceability umgesetzt; weitere Findings folgen mit späteren Modulen)*
 
 Acceptance Criteria:
 
-- ein Evidenzobjekt kann mehrere Aussagen stützen
+- ein Evidenzobjekt kann mehrere stabil adressierbare Qualification-Entities stützen ✅
+- Evidence → Entity wird deterministisch aus den kanonischen `entity.evidenceIds` abgeleitet ✅
 - Annahmen und Unbekanntes sind visuell und textlich von bestätigter Evidenz unterscheidbar ✅
 - Risiken und Aktionen verlinken auf MEDDPICC-Bereiche; Risiken können zusätzlich sicher auf konkrete Entities bzw. Process Steps verweisen ✅
+- konkrete Entity-Risiken erhalten keine Evidence einer anderen Entity nur aufgrund desselben MEDDPICC-Bereichs ✅
 - sichtbare Risk-/Action-Findings im Dashboard sind auf Evidence und Reference-Records zurückführbar ✅
+- Champion-Behavior-Evidence bleibt bis zu einer fachlich stabilen Behavior-Identität read-only; es werden keine künstlichen IDs eingeführt ✅
 
 Fortschritt und Handoff: `docs/PROGRESS.md`
 
