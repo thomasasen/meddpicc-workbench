@@ -4,6 +4,7 @@ import { defaultProject } from '../data/defaultProject'
 import {
   evidenceForQualificationTarget,
   listQualificationEvidenceTargets,
+  qualificationEvidenceLinksForEvidence,
   qualificationTargetsForEvidence,
   replaceEvidenceQualificationLinks,
 } from './qualificationEvidence'
@@ -94,4 +95,25 @@ describe('qualification evidence', () => {
     ).toThrow('nicht stabil adressierbar')
     expect(project).toEqual(before)
   })
+  it('macht bestehende Champion-Behavior-Links sichtbar, ohne eine künstliche editierbare ID zu erfinden', () => {
+    const project = structuredClone(defaultProject)
+    const links = qualificationEvidenceLinksForEvidence(project, 'ev_champion_01')
+
+    expect(links).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          area: 'champions',
+          label: expect.stringContaining('Interne Informationen geliefert'),
+          editable: false,
+        }),
+        expect.objectContaining({
+          area: 'champions',
+          label: expect.stringContaining('Zugang hergestellt'),
+          editable: false,
+        }),
+      ]),
+    )
+    expect(links.filter((link) => link.area === 'champions').every((link) => link.target === undefined)).toBe(true)
+  })
+
 })
