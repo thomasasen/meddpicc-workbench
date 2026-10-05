@@ -21,7 +21,7 @@ test('erfasst Evidenz im zentralen Register', async ({ page }) => {
   await page.getByRole('link', { name: 'Evidenzregister' }).click()
   await expect(page.getByRole('heading', { name: 'Evidenzregister' })).toBeVisible()
 
-  await page.getByLabel('Aussage').fill('Testaussage für den browserbasierten Evidenz-Flow.')
+  await page.getByRole('textbox', { name: 'Aussage', exact: true }).fill('Testaussage für den browserbasierten Evidenz-Flow.')
   await page.getByLabel('Klassifikation').selectOption('assumption')
   await page.getByLabel('Evidenzqualität').selectOption('low')
   await page.getByLabel('Verifikation').selectOption('unconfirmed')
