@@ -373,6 +373,12 @@ h3 {
   font-size: 1.15rem;
 }
 
+.opportunity-name {
+  margin: 0.15rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
 .deal-value {
   white-space: nowrap;
   font-weight: 750;
