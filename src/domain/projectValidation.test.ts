@@ -36,6 +36,17 @@ describe('Domain Validation', () => {
     }
   })
 
+  it('lehnt unbekannte Related-Entity-IDs in Risiken ab', () => {
+    const project = cloneProject()
+    project.risks[0]!.relatedEntityIds = ['missing_entity']
+
+    const result = validateProject(project)
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      expect(result.issues.some((issue) => issue.code === 'missing_reference')).toBe(true)
+    }
+  })
+
   it('lehnt unbekannte Risk-IDs in Actions ab', () => {
     const project = cloneProject()
     project.actions[0]!.relatedRiskId = 'risk_missing'
