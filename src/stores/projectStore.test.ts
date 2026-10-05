@@ -203,7 +203,7 @@ describe('projectStore', () => {
 
   it('lehnt ungültige Risk-Referenzen atomar ab', () => {
     const store = useProjectStore()
-    const before = structuredClone(store.project)
+    const before = JSON.parse(JSON.stringify(store.project))
 
     expect(() =>
       store.addRisk(
