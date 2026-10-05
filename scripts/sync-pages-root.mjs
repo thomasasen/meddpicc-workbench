@@ -59,11 +59,6 @@ async function assertPublishedRootMatchesDist() {
     for (const asset of distAssets) {
       if (!(await sameFile(join(distRoot, 'assets', asset), join(publishedAssets, asset)))) {
         mismatches.push(`assets/${asset}`)
-
-        if (asset.endsWith('.css') && process.env.CI) {
-          const expectedContent = await readFile(join(distRoot, 'assets', asset))
-          console.error(`PAGES_EXPECTED_CSS_BASE64:${expectedContent.toString('base64')}`)
-        }
       }
     }
   }
