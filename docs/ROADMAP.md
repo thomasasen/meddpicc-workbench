@@ -68,16 +68,16 @@ Acceptance Criteria:
 
 **Ziel:** bereichsübergreifende Objekte für alle MEDDPICC-Bereiche implementieren.
 
-**Aktueller Stand:** aktiv. Das projektweite Evidenzregister ist über PR #23 produktiv nutzbar. Als nächster Slice folgen Risiken und nächste Aktionen als gemeinsame, validierte Arbeitsobjekte.
+**Aktueller Stand:** aktiv. Das projektweite Evidenzregister sowie projektweite Risiken und nächste Aktionen sind als gemeinsame, validierte Arbeitsobjekte nutzbar. Als nächstes fehlen insbesondere Source-/Reference-Records und vollständige Source-Traceability des Dashboards.
 
 Deliverables:
 
 - Projektmetadaten
 - Evidenzregister ✅ *(zentrale Liste + Anlegen mit Klassifikation, Verifikation, Qualität, Quelle und MEDDPICC-Bezug)*
 - Referenzen
-- Risiken *(nächster Slice)*
-- nächste Aktionen *(nächster Slice)*
-- Historie *(Basis vorhanden; `evidence_added` wird beim Anlegen automatisch geschrieben)*
+- Risiken ✅ *(projektweit anlegen/bearbeiten, Severity/Status, Bereichs- und Entity-/Process-Verknüpfung)*
+- nächste Aktionen ✅ *(projektweit anlegen/bearbeiten, Risk-/Gap-/Evidence-Verknüpfung und Desired Evidence)*
+- Historie *(Basis vorhanden; `evidence_added`, `risk_opened`, `risk_closed` und `action_completed` werden in den implementierten Flows geschrieben; weitere Nutzung bleibt offen)*
 - gemeinsames Statusmodell
 - Dashboard-Zusammenfassung
 
@@ -85,7 +85,7 @@ Acceptance Criteria:
 
 - ein Evidenzobjekt kann mehrere Aussagen stützen
 - Annahmen und Unbekanntes sind visuell und textlich von bestätigter Evidenz unterscheidbar ✅
-- Risiken/Aktionen verlinken auf MEDDPICC-Bereich oder Prozessschritt
+- Risiken und Aktionen verlinken auf MEDDPICC-Bereiche; Risiken können zusätzlich sicher auf konkrete Entities bzw. Process Steps verweisen ✅
 - Dashboard Findings sind auf Source Data zurückführbar
 
 Fortschritt und Handoff: `docs/PROGRESS.md`
