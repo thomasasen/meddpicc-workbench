@@ -39,7 +39,7 @@ test('pflegt Source-Records und zeigt die Traceability bis ins Dashboard', async
   await evidenceForm.getByLabel('Verifikation').selectOption('confirmed')
   await evidenceForm.getByLabel('Evidenzqualität').selectOption('high')
   await evidenceForm.getByLabel('Quelldatum').fill('2026-10-05')
-  await evidenceForm.getByLabel('Quellenreferenz').selectOption({ label: /CFO Steering 05\.10\.2026/ })
+  await evidenceForm.getByLabel('Quellenreferenz').selectOption({ label: 'CFO Steering 05.10.2026 · Meeting' })
   await evidenceForm.getByLabel('Economic Buyer').check()
   await evidenceForm.getByRole('button', { name: 'Evidenz hinzufügen' }).click()
 
