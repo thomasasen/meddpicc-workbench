@@ -86,13 +86,10 @@ test('öffnet eine valide .meddpicc-Datei und schützt ungespeicherte Änderunge
   await expect(page.locator('.project-toolbar')).toContainText('Gespeicherter Stand')
 })
 
-
 test('migriert eine historische 0.1.0-Datei sichtbar und speichert sie als 0.2.0', async ({ page }) => {
   await page.goto('/meddpicc-workbench/')
 
-  await page
-    .locator('input[type="file"]')
-    .setInputFiles('examples/legacy/demo-opportunity-0.1.0.meddpicc')
+  await page.locator('input[type="file"]').setInputFiles('examples/legacy/demo-opportunity-0.1.0.meddpicc')
 
   await expect(page.getByRole('status')).toContainText('wurde von Schema 0.1.0 auf 0.2.0 migriert')
   await expect(page.getByRole('status')).toContainText('Bitte speichern')

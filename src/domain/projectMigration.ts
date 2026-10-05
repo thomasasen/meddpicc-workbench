@@ -150,8 +150,7 @@ function migrate010To020(value: unknown): unknown {
   const champions = objectAt(meddpicc.champions, '/meddpicc/champions')
   const competition = objectAt(meddpicc.competition, '/meddpicc/competition')
 
-  const legacyChampionPeople = arrayAt(champions.people, '/meddpicc/champions/people')
-    .filter(isObject)
+  const legacyChampionPeople = arrayAt(champions.people, '/meddpicc/champions/people').filter(isObject)
   const championByStakeholderId = new Map(
     legacyChampionPeople
       .filter((person) => typeof person.stakeholderId === 'string')
@@ -227,17 +226,16 @@ function migrate010To020(value: unknown): unknown {
       : [],
   }
 
-  const migratedCriteria = arrayAt(
-    decisionCriteria.criteria,
-    '/meddpicc/decisionCriteria/criteria',
-  ).map((entry, index) => {
-    const criterion = objectAt(entry, `/meddpicc/decisionCriteria/criteria/${index}`)
-    return {
-      ...criterion,
-      evidenceIds: [],
-      notes: '',
-    }
-  })
+  const migratedCriteria = arrayAt(decisionCriteria.criteria, '/meddpicc/decisionCriteria/criteria').map(
+    (entry, index) => {
+      const criterion = objectAt(entry, `/meddpicc/decisionCriteria/criteria/${index}`)
+      return {
+        ...criterion,
+        evidenceIds: [],
+        notes: '',
+      }
+    },
+  )
 
   function migrateProcess(section: JsonObject, path: string) {
     return {
@@ -276,17 +274,16 @@ function migrate010To020(value: unknown): unknown {
         : '',
   }))
 
-  const migratedAlternatives = arrayAt(
-    competition.knownAlternatives,
-    '/meddpicc/competition/knownAlternatives',
-  ).map((entry, index) => {
-    const alternative = objectAt(entry, `/meddpicc/competition/knownAlternatives/${index}`)
-    return {
-      ...alternative,
-      evidenceIds: [],
-      notes: '',
-    }
-  })
+  const migratedAlternatives = arrayAt(competition.knownAlternatives, '/meddpicc/competition/knownAlternatives').map(
+    (entry, index) => {
+      const alternative = objectAt(entry, `/meddpicc/competition/knownAlternatives/${index}`)
+      return {
+        ...alternative,
+        evidenceIds: [],
+        notes: '',
+      }
+    },
+  )
 
   const evidenceAreas = relatedAreasByEvidence(meddpicc)
   const createdAt = stringAt(legacy.createdAt, '/createdAt')
