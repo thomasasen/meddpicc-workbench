@@ -4,18 +4,23 @@ The roadmap prioritizes the portable project model before feature breadth. Every
 
 ## Phase 0 — Foundation
 
-**Goal:** create a stable development and deployment baseline.
+**Goal:** create a stable development, design, and deployment baseline.
 
 Deliverables:
 
+- repository-wide agent instructions
+- MEDDPICC Workbench design system
+- local UI/UX development skill
+- documented UI UX Pro Max reference/provenance
 - Vue 3 + TypeScript + Vite application
 - repository structure
+- central design tokens
 - formatting/linting
 - Vitest
 - Playwright baseline
 - GitHub Actions CI
 - GitHub Pages deployment
-- minimal application shell
+- minimal accessible application shell
 - architecture decision on runtime schema validator
 - first formal `.meddpicc` schema
 
@@ -25,6 +30,10 @@ Acceptance criteria:
 - `main` deploys a static site
 - application makes no opportunity-data network calls
 - project schema has versioning and test fixtures
+- application shell follows `docs/DESIGN_SYSTEM.md`
+- core shell/navigation is keyboard-operable with visible focus
+- status semantics are not encoded by color alone
+- no external web font/CDN dependency is required for the UI
 
 ## Phase 1 — Project file lifecycle
 
@@ -156,9 +165,9 @@ Acceptance criteria:
 
 Deliverables:
 
-- accessibility review
-- keyboard navigation
-- responsive layout
+- full accessibility review
+- keyboard navigation audit
+- responsive layout audit
 - PWA/offline option
 - stronger recovery flow
 - schema migration test matrix
@@ -166,6 +175,7 @@ Deliverables:
 - security review
 - privacy verification
 - import/export regression fixtures
+- UI consistency audit against the design system
 
 ## Later / optional
 
