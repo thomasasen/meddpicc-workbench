@@ -32,7 +32,9 @@ test('pflegt Source-Records und zeigt die Traceability bis ins Dashboard', async
   await expect(page.getByRole('heading', { name: 'Evidenzregister' })).toBeVisible()
 
   const evidenceForm = page.getByRole('region', { name: 'Beobachtung oder Aussage erfassen' })
-  await evidenceForm.getByLabel('Aussage').fill('CFO bestätigt die wirtschaftliche Priorität des Vorhabens.')
+  await evidenceForm
+    .getByRole('textbox', { name: 'Aussage', exact: true })
+    .fill('CFO bestätigt die wirtschaftliche Priorität des Vorhabens.')
   await evidenceForm.getByLabel('Klassifikation').selectOption('confirmed_evidence')
   await evidenceForm.getByLabel('Verifikation').selectOption('confirmed')
   await evidenceForm.getByLabel('Evidenzqualität').selectOption('high')
