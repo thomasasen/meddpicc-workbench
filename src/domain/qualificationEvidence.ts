@@ -106,8 +106,30 @@ function targetKey(target: QualificationEvidenceTarget): string {
   return `${target.area}::${target.entityId}`
 }
 
+function uniqueCarrierViews(carriers: readonly EvidenceCarrier[]): EvidenceCarrier[] {
+  const byTarget = new Map<string, EvidenceCarrier>()
+
+  for (const carrier of carriers) {
+    const key = targetKey(carrier.target)
+    const existing = byTarget.get(key)
+
+    if (existing) {
+      existing.evidenceIds = [...new Set([...existing.evidenceIds, ...carrier.evidenceIds])]
+      continue
+    }
+
+    byTarget.set(key, {
+      target: carrier.target,
+      label: carrier.label,
+      evidenceIds: [...new Set(carrier.evidenceIds)],
+    })
+  }
+
+  return [...byTarget.values()]
+}
+
 export function listQualificationEvidenceTargets(project: MeddpiccProject): QualificationEvidenceTargetGroup[] {
-  const carriers = stableEvidenceCarriers(project)
+  const carriers = uniqueCarrierViews(stableEvidenceCarriers(project))
 
   return (Object.entries(qualificationAreaLabels) as Array<[ProjectAreaKey, string]>).map(([area, label]) => ({
     area,
@@ -132,7 +154,7 @@ export function qualificationTargetsForEvidence(
   project: MeddpiccProject,
   evidenceId: string,
 ): QualificationEvidenceTargetInfo[] {
-  return stableEvidenceCarriers(project)
+  return uniqueCarrierViews(stableEvidenceCarriers(project))
     .filter((carrier) => carrier.evidenceIds.includes(evidenceId))
     .map((carrier) => ({
       ...carrier.target,
@@ -177,7 +199,9 @@ export function evidenceForQualificationTarget(
   project: MeddpiccProject,
   target: QualificationEvidenceTarget,
 ): ProjectEvidence[] {
-  const carrier = stableEvidenceCarriers(project).find((item) => targetKey(item.target) === targetKey(target))
+  const carrier = uniqueCarrierViews(stableEvidenceCarriers(project)).find(
+    (item) => targetKey(item.target) === targetKey(target),
+  )
   if (!carrier) return []
 
   const evidenceIds = new Set(carrier.evidenceIds)
