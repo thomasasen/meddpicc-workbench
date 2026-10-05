@@ -9,6 +9,7 @@ const publishedManifest = 'pages-build.json'
 const checkOnly = process.argv.includes('--check')
 
 const sourceRoots = ['app', 'src', 'schema']
+const sourceExcludes = new Set(['src/domain/project.generated.ts'])
 const sourceFiles = [
   'package.json',
   'package-lock.json',
@@ -57,7 +58,7 @@ async function sourceFingerprint() {
 
   for (const root of sourceRoots) {
     const files = await listFiles(root)
-    inputs.push(...files.map((file) => `${root}/${file}`))
+    inputs.push(...files.map((file) => `${root}/${file}`).filter((path) => !sourceExcludes.has(path)))
   }
 
   const hash = createHash('sha256')
