@@ -56,6 +56,7 @@ const form = ref({
   verification: 'unconfirmed' as ProjectEvidence['verification'],
   sourceStakeholderId: '',
   sourceDate: '',
+  referenceId: '',
   context: '',
   relatedAreas: [] as ProjectAreaKey[],
 })
@@ -70,6 +71,11 @@ const sortedEvidence = computed(() =>
 function stakeholderName(id: string | null): string {
   if (!id) return 'Keine Person hinterlegt'
   return project.value.stakeholders.find((stakeholder) => stakeholder.id === id)?.name ?? id
+}
+
+function referenceTitle(id: string | null): string {
+  if (!id) return 'Keine Reference hinterlegt'
+  return project.value.references.find((reference) => reference.id === id)?.title ?? id
 }
 
 function evidenceTone(evidence: ProjectEvidence): string {
@@ -97,6 +103,7 @@ function resetForm() {
     verification: 'unconfirmed',
     sourceStakeholderId: '',
     sourceDate: '',
+    referenceId: '',
     context: '',
     relatedAreas: [],
   }
@@ -115,7 +122,7 @@ function submitEvidence() {
       sourceStakeholderId: form.value.sourceStakeholderId || null,
       sourceDate: form.value.sourceDate || null,
       context: form.value.context || null,
-      referenceId: null,
+      referenceId: form.value.referenceId || null,
       relatedAreas: form.value.relatedAreas,
     })
 
@@ -184,6 +191,7 @@ function saveProject() {
             <ArrowLeft :size="16" aria-hidden="true" />
             <span>Dashboard</span>
           </RouterLink>
+          <RouterLink class="icon-link" to="/references">Quellen</RouterLink>
           <button class="button button-primary button-with-icon" type="button" @click="saveProject">
             <Save :size="16" aria-hidden="true" />
             <span>Projekt speichern</span>
@@ -273,6 +281,16 @@ function saveProject() {
               </label>
 
               <label class="field field--full">
+                <span>Reference-Record <small>optional</small></span>
+                <select v-model="form.referenceId">
+                  <option value="">Keine Reference hinterlegt</option>
+                  <option v-for="reference in project.references" :key="reference.id" :value="reference.id">
+                    {{ reference.title }} · {{ reference.type }}
+                  </option>
+                </select>
+              </label>
+
+              <label class="field field--full">
                 <span>Kontext</span>
                 <textarea
                   v-model="form.context"
@@ -350,6 +368,10 @@ function saveProject() {
                 <div>
                   <dt>Datum</dt>
                   <dd>{{ evidence.sourceDate ?? 'Nicht hinterlegt' }}</dd>
+                </div>
+                <div>
+                  <dt>Reference</dt>
+                  <dd>{{ referenceTitle(evidence.referenceId) }}</dd>
                 </div>
                 <div>
                   <dt>MEDDPICC</dt>
