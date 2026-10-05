@@ -310,4 +310,105 @@ describe('projectStore', () => {
       JSON.parse(download.content).actions.some((action: { id: string }) => action.id === 'action_roundtrip'),
     ).toBe(true)
   })
+  it('ändert Projektmetadaten atomar und hält Target Go-Live mit Planning synchron', () => {
+    const store = useProjectStore()
+
+    store.updateProjectMeta({
+      owner: 'Strategic AE',
+      dealValue: 510000,
+      targetGoLiveDate: '2027-08-15',
+      forecastCategory: 'commit',
+    })
+
+    expect(store.project.project.owner).toBe('Strategic AE')
+    expect(store.project.project.dealValue).toBe(510000)
+    expect(store.project.project.targetGoLiveDate).toBe('2027-08-15')
+    expect(store.project.planning.targetGoLiveDate).toBe('2027-08-15')
+    expect(store.project.project.forecastCategory).toBe('commit')
+    expect(store.dirty).toBe(true)
+    expect(() => serializeProject(store.project)).not.toThrow()
+  })
+
+  it('verwirft ungültige Projektmetadaten ohne Partial State', () => {
+    const store = useProjectStore()
+    const before = structuredClone(store.project)
+
+    expect(() => store.updateProjectMeta({ accountName: '', currency: 'EURO' })).toThrow()
+
+    expect(store.project).toEqual(before)
+    expect(store.dirty).toBe(false)
+  })
+
+  it('verknüpft und entfernt konkrete Evidence-Entity-Links atomar', () => {
+    const store = useProjectStore()
+
+    store.setEvidenceQualificationLinks('ev_metric_02', [
+      { area: 'metrics', entityId: 'metric_01' },
+      { area: 'decisionCriteria', entityId: 'dc_01' },
+    ])
+
+    expect(store.project.meddpicc.metrics.metrics[0].evidenceIds).toContain('ev_metric_02')
+    expect(store.project.meddpicc.metrics.metrics[1].evidenceIds).not.toContain('ev_metric_02')
+    expect(store.project.meddpicc.decisionCriteria.criteria[0].evidenceIds).toContain('ev_metric_02')
+
+    store.setEvidenceQualificationLinks('ev_metric_02', [{ area: 'decisionCriteria', entityId: 'dc_01' }])
+
+    expect(store.project.meddpicc.metrics.metrics[0].evidenceIds).not.toContain('ev_metric_02')
+    expect(store.project.meddpicc.decisionCriteria.criteria[0].evidenceIds.filter((id) => id === 'ev_metric_02')).toHaveLength(
+      1,
+    )
+    expect(() => serializeProject(store.project)).not.toThrow()
+  })
+
+  it('legt neue Evidence und konkrete Entity-Links in derselben validierten Mutation an', () => {
+    const store = useProjectStore()
+
+    const evidence = store.addEvidence(
+      {
+        statement: 'CFO bestätigt das Integrationskriterium als kaufentscheidend.',
+        classification: 'confirmed_evidence',
+        quality: 'high',
+        verification: 'confirmed',
+        sourceStakeholderId: 'st_eb',
+        sourceDate: '2026-10-05',
+        context: 'CFO Steering',
+        referenceId: 'ref_discovery_01',
+        relatedAreas: ['economicBuyer', 'decisionCriteria'],
+      },
+      {
+        id: 'evidence_entity_create',
+        now: new Date('2026-10-05T22:15:00.000Z'),
+        entityTargets: [
+          { area: 'economicBuyer', entityId: 'st_eb' },
+          { area: 'decisionCriteria', entityId: 'dc_01' },
+        ],
+      },
+    )
+
+    expect(evidence.id).toBe('evidence_entity_create')
+    expect(store.project.meddpicc.economicBuyer.candidates[0].evidenceIds).toContain('evidence_entity_create')
+    expect(store.project.meddpicc.decisionCriteria.criteria[0].evidenceIds).toContain('evidence_entity_create')
+    expect(store.project.history.at(-1)).toMatchObject({
+      type: 'evidence_added',
+      entityId: 'evidence_entity_create',
+    })
+  })
+
+  it('verwirft ungültige Evidence- oder Entity-Targets ohne Partial State', () => {
+    const store = useProjectStore()
+    const before = structuredClone(store.project)
+
+    expect(() =>
+      store.setEvidenceQualificationLinks('ev_missing', [{ area: 'metrics', entityId: 'metric_01' }]),
+    ).toThrow()
+    expect(store.project).toEqual(before)
+    expect(store.dirty).toBe(false)
+
+    expect(() =>
+      store.setEvidenceQualificationLinks('ev_metric_01', [{ area: 'metrics', entityId: 'metric_missing' }]),
+    ).toThrow()
+    expect(store.project).toEqual(before)
+    expect(store.dirty).toBe(false)
+  })
+
 })
