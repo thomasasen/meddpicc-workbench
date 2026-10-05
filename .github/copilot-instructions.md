@@ -69,3 +69,8 @@ Vermeiden:
 Vue 3 Composition API, `<script setup lang="ts">`, typisierte Props/Emits, Pinia für wirklich geteilten State, Vue Router für Navigation und reine Domain Services für Berechnungen und Regeln bevorzugen.
 
 Methodik- und Business-Logik nicht in Presentation Components verstecken.
+
+
+## Icons
+
+Für UI-Icons ausschließlich die in `docs/ICON_SYSTEM.md` definierte Lucide-Bibliothek und Zuordnung verwenden. Icons direkt aus `@lucide/vue` importieren; keine CDN-Icons, keine Emojis als Navigations-/Statusicons und keine neuen konkurrierenden Icon-Familien einführen.
