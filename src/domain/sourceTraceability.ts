@@ -6,6 +6,7 @@ import type {
   ProjectReference,
   ProjectRisk,
 } from './project'
+import { evidenceForQualificationTarget } from './qualificationEvidence'
 
 export type SourceTrace = {
   evidence: ProjectEvidence[]
@@ -33,39 +34,26 @@ function referenceTrace(project: MeddpiccProject, evidence: ProjectEvidence[]): 
   }
 }
 
-function entityEvidenceIds(project: MeddpiccProject, area: ProjectAreaKey, entityIds: readonly string[]): string[] {
-  const ids = new Set(entityIds)
+function championEvidenceIds(project: MeddpiccProject, stakeholderIds: readonly string[]): string[] {
+  const ids = new Set(stakeholderIds)
+  return project.meddpicc.champions.people
+    .filter((item) => ids.has(item.stakeholderId))
+    .flatMap((item) => item.behaviors.flatMap((behavior) => behavior.evidenceIds))
+}
 
-  switch (area) {
-    case 'metrics':
-      return project.meddpicc.metrics.metrics.filter((item) => ids.has(item.id)).flatMap((item) => item.evidenceIds)
-    case 'economicBuyer':
-      return project.meddpicc.economicBuyer.candidates
-        .filter((item) => ids.has(item.stakeholderId))
-        .flatMap((item) => item.evidenceIds)
-    case 'decisionCriteria':
-      return project.meddpicc.decisionCriteria.criteria
-        .filter((item) => ids.has(item.id))
-        .flatMap((item) => item.evidenceIds)
-    case 'decisionProcess':
-      return project.meddpicc.decisionProcess.steps
-        .filter((item) => ids.has(item.id))
-        .flatMap((item) => item.evidenceIds)
-    case 'paperProcess':
-      return project.meddpicc.paperProcess.steps.filter((item) => ids.has(item.id)).flatMap((item) => item.evidenceIds)
-    case 'pain':
-      return project.meddpicc.pain.items.filter((item) => ids.has(item.id)).flatMap((item) => item.evidenceIds)
-    case 'champions':
-      return project.meddpicc.champions.people
-        .filter((item) => ids.has(item.stakeholderId))
-        .flatMap((item) => item.behaviors.flatMap((behavior) => behavior.evidenceIds))
-    case 'competition':
-      return project.meddpicc.competition.knownAlternatives
-        .filter((item) => ids.has(item.id))
-        .flatMap((item) => item.evidenceIds)
+function linkedEntityEvidence(project: MeddpiccProject, risk: ProjectRisk): ProjectEvidence[] {
+  if (risk.relatedArea === 'champions') {
+    return evidenceByIds(project, championEvidenceIds(project, risk.relatedEntityIds))
   }
 
-  return []
+  return uniqueEvidence(
+    risk.relatedEntityIds.flatMap((entityId) =>
+      evidenceForQualificationTarget(project, {
+        area: risk.relatedArea,
+        entityId,
+      }),
+    ),
+  )
 }
 
 export function traceAreaSources(project: MeddpiccProject, area: ProjectAreaKey): SourceTrace {
@@ -76,7 +64,7 @@ export function traceAreaSources(project: MeddpiccProject, area: ProjectAreaKey)
 
 export function traceRiskSources(project: MeddpiccProject, risk: ProjectRisk): SourceTrace {
   const sectionEvidence = evidenceByIds(project, project.meddpicc[risk.relatedArea].evidenceIds)
-  const linkedEvidence = evidenceByIds(project, entityEvidenceIds(project, risk.relatedArea, risk.relatedEntityIds))
+  const linkedEvidence = linkedEntityEvidence(project, risk)
   const fallbackAreaEvidence =
     risk.relatedEntityIds.length === 0 ? traceAreaSources(project, risk.relatedArea).evidence : []
 
