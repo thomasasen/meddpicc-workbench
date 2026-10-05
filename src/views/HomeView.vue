@@ -13,10 +13,7 @@ import { computed, type Component } from 'vue'
 
 import type { ProjectAreaKey, ProjectRisk } from '../domain/project'
 import { useProjectStore } from '../stores/projectStore'
-import {
-  qualificationStatusLabels,
-  type QualificationStatusKey,
-} from '../domain/qualificationStatus'
+import { qualificationStatusLabels, type QualificationStatusKey } from '../domain/qualificationStatus'
 
 type SnapshotItem = {
   label: string
@@ -84,7 +81,9 @@ const openActions = computed(() =>
 
 const dateFormatter = new Intl.DateTimeFormat('de-DE')
 
-function formatCurrency(value: number): string {
+function formatCurrency(value: number | null): string {
+  if (value === null) return 'Noch offen'
+
   return new Intl.NumberFormat('de-DE', {
     style: 'currency',
     currency: project.value.project.currency,
@@ -98,9 +97,7 @@ function formatDate(value: string | null): string {
 }
 
 function riskClass(risk: ProjectRisk): string {
-  return risk.severity === 'critical' || risk.severity === 'high'
-    ? 'risk-item'
-    : 'risk-item risk-item--warning'
+  return risk.severity === 'critical' || risk.severity === 'high' ? 'risk-item' : 'risk-item risk-item--warning'
 }
 
 function forecastLabel(value: string): string {
@@ -124,12 +121,7 @@ function forecastLabel(value: string): string {
 
         <div class="header-actions">
           <span class="release-badge">Pre-Alpha</span>
-          <a
-            class="icon-link"
-            href="https://github.com/thomasasen/meddpicc-workbench"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a class="icon-link" href="https://github.com/thomasasen/meddpicc-workbench" target="_blank" rel="noreferrer">
             GitHub
           </a>
         </div>
@@ -143,9 +135,9 @@ function forecastLabel(value: string): string {
             <p class="eyebrow">MEDDPICC für komplexe B2B-Opportunities</p>
             <h1>Qualifizierung, Evidenz und Deal Planning in einer Arbeitsumgebung.</h1>
             <p class="intro-text">
-              Die Workbench strukturiert MEDDPICC-Informationen, macht Gaps sichtbar
-              und übernimmt wiederholbare Berechnungs- und Planungsarbeit. Der
-              Opportunity-Stand liegt in einer portablen <code>.meddpicc</code>-Datei.
+              Die Workbench strukturiert MEDDPICC-Informationen, macht Gaps sichtbar und übernimmt wiederholbare
+              Berechnungs- und Planungsarbeit. Der Opportunity-Stand liegt in einer portablen
+              <code>.meddpicc</code>-Datei.
             </p>
 
             <div class="release-panel" aria-label="Aktueller Funktionsstand">
@@ -153,9 +145,7 @@ function forecastLabel(value: string): string {
                 <span class="release-panel-label">Aktueller Stand</span>
                 <strong>Eine fiktive Demo-Projektdatei ist standardmäßig geladen.</strong>
               </div>
-              <a class="button button-secondary" href="#arbeitsweise">
-                Arbeitsweise ansehen
-              </a>
+              <a class="button button-secondary" href="#arbeitsweise"> Arbeitsweise ansehen </a>
             </div>
 
             <ul class="principle-list" aria-label="Technische Grundprinzipien">
@@ -196,23 +186,19 @@ function forecastLabel(value: string): string {
               <section class="workbench-block" aria-labelledby="gaps-title">
                 <div class="block-heading">
                   <h3 id="gaps-title" class="heading-with-icon">
-                    <TriangleAlert class="section-icon section-icon--risk" :size="18" :stroke-width="2" aria-hidden="true" />
+                    <TriangleAlert
+                      class="section-icon section-icon--risk"
+                      :size="18"
+                      :stroke-width="2"
+                      aria-hidden="true"
+                    />
                     <span>Kritische Gaps</span>
                   </h3>
                   <span class="count-badge">{{ openRisks.length }} sichtbar</span>
                 </div>
 
-                <div
-                  v-for="risk in openRisks"
-                  :key="risk.id"
-                  :class="riskClass(risk)"
-                >
-                  <TriangleAlert
-                    class="risk-item-icon"
-                    :size="16"
-                    :stroke-width="2"
-                    aria-hidden="true"
-                  />
+                <div v-for="risk in openRisks" :key="risk.id" :class="riskClass(risk)">
+                  <TriangleAlert class="risk-item-icon" :size="16" :stroke-width="2" aria-hidden="true" />
                   <div>
                     <strong>{{ risk.title }}</strong>
                     <p>{{ risk.impact }}</p>
@@ -266,10 +252,7 @@ function forecastLabel(value: string): string {
                       aria-hidden="true"
                     />
                     <span>{{ qualificationStatusLabels[item.status] }}</span>
-                    <span
-                      class="confidence"
-                      :aria-label="`${item.confidence} von 10 Evidenzgrad`"
-                    >
+                    <span class="confidence" :aria-label="`${item.confidence} von 10 Evidenzgrad`">
                       {{ item.confidence }}/10
                     </span>
                   </span>
@@ -286,8 +269,8 @@ function forecastLabel(value: string): string {
             <p class="eyebrow">Deterministische Unterstützung</p>
             <h2 id="aufgaben-title">Welche Arbeit die Workbench übernehmen soll</h2>
             <p>
-              Sie ersetzt keine Seller-Beurteilung. Sie reduziert administrative
-              Fleißarbeit und hält Qualifizierungslogik nachvollziehbar.
+              Sie ersetzt keine Seller-Beurteilung. Sie reduziert administrative Fleißarbeit und hält
+              Qualifizierungslogik nachvollziehbar.
             </p>
           </div>
 
@@ -297,8 +280,8 @@ function forecastLabel(value: string): string {
               <div>
                 <h3>Wissen und Annahmen trennen</h3>
                 <p>
-                  Quelle, Datum und Evidenztyp bleiben mit einer Aussage verknüpft.
-                  Unbekanntes muss nicht künstlich „grün“ gemacht werden.
+                  Quelle, Datum und Evidenztyp bleiben mit einer Aussage verknüpft. Unbekanntes muss nicht künstlich
+                  „grün“ gemacht werden.
                 </p>
               </div>
             </article>
@@ -308,8 +291,8 @@ function forecastLabel(value: string): string {
               <div>
                 <h3>Decision Process und Paper Process planbar machen</h3>
                 <p>
-                  Owner, Termine, Abhängigkeiten und Go-Live-Auswirkungen werden
-                  strukturiert statt in parallelen Notizen gepflegt.
+                  Owner, Termine, Abhängigkeiten und Go-Live-Auswirkungen werden strukturiert statt in parallelen
+                  Notizen gepflegt.
                 </p>
               </div>
             </article>
@@ -319,8 +302,8 @@ function forecastLabel(value: string): string {
               <div>
                 <h3>Metrics und Business Case reproduzierbar berechnen</h3>
                 <p>
-                  ROI, Payback und Cost of Delay entstehen aus dokumentierten Inputs
-                  und lassen sich jederzeit nachvollziehbar neu berechnen.
+                  ROI, Payback und Cost of Delay entstehen aus dokumentierten Inputs und lassen sich jederzeit
+                  nachvollziehbar neu berechnen.
                 </p>
               </div>
             </article>
@@ -334,8 +317,8 @@ function forecastLabel(value: string): string {
             <p class="eyebrow">Ein Projekt, ein Datenmodell</p>
             <h2 id="arbeitsweise-title">Geplanter Project File Lifecycle</h2>
             <p>
-              Die <code>.meddpicc</code>-Datei bleibt der kanonische Projektstand.
-              Browser Storage dient höchstens als Recovery- oder Komfortebene.
+              Die <code>.meddpicc</code>-Datei bleibt der kanonische Projektstand. Browser Storage dient höchstens als
+              Recovery- oder Komfortebene.
             </p>
           </div>
 
@@ -345,8 +328,8 @@ function forecastLabel(value: string): string {
               <div>
                 <h3>Projektdatei öffnen</h3>
                 <p>
-                  Eine portable Datei enthält den strukturierten Stand der Opportunity
-                  und kann beispielsweise beim CRM-Datensatz abgelegt werden.
+                  Eine portable Datei enthält den strukturierten Stand der Opportunity und kann beispielsweise beim
+                  CRM-Datensatz abgelegt werden.
                 </p>
               </div>
             </li>
@@ -354,10 +337,7 @@ function forecastLabel(value: string): string {
               <span class="workflow-step">2</span>
               <div>
                 <h3>Qualifizieren und planen</h3>
-                <p>
-                  MEDDPICC-Module, Evidenz, Risiken, Aktionen und Tools arbeiten
-                  auf demselben Datenmodell.
-                </p>
+                <p>MEDDPICC-Module, Evidenz, Risiken, Aktionen und Tools arbeiten auf demselben Datenmodell.</p>
               </div>
             </li>
             <li>
@@ -365,8 +345,8 @@ function forecastLabel(value: string): string {
               <div>
                 <h3>Validiert speichern und wiederverwenden</h3>
                 <p>
-                  Der aktualisierte Stand wird nach Schema-Validierung wieder als
-                  Projektdatei gespeichert; Reviews und Exporte nutzen dieselben Daten.
+                  Der aktualisierte Stand wird nach Schema-Validierung wieder als Projektdatei gespeichert; Reviews und
+                  Exporte nutzen dieselben Daten.
                 </p>
               </div>
             </li>
@@ -381,9 +361,9 @@ function forecastLabel(value: string): string {
             <h2 id="privacy-title">Projektverarbeitung ohne verpflichtendes Backend.</h2>
           </div>
           <p>
-            Die Standard-Demo wird beim Build in die Anwendung eingebettet und lokal
-            im Browser verarbeitet. Für echte Projektdateien wird kein verpflichtendes
-            Backend benötigt; spätere externe Integrationen wären ausdrücklich optional.
+            Die Standard-Demo wird beim Build in die Anwendung eingebettet und lokal im Browser verarbeitet. Für echte
+            Projektdateien wird kein verpflichtendes Backend benötigt; spätere externe Integrationen wären ausdrücklich
+            optional.
           </p>
         </div>
       </section>
@@ -395,11 +375,7 @@ function forecastLabel(value: string): string {
           <strong>MEDDPICC Workbench</strong>
           <p>Open Source · MIT · Projektstatus: Pre-Alpha</p>
         </div>
-        <a
-          href="https://github.com/thomasasen/meddpicc-workbench"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href="https://github.com/thomasasen/meddpicc-workbench" target="_blank" rel="noreferrer">
           Repository auf GitHub
         </a>
       </div>

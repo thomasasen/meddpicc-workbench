@@ -58,6 +58,8 @@ Vor der Umsetzung eines Features sind zu lesen:
 - Annahmen, unbekannte Informationen, Kundenaussagen, Interpretationen und bestätigte Evidenz müssen unterscheidbar bleiben.
 - „Unbekannt“ ist ein gültiger Zustand.
 - Jede Schema-Änderung muss Kompatibilität und Migration berücksichtigen.
+- `schema/meddpicc-project.schema.json` ist der kanonische Dateiformatvertrag. Projekt-Typen werden daraus generiert; kein paralleles manuelles TypeScript-Dateimodell pflegen.
+- Nach Schema-Änderungen mindestens `npm run schema:generate`, Unit Tests und Production Build prüfen.
 
 ## UI/UX-Anweisung
 

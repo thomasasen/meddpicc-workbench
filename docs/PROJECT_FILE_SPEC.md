@@ -2,132 +2,138 @@
 
 ## Zweck
 
-Die `.meddpicc`-Datei ist die portable Source of Truth für eine Opportunity.
-
-Die Spezifikation befindet sich noch in der Pre-Alpha-Phase. Das aktuell mitgelieferte Demo-Projekt verwendet `schemaVersion: 0.1.0`. Erst ein späterer stabiler Schema-Stand wird als langfristiger Kompatibilitätsvertrag behandelt.
-
-Version 1 bleibt bewusst einfach:
-
-- UTF-8
-- JSON
-- menschenlesbar
-- eine Datei
-- keine eingebetteten Binärdaten
-- explizite Schema-Version
-- deterministische Validierung und Migration
-
-Beispiel:
+Die `.meddpicc`-Datei ist die portable Source of Truth für eine Opportunity. Das aktuelle Dateiformat ist **Pre-Alpha** und verwendet:
 
 ```text
-acme-crm-transformation.meddpicc
+schemaVersion: 0.2.0
 ```
+
+Der kanonische technische Vertrag liegt in:
+
+```text
+schema/meddpicc-project.schema.json
+```
+
+Die Datei bleibt UTF-8, menschenlesbares JSON mit eigener Dateiendung. Binäranhänge werden nicht eingebettet.
+
+## Architektur des Dateivertrags
+
+Die Struktur wird genau einmal definiert:
+
+```text
+JSON Schema
+    ↓
+Ajv Runtime-Validierung
+    ↓
+Build-time Type Generation
+    ↓
+TypeScript
+```
+
+TypeScript-Projekttypen werden mit `json-schema-to-typescript` aus dem JSON Schema erzeugt. Komplexe bereichsübergreifende Regeln liegen zusätzlich in Domain Validation.
+
+Der Ladepfad ist getrennt in:
+
+1. Dateigröße und JSON-Parsing
+2. Schema-Version
+3. JSON-Schema-Validierung
+4. Domain Validation
+5. vollständiges Laden des Projekts
+
+Ungültige Projekte werden nicht teilweise geladen.
 
 ## Datei-Envelope
 
-Ein Projekt besitzt eine stabile Top-Level-Struktur ähnlich:
+Das aktuelle Schema verlangt mindestens:
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "format": "meddpicc-workbench-project",
+  "schemaVersion": "0.2.0",
   "appVersion": "0.1.0",
-  "projectId": "uuid",
+  "projectId": "demo-project",
   "revision": 1,
   "createdAt": "2026-10-05T13:00:00.000Z",
   "updatedAt": "2026-10-05T13:00:00.000Z",
   "project": {},
+  "stakeholders": [],
   "meddpicc": {},
   "evidence": [],
   "risks": [],
   "actions": [],
-  "history": [],
   "calculators": {},
   "planning": {},
-  "references": []
+  "references": [],
+  "history": []
 }
 ```
 
-Das exakte Schema wird vor Beginn der Feature-Implementierung formalisiert.
+Unbekannte Zusatzfelder innerhalb einer unterstützten Schema-Version werden nicht pauschal verworfen. Das verhindert unbeabsichtigten Datenverlust bei kompatiblen Erweiterungen.
 
-## Versionsfelder
+## Schema-Versionierung
 
-### schemaVersion
+`schemaVersion` steuert die Dateiformat-Kompatibilität.
 
-Steuert die Kompatibilität des Dateiformats.
+- **MAJOR:** Breaking Change. Alte Datei ist nicht direkt kompatibel.
+- **MINOR:** rückwärtskompatible Felder oder Erweiterungen.
+- **PATCH:** Schema-Korrektur ohne strukturelle Bedeutung.
 
-Regeln:
+Während Pre-Alpha kann sich das Modell noch ändern. Trotzdem ist jede unterstützte Version explizit.
 
-- Patch: abwärtskompatible Korrektur/Default
-- Minor: abwärtskompatible Ergänzung
-- Major: inkompatible Schema-Änderung mit Migration
+Eine unbekannte zukünftige Major-Version wird vollständig abgelehnt und darf nicht still überschrieben werden.
 
-Eine nicht unterstützte zukünftige Major-Version darf niemals still geöffnet und anschließend überschrieben werden.
+`appVersion` ist Diagnosemetadatum und nicht die Kompatibilitätsinstanz.
 
-### appVersion
-
-Dokumentiert die App-Version, die die Datei zuletzt gespeichert hat. Dieses Feld ist Diagnosemetadatum und nicht die eigentliche Kompatibilitätsinstanz.
-
-### revision
-
-Wird bei erfolgreichem Speichern monoton erhöht.
-
-Hilfreich zum Vergleich zweier Kopien desselben Projekts, aber kein verteiltes Conflict-Resolution-Protokoll.
+`revision` wird beim späteren Save-Lifecycle monoton erhöht; sie ist kein verteiltes Conflict-Resolution-Protokoll.
 
 ## Projektmetadaten
 
-Vorgeschlagene Felder:
+Die Metadaten enthalten nur für Qualification und Deal Planning relevante Felder:
 
-```json
-{
-  "project": {
-    "name": "ACME CRM Transformation",
-    "accountName": "ACME GmbH",
-    "opportunityId": "OPP-0042",
-    "owner": "Thomas Asen",
-    "currency": "EUR",
-    "dealValue": 480000,
-    "targetCloseDate": "2027-03-31",
-    "targetGoLiveDate": "2027-07-01",
-    "forecastCategory": "best-case",
-    "notes": ""
-  }
-}
-```
+- Projektname
+- Account
+- Opportunity ID
+- Owner
+- Currency
+- Deal Value
+- Target Close
+- Target Go-Live
+- Forecast Category
+- Notizen
 
-Nur Felder, die Qualifizierung und Deal Planning unterstützen, gehören hier hinein. Die Datei darf nicht zu einer vollständigen Account-/Kontaktdatenbank werden.
+Unbekannte Werte dürfen `null` sein, wo das Schema dies zulässt. Das System soll keine erfundenen Default-Werte erzwingen.
+
+## Stakeholder
+
+Stakeholder besitzen stabile IDs und können mehrere Beziehungen zum Deal gleichzeitig haben.
+
+Unterstützt werden unter anderem:
+
+- Economic-Buyer-Kandidat
+- Champion-Kandidat
+- Coach
+- technische oder fachliche Stakeholder
+- Procurement
+- Legal
+- Security
+- Executive Sponsor
+- Detractor
+
+Zusätzlich können Einfluss, Deal-Position, Personal Win, Status und Notizen geführt werden.
+
+Economic Buyer und Champion werden nicht als einzelne feste Person im Projektmodell gespeichert. Die jeweiligen MEDDPICC-Bereiche referenzieren Stakeholder über stabile IDs.
 
 ## MEDDPICC-Bereiche
 
-Vorgeschlagene Struktur:
+Alle acht Bereiche besitzen mindestens:
 
-```json
-{
-  "meddpicc": {
-    "metrics": {},
-    "economicBuyer": {},
-    "decisionCriteria": {},
-    "decisionProcess": {},
-    "paperProcess": {},
-    "pain": {},
-    "champions": [],
-    "competition": []
-  }
-}
-```
+- `status`
+- `confidence` von 0 bis 10
+- `summary`
+- `evidenceIds`
+- `gaps`
 
-Jeder Bereich soll unterstützen:
-
-- strukturierte Aussagen
-- manuelle Notizen
-- verknüpfte Evidence-IDs
-- aktuellen Qualifizierungsstatus
-- Gaps
-- bereichsspezifische Daten
-
-## Qualifizierungsstatus
-
-Explizite Zustände statt erzwungenem Ja/Nein.
-
-Interne Enum-Kandidaten:
+Unterstützte Qualification Status:
 
 ```text
 confirmed
@@ -137,41 +143,123 @@ unknown
 risk
 ```
 
-Im UI werden diese deutsch dargestellt:
+Der Confidence-Wert beschreibt Evidenzgrad, nicht Win Probability.
 
-```text
-confirmed  → Bestätigt
-partial    → Teilweise
-assumption → Annahme
-unknown    → Unbekannt
-risk       → Risiko
-```
+## Metrics
 
-Ein Bereich darf zusätzlich einen deterministischen Confidence Score liefern. Dieser ersetzt weder expliziten Status noch zugrunde liegende Evidenz.
+Metrics speichern nicht nur einen finalen ROI. Eine Metric kann enthalten:
 
-## Evidenzmodell
+- Ist-Zustand
+- Ziel-Zustand
+- Einheit
+- Zeitraum
+- wirtschaftliche Ableitung
+- Annahmen
+- Evidence-IDs
+- kundenseitige Bestätigung
 
-Evidenz ist ein gemeinsam nutzbares First-Class-Objekt.
+Damit bleiben spätere ROI-, Payback- und Cost-of-Delay-Berechnungen nachvollziehbar.
 
-Beispiel:
+## Economic Buyer
 
-```json
-{
-  "id": "ev_01",
-  "classification": "customer_statement",
-  "statement": "The CFO approves investments above EUR 250k.",
-  "source": {
-    "person": "Max Mustermann",
-    "role": "Head of Sales",
-    "date": "2026-10-05",
-    "context": "Discovery Workshop"
-  },
-  "referenceId": "ref_03",
-  "createdAt": "2026-10-05T13:30:00.000Z"
-}
-```
+Der Bereich unterstützt mehrere Kandidaten und trennt ausdrücklich:
 
-Interne Klassifikationskandidaten:
+- vermutete oder bestätigte Identität
+- berichtete oder bestätigte Authority
+- direkten Zugang
+- Engagement
+- Priorität
+- Entscheidungskriterien
+- Evidenz
+
+Eine Person wird nicht allein durch Titel oder Nennung zum bestätigten Economic Buyer.
+
+## Decision Criteria
+
+Kriterien besitzen stabile IDs und können unter anderem Capability-, Technical-, Business-, Value-, Commercial-, Risk- oder Partner-Kriterien abbilden.
+
+Importance und unsere Position werden getrennt modelliert. Kriterien können eigene Evidence-IDs tragen.
+
+## Decision Process und Paper Process
+
+Beide Bereiche nutzen eine gemeinsame Process-Step-Struktur, bleiben fachlich aber getrennt.
+
+Ein Step kann enthalten:
+
+- stabile ID
+- Titel und Beschreibung
+- Owner-Stakeholder
+- Status
+- geplantes und bestätigtes Datum
+- Dauer
+- Vorgänger
+- Pflicht-/Optional-Flag
+- Evidence-IDs
+- optionale Parallelgruppe
+- Notizen
+
+Die zusätzliche Domain Validation prüft:
+
+- existierende Owner
+- existierende Vorgänger
+- Dependency Cycles
+
+Damit ist die Grundlage für spätere Critical-Path-Berechnung gelegt.
+
+## Identify / Implicate Pain
+
+Pain wird als strukturierte Liste modelliert. Ein Eintrag kann Problem, Business Impact, Konsequenz des Nicht-Handelns, Priorität und Evidenz trennen.
+
+## Champion
+
+Mehrere Champion-Kandidaten sind möglich.
+
+Champion-Evidenz soll beobachtbares Verhalten abbilden, zum Beispiel:
+
+- interne Informationen geliefert
+- Zugang hergestellt
+- intern verkauft
+- schlechte Nachrichten geteilt
+- Procurement unterstützt
+- Economic-Buyer-Zugang ermöglicht
+- Personal Win bestätigt
+
+Ein hilfreicher Kontakt ist damit nicht automatisch ein bestätigter Champion.
+
+## Competition
+
+Competition umfasst nicht nur benannte Anbieter.
+
+Unterstützt werden:
+
+- direkter Anbieter
+- Status quo
+- interne Eigenentwicklung
+- Budgetverschiebung
+- Do Nothing
+- unbekannte oder andere Alternative
+
+## Evidenz
+
+Evidenz ist ein First-Class-Objekt.
+
+Wesentliche Felder:
+
+- stabile ID
+- Classification
+- Quality
+- Aussage
+- Source Stakeholder
+- Datum
+- Kontext
+- Reference
+- Verification
+- verknüpfte MEDDPICC-Bereiche
+- Erstellzeitpunkt
+
+Classification und Quality sind bewusst getrennt.
+
+Beispiele für Classification:
 
 ```text
 fact
@@ -182,139 +270,52 @@ confirmed_evidence
 unknown
 ```
 
-Die Implementierung darf die Namen noch schärfen, muss aber die konzeptionelle Trennung von Wissen und Annahme erhalten.
-
-### Verknüpfung
-
-MEDDPICC-Aussagen referenzieren Evidenz über stabile IDs, statt Quellmetadaten mehrfach zu duplizieren.
+Eine `customer_statement` ist eine Kundenaussage und nicht automatisch objektiver Fakt.
 
 ## Risiken
 
-Beispiel:
+Risiko ist orthogonal zu Evidenz.
 
-```json
-{
-  "id": "risk_01",
-  "title": "Procurement process is not confirmed",
-  "severity": "high",
-  "status": "open",
-  "relatedArea": "paperProcess",
-  "relatedEntityIds": ["pp_step_05"],
-  "impact": "Target close date may be unreliable",
-  "openedAt": "2026-10-05T13:40:00.000Z"
-}
-```
+Ein Risk kann enthalten:
 
-Interne Schweregrade:
+- Severity
+- Status
+- Related Area
+- Related Entity IDs
+- Impact
+- Mitigation
+- Owner
+- Due Date
+- Opened At
 
-```text
-low
-medium
-high
-critical
-```
-
-Interne Statuswerte:
-
-```text
-open
-mitigating
-closed
-accepted
-```
-
-Die UI übersetzt diese Werte in deutsche Labels.
+Related Entity IDs werden durch Domain Validation geprüft.
 
 ## Aktionen
 
-Aktionen übersetzen Qualification Gaps in konkrete Arbeit.
+Actions übersetzen Qualification Gaps in konkrete Arbeit.
 
-Beispiel:
+Unterstützt werden:
 
-```json
-{
-  "id": "action_01",
-  "title": "Confirm procurement lead time",
-  "status": "open",
-  "owner": "Thomas Asen",
-  "dueDate": "2026-10-12",
-  "relatedArea": "paperProcess",
-  "desiredEvidence": "Procurement owner confirms steps, lead time and PO requirement"
-}
-```
-
-Schema-Inhalte können englische technische Werte besitzen; sichtbare UI-Texte werden deutsch gepflegt bzw. dargestellt.
-
-## Decision Process und Paper Process
-
-Eine generische Process-Step-Struktur soll beide Bereiche unterstützen.
-
-Mögliche Felder:
-
-- stabile ID
-- Titel
-- Beschreibung
 - Owner
+- Due Date
+- Related Area
+- Related Risk
+- Related Gap
+- gewünschte Evidenz
 - Status
-- geplantes Datum
-- bestätigtes Datum
-- Dauer
-- Vorgänger-IDs
-- required/optional
-- Evidence-IDs
-- Notizen
+- bereits gewonnene Evidence-IDs
 
-So kann dieselbe Scheduling Engine Abhängigkeiten und Critical Path berechnen, ohne Decision Process und Paper Process semantisch zu vermischen.
+## Business Case und Planning
 
-## Metrics und Business Case
+Business-Case-Inputs speichern Inputs, Evidenz, Annahmen und kundenseitige Bestätigung.
 
-Source Inputs, Einheiten, Provenienz und Confidence persistieren.
-
-Nicht nur einen finalen ROI speichern.
-
-Mögliche Inputs:
-
-- aktuelles Volumen
-- aktueller Zeit-/Kostenaufwand
-- erwartete Verbesserung
-- Annualization Basis
-- Investment
-- wiederkehrende Kosten
-- einmalige Kosten
-
-Jede wesentliche Zahl kann optional Evidenz referenzieren.
-
-## Planning
-
-Kann enthalten:
-
-- Target Go-Live Date
-- Implementierungsphasen
-- Prozessabhängigkeiten
-- Dauerannahmen
-- berechnete Critical-Path-Metadaten
-
-Berechnete Ergebnisse müssen aus Inputs reproduzierbar sein.
+Planning hält derzeit Target Go-Live und Implementierungsannahmen. Berechnete Critical-Path-Ergebnisse gehören später in deterministische Domain Services und sollen aus Inputs reproduzierbar sein.
 
 ## Referenzen
 
-Referenzen zeigen auf externen Kontext, ohne ihn einzubetten.
+References verweisen auf externen Kontext, ohne ihn einzubetten.
 
-Beispiel:
-
-```json
-{
-  "id": "ref_03",
-  "type": "meeting",
-  "title": "Discovery Workshop",
-  "date": "2026-10-05",
-  "externalId": null,
-  "url": null,
-  "notes": ""
-}
-```
-
-Mögliche Typen:
+Unterstützte Typen sind unter anderem:
 
 - meeting
 - crm
@@ -324,68 +325,70 @@ Mögliche Typen:
 - contract
 - other
 
-URLs sind nur Metadaten. Öffnen muss immer eine explizite Nutzeraktion sein.
+URLs sind nur Metadaten. Projektdateiinhalte dürfen keine automatischen Netzwerkaufrufe auslösen.
 
 ## Historie
 
 History ist ein Audit-orientiertes Änderungsprotokoll, kein Keystroke Log.
 
-Beispiel:
+Aktuelle Event-Typen umfassen:
 
-```json
-{
-  "id": "hist_01",
-  "timestamp": "2026-10-05T14:00:00.000Z",
-  "type": "qualification_status_changed",
-  "area": "economicBuyer",
-  "entityId": "eb_01",
-  "summary": "Economic Buyer status changed from assumption to partial"
-}
+- Projekt erstellt
+- Evidenz hinzugefügt
+- Qualification Status geändert
+- Risiko geöffnet/geschlossen
+- Aktion abgeschlossen
+- Schema migriert
+
+## Domain Validation
+
+Nicht alles gehört in JSON Schema.
+
+Zusätzlich geprüft werden insbesondere:
+
+- eindeutige stabile IDs
+- existierende Evidence-IDs
+- existierende Stakeholder-IDs
+- existierende Risk-IDs
+- existierende Related-Entity-IDs
+- existierende Process-Predecessors
+- keine Process Dependency Cycles
+- gültige History-Entity-Referenzen
+
+## Round Trip
+
+Die Baseline lautet:
+
+```text
+parse
+→ validate
+→ serialize
+→ parse
+→ validate
 ```
 
-Die Event-Taxonomie soll klein und stabil bleiben.
-
-## Unbekannte Erweiterungsdaten
-
-Forward Compatibility braucht eine bewusste Policy.
-
-Validator/Migrator dürfen Felder, die sie innerhalb einer kompatiblen Schema-Version nicht kennen, nicht versehentlich löschen.
-
-Bei inkompatiblen zukünftigen Major-Versionen darf die Anwendung nicht speichern, bevor ein unterstützter Migrationspfad existiert.
+Dabei dürfen keine Projektdaten verloren gehen.
 
 ## Dateisicherheit
 
-Jede importierte Datei als untrusted Input behandeln.
+Importierte Projektdateien sind untrusted input.
 
-Anforderungen:
+Aktuelle Regeln:
 
-- Größenlimit
-- sauberes JSON-Parse-Error-Handling
-- Schema-Validierung
-- Strings niemals als unsicheres HTML interpretieren
-- sichere URL-Schemata
-- kein automatischer Netzwerkzugriff aufgrund von Dateiinhalten
-- kein Ausführen von Projektinhalten
+- Größenlimit: 5 MB
+- kein Ausführen von Dateiinhalten
+- vollständige Ablehnung ungültiger Dateien
+- Strings niemals als unsicheres HTML behandeln
+- URLs nur kontrolliert und nutzerinitiiert verwenden
+- keine automatischen Requests aufgrund von Projektinhalten
+- zukünftige unbekannte Major-Versionen nicht überschreiben
 
 ## Beispiel-Fixture
 
-Ein vollständig fiktives Pre-Alpha-Beispielprojekt liegt bereits vor:
+Das vollständig fiktive Regression-Fixture liegt unter:
 
 ```text
 examples/demo-opportunity.meddpicc
 ```
 
-Es wird aktuell beim Start der Anwendung als Standard-Demo geladen und deckt bewusst unterschiedliche Qualifizierungszustände ab: bestätigte Bereiche, Teilqualifizierung, Annahmen, unbekannte Informationen und Risiken.
-
-Das Fixture enthält unter anderem:
-
-- alle acht MEDDPICC-Bereiche
-- gemeinsame Stakeholder
-- Evidenz und Referenzen
-- Risiken und nächste Aktionen
-- Decision- und Paper-Process-Schritte
-- Business-Case-Inputs
-- Planning-Metadaten
-- History Events
-
-Alle Unternehmen, Personen und Inhalte im Fixture sind fiktiv. Das Fixture dient der Produktdemo und als frühe Regression-Basis; sein Schema ist noch nicht als stabil anzusehen.
+Es enthält bewusst unterschiedliche Qualifizierungszustände, Gaps, Risiken, mehrere Stakeholder, Evidence, Decision-/Paper-Process, Business-Case-Inputs, References und History.

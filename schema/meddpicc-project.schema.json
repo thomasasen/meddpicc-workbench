@@ -1,0 +1,1240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thomasasen.github.io/meddpicc-workbench/schema/meddpicc-project.schema.json",
+  "title": "MeddpiccProject",
+  "description": "Kanonischer Pre-Alpha-Dateiformatvertrag für MEDDPICC Workbench.",
+  "type": "object",
+  "required": [
+    "format",
+    "schemaVersion",
+    "appVersion",
+    "projectId",
+    "revision",
+    "createdAt",
+    "updatedAt",
+    "project",
+    "stakeholders",
+    "meddpicc",
+    "evidence",
+    "risks",
+    "actions",
+    "calculators",
+    "planning",
+    "references",
+    "history"
+  ],
+  "properties": {
+    "format": {
+      "const": "meddpicc-workbench-project"
+    },
+    "schemaVersion": {
+      "const": "0.2.0"
+    },
+    "appVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "projectId": {
+      "$ref": "#/$defs/id"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "createdAt": {
+      "$ref": "#/$defs/dateTime"
+    },
+    "updatedAt": {
+      "$ref": "#/$defs/dateTime"
+    },
+    "project": {
+      "$ref": "#/$defs/projectMeta"
+    },
+    "stakeholders": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/stakeholder"
+      }
+    },
+    "meddpicc": {
+      "$ref": "#/$defs/meddpicc"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/risk"
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/action"
+      }
+    },
+    "calculators": {
+      "$ref": "#/$defs/calculators"
+    },
+    "planning": {
+      "$ref": "#/$defs/planning"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reference"
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/historyEvent"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
+    },
+    "nullableId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "nullableDate": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/date"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "projectArea": {
+      "type": "string",
+      "enum": [
+        "metrics",
+        "economicBuyer",
+        "decisionCriteria",
+        "decisionProcess",
+        "paperProcess",
+        "pain",
+        "champions",
+        "competition"
+      ]
+    },
+    "qualificationStatus": {
+      "type": "string",
+      "enum": ["confirmed", "partial", "assumption", "unknown", "risk"]
+    },
+    "confidence": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "evidenceIdArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/id"
+      },
+      "uniqueItems": true
+    },
+    "gapArray": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2000
+      }
+    },
+    "qualificationBase": {
+      "type": "object",
+      "required": ["status", "confidence", "summary", "evidenceIds", "gaps"],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/qualificationStatus"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 5000
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIdArray"
+        },
+        "gaps": {
+          "$ref": "#/$defs/gapArray"
+        }
+      },
+      "additionalProperties": true
+    },
+    "projectMeta": {
+      "type": "object",
+      "required": [
+        "name",
+        "accountName",
+        "opportunityId",
+        "owner",
+        "currency",
+        "dealValue",
+        "targetCloseDate",
+        "targetGoLiveDate",
+        "forecastCategory",
+        "notes"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "accountName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "opportunityId": {
+          "type": ["string", "null"],
+          "maxLength": 200
+        },
+        "owner": {
+          "type": ["string", "null"],
+          "maxLength": 200
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "dealValue": {
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "targetCloseDate": {
+          "$ref": "#/$defs/nullableDate"
+        },
+        "targetGoLiveDate": {
+          "$ref": "#/$defs/nullableDate"
+        },
+        "forecastCategory": {
+          "type": "string",
+          "enum": ["pipeline", "best-case", "commit", "closed", "unknown"]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 10000
+        }
+      },
+      "additionalProperties": true
+    },
+    "stakeholder": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "role",
+        "organization",
+        "relationships",
+        "influence",
+        "dealPosition",
+        "personalWin",
+        "status",
+        "notes"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "organization": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "relationships": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "economic_buyer_candidate",
+              "champion_candidate",
+              "coach",
+              "technical_stakeholder",
+              "business_stakeholder",
+              "procurement",
+              "legal",
+              "security",
+              "executive_sponsor",
+              "detractor",
+              "other"
+            ]
+          }
+        },
+        "influence": {
+          "type": "string",
+          "enum": ["unknown", "low", "medium", "high"]
+        },
+        "dealPosition": {
+          "type": "string",
+          "enum": ["unknown", "supporter", "neutral", "detractor"]
+        },
+        "personalWin": {
+          "type": ["string", "null"],
+          "maxLength": 2000
+        },
+        "status": {
+          "type": "string",
+          "enum": ["unknown", "active", "inactive"]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 5000
+        }
+      },
+      "additionalProperties": true
+    },
+    "metricValue": {
+      "type": "object",
+      "required": ["value", "unit", "period"],
+      "properties": {
+        "value": {
+          "type": ["number", "null"]
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "period": {
+          "type": ["string", "null"],
+          "maxLength": 200
+        }
+      },
+      "additionalProperties": true
+    },
+    "metric": {
+      "type": "object",
+      "required": ["id", "name", "current", "target", "economicImpact", "evidenceIds", "customerConfirmed", "notes"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "current": {
+          "$ref": "#/$defs/metricValue"
+        },
+        "target": {
+          "$ref": "#/$defs/metricValue"
+        },
+        "economicImpact": {
+          "type": "object",
+          "required": ["value", "currency", "period", "derivation", "assumptions"],
+          "properties": {
+            "value": {
+              "type": ["number", "null"]
+            },
+            "currency": {
+              "type": ["string", "null"],
+              "pattern": "^[A-Z]{3}$"
+            },
+            "period": {
+              "type": ["string", "null"],
+              "maxLength": 200
+            },
+            "derivation": {
+              "type": ["string", "null"],
+              "maxLength": 5000
+            },
+            "assumptions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 2000
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIdArray"
+        },
+        "customerConfirmed": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 5000
+        }
+      },
+      "additionalProperties": true
+    },
+    "metricsSection": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/qualificationBase"
+        },
+        {
+          "type": "object",
+          "required": ["metrics"],
+          "properties": {
+            "metrics": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/metric"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "economicBuyerCandidate": {
+      "type": "object",
+      "required": [
+        "stakeholderId",
+        "identityStatus",
+        "authorityStatus",
+        "directAccess",
+        "engagementStatus",
+        "priorityStatus",
+        "decisionCriteria",
+        "evidenceIds",
+        "notes"
+      ],
+      "properties": {
+        "stakeholderId": {
+          "$ref": "#/$defs/id"
+        },
+        "identityStatus": {
+          "type": "string",
+          "enum": ["assumed", "confirmed"]
+        },
+        "authorityStatus": {
+          "type": "string",
+          "enum": ["unknown", "reported", "confirmed"]
+        },
+        "directAccess": {
+          "type": "boolean"
+        },
+        "engagementStatus": {
+          "type": "string",
+          "enum": ["none", "indirect", "direct"]
+        },
+        "priorityStatus": {
+          "type": "string",
+          "enum": ["unknown", "low", "medium", "high", "confirmed"]
+        },
+        "decisionCriteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIdArray"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 5000
+        }
+      },
+      "additionalProperties": true
+    },
+    "economicBuyerSection": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/qualificationBase"
+        },
+        {
+          "type": "object",
+          "required": ["candidates"],
+          "properties": {
+            "candidates": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/economicBuyerCandidate"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "decisionCriterion": {
+      "type": "object",
+      "required": ["id", "name", "importance", "category", "ourPosition", "evidenceIds", "notes"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "importance": {
+          "type": "string",
+          "enum": ["unknown", "low", "medium", "high", "must-have"]
+        },
+        "category": {
+          "type": "string",
+          "enum": ["capability", "technical", "business", "value", "commercial", "risk", "partner", "other"]
+        },
+        "ourPosition": {
+          "type": "string",
+          "enum": ["unknown", "weak", "medium", "strong"]
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIdArray"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 5000
+        }
+      },
+      "additionalProperties": true
+    },
+    "decisionCriteriaSection": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/qualificationBase"
+        },
+        {
+          "type": "object",
+          "required": ["criteria"],
+          "properties": {
+            "criteria": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/decisionCriterion"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "processStep": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "description",
+        "ownerStakeholderId",
+        "status",
+        "plannedDate",
+        "confirmedDate",
+        "durationBusinessDays",
+        "predecessorIds",
+        "required",
+        "evidenceIds",
+        "parallelGroup",
+        "notes"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 5000
+        },
+        "ownerStakeholderId": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["unknown", "planned", "confirmed", "completed", "blocked", "skipped"]
+        },
+        "plannedDate": {
+          "$ref": "#/$defs/nullableDate"
+        },
+        "confirmedDate": {
+          "$ref": "#/$defs/nullableDate"
+        },
+        "durationBusinessDays": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "predecessorIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "uniqueItems": true
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIdArray"
+        },
+        "parallelGroup": {
+          "type": ["string", "null"],
+          "maxLength": 200
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 5000
+        }
+      },
+      "additionalProperties": true
+    },
+    "processSection": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/qualificationBase"
+        },
+        {
+          "type": "object",
+          "required": ["steps"],
+          "properties": {
+            "steps": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/processStep"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "painItem": {
+      "type": "object",
+      "required": ["id", "statement", "businessImpact", "consequenceOfInaction", "priority", "evidenceIds", "notes"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3000
+        },
+        "businessImpact": {
+          "type": "string",
+          "maxLength": 3000
+        },
+        "consequenceOfInaction": {
+          "type": "string",
+          "maxLength": 3000
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["unknown", "low", "medium", "high", "critical"]
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIdArray"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 5000
+        }
+      },
+      "additionalProperties": true
+    },
+    "painSection": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/qualificationBase"
+        },
+        {
+          "type": "object",
+          "required": ["items"],
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/painItem"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "championBehaviorType": {
+      "type": "string",
+      "enum": [
+        "provided_internal_information",
+        "created_access",
+        "sold_internally",
+        "shared_bad_news",
+        "supported_procurement",
+        "enabled_economic_buyer_access",
+        "confirmed_personal_win",
+        "challenged_internal_process",
+        "other"
+      ]
+    },
+    "championBehavior": {
+      "type": "object",
+      "required": ["type", "evidenceIds", "notes"],
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/championBehaviorType"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIdArray"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 3000
+        }
+      },
+      "additionalProperties": true
+    },
+    "championPerson": {
+      "type": "object",
+      "required": ["stakeholderId", "status", "personalWin", "influence", "behaviors", "notes"],
+      "properties": {
+        "stakeholderId": {
+          "$ref": "#/$defs/id"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["candidate", "confirmed", "disqualified"]
+        },
+        "personalWin": {
+          "type": ["string", "null"],
+          "maxLength": 2000
+        },
+        "influence": {
+          "type": "string",
+          "enum": ["unknown", "low", "medium", "high"]
+        },
+        "behaviors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/championBehavior"
+          }
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 5000
+        }
+      },
+      "additionalProperties": true
+    },
+    "championsSection": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/qualificationBase"
+        },
+        {
+          "type": "object",
+          "required": ["people"],
+          "properties": {
+            "people": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/championPerson"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "competitionAlternative": {
+      "type": "object",
+      "required": ["id", "name", "type", "status", "evidenceIds", "notes"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "type": {
+          "type": "string",
+          "enum": ["direct_vendor", "status_quo", "internal_build", "budget_shift", "do_nothing", "unknown", "other"]
+        },
+        "status": {
+          "$ref": "#/$defs/qualificationStatus"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIdArray"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 5000
+        }
+      },
+      "additionalProperties": true
+    },
+    "competitionSection": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/qualificationBase"
+        },
+        {
+          "type": "object",
+          "required": ["knownAlternatives"],
+          "properties": {
+            "knownAlternatives": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/competitionAlternative"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "meddpicc": {
+      "type": "object",
+      "required": [
+        "metrics",
+        "economicBuyer",
+        "decisionCriteria",
+        "decisionProcess",
+        "paperProcess",
+        "pain",
+        "champions",
+        "competition"
+      ],
+      "properties": {
+        "metrics": {
+          "$ref": "#/$defs/metricsSection"
+        },
+        "economicBuyer": {
+          "$ref": "#/$defs/economicBuyerSection"
+        },
+        "decisionCriteria": {
+          "$ref": "#/$defs/decisionCriteriaSection"
+        },
+        "decisionProcess": {
+          "$ref": "#/$defs/processSection"
+        },
+        "paperProcess": {
+          "$ref": "#/$defs/processSection"
+        },
+        "pain": {
+          "$ref": "#/$defs/painSection"
+        },
+        "champions": {
+          "$ref": "#/$defs/championsSection"
+        },
+        "competition": {
+          "$ref": "#/$defs/competitionSection"
+        }
+      },
+      "additionalProperties": true
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "id",
+        "classification",
+        "quality",
+        "statement",
+        "sourceStakeholderId",
+        "sourceDate",
+        "context",
+        "referenceId",
+        "verification",
+        "relatedAreas",
+        "createdAt"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "classification": {
+          "type": "string",
+          "enum": ["fact", "customer_statement", "seller_interpretation", "assumption", "confirmed_evidence", "unknown"]
+        },
+        "quality": {
+          "type": "string",
+          "enum": ["unknown", "low", "medium", "high"]
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        },
+        "sourceStakeholderId": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "sourceDate": {
+          "$ref": "#/$defs/nullableDate"
+        },
+        "context": {
+          "type": ["string", "null"],
+          "maxLength": 2000
+        },
+        "referenceId": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "verification": {
+          "type": "string",
+          "enum": ["unconfirmed", "single_source", "corroborated", "confirmed", "observed"]
+        },
+        "relatedAreas": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/projectArea"
+          },
+          "uniqueItems": true
+        },
+        "createdAt": {
+          "$ref": "#/$defs/dateTime"
+        }
+      },
+      "additionalProperties": true
+    },
+    "risk": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "severity",
+        "status",
+        "relatedArea",
+        "relatedEntityIds",
+        "impact",
+        "mitigation",
+        "owner",
+        "dueDate",
+        "openedAt"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["open", "mitigating", "closed", "accepted"]
+        },
+        "relatedArea": {
+          "$ref": "#/$defs/projectArea"
+        },
+        "relatedEntityIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "uniqueItems": true
+        },
+        "impact": {
+          "type": "string",
+          "maxLength": 5000
+        },
+        "mitigation": {
+          "type": ["string", "null"],
+          "maxLength": 5000
+        },
+        "owner": {
+          "type": ["string", "null"],
+          "maxLength": 300
+        },
+        "dueDate": {
+          "$ref": "#/$defs/nullableDate"
+        },
+        "openedAt": {
+          "$ref": "#/$defs/dateTime"
+        }
+      },
+      "additionalProperties": true
+    },
+    "action": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "status",
+        "owner",
+        "dueDate",
+        "relatedArea",
+        "relatedRiskId",
+        "relatedGap",
+        "desiredEvidence",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "status": {
+          "type": "string",
+          "enum": ["open", "completed", "cancelled"]
+        },
+        "owner": {
+          "type": ["string", "null"],
+          "maxLength": 300
+        },
+        "dueDate": {
+          "$ref": "#/$defs/nullableDate"
+        },
+        "relatedArea": {
+          "$ref": "#/$defs/projectArea"
+        },
+        "relatedRiskId": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "relatedGap": {
+          "type": ["string", "null"],
+          "maxLength": 2000
+        },
+        "desiredEvidence": {
+          "type": "string",
+          "maxLength": 5000
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIdArray"
+        }
+      },
+      "additionalProperties": true
+    },
+    "businessCaseInputs": {
+      "type": "object",
+      "required": [
+        "affectedSalesEmployees",
+        "hoursLostPerEmployeePerWeek",
+        "workingWeeksPerYear",
+        "loadedHourlyCost",
+        "expectedEfficiencyImprovementPercent",
+        "oneTimeInvestment",
+        "annualRecurringCost"
+      ],
+      "properties": {
+        "affectedSalesEmployees": {
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "hoursLostPerEmployeePerWeek": {
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "workingWeeksPerYear": {
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "loadedHourlyCost": {
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "expectedEfficiencyImprovementPercent": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "oneTimeInvestment": {
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "annualRecurringCost": {
+          "type": ["number", "null"],
+          "minimum": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "calculators": {
+      "type": "object",
+      "properties": {
+        "businessCase": {
+          "type": "object",
+          "required": ["currency", "inputs", "evidenceIds", "assumptions", "customerConfirmed", "notes"],
+          "properties": {
+            "currency": {
+              "type": "string",
+              "pattern": "^[A-Z]{3}$"
+            },
+            "inputs": {
+              "$ref": "#/$defs/businessCaseInputs"
+            },
+            "evidenceIds": {
+              "$ref": "#/$defs/evidenceIdArray"
+            },
+            "assumptions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 2000
+              }
+            },
+            "customerConfirmed": {
+              "type": "boolean"
+            },
+            "notes": {
+              "type": "string",
+              "maxLength": 5000
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "planning": {
+      "type": "object",
+      "required": ["targetGoLiveDate", "implementation", "notes"],
+      "properties": {
+        "targetGoLiveDate": {
+          "$ref": "#/$defs/nullableDate"
+        },
+        "implementation": {
+          "type": "object",
+          "required": ["estimatedBusinessDays", "assumption", "evidenceIds"],
+          "properties": {
+            "estimatedBusinessDays": {
+              "type": ["integer", "null"],
+              "minimum": 0
+            },
+            "assumption": {
+              "type": "boolean"
+            },
+            "evidenceIds": {
+              "$ref": "#/$defs/evidenceIdArray"
+            }
+          },
+          "additionalProperties": true
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 5000
+        }
+      },
+      "additionalProperties": true
+    },
+    "reference": {
+      "type": "object",
+      "required": ["id", "type", "title", "date", "externalId", "url", "notes"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["meeting", "crm", "document", "email", "rfp", "contract", "other"]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "date": {
+          "$ref": "#/$defs/nullableDate"
+        },
+        "externalId": {
+          "type": ["string", "null"],
+          "maxLength": 500
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^https?://",
+              "maxLength": 2000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 5000
+        }
+      },
+      "additionalProperties": true
+    },
+    "historyEvent": {
+      "type": "object",
+      "required": ["id", "timestamp", "type", "area", "entityId", "summary"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "timestamp": {
+          "$ref": "#/$defs/dateTime"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "project_created",
+            "evidence_added",
+            "qualification_status_changed",
+            "risk_opened",
+            "risk_closed",
+            "action_completed",
+            "schema_migrated"
+          ]
+        },
+        "area": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/projectArea"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "entityId": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

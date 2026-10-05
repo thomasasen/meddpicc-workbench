@@ -147,3 +147,7 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+# MEDDPICC Workbench generated/test output
+src/domain/project.generated.ts
+playwright-report/
+test-results/
