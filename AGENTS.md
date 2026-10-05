@@ -1,97 +1,129 @@
-# Agent Instructions
+# Agent-Anweisungen
 
-These instructions apply to the entire MEDDPICC Workbench repository.
+Diese Anweisungen gelten für das gesamte Repository von MEDDPICC Workbench.
 
-## Product intent
+## Projektsprache
 
-MEDDPICC Workbench is a local-first browser application for rigorous MEDDPICC opportunity qualification and deterministic deal-planning utilities.
+**Die Projektsprache ist Deutsch.**
 
-The product must reduce repetitive sales work without replacing seller judgment.
+Das gilt insbesondere für:
 
-Before implementing a feature, read:
+- Benutzeroberfläche und alle sichtbaren UI-Texte
+- Dokumentation
+- Issues und Pull Requests
+- fachliche Beschreibungen
+- Fehlermeldungen und Hilfetexte
+- Beispieldaten, sofern sie nicht bewusst einen internationalen Use Case abbilden
+
+Ausnahmen:
+
+- etablierte MEDDPICC-Fachbegriffe wie `Metrics`, `Economic Buyer`, `Decision Criteria`, `Decision Process`, `Paper Process`, `Champion` und `Competition`
+- etablierte technische Begriffe, wenn die deutsche Übersetzung unüblich oder unpräzise wäre, z. B. `local-first`, `Runtime`, `Schema`, `Migration`, `Build`, `CI`
+- Code, API-Namen, Dateinamen, Schema-Keys, Variablen-, Funktions- und Typnamen
+- Conventional-Commit-Präfixe wie `feat:`, `fix:`, `docs:`
+
+Englische Fachbegriffe dürfen in deutschen Sätzen verwendet werden. Normale Produkt- und UI-Sprache darf nicht unnötig anglisiert werden.
+
+Beispiele:
+
+- UI: **„Bestätigt“**, nicht „Confirmed“
+- UI: **„Unbekannt“**, nicht „Unknown“
+- UI: **„Nächste Aktion“**, nicht „Next Action“
+- Fachbegriff: **„Economic Buyer“** bleibt „Economic Buyer“
+- Fachbegriff: **„Paper Process“** bleibt „Paper Process“
+- Code: `targetCloseDate` bleibt Englisch
+
+## Produktziel
+
+MEDDPICC Workbench ist eine local-first Browser-Anwendung für die strukturierte Qualifizierung komplexer B2B-Opportunities nach MEDDPICC und für deterministische Deal-Planning-Werkzeuge.
+
+Das Produkt soll repetitive Sales-Arbeit reduzieren, ohne die fachliche Beurteilung durch den Seller zu ersetzen.
+
+Vor der Umsetzung eines Features sind zu lesen:
 
 1. `README.md`
 2. `docs/PROJECT_CHARTER.md`
 3. `docs/ARCHITECTURE.md`
 4. `docs/PROJECT_FILE_SPEC.md`
-5. `docs/DESIGN_SYSTEM.md` for any UI/UX work
+5. bei UI/UX-Arbeiten zusätzlich `docs/DESIGN_SYSTEM.md`
 
-## Non-negotiable architecture rules
+## Nicht verhandelbare Architekturregeln
 
-- The portable `.meddpicc` project file is the canonical opportunity state.
-- Do not introduce a mandatory backend.
-- Do not introduce runtime AI/LLM dependencies.
-- Do not upload or sync opportunity/project content by default.
-- Do not turn the application into a CRM, email client, calendar, or pipeline-management suite.
-- Deterministic calculations and qualification rules belong in domain services, not hidden in UI components.
-- Assumptions, unknowns, customer statements, interpretations, and confirmed evidence must remain distinguishable.
-- Unknown is a valid state.
-- Any schema change requires compatibility and migration consideration.
+- Die portable `.meddpicc`-Projektdatei ist die kanonische Source of Truth der Opportunity.
+- Kein verpflichtendes Backend einführen.
+- Keine AI-/LLM-Abhängigkeit zur Runtime einführen.
+- Opportunity- oder Projektdaten standardmäßig nicht hochladen oder synchronisieren.
+- Die Anwendung nicht zu CRM, E-Mail-Client, Kalender oder Pipeline-Management-Suite ausweiten.
+- Deterministische Berechnungen und Qualifizierungsregeln gehören in Domain Services und nicht versteckt in UI-Komponenten.
+- Annahmen, unbekannte Informationen, Kundenaussagen, Interpretationen und bestätigte Evidenz müssen unterscheidbar bleiben.
+- „Unbekannt“ ist ein gültiger Zustand.
+- Jede Schema-Änderung muss Kompatibilität und Migration berücksichtigen.
 
-## UI/UX instruction
+## UI/UX-Anweisung
 
-For any task that creates or changes screens, navigation, forms, tables, charts, status indicators, responsive behavior, or interaction patterns:
+Bei jeder Aufgabe, die Screens, Navigation, Formulare, Tabellen, Charts, Statusanzeigen, Responsive-Verhalten oder Interaktionsmuster erstellt oder verändert:
 
-1. Read and follow `docs/DESIGN_SYSTEM.md`.
-2. Use the local skill `.agents/skills/meddpicc-ui-ux/SKILL.md` as the UI/UX implementation checklist.
-3. Treat `nextlevelbuilder/ui-ux-pro-max-skill` as a **development reference**, not a runtime dependency.
-4. When consulting that upstream project, prefer the pinned reference documented in `docs/UI_UX_REFERENCE.md`.
-5. Do not copy upstream datasets or large bodies of text into this repository unless there is a specific reviewed need and license notices are preserved.
+1. `docs/DESIGN_SYSTEM.md` lesen und befolgen.
+2. Den lokalen Skill `.agents/skills/meddpicc-ui-ux/SKILL.md` als UI/UX-Checkliste verwenden.
+3. `nextlevelbuilder/ui-ux-pro-max-skill` nur als **Entwicklungsreferenz**, niemals als Runtime-Abhängigkeit behandeln.
+4. Bei Nutzung der Upstream-Referenz den in `docs/UI_UX_REFERENCE.md` dokumentierten Stand bevorzugen.
+5. Keine Upstream-Datensätze oder größeren Textmengen kopieren, außer dies wurde bewusst geprüft und die Lizenzhinweise werden erhalten.
 
-The MEDDPICC-specific design system takes precedence over generic upstream style recommendations.
+Das MEDDPICC-spezifische Design System hat Vorrang vor generischen Upstream-Empfehlungen.
 
-## Design direction
+## Designrichtung
 
-The default product direction is:
+Die Standardrichtung ist:
 
-- professional B2B/enterprise workbench
-- minimal and information-dense
-- influenced by accessible/ethical, Swiss/minimal, data-dense dashboard, and drill-down patterns
-- neutral surfaces with restrained semantic color
-- strong information hierarchy
-- little decorative motion
-- no glassmorphism, neon gradients, marketing-style hero layouts, or decorative dashboard clutter in the working application
+- professionelle B2B-/Enterprise-Workbench
+- minimal und informationsdicht
+- beeinflusst durch Accessible & Ethical, Swiss/Minimal, Data-Dense Dashboard und Drill-Down
+- neutrale Flächen mit zurückhaltenden semantischen Farben
+- klare Informationshierarchie
+- wenig dekorative Bewegung
+- kein Glassmorphism, keine Neon- oder AI-Gradienten, keine Marketing-Hero-Layouts und kein dekorativer Dashboard-Ballast in der Arbeitsoberfläche
 
 ## Accessibility
 
-Accessibility is a baseline requirement, not a later polish step.
+Accessibility ist eine Basisanforderung und kein späterer Feinschliff.
 
-- Use semantic HTML.
-- All functions must be keyboard-operable.
-- Show visible focus.
-- Do not encode meaning with color alone.
-- Respect `prefers-reduced-motion`.
-- Maintain readable contrast.
-- Charts require an accessible textual/table representation when they convey material information.
-- Interactive controls need accessible names and appropriate state semantics.
+- Semantisches HTML verwenden.
+- Alle Funktionen müssen per Tastatur bedienbar sein.
+- Fokuszustände sichtbar machen.
+- Bedeutung niemals ausschließlich über Farbe vermitteln.
+- `prefers-reduced-motion` berücksichtigen.
+- Ausreichenden Kontrast sicherstellen.
+- Charts benötigen für wesentliche Informationen eine zugängliche Text- oder Tabellenalternative.
+- Interaktive Controls benötigen zugängliche Namen und korrekte Zustandssemantik.
 
-## Privacy-sensitive UI rules
+## Privacy-sensitive UI-Regeln
 
-- Do not load fonts, scripts, icons, analytics, or other assets from third-party CDNs in production without explicit architectural review.
-- Prefer bundled assets and system fonts.
-- Do not add telemetry that could receive project content.
-- External URLs contained in a project file are data only and must never trigger automatic requests.
+- Keine Fonts, Scripts, Icons, Analytics oder sonstige Assets aus Drittanbieter-CDNs in Produktion laden, sofern dies nicht ausdrücklich architektonisch geprüft wurde.
+- Gebündelte Assets und Systemfonts bevorzugen.
+- Keine Telemetrie hinzufügen, die Projektinhalte empfangen könnte.
+- Externe URLs in einer Projektdatei sind nur Daten und dürfen niemals automatisch Requests auslösen.
 
-## Implementation quality
+## Umsetzungsqualität
 
-- Prefer Vue 3 Composition API with `<script setup lang="ts">`.
-- Keep shared state in Pinia when it is genuinely cross-view.
-- Use computed state for derived UI values.
-- Keep domain calculations pure and testable.
-- Prefer native semantic controls over clickable `div` elements.
-- Add tests for deterministic rules and regression fixes.
-- Test responsive behavior at representative widths around 375, 768, 1024, and 1440 px.
-- Avoid magic spacing values; use design tokens.
+- Vue 3 Composition API mit `<script setup lang="ts">` bevorzugen.
+- Pinia nur für tatsächlich view-übergreifenden State verwenden.
+- Abgeleitete UI-Werte über `computed` modellieren.
+- Domain-Berechnungen rein und testbar halten.
+- Native semantische Controls statt klickbarer `div`-Elemente bevorzugen.
+- Deterministische Regeln und Regressionen testen.
+- Responsive-Verhalten ungefähr bei 375, 768, 1024 und 1440 px prüfen.
+- Keine beliebigen Spacing-Werte; Design Tokens verwenden.
 
-## Review questions
+## Review-Fragen
 
-Before considering UI work complete, verify:
+Vor Abschluss einer UI-Arbeit prüfen:
 
-- Is the most important deal information visible without hunting?
-- Can evidence be distinguished from assumption at a glance and by text/icon, not only color?
-- Can the task be completed with a keyboard?
-- Does the UI still work with longer German/English labels?
-- Does it work at browser zoom/text scaling without clipping?
-- Is every chart actually more useful than a table or direct number?
-- Did this change add any unnecessary runtime network dependency?
-- Does the design stay consistent with `docs/DESIGN_SYSTEM.md`?
+- Ist die wichtigste Deal-Information ohne Suchen sichtbar?
+- Lassen sich Evidenz und Annahme anhand Text/Icon unterscheiden und nicht nur anhand Farbe?
+- Kann die Aufgabe vollständig per Tastatur erledigt werden?
+- Funktioniert das UI auch mit längeren deutschen und englischen Fachbegriffen?
+- Funktioniert es bei Browser-Zoom und Textskalierung ohne Clipping?
+- Ist jeder Chart wirklich hilfreicher als Tabelle oder Direktwert?
+- Wurde eine unnötige Runtime-Netzwerkabhängigkeit eingeführt?
+- Entspricht das Design weiterhin `docs/DESIGN_SYSTEM.md`?
+- Sind alle normalen UI-Texte deutsch und nur echte Fachbegriffe Englisch?
