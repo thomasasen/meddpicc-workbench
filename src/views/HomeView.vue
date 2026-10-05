@@ -15,11 +15,7 @@ import { storeToRefs } from 'pinia'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, type Component } from 'vue'
 
 import type { ProjectAreaKey, ProjectRisk } from '../domain/project'
-import {
-  loadProject,
-  ProjectValidationError,
-  type ProjectValidationIssue,
-} from '../domain/projectSchema'
+import { loadProject, ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
 import { downloadTextFile } from '../services/browserFile'
 import { useProjectStore } from '../stores/projectStore'
 import { qualificationStatusLabels, type QualificationStatusKey } from '../domain/qualificationStatus'
@@ -139,9 +135,7 @@ function forecastLabel(value: string): string {
 function confirmDiscardUnsavedChanges(): boolean {
   if (!dirty.value) return true
 
-  return window.confirm(
-    'Es gibt ungespeicherte Änderungen. Wenn du fortfährst, gehen diese Änderungen verloren.',
-  )
+  return window.confirm('Es gibt ungespeicherte Änderungen. Wenn du fortfährst, gehen diese Änderungen verloren.')
 }
 
 async function openNewProjectForm() {
@@ -380,7 +374,9 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', handleBeforeUnl
               <code>{{ issue.path }}</code> {{ issue.message }}
             </li>
           </ul>
-          <p v-if="importIssues.length > 8">Weitere {{ importIssues.length - 8 }} Validierungsfehler wurden ausgeblendet.</p>
+          <p v-if="importIssues.length > 8">
+            Weitere {{ importIssues.length - 8 }} Validierungsfehler wurden ausgeblendet.
+          </p>
         </div>
       </div>
 
@@ -422,7 +418,9 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', handleBeforeUnl
           <section class="opportunity-panel" aria-labelledby="opportunity-title">
             <div class="panel-header">
               <div>
-                <p class="panel-kicker">{{ source === 'demo' ? 'Standard-Demo · vollständig fiktiv' : projectStateLabel }}</p>
+                <p class="panel-kicker">
+                  {{ source === 'demo' ? 'Standard-Demo · vollständig fiktiv' : projectStateLabel }}
+                </p>
                 <h2 id="opportunity-title">{{ project.project.accountName }}</h2>
                 <p class="opportunity-name">{{ project.project.name }}</p>
               </div>
