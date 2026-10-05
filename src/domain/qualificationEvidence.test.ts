@@ -115,5 +115,4 @@ describe('qualification evidence', () => {
     )
     expect(links.filter((link) => link.area === 'champions').every((link) => link.target === undefined)).toBe(true)
   })
-
 })
