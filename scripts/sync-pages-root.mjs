@@ -1,12 +1,15 @@
+import { execFile } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { dirname, join, relative } from 'node:path'
+import { promisify } from 'node:util'
 
 const distRoot = 'dist'
 const publishedIndex = 'index.html'
 const publishedAssets = 'assets'
 const publishedManifest = 'pages-build.json'
 const checkOnly = process.argv.includes('--check')
+const execFileAsync = promisify(execFile)
 
 const sourceRoots = ['app', 'src', 'schema']
 const sourceExcludes = new Set(['src/domain/project.generated.ts'])
@@ -48,9 +51,11 @@ async function hashFile(path) {
   return createHash('sha256').update(content).digest('hex')
 }
 
-async function normalizedSource(path) {
-  const content = await readFile(path, 'utf8')
-  return content.replaceAll('\r\n', '\n')
+async function canonicalGitHash(path) {
+  const { stdout } = await execFileAsync('git', ['hash-object', `--path=${path}`, path], {
+    encoding: 'utf8',
+  })
+  return stdout.trim()
 }
 
 async function sourceFingerprint() {
@@ -66,7 +71,7 @@ async function sourceFingerprint() {
   for (const path of [...new Set(inputs)].sort()) {
     hash.update(path)
     hash.update('\0')
-    hash.update(await normalizedSource(path))
+    hash.update(await canonicalGitHash(path))
     hash.update('\0')
   }
 
