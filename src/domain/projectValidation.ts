@@ -264,6 +264,16 @@ export function validateProjectDomain(project: MeddpiccProject): DomainValidatio
     }
   })
 
+  project.risks.forEach((risk, index) => {
+    addMissingReferences(
+      issues,
+      risk.relatedEntityIds,
+      new Set(seen.keys()),
+      `/risks/${index}/relatedEntityIds`,
+      'Related-Entity-ID',
+    )
+  })
+
   project.actions.forEach((action, index) => {
     if (action.relatedRiskId && !riskIds.has(action.relatedRiskId)) {
       issues.push({
