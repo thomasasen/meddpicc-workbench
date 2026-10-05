@@ -141,13 +141,21 @@ function sourceTraceLabel(trace: SourceTrace): string {
   if (trace.evidence.length === 0) return 'Quellenbasis: keine verknüpfte Evidenz'
 
   const evidenceLabel = `${trace.evidence.length} ${trace.evidence.length === 1 ? 'Evidenz' : 'Evidenzen'}`
-  if (trace.references.length === 0) return `Quellenbasis: ${evidenceLabel} · ohne Reference-Record`
+  if (trace.references.length === 0) return `Quellenbasis: ${evidenceLabel} · ohne Quellenreferenz`
 
   const titles = trace.references.slice(0, 2).map((reference) => reference.title)
   const remaining = trace.references.length - titles.length
   const sourceLabel = titles.join(', ') + (remaining > 0 ? ` +${remaining}` : '')
+  const missingLabel =
+    trace.evidenceWithoutReference > 0 ? ` · ${trace.evidenceWithoutReference} ohne Quellenreferenz` : ''
 
-  return `Quellenbasis: ${evidenceLabel} · ${sourceLabel}`
+  return `Quellenbasis: ${evidenceLabel} · ${sourceLabel}${missingLabel}`
+}
+
+function sourceTraceTarget(trace: SourceTrace): string {
+  if (trace.references[0]) return `/references#reference-${trace.references[0].id}`
+  if (trace.evidence[0]) return `/evidence#evidence-${trace.evidence[0].id}`
+  return '/evidence'
 }
 
 function forecastLabel(value: string): string {
@@ -483,7 +491,7 @@ function saveProject() {
                   <div>
                     <strong>{{ risk.title }}</strong>
                     <p>{{ risk.impact }}</p>
-                    <RouterLink class="source-trace-link" to="/evidence">
+                    <RouterLink class="source-trace-link" :to="sourceTraceTarget(riskTrace(risk))">
                       {{ sourceTraceLabel(riskTrace(risk)) }}
                     </RouterLink>
                   </div>
@@ -504,7 +512,7 @@ function saveProject() {
                     <div>
                       <strong>{{ action.title }}</strong>
                       <span>{{ areaLabels[action.relatedArea] }}</span>
-                      <RouterLink class="source-trace-link" to="/evidence">
+                      <RouterLink class="source-trace-link" :to="sourceTraceTarget(actionTrace(action))">
                         {{ sourceTraceLabel(actionTrace(action)) }}
                       </RouterLink>
                     </div>
