@@ -12,6 +12,7 @@ Diesen Skill bei jeder UI-Implementierung oder UI-Review in diesem Repository ve
 Lesen:
 
 - `docs/DESIGN_SYSTEM.md`
+- `docs/ICON_SYSTEM.md` bei Icon-relevanten Aufgaben
 - `docs/ARCHITECTURE.md`
 - `docs/PROJECT_CHARTER.md`
 
@@ -243,3 +244,8 @@ Eine UI-Änderung ist erst fertig, wenn sie:
 - mit realistischen, dichten B2B-Daten lesbar bleibt
 - normale UI-Sprache auf Deutsch verwendet
 - auf geeigneter Unit-/Component-/Browser-Ebene getestet wurde
+
+
+## Icon Review
+
+Bei Icons gilt `docs/ICON_SYSTEM.md` als verbindliche Quelle. Nur Lucide über `@lucide/vue` verwenden, vorhandene Zuordnungen wiederverwenden und komplexe MEDDPICC-Begriffe niemals durch ein Icon ohne sichtbares Textlabel ersetzen.
