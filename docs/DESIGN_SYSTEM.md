@@ -1,127 +1,153 @@
 # MEDDPICC Workbench Design System
 
-## 1. Product design goal
+## 1. Designziel
 
-MEDDPICC Workbench is an operational tool for complex B2B sales opportunities.
+MEDDPICC Workbench ist ein operatives Werkzeug für komplexe B2B-Opportunities.
 
-The interface must optimize for:
+Die Oberfläche muss optimieren auf:
 
-- fast orientation
-- reliable distinction between evidence and assumption
-- dense but readable information
-- efficient editing
-- visible risks and gaps
-- clear next actions
-- repeatable deal reviews
+- schnelle Orientierung
+- klare Trennung von Evidenz und Annahme
+- hohe, aber beherrschbare Informationsdichte
+- effiziente Bearbeitung
+- sichtbare Risiken und Gaps
+- klare nächste Aktionen
+- wiederholbare Deal Reviews
 
-It should look and behave like a serious enterprise workbench, not a marketing website.
+Die Anwendung soll wie eine ernsthafte Enterprise Workbench wirken und nicht wie eine Marketing-Website.
 
-## 2. Design direction
+## 2. Designrichtung
 
-The design combines four influences:
+Das Design kombiniert vier Einflüsse:
 
-1. **Accessible & Ethical** — clarity, semantic controls, inclusive interaction
-2. **Minimal / Swiss** — strong hierarchy, restrained decoration, consistent grid
-3. **Data-Dense Dashboard** — efficient use of screen space for complex opportunities
-4. **Drill-Down Analytics** — summary first, detail and evidence on demand
+1. **Accessible & Ethical** – Klarheit, semantische Controls, inklusive Interaktion
+2. **Minimal / Swiss** – klare Hierarchie, zurückhaltende Gestaltung, konsistentes Grid
+3. **Data-Dense Dashboard** – effizienter Platzgebrauch für komplexe Opportunity-Daten
+4. **Drill-Down Analytics** – Übersicht zuerst, Details und Evidenz bei Bedarf
 
-These influences were selected with help from the external reference documented in `UI_UX_REFERENCE.md`.
+Diese Richtung wurde unter Nutzung der externen Referenz aus `UI_UX_REFERENCE.md` festgelegt.
 
-### Desired character
+### Gewünschter Charakter
 
-- calm
-- precise
-- professional
-- trustworthy
-- analytical
-- compact
-- predictable
+- ruhig
+- präzise
+- professionell
+- vertrauenswürdig
+- analytisch
+- kompakt
+- vorhersehbar
 
-### Avoid
+### Vermeiden
 
-- glassmorphism
-- neon or "AI" gradients
-- decorative 3D effects
-- marketing hero patterns inside the application
-- unnecessary animations
-- excessive card nesting
-- oversized whitespace that reduces information density
-- status encoded only by red/amber/green
-- charts used merely for visual decoration
+- Glassmorphism
+- Neon- oder „AI“-Gradienten
+- dekorative 3D-Effekte
+- Marketing-Hero-Muster in der Arbeitsoberfläche
+- unnötige Animation
+- verschachtelte Card-Strukturen ohne fachlichen Nutzen
+- überdimensionierten Leerraum zulasten der Informationsdichte
+- Status nur über Rot/Amber/Grün
+- Charts als reine Dekoration
 
-## 3. Information architecture
+## 3. Projektsprache
 
-The opportunity is always the primary context.
+Die Projektsprache ist **Deutsch**.
 
-Recommended application structure:
+Normale UI-Texte, Labels, Buttons, Hilfetexte, Fehlermeldungen und Beschreibungen sind deutsch.
+
+Etablierte MEDDPICC-Begriffe bleiben im Original:
+
+- Metrics
+- Economic Buyer
+- Decision Criteria
+- Decision Process
+- Paper Process
+- Champion
+- Competition
+
+Technische Identifier bleiben Englisch.
+
+### Verbindliche Statusbegriffe im UI
+
+- **Bestätigt**
+- **Teilweise**
+- **Annahme**
+- **Unbekannt**
+- **Risiko**
+
+Diese Begriffe sind in allen Modulen konsistent zu verwenden.
+
+## 4. Informationsarchitektur
+
+Die Opportunity ist immer der primäre Kontext.
+
+Empfohlene Struktur:
 
 ```text
-Application shell
-├── Opportunity header
-│   ├── Account / opportunity name
-│   ├── value
-│   ├── forecast category
-│   ├── target close
-│   ├── target go-live
-│   └── save/dirty state
-├── Primary navigation
-│   ├── Overview
-│   ├── MEDDPICC sections
-│   ├── Evidence
-│   ├── Risks
-│   ├── Actions
+Application Shell
+├── Opportunity-Header
+│   ├── Account / Opportunity-Name
+│   ├── Wert
+│   ├── Forecast Category
+│   ├── Target Close
+│   ├── Target Go-Live
+│   └── Speicher-/Dirty-Status
+├── Hauptnavigation
+│   ├── Übersicht
+│   ├── MEDDPICC-Bereiche
+│   ├── Evidenz
+│   ├── Risiken
+│   ├── Aktionen
 │   ├── Tools
-│   ├── History
+│   ├── Historie
 │   └── Export
-└── Work area
+└── Arbeitsbereich
 ```
 
-Default interaction model:
+Standard-Interaktion:
 
-**Overview → MEDDPICC area → qualification statement/process item → evidence/source**
+**Übersicht → MEDDPICC-Bereich → Aussage/Prozessschritt → Evidenz/Quelle**
 
-The user should not lose the opportunity context while drilling down.
+Beim Drill-Down darf der Opportunity-Kontext nicht verloren gehen.
 
-## 4. Layout
+## 5. Layout
 
 ### Desktop
 
 Baseline:
 
-- top opportunity bar: approximately 56–64 px
-- left navigation: approximately 232–248 px
-- main content: fluid
-- compact 8/12-column content grids where useful
-- page padding: 20–24 px on large screens
-- panel gaps: 12–16 px
+- Opportunity-Bar: ca. 56–64 px
+- linke Navigation: ca. 232–248 px
+- Hauptinhalt: flexibel
+- kompakte 8-/12-Spalten-Grids, wenn sinnvoll
+- Seiten-Padding: ca. 20–24 px
+- Panel-Abstände: ca. 12–16 px
 
-The exact dimensions become tokens during implementation. Avoid arbitrary per-component spacing.
+Die exakten Werte werden bei der Implementierung als Design Tokens festgelegt. Keine beliebigen Einzelwerte pro Komponente.
 
-### Medium widths
+### Mittlere Breiten
 
-- reduce navigation width or use compact labels
-- allow cards/panels to move from 3 → 2 → 1 columns
-- preserve full status labels where possible
+- Navigation schmaler oder kompakter
+- Cards/Panels von 3 → 2 → 1 Spalte umbrechen
+- vollständige Statuslabels möglichst erhalten
 
-### Small screens
+### Kleine Displays
 
-- sidebar becomes an accessible drawer or compact navigation
-- primary content stacks vertically
-- tables may scroll horizontally when that is clearer than transforming the data
-- key opportunity identity and save state remain accessible
+- Sidebar wird Drawer oder kompakte Navigation
+- Hauptinhalt stapelt vertikal
+- Tabellen dürfen horizontal scrollen, wenn das verständlicher ist als eine Transformation
+- Opportunity-Identität und Speicherstatus bleiben erreichbar
 
-Test around:
+Prüfbreiten ungefähr:
 
 - 375 px
 - 768 px
 - 1024 px
 - 1440 px
 
-## 5. Spacing and shape
+## 6. Spacing und Formen
 
-Use a 4 px base spacing system.
-
-Suggested tokens:
+4-px-Basissystem:
 
 ```text
 space-1   4px
@@ -134,19 +160,19 @@ space-8  32px
 space-10 40px
 ```
 
-Default corner radius should be restrained:
+Zurückhaltende Radien:
 
-- inputs/buttons: 6 px
-- panels/cards: 8 px
-- pills only for true compact categorical/status content
+- Inputs/Buttons: 6 px
+- Panels/Cards: 8 px
+- Pills nur für echte kompakte Status-/Kategorieinformationen
 
-Avoid turning every label into a rounded pill.
+Nicht jedes Label als Pill darstellen.
 
-## 6. Typography
+## 7. Typografie
 
-Use a local/system font strategy.
+Lokale/Systemfont-Strategie.
 
-Default UI stack:
+Standard:
 
 ```css
 font-family:
@@ -158,25 +184,25 @@ font-family:
   sans-serif;
 ```
 
-Use `ui-monospace` only for IDs, schema/version data, formulas, or technical values where monospace improves scanning.
+`ui-monospace` nur für IDs, Schema-/Versionsdaten, Formeln oder technische Werte.
 
-Suggested hierarchy:
+Empfohlene Hierarchie:
 
-- page title: 24–28 px / 600–700
-- section title: 18–20 px / 600
-- card/panel title: 15–16 px / 600
-- body/input: 14–16 px / 400–500
-- compact metadata: 12–13 px / 500
+- Seitentitel: 24–28 px / 600–700
+- Abschnittstitel: 18–20 px / 600
+- Panel-Titel: 15–16 px / 600
+- Body/Input: 14–16 px / 400–500
+- kompakte Metadaten: 12–13 px / 500
 
-Do not use tiny 10–11 px text to create artificial density.
+Keine 10–11-px-Schrift nur zur künstlichen Verdichtung.
 
-Long German/English labels must wrap safely.
+Lange deutsche Texte und englische Fachbegriffe müssen sicher umbrechen.
 
-## 7. Color model
+## 8. Farbmodell
 
-Use a neutral base plus one restrained application accent and semantic status colors.
+Neutrale Basis plus eine zurückhaltende Akzentfarbe und semantische Statusfarben.
 
-Initial light-theme direction:
+Erste Light-Theme-Richtung:
 
 ```text
 background       #F6F8FB
@@ -190,294 +216,285 @@ accent-strong    #1D4ED8
 focus            #2563EB
 ```
 
-These are baseline tokens, not a license to hardcode colors throughout components.
+Diese Werte werden Tokens. Keine verstreuten Hardcodes.
 
-### Semantic states
-
-Suggested baseline:
+### Semantische Zustände
 
 ```text
-Confirmed    green family
-Partial      amber family
-Assumption   violet family
-Unknown      neutral/slate family
-Risk         red family
-Information  blue family
+Bestätigt    Grün-Familie
+Teilweise    Amber-Familie
+Annahme      Violett-Familie
+Unbekannt    Neutral/Slate
+Risiko       Rot-Familie
+Information  Blau-Familie
 ```
 
-Every semantic state must also have a text label and/or icon.
+Jeder Zustand benötigt zusätzlich Text und/oder Icon.
 
-Never use green/red alone to distinguish meaning.
+Bedeutung niemals nur über Grün/Rot vermitteln.
 
-## 8. MEDDPICC status language
+## 9. MEDDPICC-Statussemantik
 
-Use a stable vocabulary throughout the product.
+Verbindliche Begriffe:
 
-Preferred primary states:
+- **Bestätigt**
+- **Teilweise**
+- **Annahme**
+- **Unbekannt**
+- **Risiko**
 
-- **Confirmed**
-- **Partial**
-- **Assumption**
-- **Unknown**
-- **Risk**
+In Detailansichten dürfen feinere Evidence-Klassifikationen sichtbar sein.
 
-Where the product uses more precise evidence classifications, preserve those distinctions in detail views.
+Ein Deal darf nicht allein wegen eines hohen Durchschnittsscores als „gesund“ gelten.
 
-Do not label a deal as "healthy" solely because its average score is high.
+Ein Confidence Score beschreibt Qualifizierungs-/Evidence Confidence und **keine Win Probability**.
 
-A confidence score represents qualification/evidence confidence, not probability of winning.
+## 10. Dashboard / Übersicht
 
-## 9. Dashboard
+Die Übersicht priorisiert Handlung vor Dekoration.
 
-The Overview page should prioritize action over decoration.
+Empfohlene Reihenfolge:
 
-Recommended order:
+1. Opportunity- und kommerzieller Kontext
+2. kritische Gaps und Risiken
+3. nächste Aktionen
+4. MEDDPICC-Statusübersicht
+5. Prozess-/Close-Date-Warnungen
+6. Business-Case-/Value-Zusammenfassung
+7. letzte relevante Änderungen
 
-1. opportunity identity / commercial context
-2. critical gaps and risks
-3. next actions
-4. MEDDPICC status summary
-5. process/close-date warnings
-6. supporting value/business-case summary
-7. recent meaningful changes
+Kein Dashboard voller gleichgewichteter KPI-Cards.
 
-Avoid a screen filled with equally weighted KPI cards.
+### MEDDPICC-Zusammenfassung
 
-### MEDDPICC summary
+Kompakte Liste oder Bullet-artiger Vergleich statt Radar-/Spider-Chart.
 
-A compact list or bullet-style comparison is preferred over a radar/spider chart.
-
-Example:
+Beispiel:
 
 ```text
-Metrics            Confirmed   7/10 evidence confidence
-Economic Buyer     Partial     5/10 evidence confidence
-Decision Criteria  Confirmed   8/10 evidence confidence
-Paper Process      Risk        3/10 evidence confidence
+Metrics            Bestätigt   7/10 Evidence Confidence
+Economic Buyer     Teilweise   5/10 Evidence Confidence
+Decision Criteria  Bestätigt   8/10 Evidence Confidence
+Paper Process      Risiko      3/10 Evidence Confidence
 ```
 
-The label/state is primary. The numeric confidence is secondary and must be explainable.
+Statuslabel ist primär, numerische Confidence sekundär und erklärbar.
 
-## 10. Cards and panels
+## 11. Cards und Panels
 
-Use cards only when they create meaningful grouping.
+Cards nur verwenden, wenn sie echte Gruppierung schaffen.
 
-Avoid "card inside card inside card".
+Keine „Card in Card in Card“-Strukturen.
 
-A standard panel should contain:
+Standard-Panel:
 
-- concise title
-- optional status/metadata
-- primary content
-- actions aligned consistently
-- no decorative icon unless it improves recognition
+- kurzer Titel
+- optional Status/Metadaten
+- Hauptinhalt
+- konsistent platzierte Aktionen
+- Icon nur, wenn es Erkennung verbessert
 
-Use borders/background hierarchy before heavy shadows.
+Border/Background-Hierarchie vor starken Schatten bevorzugen.
 
-## 11. Forms
+## 12. Formulare
 
-MEDDPICC data is complex; forms must remain calm.
+Regeln:
 
-Rules:
+- jedes Feld sichtbar beschriften
+- fachlich gruppieren, nicht nach Datenbankstruktur
+- ungewöhnliche Felder kurz erklären
+- Pflicht/optional eindeutig
+- Validierung direkt beim Problem
+- Eingaben nach Fehlern erhalten
+- passende native Input-Typen
+- „unbekannt/noch nicht bekannt“ zulassen
+- Wechsel von Annahme zu bestätigter Evidenz bewusst sichtbar machen
 
-- label every input visibly
-- group fields by meaning, not database structure
-- explain uncommon fields with short helper text
-- clearly distinguish optional from required
-- show validation beside the field/problem
-- preserve input after errors
-- use appropriate native input types
-- allow unknown/not-yet-known instead of forcing false precision
-- confirmations that convert assumption → evidence should make the semantic change explicit
+Keine riesigen Single-Page-Formulare für ganz MEDDPICC.
 
-Avoid giant single-page forms containing every MEDDPICC element.
+## 13. Evidenz
 
-## 12. Evidence UI
+Evidenz ist ein First-Class-Objekt und muss sich visuell von Schlussfolgerungen unterscheiden.
 
-Evidence is a first-class object and should look different from conclusions.
+Scannbare Evidenzdarstellung:
 
-An evidence record should make it easy to scan:
+- Klassifikation
+- Aussage
+- Quelle/Person
+- Rolle
+- Datum
+- Kontext/Referenz
+- verknüpfte MEDDPICC-Bereiche
 
-- classification
-- statement
-- source/person
-- role
-- date
-- context/reference
-- linked MEDDPICC areas
+Von einer Qualifizierungsaussage muss ein klarer Weg zur stützenden Evidenz existieren.
 
-When displaying a qualification conclusion, provide a clear route to its supporting evidence.
+Annahmen dürfen niemals wie bestätigte Evidenz aussehen.
 
-Assumptions should never visually resemble confirmed evidence.
+## 14. Risiken und Aktionen
 
-## 13. Risks and actions
+Risiken zeigen:
 
-Risk rows/cards should show:
+- Schweregrad
+- kurzen Titel
+- Auswirkung
+- zugehörigen MEDDPICC-Bereich/Prozess
+- Status
+- Mitigation/nächste Aktion, falls vorhanden
 
-- severity
-- concise title
-- impact
-- related MEDDPICC area/process
-- status
-- mitigation/next action when present
+Nächste Aktionen zeigen:
 
-Next actions should show:
+- Aktion
+- Owner
+- Fälligkeitsdatum, falls bekannt
+- zugehöriges Gap
+- gewünschte Evidenz bzw. gewünschtes Ergebnis
 
-- action
-- owner
-- due date if known
-- related gap
-- desired evidence/outcome
+Nicht jede Warnung optisch als kritisch darstellen.
 
-Use severity/order to prioritize; do not make every warning visually critical.
+## 15. Tabellen
 
-## 14. Tables
+Typische Bereiche: Evidenz, Risiken, Aktionen, Criteria, Historie und Prozesse.
 
-Tables will be common in Evidence, Risks, Actions, Criteria, History, and Process areas.
+Regeln:
 
-Rules:
+- eindeutige Header
+- sinnvolle Ausrichtung
+- Zahlen konsistent ausrichten
+- Sortierung nur, wenn hilfreich
+- Sortierzustand semantisch ausweisen
+- fokussierte/ausgewählte Zeilen sichtbar
+- langen Business-Text umbrechen
+- bei unvermeidbarer Kürzung vollständigen Wert zugänglich machen
+- horizontalen Overflow statt Clipping
+- Row Actions per Tastatur und Touch erreichbar
 
-- explicit headers
-- meaningful alignment
-- numbers aligned consistently
-- sorting only where useful
-- expose sort state semantically
-- visible selected/focused rows
-- wrap long business text
-- provide accessible full value if truncation is unavoidable
-- support horizontal overflow instead of clipping
-- keep row actions discoverable by keyboard and touch
+Auf schmalen Displays bewusst zwischen scrollbarer Tabelle und Record-Liste entscheiden.
 
-For very narrow screens, choose deliberately between scrollable table and a structured record list.
+## 16. Decision Process und Paper Process
 
-## 15. Decision and Paper Process visualization
+Prozess-/Timeline-Visualisierung nur verwenden, wenn sie Abhängigkeiten besser verständlich macht.
 
-Use a process/timeline view only when it improves dependency understanding.
+Jeder visuelle Schritt braucht eine textuelle Repräsentation mit:
 
-Every visual step must have a corresponding textual representation containing:
+- Titel
+- Owner
+- Status
+- geplantem/bestätigtem Datum
+- Dauer
+- Abhängigkeiten
+- Evidenz
+- Risiko/Gap
 
-- title
-- owner
-- status
-- planned/confirmed date
-- duration
-- dependencies
-- evidence
-- risk/gap
+Drag-and-Drop darf niemals die einzige Bearbeitungsmöglichkeit sein.
 
-Do not make drag-and-drop the only way to modify or reorder process steps.
+## 17. Charts und Berechnungen
 
-## 16. Charts and calculations
+Wenn Präzision wichtig ist, Direktwerte und Tabellen bevorzugen.
 
-Prefer direct values and tables whenever precision matters.
+Geeignet:
 
-Recommended:
+- Bullet-/Progress-Vergleiche für mehrere Confidence-/Evidence-Maße
+- horizontale Bars für Kategorien
+- Line Charts für echte Zeitreihen
+- Timeline/Gantt-artige Darstellung für Prozessabhängigkeiten
+- einfacher Waterfall nur bei echtem Value Bridge Use Case
 
-- bullet/progress comparisons for multiple confidence/evidence measures
-- horizontal bars for category comparison
-- line charts for genuine time-series data
-- timeline/Gantt-like representation for process dependencies
-- simple waterfall only if a value bridge truly needs it
+Standardmäßig vermeiden:
 
-Avoid by default:
+- Radar-/Spider-Charts
+- Gauges
+- Donut Charts für präzise Vergleiche
+- 3D-Charts
+- dekorative Heatmaps
 
-- radar/spider charts
-- gauges
-- donut charts for precise comparisons
-- 3D charts
-- decorative heat maps
+Charts müssen:
 
-Charts must:
+- für wesentliche Inhalte Text-/Tabellenalternative haben
+- nicht nur auf Farbe beruhen
+- bei Interaktivität per Tastatur zugänglich sein
+- wichtige Details auch ohne Hover bereitstellen
 
-- have a text/table alternative for material information
-- not rely on color alone
-- support keyboard access when interactive
-- expose the same important detail without hover
+## 18. Interaktion und Motion
 
-## 17. Interaction and motion
+Motion erklärt Zustandsänderung und dekoriert nicht.
 
-Motion should explain state change, not decorate the application.
+- kurze, zurückhaltende Transitions
+- keine permanente Bewegung außer sinnvollen Loading-/Progress-Indikatoren
+- `prefers-reduced-motion` respektieren
+- Aufgaben niemals für Animation verzögern
+- keine animierten Score-Shows
 
-- fast, restrained transitions
-- no perpetual motion except meaningful progress/loading indicators
-- respect `prefers-reduced-motion`
-- never delay a task for animation
-- avoid animated score theatrics
+## 19. Icons
 
-## 18. Icons
+Ein konsistentes SVG-Iconset verwenden.
 
-Use one consistent SVG icon family.
+- Icons ergänzen Text bei wichtigen Aktionen/Status
+- Icon-only Buttons brauchen zugängliche Namen
+- keine Emojis als Navigations-/Statusicons
+- Icons mit der App bundlen, nicht remote laden
 
-Requirements:
+## 20. Accessibility-Baseline
 
-- icons are supplementary to text for important actions/statuses
-- icon-only buttons require accessible names/tooltips where appropriate
-- no emoji as application navigation/status icons
-- bundle icons with the app; avoid remote runtime assets
+Mindestens:
 
-## 19. Accessibility baseline
+- semantische Landmarks
+- logische Heading-Hierarchie
+- vollständige Tastaturbedienung
+- sichtbarer Fokus
+- korrekt verknüpfte Labels
+- zugängliche Fehler
+- korrekte Button-/Link-Semantik
+- ausreichender Kontrast
+- keine Bedeutung nur über Farbe
+- Reduced-Motion-Unterstützung
+- keine essenziellen Hover-only-Inhalte
+- Layout stabil bei Zoom/Textskalierung
+- korrektes Dialog-Focus-Management
+- nichtvisuelle Chart-Alternativen
 
-Minimum expectations:
+## 21. Privacy und externe Assets
 
-- semantic landmarks
-- logical heading order
-- keyboard complete
-- visible focus
-- correctly associated labels
-- accessible errors
-- correct button/link semantics
-- sufficient contrast
-- no color-only meaning
-- reduced-motion support
-- no hover-only essential content
-- responsive at zoom/text scaling
-- dialog focus management
-- charts with non-visual alternatives
+Default-Regeln:
 
-## 20. Privacy and external assets
+- keine Google-Fonts-Requests
+- kein CDN-JavaScript
+- keine Remote-Icon-Library zur Runtime
+- keine Analytics-/Tracking-Scripts mit Opportunity-Kontext
+- kein automatisches Fetching von URLs aus `.meddpicc`-Dateien
 
-The interface must respect the project's local-first architecture.
+Externe Runtime-Ressourcen benötigen ausdrückliche Architektur- und Privacy-Prüfung.
 
-Default rules:
+## 22. Design Tokens
 
-- no Google Fonts request
-- no CDN JavaScript
-- no remote icon library at runtime
-- no analytics/tracking scripts that can receive opportunity context
-- no automatic fetch of URLs stored inside `.meddpicc` files
+Bei Implementierungsstart zentrale Tokens mindestens für:
 
-If external runtime resources are ever proposed, they require explicit architectural and privacy review.
+- Farben
+- Spacing
+- Typografie
+- Radii
+- Borders
+- Focus Ring
+- Control Heights
+- Sidebar-/Header-Maße
+- z-index Layer
+- Motion Durations
 
-## 21. Design tokens
+Komponenten konsumieren Tokens statt eigene Einzelwerte zu erfinden.
 
-When implementation starts, create central tokens for at least:
+## 23. UI-Qualitätscheckliste
 
-- colors
-- spacing
-- typography
-- radii
-- borders
-- focus ring
-- control heights
-- sidebar/header dimensions
-- z-index layers
-- motion durations
+Vor Merge einer UI-Änderung:
 
-Components must consume tokens rather than create isolated visual constants.
-
-## 22. UI quality checklist
-
-Before merging a UI change:
-
-- [ ] The opportunity context remains clear.
-- [ ] The most important gap/action is easy to find.
-- [ ] Confirmed/Partial/Assumption/Unknown/Risk are not color-only.
-- [ ] Keyboard navigation works.
-- [ ] Focus is visible.
-- [ ] Long labels and values do not break the layout.
-- [ ] 375/768/1024/1440-width behavior was considered/tested.
-- [ ] Zoom/text scaling does not clip essential content.
-- [ ] Any chart is justified and has a non-visual alternative.
-- [ ] Motion respects reduced-motion settings.
-- [ ] No unnecessary runtime network dependency was introduced.
-- [ ] The screen looks like one product, not a collection of unrelated components.
+- [ ] Opportunity-Kontext bleibt klar.
+- [ ] Wichtigstes Gap / wichtigste Aktion ist schnell sichtbar.
+- [ ] Bestätigt/Teilweise/Annahme/Unbekannt/Risiko funktioniert nicht nur über Farbe.
+- [ ] Tastaturnavigation funktioniert.
+- [ ] Fokus ist sichtbar.
+- [ ] Lange Labels/Werte brechen das Layout nicht.
+- [ ] 375/768/1024/1440 px wurden berücksichtigt.
+- [ ] Zoom/Textskalierung clippt keine wesentlichen Inhalte.
+- [ ] Jeder Chart ist begründet und hat eine nichtvisuelle Alternative.
+- [ ] Motion respektiert Reduced Motion.
+- [ ] Keine unnötige Runtime-Netzwerkabhängigkeit wurde hinzugefügt.
+- [ ] Normale UI-Sprache ist Deutsch; MEDDPICC-Fachbegriffe bleiben korrekt.
+- [ ] Der Screen wirkt wie ein Teil eines konsistenten Produkts.
