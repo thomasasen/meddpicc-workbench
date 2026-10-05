@@ -1,84 +1,88 @@
-# Security and Privacy
+# Security und Privacy
 
-## Security model
+## Security-Modell
 
-MEDDPICC Workbench is designed as a static local-first browser application.
+MEDDPICC Workbench ist als statische local-first Browser-Anwendung konzipiert.
 
-The intended default data flow is:
+Vorgesehener Standard-Datenfluss:
 
 ```text
-local .meddpicc file
+lokale .meddpicc-Datei
         ↓
-browser memory
+Browser Memory
         ↓
-local save/download
+lokales Speichern / Download
 ```
 
-Opportunity content should not require a backend or external API.
+Opportunity-Inhalte benötigen kein Backend und keine externe API.
 
-## Privacy promises we can reasonably make
+## Realistische Privacy-Aussage
 
-The project should be engineered so that the application itself does not intentionally transmit loaded opportunity data during normal local use.
+Die Anwendung soll so gebaut werden, dass sie im normalen lokalen Betrieb geladene Opportunity-Daten **nicht absichtlich überträgt**.
 
-That does **not** mean a web application can guarantee absolute confidentiality. Browser extensions, compromised devices, developer tools, modified builds, third-party hosting changes, or user actions can affect privacy.
+Das bedeutet nicht, dass eine Webanwendung absolute Vertraulichkeit garantieren kann. Browser Extensions, kompromittierte Geräte, Developer Tools, veränderte Builds, Hosting-Änderungen oder Nutzeraktionen können Privacy beeinflussen.
 
-Documentation and UI must therefore avoid absolute claims such as "data can never leave your computer."
+Dokumentation und UI dürfen deshalb keine absoluten Aussagen wie „Daten können niemals den Rechner verlassen“ machen.
 
-## Runtime network policy
+## Runtime-Netzwerkpolicy
 
-The production application should not send project content to:
+Die Produktionsanwendung sendet Projektinhalte standardmäßig nicht an:
 
-- analytics services
-- AI services
-- error-reporting services
-- ad networks
-- remote databases
-- CRM systems
+- Analytics Services
+- AI Services
+- Error Reporting Services
+- Werbenetzwerke
+- Remote-Datenbanken
+- CRM-Systeme
 
-unless a future integration is explicitly enabled by the user and clearly separated from the default local-only mode.
+Eine spätere Integration muss explizit vom Nutzer aktiviert und klar vom lokalen Standardmodus getrennt sein.
 
-## Static assets
+## Statische Assets
 
-Prefer bundling runtime assets with the application.
+Runtime-Assets möglichst mit der Anwendung bundlen.
 
-Avoid external fonts, scripts, or trackers when the same result can be achieved with packaged assets.
+Externe Fonts, Scripts und Tracker vermeiden, wenn das gleiche Ergebnis mit gebündelten Assets möglich ist.
 
-## Imported project files are untrusted
+## Importierte Projektdateien sind untrusted
 
-The loader must defend against:
+Loader muss absichern gegen:
 
-- malformed JSON
-- oversized files
-- unexpected types
-- prototype-pollution style objects
-- unsafe URLs
-- HTML/script strings
-- unsupported schema versions
+- fehlerhaftes JSON
+- übergroße Dateien
+- unerwartete Datentypen
+- Prototype-Pollution-artige Objekte
+- unsichere URLs
+- HTML-/Script-Strings
+- nicht unterstützte Schema-Versionen
 
-Project content must be rendered as data, never executed.
+Projektinhalt ist Datenmaterial und darf niemals ausgeführt werden.
 
-## Saving files
+## Speichern
 
-Before saving:
+Vor Save:
 
-1. validate the current project
-2. serialize through the canonical schema/model
-3. update revision metadata
-4. preserve compatible unknown data according to the schema policy
-5. never mark the project as saved before the browser save/download operation succeeds
+1. aktuellen Projektstand validieren
+2. über kanonisches Schema/Model serialisieren
+3. Revision-Metadaten aktualisieren
+4. kompatible unbekannte Daten gemäß Policy erhalten
+5. Projekt erst als gespeichert markieren, wenn Save/Download erfolgreich war
 
-## Vulnerability reporting
+## Vulnerability Reporting
 
-Please do not publish sensitive exploit details in a public issue.
+Sensible Exploit-Details nicht in einem öffentlichen Issue veröffentlichen.
 
-Use GitHub's private security reporting / Security Advisory mechanism for this repository when available. If that mechanism is not enabled, open a minimal non-sensitive issue asking for a private reporting channel without including exploit details.
+GitHub Private Security Reporting / Security Advisory verwenden, sofern verfügbar. Andernfalls nur ein minimales nicht sensibles Issue eröffnen, das um einen privaten Meldekanal bittet.
 
-## Dependency security
+## Dependency Security
 
-Once application dependencies are added:
+Sobald Dependencies hinzukommen:
 
-- keep the dependency surface small
-- use lockfiles
-- enable automated dependency alerts
-- review runtime dependencies more strictly than development-only tooling
-- avoid dependencies that add telemetry or runtime remote code
+- Dependency Surface klein halten
+- Lockfiles verwenden
+- automatisierte Dependency Alerts aktivieren
+- Runtime Dependencies strenger prüfen als reine Dev Dependencies
+- Dependencies mit Telemetrie oder Runtime Remote Code vermeiden
+
+## Projektsprache
+
+Security-Dokumentation und Nutzerwarnungen sind deutsch. Etablierte technische Security-Begriffe können Englisch bleiben, wenn das präziser und üblicher ist.

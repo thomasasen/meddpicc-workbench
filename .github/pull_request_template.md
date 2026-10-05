@@ -1,41 +1,47 @@
-## Summary
+## Zusammenfassung
 
-Describe what this pull request changes and why.
+Beschreibe, was dieser Pull Request ändert und warum.
 
 ## Scope
 
-- [ ] UI only
-- [ ] Domain logic
-- [ ] `.meddpicc` schema
+- [ ] nur UI
+- [ ] Domain Logic
+- [ ] `.meddpicc`-Schema
 - [ ] Migration
-- [ ] Calculation / deterministic rule
-- [ ] Documentation
-- [ ] Build / CI / deployment
+- [ ] Berechnung / deterministische Regel
+- [ ] Dokumentation
+- [ ] Build / CI / Deployment
 
-## Project-file compatibility
+## Project-File-Kompatibilität
 
-- Schema impact: none / patch / minor / major
-- Migration required: yes / no
-- Potential data-loss risk: yes / no
+- Schema-Auswirkung: keine / Patch / Minor / Major
+- Migration erforderlich: ja / nein
+- mögliches Datenverlustrisiko: ja / nein
 
-If applicable, explain the migration and fixture coverage.
+Falls relevant: Migration und Fixture-/Testabdeckung erläutern.
 
-## Privacy / network impact
+## Privacy / Netzwerk
 
-- [ ] No new runtime network requests involving project data
-- [ ] No new telemetry
-- [ ] No backend dependency
+- [ ] Keine neuen Runtime-Netzwerkaufrufe mit Projektdaten
+- [ ] Keine neue Telemetrie
+- [ ] Keine Backend-Abhängigkeit
 
-If any box cannot be checked, explain why and how the behavior is surfaced to users.
+Wenn ein Punkt nicht erfüllt ist, begründen und beschreiben, wie das Verhalten für Nutzer sichtbar gemacht wird.
 
-## Testing
+## Projektsprache
 
-Describe tests added or performed.
+- [ ] UI-Texte und Dokumentation sind deutsch.
+- [ ] Englische Begriffe werden nur als MEDDPICC-/technische Fachbegriffe oder Code-Identifier verwendet.
 
-## Checklist
+## Tests
 
-- [ ] Behavior is deterministic where expected.
-- [ ] Assumption and evidence are not conflated.
-- [ ] Business rules are not hidden only in UI components.
-- [ ] Documentation is updated.
-- [ ] No copyrighted/proprietary training text was copied into the repository.
+Beschreibe hinzugefügte bzw. durchgeführte Tests.
+
+## Checkliste
+
+- [ ] Verhalten ist dort deterministisch, wo es erwartet wird.
+- [ ] Annahme und Evidenz werden nicht vermischt.
+- [ ] Business Rules liegen nicht nur versteckt in UI-Komponenten.
+- [ ] Dokumentation ist aktualisiert.
+- [ ] Bei UI-Änderungen wurde `docs/DESIGN_SYSTEM.md` geprüft.
+- [ ] Es wurden keine Copyright-geschützten/proprietären Trainingstexte kopiert.

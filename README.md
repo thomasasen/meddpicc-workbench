@@ -1,65 +1,72 @@
 # MEDDPICC Workbench
 
-A local-first browser application for managing and qualifying complex B2B sales opportunities with MEDDPICC.
+Eine local-first Browser-Anwendung zur Verwaltung und Qualifizierung komplexer B2B-Opportunities mit MEDDPICC.
 
-The core idea is simple: **the project file is the source of truth**. The application opens a portable `.meddpicc` file, helps the user structure and evaluate the opportunity with deterministic tools, and saves the updated project back to that file. No AI, backend, account, or external database is required at runtime.
+Die Grundidee ist einfach: **Die Projektdatei ist die Source of Truth.** Die Anwendung öffnet eine portable `.meddpicc`-Datei, unterstützt bei der strukturierten Bewertung der Opportunity mit deterministischen Werkzeugen und speichert das aktualisierte Projekt wieder in dieser Datei. Zur Runtime werden weder AI, Backend, Benutzerkonto noch externe Datenbank benötigt.
 
-> **Project status:** foundation / pre-alpha. The repository currently defines the product scope, architecture, project-file concept, UI/UX system, and implementation roadmap. The application itself is not implemented yet.
+> **Projektstatus:** Foundation / Pre-Alpha. Das Repository definiert aktuell Produktscope, Architektur, Projektdateikonzept, UI/UX-System und Umsetzungs-Roadmap. Die eigentliche Anwendung ist noch nicht implementiert.
 
-## Why this project exists
+## Projektsprache
 
-MEDDPICC is useful because it forces sellers to separate what they know from what they merely assume. In practice, however, good qualification creates repetitive work: maintaining evidence, reconstructing decision and paper processes, recalculating business cases, tracking gaps, planning backwards from a target go-live, and preparing deal reviews.
+Die Projektsprache ist **Deutsch**.
 
-MEDDPICC Workbench is intended to remove that administrative friction without replacing seller judgment.
+Deutsch verwenden wir für UI, Dokumentation, Issues, Pull Requests, Hilfetexte und fachliche Beschreibungen. Etablierte MEDDPICC-Begriffe wie `Economic Buyer`, `Decision Process`, `Paper Process` oder `Champion` bleiben im Original. Code, Schema-Keys, API-Namen und andere technische Identifier bleiben Englisch.
 
-It should answer four questions at any point in a deal:
+## Warum dieses Projekt existiert
 
-1. **What do we actually know?**
-2. **What is still assumption or unknown?**
-3. **Which gaps or risks matter?**
-4. **What is the next concrete action to improve qualification?**
+MEDDPICC ist wertvoll, weil es Seller dazu zwingt, zwischen belastbarem Wissen und bloßen Annahmen zu unterscheiden. Gute Qualifizierung erzeugt in der Praxis jedoch viel repetitive Arbeit: Evidenz pflegen, Decision Process und Paper Process rekonstruieren, Business Cases neu berechnen, Gaps verfolgen, vom gewünschten Go-Live rückwärts planen und Deal Reviews vorbereiten.
 
-## Product concept
+MEDDPICC Workbench soll diese administrative Arbeit reduzieren, ohne die fachliche Beurteilung des Sellers zu ersetzen.
 
-A seller creates or opens one opportunity project:
+Zu jedem Zeitpunkt im Deal soll die Anwendung vier Fragen beantworten:
+
+1. **Was wissen wir tatsächlich?**
+2. **Was ist noch Annahme oder unbekannt?**
+3. **Welche Gaps oder Risiken sind relevant?**
+4. **Welche konkrete nächste Aktion verbessert die Qualifizierung?**
+
+## Produktkonzept
+
+Ein Seller erstellt oder öffnet ein Opportunity-Projekt:
 
 ```text
 ACME CRM Transformation.meddpicc
         ↓
 MEDDPICC Workbench
         ↓
-Dashboard + MEDDPICC modules + deterministic utilities
+Dashboard + MEDDPICC-Module + deterministische Tools
         ↓
-Updated .meddpicc project file
+aktualisierte .meddpicc-Projektdatei
         ↓
-Stored alongside the opportunity, e.g. in a CRM
+Ablage bei der Opportunity, z. B. im CRM
 ```
 
-The application should be usable directly through GitHub Pages and run entirely in the browser.
+Die Anwendung soll direkt über GitHub Pages nutzbar sein und vollständig im Browser laufen.
 
-## Core principles
+## Kernprinzipien
 
-- **Local first** — project data is processed in the browser.
-- **No AI at runtime** — all qualification logic, calculations, checks, and exports are deterministic.
-- **No backend required** — GitHub Pages can host the complete application.
-- **Portable project files** — one `.meddpicc` file contains the reusable opportunity state.
-- **Evidence over optimism** — assumptions must never look like confirmed facts.
-- **Gaps become actions** — missing qualification should produce a clear next step.
-- **One data model** — every module reads and writes the same project state.
-- **CRM companion, not CRM replacement** — the Workbench manages MEDDPICC depth, not the entire sales process.
-- **Backward compatible files** — schema versioning and migrations are first-class requirements.
-- **Accessible by design** — keyboard, focus, contrast, responsive behavior, and non-color-only status semantics are baseline requirements.
+- **Local-first** – Projektdaten werden im Browser verarbeitet.
+- **Keine AI zur Runtime** – Qualifizierungslogik, Berechnungen, Prüfungen und Exporte sind deterministisch.
+- **Kein Backend erforderlich** – GitHub Pages kann die vollständige Anwendung hosten.
+- **Portable Projektdateien** – eine `.meddpicc`-Datei enthält den wiederverwendbaren Opportunity-Stand.
+- **Evidenz vor Optimismus** – Annahmen dürfen niemals wie bestätigte Fakten aussehen.
+- **Aus Gaps werden Aktionen** – fehlende Qualifizierung soll zu einer klaren nächsten Aktion führen.
+- **Ein Datenmodell** – jedes Modul liest und schreibt denselben Projektstand.
+- **CRM-Begleiter statt CRM-Ersatz** – die Workbench verwaltet MEDDPICC-Tiefe, nicht den kompletten Sales-Prozess.
+- **Abwärtskompatible Dateien** – Schema-Versionierung und Migrationen sind zentrale Anforderungen.
+- **Accessible by Design** – Tastatur, Fokus, Kontrast, Responsive-Verhalten und nicht farbabhängige Statussemantik sind Basisanforderungen.
+- **Deutsch als Produktsprache** – außer bei etablierten Fachbegriffen und technischen Identifiern.
 
-## Planned workspace
+## Geplanter Workspace
 
-### Project
+### Projekt
 
-- Opportunity metadata
-- Deal-health overview
-- Evidence register
-- Risks
-- Next actions
-- Change history
+- Opportunity-Metadaten
+- Deal-Health-Übersicht
+- Evidenzregister
+- Risiken
+- nächste Aktionen
+- Änderungshistorie
 
 ### MEDDPICC
 
@@ -72,137 +79,137 @@ The application should be usable directly through GitHub Pages and run entirely 
 - Champion
 - Competition
 
-### Deterministic utilities
+### Deterministische Tools
 
-- Metrics and value calculator
-- ROI and payback calculator
-- Cost-of-delay calculator
-- Go-live / critical-path planner
-- Closing checklist
-- Confidence / evidence scoring
-- Decision-criteria matrix
-- Champion evidence check
+- Metrics- und Value-Calculator
+- ROI- und Payback-Calculator
+- Cost-of-Delay-Calculator
+- Go-Live-/Critical-Path-Planer
+- Closing Checklist
+- Confidence-/Evidence-Scoring
+- Decision-Criteria-Matrix
+- Champion-Evidence-Check
 
 ### Output
 
-- Executive deal review
-- Manager deal review
-- MEDDPICC summary
-- Customer-facing go-live plan
-- CRM-ready summary
-- JSON/`.meddpicc` export
+- Executive Deal Review
+- Manager Deal Review
+- MEDDPICC-Zusammenfassung
+- kundenfähiger Go-Live-Plan
+- CRM-fähige Zusammenfassung
+- JSON-/`.meddpicc`-Export
 
-## What a project file should contain
+## Inhalt einer Projektdatei
 
-A `.meddpicc` project is planned as human-readable JSON with its own file extension. It will hold:
+Ein `.meddpicc`-Projekt ist für v1 als menschenlesbares JSON mit eigener Dateiendung geplant. Es enthält unter anderem:
 
-- project metadata
-- all MEDDPICC elements
-- structured evidence and source references
-- assumptions and unknowns
-- risks and qualification gaps
-- next actions
-- business-case inputs and calculated outputs
-- decision and paper-process steps
-- go-live planning data
-- scoring results
-- project history
-- schema and application version metadata
+- Projektmetadaten
+- alle MEDDPICC-Elemente
+- strukturierte Evidenz und Quellenreferenzen
+- Annahmen und unbekannte Informationen
+- Risiken und Qualification Gaps
+- nächste Aktionen
+- Business-Case-Eingaben und berechnete Ergebnisse
+- Schritte aus Decision Process und Paper Process
+- Go-Live-Planungsdaten
+- Scoring-Ergebnisse
+- Projekthistorie
+- Schema- und Anwendungsversion
 
-The first version will deliberately avoid embedded binary attachments. Documents can be referenced by title, CRM ID, URL, or other metadata without making the project file unnecessarily large.
+Die erste Version bettet bewusst keine Binäranhänge ein. Dokumente können über Titel, CRM-ID, URL oder andere Metadaten referenziert werden, ohne die Projektdatei unnötig groß zu machen.
 
-See [Project File Specification](docs/PROJECT_FILE_SPEC.md).
+Siehe [Spezifikation der Projektdatei](docs/PROJECT_FILE_SPEC.md).
 
-## Intended architecture
+## Geplante Architektur
 
-The planned technical baseline is:
+Technische Basis:
 
 - Vue 3
 - TypeScript
 - Vite
 - Pinia
 - Vue Router
-- schema validation for `.meddpicc` files
-- Vitest for unit tests
-- Playwright for key browser flows
-- GitHub Actions for build/test/deploy
-- GitHub Pages for hosting
+- Schema-Validierung für `.meddpicc`-Dateien
+- Vitest für Unit Tests
+- Playwright für zentrale Browser-Flows
+- GitHub Actions für Build/Test/Deployment
+- GitHub Pages für Hosting
 
-Browser storage may be used for recovery or convenience, but must never silently replace the project file as the canonical state.
+Browser Storage darf für Recovery oder Komfort genutzt werden, darf die Projektdatei aber niemals stillschweigend als kanonischen Projektstand ersetzen.
 
-See [Architecture](docs/ARCHITECTURE.md).
+Siehe [Architektur](docs/ARCHITECTURE.md).
 
-## UI/UX engineering
+## UI/UX Engineering
 
-The application has a repository-specific design system before implementation begins.
+Die Anwendung besitzt bereits vor der Implementierung ein projektspezifisches Design System.
 
-The visual direction is deliberately **enterprise-workbench**, not marketing-SaaS:
+Die visuelle Richtung ist bewusst **Enterprise Workbench** und nicht Marketing-SaaS:
 
-- accessible and semantic
-- minimal / Swiss-style hierarchy
-- data-dense but readable
-- overview → drill-down → evidence
-- restrained semantic color
-- minimal decorative motion
-- system/local fonts and bundled assets
-- no color-only MEDDPICC status meaning
+- zugänglich und semantisch
+- minimale/Swiss Informationshierarchie
+- informationsdicht, aber lesbar
+- Übersicht → Drill-Down → Evidenz
+- zurückhaltende semantische Farben
+- minimale dekorative Bewegung
+- System-/lokale Fonts und gebündelte Assets
+- keine MEDDPICC-Statusbedeutung ausschließlich über Farbe
 
-The project uses [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) as an **external development reference only**. It is not part of the production runtime.
+Das Projekt nutzt [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) ausschließlich als **externe Entwicklungsreferenz**. Es ist kein Bestandteil der Produktions-Runtime.
 
-Repository guidance for coding assistants is provided through:
+Anweisungen für Coding Assistants liegen in:
 
 - `AGENTS.md`
 - `.github/copilot-instructions.md`
 - `.agents/skills/meddpicc-ui-ux/SKILL.md`
 
-See [Design System](docs/DESIGN_SYSTEM.md) and [UI/UX Development Reference](docs/UI_UX_REFERENCE.md).
+Siehe [Design System](docs/DESIGN_SYSTEM.md) und [UI/UX-Entwicklungsreferenz](docs/UI_UX_REFERENCE.md).
 
-## Scope boundaries
+## Scope-Grenzen
 
-MEDDPICC Workbench is **not** intended to become:
+MEDDPICC Workbench soll **nicht** werden:
 
-- a CRM
-- an email client
-- a calendar
-- a contact database
-- a pipeline-management system
-- a generative-AI sales assistant
-- a cloud repository for customer data
+- CRM
+- E-Mail-Client
+- Kalender
+- Kontaktdatenbank
+- Pipeline-Management-System
+- generativer AI Sales Assistant
+- Cloud-Ablage für Kundendaten
 
-Keeping these boundaries is important. The product should remain a focused qualification and deal-planning companion.
+Diese Grenzen sind wichtig. Das Produkt soll ein fokussierter Begleiter für Qualifizierung und Deal Planning bleiben.
 
 ## Roadmap
 
-The implementation is split into small, testable phases:
+Die Umsetzung erfolgt in kleinen, testbaren Phasen:
 
-1. Project foundation, design system, and technical skeleton
-2. `.meddpicc` file lifecycle and schema validation
-3. Dashboard, evidence, risks, actions, and history
-4. Core MEDDPICC modules
-5. Deterministic utilities
-6. Exports and CRM handoff
-7. Hardening, accessibility, offline support, and migrations
+1. Projektgrundlage, Design System und technisches Grundgerüst
+2. `.meddpicc`-Dateilifecycle und Schema-Validierung
+3. Dashboard, Evidenz, Risiken, Aktionen und Historie
+4. MEDDPICC-Kernmodule
+5. deterministische Tools
+6. Exporte und CRM-Handoff
+7. Hardening, Accessibility, Offline-Nutzung und Migrationen
 
-See the detailed [Roadmap](docs/ROADMAP.md).
+Siehe die ausführliche [Roadmap](docs/ROADMAP.md).
 
-## Documentation
+## Dokumentation
 
-- [Project Charter](docs/PROJECT_CHARTER.md)
-- [Architecture](docs/ARCHITECTURE.md)
-- [Project File Specification](docs/PROJECT_FILE_SPEC.md)
+- [Projektauftrag](docs/PROJECT_CHARTER.md)
+- [Architektur](docs/ARCHITECTURE.md)
+- [Spezifikation der Projektdatei](docs/PROJECT_FILE_SPEC.md)
 - [Design System](docs/DESIGN_SYSTEM.md)
-- [UI/UX Development Reference](docs/UI_UX_REFERENCE.md)
+- [UI/UX-Entwicklungsreferenz](docs/UI_UX_REFERENCE.md)
 - [Roadmap](docs/ROADMAP.md)
-- [Contributing](CONTRIBUTING.md)
+- [Beitragen](CONTRIBUTING.md)
 - [Security & Privacy](SECURITY.md)
-- [Agent Instructions](AGENTS.md)
+- [Agent-Anweisungen](AGENTS.md)
 
-## Methodology and content
+## Methodik und Inhalte
 
-This project implements general MEDDPICC qualification concepts as structured software workflows. The implementation should use original wording and deterministic rules. It must not reproduce copyrighted book text, proprietary training material, or third-party course content.
+Dieses Projekt setzt allgemeine MEDDPICC-Konzepte als strukturierte Software-Workflows um. Die Implementierung verwendet eigene Formulierungen und deterministische Regeln. Copyright-geschützte Buchtexte, proprietäre Trainingsunterlagen oder Inhalte fremder Kurse dürfen nicht reproduziert werden.
 
-The application is an independent open-source project and is not presented as an official MEDDPICC training product or as being affiliated with any methodology provider or author.
+Die Anwendung ist ein unabhängiges Open-Source-Projekt und wird nicht als offizielles MEDDPICC-Trainingsprodukt oder als mit einem Methodikanbieter bzw. Autor verbunden dargestellt.
 
-## License
+## Lizenz
 
-MIT. See [LICENSE](LICENSE).
+MIT. Siehe [LICENSE](LICENSE).

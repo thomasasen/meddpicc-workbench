@@ -1,41 +1,41 @@
-# Architecture
+# Architektur
 
-## Architectural goal
+## Architekturziel
 
-MEDDPICC Workbench should be deployable as a static GitHub Pages application while still providing a robust project-based workflow.
+MEDDPICC Workbench soll als statische GitHub-Pages-Anwendung deploybar sein und trotzdem einen robusten projektbasierten Workflow bieten.
 
-The central rule is:
+Zentrale Regel:
 
-> **The `.meddpicc` project file is the canonical state. Browser storage is optional recovery/cache state only.**
+> **Die `.meddpicc`-Projektdatei ist der kanonische Projektstand. Browser Storage ist nur optionaler Recovery-/Cache-State.**
 
-## High-level architecture
+## High-Level-Architektur
 
 ```text
                  GitHub Pages
                      │
                      ▼
-              Static Vue application
+              statische Vue-App
                      │
           ┌──────────┴──────────┐
           ▼                     ▼
-   Project file I/O       Deterministic services
-   (.meddpicc JSON)       calculations / checks
+    Project File I/O      deterministische
+   (.meddpicc JSON)       Domain Services
           │                     │
           └──────────┬──────────┘
                      ▼
-                Pinia state
+                Pinia State
                      │
           ┌──────────┼──────────┐
           ▼          ▼          ▼
-      MEDDPICC    Dashboard   Exports
-       modules
+      MEDDPICC    Dashboard   Exporte
+       Module
 ```
 
-There is no application backend in the intended v1 architecture.
+Für v1 ist kein Application Backend vorgesehen.
 
-## Proposed stack
+## Geplanter Stack
 
-### Application
+### Anwendung
 
 - Vue 3
 - TypeScript
@@ -43,211 +43,221 @@ There is no application backend in the intended v1 architecture.
 - Vue Router
 - Pinia
 
-### Validation
+### Validierung
 
-Use a single explicit runtime schema for project files. The implementation may use a TypeScript-friendly validator such as Zod or JSON Schema plus generated types, but the repository must avoid having two divergent definitions of the file format.
+Es gibt genau ein explizites Runtime-Schema für Projektdateien.
 
-Requirements:
+Möglich sind z. B. Zod oder JSON Schema mit generierten Typen. Entscheidend ist, dass nicht zwei voneinander abweichende Definitionen des Dateiformats entstehen.
 
-- parse untrusted local files defensively
-- reject malformed required data
-- retain compatible optional data
-- provide actionable validation errors
-- support explicit schema migrations
+Anforderungen:
 
-### Testing
+- lokale Dateien defensiv als untrusted Input behandeln
+- fehlerhafte Pflichtdaten ablehnen
+- kompatible optionale Daten erhalten
+- verständliche Validierungsfehler liefern
+- explizite Schema-Migrationen unterstützen
 
-- **Vitest** for calculations, stores, validation, and migrations
-- **Playwright** for critical file lifecycle and browser flows
-- fixture projects for old/current/invalid schema versions
+### Tests
+
+- **Vitest** für Berechnungen, Stores, Validierung und Migrationen
+- **Playwright** für zentrale File-Lifecycle- und Browser-Flows
+- Fixture-Projekte für alte, aktuelle und ungültige Schema-Versionen
 
 ### Delivery
 
 - GitHub Actions
-- production build on pull request
-- test gate before deploy
-- deploy static build to GitHub Pages from `main`
+- Production Build bei Pull Requests
+- Test Gate vor Deployment
+- statischer Deploy nach GitHub Pages aus `main`
 
-## Domain layers
+## Domain Layer
 
-### 1. Project model
+### 1. Projektmodell
 
-Owns the canonical opportunity state.
+Besitzt den kanonischen Opportunity-State.
 
-Examples:
+Beispiele:
 
-- metadata
-- MEDDPICC sections
-- evidence
-- risks
-- actions
-- history
-- calculator inputs
-- derived settings
+- Metadaten
+- MEDDPICC-Bereiche
+- Evidenz
+- Risiken
+- Aktionen
+- Historie
+- Calculator-Inputs
+- Einstellungen für abgeleitete Regeln
 
-### 2. Domain services
+### 2. Domain Services
 
-Pure deterministic functions wherever possible.
+Wo möglich reine deterministische Funktionen.
 
-Examples:
+Beispiele:
 
-- ROI calculation
-- payback calculation
-- cost-of-delay calculation
-- critical-path calculation
-- qualification status derivation
-- evidence completeness checks
-- timeline consistency checks
-- export rendering
+- ROI-Berechnung
+- Payback-Berechnung
+- Cost-of-Delay-Berechnung
+- Critical-Path-Berechnung
+- Ableitung von Qualifizierungsstatus
+- Prüfung von Evidence Completeness
+- Timeline-Konsistenzprüfung
+- Export-Rendering
 
-A domain service should not know about Vue components.
+Ein Domain Service kennt keine Vue-Komponenten.
 
-### 3. Application state
+### 3. Application State
 
-Pinia stores provide the currently loaded working state.
+Pinia Stores halten den aktuell geladenen Arbeitsstand.
 
-They are responsible for:
+Verantwortung:
 
-- loading a validated project
-- tracking dirty state
-- applying edits
-- invoking domain services
-- coordinating save/export
-- exposing derived UI state
+- validiertes Projekt laden
+- Dirty State verfolgen
+- Änderungen anwenden
+- Domain Services aufrufen
+- Save/Export koordinieren
+- abgeleiteten UI-State bereitstellen
 
 ### 4. UI
 
-The UI should render domain state and collect user input. Business rules should not be hidden inside components.
+Das UI stellt Domain State dar und sammelt Eingaben.
 
-## Project file lifecycle
+Business Rules dürfen nicht versteckt in Komponenten liegen.
 
-### Open
+## Lifecycle einer Projektdatei
 
-1. User selects a `.meddpicc` file.
-2. Read as text.
-3. Parse JSON.
-4. Validate envelope and schema version.
-5. Migrate if supported.
-6. Validate migrated project.
-7. Load into application state.
-8. Mark project clean.
+### Öffnen
 
-### Edit
+1. Nutzer wählt `.meddpicc`-Datei.
+2. Datei als Text lesen.
+3. JSON parsen.
+4. Envelope und Schema-Version validieren.
+5. Falls unterstützt migrieren.
+6. Migriertes Projekt erneut validieren.
+7. In Application State laden.
+8. Projekt als unverändert markieren.
 
-- edits update in-memory project state
-- deterministic derived values recompute
-- project becomes dirty
-- changes that matter for audit may create history events
+### Bearbeiten
 
-### Save
+- Änderungen aktualisieren den In-Memory-Projektstand.
+- deterministische abgeleitete Werte werden neu berechnet.
+- Projekt wird dirty.
+- auditrelevante Änderungen können History Events erzeugen.
 
-1. Validate current project.
-2. Normalize fields.
-3. update `updatedAt` and revision
-4. serialize stable JSON
-5. download/write the `.meddpicc` file
-6. mark state clean only after successful save operation
+### Speichern
 
-## Browser file APIs
+1. aktuellen Projektstand validieren
+2. Felder normalisieren
+3. `updatedAt` und `revision` aktualisieren
+4. stabiles JSON serialisieren
+5. `.meddpicc` speichern/downloaden
+6. erst nach erfolgreichem Save als clean markieren
 
-The baseline must work through standard file upload + download APIs.
+## Browser File APIs
 
-The File System Access API may be used as progressive enhancement for browsers that support direct reopen/save behavior. It must not be a hard dependency because support differs between browsers.
+Die Basis muss mit normalem File Upload + Download funktionieren.
 
-## Browser persistence
+Die File System Access API darf als Progressive Enhancement für Browser mit direktem Reopen/Save dienen. Sie darf keine harte Abhängigkeit sein.
 
-Optional local persistence can improve resilience, but it must be clearly separated from canonical project storage.
+## Browser Persistence
 
-Allowed uses:
+Lokale Persistenz kann Resilienz verbessern, muss aber klar vom kanonischen Projektstand getrennt bleiben.
 
-- crash recovery
-- unsaved-change recovery
-- recently opened project metadata
-- user preferences
+Erlaubt:
 
-Not allowed:
+- Crash Recovery
+- Recovery ungespeicherter Änderungen
+- Metadaten zuletzt geöffneter Projekte
+- Benutzereinstellungen
 
-- silently treating browser storage as the only project copy
-- syncing opportunity content to third-party storage
-- claiming data is saved when it exists only in volatile memory
+Nicht erlaubt:
 
-## Derived vs persisted data
+- Browser Storage still als einzige Projektkopie behandeln
+- Opportunity-Inhalte zu Drittanbietern synchronisieren
+- „gespeichert“ anzeigen, obwohl Daten nur in volatilem State liegen
 
-Prefer persisting inputs and qualification records. Derived values can be recalculated.
+## Persistierte vs. abgeleitete Daten
 
-Examples of good persisted data:
+Bevorzugt Inputs und Qualifizierungsrecords persistieren. Abgeleitete Werte neu berechnen.
 
-- investment amount
-- annual benefit assumption
-- process duration
-- dependency
-- evidence classification
+Gut persistierbar:
 
-Examples of normally derived data:
+- Investment
+- Annual Benefit Assumption
+- Prozessdauer
+- Abhängigkeit
+- Evidenzklassifikation
+
+Normalerweise abgeleitet:
 
 - ROI
-- payback
-- cost of delay per month
-- schedule slack
-- dashboard counts
-- score summaries
+- Payback
+- Cost of Delay pro Monat
+- Schedule Slack
+- Dashboard Counts
+- Score Summaries
 
-If a derived value is persisted for audit reasons, store the calculation version and inputs that produced it.
+Falls ein abgeleiteter Wert aus Audit-Gründen gespeichert wird, Calculation Version und Inputs mitführen.
 
-## History model
+## History-Modell
 
-History should be useful without recording every keystroke.
+History soll sinnvoll sein, ohne jeden Tastendruck zu protokollieren.
 
-Candidate events:
+Mögliche Events:
 
-- project created
-- MEDDPICC status changed
-- assumption confirmed/rejected
-- critical process date changed
-- risk opened/closed
-- action completed
-- project schema migrated
+- Projekt erstellt
+- MEDDPICC-Status geändert
+- Annahme bestätigt/verworfen
+- kritisches Prozessdatum geändert
+- Risiko geöffnet/geschlossen
+- Aktion erledigt
+- Schema migriert
 
-History entries should reference stable IDs where possible.
+Wo möglich stabile IDs referenzieren.
 
-## Deterministic rule engine
+## Deterministic Rule Engine
 
-Rules should be implemented as pure functions with tests.
+Regeln als reine Funktionen mit Tests.
 
-Example:
+Beispiel:
 
 ```text
-Paper Process step has no owner
-AND step is required
-AND target close date depends on it
-→ create/display process gap
+Paper-Process-Schritt hat keinen Owner
+UND Schritt ist erforderlich
+UND Target Close hängt davon ab
+→ Process Gap anzeigen/erzeugen
 ```
 
-The application must distinguish between:
+Die Anwendung unterscheidet:
 
-- source data
-- deterministic derived findings
-- human judgment / manual status
+- Source Data
+- deterministisch abgeleitete Findings
+- menschliche Beurteilung / manuellen Status
 
-Derived findings should always be explainable by showing which input fields triggered them.
+Abgeleitete Findings müssen erklärbar sein und die auslösenden Inputs zeigen können.
 
-## Security and privacy architecture
+## Security- und Privacy-Architektur
 
-Production runtime should not require network calls for project processing.
+Zur Production Runtime sind für Projektverarbeitung keine Netzwerkaufrufe erforderlich.
 
-External dependencies are build-time assets bundled into the application. Any future runtime integration must be opt-in, documented, and isolated from the default local-only mode.
+Externe Dependencies werden beim Build gebündelt. Künftige Runtime-Integrationen müssen opt-in, dokumentiert und vom lokalen Standardmodus getrennt sein.
 
-See [SECURITY.md](../SECURITY.md).
+Siehe [SECURITY.md](../SECURITY.md).
 
-## Future architecture decisions
+## Projektsprache und technische Namen
 
-Not required for the first implementation:
+Dokumentation und UI sind deutsch.
 
-- PWA/offline installation
-- encrypted project files
-- optional cloud sync
-- CRM API adapters
-- team collaboration
-- plugin architecture
+Code, Schema-Keys, Typen, APIs und technische Identifier bleiben Englisch. MEDDPICC-Fachbegriffe bleiben im Original, wenn dies fachlich präziser ist.
 
-These should be evaluated only after the file model and single-user local workflow are stable.
+## Spätere Architekturentscheidungen
+
+Nicht für die erste Umsetzung erforderlich:
+
+- PWA/Offline-Installation
+- verschlüsselte Projektdateien
+- optionaler Cloud Sync
+- CRM API Adapter
+- Team Collaboration
+- Plugin Architecture
+
+Erst bewerten, wenn Dateimodell und lokaler Single-User-Workflow stabil sind.

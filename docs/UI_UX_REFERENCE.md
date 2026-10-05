@@ -1,74 +1,74 @@
-# UI/UX Development Reference
+# UI/UX-Entwicklungsreferenz
 
-## Purpose
+## Zweck
 
-MEDDPICC Workbench uses **UI UX Pro Max** by NextLevelBuilder as an external development reference for UI/UX design and implementation reviews.
+MEDDPICC Workbench nutzt **UI UX Pro Max** von NextLevelBuilder als externe Entwicklungsreferenz für UI/UX-Design und Reviews.
 
 Repository:
 
 `nextlevelbuilder/ui-ux-pro-max-skill`
 
-The upstream project is **not** a runtime dependency of MEDDPICC Workbench.
+Das Upstream-Projekt ist **keine Runtime-Abhängigkeit** von MEDDPICC Workbench.
 
-## Reviewed upstream snapshot
+## Geprüfter Upstream-Stand
 
-The initial design-system decisions in this repository were informed by:
+Die initialen Design-System-Entscheidungen basieren auf:
 
-- upstream version metadata: **2.13.0**
-- upstream `main` commit reviewed: `477bcb28c9812b385cb51a4605ddf30d7b2266e2`
-- license: MIT
+- Upstream-Version: **2.13.0**
+- geprüftem `main`-Commit: `477bcb28c9812b385cb51a4605ddf30d7b2266e2`
+- Lizenz: MIT
 
-Pinning the reviewed commit makes our design provenance reproducible. A future review may update this reference after checking upstream changes.
+Der gepinnte Commit macht die Design-Provenienz reproduzierbar. Ein späteres Review kann diesen Stand aktualisieren.
 
-## Why we use it
+## Warum wir es nutzen
 
-The upstream project contains structured guidance for:
+Das Upstream-Projekt enthält strukturierte Guidance für:
 
 - Vue
-- accessibility
-- forms and interaction
-- responsive behavior
-- data-dense dashboards
-- drill-down analytics
-- chart selection
-- typography and color systems
-- UI anti-patterns
+- Accessibility
+- Formulare und Interaktion
+- Responsive-Verhalten
+- Data-Dense Dashboards
+- Drill-Down Analytics
+- Chart-Auswahl
+- Typografie- und Farbsysteme
+- UI-Anti-Patterns
 
-These are useful during development because MEDDPICC Workbench combines dense opportunity data, structured forms, evidence tables, timelines, statuses, and management dashboards.
+Das ist für MEDDPICC Workbench relevant, weil die Anwendung dichte Opportunity-Daten, strukturierte Formulare, Evidenztabellen, Timelines, Status und Management-Dashboards kombiniert.
 
-## What we use from it
+## Was wir daraus verwenden
 
-We use its guidance as **design intelligence**, especially around:
+Wir nutzen die Inhalte als **Design Intelligence**, insbesondere für:
 
-1. Vue 3 implementation practices
-2. accessible semantic controls
-3. keyboard/focus behavior
-4. responsive layouts
-5. information-dense enterprise dashboards
-6. drill-down navigation
-7. chart and data-table accessibility
-8. avoiding color-only meaning
+1. Vue-3-Implementierung
+2. zugängliche semantische Controls
+3. Keyboard-/Focus-Verhalten
+4. Responsive Layouts
+5. informationsdichte Enterprise-Dashboards
+6. Drill-Down-Navigation
+7. Chart- und Tabellen-Accessibility
+8. Vermeidung von Color-only-Semantik
 
-The resulting MEDDPICC-specific rules are maintained in `docs/DESIGN_SYSTEM.md`.
+Die daraus abgeleiteten MEDDPICC-spezifischen Regeln stehen in `docs/DESIGN_SYSTEM.md`.
 
-## What we deliberately do not adopt
+## Was wir bewusst nicht übernehmen
 
-Generic recommendations are never automatically authoritative.
+Generische Empfehlungen sind nicht automatisch verbindlich.
 
-For example, upstream SaaS recommendations may include visual styles that are inappropriate for this product. MEDDPICC Workbench deliberately avoids:
+Upstream-SaaS-Empfehlungen können beispielsweise visuelle Stile enthalten, die für unsere Anwendung ungeeignet sind. MEDDPICC Workbench vermeidet bewusst:
 
-- glassmorphism as a primary app style
-- decorative gradients
-- marketing hero layouts in the working application
-- excessive micro-animation
-- external Google Fonts at runtime
-- visual complexity that reduces deal-review speed
+- Glassmorphism als primären App-Stil
+- dekorative Gradienten
+- Marketing-Hero-Layouts in der Arbeitsoberfläche
+- übermäßige Micro-Animation
+- externe Google Fonts zur Runtime
+- visuelle Komplexität zulasten der Deal-Review-Geschwindigkeit
 
-The project design system always has precedence.
+Das projektspezifische Design System hat immer Vorrang.
 
-## Useful upstream locations
+## Relevante Upstream-Pfade
 
-At the pinned commit, the most relevant source areas are:
+Beim gepinnten Commit insbesondere:
 
 - `src/ui-ux-pro-max/data/stacks/vue.csv`
 - `src/ui-ux-pro-max/data/styles.csv`
@@ -77,35 +77,39 @@ At the pinned commit, the most relevant source areas are:
 - `.claude/skills/ui-ux-pro-max/references/quick-reference.md`
 - `src/ui-ux-pro-max/templates/platforms/codex.json`
 
-## Agent integration
+## Agent-Integration
 
-The upstream project supports Codex skills under `.agents/skills/`.
+Das Upstream-Projekt unterstützt Codex-Skills unter `.agents/skills/`.
 
-Rather than vendoring the full upstream skill, this repository provides a focused local skill:
+Wir vendoren nicht den kompletten Skill, sondern pflegen einen fokussierten lokalen Skill:
 
 `.agents/skills/meddpicc-ui-ux/SKILL.md`
 
-That skill contains only the MEDDPICC Workbench-specific workflow and points back to this document for external reference provenance.
-
-We also maintain:
+Zusätzlich:
 
 - `AGENTS.md`
 - `.github/copilot-instructions.md`
 
-This keeps the design constraints visible to multiple coding-assistant workflows.
+So bleiben die Designregeln für unterschiedliche Coding-Assistant-Workflows sichtbar.
 
-## Runtime boundary
+## Projektsprache
 
-UI UX Pro Max must not be imported into the production bundle merely to provide development guidance.
+Auch bei Verwendung externer englischer Quellen bleibt die Projektsprache Deutsch.
 
-No Python search engine, AI agent, design recommender, or remote UI UX Pro Max service is required for the deployed application.
+Upstream-Begriffe dürfen als Fachbegriffe übernommen werden. Eigene UI-Texte, Dokumentation und fachliche Erklärungen werden deutsch formuliert.
 
-The finished GitHub Pages application remains deterministic and local-first.
+## Runtime-Grenze
 
-## License and attribution
+UI UX Pro Max darf nicht nur wegen seiner Entwicklungs-Guidance in den Production Bundle importiert werden.
 
-UI UX Pro Max is licensed under the MIT License by Next Level Builder.
+Kein Python-Suchsystem, AI Agent, Design Recommender oder Remote-Service von UI UX Pro Max wird für die deployte Anwendung benötigt.
 
-At the time of this integration, no substantial upstream source or dataset is copied into MEDDPICC Workbench. We therefore reference the upstream repository and its license rather than vendoring its files.
+Die GitHub-Pages-Anwendung bleibt deterministisch und local-first.
 
-If substantial upstream code or data is copied in the future, the contributor must preserve the required MIT copyright and permission notice and document the copied scope.
+## Lizenz und Attribution
+
+UI UX Pro Max steht unter MIT License von Next Level Builder.
+
+Aktuell wurden keine substantiellen Upstream-Quelltexte oder Datensätze in MEDDPICC Workbench kopiert. Deshalb referenzieren wir Repository und Lizenz, statt Upstream-Dateien zu vendoren.
+
+Falls künftig substantieller Code oder Daten übernommen werden, müssen Copyright- und MIT-Hinweise erhalten und der übernommene Umfang dokumentiert werden.
