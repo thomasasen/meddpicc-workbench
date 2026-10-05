@@ -426,12 +426,18 @@ Motion erklärt Zustandsänderung und dekoriert nicht.
 
 ## 19. Icons
 
-Ein konsistentes SVG-Iconset verwenden.
+Als verbindliche primäre Icon-Bibliothek verwenden wir **Lucide** über das Vue-Paket `@lucide/vue`.
 
-- Icons ergänzen Text bei wichtigen Aktionen/Status
-- Icon-only Buttons brauchen zugängliche Namen
+- Icons direkt aus `@lucide/vue` importieren und mit der App bundlen
+- keine Icon-CDNs oder Remote-Icon-Requests
+- Icons ergänzen Text bei wichtigen Aktionen und Status
+- MEDDPICC-Fachbegriffe niemals durch Icons allein ersetzen
+- Icon-only Buttons nur für allgemein bekannte kompakte Aktionen und mit zugänglichem Namen
 - keine Emojis als Navigations-/Statusicons
-- Icons mit der App bundlen, nicht remote laden
+- semantische Bedeutung nie nur über Icon oder Farbe vermitteln
+- vorhandene Zuordnungen nicht pro Screen neu erfinden
+
+Die verbindliche Icon-Matrix, Größen, Accessibility-Regeln und Einsatzbereiche stehen in [ICON_SYSTEM.md](ICON_SYSTEM.md).
 
 ## 20. Accessibility-Baseline
 
