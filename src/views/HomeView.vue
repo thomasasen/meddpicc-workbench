@@ -20,6 +20,19 @@ const snapshot: SnapshotItem[] = [
   { label: 'Champion', status: 'partial', confidence: 6 },
   { label: 'Competition', status: 'unknown', confidence: 2 },
 ]
+
+const nextActions = [
+  {
+    title: 'Procurement-Ablauf bestätigen',
+    context: 'Paper Process',
+    due: 'Nächster Kundentermin',
+  },
+  {
+    title: 'Investitionspriorität mit Economic Buyer validieren',
+    context: 'Economic Buyer',
+    due: 'Offen',
+  },
+]
 </script>
 
 <template>
@@ -32,7 +45,7 @@ const snapshot: SnapshotItem[] = [
           <span class="brand-mark" aria-hidden="true">M</span>
           <span class="brand-copy">
             <strong>MEDDPICC Workbench</strong>
-            <span>Local-first Deal Qualification</span>
+            <span>Local-first Deal-Qualifizierung</span>
           </span>
         </a>
 
@@ -51,56 +64,44 @@ const snapshot: SnapshotItem[] = [
     </header>
 
     <main id="main-content">
-      <section class="hero">
-        <div class="container hero-grid">
-          <div class="hero-copy">
-            <p class="eyebrow">Komplexe Deals. Belastbar qualifiziert.</p>
-            <h1>MEDDPICC als Arbeitsumgebung – nicht als Checkliste.</h1>
-            <p class="hero-text">
-              Die Workbench bündelt Qualifizierung, Evidenz, Risiken, nächste Aktionen
-              und Deal Planning in einer portablen <code>.meddpicc</code>-Projektdatei.
-              Die Daten bleiben dabei lokal im Browser.
+      <section class="intro">
+        <div class="container intro-grid">
+          <div class="intro-copy">
+            <p class="eyebrow">MEDDPICC für komplexe B2B-Opportunities</p>
+            <h1>Qualifizierung, Evidenz und Deal Planning in einer Arbeitsumgebung.</h1>
+            <p class="intro-text">
+              Die Workbench strukturiert MEDDPICC-Informationen, macht Gaps sichtbar
+              und übernimmt wiederholbare Berechnungs- und Planungsarbeit. Der
+              Opportunity-Stand liegt in einer portablen <code>.meddpicc</code>-Datei.
             </p>
 
-            <div class="hero-actions">
-              <button class="button button-primary" type="button" disabled>
-                Projekt öffnen
-              </button>
+            <div class="release-panel" aria-label="Aktueller Funktionsstand">
+              <div>
+                <span class="release-panel-label">Aktueller Stand</span>
+                <strong>Projektdatei-Funktionen folgen mit Roadmap 1</strong>
+              </div>
               <a class="button button-secondary" href="#arbeitsweise">
                 Arbeitsweise ansehen
               </a>
             </div>
 
-            <p class="availability-note">
-              Das Öffnen und Speichern von Projektdateien folgt mit Roadmap&nbsp;1.
-            </p>
-
-            <ul class="trust-list" aria-label="Technische Grundprinzipien">
-              <li>
-                <span class="trust-icon" aria-hidden="true"></span>
-                Kein Backend erforderlich
-              </li>
-              <li>
-                <span class="trust-icon" aria-hidden="true"></span>
-                Keine AI zur Runtime
-              </li>
-              <li>
-                <span class="trust-icon" aria-hidden="true"></span>
-                Kundendaten bleiben lokal
-              </li>
+            <ul class="principle-list" aria-label="Technische Grundprinzipien">
+              <li>Kein Backend erforderlich</li>
+              <li>Keine AI zur Runtime</li>
+              <li>Projektinhalte werden lokal im Browser verarbeitet</li>
             </ul>
           </div>
 
-          <aside class="snapshot-card" aria-labelledby="snapshot-title">
-            <div class="snapshot-head">
+          <section class="opportunity-panel" aria-labelledby="opportunity-title">
+            <div class="panel-header">
               <div>
-                <p class="snapshot-kicker">Opportunity Snapshot</p>
-                <h2 id="snapshot-title">ACME CRM Transformation</h2>
+                <p class="panel-kicker">Beispiel-Opportunity</p>
+                <h2 id="opportunity-title">ACME CRM Transformation</h2>
               </div>
-              <span class="snapshot-value">€ 480k</span>
+              <span class="deal-value">€ 480k</span>
             </div>
 
-            <dl class="snapshot-meta">
+            <dl class="opportunity-meta">
               <div>
                 <dt>Forecast</dt>
                 <dd>Best Case</dd>
@@ -115,81 +116,138 @@ const snapshot: SnapshotItem[] = [
               </div>
             </dl>
 
-            <div class="snapshot-divider"></div>
+            <div class="workbench-grid">
+              <section class="workbench-block" aria-labelledby="gaps-title">
+                <div class="block-heading">
+                  <h3 id="gaps-title">Kritische Gaps</h3>
+                  <span class="count-badge">2 offen</span>
+                </div>
 
-            <div class="status-list" aria-label="Beispielhafter MEDDPICC-Status">
-              <div v-for="item in snapshot" :key="item.label" class="status-row">
-                <span class="status-label">{{ item.label }}</span>
-                <span class="status-summary">
-                  <span
-                    class="status-dot"
-                    :class="`status-dot--${item.status}`"
-                    aria-hidden="true"
-                  ></span>
-                  <span>{{ qualificationStatusLabels[item.status] }}</span>
-                  <span class="confidence">{{ item.confidence }}/10</span>
-                </span>
-              </div>
+                <div class="risk-item">
+                  <span class="risk-indicator" aria-hidden="true"></span>
+                  <div>
+                    <strong>Paper Process nicht belastbar bestätigt</strong>
+                    <p>Owner, Procurement-Schritte und Lead Time fehlen.</p>
+                  </div>
+                </div>
+
+                <div class="risk-item risk-item--warning">
+                  <span class="warning-indicator" aria-hidden="true"></span>
+                  <div>
+                    <strong>Economic-Buyer-Priorität nur teilweise belegt</strong>
+                    <p>Direkte Bestätigung der Investitionspriorität fehlt.</p>
+                  </div>
+                </div>
+              </section>
+
+              <section class="workbench-block" aria-labelledby="actions-title">
+                <div class="block-heading">
+                  <h3 id="actions-title">Nächste Aktionen</h3>
+                  <span class="count-badge">2</span>
+                </div>
+
+                <ol class="action-list">
+                  <li v-for="action in nextActions" :key="action.title">
+                    <div>
+                      <strong>{{ action.title }}</strong>
+                      <span>{{ action.context }}</span>
+                    </div>
+                    <span class="action-due">{{ action.due }}</span>
+                  </li>
+                </ol>
+              </section>
             </div>
 
-            <div class="snapshot-alert">
-              <span class="alert-mark" aria-hidden="true"></span>
-              <div>
-                <strong>Kritisches Gap</strong>
-                <p>Paper Process ist noch nicht belastbar bestätigt.</p>
+            <section class="status-section" aria-labelledby="status-title">
+              <div class="block-heading block-heading--status">
+                <div>
+                  <h3 id="status-title">MEDDPICC-Status</h3>
+                  <p>Evidenzgrad, keine Gewinnwahrscheinlichkeit</p>
+                </div>
+                <span class="status-scale">0–10</span>
               </div>
-            </div>
-          </aside>
+
+              <div class="status-list" aria-label="Beispielhafter MEDDPICC-Status">
+                <div v-for="item in snapshot" :key="item.label" class="status-row">
+                  <span class="status-label">{{ item.label }}</span>
+                  <span class="status-summary">
+                    <span
+                      class="status-dot"
+                      :class="`status-dot--${item.status}`"
+                      aria-hidden="true"
+                    ></span>
+                    <span>{{ qualificationStatusLabels[item.status] }}</span>
+                    <span
+                      class="confidence"
+                      :aria-label="`${item.confidence} von 10 Evidenzgrad`"
+                    >
+                      {{ item.confidence }}/10
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </section>
+          </section>
         </div>
       </section>
 
-      <section class="section section-muted" aria-labelledby="nutzen-title">
-        <div class="container">
+      <section class="section section-muted" aria-labelledby="aufgaben-title">
+        <div class="container compact-section-grid">
           <div class="section-heading">
-            <p class="eyebrow">Fleißarbeit reduzieren</p>
-            <h2 id="nutzen-title">Was die Workbench übernehmen soll</h2>
+            <p class="eyebrow">Deterministische Unterstützung</p>
+            <h2 id="aufgaben-title">Welche Arbeit die Workbench übernehmen soll</h2>
             <p>
-              Die Anwendung denkt nicht für den Seller. Sie strukturiert Daten,
-              berechnet wiederholbare Ergebnisse und macht fehlende Evidenz sichtbar.
+              Sie ersetzt keine Seller-Beurteilung. Sie reduziert administrative
+              Fleißarbeit und hält Qualifizierungslogik nachvollziehbar.
             </p>
           </div>
 
-          <div class="feature-grid">
-            <article class="feature-card">
-              <span class="feature-number" aria-hidden="true">01</span>
-              <h3>Evidenz statt Bauchgefühl</h3>
-              <p>
-                Aussagen werden mit Quelle, Datum und Evidenztyp verknüpft. Annahmen,
-                unbekannte Informationen und bestätigte Fakten bleiben klar getrennt.
-              </p>
+          <div class="capability-list">
+            <article>
+              <span class="capability-label">Evidenz</span>
+              <div>
+                <h3>Wissen und Annahmen trennen</h3>
+                <p>
+                  Quelle, Datum und Evidenztyp bleiben mit einer Aussage verknüpft.
+                  Unbekanntes muss nicht künstlich „grün“ gemacht werden.
+                </p>
+              </div>
             </article>
 
-            <article class="feature-card">
-              <span class="feature-number" aria-hidden="true">02</span>
-              <h3>Prozesse planbar machen</h3>
-              <p>
-                Decision Process, Paper Process und Go-Live werden als zusammenhängende
-                Abhängigkeiten modelliert – inklusive Ownern, Terminen und Risiken.
-              </p>
+            <article>
+              <span class="capability-label">Prozess</span>
+              <div>
+                <h3>Decision Process und Paper Process planbar machen</h3>
+                <p>
+                  Owner, Termine, Abhängigkeiten und Go-Live-Auswirkungen werden
+                  strukturiert statt in parallelen Notizen gepflegt.
+                </p>
+              </div>
             </article>
 
-            <article class="feature-card">
-              <span class="feature-number" aria-hidden="true">03</span>
-              <h3>Value reproduzierbar rechnen</h3>
-              <p>
-                Metrics, ROI, Payback und Cost of Delay werden aus nachvollziehbaren
-                Inputs deterministisch berechnet statt in separaten Sheets gepflegt.
-              </p>
+            <article>
+              <span class="capability-label">Value</span>
+              <div>
+                <h3>Metrics und Business Case reproduzierbar berechnen</h3>
+                <p>
+                  ROI, Payback und Cost of Delay entstehen aus dokumentierten Inputs
+                  und lassen sich jederzeit nachvollziehbar neu berechnen.
+                </p>
+              </div>
             </article>
           </div>
         </div>
       </section>
 
       <section id="arbeitsweise" class="section" aria-labelledby="arbeitsweise-title">
-        <div class="container">
-          <div class="section-heading section-heading--compact">
+        <div class="container compact-section-grid">
+          <div class="section-heading">
             <p class="eyebrow">Ein Projekt, ein Datenmodell</p>
-            <h2 id="arbeitsweise-title">Die geplante Arbeitsweise</h2>
+            <h2 id="arbeitsweise-title">Geplanter Project File Lifecycle</h2>
+            <p>
+              Die <code>.meddpicc</code>-Datei bleibt der kanonische Projektstand.
+              Browser Storage dient höchstens als Recovery- oder Komfortebene.
+            </p>
           </div>
 
           <ol class="workflow-list">
@@ -198,8 +256,8 @@ const snapshot: SnapshotItem[] = [
               <div>
                 <h3>Projektdatei öffnen</h3>
                 <p>
-                  Eine portable <code>.meddpicc</code>-Datei enthält den vollständigen
-                  Stand einer Opportunity und kann z. B. im CRM abgelegt werden.
+                  Eine portable Datei enthält den strukturierten Stand der Opportunity
+                  und kann beispielsweise beim CRM-Datensatz abgelegt werden.
                 </p>
               </div>
             </li>
@@ -208,18 +266,18 @@ const snapshot: SnapshotItem[] = [
               <div>
                 <h3>Qualifizieren und planen</h3>
                 <p>
-                  MEDDPICC-Module und deterministische Tools arbeiten auf demselben
-                  Datenmodell. Informationen müssen nicht mehrfach erfasst werden.
+                  MEDDPICC-Module, Evidenz, Risiken, Aktionen und Tools arbeiten
+                  auf demselben Datenmodell.
                 </p>
               </div>
             </li>
             <li>
               <span class="workflow-step">3</span>
               <div>
-                <h3>Speichern und wiederverwenden</h3>
+                <h3>Validiert speichern und wiederverwenden</h3>
                 <p>
-                  Der aktualisierte Projektstand wird wieder als Datei gespeichert.
-                  Deal Reviews und Exporte entstehen aus denselben strukturierten Daten.
+                  Der aktualisierte Stand wird nach Schema-Validierung wieder als
+                  Projektdatei gespeichert; Reviews und Exporte nutzen dieselben Daten.
                 </p>
               </div>
             </li>
@@ -231,12 +289,12 @@ const snapshot: SnapshotItem[] = [
         <div class="container privacy-grid">
           <div>
             <p class="eyebrow eyebrow--light">Local-first</p>
-            <h2 id="privacy-title">Die Projektdatei bleibt die Source of Truth.</h2>
+            <h2 id="privacy-title">Projektverarbeitung ohne verpflichtendes Backend.</h2>
           </div>
           <p>
-            Die geplante Basis benötigt weder Cloud-Datenbank noch Benutzerkonto.
-            Projektinhalte werden im Browser verarbeitet; externe Integrationen wären
-            später ausschließlich optional.
+            Die geplante Basis verarbeitet Projektinhalte lokal im Browser. Die
+            Anwendung benötigt dafür weder Cloud-Datenbank noch Benutzerkonto.
+            Spätere externe Integrationen wären ausdrücklich optional.
           </p>
         </div>
       </section>
