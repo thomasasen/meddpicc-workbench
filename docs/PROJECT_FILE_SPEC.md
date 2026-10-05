@@ -1,28 +1,28 @@
-# MEDDPICC Project File Specification
+# Spezifikation der MEDDPICC-Projektdatei
 
-## Purpose
+## Zweck
 
-The `.meddpicc` file is the portable source of truth for one sales opportunity.
+Die `.meddpicc`-Datei ist die portable Source of Truth für eine Opportunity.
 
-Version 1 is intentionally simple:
+Version 1 bleibt bewusst einfach:
 
 - UTF-8
 - JSON
-- human-readable
-- one file
-- no embedded binaries
-- explicit schema version
-- deterministic validation and migration
+- menschenlesbar
+- eine Datei
+- keine eingebetteten Binärdaten
+- explizite Schema-Version
+- deterministische Validierung und Migration
 
-Example filename:
+Beispiel:
 
 ```text
 acme-crm-transformation.meddpicc
 ```
 
-## File envelope
+## Datei-Envelope
 
-A project should have a stable top-level structure similar to:
+Ein Projekt besitzt eine stabile Top-Level-Struktur ähnlich:
 
 ```json
 {
@@ -44,35 +44,35 @@ A project should have a stable top-level structure similar to:
 }
 ```
 
-The exact schema will be formalized before application development begins.
+Das exakte Schema wird vor Beginn der Feature-Implementierung formalisiert.
 
-## Version fields
+## Versionsfelder
 
 ### schemaVersion
 
-Controls compatibility of the file structure.
+Steuert die Kompatibilität des Dateiformats.
 
-Rules:
+Regeln:
 
-- patch: backward-compatible clarification/default
-- minor: backward-compatible additions
-- major: incompatible schema change requiring migration
+- Patch: abwärtskompatible Korrektur/Default
+- Minor: abwärtskompatible Ergänzung
+- Major: inkompatible Schema-Änderung mit Migration
 
-The application must never silently open and rewrite an unsupported future major version.
+Eine nicht unterstützte zukünftige Major-Version darf niemals still geöffnet und anschließend überschrieben werden.
 
 ### appVersion
 
-Records the application version that last saved the file. It is diagnostic metadata, not the compatibility authority.
+Dokumentiert die App-Version, die die Datei zuletzt gespeichert hat. Dieses Feld ist Diagnosemetadatum und nicht die eigentliche Kompatibilitätsinstanz.
 
 ### revision
 
-Monotonically increments on successful project save.
+Wird bei erfolgreichem Speichern monoton erhöht.
 
-It is useful for comparing two copies of the same project, but it is not intended to be a distributed conflict-resolution protocol.
+Hilfreich zum Vergleich zweier Kopien desselben Projekts, aber kein verteiltes Conflict-Resolution-Protokoll.
 
-## Project metadata
+## Projektmetadaten
 
-Suggested fields:
+Vorgeschlagene Felder:
 
 ```json
 {
@@ -91,11 +91,11 @@ Suggested fields:
 }
 ```
 
-Only fields that support qualification and deal planning belong here. The file must not drift into becoming a full account/contact database.
+Nur Felder, die Qualifizierung und Deal Planning unterstützen, gehören hier hinein. Die Datei darf nicht zu einer vollständigen Account-/Kontaktdatenbank werden.
 
-## MEDDPICC sections
+## MEDDPICC-Bereiche
 
-Suggested envelope:
+Vorgeschlagene Struktur:
 
 ```json
 {
@@ -112,20 +112,20 @@ Suggested envelope:
 }
 ```
 
-Each section should be able to hold:
+Jeder Bereich soll unterstützen:
 
-- structured statements
-- manual notes
-- linked evidence IDs
-- current qualification status
-- gaps
-- section-specific data
+- strukturierte Aussagen
+- manuelle Notizen
+- verknüpfte Evidence-IDs
+- aktuellen Qualifizierungsstatus
+- Gaps
+- bereichsspezifische Daten
 
-## Qualification status
+## Qualifizierungsstatus
 
-Use explicit states instead of a forced yes/no model.
+Explizite Zustände statt erzwungenem Ja/Nein.
 
-Candidate enum:
+Interne Enum-Kandidaten:
 
 ```text
 confirmed
@@ -135,13 +135,23 @@ unknown
 risk
 ```
 
-A section may also expose a deterministic confidence score, but the score must not replace the explicit state or underlying evidence.
+Im UI werden diese deutsch dargestellt:
 
-## Evidence model
+```text
+confirmed  → Bestätigt
+partial    → Teilweise
+assumption → Annahme
+unknown    → Unbekannt
+risk       → Risiko
+```
 
-Evidence is a first-class shared object.
+Ein Bereich darf zusätzlich einen deterministischen Confidence Score liefern. Dieser ersetzt weder expliziten Status noch zugrunde liegende Evidenz.
 
-Example:
+## Evidenzmodell
+
+Evidenz ist ein gemeinsam nutzbares First-Class-Objekt.
+
+Beispiel:
 
 ```json
 {
@@ -152,14 +162,14 @@ Example:
     "person": "Max Mustermann",
     "role": "Head of Sales",
     "date": "2026-10-05",
-    "context": "Discovery workshop"
+    "context": "Discovery Workshop"
   },
   "referenceId": "ref_03",
   "createdAt": "2026-10-05T13:30:00.000Z"
 }
 ```
 
-Candidate classifications:
+Interne Klassifikationskandidaten:
 
 ```text
 fact
@@ -170,15 +180,15 @@ confirmed_evidence
 unknown
 ```
 
-The implementation should refine these names if necessary, but it must preserve the conceptual distinction between knowledge and assumption.
+Die Implementierung darf die Namen noch schärfen, muss aber die konzeptionelle Trennung von Wissen und Annahme erhalten.
 
-### Evidence links
+### Verknüpfung
 
-MEDDPICC statements should reference evidence by stable ID rather than duplicating source metadata throughout the project.
+MEDDPICC-Aussagen referenzieren Evidenz über stabile IDs, statt Quellmetadaten mehrfach zu duplizieren.
 
-## Risks
+## Risiken
 
-Example:
+Beispiel:
 
 ```json
 {
@@ -193,7 +203,7 @@ Example:
 }
 ```
 
-Candidate severities:
+Interne Schweregrade:
 
 ```text
 low
@@ -202,7 +212,7 @@ high
 critical
 ```
 
-Candidate statuses:
+Interne Statuswerte:
 
 ```text
 open
@@ -211,11 +221,13 @@ closed
 accepted
 ```
 
-## Actions
+Die UI übersetzt diese Werte in deutsche Labels.
 
-Actions convert qualification gaps into work.
+## Aktionen
 
-Example:
+Aktionen übersetzen Qualification Gaps in konkrete Arbeit.
+
+Beispiel:
 
 ```json
 {
@@ -229,68 +241,70 @@ Example:
 }
 ```
 
-## Decision and paper processes
+Schema-Inhalte können englische technische Werte besitzen; sichtbare UI-Texte werden deutsch gepflegt bzw. dargestellt.
 
-A generic process-step structure should support both areas.
+## Decision Process und Paper Process
 
-Candidate fields:
+Eine generische Process-Step-Struktur soll beide Bereiche unterstützen.
 
-- stable ID
-- title
-- description
-- owner
-- status
-- planned date
-- confirmed date
-- duration
-- predecessor IDs
+Mögliche Felder:
+
+- stabile ID
+- Titel
+- Beschreibung
+- Owner
+- Status
+- geplantes Datum
+- bestätigtes Datum
+- Dauer
+- Vorgänger-IDs
 - required/optional
-- evidence IDs
-- notes
+- Evidence-IDs
+- Notizen
 
-This allows the same scheduling engine to calculate dependencies and critical paths without mixing the semantic meaning of Decision Process and Paper Process.
+So kann dieselbe Scheduling Engine Abhängigkeiten und Critical Path berechnen, ohne Decision Process und Paper Process semantisch zu vermischen.
 
-## Metrics and business case
+## Metrics und Business Case
 
-Persist source inputs, units, provenance, and confidence.
+Source Inputs, Einheiten, Provenienz und Confidence persistieren.
 
-Avoid persisting only a final ROI number.
+Nicht nur einen finalen ROI speichern.
 
-Example inputs:
+Mögliche Inputs:
 
-- current volume
-- current time/cost
-- expected improvement
-- annualization basis
-- investment
-- recurring cost
-- one-time cost
+- aktuelles Volumen
+- aktueller Zeit-/Kostenaufwand
+- erwartete Verbesserung
+- Annualization Basis
+- Investment
+- wiederkehrende Kosten
+- einmalige Kosten
 
-Every material number should optionally reference evidence.
+Jede wesentliche Zahl kann optional Evidenz referenzieren.
 
 ## Planning
 
-Planning may contain:
+Kann enthalten:
 
-- target go-live date
-- implementation phases
-- process dependencies
-- duration assumptions
-- calculated critical-path metadata
+- Target Go-Live Date
+- Implementierungsphasen
+- Prozessabhängigkeiten
+- Dauerannahmen
+- berechnete Critical-Path-Metadaten
 
-Calculated outputs should be reproducible from source inputs.
+Berechnete Ergebnisse müssen aus Inputs reproduzierbar sein.
 
-## References
+## Referenzen
 
-References point to external context without embedding it.
+Referenzen zeigen auf externen Kontext, ohne ihn einzubetten.
 
-Example:
+Beispiel:
 
 ```json
 {
   "id": "ref_03",
   "type": "meeting",
-  "title": "Discovery workshop",
+  "title": "Discovery Workshop",
   "date": "2026-10-05",
   "externalId": null,
   "url": null,
@@ -298,7 +312,7 @@ Example:
 }
 ```
 
-Potential reference types:
+Mögliche Typen:
 
 - meeting
 - crm
@@ -308,13 +322,13 @@ Potential reference types:
 - contract
 - other
 
-URLs are metadata only. Opening them should always be an explicit user action.
+URLs sind nur Metadaten. Öffnen muss immer eine explizite Nutzeraktion sein.
 
-## History
+## Historie
 
-History is an audit-oriented change log, not a keystroke log.
+History ist ein Audit-orientiertes Änderungsprotokoll, kein Keystroke Log.
 
-Example:
+Beispiel:
 
 ```json
 {
@@ -327,36 +341,36 @@ Example:
 }
 ```
 
-The exact event taxonomy should remain small and stable.
+Die Event-Taxonomie soll klein und stabil bleiben.
 
-## Unknown extension data
+## Unbekannte Erweiterungsdaten
 
-Forward compatibility needs a deliberate policy.
+Forward Compatibility braucht eine bewusste Policy.
 
-The validator/migrator must not accidentally delete fields it does not understand within a compatible schema version.
+Validator/Migrator dürfen Felder, die sie innerhalb einer kompatiblen Schema-Version nicht kennen, nicht versehentlich löschen.
 
-For incompatible future major versions, the application should refuse to save until a supported migration path exists.
+Bei inkompatiblen zukünftigen Major-Versionen darf die Anwendung nicht speichern, bevor ein unterstützter Migrationspfad existiert.
 
-## File safety
+## Dateisicherheit
 
-Treat every imported file as untrusted input.
+Jede importierte Datei als untrusted Input behandeln.
 
-Requirements:
+Anforderungen:
 
-- size limit
-- JSON parse error handling
-- schema validation
-- string rendering without unsafe HTML interpretation
-- URL handling with safe schemes
-- no automatic network access based on file content
-- no execution of project content
+- Größenlimit
+- sauberes JSON-Parse-Error-Handling
+- Schema-Validierung
+- Strings niemals als unsicheres HTML interpretieren
+- sichere URL-Schemata
+- kein automatischer Netzwerkzugriff aufgrund von Dateiinhalten
+- kein Ausführen von Projektinhalten
 
-## Example fixture
+## Beispiel-Fixture
 
-A sanitized example project should be added once the first formal schema exists:
+Nach Definition des ersten formalen Schemas wird ein bereinigtes Beispielprojekt ergänzt:
 
 ```text
 examples/demo-opportunity.meddpicc
 ```
 
-It should contain fictional companies and people only.
+Nur fiktive Unternehmen und Personen verwenden.
