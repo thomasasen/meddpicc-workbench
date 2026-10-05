@@ -73,9 +73,11 @@ export function traceAreaSources(project: MeddpiccProject, area: ProjectAreaKey)
 }
 
 export function traceRiskSources(project: MeddpiccProject, risk: ProjectRisk): SourceTrace {
-  const areaTrace = traceAreaSources(project, risk.relatedArea)
+  const sectionEvidence = evidenceByIds(project, project.meddpicc[risk.relatedArea].evidenceIds)
   const linkedEvidence = evidenceByIds(project, entityEvidenceIds(project, risk.relatedArea, risk.relatedEntityIds))
-  return referenceTrace(project, uniqueEvidence([...linkedEvidence, ...areaTrace.evidence]))
+  const fallbackAreaEvidence = risk.relatedEntityIds.length === 0 ? traceAreaSources(project, risk.relatedArea).evidence : []
+
+  return referenceTrace(project, uniqueEvidence([...linkedEvidence, ...sectionEvidence, ...fallbackAreaEvidence]))
 }
 
 export function traceActionSources(project: MeddpiccProject, action: ProjectAction): SourceTrace {
