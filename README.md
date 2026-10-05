@@ -6,6 +6,8 @@ Die Grundidee ist einfach: **Die Projektdatei ist die Source of Truth.** Die Anw
 
 > **Projektstatus:** Pre-Alpha. Die technische Basis und eine erste responsive Startseite sind implementiert und werden automatisch über GitHub Pages deployt. Die fachlichen MEDDPICC-Funktionen und der `.meddpicc`-Dateilifecycle folgen schrittweise.
 
+[![Live-Anwendung öffnen](https://img.shields.io/badge/MEDDPICC%20Workbench-Live--Anwendung%20%C3%B6ffnen-2563EB?style=for-the-badge)](https://thomasasen.github.io/meddpicc-workbench/)
+
 ## Projektsprache
 
 Die Projektsprache ist **Deutsch**.
