@@ -160,7 +160,7 @@ Die CI soll Qualität sichern, nicht jeden Zwischenschritt teuer duplizieren.
 - Draft-PRs führen keine vollständige CI aus.
 - Neue Commits auf demselben aktiven PR ersetzen ältere CI-Runs; veraltete Runs werden automatisch abgebrochen.
 - Reine Markdown-/Lizenzänderungen lösen keine vollständige CI aus.
-- Playwright Desktop + Mobile läuft als PR-Gate. Nach einem bereits grünen PR wird die Browsermatrix auf `main` nicht nochmals ausgeführt.
+- Die vollständigen Quality Gates (Format, Lint, Unit Tests, Build, Pages-Check, Playwright Desktop + Mobile) laufen einmal auf dem finalen Ready-for-review-PR. Nach dem Merge prüft `main` nur noch Production Build + Pages-Integrität.
 - Der bereits erzeugte Production Build wird für Playwright wiederverwendet.
 - Abhängigkeiten werden reproduzierbar mit `npm ci` installiert und über den npm-Cache von `setup-node` wiederverwendet.
 - Keine temporären GitHub-Actions-Workflows für einmalige Formatierungs- oder Sync-Aufgaben anlegen.
