@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
+import EvidenceView from '../views/EvidenceView.vue'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -9,6 +10,11 @@ const router = createRouter({
       path: '/',
       name: 'start',
       component: HomeView,
+    },
+    {
+      path: '/evidence',
+      name: 'evidence',
+      component: EvidenceView,
     },
   ],
 })
