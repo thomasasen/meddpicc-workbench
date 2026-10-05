@@ -45,17 +45,39 @@ Für v1 ist kein Application Backend vorgesehen.
 
 ### Validierung
 
-Es gibt genau ein explizites Runtime-Schema für Projektdateien.
+Es gibt genau einen kanonischen Dateiformatvertrag:
 
-Möglich sind z. B. Zod oder JSON Schema mit generierten Typen. Entscheidend ist, dass nicht zwei voneinander abweichende Definitionen des Dateiformats entstehen.
+```text
+schema/meddpicc-project.schema.json
+        ↓
+Ajv Runtime-Validierung
+        ↓
+Build-time Type Generation
+        ↓
+src/domain/project.generated.ts
+```
 
-Anforderungen:
+Das JSON Schema ist die Source of Truth für Struktur, Required Fields, Enums, Datumsformate und grundlegende Constraints. TypeScript-Typen für den Projektvertrag werden mit `json-schema-to-typescript` erzeugt und nicht unabhängig gepflegt.
 
-- lokale Dateien defensiv als untrusted Input behandeln
-- fehlerhafte Pflichtdaten ablehnen
-- kompatible optionale Daten erhalten
-- verständliche Validierungsfehler liefern
-- explizite Schema-Migrationen unterstützen
+Komplexe Regeln, die JSON Schema nicht sinnvoll ausdrücken soll, liegen in separater Domain Validation. Dazu gehören insbesondere:
+
+- Referenzintegrität von Stakeholder-, Evidence-, Risk- und Entity-IDs
+- Existenz von Process-Predecessors
+- Erkennung von Dependency Cycles
+- bereichsübergreifende Konsistenzprüfungen
+
+Der Ladepfad ist bewusst getrennt:
+
+```text
+Text
+→ Größenlimit / JSON parse
+→ Schema-Version prüfen
+→ JSON-Schema-Validierung
+→ Domain Validation
+→ vollständig validiertes Projekt laden
+```
+
+Ungültige Projekte werden vollständig abgelehnt; es gibt keinen Partial Load und keinen Silent Fallback. Eine unbekannte zukünftige Major-Version wird nicht geladen und darf nicht still überschrieben werden. Das aktuelle Pre-Alpha-Limit für Projektdateien beträgt 5 MB.
 
 ### Tests
 
