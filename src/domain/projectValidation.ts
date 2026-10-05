@@ -152,15 +152,6 @@ export function validateProjectDomain(project: MeddpiccProject): DomainValidatio
   const riskIds = new Set(project.risks.map((item) => item.id))
   const riskEntityIds = riskRelatedEntityIdsByArea(project)
 
-  if (project.project.targetGoLiveDate !== project.planning.targetGoLiveDate) {
-    issues.push({
-      code: 'target_go_live_mismatch',
-      path: '/planning/targetGoLiveDate',
-      message:
-        'Project Target Go-Live und Planning Target Go-Live müssen identisch sein. Projektmetadaten sind die kanonische Quelle.',
-    })
-  }
-
   const seen = new Map<string, string>()
   for (const entity of collectEntityIds(project)) {
     const firstPath = seen.get(entity.id)
