@@ -4,7 +4,7 @@ Eine local-first Browser-Anwendung zur Verwaltung und Qualifizierung komplexer B
 
 Die Grundidee ist einfach: **Die Projektdatei ist die Source of Truth.** Die Anwendung öffnet eine portable `.meddpicc`-Datei, unterstützt bei der strukturierten Bewertung der Opportunity mit deterministischen Werkzeugen und speichert das aktualisierte Projekt wieder in dieser Datei. Zur Runtime werden weder AI, Backend, Benutzerkonto noch externe Datenbank benötigt.
 
-> **Projektstatus:** Pre-Alpha. Foundation und Project File Lifecycle sind im Core abgeschlossen. Roadmap 2 besitzt ein projektweites Evidenzregister, gemeinsame Risiken und nächste Aktionen sowie editierbare Source-/Reference-Records. Sichtbare Risk-/Action-Findings im Dashboard zeigen ihre Quellenbasis mit Drill-down zu Evidence bzw. Reference-Records. Projektmetadaten-Bearbeitung und konkrete Evidence-to-Entity-Verknüpfungen bleiben offen. Historische Schema-0.1.0-Dateien werden deterministisch auf 0.2.0 migriert.
+> **Projektstatus:** Pre-Alpha. Foundation und Project File Lifecycle sind im Core abgeschlossen. Die Roadmap-2-Slices für Evidenz, Risiken/Aktionen sowie Source-/Reference-Records mit Dashboard-Traceability sind auf `main` gemergt. Projektmetadaten-Bearbeitung und konkrete Evidence-to-Entity-Verknüpfungen bilden den nächsten gemeinsamen Slice. Historische Schema-0.1.0-Dateien werden deterministisch auf 0.2.0 migriert.
 
 [![Live-Anwendung öffnen](https://img.shields.io/badge/MEDDPICC%20Workbench-Live--Anwendung%20%C3%B6ffnen-2563EB?style=for-the-badge)](https://thomasasen.github.io/meddpicc-workbench/)
 
