@@ -1,0 +1,507 @@
+{
+  "format": "meddpicc-workbench-project",
+  "schemaVersion": "0.1.0",
+  "appVersion": "0.1.0",
+  "projectId": "demo-beispielwerke-crm-2027",
+  "revision": 1,
+  "createdAt": "2026-10-05T12:00:00.000Z",
+  "updatedAt": "2026-10-05T12:00:00.000Z",
+  "project": {
+    "name": "CRM & Service Transformation 2027",
+    "accountName": "Beispielwerke Industrie GmbH",
+    "opportunityId": "DEMO-OPP-2027-001",
+    "owner": "Demo Seller",
+    "currency": "EUR",
+    "dealValue": 480000,
+    "targetCloseDate": "2027-03-31",
+    "targetGoLiveDate": "2027-07-01",
+    "forecastCategory": "best-case",
+    "notes": "Vollständig fiktive Demo-Opportunity für MEDDPICC Workbench."
+  },
+  "stakeholders": [
+    {
+      "id": "st_eb",
+      "name": "Dr. Julia Berger",
+      "role": "CFO",
+      "organization": "Beispielwerke Industrie GmbH",
+      "relationship": "economic_buyer_candidate"
+    },
+    {
+      "id": "st_champion",
+      "name": "Markus Stein",
+      "role": "Leiter Vertrieb",
+      "organization": "Beispielwerke Industrie GmbH",
+      "relationship": "champion"
+    },
+    {
+      "id": "st_it",
+      "name": "Aylin Demir",
+      "role": "CIO",
+      "organization": "Beispielwerke Industrie GmbH",
+      "relationship": "technical_stakeholder"
+    },
+    {
+      "id": "st_procurement",
+      "name": "Martin Vogel",
+      "role": "Strategischer Einkauf",
+      "organization": "Beispielwerke Industrie GmbH",
+      "relationship": "procurement"
+    }
+  ],
+  "meddpicc": {
+    "metrics": {
+      "status": "confirmed",
+      "confidence": 7,
+      "summary": "Vertriebs- und Serviceprozesse verursachen messbare manuelle Aufwände und verlängern Reaktionszeiten.",
+      "evidenceIds": ["ev_metric_01", "ev_metric_02"],
+      "gaps": [
+        "Finanzielle Wirkung der geringeren Service-Reaktionszeit noch mit Finance bestätigen."
+      ],
+      "metrics": [
+        {
+          "id": "metric_01",
+          "name": "Manuelle CRM-Nacharbeit",
+          "currentValue": 9,
+          "targetValue": 3,
+          "unit": "Stunden pro Vertriebsmitarbeiter und Woche",
+          "evidenceIds": ["ev_metric_01"]
+        },
+        {
+          "id": "metric_02",
+          "name": "Durchschnittliche Service-Reaktionszeit",
+          "currentValue": 19,
+          "targetValue": 8,
+          "unit": "Stunden",
+          "evidenceIds": ["ev_metric_02"]
+        }
+      ]
+    },
+    "economicBuyer": {
+      "status": "partial",
+      "confidence": 5,
+      "stakeholderId": "st_eb",
+      "summary": "Die CFO ist als wahrscheinlicher Economic Buyer identifiziert, eine direkte Bestätigung der finalen wirtschaftlichen Entscheidungsbefugnis fehlt noch.",
+      "evidenceIds": ["ev_eb_01"],
+      "gaps": [
+        "Finale wirtschaftliche Entscheidungsbefugnis direkt bestätigen.",
+        "Investitionspriorität und Erfolgskriterien mit der CFO validieren."
+      ]
+    },
+    "decisionCriteria": {
+      "status": "confirmed",
+      "confidence": 8,
+      "summary": "Die wichtigsten fachlichen, technischen und wirtschaftlichen Kriterien sind dokumentiert und mit mehreren Stakeholdern abgestimmt.",
+      "evidenceIds": ["ev_dc_01", "ev_dc_02"],
+      "gaps": [],
+      "criteria": [
+        {
+          "id": "dc_01",
+          "name": "Integration in Microsoft 365 und ERP",
+          "importance": "high",
+          "category": "capability",
+          "ourPosition": "strong"
+        },
+        {
+          "id": "dc_02",
+          "name": "Datenhaltung in Deutschland/EU",
+          "importance": "high",
+          "category": "risk",
+          "ourPosition": "strong"
+        },
+        {
+          "id": "dc_03",
+          "name": "Time-to-Value unter sechs Monaten",
+          "importance": "high",
+          "category": "value",
+          "ourPosition": "medium"
+        }
+      ]
+    },
+    "decisionProcess": {
+      "status": "partial",
+      "confidence": 6,
+      "summary": "Fachliche Auswahl und Management-Freigabe sind bekannt; der finale Ablauf zwischen CFO und Geschäftsführung ist noch nicht vollständig getestet.",
+      "evidenceIds": ["ev_dp_01"],
+      "gaps": [
+        "Finale Reihenfolge von CFO-Freigabe und Geschäftsführungsbeschluss bestätigen."
+      ],
+      "steps": [
+        {
+          "id": "dp_01",
+          "title": "Fachliche Shortlist bestätigen",
+          "ownerStakeholderId": "st_champion",
+          "status": "confirmed",
+          "plannedDate": "2027-01-29",
+          "durationBusinessDays": 1,
+          "predecessorIds": []
+        },
+        {
+          "id": "dp_02",
+          "title": "IT- und Security-Freigabe",
+          "ownerStakeholderId": "st_it",
+          "status": "partial",
+          "plannedDate": "2027-02-19",
+          "durationBusinessDays": 15,
+          "predecessorIds": ["dp_01"]
+        },
+        {
+          "id": "dp_03",
+          "title": "Wirtschaftliche Freigabe",
+          "ownerStakeholderId": "st_eb",
+          "status": "unknown",
+          "plannedDate": "2027-03-05",
+          "durationBusinessDays": 5,
+          "predecessorIds": ["dp_02"]
+        }
+      ]
+    },
+    "paperProcess": {
+      "status": "risk",
+      "confidence": 3,
+      "summary": "Procurement, Legal und PO-Prozess sind nur teilweise bekannt. Der aktuelle Target Close ist deshalb noch nicht belastbar.",
+      "evidenceIds": ["ev_pp_01"],
+      "gaps": [
+        "Procurement-Schritte und Lead Times mit dem Einkauf bestätigen.",
+        "Legal-Review und DPA-Verantwortliche identifizieren.",
+        "PO-Erfordernis und Signaturprozess dokumentieren."
+      ],
+      "steps": [
+        {
+          "id": "pp_01",
+          "title": "Lieferantenanlage",
+          "ownerStakeholderId": "st_procurement",
+          "status": "assumption",
+          "plannedDate": "2027-03-08",
+          "durationBusinessDays": 5,
+          "predecessorIds": []
+        },
+        {
+          "id": "pp_02",
+          "title": "Vertrags- und DPA-Prüfung",
+          "ownerStakeholderId": null,
+          "status": "unknown",
+          "plannedDate": null,
+          "durationBusinessDays": null,
+          "predecessorIds": ["pp_01"]
+        },
+        {
+          "id": "pp_03",
+          "title": "PO und Signatur",
+          "ownerStakeholderId": "st_procurement",
+          "status": "unknown",
+          "plannedDate": null,
+          "durationBusinessDays": null,
+          "predecessorIds": ["pp_02"]
+        }
+      ]
+    },
+    "pain": {
+      "status": "confirmed",
+      "confidence": 7,
+      "summary": "Fragmentierte Vertriebs- und Serviceprozesse erzeugen manuellen Aufwand, langsame Reaktionszeiten und unzuverlässige Forecast-Daten.",
+      "evidenceIds": ["ev_pain_01", "ev_metric_01", "ev_metric_02"],
+      "gaps": [
+        "Konsequenz für Umsatzrisiko und Kundenbindung noch finanziell quantifizieren."
+      ]
+    },
+    "champions": {
+      "status": "partial",
+      "confidence": 6,
+      "summary": "Der Leiter Vertrieb unterstützt das Vorhaben aktiv und liefert interne Informationen, hat aber den Zugang zum Economic Buyer noch nicht hergestellt.",
+      "evidenceIds": ["ev_champion_01"],
+      "gaps": [
+        "Economic-Buyer-Meeting durch den Champion herstellen lassen.",
+        "Champion anhand einer anspruchsvolleren internen Aktion weiter testen."
+      ],
+      "people": [
+        {
+          "stakeholderId": "st_champion",
+          "personalWin": "Schnellere Vertriebssteuerung und weniger manuelle Forecast-Nacharbeit",
+          "influence": "high",
+          "tested": true
+        }
+      ]
+    },
+    "competition": {
+      "status": "unknown",
+      "confidence": 2,
+      "summary": "Ein bestehender CRM-Anbieter und eine mögliche interne Weiterentwicklung werden vermutet, sind aber nicht belastbar qualifiziert.",
+      "evidenceIds": ["ev_comp_01"],
+      "gaps": [
+        "Alternativen, Status quo und interne Build-Option mit dem Champion konkretisieren.",
+        "Entscheidungskriterien gegen relevante Alternativen testen."
+      ],
+      "knownAlternatives": [
+        {
+          "id": "comp_01",
+          "name": "Status quo / interne Erweiterung",
+          "type": "status_quo",
+          "status": "assumption"
+        }
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "ev_metric_01",
+      "classification": "customer_statement",
+      "statement": "Im Vertrieb fallen durchschnittlich rund neun Stunden manuelle CRM-Nacharbeit pro Mitarbeiter und Woche an.",
+      "sourceStakeholderId": "st_champion",
+      "sourceDate": "2026-09-18",
+      "referenceId": "ref_discovery_01",
+      "verification": "corroborated"
+    },
+    {
+      "id": "ev_metric_02",
+      "classification": "confirmed_evidence",
+      "statement": "Der Service-Report weist eine durchschnittliche Erstreaktionszeit von 19 Stunden aus.",
+      "sourceStakeholderId": "st_it",
+      "sourceDate": "2026-09-24",
+      "referenceId": "ref_service_report",
+      "verification": "confirmed"
+    },
+    {
+      "id": "ev_eb_01",
+      "classification": "customer_statement",
+      "statement": "Investitionen dieser Größenordnung werden nach Aussage des Leiters Vertrieb von der CFO wirtschaftlich freigegeben.",
+      "sourceStakeholderId": "st_champion",
+      "sourceDate": "2026-09-18",
+      "referenceId": "ref_discovery_01",
+      "verification": "single_source"
+    },
+    {
+      "id": "ev_dc_01",
+      "classification": "customer_statement",
+      "statement": "Microsoft-365- und ERP-Integration sind Muss-Kriterien für die Shortlist.",
+      "sourceStakeholderId": "st_it",
+      "sourceDate": "2026-09-24",
+      "referenceId": "ref_technical_01",
+      "verification": "corroborated"
+    },
+    {
+      "id": "ev_dc_02",
+      "classification": "confirmed_evidence",
+      "statement": "Der dokumentierte Kriterienkatalog fordert EU-Datenhaltung und ein Go-Live innerhalb von sechs Monaten nach Vertragsstart.",
+      "sourceStakeholderId": "st_champion",
+      "sourceDate": "2026-09-30",
+      "referenceId": "ref_criteria_doc",
+      "verification": "confirmed"
+    },
+    {
+      "id": "ev_dp_01",
+      "classification": "customer_statement",
+      "statement": "Nach fachlicher Shortlist folgen IT-Freigabe und wirtschaftliche Management-Freigabe.",
+      "sourceStakeholderId": "st_champion",
+      "sourceDate": "2026-09-30",
+      "referenceId": "ref_criteria_doc",
+      "verification": "single_source"
+    },
+    {
+      "id": "ev_pp_01",
+      "classification": "customer_statement",
+      "statement": "Der Einkauf muss den Lieferanten anlegen; weitere Vertrags- und PO-Schritte sind noch nicht geklärt.",
+      "sourceStakeholderId": "st_procurement",
+      "sourceDate": "2026-10-02",
+      "referenceId": "ref_procurement_call",
+      "verification": "single_source"
+    },
+    {
+      "id": "ev_pain_01",
+      "classification": "customer_statement",
+      "statement": "Vertrieb und Service arbeiten heute mit mehreren Listen und Übergaben; Management-Forecasts sind deshalb regelmäßig verspätet.",
+      "sourceStakeholderId": "st_champion",
+      "sourceDate": "2026-09-18",
+      "referenceId": "ref_discovery_01",
+      "verification": "corroborated"
+    },
+    {
+      "id": "ev_champion_01",
+      "classification": "seller_interpretation",
+      "statement": "Der Leiter Vertrieb hat interne Zahlen und den Kriterienkatalog proaktiv bereitgestellt und mehrere interne Termine koordiniert.",
+      "sourceStakeholderId": "st_champion",
+      "sourceDate": "2026-10-02",
+      "referenceId": "ref_discovery_01",
+      "verification": "observed"
+    },
+    {
+      "id": "ev_comp_01",
+      "classification": "assumption",
+      "statement": "Eine interne Erweiterung des bestehenden CRM könnte als Alternative im Rennen sein.",
+      "sourceStakeholderId": "st_champion",
+      "sourceDate": "2026-09-30",
+      "referenceId": "ref_criteria_doc",
+      "verification": "unconfirmed"
+    }
+  ],
+  "risks": [
+    {
+      "id": "risk_pp_01",
+      "title": "Paper Process ist nicht belastbar bestätigt",
+      "severity": "high",
+      "status": "open",
+      "relatedArea": "paperProcess",
+      "relatedEntityIds": ["pp_01", "pp_02", "pp_03"],
+      "impact": "Der Target Close 31.03.2027 kann durch unbekannte Procurement- und Legal-Lead-Times reißen.",
+      "openedAt": "2026-10-02T14:00:00.000Z"
+    },
+    {
+      "id": "risk_eb_01",
+      "title": "Priorität beim Economic Buyer ist nur indirekt belegt",
+      "severity": "medium",
+      "status": "open",
+      "relatedArea": "economicBuyer",
+      "relatedEntityIds": ["st_eb"],
+      "impact": "Business Case und Dringlichkeit könnten auf Management-Ebene anders bewertet werden.",
+      "openedAt": "2026-10-03T09:00:00.000Z"
+    },
+    {
+      "id": "risk_comp_01",
+      "title": "Competition ist weitgehend unbekannt",
+      "severity": "medium",
+      "status": "open",
+      "relatedArea": "competition",
+      "relatedEntityIds": ["comp_01"],
+      "impact": "Decision Criteria können noch unbemerkt zugunsten einer Alternative verändert werden.",
+      "openedAt": "2026-10-03T10:00:00.000Z"
+    }
+  ],
+  "actions": [
+    {
+      "id": "action_pp_01",
+      "title": "Procurement-Ablauf und Lead Times bestätigen",
+      "status": "open",
+      "owner": "Demo Seller",
+      "dueDate": "2026-10-12",
+      "relatedArea": "paperProcess",
+      "relatedRiskId": "risk_pp_01",
+      "desiredEvidence": "Einkauf bestätigt Schritte, Owner, Lead Times, PO-Erfordernis und Signaturweg."
+    },
+    {
+      "id": "action_eb_01",
+      "title": "Investitionspriorität mit Economic Buyer validieren",
+      "status": "open",
+      "owner": "Demo Seller",
+      "dueDate": "2026-10-16",
+      "relatedArea": "economicBuyer",
+      "relatedRiskId": "risk_eb_01",
+      "desiredEvidence": "CFO bestätigt wirtschaftliche Priorität, Erfolgskriterien und eigene Rolle in der finalen Entscheidung."
+    },
+    {
+      "id": "action_champion_01",
+      "title": "Champion um Einführung beim Economic Buyer bitten",
+      "status": "open",
+      "owner": "Demo Seller",
+      "dueDate": "2026-10-09",
+      "relatedArea": "champions",
+      "relatedRiskId": "risk_eb_01",
+      "desiredEvidence": "Champion organisiert und positioniert ein Gespräch mit der CFO."
+    },
+    {
+      "id": "action_comp_01",
+      "title": "Alternativen und Status quo konkretisieren",
+      "status": "open",
+      "owner": "Demo Seller",
+      "dueDate": "2026-10-14",
+      "relatedArea": "competition",
+      "relatedRiskId": "risk_comp_01",
+      "desiredEvidence": "Champion benennt aktive Alternativen, internen Build und Bewertungskriterien."
+    }
+  ],
+  "calculators": {
+    "businessCase": {
+      "currency": "EUR",
+      "inputs": {
+        "affectedSalesEmployees": 85,
+        "hoursLostPerEmployeePerWeek": 9,
+        "workingWeeksPerYear": 46,
+        "loadedHourlyCost": 58,
+        "expectedEfficiencyImprovementPercent": 55,
+        "oneTimeInvestment": 480000,
+        "annualRecurringCost": 96000
+      },
+      "evidenceIds": ["ev_metric_01"],
+      "notes": "Demo-Werte. Finanzielle Wirkung muss vor echter Verwendung kundenseitig bestätigt werden."
+    }
+  },
+  "planning": {
+    "targetGoLiveDate": "2027-07-01",
+    "implementation": {
+      "estimatedBusinessDays": 65,
+      "assumption": true
+    },
+    "notes": "Critical Path wird in einer späteren Roadmap-Phase deterministisch berechnet."
+  },
+  "references": [
+    {
+      "id": "ref_discovery_01",
+      "type": "meeting",
+      "title": "Discovery Workshop Vertrieb",
+      "date": "2026-09-18",
+      "externalId": null,
+      "url": null,
+      "notes": "Fiktiver Demo-Termin."
+    },
+    {
+      "id": "ref_technical_01",
+      "type": "meeting",
+      "title": "Technischer Workshop",
+      "date": "2026-09-24",
+      "externalId": null,
+      "url": null,
+      "notes": "Fiktiver Demo-Termin."
+    },
+    {
+      "id": "ref_service_report",
+      "type": "document",
+      "title": "Service KPI Report Q3",
+      "date": "2026-09-24",
+      "externalId": null,
+      "url": null,
+      "notes": "Fiktives Demo-Dokument."
+    },
+    {
+      "id": "ref_criteria_doc",
+      "type": "document",
+      "title": "CRM Auswahlkriterien v2",
+      "date": "2026-09-30",
+      "externalId": null,
+      "url": null,
+      "notes": "Fiktives Demo-Dokument."
+    },
+    {
+      "id": "ref_procurement_call",
+      "type": "meeting",
+      "title": "Erstgespräch Einkauf",
+      "date": "2026-10-02",
+      "externalId": null,
+      "url": null,
+      "notes": "Fiktiver Demo-Termin."
+    }
+  ],
+  "history": [
+    {
+      "id": "hist_01",
+      "timestamp": "2026-09-18T15:00:00.000Z",
+      "type": "project_created",
+      "area": null,
+      "entityId": null,
+      "summary": "Demo-Projekt nach Discovery Workshop angelegt."
+    },
+    {
+      "id": "hist_02",
+      "timestamp": "2026-09-30T16:00:00.000Z",
+      "type": "qualification_status_changed",
+      "area": "decisionCriteria",
+      "entityId": null,
+      "summary": "Decision Criteria nach Erhalt des Kriterienkatalogs auf bestätigt gesetzt."
+    },
+    {
+      "id": "hist_03",
+      "timestamp": "2026-10-02T14:00:00.000Z",
+      "type": "risk_opened",
+      "area": "paperProcess",
+      "entityId": "risk_pp_01",
+      "summary": "Paper Process wegen unbekannter Procurement- und Legal-Schritte als Risiko markiert."
+    }
+  ]
+}

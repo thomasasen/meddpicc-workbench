@@ -47,6 +47,12 @@ Die Anwendung läuft vollständig im Browser und wird automatisch über GitHub P
 
 **Live:** https://thomasasen.github.io/meddpicc-workbench/
 
+### Standard-Demo
+
+Beim Öffnen der Anwendung wird derzeit eine vollständig fiktive Demo-Opportunity aus `examples/demo-opportunity.meddpicc` geladen. Die Startseite liest Account, Deal Value, Termine, MEDDPICC-Status, Risiken und nächste Aktionen direkt aus dieser Datei.
+
+Die Demo dient gleichzeitig als frühes Regression-Fixture für das geplante Dateiformat. Ihr `schemaVersion: 0.1.0` ist ausdrücklich **Pre-Alpha** und noch kein langfristiger Kompatibilitätsvertrag.
+
 ## Kernprinzipien
 
 - **Local-first** – Projektdaten werden im Browser verarbeitet.

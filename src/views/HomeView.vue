@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
+
+import type { ProjectAreaKey, ProjectRisk } from '../domain/project'
+import { useProjectStore } from '../stores/projectStore'
 import {
   qualificationStatusLabels,
   type QualificationStatusKey,
@@ -10,29 +15,80 @@ type SnapshotItem = {
   confidence: number
 }
 
-const snapshot: SnapshotItem[] = [
-  { label: 'Metrics', status: 'confirmed', confidence: 7 },
-  { label: 'Economic Buyer', status: 'partial', confidence: 5 },
-  { label: 'Decision Criteria', status: 'confirmed', confidence: 8 },
-  { label: 'Decision Process', status: 'partial', confidence: 6 },
-  { label: 'Paper Process', status: 'risk', confidence: 3 },
-  { label: 'Pain', status: 'confirmed', confidence: 7 },
-  { label: 'Champion', status: 'partial', confidence: 6 },
-  { label: 'Competition', status: 'unknown', confidence: 2 },
-]
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
 
-const nextActions = [
-  {
-    title: 'Procurement-Ablauf bestätigen',
-    context: 'Paper Process',
-    due: 'Nächster Kundentermin',
-  },
-  {
-    title: 'Investitionspriorität mit Economic Buyer validieren',
-    context: 'Economic Buyer',
-    due: 'Offen',
-  },
-]
+const areaLabels: Record<ProjectAreaKey, string> = {
+  metrics: 'Metrics',
+  economicBuyer: 'Economic Buyer',
+  decisionCriteria: 'Decision Criteria',
+  decisionProcess: 'Decision Process',
+  paperProcess: 'Paper Process',
+  pain: 'Pain',
+  champions: 'Champion',
+  competition: 'Competition',
+}
+
+const forecastLabels: Record<string, string> = {
+  pipeline: 'Pipeline',
+  'best-case': 'Best Case',
+  commit: 'Commit',
+  closed: 'Closed',
+}
+
+const snapshot = computed<SnapshotItem[]>(() =>
+  (Object.entries(areaLabels) as Array<[ProjectAreaKey, string]>).map(([key, label]) => ({
+    label,
+    status: project.value.meddpicc[key].status,
+    confidence: project.value.meddpicc[key].confidence,
+  })),
+)
+
+const severityWeight: Record<ProjectRisk['severity'], number> = {
+  critical: 4,
+  high: 3,
+  medium: 2,
+  low: 1,
+}
+
+const openRisks = computed(() =>
+  project.value.risks
+    .filter((risk) => risk.status === 'open' || risk.status === 'mitigating')
+    .sort((a, b) => severityWeight[b.severity] - severityWeight[a.severity])
+    .slice(0, 2),
+)
+
+const openActions = computed(() =>
+  project.value.actions
+    .filter((action) => action.status === 'open')
+    .sort((a, b) => (a.dueDate ?? '9999-12-31').localeCompare(b.dueDate ?? '9999-12-31'))
+    .slice(0, 2),
+)
+
+const dateFormatter = new Intl.DateTimeFormat('de-DE')
+
+function formatCurrency(value: number): string {
+  return new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: project.value.project.currency,
+    maximumFractionDigits: 0,
+  }).format(value)
+}
+
+function formatDate(value: string | null): string {
+  if (!value) return 'Noch offen'
+  return dateFormatter.format(new Date(`${value}T00:00:00`))
+}
+
+function riskClass(risk: ProjectRisk): string {
+  return risk.severity === 'critical' || risk.severity === 'high'
+    ? 'risk-item'
+    : 'risk-item risk-item--warning'
+}
+
+function forecastLabel(value: string): string {
+  return forecastLabels[value] ?? value
+}
 </script>
 
 <template>
@@ -78,7 +134,7 @@ const nextActions = [
             <div class="release-panel" aria-label="Aktueller Funktionsstand">
               <div>
                 <span class="release-panel-label">Aktueller Stand</span>
-                <strong>Projektdatei-Funktionen folgen mit Roadmap 1</strong>
+                <strong>Eine fiktive Demo-Projektdatei ist standardmäßig geladen.</strong>
               </div>
               <a class="button button-secondary" href="#arbeitsweise">
                 Arbeitsweise ansehen
@@ -95,24 +151,27 @@ const nextActions = [
           <section class="opportunity-panel" aria-labelledby="opportunity-title">
             <div class="panel-header">
               <div>
-                <p class="panel-kicker">Beispiel-Opportunity</p>
-                <h2 id="opportunity-title">ACME CRM Transformation</h2>
+                <p class="panel-kicker">Standard-Demo · vollständig fiktiv</p>
+                <h2 id="opportunity-title">{{ project.project.accountName }}</h2>
+                <p class="opportunity-name">{{ project.project.name }}</p>
               </div>
-              <span class="deal-value">€ 480k</span>
+              <span class="deal-value">
+                {{ formatCurrency(project.project.dealValue) }}
+              </span>
             </div>
 
             <dl class="opportunity-meta">
               <div>
                 <dt>Forecast</dt>
-                <dd>Best Case</dd>
+                <dd>{{ forecastLabel(project.project.forecastCategory) }}</dd>
               </div>
               <div>
                 <dt>Target Close</dt>
-                <dd>31.03.2027</dd>
+                <dd>{{ formatDate(project.project.targetCloseDate) }}</dd>
               </div>
               <div>
                 <dt>Target Go-Live</dt>
-                <dd>01.07.2027</dd>
+                <dd>{{ formatDate(project.project.targetGoLiveDate) }}</dd>
               </div>
             </dl>
 
@@ -120,22 +179,23 @@ const nextActions = [
               <section class="workbench-block" aria-labelledby="gaps-title">
                 <div class="block-heading">
                   <h3 id="gaps-title">Kritische Gaps</h3>
-                  <span class="count-badge">2 offen</span>
+                  <span class="count-badge">{{ openRisks.length }} sichtbar</span>
                 </div>
 
-                <div class="risk-item">
-                  <span class="risk-indicator" aria-hidden="true"></span>
+                <div
+                  v-for="risk in openRisks"
+                  :key="risk.id"
+                  :class="riskClass(risk)"
+                >
+                  <span
+                    :class="risk.severity === 'critical' || risk.severity === 'high'
+                      ? 'risk-indicator'
+                      : 'warning-indicator'"
+                    aria-hidden="true"
+                  ></span>
                   <div>
-                    <strong>Paper Process nicht belastbar bestätigt</strong>
-                    <p>Owner, Procurement-Schritte und Lead Time fehlen.</p>
-                  </div>
-                </div>
-
-                <div class="risk-item risk-item--warning">
-                  <span class="warning-indicator" aria-hidden="true"></span>
-                  <div>
-                    <strong>Economic-Buyer-Priorität nur teilweise belegt</strong>
-                    <p>Direkte Bestätigung der Investitionspriorität fehlt.</p>
+                    <strong>{{ risk.title }}</strong>
+                    <p>{{ risk.impact }}</p>
                   </div>
                 </div>
               </section>
@@ -143,16 +203,16 @@ const nextActions = [
               <section class="workbench-block" aria-labelledby="actions-title">
                 <div class="block-heading">
                   <h3 id="actions-title">Nächste Aktionen</h3>
-                  <span class="count-badge">2</span>
+                  <span class="count-badge">{{ openActions.length }} sichtbar</span>
                 </div>
 
                 <ol class="action-list">
-                  <li v-for="action in nextActions" :key="action.title">
+                  <li v-for="action in openActions" :key="action.id">
                     <div>
                       <strong>{{ action.title }}</strong>
-                      <span>{{ action.context }}</span>
+                      <span>{{ areaLabels[action.relatedArea] }}</span>
                     </div>
-                    <span class="action-due">{{ action.due }}</span>
+                    <span class="action-due">{{ formatDate(action.dueDate) }}</span>
                   </li>
                 </ol>
               </section>
@@ -167,7 +227,7 @@ const nextActions = [
                 <span class="status-scale">0–10</span>
               </div>
 
-              <div class="status-list" aria-label="Beispielhafter MEDDPICC-Status">
+              <div class="status-list" aria-label="MEDDPICC-Status der Standard-Demo">
                 <div v-for="item in snapshot" :key="item.label" class="status-row">
                   <span class="status-label">{{ item.label }}</span>
                   <span class="status-summary">
@@ -292,9 +352,9 @@ const nextActions = [
             <h2 id="privacy-title">Projektverarbeitung ohne verpflichtendes Backend.</h2>
           </div>
           <p>
-            Die geplante Basis verarbeitet Projektinhalte lokal im Browser. Die
-            Anwendung benötigt dafür weder Cloud-Datenbank noch Benutzerkonto.
-            Spätere externe Integrationen wären ausdrücklich optional.
+            Die Standard-Demo wird beim Build in die Anwendung eingebettet und lokal
+            im Browser verarbeitet. Für echte Projektdateien wird kein verpflichtendes
+            Backend benötigt; spätere externe Integrationen wären ausdrücklich optional.
           </p>
         </div>
       </section>
