@@ -1,48 +1,63 @@
-# Contributing
+# Beitragen
 
-MEDDPICC Workbench is intended to remain a focused, local-first qualification tool. Contributions should preserve that product direction.
+MEDDPICC Workbench soll ein fokussiertes local-first Qualifizierungswerkzeug bleiben. Beiträge müssen diese Richtung erhalten.
 
-## Before implementing a feature
+## Projektsprache
 
-A change should answer at least one of these questions:
+Die Projektsprache ist **Deutsch**.
 
-- Does it reduce repetitive qualification/deal-planning work?
-- Does it improve the reliability of evidence and qualification state?
-- Does it make a project easier to reopen, review, or hand off?
-- Does it help expose a real gap, risk, dependency, or next action?
+Deutsch für:
 
-If not, it may belong outside the core product.
+- Dokumentation
+- Issues
+- Pull Requests
+- UI-Texte
+- Hilfetexte und Fehlermeldungen
+- fachliche Beschreibungen
 
-Before coding, read `AGENTS.md`. For UI/UX changes also read `docs/DESIGN_SYSTEM.md`.
+Englisch bleibt bei etablierten MEDDPICC- und technischen Fachbegriffen sowie in Code, Schema-Keys, APIs, Typen, Variablen, Funktionen und Dateinamen.
 
-## Architecture constraints
+Vor Implementierung `AGENTS.md` lesen. Bei UI/UX zusätzlich `docs/DESIGN_SYSTEM.md`.
 
-Do not introduce:
+## Vor einem Feature
 
-- a mandatory backend
-- mandatory user accounts
-- runtime AI dependencies
-- telemetry that can receive opportunity content
-- silent upload/sync of project files
-- a second canonical datastore beside the `.meddpicc` file
+Eine Änderung sollte mindestens eine dieser Fragen mit Ja beantworten:
 
-Browser storage is permitted only for recovery, preferences, or explicitly documented convenience features.
+- Reduziert sie repetitive Qualification-/Deal-Planning-Arbeit?
+- Verbessert sie Verlässlichkeit von Evidenz und Qualifizierungsstatus?
+- Macht sie ein Projekt leichter wiederaufnehmbar, reviewbar oder übergebbar?
+- Hilft sie, reale Gaps, Risiken, Abhängigkeiten oder nächste Aktionen sichtbar zu machen?
 
-## Development workflow
+Wenn nicht, gehört sie wahrscheinlich nicht in den Core.
 
-Recommended workflow:
+## Architekturgrenzen
 
-1. Create a focused branch.
-2. Keep commits small and descriptive.
-3. Add or update tests for domain behavior.
-4. Update schema/migration documentation when file structure changes.
-5. For UI changes, validate against the design-system checklist.
-6. Open a pull request describing behavior and compatibility impact.
-7. Do not merge with failing tests.
+Nicht einführen:
 
-## Commit style
+- verpflichtendes Backend
+- verpflichtende Benutzerkonten
+- AI-Abhängigkeit zur Runtime
+- Telemetrie mit Zugriff auf Opportunity-Inhalte
+- stillen Upload/Sync von Projektdateien
+- zweite kanonische Datenquelle neben der `.meddpicc`-Datei
 
-Use clear conventional-style prefixes where practical:
+Browser Storage ist nur für Recovery, Präferenzen oder ausdrücklich dokumentierte Komfortfunktionen zulässig.
+
+## Entwicklungsworkflow
+
+Empfohlen:
+
+1. fokussierten Branch erstellen
+2. kleine, beschreibende Commits
+3. Tests für Domain-Verhalten ergänzen/aktualisieren
+4. bei Schema-Änderungen Migrationsdokumentation aktualisieren
+5. UI-Änderungen gegen Design-System-Checkliste prüfen
+6. Pull Request mit Verhalten und Kompatibilitätsauswirkung erstellen
+7. nicht mit fehlschlagenden Tests mergen
+
+## Commit-Stil
+
+Conventional-Commit-Präfixe bleiben Englisch:
 
 ```text
 feat:
@@ -55,80 +70,83 @@ ci:
 chore:
 ```
 
-## Project-file compatibility
+Die Beschreibung danach darf deutsch sein.
 
-Changes to the `.meddpicc` schema require special care.
+## Project-File-Kompatibilität
 
-A pull request changing persisted data should document:
+Änderungen am `.meddpicc`-Schema erfordern besondere Sorgfalt.
 
-- old schema version
-- new schema version
-- whether change is patch/minor/major
-- migration behavior
-- fixture/test changes
-- data-loss risk
-- downgrade behavior, if relevant
+Ein Pull Request mit Persistenzänderung dokumentiert:
 
-Never silently discard unknown compatible fields.
+- alte Schema-Version
+- neue Schema-Version
+- Patch/Minor/Major
+- Migrationsverhalten
+- Fixture-/Teständerungen
+- Datenverlustrisiko
+- Downgrade-Verhalten, falls relevant
 
-## Domain rules
+Kompatible unbekannte Felder niemals still verwerfen.
 
-Prefer pure functions for:
+## Domain-Regeln
 
-- calculations
-- scoring
-- gap detection
-- date/dependency logic
-- validation
-- migration
+Reine Funktionen bevorzugen für:
 
-UI components should not contain hidden methodology rules.
+- Berechnungen
+- Scoring
+- Gap Detection
+- Datums-/Dependency-Logik
+- Validierung
+- Migration
 
-## UI/UX contributions
+UI-Komponenten dürfen keine versteckte Methodiklogik enthalten.
 
-UI work must follow:
+## UI/UX-Beiträge
+
+UI-Arbeiten folgen:
 
 - `docs/DESIGN_SYSTEM.md`
 - `.agents/skills/meddpicc-ui-ux/SKILL.md`
-- repository-wide rules in `AGENTS.md`
+- `AGENTS.md`
 
-The project uses `nextlevelbuilder/ui-ux-pro-max-skill` only as an external development reference. The reviewed upstream snapshot and usage boundaries are documented in `docs/UI_UX_REFERENCE.md`.
+`nextlevelbuilder/ui-ux-pro-max-skill` ist ausschließlich externe Entwicklungsreferenz. Gepinnter Stand und Nutzungsgrenzen: `docs/UI_UX_REFERENCE.md`.
 
-Do not add the upstream skill as a runtime dependency.
+Nicht als Runtime Dependency hinzufügen.
 
-UI pull requests should consider:
+UI-Pull-Requests prüfen insbesondere:
 
-- semantic HTML
-- complete keyboard operation
-- visible focus
-- non-color-only status meaning
-- responsive behavior around 375/768/1024/1440 px
-- long German/English labels
-- browser zoom and text scaling
-- reduced motion
-- chart/table accessibility
-- local/bundled assets rather than external runtime fonts/scripts
+- semantisches HTML
+- vollständige Tastaturbedienung
+- sichtbaren Fokus
+- Status nicht nur über Farbe
+- Responsive-Verhalten bei ca. 375/768/1024/1440 px
+- lange deutsche Labels und englische Fachbegriffe
+- Browser-Zoom/Textskalierung
+- Reduced Motion
+- Chart-/Tabellen-Accessibility
+- lokale/gebündelte Assets statt externer Runtime-Fonts/Scripts
+- deutsche Standardsprache im UI
 
-## Methodology content
+## Methodikinhalte
 
-Use original wording.
+Eigene Formulierungen verwenden.
 
-Do not paste or reproduce copyrighted book passages, proprietary training slides, certification materials, or third-party course content into the repository.
+Keine Copyright-geschützten Buchpassagen, proprietären Trainingsfolien, Zertifizierungsunterlagen oder fremden Kursinhalte in das Repository kopieren.
 
-General methodology concepts can be implemented as software behavior, but public documentation and UI copy should be independently written.
+Allgemeine Methodik kann als Softwareverhalten umgesetzt werden; öffentliche Dokumentation und UI-Texte müssen eigenständig formuliert sein.
 
-## Testing expectations
+## Testerwartungen
 
-At minimum:
+Mindestens:
 
-- deterministic calculations need unit tests
-- schema changes need valid/invalid/migration fixtures
-- file open/save needs browser-flow coverage
-- meaningful UI workflows need keyboard/responsive checks
-- bug fixes should receive a regression test when practical
+- deterministische Berechnungen mit Unit Tests
+- Schema-Änderungen mit valid/invalid/migration Fixtures
+- File Open/Save mit Browser-Flow-Tests
+- relevante UI-Flows mit Keyboard-/Responsive-Prüfung
+- Bugfixes möglichst mit Regression Test
 
-## Security and privacy
+## Security und Privacy
 
-Any feature that introduces a runtime network request involving project data requires explicit design review and documentation.
+Jede Funktion, die Runtime-Netzwerkverkehr mit Projektdaten einführt, benötigt explizites Design Review und Dokumentation.
 
-See [SECURITY.md](SECURITY.md).
+Siehe [SECURITY.md](SECURITY.md).
