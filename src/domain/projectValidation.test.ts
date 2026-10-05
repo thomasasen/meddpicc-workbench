@@ -86,4 +86,20 @@ describe('Domain Validation', () => {
     expect(result.success).toBe(false)
     if (!result.success) expect(result.issues.some((issue) => issue.code === 'missing_reference')).toBe(true)
   })
+  it('erkennt widersprüchliche Target-Go-Live-Werte zwischen Projektmetadaten und Planning', () => {
+    const project = structuredClone(defaultProject)
+    project.planning.targetGoLiveDate = '2027-08-01'
+
+    const issues = validateProjectDomain(project)
+
+    expect(issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'target_go_live_mismatch',
+          path: '/planning/targetGoLiveDate',
+        }),
+      ]),
+    )
+  })
+
 })
