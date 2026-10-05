@@ -5,8 +5,12 @@ export type PreparedProjectSave = {
   fileName: string
 }
 
+export function cloneProject(project: MeddpiccProject): MeddpiccProject {
+  return JSON.parse(JSON.stringify(project)) as MeddpiccProject
+}
+
 export function prepareProjectForSave(project: MeddpiccProject, savedAt: Date = new Date()): MeddpiccProject {
-  const snapshot = structuredClone(project)
+  const snapshot = cloneProject(project)
   snapshot.revision += 1
   snapshot.updatedAt = savedAt.toISOString()
   return snapshot
