@@ -49,7 +49,7 @@ type ProjectMetaForm = {
   opportunityId: string
   owner: string
   currency: string
-  dealValue: string
+  dealValue: string | number
   targetCloseDate: string
   targetGoLiveDate: string
   forecastCategory: ProjectMeta['forecastCategory']
@@ -226,7 +226,7 @@ function submitProjectMeta() {
   statusMessage.value = ''
 
   try {
-    const rawDealValue = projectMetaForm.value.dealValue.trim()
+    const rawDealValue = String(projectMetaForm.value.dealValue).trim()
     projectStore.updateProjectMeta({
       name: projectMetaForm.value.name.trim(),
       accountName: projectMetaForm.value.accountName.trim(),
