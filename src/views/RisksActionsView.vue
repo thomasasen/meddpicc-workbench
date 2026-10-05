@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, CircleCheck, ListTodo, Pencil, Plus, Save, TriangleAlert } from '@lucide/vue'
+import { ArrowLeft, CircleCheck, Pencil, Plus, Save, TriangleAlert } from '@lucide/vue'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
@@ -97,6 +97,8 @@ const riskEntityOptions = computed(() => {
     case 'competition':
       return p.meddpicc.competition.knownAlternatives.map((item) => ({ id: item.id, label: item.name }))
   }
+
+  return []
 })
 
 function resetRiskForm() {
