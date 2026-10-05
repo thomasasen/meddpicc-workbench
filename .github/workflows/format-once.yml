@@ -1,9 +1,9 @@
 name: Format branch once
 
 on:
-  push:
-    branches:
-      - feat/schema-foundation
+  pull_request:
+    types:
+      - reopened
 
 permissions:
   contents: write
@@ -13,7 +13,7 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
-      - name: Branch auschecken
+      - name: Feature-Branch auschecken
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: feat/schema-foundation
