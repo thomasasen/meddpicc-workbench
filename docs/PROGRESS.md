@@ -4,26 +4,34 @@ Stand: 05.10.2026
 
 Dieses Dokument ist der kompakte Handoff-Stand für die Weiterentwicklung von MEDDPICC Workbench. Es ergänzt die Roadmap um den tatsächlich implementierten Zustand und den nächsten empfohlenen Arbeitsschritt.
 
-## Aktueller qualitätsgesicherter Stand
+## Aktueller qualitätsgesicherter Stand auf `main`
 
-Der aktuelle Roadmap-2-Slice wird über PR #25 umgesetzt:
+Der aktuelle Roadmap-2-Slice wurde über PR #25 gemerged.
 
-- projektweites Evidenzregister
-- projektweite Risiken
-- projektweite nächste Aktionen
+Fachlicher Merge:
+
+- PR #25 – `feat: projektweite Risiken und nächste Aktionen bearbeiten`
+- Squash-Commit: `62ebf1612cbecdb4e75395123209275eba34fd35`
+
+Damit sind projektweit nutzbar:
+
+- Evidenzregister
+- Risiken
+- nächste Aktionen
 - Risk → Action-Verknüpfung
 - relevante History-Events für diese Workflows
 
-Für den finalen Implementierungsstand vor der Dokumentationsaktualisierung liefen in der PR-CI erfolgreich:
+Für den gemergten Stand liefen erfolgreich:
 
+- finale PR-CI
 - Formatting
 - ESLint
 - 43 Unit Tests
 - Production Build
 - Pages-Root-Synchronitätsprüfung
 - 14 Playwright-Ausführungen auf Desktop und Mobile
-
-Der Merge erfolgt weiterhin erst nach einer vollständig grünen finalen PR-CI einschließlich dieser Dokumentationsänderungen.
+- `main`-CI nach dem Merge
+- GitHub Pages Build und Deployment
 
 ## Abgeschlossen
 
