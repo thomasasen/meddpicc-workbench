@@ -169,12 +169,16 @@ export const useProjectStore = defineStore('project', () => {
     nextProject.risks[index] = updated
 
     if (previous.status !== 'closed' && updated.status === 'closed') {
-      appendHistory(nextProject, {
-        type: 'risk_closed',
-        area: updated.relatedArea,
-        entityId: updated.id,
-        summary: `Risiko geschlossen: ${updated.title}`,
-      }, options)
+      appendHistory(
+        nextProject,
+        {
+          type: 'risk_closed',
+          area: updated.relatedArea,
+          entityId: updated.id,
+          summary: `Risiko geschlossen: ${updated.title}`,
+        },
+        options,
+      )
     }
 
     commitValidatedProject(nextProject)
@@ -243,12 +247,16 @@ export const useProjectStore = defineStore('project', () => {
     nextProject.actions[index] = updated
 
     if (previous.status !== 'completed' && updated.status === 'completed') {
-      appendHistory(nextProject, {
-        type: 'action_completed',
-        area: updated.relatedArea,
-        entityId: updated.id,
-        summary: `Aktion abgeschlossen: ${updated.title}`,
-      }, options)
+      appendHistory(
+        nextProject,
+        {
+          type: 'action_completed',
+          area: updated.relatedArea,
+          entityId: updated.id,
+          summary: `Aktion abgeschlossen: ${updated.title}`,
+        },
+        options,
+      )
     }
 
     commitValidatedProject(nextProject)

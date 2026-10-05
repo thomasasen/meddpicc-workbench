@@ -160,9 +160,7 @@ function submitRisk() {
       owner: riskForm.value.owner || null,
       dueDate: riskForm.value.dueDate || null,
     }
-    const risk = editingRiskId.value
-      ? projectStore.updateRisk(editingRiskId.value, draft)
-      : projectStore.addRisk(draft)
+    const risk = editingRiskId.value ? projectStore.updateRisk(editingRiskId.value, draft) : projectStore.addRisk(draft)
     statusMessage.value = `Risiko „${risk.title}“ wurde ${editingRiskId.value ? 'aktualisiert' : 'angelegt'}.`
     resetRiskForm()
   } catch (error) {
@@ -254,12 +252,18 @@ function saveProject() {
       <div class="container header-inner">
         <RouterLink class="brand" to="/" aria-label="Zur MEDDPICC Workbench">
           <span class="brand-mark" aria-hidden="true">M</span>
-          <span class="brand-copy"><strong>MEDDPICC Workbench</strong><span>Local-first Deal-Qualifizierung</span></span>
+          <span class="brand-copy"
+            ><strong>MEDDPICC Workbench</strong><span>Local-first Deal-Qualifizierung</span></span
+          >
         </RouterLink>
         <div class="header-actions">
-          <RouterLink class="icon-link heading-with-icon" to="/"><ArrowLeft :size="16" aria-hidden="true" /><span>Dashboard</span></RouterLink>
+          <RouterLink class="icon-link heading-with-icon" to="/"
+            ><ArrowLeft :size="16" aria-hidden="true" /><span>Dashboard</span></RouterLink
+          >
           <RouterLink class="icon-link" to="/evidence">Evidenzregister</RouterLink>
-          <button class="button button-primary button-with-icon" type="button" @click="saveProject"><Save :size="16" aria-hidden="true" /><span>Projekt speichern</span></button>
+          <button class="button button-primary button-with-icon" type="button" @click="saveProject">
+            <Save :size="16" aria-hidden="true" /><span>Projekt speichern</span>
+          </button>
         </div>
       </div>
     </header>
@@ -270,22 +274,36 @@ function saveProject() {
           <div>
             <p class="eyebrow">Roadmap 2 · Gemeinsame Arbeitsobjekte</p>
             <h1>Risiken &amp; Aktionen</h1>
-            <p class="intro-text">Risiken beschreiben konkrete Deal-Gefahren. Aktionen schließen Qualification- oder Execution-Lücken und halten fest, welche Evidenz danach vorliegen soll.</p>
+            <p class="intro-text">
+              Risiken beschreiben konkrete Deal-Gefahren. Aktionen schließen Qualification- oder Execution-Lücken und
+              halten fest, welche Evidenz danach vorliegen soll.
+            </p>
           </div>
           <div class="evidence-project-state">
             <span class="project-context-label">Aktuelles Projekt</span>
             <strong>{{ project.project.accountName }} · {{ project.project.name }}</strong>
             <span>{{ fileName ?? 'Noch keine Projektdatei' }}</span>
-            <span class="project-save-state" :class="{ 'project-save-state--dirty': dirty }">{{ dirty ? 'Ungespeicherte Änderungen' : 'Gespeicherter Stand' }}</span>
+            <span class="project-save-state" :class="{ 'project-save-state--dirty': dirty }">{{
+              dirty ? 'Ungespeicherte Änderungen' : 'Gespeicherter Stand'
+            }}</span>
           </div>
         </div>
       </section>
 
       <div v-if="issues.length" class="container project-message project-message--error workbench-message" role="alert">
         <TriangleAlert :size="18" aria-hidden="true" />
-        <div><strong>Änderung konnte nicht gespeichert werden.</strong><ul><li v-for="issue in issues" :key="`${issue.code}-${issue.path}-${issue.message}`">{{ issue.message }}</li></ul></div>
+        <div>
+          <strong>Änderung konnte nicht gespeichert werden.</strong>
+          <ul>
+            <li v-for="issue in issues" :key="`${issue.code}-${issue.path}-${issue.message}`">{{ issue.message }}</li>
+          </ul>
+        </div>
       </div>
-      <div v-else-if="statusMessage" class="container project-message project-message--success workbench-message" role="status">
+      <div
+        v-else-if="statusMessage"
+        class="container project-message project-message--success workbench-message"
+        role="status"
+      >
         <CircleCheck :size="18" aria-hidden="true" /><strong>{{ statusMessage }}</strong>
       </div>
 
@@ -293,75 +311,216 @@ function saveProject() {
         <div class="container risk-action-grid">
           <section class="risk-action-column" aria-labelledby="risk-editor-title">
             <div class="risk-action-heading">
-              <div><p class="eyebrow">Deal Risk</p><h2 id="risk-editor-title">Risiken</h2></div>
+              <div>
+                <p class="eyebrow">Deal Risk</p>
+                <h2 id="risk-editor-title">Risiken</h2>
+              </div>
               <span class="count-badge">{{ project.risks.length }} Einträge</span>
             </div>
             <form class="work-object-form" @submit.prevent="submitRisk">
-              <label class="field field--full"><span>Titel</span><input v-model="riskForm.title" required maxlength="500" /></label>
-              <label class="field"><span>Severity</span><select v-model="riskForm.severity"><option v-for="(label, value) in riskSeverityLabels" :key="value" :value="value">{{ label }}</option></select></label>
-              <label class="field"><span>Status</span><select v-model="riskForm.status"><option v-for="(label, value) in riskStatusLabels" :key="value" :value="value">{{ label }}</option></select></label>
-              <label class="field"><span>MEDDPICC-Bereich</span><select v-model="riskForm.relatedArea" @change="changeRiskArea"><option v-for="[value, label] in areaEntries" :key="value" :value="value">{{ label }}</option></select></label>
-              <label class="field"><span>Due Date <small>optional</small></span><input v-model="riskForm.dueDate" type="date" /></label>
-              <label class="field field--full"><span>Impact</span><textarea v-model="riskForm.impact" rows="3" maxlength="5000" /></label>
-              <label class="field field--full"><span>Mitigation <small>optional</small></span><textarea v-model="riskForm.mitigation" rows="2" maxlength="5000" /></label>
-              <label class="field field--full"><span>Owner <small>optional</small></span><input v-model="riskForm.owner" maxlength="300" /></label>
+              <label class="field field--full"
+                ><span>Titel</span><input v-model="riskForm.title" required maxlength="500"
+              /></label>
+              <label class="field"
+                ><span>Severity</span
+                ><select v-model="riskForm.severity">
+                  <option v-for="(label, value) in riskSeverityLabels" :key="value" :value="value">{{ label }}</option>
+                </select></label
+              >
+              <label class="field"
+                ><span>Status</span
+                ><select v-model="riskForm.status">
+                  <option v-for="(label, value) in riskStatusLabels" :key="value" :value="value">{{ label }}</option>
+                </select></label
+              >
+              <label class="field"
+                ><span>MEDDPICC-Bereich</span
+                ><select v-model="riskForm.relatedArea" @change="changeRiskArea">
+                  <option v-for="[value, label] in areaEntries" :key="value" :value="value">{{ label }}</option>
+                </select></label
+              >
+              <label class="field"
+                ><span>Due Date <small>optional</small></span
+                ><input v-model="riskForm.dueDate" type="date"
+              /></label>
+              <label class="field field--full"
+                ><span>Impact</span><textarea v-model="riskForm.impact" rows="3" maxlength="5000" />
+              </label>
+              <label class="field field--full"
+                ><span>Mitigation <small>optional</small></span
+                ><textarea v-model="riskForm.mitigation" rows="2" maxlength="5000" />
+              </label>
+              <label class="field field--full"
+                ><span>Owner <small>optional</small></span
+                ><input v-model="riskForm.owner" maxlength="300"
+              /></label>
               <fieldset v-if="riskEntityOptions.length" class="field field--full evidence-area-fieldset">
                 <legend>Verknüpfte Entities / Process Steps <small>optional</small></legend>
                 <div class="entity-option-list">
                   <label v-for="option in riskEntityOptions" :key="option.id" class="evidence-area-option">
-                    <input type="checkbox" :checked="riskForm.relatedEntityIds.includes(option.id)" @change="toggleRiskEntity(option.id)" /><span>{{ option.label }}</span>
+                    <input
+                      type="checkbox"
+                      :checked="riskForm.relatedEntityIds.includes(option.id)"
+                      @change="toggleRiskEntity(option.id)"
+                    /><span>{{ option.label }}</span>
                   </label>
                 </div>
               </fieldset>
               <div class="form-actions field--full">
-                <button class="button button-primary button-with-icon" type="submit"><Plus v-if="!editingRiskId" :size="16" aria-hidden="true" /><Pencil v-else :size="16" aria-hidden="true" /><span>{{ editingRiskId ? 'Risiko speichern' : 'Risiko anlegen' }}</span></button>
-                <button v-if="editingRiskId" class="button button-secondary" type="button" @click="resetRiskForm">Abbrechen</button>
+                <button class="button button-primary button-with-icon" type="submit">
+                  <Plus v-if="!editingRiskId" :size="16" aria-hidden="true" /><Pencil
+                    v-else
+                    :size="16"
+                    aria-hidden="true"
+                  /><span>{{ editingRiskId ? 'Risiko speichern' : 'Risiko anlegen' }}</span>
+                </button>
+                <button v-if="editingRiskId" class="button button-secondary" type="button" @click="resetRiskForm">
+                  Abbrechen
+                </button>
               </div>
             </form>
 
             <div class="work-object-list">
               <article v-for="risk in project.risks" :key="risk.id" class="work-object-card">
-                <div class="work-object-card-heading"><div><strong>{{ risk.title }}</strong><span>{{ areaLabels[risk.relatedArea] }} · {{ riskSeverityLabels[risk.severity] }}</span></div><button class="button button-secondary button-with-icon compact-button" type="button" @click="editRisk(risk)"><Pencil :size="14" aria-hidden="true" /><span>Bearbeiten</span></button></div>
+                <div class="work-object-card-heading">
+                  <div>
+                    <strong>{{ risk.title }}</strong
+                    ><span>{{ areaLabels[risk.relatedArea] }} · {{ riskSeverityLabels[risk.severity] }}</span>
+                  </div>
+                  <button
+                    class="button button-secondary button-with-icon compact-button"
+                    type="button"
+                    @click="editRisk(risk)"
+                  >
+                    <Pencil :size="14" aria-hidden="true" /><span>Bearbeiten</span>
+                  </button>
+                </div>
                 <p>{{ risk.impact || 'Impact noch nicht beschrieben.' }}</p>
-                <label class="inline-status"><span>Status</span><select :value="risk.status" :aria-label="`Status für Risiko ${risk.title}`" @change="changeRiskStatus(risk, $event)"><option v-for="(label, value) in riskStatusLabels" :key="value" :value="value">{{ label }}</option></select></label>
+                <label class="inline-status"
+                  ><span>Status</span
+                  ><select
+                    :value="risk.status"
+                    :aria-label="`Status für Risiko ${risk.title}`"
+                    @change="changeRiskStatus(risk, $event)"
+                  >
+                    <option v-for="(label, value) in riskStatusLabels" :key="value" :value="value">{{ label }}</option>
+                  </select></label
+                >
               </article>
             </div>
           </section>
 
           <section class="risk-action-column" aria-labelledby="action-editor-title">
             <div class="risk-action-heading">
-              <div><p class="eyebrow">Next Step</p><h2 id="action-editor-title">Nächste Aktionen</h2></div>
+              <div>
+                <p class="eyebrow">Next Step</p>
+                <h2 id="action-editor-title">Nächste Aktionen</h2>
+              </div>
               <span class="count-badge">{{ project.actions.length }} Einträge</span>
             </div>
             <form class="work-object-form" @submit.prevent="submitAction">
-              <label class="field field--full"><span>Titel</span><input v-model="actionForm.title" required maxlength="500" /></label>
-              <label class="field"><span>Status</span><select v-model="actionForm.status"><option v-for="(label, value) in actionStatusLabels" :key="value" :value="value">{{ label }}</option></select></label>
-              <label class="field"><span>MEDDPICC-Bereich</span><select v-model="actionForm.relatedArea"><option v-for="[value, label] in areaEntries" :key="value" :value="value">{{ label }}</option></select></label>
-              <label class="field"><span>Owner <small>optional</small></span><input v-model="actionForm.owner" maxlength="300" /></label>
-              <label class="field"><span>Due Date <small>optional</small></span><input v-model="actionForm.dueDate" type="date" /></label>
-              <label class="field field--full"><span>Related Risk <small>optional</small></span><select v-model="actionForm.relatedRiskId"><option value="">Kein verknüpftes Risiko</option><option v-for="risk in project.risks" :key="risk.id" :value="risk.id">{{ risk.title }}</option></select></label>
-              <label class="field field--full"><span>Related Gap <small>optional</small></span><textarea v-model="actionForm.relatedGap" rows="2" maxlength="2000" /></label>
-              <label class="field field--full"><span>Desired Evidence</span><textarea v-model="actionForm.desiredEvidence" rows="3" maxlength="5000" required placeholder="Welches Wissen oder welcher Nachweis soll nach der Aktion vorliegen?" /></label>
+              <label class="field field--full"
+                ><span>Titel</span><input v-model="actionForm.title" required maxlength="500"
+              /></label>
+              <label class="field"
+                ><span>Status</span
+                ><select v-model="actionForm.status">
+                  <option v-for="(label, value) in actionStatusLabels" :key="value" :value="value">{{ label }}</option>
+                </select></label
+              >
+              <label class="field"
+                ><span>MEDDPICC-Bereich</span
+                ><select v-model="actionForm.relatedArea">
+                  <option v-for="[value, label] in areaEntries" :key="value" :value="value">{{ label }}</option>
+                </select></label
+              >
+              <label class="field"
+                ><span>Owner <small>optional</small></span
+                ><input v-model="actionForm.owner" maxlength="300"
+              /></label>
+              <label class="field"
+                ><span>Due Date <small>optional</small></span
+                ><input v-model="actionForm.dueDate" type="date"
+              /></label>
+              <label class="field field--full"
+                ><span>Related Risk <small>optional</small></span
+                ><select v-model="actionForm.relatedRiskId">
+                  <option value="">Kein verknüpftes Risiko</option>
+                  <option v-for="risk in project.risks" :key="risk.id" :value="risk.id">{{ risk.title }}</option>
+                </select></label
+              >
+              <label class="field field--full"
+                ><span>Related Gap <small>optional</small></span
+                ><textarea v-model="actionForm.relatedGap" rows="2" maxlength="2000" />
+              </label>
+              <label class="field field--full"
+                ><span>Desired Evidence</span
+                ><textarea
+                  v-model="actionForm.desiredEvidence"
+                  rows="3"
+                  maxlength="5000"
+                  required
+                  placeholder="Welches Wissen oder welcher Nachweis soll nach der Aktion vorliegen?"
+                />
+              </label>
               <fieldset v-if="project.evidence.length" class="field field--full evidence-area-fieldset">
                 <legend>Vorhandene Evidenz verknüpfen <small>optional</small></legend>
                 <div class="entity-option-list">
                   <label v-for="evidence in project.evidence" :key="evidence.id" class="evidence-area-option">
-                    <input type="checkbox" :checked="actionForm.evidenceIds.includes(evidence.id)" @change="toggleEvidence(evidence.id)" /><span>{{ evidence.statement }}</span>
+                    <input
+                      type="checkbox"
+                      :checked="actionForm.evidenceIds.includes(evidence.id)"
+                      @change="toggleEvidence(evidence.id)"
+                    /><span>{{ evidence.statement }}</span>
                   </label>
                 </div>
               </fieldset>
               <div class="form-actions field--full">
-                <button class="button button-primary button-with-icon" type="submit"><Plus v-if="!editingActionId" :size="16" aria-hidden="true" /><Pencil v-else :size="16" aria-hidden="true" /><span>{{ editingActionId ? 'Aktion speichern' : 'Aktion anlegen' }}</span></button>
-                <button v-if="editingActionId" class="button button-secondary" type="button" @click="resetActionForm">Abbrechen</button>
+                <button class="button button-primary button-with-icon" type="submit">
+                  <Plus v-if="!editingActionId" :size="16" aria-hidden="true" /><Pencil
+                    v-else
+                    :size="16"
+                    aria-hidden="true"
+                  /><span>{{ editingActionId ? 'Aktion speichern' : 'Aktion anlegen' }}</span>
+                </button>
+                <button v-if="editingActionId" class="button button-secondary" type="button" @click="resetActionForm">
+                  Abbrechen
+                </button>
               </div>
             </form>
 
             <div class="work-object-list">
               <article v-for="action in project.actions" :key="action.id" class="work-object-card action-card">
-                <div class="work-object-card-heading"><div><strong>{{ action.title }}</strong><span>{{ areaLabels[action.relatedArea] }}</span></div><button class="button button-secondary button-with-icon compact-button" type="button" @click="editAction(action)"><Pencil :size="14" aria-hidden="true" /><span>Bearbeiten</span></button></div>
-                <p v-if="action.relatedRiskId"><strong>Verknüpftes Risiko:</strong> {{ riskById.get(action.relatedRiskId)?.title ?? action.relatedRiskId }}</p>
+                <div class="work-object-card-heading">
+                  <div>
+                    <strong>{{ action.title }}</strong
+                    ><span>{{ areaLabels[action.relatedArea] }}</span>
+                  </div>
+                  <button
+                    class="button button-secondary button-with-icon compact-button"
+                    type="button"
+                    @click="editAction(action)"
+                  >
+                    <Pencil :size="14" aria-hidden="true" /><span>Bearbeiten</span>
+                  </button>
+                </div>
+                <p v-if="action.relatedRiskId">
+                  <strong>Verknüpftes Risiko:</strong>
+                  {{ riskById.get(action.relatedRiskId)?.title ?? action.relatedRiskId }}
+                </p>
                 <p><strong>Desired Evidence:</strong> {{ action.desiredEvidence || 'Noch nicht beschrieben.' }}</p>
-                <label class="inline-status"><span>Status</span><select :value="action.status" :aria-label="`Status für Aktion ${action.title}`" @change="changeActionStatus(action, $event)"><option v-for="(label, value) in actionStatusLabels" :key="value" :value="value">{{ label }}</option></select></label>
+                <label class="inline-status"
+                  ><span>Status</span
+                  ><select
+                    :value="action.status"
+                    :aria-label="`Status für Aktion ${action.title}`"
+                    @change="changeActionStatus(action, $event)"
+                  >
+                    <option v-for="(label, value) in actionStatusLabels" :key="value" :value="value">
+                      {{ label }}
+                    </option>
+                  </select></label
+                >
               </article>
             </div>
           </section>

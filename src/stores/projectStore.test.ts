@@ -150,7 +150,9 @@ describe('projectStore', () => {
     store.setRiskStatus('risk_store_001', 'closed', { now: new Date('2026-10-05T19:30:00.000Z') })
 
     expect(store.project.risks.find((risk) => risk.id === 'risk_store_001')?.status).toBe('closed')
-    expect(store.project.history.filter((event) => event.entityId === 'risk_store_001' && event.type === 'risk_closed')).toHaveLength(1)
+    expect(
+      store.project.history.filter((event) => event.entityId === 'risk_store_001' && event.type === 'risk_closed'),
+    ).toHaveLength(1)
   })
 
   it('verknüpft eine Action mit Risk und protokolliert completed genau einmal', () => {
@@ -181,7 +183,9 @@ describe('projectStore', () => {
       { id: 'action_store_001' },
     )
 
-    expect(store.project.actions.find((action) => action.id === 'action_store_001')?.relatedRiskId).toBe('risk_action_link')
+    expect(store.project.actions.find((action) => action.id === 'action_store_001')?.relatedRiskId).toBe(
+      'risk_action_link',
+    )
     expect(() => serializeProject(store.project)).not.toThrow()
 
     store.setActionStatus('action_store_001', 'completed', {
@@ -190,7 +194,11 @@ describe('projectStore', () => {
     })
     store.setActionStatus('action_store_001', 'completed')
 
-    expect(store.project.history.filter((event) => event.entityId === 'action_store_001' && event.type === 'action_completed')).toHaveLength(1)
+    expect(
+      store.project.history.filter(
+        (event) => event.entityId === 'action_store_001' && event.type === 'action_completed',
+      ),
+    ).toHaveLength(1)
   })
 
   it('lehnt ungültige Risk-Referenzen atomar ab', () => {
@@ -230,6 +238,8 @@ describe('projectStore', () => {
 
     const download = store.prepareDownload(new Date('2026-10-05T21:00:00.000Z'))
     expect(() => serializeProject(download.project)).not.toThrow()
-    expect(JSON.parse(download.content).actions.some((action: { id: string }) => action.id === 'action_roundtrip')).toBe(true)
+    expect(
+      JSON.parse(download.content).actions.some((action: { id: string }) => action.id === 'action_roundtrip'),
+    ).toBe(true)
   })
 })
