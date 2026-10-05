@@ -1,15 +1,17 @@
 import demoProjectRaw from '../../examples/demo-opportunity.meddpicc?raw'
 
-import { isMeddpiccProject, type MeddpiccProject } from '../domain/project'
+import {
+  loadProject,
+  ProjectValidationError,
+} from '../domain/projectSchema'
 
-export function parseProject(raw: string): MeddpiccProject {
-  const parsed: unknown = JSON.parse(raw)
+const result = loadProject(demoProjectRaw)
 
-  if (!isMeddpiccProject(parsed)) {
-    throw new Error('Die Demo-Projektdatei entspricht nicht dem erwarteten Pre-Alpha-Format.')
-  }
-
-  return parsed
+if (!result.success) {
+  throw new ProjectValidationError(
+    'Die eingebettete Demo-Projektdatei entspricht nicht dem erwarteten Pre-Alpha-Format.',
+    result.issues,
+  )
 }
 
-export const defaultProject = parseProject(demoProjectRaw)
+export const defaultProject = result.project
