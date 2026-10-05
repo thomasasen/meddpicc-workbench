@@ -4,7 +4,7 @@ Eine local-first Browser-Anwendung zur Verwaltung und Qualifizierung komplexer B
 
 Die Grundidee ist einfach: **Die Projektdatei ist die Source of Truth.** Die Anwendung öffnet eine portable `.meddpicc`-Datei, unterstützt bei der strukturierten Bewertung der Opportunity mit deterministischen Werkzeugen und speichert das aktualisierte Projekt wieder in dieser Datei. Zur Runtime werden weder AI, Backend, Benutzerkonto noch externe Datenbank benötigt.
 
-> **Projektstatus:** Pre-Alpha. Foundation und Project File Lifecycle sind im Core abgeschlossen. Das erste gemeinsame Roadmap-2-Arbeitsobjekt ist mit dem projektweiten Evidenzregister produktiv nutzbar. Als nächster Slice folgen Risiken und nächste Aktionen. Historische Schema-0.1.0-Dateien werden deterministisch auf 0.2.0 migriert.
+> **Projektstatus:** Pre-Alpha. Foundation und Project File Lifecycle sind im Core abgeschlossen. Roadmap 2 besitzt ein projektweites Evidenzregister sowie gemeinsame, validierte Risiken und nächste Aktionen mit Risk→Action-Verknüpfung. Source-/Reference-Records und vollständige Dashboard-Traceability bleiben offen. Historische Schema-0.1.0-Dateien werden deterministisch auf 0.2.0 migriert.
 
 [![Live-Anwendung öffnen](https://img.shields.io/badge/MEDDPICC%20Workbench-Live--Anwendung%20%C3%B6ffnen-2563EB?style=for-the-badge)](https://thomasasen.github.io/meddpicc-workbench/)
 
@@ -49,7 +49,7 @@ Die Anwendung läuft vollständig im Browser und wird automatisch über GitHub P
 
 ### Standard-Demo
 
-Beim Öffnen der Anwendung wird zunächst eine vollständig fiktive Demo-Opportunity aus `examples/demo-opportunity.meddpicc` geladen. Über die Projektleiste können Nutzer ein fachlich leeres Projekt anlegen, eine lokale `.meddpicc`-Datei vollständig validiert öffnen und den aktuellen Stand wieder als `.meddpicc` herunterladen. Die Startseite liest Account, Deal Value, Termine, MEDDPICC-Status, Risiken und nächste Aktionen direkt aus dem aktuell geladenen Projekt.
+Beim Öffnen der Anwendung wird zunächst eine vollständig fiktive Demo-Opportunity aus `examples/demo-opportunity.meddpicc` geladen. Über die Projektleiste können Nutzer ein fachlich leeres Projekt anlegen, eine lokale `.meddpicc`-Datei vollständig validiert öffnen und den aktuellen Stand wieder als `.meddpicc` herunterladen. Die Startseite liest Account, Deal Value, Termine, MEDDPICC-Status, Risiken und nächste Aktionen direkt aus dem aktuell geladenen Projekt. Über die gemeinsame Arbeitsoberfläche „Risiken & Aktionen“ lassen sich beide Objektarten projektweit validiert anlegen und bearbeiten; Aktionen können mit Risks, Gaps und vorhandener Evidenz verknüpft werden.
 
 Die Demo dient gleichzeitig als Regression-Fixture für das formalisierte Pre-Alpha-Dateiformat. Sie verwendet `schemaVersion: 0.2.0`. Zusätzlich sichert `examples/legacy/demo-opportunity-0.1.0.meddpicc` die deterministische Migration des echten historischen 0.1.0-Formats ab. Der kanonische Vertrag liegt in `schema/meddpicc-project.schema.json`; Pre-Alpha-Versionen sind weiterhin noch kein langfristiger Kompatibilitätsvertrag.
 
