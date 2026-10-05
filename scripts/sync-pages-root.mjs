@@ -62,7 +62,7 @@ async function assertPublishedRootMatchesDist() {
 
         if (asset.endsWith('.css') && process.env.CI) {
           const expectedContent = await readFile(join(distRoot, 'assets', asset))
-          console.error(`PAGES_EXPECTED_CSS_BASE64:${expectedContent.toString('base64')}`)
+          console.error(\n            `PAGES_EXPECTED_CSS_BASE64:${expectedContent.toString('base64')}`,\n          )
         }
       }
     }
