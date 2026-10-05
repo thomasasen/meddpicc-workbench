@@ -104,17 +104,16 @@ function targetKey(target: QualificationEvidenceTarget): string {
 }
 
 function targetsFromKeys(keys: readonly string[]): QualificationEvidenceTarget[] {
-  const byKey = new Map(
-    targetGroups.value.flatMap((group) =>
-      group.targets.map((target) => [
-        targetKey(target),
-        {
-          area: target.area,
-          entityId: target.entityId,
-        } satisfies QualificationEvidenceTarget,
-      ]),
-    ),
-  )
+  const byKey = new Map<string, QualificationEvidenceTarget>()
+
+  for (const group of targetGroups.value) {
+    for (const target of group.targets) {
+      byKey.set(targetKey(target), {
+        area: target.area,
+        entityId: target.entityId,
+      })
+    }
+  }
 
   return [...new Set(keys)].flatMap((key) => {
     const target = byKey.get(key)
@@ -202,19 +201,22 @@ function submitEvidence() {
   issues.value = []
 
   try {
-    const evidence = projectStore.addEvidence({
-      statement: form.value.statement,
-      classification: form.value.classification,
-      quality: form.value.quality,
-      verification: form.value.verification,
-      sourceStakeholderId: form.value.sourceStakeholderId || null,
-      sourceDate: form.value.sourceDate || null,
-      context: form.value.context || null,
-      referenceId: form.value.referenceId || null,
-      relatedAreas: form.value.relatedAreas,
-    }, {
-      entityTargets: targetsFromKeys(form.value.entityTargetKeys),
-    })
+    const evidence = projectStore.addEvidence(
+      {
+        statement: form.value.statement,
+        classification: form.value.classification,
+        quality: form.value.quality,
+        verification: form.value.verification,
+        sourceStakeholderId: form.value.sourceStakeholderId || null,
+        sourceDate: form.value.sourceDate || null,
+        context: form.value.context || null,
+        referenceId: form.value.referenceId || null,
+        relatedAreas: form.value.relatedAreas,
+      },
+      {
+        entityTargets: targetsFromKeys(form.value.entityTargetKeys),
+      },
+    )
 
     statusMessage.value = `Evidenz „${evidence.statement}“ wurde angelegt.`
     resetForm()
@@ -556,7 +558,11 @@ function saveProject() {
                   </div>
 
                   <div class="form-actions evidence-link-actions">
-                    <button class="button button-primary compact-button" type="button" @click="saveEvidenceLinks(evidence.id)">
+                    <button
+                      class="button button-primary compact-button"
+                      type="button"
+                      @click="saveEvidenceLinks(evidence.id)"
+                    >
                       Links speichern
                     </button>
                     <button class="button button-secondary compact-button" type="button" @click="cancelLinkEdit">
