@@ -1,6 +1,15 @@
 <script setup lang="ts">
+import {
+  CircleCheck,
+  CircleDashed,
+  CircleDot,
+  CircleQuestionMark,
+  ListChecks,
+  ListTodo,
+  TriangleAlert,
+} from '@lucide/vue'
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
+import { computed, type Component } from 'vue'
 
 import type { ProjectAreaKey, ProjectRisk } from '../domain/project'
 import { useProjectStore } from '../stores/projectStore'
@@ -34,6 +43,14 @@ const forecastLabels: Record<string, string> = {
   'best-case': 'Best Case',
   commit: 'Commit',
   closed: 'Closed',
+}
+
+const statusIcons: Record<QualificationStatusKey, Component> = {
+  confirmed: CircleCheck,
+  partial: CircleDot,
+  assumption: CircleDashed,
+  unknown: CircleQuestionMark,
+  risk: TriangleAlert,
 }
 
 const snapshot = computed<SnapshotItem[]>(() =>
@@ -178,7 +195,10 @@ function forecastLabel(value: string): string {
             <div class="workbench-grid">
               <section class="workbench-block" aria-labelledby="gaps-title">
                 <div class="block-heading">
-                  <h3 id="gaps-title">Kritische Gaps</h3>
+                  <h3 id="gaps-title" class="heading-with-icon">
+                    <TriangleAlert class="section-icon section-icon--risk" :size="18" :stroke-width="2" aria-hidden="true" />
+                    <span>Kritische Gaps</span>
+                  </h3>
                   <span class="count-badge">{{ openRisks.length }} sichtbar</span>
                 </div>
 
@@ -187,12 +207,12 @@ function forecastLabel(value: string): string {
                   :key="risk.id"
                   :class="riskClass(risk)"
                 >
-                  <span
-                    :class="risk.severity === 'critical' || risk.severity === 'high'
-                      ? 'risk-indicator'
-                      : 'warning-indicator'"
+                  <TriangleAlert
+                    class="risk-item-icon"
+                    :size="16"
+                    :stroke-width="2"
                     aria-hidden="true"
-                  ></span>
+                  />
                   <div>
                     <strong>{{ risk.title }}</strong>
                     <p>{{ risk.impact }}</p>
@@ -202,7 +222,10 @@ function forecastLabel(value: string): string {
 
               <section class="workbench-block" aria-labelledby="actions-title">
                 <div class="block-heading">
-                  <h3 id="actions-title">Nächste Aktionen</h3>
+                  <h3 id="actions-title" class="heading-with-icon">
+                    <ListTodo class="section-icon" :size="18" :stroke-width="2" aria-hidden="true" />
+                    <span>Nächste Aktionen</span>
+                  </h3>
                   <span class="count-badge">{{ openActions.length }} sichtbar</span>
                 </div>
 
@@ -221,7 +244,10 @@ function forecastLabel(value: string): string {
             <section class="status-section" aria-labelledby="status-title">
               <div class="block-heading block-heading--status">
                 <div>
-                  <h3 id="status-title">MEDDPICC-Status</h3>
+                  <h3 id="status-title" class="heading-with-icon">
+                    <ListChecks class="section-icon" :size="18" :stroke-width="2" aria-hidden="true" />
+                    <span>MEDDPICC-Status</span>
+                  </h3>
                   <p>Evidenzgrad, keine Gewinnwahrscheinlichkeit</p>
                 </div>
                 <span class="status-scale">0–10</span>
@@ -231,11 +257,14 @@ function forecastLabel(value: string): string {
                 <div v-for="item in snapshot" :key="item.label" class="status-row">
                   <span class="status-label">{{ item.label }}</span>
                   <span class="status-summary">
-                    <span
-                      class="status-dot"
-                      :class="`status-dot--${item.status}`"
+                    <component
+                      :is="statusIcons[item.status]"
+                      class="status-icon"
+                      :class="`status-icon--${item.status}`"
+                      :size="16"
+                      :stroke-width="2"
                       aria-hidden="true"
-                    ></span>
+                    />
                     <span>{{ qualificationStatusLabels[item.status] }}</span>
                     <span
                       class="confidence"
