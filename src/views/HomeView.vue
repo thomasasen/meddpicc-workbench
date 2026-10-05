@@ -138,16 +138,16 @@ function actionTrace(action: ProjectAction): SourceTrace {
 }
 
 function sourceTraceLabel(trace: SourceTrace): string {
-  if (trace.evidence.length === 0) return 'Keine verknüpfte Evidenz'
+  if (trace.evidence.length === 0) return 'Quellenbasis: keine verknüpfte Evidenz'
 
   const evidenceLabel = `${trace.evidence.length} ${trace.evidence.length === 1 ? 'Evidenz' : 'Evidenzen'}`
-  if (trace.references.length === 0) return `${evidenceLabel} · ohne Reference-Record`
+  if (trace.references.length === 0) return `Quellenbasis: ${evidenceLabel} · ohne Reference-Record`
 
   const titles = trace.references.slice(0, 2).map((reference) => reference.title)
   const remaining = trace.references.length - titles.length
   const sourceLabel = titles.join(', ') + (remaining > 0 ? ` +${remaining}` : '')
 
-  return `${evidenceLabel} · Quellen: ${sourceLabel}`
+  return `Quellenbasis: ${evidenceLabel} · ${sourceLabel}`
 }
 
 function forecastLabel(value: string): string {
