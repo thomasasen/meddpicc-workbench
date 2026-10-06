@@ -164,9 +164,7 @@ describe('Next Best Action Engine', () => {
       title: 'Paper-Process-Owner und Lead Times bestätigen',
     })
     expect(recommendation?.inputs).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ path: 'project.targetCloseDate', value: '2027-03-31' }),
-      ]),
+      expect.arrayContaining([expect.objectContaining({ path: 'project.targetCloseDate', value: '2027-03-31' })]),
     )
   })
 
