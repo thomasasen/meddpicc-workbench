@@ -407,10 +407,7 @@ function paperProcessRule(project: MeddpiccProject): DealInspectorFinding | null
       'Lead Times bzw. Dauer der noch unklaren Schritte',
       'Kundenseitige Bestätigung der formalen Abfolge',
     ],
-    evidenceIds: [
-      ...section.evidenceIds,
-      ...unclear.flatMap((step) => step.evidenceIds),
-    ],
+    evidenceIds: [...section.evidenceIds, ...unclear.flatMap((step) => step.evidenceIds)],
     entityIds: unclear.map((step) => step.id),
     inputs: [
       {
