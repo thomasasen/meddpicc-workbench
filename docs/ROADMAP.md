@@ -139,16 +139,15 @@ Beispiel:
 
 Priorisiert aus den offenen Gaps **wenige konkrete nächste Sales-Aktionen** statt einer generischen Taskliste.
 
-Bewertet u. a.:
+**Erster Slice v0.1 umgesetzt:** sechs fokussierte Action Families für Pain, Metrics, Economic Buyer, Champion, Decision Process und Paper Process. Empfehlungen enthalten stabile Rule-IDs, Priorität, „Warum jetzt?“, gewünschte Evidence sowie vollständige Rückverfolgbarkeit auf Inspector-Findings, Evidence-/Entity-IDs und strukturierte Inputs.
 
-- Deal Impact
-- Dringlichkeit
-- Abhängigkeit für spätere Schritte
-- vorhandene Evidence
-- Aufwand zum Schließen des Gaps
-- Target Close / Go-Live
+Die Engine dedupliziert insbesondere verwandte Economic-Buyer-/Champion-Gaps und empfiehlt eine Champion-Introduction nur bei belastbar evidenzbasiertem Champion. Fehlende Daten werden als Validierungs-/Evidence-Aktion formuliert, nicht als Annahme ergänzt.
 
-Jede Empfehlung muss ein „Warum jetzt?“ liefern und auf die auslösenden Daten/Regeln zurückführbar sein.
+Die Priorisierung ist eine transparente Workbench-Produktregel: Blocker/Voraussetzungen vor Optimierung, high vor medium, Multi-Gap-Aktionen vor isolierten Schritten, direkte Evidence-Erzeugung vor Interpretation, zusätzliche Dringlichkeit für offene Decision-/Paper-Process-Lücken bei gesetztem Target Close sowie stabile Rule-ID-Reihenfolge. Es gibt keinen sichtbaren Score und keine Win Probability.
+
+Die Startseite zeigt maximal drei priorisierte Empfehlungen getrennt von Deal-Inspector-Findings, manuellen Risiken und `project.actions`. Empfehlungen bleiben vollständig abgeleiteter State.
+
+Regelkatalog: `docs/NEXT_BEST_ACTION_RULES.md`.
 
 **Technik:** deterministische Priorisierungs- und Regelengine. Keine AI notwendig.
 

@@ -29,6 +29,19 @@ test('lädt die Standard-Demo als Deal-Fokus ohne offensichtlichen Runtime-Fehle
   await expect(inspector).toContainText('economic-buyer.validated')
   await expect(inspector).toContainText('Regelset v0.1')
 
+  const recommendations = page.locator('.next-best-action-panel')
+  await expect(recommendations.getByRole('heading', { name: 'Empfohlene nächste Schritte' })).toBeVisible()
+  await expect(recommendations).toContainText('4 deterministisch abgeleitete Empfehlungen')
+  await expect(recommendations.locator('.next-best-action-item')).toHaveCount(3)
+  await expect(recommendations).toContainText('Tatsächliche Economic-Buyer-Authority validieren')
+  await expect(recommendations).toContainText(
+    'Geplante und unbekannte Decision-Process-Schritte kundenseitig validieren',
+  )
+  await expect(recommendations).toContainText('Paper-Process-Owner und Lead Times bestätigen')
+  await expect(recommendations).not.toContainText('Champion-Candidate durch konkrete interne Aktion testen')
+  await expect(recommendations).toContainText('Warum jetzt?')
+  await expect(recommendations).toContainText('Gewünschte Evidence / Outcome')
+
   await expect(page.getByRole('heading', { name: 'Offene Risiken' })).toBeVisible()
   await expect(page.getByText('Paper Process ist nicht belastbar bestätigt', { exact: true })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Nächste Aktionen' })).toBeVisible()
@@ -61,6 +74,13 @@ test('zeigt bei einem neuen Projekt fachlich korrekte Empty States', async ({ pa
   await expect(inspector).toContainText('Kundenseitiger Pain ist noch nicht konkret identifiziert.')
   await expect(inspector).toContainText('Economic Buyer ist noch nicht belastbar validiert.')
   await expect(inspector).not.toContainText('Die aktuellen v0.1-Regeln erkennen kein offenes Qualification Gap.')
+
+  const recommendations = page.locator('.next-best-action-panel')
+  await expect(recommendations).toContainText('5 deterministisch abgeleitete Empfehlungen')
+  await expect(recommendations.locator('.next-best-action-item')).toHaveCount(3)
+  await expect(recommendations).toContainText('Kundenseitigen Pain konkretisieren')
+  await expect(recommendations).toContainText('Economic-Buyer-Candidate identifizieren und Authority prüfen')
+  await expect(recommendations).toContainText('Kundenseitigen Decision Process gemeinsam abbilden')
 
   const context = page.locator('.opportunity-context-meta')
   await expect(context.getByText('Unbekannt', { exact: true })).toHaveCount(4)

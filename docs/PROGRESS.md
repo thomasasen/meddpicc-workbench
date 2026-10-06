@@ -43,7 +43,7 @@ PR #28 hat den letzten dafür benötigten Slice geliefert. Damit ist das Daten-/
 
 Weitere History-/Status-Ausbauschritte werden **nicht automatisch** vorgezogen. Sie werden nur umgesetzt, wenn ein konkreter Reasoning-/Coaching-Service sie tatsächlich benötigt.
 
-Der erste Reasoning-Slice ist nun ebenfalls umgesetzt: **Deal Inspector v0.1** analysiert den Projektstand rein deterministisch und zeigt die wichtigsten abgeleiteten Qualification Gaps getrennt von manuell gepflegten Risiken. Das Regelset ist in `docs/DEAL_INSPECTOR_RULES.md` dokumentiert.
+Die ersten beiden Reasoning-Slices sind umgesetzt: **Deal Inspector v0.1** analysiert den Projektstand rein deterministisch und zeigt die wichtigsten abgeleiteten Qualification Gaps getrennt von manuell gepflegten Risiken. Darauf aufbauend leitet die **Next Best Action Engine v0.1** wenige konkrete, erklärbare Verkäuferaktionen ab. Beide Services bleiben abgeleiteter State und verändern weder manuelle Risiken noch `project.actions`. Die Regelsets sind in `docs/DEAL_INSPECTOR_RULES.md` und `docs/NEXT_BEST_ACTION_RULES.md` dokumentiert.
 
 ## Abgeschlossen
 
@@ -131,7 +131,28 @@ Bewusste Grenzen:
 
 ### 2. Next Best Action Engine
 
-Aus offenen Gaps wenige konkrete nächste Verkäuferaktionen priorisieren und jeweils erklären, warum diese Aktion jetzt wichtig ist.
+Erster Slice v0.1 umgesetzt.
+
+Umgesetzt:
+
+- reiner Domain Service `deriveNextBestActions(project, findings)`
+- sechs fokussierte Action Families für Pain, Metrics, Economic Buyer, Champion, Decision Process und Paper Process
+- stabile Recommendation-/Rule-IDs, Priorität, `whyNow`, gewünschte Evidence, auslösende Inspector-Regeln sowie Evidence-/Entity-/Input-Traceability
+- Evidence-Härtung identisch zum Deal Inspector; Assumption/Unknown/Unconfirmed erfüllt keine Voraussetzung
+- Economic-Buyer-/Champion-Deduplizierung, einschließlich Schutz vor unbewiesenen Champion-Introductions
+- deterministische Priorisierung ohne sichtbaren Score und ohne Win Probability
+- Target Close erhöht die Dringlichkeit offener Decision-/Paper-Process-Klärung ohne künstliche Tages-Schwellen
+- Empfehlungen bleiben abgeleiteter State und mutieren weder Risks noch `project.actions`
+- Deal-Fokus zeigt maximal drei priorisierte Empfehlungen mit „Warum jetzt?“ und gewünschter Evidence
+- Desktop- und Mobile-Smokes decken die UI-Integration ab
+- fachlicher Regelkatalog: `docs/NEXT_BEST_ACTION_RULES.md`
+
+Bewusste Grenzen:
+
+- keine Competition-Regel in v0.1
+- keine automatische Brief-/E-Mail-Erzeugung
+- keine neue Schema-Version
+- keine AI-/LLM-Runtime
 
 ### 3. Qualification Gates / Pause Points
 
@@ -175,20 +196,18 @@ Wichtig:
 
 ## Nächster empfohlener Slice
 
-**Next Best Action Engine.**
+**Qualification Gates / Pause Points.**
 
-Aus den offenen Deal-Inspector-Findings sollen wenige konkrete Verkäuferaktionen priorisiert werden. Der Service darf die vorhandene generische Action-Liste nicht einfach neu sortieren, sondern muss aus einem Gap eine begründete Empfehlung ableiten.
+Auf Basis von Deal Inspector und Next Best Action Engine soll als nächstes geprüft werden, ob ressourcenintensive oder irreversible Sales-Aktivitäten fachlich ausreichend vorbereitet sind.
 
 Erster sinnvoller Umfang:
 
-- Inspector-Findings als primärer Input
-- 3–5 Aktionstypen für die in v0.1 abgedeckten Bereiche
-- Priorisierung nach Deal Impact, Dringlichkeit und fachlicher Abhängigkeit
-- für jede Empfehlung: „Warum jetzt?“, auslösendes Finding und gewünschte Evidence
-- keine automatische Persistierung in `project.actions`
-- keine versteckte Win Probability oder globale Deal-Health-Zahl
-- Unit Tests für jede Priorisierungsregel
-- UI zeigt wenige Empfehlungen, nicht eine neue Taskliste
+- wenige klar definierte Gates, zunächst z. B. POC/Pilot, Proposal/Pricing und Commit Forecast
+- pro Gate explizite Vorbedingungen aus vorhandenen Deal-Daten
+- Output als Empfehlung, nicht als technischer Zwang
+- fehlende Voraussetzungen mit konkreter Evidence und nächstem Qualifizierungsschritt erklären
+- keine neue globale Deal-Health-Zahl oder Win Probability
+- keine Schemaerweiterung ohne belegten Bedarf
 
 ## Bewusst nicht als nächstes bauen
 
@@ -232,5 +251,7 @@ Ein Slice gilt erst als abgeschlossen, wenn:
 - `src/domain/sourceTraceability.ts`
 - `src/domain/riskAction.ts`
 - `src/domain/dealInspector.ts`
+- `src/domain/nextBestAction.ts`
 - `docs/DEAL_INSPECTOR_RULES.md`
+- `docs/NEXT_BEST_ACTION_RULES.md`
 - `src/stores/projectStore.ts`
