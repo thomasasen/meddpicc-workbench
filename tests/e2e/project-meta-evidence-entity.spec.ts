@@ -12,7 +12,8 @@ test('bearbeitet Projektmetadaten und verknüpft Evidence konkret mit einer Qual
   await metaEditor.getByLabel('Account').fill('Nicht speichern AG')
   await metaEditor.getByRole('button', { name: 'Abbrechen', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Beispielwerke Industrie GmbH' })).toBeVisible()
-  await expect(page.locator('.project-toolbar')).toContainText('Demo · unverändert')
+  await expect(page.locator('.project-toolbar')).toContainText('Fiktive Demo')
+  await expect(page.locator('.project-toolbar')).toContainText('Gespeicherter Stand')
 
   await page.getByRole('button', { name: 'Projekt bearbeiten', exact: true }).click()
   await metaEditor.getByLabel('Account').fill('Beispielwerke Industrie SE')
