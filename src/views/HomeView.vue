@@ -793,7 +793,8 @@ function saveProject() {
             <div>
               <h3 id="next-best-action-title">Empfohlene nächste Schritte</h3>
               <p>
-                {{ allNextBestActions.length }} deterministisch abgeleitete Empfehlungen · maximal 3 priorisiert sichtbar
+                {{ allNextBestActions.length }} deterministisch abgeleitete Empfehlungen · maximal 3 priorisiert
+                sichtbar
               </p>
             </div>
             <span class="inspector-version">Regelset v0.1</span>
