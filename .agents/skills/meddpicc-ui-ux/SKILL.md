@@ -12,6 +12,8 @@ Diesen Skill bei jeder UI-Implementierung oder UI-Review in diesem Repository ve
 Lesen:
 
 - `docs/DESIGN_SYSTEM.md`
+- `docs/ROADMAP.md`
+- `docs/PROGRESS.md`
 - `docs/ICON_SYSTEM.md` bei Icon-relevanten Aufgaben
 - `docs/ARCHITECTURE.md`
 - `docs/PROJECT_CHARTER.md`
