@@ -15,6 +15,11 @@ import { computed, nextTick, ref, type Component } from 'vue'
 
 import { inspectDeal, type DealInspectorFinding } from '../domain/dealInspector'
 import { deriveNextBestActions, type NextBestActionRecommendation } from '../domain/nextBestAction'
+import {
+  assessQualificationGates,
+  type QualificationGateAssessment,
+  type QualificationGateRequirementLevel,
+} from '../domain/qualificationGate'
 import type { ProjectAction, ProjectAreaKey, ProjectMeta, ProjectRisk } from '../domain/project'
 import { qualificationStatusLabels, type QualificationStatusKey } from '../domain/qualificationStatus'
 import { loadProject, ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
@@ -158,6 +163,7 @@ const allInspectorFindings = computed(() => inspectDeal(project.value))
 const inspectorFindings = computed(() => allInspectorFindings.value.slice(0, 3))
 const allNextBestActions = computed(() => deriveNextBestActions(project.value, allInspectorFindings.value))
 const nextBestActions = computed(() => allNextBestActions.value.slice(0, 3))
+const qualificationGates = computed(() => assessQualificationGates(project.value))
 
 const inspectorSeverityLabels: Record<DealInspectorFinding['severity'], string> = {
   high: 'Hoch',
@@ -167,6 +173,17 @@ const inspectorSeverityLabels: Record<DealInspectorFinding['severity'], string> 
 const nextBestActionPriorityLabels: Record<NextBestActionRecommendation['priority'], string> = {
   high: 'Hoch',
   medium: 'Mittel',
+}
+
+const qualificationGateStatusLabels: Record<QualificationGateAssessment['status'], string> = {
+  ready: 'Bereit',
+  conditional: 'Bedingt',
+  'not-ready': 'Nicht bereit',
+}
+
+const qualificationGateRequirementLabels: Record<QualificationGateRequirementLevel, string> = {
+  required: 'Notwendig',
+  recommended: 'Empfohlen',
 }
 
 const dateFormatter = new Intl.DateTimeFormat('de-DE', {
@@ -223,6 +240,10 @@ function inspectorTrace(finding: DealInspectorFinding): SourceTrace {
 
 function recommendationTrace(recommendation: NextBestActionRecommendation): SourceTrace {
   return traceEvidenceIds(recommendation.evidenceIds)
+}
+
+function qualificationGateTrace(assessment: QualificationGateAssessment): SourceTrace {
+  return traceEvidenceIds(assessment.evidenceIds)
 }
 
 function sourceTraceLabel(trace: SourceTrace): string {
@@ -858,6 +879,86 @@ function saveProject() {
               </details>
             </li>
           </ol>
+        </section>
+
+        <section class="qualification-gates-panel" aria-labelledby="qualification-gates-title">
+          <div class="focus-panel-heading qualification-gates-heading">
+            <div>
+              <h3 id="qualification-gates-title">Qualification Gates</h3>
+              <p>POC / Pilot, Proposal / Pricing und Commit Forecast deterministisch prüfen</p>
+            </div>
+            <span class="inspector-version">Regelset v0.1</span>
+          </div>
+
+          <p class="section-note qualification-gates-note">
+            Die Gates sind Coaching-Empfehlungen und keine technische Blockade. „Bereit“ bedeutet nur, dass die für
+            dieses v0.1-Gate definierten Qualification-Voraussetzungen erfüllt sind.
+          </p>
+
+          <div class="qualification-gate-grid">
+            <article
+              v-for="assessment in qualificationGates"
+              :key="assessment.id"
+              class="qualification-gate-card"
+              :aria-labelledby="'qualification-gate-title-' + assessment.gateId"
+            >
+              <div class="qualification-gate-meta">
+                <span
+                  class="qualification-gate-status"
+                  :class="'qualification-gate-status--' + assessment.status"
+                >
+                  {{ qualificationGateStatusLabels[assessment.status] }}
+                </span>
+                <code>{{ assessment.gateId }}</code>
+              </div>
+
+              <strong :id="'qualification-gate-title-' + assessment.gateId">{{ assessment.title }}</strong>
+              <p>{{ assessment.verdict }}</p>
+              <p class="qualification-gate-rationale">{{ assessment.rationale }}</p>
+
+              <div v-if="assessment.nextStep" class="qualification-gate-next-step">
+                <strong>Nächster sinnvoller Schritt</strong>
+                <span>{{ assessment.nextStep }}</span>
+              </div>
+
+              <details class="inspector-details">
+                <summary>Voraussetzungen &amp; Datenbasis</summary>
+
+                <ul class="qualification-gate-requirements">
+                  <li v-for="requirement in assessment.requirements" :key="requirement.id">
+                    <div class="qualification-gate-requirement-heading">
+                      <strong>
+                        {{
+                          requirement.satisfied
+                            ? 'Erfüllt'
+                            : requirement.level === 'required'
+                              ? 'Fehlt'
+                              : 'Warnung'
+                        }}
+                        · {{ requirement.label }}
+                      </strong>
+                      <span>{{ qualificationGateRequirementLabels[requirement.level] }}</span>
+                    </div>
+                    <p>{{ requirement.explanation }}</p>
+                    <p v-if="!requirement.satisfied">
+                      <strong>Nächster Schritt:</strong> {{ requirement.nextStep }}
+                    </p>
+                  </li>
+                </ul>
+
+                <div class="qualification-gate-limitations">
+                  <strong>Prüfumfang v0.1</strong>
+                  <ul>
+                    <li v-for="limitation in assessment.limitations" :key="limitation">{{ limitation }}</li>
+                  </ul>
+                </div>
+
+                <RouterLink class="source-trace-link" :to="sourceTraceTarget(qualificationGateTrace(assessment))">
+                  {{ sourceTraceLabel(qualificationGateTrace(assessment)) }}
+                </RouterLink>
+              </details>
+            </article>
+          </div>
         </section>
 
         <div class="deal-focus-grid">
