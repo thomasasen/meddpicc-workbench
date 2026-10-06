@@ -46,9 +46,7 @@ describe('Next Best Action Engine', () => {
     const project = structuredClone(defaultProject)
     project.meddpicc.economicBuyer.candidates = []
 
-    const recommendation = recommendationsFor(project).find(
-      (item) => item.ruleId === 'nba.economic-buyer.advance',
-    )
+    const recommendation = recommendationsFor(project).find((item) => item.ruleId === 'nba.economic-buyer.advance')
 
     expect(recommendation?.title).toBe('Economic-Buyer-Candidate identifizieren und Authority prüfen')
     expect(recommendation?.priority).toBe('high')
@@ -63,9 +61,7 @@ describe('Next Best Action Engine', () => {
     candidate.identityStatus = 'confirmed'
     candidate.authorityStatus = 'reported'
 
-    const recommendation = recommendationsFor(project).find(
-      (item) => item.ruleId === 'nba.economic-buyer.advance',
-    )
+    const recommendation = recommendationsFor(project).find((item) => item.ruleId === 'nba.economic-buyer.advance')
 
     expect(recommendation?.title).toBe('Tatsächliche Economic-Buyer-Authority validieren')
   })
@@ -90,9 +86,7 @@ describe('Next Best Action Engine', () => {
       notes: 'Hat den Business Case intern aktiv vertreten.',
     })
 
-    const recommendation = recommendationsFor(project).find(
-      (item) => item.ruleId === 'nba.economic-buyer.advance',
-    )
+    const recommendation = recommendationsFor(project).find((item) => item.ruleId === 'nba.economic-buyer.advance')
 
     expect(recommendation?.title).toBe('Champion gezielt um direkte Economic-Buyer-Introduction bitten')
   })
@@ -108,9 +102,7 @@ describe('Next Best Action Engine', () => {
     candidate.directAccess = false
     candidate.engagementStatus = 'indirect'
 
-    const recommendation = recommendationsFor(project).find(
-      (item) => item.ruleId === 'nba.economic-buyer.advance',
-    )
+    const recommendation = recommendationsFor(project).find((item) => item.ruleId === 'nba.economic-buyer.advance')
 
     expect(recommendation?.title).not.toContain('Introduction bitten')
     expect(recommendation?.title).toBe('Champion-Candidate testen und einen belastbaren EB-Zugangspfad klären')
@@ -142,9 +134,7 @@ describe('Next Best Action Engine', () => {
       { now: new Date('2026-10-06T12:00:00.000Z'), projectId: 'nba_empty_project' },
     )
 
-    const recommendation = recommendationsFor(project).find(
-      (item) => item.ruleId === 'nba.decision-process.validate',
-    )
+    const recommendation = recommendationsFor(project).find((item) => item.ruleId === 'nba.decision-process.validate')
 
     expect(recommendation?.title).toBe('Kundenseitigen Decision Process gemeinsam abbilden')
   })
@@ -157,9 +147,7 @@ describe('Next Best Action Engine', () => {
 
     step.status = 'blocked'
 
-    const recommendation = recommendationsFor(project).find(
-      (item) => item.ruleId === 'nba.decision-process.validate',
-    )
+    const recommendation = recommendationsFor(project).find((item) => item.ruleId === 'nba.decision-process.validate')
 
     expect(recommendation?.title).toBe(
       'Blocker im Decision Process klären, bevor nachgelagerte Schritte geplant werden',
@@ -169,9 +157,7 @@ describe('Next Best Action Engine', () => {
   it('macht bei Target Close und unbekannten Paper-Process-Lead-Times die Klärung high-priority', () => {
     const project = structuredClone(defaultProject)
 
-    const recommendation = recommendationsFor(project).find(
-      (item) => item.ruleId === 'nba.paper-process.de-risk',
-    )
+    const recommendation = recommendationsFor(project).find((item) => item.ruleId === 'nba.paper-process.de-risk')
 
     expect(recommendation).toMatchObject({
       priority: 'high',
@@ -190,9 +176,7 @@ describe('Next Best Action Engine', () => {
       metric.customerConfirmed = false
     })
 
-    const recommendation = recommendationsFor(project).find(
-      (item) => item.ruleId === 'nba.metrics.validate-value',
-    )
+    const recommendation = recommendationsFor(project).find((item) => item.ruleId === 'nba.metrics.validate-value')
 
     expect(recommendation?.title).toBe('Current State und Desired Outcome mit dem Kunden quantifizieren')
   })
@@ -205,9 +189,7 @@ describe('Next Best Action Engine', () => {
       metric.economicImpact.derivation = null
     })
 
-    const recommendation = recommendationsFor(project).find(
-      (item) => item.ruleId === 'nba.metrics.validate-value',
-    )
+    const recommendation = recommendationsFor(project).find((item) => item.ruleId === 'nba.metrics.validate-value')
 
     expect(recommendation?.title).toBe('Wirtschaftlichen Impact einer relevanten Metric validieren')
   })
@@ -234,9 +216,7 @@ describe('Next Best Action Engine', () => {
     evidence.classification = 'assumption'
     evidence.verification = 'unconfirmed'
 
-    const recommendation = recommendationsFor(project).find(
-      (item) => item.ruleId === 'nba.economic-buyer.advance',
-    )
+    const recommendation = recommendationsFor(project).find((item) => item.ruleId === 'nba.economic-buyer.advance')
 
     expect(recommendation?.title).not.toBe('Champion gezielt um direkte Economic-Buyer-Introduction bitten')
   })
