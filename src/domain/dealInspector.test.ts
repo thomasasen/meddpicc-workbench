@@ -157,6 +157,11 @@ describe('Deal Inspector', () => {
         notes: 'Hat den Business Case intern vertreten.',
       },
       {
+        type: 'confirmed_personal_win',
+        evidenceIds: ['ev_champion_01'],
+        notes: 'Hat den eigenen Personal Win belastbar bestätigt.',
+      },
+      {
         type: 'enabled_economic_buyer_access',
         evidenceIds: ['ev_champion_01'],
         notes: 'Hat direkten Zugang zum Economic Buyer hergestellt.',
