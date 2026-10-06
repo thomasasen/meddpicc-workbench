@@ -476,9 +476,7 @@ function championRule(project: MeddpiccProject): DealInspectorFinding | null {
     person: (typeof section.people)[number],
     type: (typeof person.behaviors)[number]['type'],
   ) =>
-    person.behaviors.some(
-      (behavior) => behavior.type === type && hasSupportingEvidence(project, behavior.evidenceIds),
-    )
+    person.behaviors.some((behavior) => behavior.type === type && hasSupportingEvidence(project, behavior.evidenceIds))
 
   const championScore = (person: (typeof section.people)[number]) =>
     Number(person.influence === 'medium' || person.influence === 'high') +
