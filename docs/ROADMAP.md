@@ -153,27 +153,31 @@ Regelkatalog: `docs/NEXT_BEST_ACTION_RULES.md`.
 
 ### 3C – Qualification Gates / Pause Points
 
-Prüft vor ressourcenintensiven oder irreversiblen Sales-Aktivitäten, ob der Deal ausreichend qualifiziert ist.
+Prüft vor ressourcenintensiven oder forecast-relevanten Sales-Aktivitäten, ob der Deal ausreichend qualifiziert ist.
 
-Geplante Gates:
+**Erster Slice v0.1 umgesetzt:** drei deterministische Gates für **POC / Pilot**, **Proposal / Pricing** und **Commit Forecast**. Jedes Gate liefert einen der Status `not-ready`, `conditional` oder `ready`, ein begründetes Urteil, notwendige und empfohlene Voraussetzungen, fehlende Evidence und einen nächsten Qualifizierungsschritt.
 
-- Demo
-- POC / Pilot
-- Proposal
-- Pricing
-- Reference Call
-- Executive Meeting
-- Contract / Legal Start
-- Commit Forecast
-- Close
+Die Gates verwenden dieselbe Evidence-Härtung wie die übrige Reasoning-Schicht: Assumption, Unknown und Unconfirmed erfüllen evidenzpflichtige Voraussetzungen nicht. Wo ein offenes Gate auf ein Deal-Inspector-Finding zurückgeht, wird bevorzugt die bereits vorhandene Next Best Action verknüpft. Es entsteht keine zweite konkurrierende Action Engine.
 
 Beispiel:
 
-> POC aktuell nicht empfohlen: Economic Buyer nicht validiert und Success Criteria nicht bestätigt.
+> POC aktuell nicht empfohlen: Der Decision Process ist noch nicht belastbar genug, um einen erfolgreichen Test in den nächsten kundenseitigen Entscheidungsschritt zu überführen.
 
-Die Engine blockiert nichts technisch, sondern gibt eine begründete Empfehlung und zeigt fehlende Vorbedingungen.
+Die konkrete Required-/Recommended-Matrix ist eine transparente Workbench-Produktregel, keine offizielle MEDDPICC-Formel. Es gibt keinen sichtbaren Deal Score und keine Win Probability. Die Engine blockiert nichts technisch und verändert weder Risks, Actions noch Forecast Category.
 
-**Technik:** deterministische Regeln. Keine AI notwendig.
+Bewusste v0.1-Grenze: Schema 0.2.0 enthält noch keine test-spezifischen POC-Success-Criteria oder vollständige POC-Charter. Das POC-Gate prüft deshalb ausdrücklich nur die vorgelagerte Qualifizierungsbasis und setzt allgemeine Decision Criteria nicht mit POC-Success-Criteria gleich.
+
+Spätere mögliche Gate-Erweiterungen:
+
+- Demo
+- Reference Call
+- Executive Meeting
+- Contract / Legal Start
+- Close
+
+Regelkatalog: `docs/QUALIFICATION_GATES_RULES.md`.
+
+**Technik:** deterministische, testbare Domain-Regeln. Keine AI notwendig.
 
 ### 3D – Champion Tester
 

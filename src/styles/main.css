@@ -808,6 +808,178 @@ h3 {
   line-height: 1.45;
 }
 
+.qualification-gates-panel {
+  margin-bottom: var(--space-4);
+  overflow: hidden;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+}
+
+.qualification-gates-heading {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.qualification-gates-note {
+  margin: 0;
+  border-bottom: 1px solid var(--color-divider);
+  padding: var(--space-2) var(--space-4);
+}
+
+.qualification-gate-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.qualification-gate-card {
+  min-width: 0;
+  padding: var(--space-3) var(--space-4);
+}
+
+.qualification-gate-card + .qualification-gate-card {
+  border-left: 1px solid var(--color-divider);
+}
+
+.qualification-gate-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.qualification-gate-meta code {
+  overflow-wrap: anywhere;
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+}
+
+.qualification-gate-status {
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.qualification-gate-status--ready {
+  color: var(--color-confirmed);
+}
+
+.qualification-gate-status--conditional {
+  color: var(--color-warning-text);
+}
+
+.qualification-gate-status--not-ready {
+  color: var(--color-risk);
+}
+
+.qualification-gate-card > strong {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.qualification-gate-card > p {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.qualification-gate-card > p:first-of-type {
+  color: var(--color-text);
+}
+
+.qualification-gate-rationale {
+  font-size: 0.74rem !important;
+}
+
+.qualification-gate-next-step {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-3);
+  border-left: 2px solid var(--color-border-strong);
+  background: var(--color-surface-muted);
+  padding: var(--space-2) var(--space-3);
+}
+
+.qualification-gate-next-step strong {
+  font-size: 0.72rem;
+}
+
+.qualification-gate-next-step span {
+  color: var(--color-text-muted);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.qualification-gate-requirements {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qualification-gate-requirements > li {
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--space-2);
+}
+
+.qualification-gate-requirements > li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.qualification-gate-requirement-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.qualification-gate-requirement-heading strong {
+  overflow-wrap: anywhere;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.qualification-gate-requirement-heading span {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+  font-size: 0.66rem;
+  font-weight: 650;
+}
+
+.qualification-gate-requirements p {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.qualification-gate-requirements p strong {
+  color: var(--color-text);
+}
+
+.qualification-gate-limitations {
+  margin-top: var(--space-3);
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--space-2);
+}
+
+.qualification-gate-limitations > strong {
+  font-size: 0.7rem;
+}
+
+.qualification-gate-limitations ul {
+  margin: var(--space-1) 0 0;
+  padding-left: 1.1rem;
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+
 .deal-focus-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -1127,6 +1299,15 @@ h3 {
 }
 
 @media (max-width: 1024px) {
+  .qualification-gate-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qualification-gate-card + .qualification-gate-card {
+    border-top: 1px solid var(--color-divider);
+    border-left: 0;
+  }
+
   .header-inner {
     flex-wrap: wrap;
     padding-block: var(--space-2);

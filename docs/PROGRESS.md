@@ -43,7 +43,7 @@ PR #28 hat den letzten dafür benötigten Slice geliefert. Damit ist das Daten-/
 
 Weitere History-/Status-Ausbauschritte werden **nicht automatisch** vorgezogen. Sie werden nur umgesetzt, wenn ein konkreter Reasoning-/Coaching-Service sie tatsächlich benötigt.
 
-Die ersten beiden Reasoning-Slices sind umgesetzt: **Deal Inspector v0.1** analysiert den Projektstand rein deterministisch und zeigt die wichtigsten abgeleiteten Qualification Gaps getrennt von manuell gepflegten Risiken. Darauf aufbauend leitet die **Next Best Action Engine v0.1** wenige konkrete, erklärbare Verkäuferaktionen ab. Beide Services bleiben abgeleiteter State und verändern weder manuelle Risiken noch `project.actions`. Die Regelsets sind in `docs/DEAL_INSPECTOR_RULES.md` und `docs/NEXT_BEST_ACTION_RULES.md` dokumentiert.
+Die ersten drei Reasoning-Slices sind umgesetzt: **Deal Inspector v0.1** analysiert den Projektstand rein deterministisch und zeigt die wichtigsten abgeleiteten Qualification Gaps getrennt von manuell gepflegten Risiken. Darauf aufbauend leitet die **Next Best Action Engine v0.1** wenige konkrete, erklärbare Verkäuferaktionen ab. Die **Qualification Gates v0.1** prüfen für POC/Pilot, Proposal/Pricing und Commit Forecast, ob die vorhandene Qualifizierung den nächsten Schritt fachlich trägt. Alle drei Services bleiben abgeleiteter State und verändern weder manuelle Risiken noch `project.actions`. Die Regelsets sind in `docs/DEAL_INSPECTOR_RULES.md`, `docs/NEXT_BEST_ACTION_RULES.md` und `docs/QUALIFICATION_GATES_RULES.md` dokumentiert.
 
 ## Abgeschlossen
 
@@ -156,7 +156,32 @@ Bewusste Grenzen:
 
 ### 3. Qualification Gates / Pause Points
 
-Vor Demo, POC, Pricing, Proposal, Reference Call, Commit usw. prüfen, ob fachliche Vorbedingungen erfüllt sind und unnötige Sales-/Presales-Arbeit vermeiden.
+Erster Slice v0.1 umgesetzt.
+
+Umgesetzt:
+
+- reine Domain Services `assessQualificationGate(project, gateId)` und `assessQualificationGates(project)`
+- drei fokussierte Gates: POC/Pilot, Proposal/Pricing und Commit Forecast
+- deterministische Status `not-ready`, `conditional` und `ready`
+- explizite notwendige und empfohlene Voraussetzungen je Gate statt eines versteckten Scores
+- Evidence-Härtung für Pain, Metrics und Decision Criteria; Assumption/Unknown/Unconfirmed kann eine evidenzpflichtige Voraussetzung nicht erfüllen
+- Wiederverwendung von Deal Inspector und Next Best Action Engine; passende vorhandene NBA wird als nächster Schritt bevorzugt
+- vollständige Evidence-/Entity-/Input-Traceability
+- Gates bleiben Coaching-Empfehlungen und blockieren keine Verkäuferaktion technisch
+- kein globaler Deal Score und keine Win Probability
+- keine Mutation von Risks, Actions oder Forecast Category
+- Deal-Fokus zeigt drei responsive Gate-Karten mit Status, Urteil, nächstem Schritt, Voraussetzungen und Datenbasis
+- Desktop- und Mobile-Smokes decken Demo und fachlich leeren Projektstand ab
+- fachlicher Regelkatalog: `docs/QUALIFICATION_GATES_RULES.md`
+
+Bewusste Grenzen:
+
+- Schema 0.2.0 modelliert noch keine POC-spezifischen Success Criteria oder vollständige POC-Charter; `ready` bedeutet beim POC deshalb nur, dass die vorgelagerte v0.1-Qualifizierungsbasis erfüllt ist
+- interne Preis-/Discount-/Margenfreigaben liegen außerhalb des Proposal-/Pricing-Gates
+- keine Critical-Path- oder Datumsfeasibility-Berechnung für Commit in diesem Slice
+- Champion und Competition sind beim Commit wichtige Warnfaktoren, aber keine universellen Hard Stops
+- keine neue Schema-Version
+- keine AI-/LLM-Runtime
 
 ### 4. Champion Tester
 
@@ -196,18 +221,19 @@ Wichtig:
 
 ## Nächster empfohlener Slice
 
-**Qualification Gates / Pause Points.**
+**Champion Tester.**
 
-Auf Basis von Deal Inspector und Next Best Action Engine soll als nächstes geprüft werden, ob ressourcenintensive oder irreversible Sales-Aktivitäten fachlich ausreichend vorbereitet sind.
+Der nächste Slice soll den vorhandenen Champion-Stand nicht nur als Label lesen, sondern beobachtbares Verhalten und belastbare Evidence systematisch testen.
 
 Erster sinnvoller Umfang:
 
-- wenige klar definierte Gates, zunächst z. B. POC/Pilot, Proposal/Pricing und Commit Forecast
-- pro Gate explizite Vorbedingungen aus vorhandenen Deal-Daten
-- Output als Empfehlung, nicht als technischer Zwang
-- fehlende Voraussetzungen mit konkreter Evidence und nächstem Qualifizierungsschritt erklären
-- keine neue globale Deal-Health-Zahl oder Win Probability
-- keine Schemaerweiterung ohne belegten Bedarf
+- Champion-Candidates anhand von Einfluss, Personal Win und beobachtbaren Verhaltenssignalen prüfen
+- vorhandene Behaviors wie internes Verkaufen, interne Informationen und geschaffenen Economic-Buyer-Zugang evidenzbasiert auswerten
+- fehlende Belege in einen konkreten nächsten Champion-Test übersetzen
+- Ergebnis ohne globale Score-Zahl als nachvollziehbaren Zustand formulieren, z. B. Kandidat / teilweise bewiesen / belastbar
+- vorhandene Next-Best-Action-Logik wiederverwenden statt eine zweite Task-Engine aufzubauen
+- prüfen, ob stabile Champion-Behavior-IDs für Traceability wirklich erforderlich sind; Schema nur bei belegtem Bedarf erweitern
+- keine CRM-artige Kontaktverwaltung, keine Win Probability und keine AI-/LLM-Runtime
 
 ## Bewusst nicht als nächstes bauen
 
@@ -252,6 +278,8 @@ Ein Slice gilt erst als abgeschlossen, wenn:
 - `src/domain/riskAction.ts`
 - `src/domain/dealInspector.ts`
 - `src/domain/nextBestAction.ts`
+- `src/domain/qualificationGate.ts`
 - `docs/DEAL_INSPECTOR_RULES.md`
 - `docs/NEXT_BEST_ACTION_RULES.md`
+- `docs/QUALIFICATION_GATES_RULES.md`
 - `src/stores/projectStore.ts`

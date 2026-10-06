@@ -42,6 +42,22 @@ test('lädt die Standard-Demo als Deal-Fokus ohne offensichtlichen Runtime-Fehle
   await expect(recommendations).toContainText('Warum jetzt?')
   await expect(recommendations).toContainText('Gewünschte Evidence / Outcome')
 
+  const gates = page.locator('.qualification-gates-panel')
+  await expect(gates.getByRole('heading', { name: 'Qualification Gates' })).toBeVisible()
+  await expect(gates.locator('.qualification-gate-card')).toHaveCount(3)
+
+  const pocGate = gates.locator('.qualification-gate-card').filter({ hasText: 'POC / Pilot' })
+  await expect(pocGate).toContainText('Nicht bereit')
+  await expect(pocGate).toContainText('Geplante und unbekannte Decision-Process-Schritte kundenseitig validieren')
+
+  const proposalGate = gates.locator('.qualification-gate-card').filter({ hasText: 'Proposal / Pricing' })
+  await expect(proposalGate).toContainText('Bedingt')
+  await expect(proposalGate).toContainText('Tatsächliche Economic-Buyer-Authority validieren')
+
+  const commitGate = gates.locator('.qualification-gate-card').filter({ hasText: 'Commit Forecast' })
+  await expect(commitGate).toContainText('Nicht bereit')
+  await expect(commitGate).toContainText('Pause empfohlen')
+
   await expect(page.getByRole('heading', { name: 'Offene Risiken' })).toBeVisible()
   await expect(page.getByText('Paper Process ist nicht belastbar bestätigt', { exact: true })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Nächste Aktionen' })).toBeVisible()
@@ -51,9 +67,10 @@ test('lädt die Standard-Demo als Deal-Fokus ohne offensichtlichen Runtime-Fehle
   await expect(page.getByRole('link', { name: /Evidenz prüfen/ })).toBeVisible()
   await expect(page.getByRole('button', { name: /Projekt bearbeiten/ })).toBeVisible()
 
-  await expect(page.getByRole('heading', { name: 'MEDDPICC-Kurzstatus' })).toBeVisible()
-  await expect(page.getByText('Economic Buyer', { exact: true }).first()).toBeVisible()
-  await expect(page.getByText(/keine Win Probability/i)).toBeVisible()
+  const qualificationSnapshot = page.locator('.qualification-section')
+  await expect(qualificationSnapshot.getByRole('heading', { name: 'MEDDPICC-Kurzstatus' })).toBeVisible()
+  await expect(qualificationSnapshot.getByText('Economic Buyer', { exact: true }).first()).toBeVisible()
+  await expect(qualificationSnapshot.getByText(/keine Win Probability/i)).toBeVisible()
 
   expect(runtimeErrors).toEqual([])
 })
@@ -81,6 +98,19 @@ test('zeigt bei einem neuen Projekt fachlich korrekte Empty States', async ({ pa
   await expect(recommendations).toContainText('Kundenseitigen Pain konkretisieren')
   await expect(recommendations).toContainText('Economic-Buyer-Candidate identifizieren und Authority prüfen')
   await expect(recommendations).toContainText('Kundenseitigen Decision Process gemeinsam abbilden')
+
+  const gates = page.locator('.qualification-gates-panel')
+  await expect(gates.locator('.qualification-gate-card')).toHaveCount(3)
+  await expect(gates.locator('.qualification-gate-status--not-ready')).toHaveCount(3)
+
+  const pocGate = gates.locator('.qualification-gate-card').filter({ hasText: 'POC / Pilot' })
+  await expect(pocGate).toContainText('Kundenseitigen Pain konkretisieren')
+
+  const proposalGate = gates.locator('.qualification-gate-card').filter({ hasText: 'Proposal / Pricing' })
+  await expect(proposalGate).toContainText('Nicht bereit')
+
+  const commitGate = gates.locator('.qualification-gate-card').filter({ hasText: 'Commit Forecast' })
+  await expect(commitGate).toContainText('Nicht bereit')
 
   const context = page.locator('.opportunity-context-meta')
   await expect(context.getByText('Unbekannt', { exact: true })).toHaveCount(4)
