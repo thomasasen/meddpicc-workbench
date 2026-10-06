@@ -777,8 +777,7 @@ function sortCandidates(a: RecommendationCandidate, b: RecommendationCandidate):
     b.recommendation.triggeringFindingRuleIds.length - a.recommendation.triggeringFindingRuleIds.length ||
     Number(b.directEvidence) - Number(a.directEvidence) ||
     Number(b.targetCloseUrgency) - Number(a.targetCloseUrgency) ||
-    nextBestActionRuleIds.indexOf(a.recommendation.ruleId) -
-      nextBestActionRuleIds.indexOf(b.recommendation.ruleId)
+    nextBestActionRuleIds.indexOf(a.recommendation.ruleId) - nextBestActionRuleIds.indexOf(b.recommendation.ruleId)
   )
 }
 
