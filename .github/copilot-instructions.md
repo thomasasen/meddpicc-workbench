@@ -24,12 +24,16 @@ Beispiel: Im UI heißt der Status **„Bestätigt“**, die Sektion heißt aber 
 
 ## Pflichtlektüre bei Implementierungen
 
+- `AGENTS.md` für repository-weite Regeln
 - `README.md`
 - `docs/PROJECT_CHARTER.md`
+- `docs/ROADMAP.md`
+- `docs/PROGRESS.md` – bestimmt den aktuell nächsten empfohlenen Slice
 - `docs/ARCHITECTURE.md`
 - `docs/PROJECT_FILE_SPEC.md`
 - bei UI/UX-Änderungen `docs/DESIGN_SYSTEM.md`
-- `AGENTS.md` für repository-weite Regeln
+
+Bei Prioritätskonflikten gelten die aktuelle Roadmap und Progress-Datei vor älteren Beschreibungen bereits implementierter Screens.
 
 ## Produktziel und Produktgrenzen
 
