@@ -115,7 +115,9 @@ function championIsStrongEnoughForEbIntroduction(
     textPresent(person.personalWin) &&
     (behaviorHasSupportingEvidence(project, person, 'provided_internal_information') ||
       behaviorHasSupportingEvidence(project, person, 'shared_bad_news')) &&
-    behaviorHasSupportingEvidence(project, person, 'sold_internally')
+    behaviorHasSupportingEvidence(project, person, 'sold_internally') &&
+    (behaviorHasSupportingEvidence(project, person, 'created_access') ||
+      behaviorHasSupportingEvidence(project, person, 'enabled_economic_buyer_access'))
   )
 }
 
