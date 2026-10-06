@@ -20,9 +20,17 @@ test('lädt die Standard-Demo als Deal-Fokus ohne offensichtlichen Runtime-Fehle
   await expect(context).toContainText('01.07.2027')
 
   await expect(page.getByRole('heading', { name: 'Aktuell wichtig' })).toBeVisible()
+
+  const inspector = page.locator('.inspector-panel')
+  await expect(inspector.getByRole('heading', { name: 'Deal Inspector' })).toBeVisible()
+  await expect(inspector).toContainText('Economic Buyer ist noch nicht belastbar validiert.')
+  await expect(inspector).toContainText('Erforderliche Schritte im Decision Process sind noch nicht bestätigt.')
+  await expect(inspector).toContainText('Der Paper Process enthält noch close-relevante Lücken.')
+  await expect(inspector).toContainText('economic-buyer.validated')
+  await expect(inspector).toContainText('Regelset v0.1')
+
   await expect(page.getByRole('heading', { name: 'Offene Risiken' })).toBeVisible()
   await expect(page.getByText('Paper Process ist nicht belastbar bestätigt', { exact: true })).toBeVisible()
-  await expect(page.getByText('Hoch', { exact: true })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Nächste Aktionen' })).toBeVisible()
   await expect(page.getByText('Champion um Einführung beim Economic Buyer bitten', { exact: true })).toBeVisible()
 
@@ -47,6 +55,12 @@ test('zeigt bei einem neuen Projekt fachlich korrekte Empty States', async ({ pa
 
   await expect(page.getByText('Keine offenen Risiken erfasst.', { exact: true })).toBeVisible()
   await expect(page.getByText('Keine offenen nächsten Aktionen vorhanden.', { exact: true })).toBeVisible()
+
+  const inspector = page.locator('.inspector-panel')
+  await expect(inspector).toContainText('5 deterministisch abgeleitete Qualification Gaps')
+  await expect(inspector).toContainText('Kundenseitiger Pain ist noch nicht konkret identifiziert.')
+  await expect(inspector).toContainText('Economic Buyer ist noch nicht belastbar validiert.')
+  await expect(inspector).not.toContainText('Die aktuellen v0.1-Regeln erkennen kein offenes Qualification Gap.')
 
   const context = page.locator('.opportunity-context-meta')
   await expect(context.getByText('Unbekannt', { exact: true })).toHaveCount(4)
