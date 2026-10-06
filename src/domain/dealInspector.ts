@@ -44,10 +44,6 @@ function existingEvidenceIds(project: MeddpiccProject, ids: readonly string[]): 
   return unique(ids).filter((id) => available.has(id))
 }
 
-function sectionEvidenceIds(project: MeddpiccProject, area: ProjectAreaKey): string[] {
-  return existingEvidenceIds(project, project.meddpicc[area].evidenceIds)
-}
-
 function finding(
   project: MeddpiccProject,
   value: Omit<DealInspectorFinding, 'id' | 'evidenceIds'> & { evidenceIds: readonly string[] },
