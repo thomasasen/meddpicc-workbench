@@ -163,6 +163,26 @@ describe('Qualification Gates', () => {
     expect(assessment.status).toBe('not-ready')
   })
 
+  it('wertet einen strukturierten Pain mit reiner Assumption-Evidence nicht als erfüllt', () => {
+    const project = structuredClone(defaultProject)
+    const evidence = project.evidence.find((item) => item.id === 'ev_pain_01')
+    expect(evidence).toBeDefined()
+    if (!evidence) return
+
+    project.meddpicc.pain.items.forEach((item) => {
+      item.evidenceIds = ['ev_pain_01']
+    })
+    project.meddpicc.pain.evidenceIds = ['ev_pain_01']
+    evidence.classification = 'assumption'
+    evidence.verification = 'unconfirmed'
+
+    const assessment = assessQualificationGate(project, 'poc-pilot')
+    const painRequirement = assessment.requirements.find((item) => item.id === 'poc.pain')
+
+    expect(painRequirement?.satisfied).toBe(false)
+    expect(assessment.status).toBe('not-ready')
+  })
+
   it('wertet priorisierte Decision Criteria ohne belastbare Evidence nicht als erfüllt', () => {
     const project = structuredClone(defaultProject)
     const evidenceIds = project.meddpicc.decisionCriteria.criteria.flatMap((criterion) => criterion.evidenceIds)
