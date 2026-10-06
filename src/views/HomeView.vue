@@ -925,21 +925,13 @@ function saveProject() {
                   <li v-for="requirement in assessment.requirements" :key="requirement.id">
                     <div class="qualification-gate-requirement-heading">
                       <strong>
-                        {{
-                          requirement.satisfied
-                            ? 'Erfüllt'
-                            : requirement.level === 'required'
-                              ? 'Fehlt'
-                              : 'Warnung'
-                        }}
+                        {{ requirement.satisfied ? 'Erfüllt' : requirement.level === 'required' ? 'Fehlt' : 'Warnung' }}
                         · {{ requirement.label }}
                       </strong>
                       <span>{{ qualificationGateRequirementLabels[requirement.level] }}</span>
                     </div>
                     <p>{{ requirement.explanation }}</p>
-                    <p v-if="!requirement.satisfied">
-                      <strong>Nächster Schritt:</strong> {{ requirement.nextStep }}
-                    </p>
+                    <p v-if="!requirement.satisfied"><strong>Nächster Schritt:</strong> {{ requirement.nextStep }}</p>
                   </li>
                 </ul>
 
