@@ -1298,6 +1298,265 @@ h3 {
   color: var(--color-text);
 }
 
+
+.champion-tester-panel {
+  margin-bottom: var(--space-4);
+  overflow: hidden;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+}
+
+.champion-tester-heading {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.champion-tester-note {
+  margin: 0;
+  border-bottom: 1px solid var(--color-divider);
+  padding: var(--space-2) var(--space-4);
+}
+
+.champion-tester-assessment {
+  padding: var(--space-4);
+}
+
+.champion-tester-candidate {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.42fr) minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.champion-tester-candidate > div > strong {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: 1rem;
+}
+
+.champion-role {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--color-text-muted);
+  font-size: 0.76rem;
+}
+
+.champion-tester-candidate > p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.champion-status {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.champion-status--proven {
+  color: var(--color-confirmed);
+}
+
+.champion-status--partially-proven {
+  color: var(--color-warning-text);
+}
+
+.champion-status--candidate {
+  color: var(--color-text-muted);
+}
+
+.champion-status--disqualified {
+  color: var(--color-risk);
+}
+
+.champion-signal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--color-divider);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.champion-signal-grid > section {
+  min-width: 0;
+  padding: var(--space-3) var(--space-4) var(--space-3) 0;
+}
+
+.champion-signal-grid > section + section {
+  border-left: 1px solid var(--color-divider);
+  padding-right: 0;
+  padding-left: var(--space-4);
+}
+
+.champion-signal-grid > section > strong {
+  font-size: 0.78rem;
+}
+
+.champion-signal-empty {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.74rem;
+}
+
+.champion-signal-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.champion-signal-list li {
+  display: grid;
+  grid-template-columns: minmax(105px, auto) minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.champion-signal-list li > div {
+  min-width: 0;
+}
+
+.champion-signal-list li > div > strong {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 0.76rem;
+}
+
+.champion-signal-list li p {
+  margin: 0.15rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.champion-signal-state {
+  width: fit-content;
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.champion-signal-state--proven {
+  color: var(--color-confirmed);
+}
+
+.champion-signal-state--insufficient {
+  color: var(--color-warning-text);
+}
+
+.champion-signal-state--missing {
+  color: var(--color-risk);
+}
+
+.champion-next-test {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: var(--space-5);
+  margin-top: var(--space-4);
+  border-left: 2px solid var(--color-border-strong);
+  background: var(--color-surface-muted);
+  padding: var(--space-3) var(--space-4);
+}
+
+.champion-next-test > div {
+  min-width: 0;
+}
+
+.champion-next-test-kicker {
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.champion-next-test > div > strong {
+  display: block;
+  font-size: 0.8rem;
+}
+
+.champion-next-test p,
+.champion-next-test ul {
+  color: var(--color-text-muted);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.champion-next-test p {
+  margin: var(--space-2) 0 0;
+}
+
+.champion-next-test p strong {
+  color: var(--color-text);
+}
+
+.champion-next-test ul {
+  margin: var(--space-2) 0 0;
+  padding-left: 1.1rem;
+}
+
+.champion-tester-details {
+  margin-top: var(--space-4);
+}
+
+.champion-candidate-list {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.champion-candidate-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--space-2);
+}
+
+.champion-candidate-row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.champion-candidate-row > div {
+  min-width: 0;
+}
+
+.champion-candidate-row > div strong,
+.champion-candidate-row > div span {
+  display: block;
+}
+
+.champion-candidate-row > div strong {
+  overflow-wrap: anywhere;
+  font-size: 0.76rem;
+}
+
+.champion-candidate-row > div span {
+  margin-top: 0.1rem;
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+}
+
+.champion-traceability-note {
+  margin: var(--space-3) 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
 @media (max-width: 1024px) {
   .qualification-gate-grid {
     grid-template-columns: 1fr;
@@ -1339,6 +1598,22 @@ h3 {
 }
 
 @media (max-width: 768px) {
+  .champion-tester-candidate,
+  .champion-signal-grid,
+  .champion-next-test {
+    grid-template-columns: 1fr;
+  }
+
+  .champion-signal-grid > section {
+    padding-right: 0;
+  }
+
+  .champion-signal-grid > section + section {
+    border-top: 1px solid var(--color-divider);
+    border-left: 0;
+    padding-left: 0;
+  }
+
   .app-nav {
     flex-wrap: wrap;
   }
@@ -1359,6 +1634,19 @@ h3 {
 }
 
 @media (max-width: 640px) {
+  .champion-tester-assessment {
+    padding: var(--space-3);
+  }
+
+  .champion-signal-list li {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+
+  .champion-candidate-row {
+    flex-direction: column;
+  }
+
   .container {
     width: min(calc(100% - 1.5rem), var(--container));
   }
