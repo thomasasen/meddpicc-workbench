@@ -1,4 +1,5 @@
 name: Feature Pages Sync
+# Temporary workflow for this feature branch only.
 
 on:
   push:
