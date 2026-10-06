@@ -44,6 +44,24 @@ function existingEvidenceIds(project: MeddpiccProject, ids: readonly string[]): 
   return unique(ids).filter((id) => available.has(id))
 }
 
+function supportingEvidenceIds(project: MeddpiccProject, ids: readonly string[]): string[] {
+  const wanted = new Set(ids)
+
+  return project.evidence
+    .filter(
+      (item) =>
+        wanted.has(item.id) &&
+        item.classification !== 'assumption' &&
+        item.classification !== 'unknown' &&
+        item.verification !== 'unconfirmed',
+    )
+    .map((item) => item.id)
+}
+
+function hasSupportingEvidence(project: MeddpiccProject, ids: readonly string[]): boolean {
+  return supportingEvidenceIds(project, ids).length > 0
+}
+
 function finding(
   project: MeddpiccProject,
   value: Omit<DealInspectorFinding, 'id' | 'evidenceIds'> & { evidenceIds: readonly string[] },
@@ -170,27 +188,38 @@ function economicImpactRule(project: MeddpiccProject): DealInspectorFinding | nu
   if (section.metrics.length === 0) return null
 
   const relevant = section.metrics.filter((metric) => metric.current.value !== null || metric.target.value !== null)
-  const incomplete = relevant.filter((metric) => metric.economicImpact.value === null)
-  if (incomplete.length === 0) return null
+  if (relevant.length === 0) return null
+
+  const economicallyQuantified = relevant.filter(
+    (metric) => metric.economicImpact.value !== null && textPresent(metric.economicImpact.derivation),
+  )
+  if (economicallyQuantified.length > 0) return null
 
   return finding(project, {
     ruleId: 'metrics.economic-impact-quantified',
     area: 'metrics',
-    severity: incomplete.some((metric) => metric.customerConfirmed) ? 'high' : 'medium',
-    title: 'Mindestens eine relevante Metric ist wirtschaftlich noch nicht quantifiziert.',
+    severity: relevant.some((metric) => metric.customerConfirmed) ? 'high' : 'medium',
+    title: 'Der wirtschaftliche Effekt der Metrics ist noch nicht belastbar quantifiziert.',
     whyItMatters:
-      'Operative Kennzahlen werden für die Investitionsentscheidung stärker, wenn ihr wirtschaftlicher Effekt nachvollziehbar quantifiziert werden kann.',
+      'Operative Kennzahlen werden für die Investitionsentscheidung stärker, wenn mindestens ein relevanter Kundennutzen wirtschaftlich und nachvollziehbar quantifiziert ist.',
     missingEvidence: [
-      'Wirtschaftlicher Effekt der betroffenen Metric',
+      'Mindestens eine wirtschaftlich quantifizierte relevante Metric',
       'Nachvollziehbare Herleitung des wirtschaftlichen Effekts',
     ],
-    evidenceIds: [...section.evidenceIds, ...incomplete.flatMap((metric) => metric.evidenceIds)],
-    entityIds: incomplete.map((metric) => metric.id),
-    inputs: incomplete.map((metric) => ({
-      path: `meddpicc.metrics.metrics[${metric.id}].economicImpact.value`,
-      label: `${metric.name} · Economic Impact`,
-      value: 'nicht quantifiziert',
-    })),
+    evidenceIds: [...section.evidenceIds, ...relevant.flatMap((metric) => metric.evidenceIds)],
+    entityIds: relevant.map((metric) => metric.id),
+    inputs: relevant.flatMap((metric) => [
+      {
+        path: `meddpicc.metrics.metrics[${metric.id}].economicImpact.value`,
+        label: `${metric.name} · Economic Impact`,
+        value: metric.economicImpact.value === null ? 'nicht quantifiziert' : String(metric.economicImpact.value),
+      },
+      {
+        path: `meddpicc.metrics.metrics[${metric.id}].economicImpact.derivation`,
+        label: `${metric.name} · Herleitung`,
+        value: textPresent(metric.economicImpact.derivation) ? 'vorhanden' : 'fehlt',
+      },
+    ]),
   })
 }
 
@@ -242,6 +271,9 @@ function economicBuyerRule(project: MeddpiccProject): DealInspectorFinding | nul
     missing.push('Direkten Zugang bzw. direkte Interaktion mit dem Economic Buyer herstellen')
   }
   if (candidate.priorityStatus !== 'confirmed') missing.push('Investitionspriorität direkt bestätigen')
+  if (!hasSupportingEvidence(project, candidate.evidenceIds)) {
+    missing.push('Belastbare Evidence für die Economic-Buyer-Validierung')
+  }
 
   if (missing.length === 0) return null
 
@@ -314,7 +346,9 @@ function decisionProcessRule(project: MeddpiccProject): DealInspectorFinding | n
       step.ownerStakeholderId === null ||
       step.status === 'unknown' ||
       step.status === 'planned' ||
-      step.evidenceIds.length === 0,
+      step.status === 'blocked' ||
+      step.status === 'skipped' ||
+      !hasSupportingEvidence(project, step.evidenceIds),
   )
   if (unclear.length === 0) return null
 
@@ -386,8 +420,10 @@ function paperProcessRule(project: MeddpiccProject): DealInspectorFinding | null
     (step) =>
       step.ownerStakeholderId === null ||
       step.status === 'unknown' ||
+      step.status === 'blocked' ||
+      step.status === 'skipped' ||
       step.durationBusinessDays === null ||
-      step.evidenceIds.length === 0,
+      !hasSupportingEvidence(project, step.evidenceIds),
   )
   if (unclear.length === 0) return null
 
@@ -439,10 +475,13 @@ function championRule(project: MeddpiccProject): DealInspectorFinding | null {
   const behaviorHasEvidence = (
     person: (typeof section.people)[number],
     type: (typeof person.behaviors)[number]['type'],
-  ) => person.behaviors.some((behavior) => behavior.type === type && behavior.evidenceIds.length > 0)
+  ) =>
+    person.behaviors.some(
+      (behavior) => behavior.type === type && hasSupportingEvidence(project, behavior.evidenceIds),
+    )
 
   const championScore = (person: (typeof section.people)[number]) =>
-    Number(person.influence === 'high') +
+    Number(person.influence === 'medium' || person.influence === 'high') +
     Number(textPresent(person.personalWin)) +
     Number(
       behaviorHasEvidence(person, 'provided_internal_information') || behaviorHasEvidence(person, 'shared_bad_news'),
@@ -483,7 +522,9 @@ function championRule(project: MeddpiccProject): DealInspectorFinding | null {
   }
 
   const missing: string[] = []
-  if (candidate.influence !== 'high') missing.push('Hoher interner Einfluss')
+  if (candidate.influence === 'unknown' || candidate.influence === 'low') {
+    missing.push('Ausreichender interner Einfluss')
+  }
   if (!textPresent(candidate.personalWin)) missing.push('Konkreter Personal Win')
   if (
     !behaviorHasEvidence(candidate, 'provided_internal_information') &&
@@ -534,7 +575,9 @@ function championRule(project: MeddpiccProject): DealInspectorFinding | null {
       {
         path: `meddpicc.champions.people[${candidate.stakeholderId}].behaviors`,
         label: 'Belegte Champion-Verhaltenssignale',
-        value: String(candidate.behaviors.filter((behavior) => behavior.evidenceIds.length > 0).length),
+        value: String(
+          candidate.behaviors.filter((behavior) => hasSupportingEvidence(project, behavior.evidenceIds)).length,
+        ),
       },
     ],
   })
