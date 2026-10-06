@@ -14,6 +14,10 @@ import { storeToRefs } from 'pinia'
 import { computed, nextTick, ref, type Component } from 'vue'
 
 import { inspectDeal, type DealInspectorFinding } from '../domain/dealInspector'
+import {
+  deriveNextBestActions,
+  type NextBestActionRecommendation,
+} from '../domain/nextBestAction'
 import type { ProjectAction, ProjectAreaKey, ProjectMeta, ProjectRisk } from '../domain/project'
 import { qualificationStatusLabels, type QualificationStatusKey } from '../domain/qualificationStatus'
 import { loadProject, ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
@@ -155,8 +159,15 @@ const openActions = computed(() =>
 
 const allInspectorFindings = computed(() => inspectDeal(project.value))
 const inspectorFindings = computed(() => allInspectorFindings.value.slice(0, 3))
+const allNextBestActions = computed(() => deriveNextBestActions(project.value, allInspectorFindings.value))
+const nextBestActions = computed(() => allNextBestActions.value.slice(0, 3))
 
 const inspectorSeverityLabels: Record<DealInspectorFinding['severity'], string> = {
+  high: 'Hoch',
+  medium: 'Mittel',
+}
+
+const nextBestActionPriorityLabels: Record<NextBestActionRecommendation['priority'], string> = {
   high: 'Hoch',
   medium: 'Mittel',
 }
@@ -196,9 +207,9 @@ function actionTrace(action: ProjectAction): SourceTrace {
   return traceActionSources(project.value, action)
 }
 
-function inspectorTrace(finding: DealInspectorFinding): SourceTrace {
-  const evidenceIds = new Set(finding.evidenceIds)
-  const evidence = project.value.evidence.filter((item) => evidenceIds.has(item.id))
+function traceEvidenceIds(evidenceIds: readonly string[]): SourceTrace {
+  const wantedEvidenceIds = new Set(evidenceIds)
+  const evidence = project.value.evidence.filter((item) => wantedEvidenceIds.has(item.id))
   const referenceIds = new Set(evidence.map((item) => item.referenceId).filter((id): id is string => Boolean(id)))
   const references = project.value.references.filter((item) => referenceIds.has(item.id))
 
@@ -207,6 +218,14 @@ function inspectorTrace(finding: DealInspectorFinding): SourceTrace {
     references,
     evidenceWithoutReference: evidence.filter((item) => !item.referenceId).length,
   }
+}
+
+function inspectorTrace(finding: DealInspectorFinding): SourceTrace {
+  return traceEvidenceIds(finding.evidenceIds)
+}
+
+function recommendationTrace(recommendation: NextBestActionRecommendation): SourceTrace {
+  return traceEvidenceIds(recommendation.evidenceIds)
 }
 
 function sourceTraceLabel(trace: SourceTrace): string {
@@ -766,6 +785,81 @@ function saveProject() {
 
                 <RouterLink class="source-trace-link" :to="sourceTraceTarget(inspectorTrace(finding))">
                   {{ sourceTraceLabel(inspectorTrace(finding)) }}
+                </RouterLink>
+              </details>
+            </li>
+          </ol>
+        </section>
+
+        <section class="next-best-action-panel" aria-labelledby="next-best-action-title">
+          <div class="focus-panel-heading next-best-action-heading">
+            <div>
+              <h3 id="next-best-action-title">Empfohlene nächste Schritte</h3>
+              <p>
+                {{ allNextBestActions.length }} deterministisch abgeleitete Empfehlungen · maximal 3 priorisiert sichtbar
+              </p>
+            </div>
+            <span class="inspector-version">Regelset v0.1</span>
+          </div>
+
+          <p class="section-note next-best-action-note">
+            Die Empfehlungen sind abgeleiteter State. Sie ersetzen oder verändern die manuell gepflegten Aktionen nicht.
+          </p>
+
+          <p v-if="nextBestActions.length === 0" class="focus-empty">
+            Die aktuellen v0.1-Regeln erkennen keinen konkreten nächsten Qualifizierungsschritt.
+          </p>
+
+          <ol v-else class="next-best-action-list">
+            <li
+              v-for="recommendation in nextBestActions"
+              :key="recommendation.id"
+              class="next-best-action-item"
+            >
+              <div class="focus-meta-line">
+                <span class="risk-severity" :class="'risk-severity--' + recommendation.priority">
+                  {{ nextBestActionPriorityLabels[recommendation.priority] }}
+                </span>
+                <span>{{ areaLabels[recommendation.area] }}</span>
+                <code>{{ recommendation.ruleId }}</code>
+              </div>
+
+              <strong>{{ recommendation.title }}</strong>
+              <p><strong>Warum jetzt?</strong> {{ recommendation.whyNow }}</p>
+
+              <div class="next-best-action-evidence">
+                <strong>Gewünschte Evidence / Outcome</strong>
+                <ul>
+                  <li v-for="item in recommendation.desiredEvidence" :key="item">{{ item }}</li>
+                </ul>
+              </div>
+
+              <details class="inspector-details">
+                <summary>Regel &amp; Datenbasis</summary>
+
+                <div class="inspector-detail-grid">
+                  <div>
+                    <strong>Ausgelöst durch</strong>
+                    <ul>
+                      <li v-for="ruleId in recommendation.triggeringFindingRuleIds" :key="ruleId">
+                        <code>{{ ruleId }}</code>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <strong>Auslösende Inputs</strong>
+                    <dl>
+                      <div v-for="input in recommendation.inputs" :key="input.path + input.label">
+                        <dt>{{ input.label }}</dt>
+                        <dd>{{ input.value }}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                </div>
+
+                <RouterLink class="source-trace-link" :to="sourceTraceTarget(recommendationTrace(recommendation))">
+                  {{ sourceTraceLabel(recommendationTrace(recommendation)) }}
                 </RouterLink>
               </details>
             </li>
