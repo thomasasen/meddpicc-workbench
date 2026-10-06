@@ -13,6 +13,7 @@ import {
 import { storeToRefs } from 'pinia'
 import { computed, nextTick, ref, type Component } from 'vue'
 
+import { inspectDeal, type DealInspectorFinding } from '../domain/dealInspector'
 import type { ProjectAction, ProjectAreaKey, ProjectMeta, ProjectRisk } from '../domain/project'
 import { qualificationStatusLabels, type QualificationStatusKey } from '../domain/qualificationStatus'
 import { loadProject, ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
