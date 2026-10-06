@@ -23,20 +23,23 @@ Gute Pflege per Hand erzeugt gleichzeitig viel repetitive administrative Arbeit.
 
 ## Vision
 
-Eine **local-first MEDDPICC Workbench**, die rigorose Qualifizierung so praktikabel macht, dass sie während des gesamten komplexen Sales Cycles kontinuierlich genutzt werden kann.
+Eine **local-first MEDDPICC Deal-Reasoning- und Coaching-Workbench**, die rigorose Qualifizierung so praktikabel macht, dass sie während des gesamten komplexen Sales Cycles kontinuierlich genutzt werden kann.
 
-Die Anwendung übernimmt mechanische Arbeit. Die fachliche Beurteilung bleibt beim Seller.
+Die Anwendung übernimmt mechanische und regelbasierte Denkarbeit. Die fachliche Beurteilung bleibt beim Seller.
 
-Beispiele für mechanische Arbeit:
+Das Produktversprechen ist nicht „MEDDPICC digital pflegen“, sondern **„aus vorhandenem Dealwissen schneller die richtige nächste Arbeit ableiten“**.
 
+Beispiele:
+
+- Qualification Gaps deterministisch erkennen und erklären
+- wenige Next Best Actions priorisieren
+- vor POC, Pricing, Proposal oder Commit Qualification Gates prüfen
+- Champion und Economic Buyer anhand Evidence testen
 - ROI, Payback und Cost of Delay berechnen
-- strukturiertes Evidenzregister pflegen
-- Decision Process und Paper Process abbilden
-- rückwärts von einem Target Go-Live planen
-- fehlende Owner, Termine, Abhängigkeiten und Bestätigungen erkennen
-- deterministische Evidence-/Confidence-Bewertungen pflegen
+- Decision Process und Paper Process auf Lücken, Dependencies und unrealistische Termine prüfen
+- rückwärts vom Target Close / Go-Live planen
+- Meeting Prep aus aktuellen Gaps und Gesprächszielen ableiten
 - konsistente Deal Reviews erzeugen
-- Entwicklung der Qualifizierung historisieren
 
 ## Produktversprechen
 
@@ -75,9 +78,17 @@ Benötigt eine gemeinsame, portable Darstellung von Qualifizierung, Prozess, Val
 
 Eine `.meddpicc`-Datei wird aus CRM oder Ablage geladen, in der Workbench bearbeitet und anschließend wieder gespeichert.
 
-### Qualifizierung prüfen
+### Deal prüfen
 
-Das Dashboard zeigt den Zustand jedes MEDDPICC-Elements zusammen mit Evidenzqualität, offenen Gaps und Risiken.
+Der Deal Inspector zeigt die wenigen kritischen Qualification Gaps, Risiken und fehlenden Belege und erklärt die zugrunde liegenden Regeln und Inputs.
+
+### Nächste Aktion bestimmen
+
+Aus den offenen Gaps priorisiert die Workbench wenige konkrete Sales-Aktionen und erklärt, warum diese jetzt wichtiger sind als andere.
+
+### Qualification Gate prüfen
+
+Vor ressourcenintensiven Schritten wie POC, Proposal, Pricing oder Commit prüft die Workbench deterministisch, welche Voraussetzungen erfüllt bzw. noch offen sind.
 
 ### Deal Review vorbereiten
 
@@ -92,6 +103,18 @@ Annahmen oder kundenseitig bestätigte Werte werden aktualisiert und Value, ROI,
 Decision Process, Paper Process und Go-Live-Planung werden kombiniert, um unrealistische Termine, fehlende Schritte und Abhängigkeiten sichtbar zu machen.
 
 ## Produktprinzipien
+
+### Workflows statt Datensätze
+
+Die primäre UI folgt Seller-Aufgaben wie „Deal prüfen“, „Champion testen“ oder „Business Case rechnen“. Das Projektschema ist ein Datenfundament und kein Auftrag, für jedes Feld eine CRUD-Oberfläche zu bauen.
+
+### Deterministisch by default
+
+MEDDPICC-Reasoning, Gap Detection, Priorisierung, Berechnungen und Prozessplanung müssen ohne AI-/LLM-Runtime funktionieren. Gleiche Inputs liefern gleiche Ergebnisse.
+
+### AI ist optionaler Input, nicht die Reasoning Engine
+
+Eine spätere AI-Funktion darf unstrukturierte Texte in Candidate Evidence überführen. Candidate Evidence wird erst nach Bestätigung zum kanonischen Projektwissen.
 
 ### Evidenz ist ein First-Class-Objekt
 
@@ -121,23 +144,24 @@ Account-Stammdaten, E-Mail, Activity Capture, Pipeline Rollups und Contact Manag
 
 v1 ist erfolgreich, wenn ein Nutzer:
 
-- ein neues Projekt erstellen kann
-- eine vorhandene `.meddpicc`-Datei öffnen kann
-- Schema validieren und migrieren kann
-- alle MEDDPICC-Elemente pflegen kann
-- Evidenz mit Qualifizierungsaussagen verknüpfen kann
-- Risiken und nächste Aktionen pflegen kann
-- Value / ROI / Payback / Cost of Delay berechnen kann
-- Decision Process und Paper Process abbilden kann
-- Go-Live-/Critical-Path-Planung erstellen kann
-- ein Deal-Health-Dashboard auf Basis deterministischer Regeln nutzen kann
+- eine portable `.meddpicc`-Datei zuverlässig erstellen, öffnen, validieren, migrieren und speichern kann
+- Evidence, Annahmen und unbekannte Informationen sauber unterscheiden und auf Quellen zurückführen kann
+- einen Deal Inspector nutzen kann, der kritische Qualification Gaps nachvollziehbar erkennt
+- wenige Next Best Actions mit klarer Begründung erhält
+- Qualification Gates vor POC, Proposal, Pricing, Commit und ähnlichen Schritten nutzen kann
+- Champion und Economic Buyer evidence-basiert prüfen kann
+- Value / ROI / Payback / Cost of Delay deterministisch berechnen kann
+- Decision Process und Paper Process inklusive Dependencies und Closing-Timeline prüfen kann
+- ein nächstes Meeting aus Deal-Gaps fokussiert vorbereiten kann
 - einen verwendbaren Deal Review exportieren kann
-- den vollständigen Projektstand wieder in einer portablen Datei speichern kann
-- all das ohne Übertragung von Opportunity-Daten an ein Backend tun kann
+- alle Core-Funktionen ohne AI-/LLM-Runtime und ohne verpflichtendes Backend nutzen kann
 
 ## Nichtziele für v1
 
-- AI-generierte Empfehlungen
+- CRM-artige Account- oder Kontaktverwaltung
+- Pipeline Board und Pipeline Rollups
+- Activity Timeline oder generische Task-App
+- AI als Voraussetzung für Deal-Reasoning oder Empfehlungen
 - automatische Meeting-Transkription
 - automatische CRM-Synchronisation
 - E-Mail-/Kalender-Integration
@@ -145,7 +169,6 @@ v1 ist erfolgreich, wenn ein Nutzer:
 - Cloud-Projektspeicher
 - Enterprise Identity Management
 - eingebettetes Dokumentarchiv
-- vollständiges Pipeline Management
 
 Diese Themen können später bewertet werden, dürfen aber v1 nicht architektonisch belasten.
 
