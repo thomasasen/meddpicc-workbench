@@ -65,9 +65,13 @@ Vor der Umsetzung eines Features sind zu lesen:
 
 1. `README.md`
 2. `docs/PROJECT_CHARTER.md`
-3. `docs/ARCHITECTURE.md`
-4. `docs/PROJECT_FILE_SPEC.md`
-5. bei UI/UX-Arbeiten zusätzlich `docs/DESIGN_SYSTEM.md`
+3. `docs/ROADMAP.md`
+4. `docs/PROGRESS.md` – bestimmt den aktuell nächsten empfohlenen Slice
+5. `docs/ARCHITECTURE.md`
+6. `docs/PROJECT_FILE_SPEC.md`
+7. bei UI/UX-Arbeiten zusätzlich `docs/DESIGN_SYSTEM.md`
+
+Bei Widersprüchen zur Feature-Priorität haben die aktuelle `ROADMAP.md` und `PROGRESS.md` Vorrang vor älteren Beschreibungen bereits implementierter Oberflächen.
 
 ## Nicht verhandelbare Architekturregeln
 
