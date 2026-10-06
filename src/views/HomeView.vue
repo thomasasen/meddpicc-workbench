@@ -903,10 +903,7 @@ function saveProject() {
               :aria-labelledby="'qualification-gate-title-' + assessment.gateId"
             >
               <div class="qualification-gate-meta">
-                <span
-                  class="qualification-gate-status"
-                  :class="'qualification-gate-status--' + assessment.status"
-                >
+                <span class="qualification-gate-status" :class="'qualification-gate-status--' + assessment.status">
                   {{ qualificationGateStatusLabels[assessment.status] }}
                 </span>
                 <code>{{ assessment.gateId }}</code>
