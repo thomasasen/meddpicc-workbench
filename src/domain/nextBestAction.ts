@@ -1,3 +1,4 @@
+import { strongestChampionAssessment } from './championTester'
 import type { DealInspectorFinding, DealInspectorInput, DealInspectorRuleId } from './dealInspector'
 import type { MeddpiccProject, ProjectAreaKey } from './project'
 
@@ -43,78 +44,6 @@ type NextBestActionRule = (
 
 function unique<T>(values: readonly T[]): T[] {
   return [...new Set(values)]
-}
-
-function textPresent(value: string | null | undefined): boolean {
-  return Boolean(value?.trim())
-}
-
-function hasSupportingEvidence(project: MeddpiccProject, ids: readonly string[]): boolean {
-  const wanted = new Set(ids)
-
-  return project.evidence.some(
-    (item) =>
-      wanted.has(item.id) &&
-      item.classification !== 'assumption' &&
-      item.classification !== 'unknown' &&
-      item.verification !== 'unconfirmed',
-  )
-}
-
-function behaviorHasSupportingEvidence(
-  project: MeddpiccProject,
-  person: MeddpiccProject['meddpicc']['champions']['people'][number],
-  type: MeddpiccProject['meddpicc']['champions']['people'][number]['behaviors'][number]['type'],
-): boolean {
-  return person.behaviors.some(
-    (behavior) => behavior.type === type && hasSupportingEvidence(project, behavior.evidenceIds),
-  )
-}
-
-function activeChampionCandidates(project: MeddpiccProject) {
-  return project.meddpicc.champions.people.filter((person) => person.status !== 'disqualified')
-}
-
-function championEvidenceScore(
-  project: MeddpiccProject,
-  person: MeddpiccProject['meddpicc']['champions']['people'][number],
-): number {
-  return (
-    Number(person.influence === 'medium' || person.influence === 'high') +
-    Number(textPresent(person.personalWin)) +
-    Number(
-      behaviorHasSupportingEvidence(project, person, 'provided_internal_information') ||
-        behaviorHasSupportingEvidence(project, person, 'shared_bad_news'),
-    ) +
-    Number(behaviorHasSupportingEvidence(project, person, 'sold_internally')) +
-    Number(
-      behaviorHasSupportingEvidence(project, person, 'created_access') ||
-        behaviorHasSupportingEvidence(project, person, 'enabled_economic_buyer_access'),
-    )
-  )
-}
-
-function strongestChampionCandidate(project: MeddpiccProject) {
-  return [...activeChampionCandidates(project)].sort(
-    (a, b) =>
-      championEvidenceScore(project, b) - championEvidenceScore(project, a) ||
-      a.stakeholderId.localeCompare(b.stakeholderId),
-  )[0]
-}
-
-function championIsStrongEnoughForEbIntroduction(
-  project: MeddpiccProject,
-  person: MeddpiccProject['meddpicc']['champions']['people'][number],
-): boolean {
-  return (
-    (person.influence === 'medium' || person.influence === 'high') &&
-    textPresent(person.personalWin) &&
-    (behaviorHasSupportingEvidence(project, person, 'provided_internal_information') ||
-      behaviorHasSupportingEvidence(project, person, 'shared_bad_news')) &&
-    behaviorHasSupportingEvidence(project, person, 'sold_internally') &&
-    (behaviorHasSupportingEvidence(project, person, 'created_access') ||
-      behaviorHasSupportingEvidence(project, person, 'enabled_economic_buyer_access'))
-  )
 }
 
 function findingByRule(
@@ -297,7 +226,7 @@ function economicBuyerRule(
 
   const section = project.meddpicc.economicBuyer
   const championGap = findingByRule(findings, 'champion.proven')
-  const champion = strongestChampionCandidate(project)
+  const champion = strongestChampionAssessment(project)
 
   if (section.candidates.length === 0) {
     return {
@@ -356,7 +285,7 @@ function economicBuyerRule(
   }
 
   if (!candidate.directAccess || candidate.engagementStatus !== 'direct') {
-    if (champion && championIsStrongEnoughForEbIntroduction(project, champion)) {
+    if (champion?.readyForEconomicBuyerAccessTest) {
       if (championGap) consumedFindingRuleIds.add(championGap.ruleId)
 
       return {
@@ -373,7 +302,7 @@ function economicBuyerRule(
             'Bestätigung von Business Outcome und Investitionspriorität aus erster Hand',
           ],
           triggeringFindings: championGap ? [ebGap, championGap] : [ebGap],
-          extraEvidenceIds: champion.behaviors.flatMap((behavior) => behavior.evidenceIds),
+          extraEvidenceIds: champion.evidenceIds,
           extraEntityIds: [candidate.stakeholderId, champion.stakeholderId],
         }),
         dependencyBlocker: false,
@@ -399,7 +328,7 @@ function economicBuyerRule(
             'Keine bloße Zusage, sondern nachvollziehbares internes Handeln',
           ],
           triggeringFindings: [ebGap, championGap],
-          extraEvidenceIds: champion.behaviors.flatMap((behavior) => behavior.evidenceIds),
+          extraEvidenceIds: champion.evidenceIds,
           extraEntityIds: [candidate.stakeholderId, champion.stakeholderId],
         }),
         dependencyBlocker: false,
@@ -482,7 +411,7 @@ function championRule(
   const championGap = findingByRule(findings, 'champion.proven')
   if (!championGap || consumedFindingRuleIds.has(championGap.ruleId)) return null
 
-  const champion = strongestChampionCandidate(project)
+  const champion = strongestChampionAssessment(project)
 
   if (!champion) {
     return {
@@ -506,43 +435,19 @@ function championRule(
     }
   }
 
-  if (!textPresent(champion.personalWin)) {
-    return {
-      recommendation: makeRecommendation(project, {
-        ruleId: 'nba.champion.test',
-        area: 'champions',
-        priority: priorityFromFindings([championGap]),
-        title: 'Personal Win des Champion-Candidates herausarbeiten',
-        whyNow:
-          'Einfluss und Hilfsbereitschaft allein reichen nicht. Ohne persönlichen Nutzen ist unklar, warum der Candidate intern dauerhaft für die Veränderung handeln sollte.',
-        desiredEvidence: [
-          'Konkreter persönlicher Nutzen des Champion-Candidates',
-          'Verbindung zwischen Projekterfolg und eigenem Erfolg des Candidates',
-        ],
-        triggeringFindings: [championGap],
-        extraEntityIds: [champion.stakeholderId],
-      }),
-      dependencyBlocker: false,
-      directEvidence: true,
-      targetCloseUrgency: false,
-    }
-  }
+  const test = champion.nextTest
+  if (!test) return null
 
   return {
     recommendation: makeRecommendation(project, {
       ruleId: 'nba.champion.test',
       area: 'champions',
       priority: priorityFromFindings([championGap]),
-      title: 'Champion-Candidate durch konkrete interne Aktion testen',
-      whyNow:
-        'Der Candidate zeigt bereits einzelne positive Signale, aber internes Verkaufen oder belastbarer Einfluss sind noch nicht ausreichend belegt. Ein konkreter Test erzeugt bessere Evidence als ein weiteres Verkäuferurteil.',
-      desiredEvidence: [
-        'Belegtes internes Verkaufen oder belastbare Weitergabe kritischer Informationen',
-        'Konkrete interne Aktion mit nachvollziehbarem Ergebnis',
-        'Beleg für ausreichenden Einfluss im Buying Team',
-      ],
+      title: test.title,
+      whyNow: test.rationale + ' ' + test.action,
+      desiredEvidence: test.desiredEvidence,
       triggeringFindings: [championGap],
-      extraEvidenceIds: champion.behaviors.flatMap((behavior) => behavior.evidenceIds),
+      extraEvidenceIds: champion.evidenceIds,
       extraEntityIds: [champion.stakeholderId],
     }),
     dependencyBlocker: false,
