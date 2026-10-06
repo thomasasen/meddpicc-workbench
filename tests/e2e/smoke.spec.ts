@@ -58,6 +58,17 @@ test('lädt die Standard-Demo als Deal-Fokus ohne offensichtlichen Runtime-Fehle
   await expect(commitGate).toContainText('Nicht bereit')
   await expect(commitGate).toContainText('Pause empfohlen')
 
+  const championTester = page.locator('.champion-tester-panel')
+  await expect(championTester.getByRole('heading', { name: 'Champion Tester' })).toBeVisible()
+  await expect(championTester).toContainText('Markus Stein')
+  await expect(championTester).toContainText('Teilweise bewiesen')
+  await expect(championTester).toContainText('Inside Information / Bad News')
+  await expect(championTester).toContainText('Internal Selling')
+  await expect(championTester).toContainText('Economic-Buyer-Zugang')
+  await expect(championTester).toContainText('Strukturiert, nicht evidenzverankert')
+  await expect(championTester).toContainText('Internal Selling konkret testen')
+  await expect(championTester).toContainText('Beobachtbares internes Verkaufen zugunsten der Opportunity')
+
   await expect(page.getByRole('heading', { name: 'Offene Risiken' })).toBeVisible()
   await expect(page.getByText('Paper Process ist nicht belastbar bestätigt', { exact: true })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Nächste Aktionen' })).toBeVisible()
@@ -111,6 +122,11 @@ test('zeigt bei einem neuen Projekt fachlich korrekte Empty States', async ({ pa
 
   const commitGate = gates.locator('.qualification-gate-card').filter({ hasText: 'Commit Forecast' })
   await expect(commitGate).toContainText('Nicht bereit')
+
+  const championTester = page.locator('.champion-tester-panel')
+  await expect(championTester.getByRole('heading', { name: 'Champion Tester' })).toBeVisible()
+  await expect(championTester).toContainText('0 aktive Candidates')
+  await expect(championTester).toContainText('Kein aktiver Champion-Candidate vorhanden.')
 
   const context = page.locator('.opportunity-context-meta')
   await expect(context.getByText('Unbekannt', { exact: true })).toHaveCount(4)
