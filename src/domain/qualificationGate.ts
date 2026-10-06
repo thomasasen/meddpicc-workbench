@@ -101,7 +101,10 @@ function areaEvidenceIds(project: MeddpiccProject, area: ProjectAreaKey): string
 
   switch (area) {
     case 'metrics':
-      return existingEvidenceIds(project, [...base, ...project.meddpicc.metrics.metrics.flatMap((item) => item.evidenceIds)])
+      return existingEvidenceIds(project, [
+        ...base,
+        ...project.meddpicc.metrics.metrics.flatMap((item) => item.evidenceIds),
+      ])
     case 'economicBuyer':
       return existingEvidenceIds(project, [
         ...base,
@@ -139,10 +142,7 @@ function areaEvidenceIds(project: MeddpiccProject, area: ProjectAreaKey): string
   }
 }
 
-function relatedFindings(
-  context: GateContext,
-  ruleIds: readonly DealInspectorRuleId[],
-): DealInspectorFinding[] {
+function relatedFindings(context: GateContext, ruleIds: readonly DealInspectorRuleId[]): DealInspectorFinding[] {
   const wanted = new Set(ruleIds)
   return context.findings.filter((finding) => wanted.has(finding.ruleId))
 }
@@ -573,7 +573,11 @@ function commitForecastRequirements(context: GateContext): QualificationGateRequ
       explanationWhenSatisfied: 'Die finale wirtschaftliche Entscheidungsautorität und Priorität sind ausreichend qualifiziert.',
       explanationWhenMissing:
         'Ohne belastbare Economic-Buyer-Validierung bleibt offen, wer final entscheidet und ob die Investition tatsächlich Priorität hat.',
-      desiredEvidence: ['Economic-Buyer-Authority', 'direkte Interaktion oder belastbarer Access', 'Investitionspriorität'],
+      desiredEvidence: [
+        'Economic-Buyer-Authority',
+        'direkte Interaktion oder belastbarer Access',
+        'Investitionspriorität',
+      ],
       nextStep: 'Economic-Buyer-Gap schließen, bevor der Deal als Commit geführt wird.',
     }),
     findingRequirement(context, {
