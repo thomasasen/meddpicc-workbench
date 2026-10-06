@@ -115,14 +115,8 @@ function painImplicationRule(project: MeddpiccProject): DealInspectorFinding | n
     title: 'Pain ist identifiziert, aber noch nicht vollständig impliziert.',
     whyItMatters:
       'Ein beschriebenes Problem erzeugt erst dann belastbare Dringlichkeit, wenn Business Impact und Konsequenz des Nicht-Handelns nachvollziehbar sind.',
-    missingEvidence: [
-      'Business Impact der betroffenen Pain-Items',
-      'Konsequenz des Nicht-Handelns',
-    ],
-    evidenceIds: [
-      ...section.evidenceIds,
-      ...incomplete.flatMap((item) => item.evidenceIds),
-    ],
+    missingEvidence: ['Business Impact der betroffenen Pain-Items', 'Konsequenz des Nicht-Handelns'],
+    evidenceIds: [...section.evidenceIds, ...incomplete.flatMap((item) => item.evidenceIds)],
     entityIds: incomplete.map((item) => item.id),
     inputs: incomplete.flatMap((item) => [
       {
@@ -158,10 +152,7 @@ function customerConfirmedMetricsRule(project: MeddpiccProject): DealInspectorFi
       'Kundenseitig bestätigte Current-State-Messgröße',
       'Kundenseitig bestätigtes Ziel oder Verbesserungspotenzial',
     ],
-    evidenceIds: [
-      ...section.evidenceIds,
-      ...section.metrics.flatMap((metric) => metric.evidenceIds),
-    ],
+    evidenceIds: [...section.evidenceIds, ...section.metrics.flatMap((metric) => metric.evidenceIds)],
     entityIds: section.metrics.map((metric) => metric.id),
     inputs: [
       {
@@ -197,10 +188,7 @@ function economicImpactRule(project: MeddpiccProject): DealInspectorFinding | nu
       'Wirtschaftlicher Effekt der betroffenen Metric',
       'Nachvollziehbare Herleitung des wirtschaftlichen Effekts',
     ],
-    evidenceIds: [
-      ...section.evidenceIds,
-      ...incomplete.flatMap((metric) => metric.evidenceIds),
-    ],
+    evidenceIds: [...section.evidenceIds, ...incomplete.flatMap((metric) => metric.evidenceIds)],
     entityIds: incomplete.map((metric) => metric.id),
     inputs: incomplete.map((metric) => ({
       path: `meddpicc.metrics.metrics[${metric.id}].economicImpact.value`,
@@ -346,10 +334,7 @@ function decisionProcessRule(project: MeddpiccProject): DealInspectorFinding | n
       'Kundenseitige Bestätigung noch geplanter oder unbekannter Schritte',
       'Evidence für die beschriebenen Entscheidungsschritte',
     ],
-    evidenceIds: [
-      ...section.evidenceIds,
-      ...unclear.flatMap((step) => step.evidenceIds),
-    ],
+    evidenceIds: [...section.evidenceIds, ...unclear.flatMap((step) => step.evidenceIds)],
     entityIds: unclear.map((step) => step.id),
     inputs: unclear.flatMap((step) => [
       {
@@ -467,13 +452,11 @@ function championRule(project: MeddpiccProject): DealInspectorFinding | null {
     Number(person.influence === 'high') +
     Number(textPresent(person.personalWin)) +
     Number(
-      behaviorHasEvidence(person, 'provided_internal_information') ||
-        behaviorHasEvidence(person, 'shared_bad_news'),
+      behaviorHasEvidence(person, 'provided_internal_information') || behaviorHasEvidence(person, 'shared_bad_news'),
     ) +
     Number(behaviorHasEvidence(person, 'sold_internally')) +
     Number(
-      behaviorHasEvidence(person, 'created_access') ||
-        behaviorHasEvidence(person, 'enabled_economic_buyer_access'),
+      behaviorHasEvidence(person, 'created_access') || behaviorHasEvidence(person, 'enabled_economic_buyer_access'),
     )
 
   const ranked = [...candidates].sort(
