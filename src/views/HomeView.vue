@@ -13,6 +13,7 @@ import {
 import { storeToRefs } from 'pinia'
 import { computed, nextTick, ref, type Component } from 'vue'
 
+import { assessChampions, type ChampionAssessment, type ChampionSignalState } from '../domain/championTester'
 import { inspectDeal, type DealInspectorFinding } from '../domain/dealInspector'
 import { deriveNextBestActions, type NextBestActionRecommendation } from '../domain/nextBestAction'
 import {
@@ -164,6 +165,13 @@ const inspectorFindings = computed(() => allInspectorFindings.value.slice(0, 3))
 const allNextBestActions = computed(() => deriveNextBestActions(project.value, allInspectorFindings.value))
 const nextBestActions = computed(() => allNextBestActions.value.slice(0, 3))
 const qualificationGates = computed(() => assessQualificationGates(project.value))
+const championAssessments = computed(() => assessChampions(project.value))
+const strongestChampion = computed(
+  () => championAssessments.value.find((assessment) => assessment.status !== 'disqualified') ?? null,
+)
+const activeChampionCount = computed(
+  () => championAssessments.value.filter((assessment) => assessment.status !== 'disqualified').length,
+)
 
 const inspectorSeverityLabels: Record<DealInspectorFinding['severity'], string> = {
   high: 'Hoch',
@@ -184,6 +192,20 @@ const qualificationGateStatusLabels: Record<QualificationGateAssessment['status'
 const qualificationGateRequirementLabels: Record<QualificationGateRequirementLevel, string> = {
   required: 'Notwendig',
   recommended: 'Empfohlen',
+}
+
+const championAssessmentStatusLabels: Record<ChampionAssessment['status'], string> = {
+  candidate: 'Kandidat',
+  'partially-proven': 'Teilweise bewiesen',
+  proven: 'Belastbar',
+  disqualified: 'Disqualifiziert',
+}
+
+const championSignalStateLabels: Record<ChampionSignalState, string> = {
+  proven: 'Bewiesen',
+  structured: 'Strukturiert, nicht evidenzverankert',
+  insufficient: 'Nicht ausreichend belegt',
+  missing: 'Fehlt',
 }
 
 const dateFormatter = new Intl.DateTimeFormat('de-DE', {
@@ -243,6 +265,10 @@ function recommendationTrace(recommendation: NextBestActionRecommendation): Sour
 }
 
 function qualificationGateTrace(assessment: QualificationGateAssessment): SourceTrace {
+  return traceEvidenceIds(assessment.evidenceIds)
+}
+
+function championTrace(assessment: ChampionAssessment): SourceTrace {
   return traceEvidenceIds(assessment.evidenceIds)
 }
 
@@ -948,6 +974,129 @@ function saveProject() {
               </details>
             </article>
           </div>
+        </section>
+
+
+        <section class="champion-tester-panel" aria-labelledby="champion-tester-title">
+          <div class="focus-panel-heading champion-tester-heading">
+            <div>
+              <h3 id="champion-tester-title">Champion Tester</h3>
+              <p>
+                {{ activeChampionCount }} aktive Candidates · stärksten Candidate evidenzbasiert prüfen
+              </p>
+            </div>
+            <span class="inspector-version">Regelset v0.1</span>
+          </div>
+
+          <p class="section-note champion-tester-note">
+            Der Tester bewertet beobachtbares Verhalten, Evidence, Einfluss und Personal Win. Ein manuelles
+            „confirmed“-Label allein macht niemanden zum belastbaren Champion.
+          </p>
+
+          <p v-if="!strongestChampion" class="focus-empty">
+            Kein aktiver Champion-Candidate vorhanden. Disqualifizierte Personen werden nicht wieder hochgestuft.
+          </p>
+
+          <article v-else class="champion-tester-assessment">
+            <div class="champion-tester-candidate">
+              <div>
+                <div class="focus-meta-line">
+                  <span
+                    class="champion-status"
+                    :class="'champion-status--' + strongestChampion.status"
+                  >
+                    {{ championAssessmentStatusLabels[strongestChampion.status] }}
+                  </span>
+                  <span>Stärkster Candidate</span>
+                </div>
+                <strong>{{ strongestChampion.stakeholderName }}</strong>
+                <span v-if="strongestChampion.stakeholderRole" class="champion-role">
+                  {{ strongestChampion.stakeholderRole }}
+                </span>
+              </div>
+              <p>{{ strongestChampion.rationale }}</p>
+            </div>
+
+            <div class="champion-signal-grid">
+              <section aria-labelledby="champion-proven-signals-title">
+                <strong id="champion-proven-signals-title">Bewiesene Signale</strong>
+                <p v-if="strongestChampion.provenSignals.length === 0" class="champion-signal-empty">
+                  Noch kein Champion-Signal ist durch belastbare Evidence bewiesen.
+                </p>
+                <ul v-else class="champion-signal-list">
+                  <li v-for="signal in strongestChampion.provenSignals" :key="signal.id">
+                    <span class="champion-signal-state champion-signal-state--proven">Bewiesen</span>
+                    <div>
+                      <strong>{{ signal.label }}</strong>
+                      <p>{{ signal.explanation }}</p>
+                    </div>
+                  </li>
+                </ul>
+              </section>
+
+              <section aria-labelledby="champion-open-signals-title">
+                <strong id="champion-open-signals-title">Offen oder noch nicht belastbar</strong>
+                <p v-if="strongestChampion.openSignals.length === 0" class="champion-signal-empty">
+                  Keine offenen v0.1-Signale.
+                </p>
+                <ul v-else class="champion-signal-list">
+                  <li v-for="signal in strongestChampion.openSignals" :key="signal.id">
+                    <span class="champion-signal-state" :class="'champion-signal-state--' + signal.state">
+                      {{ championSignalStateLabels[signal.state] }}
+                    </span>
+                    <div>
+                      <strong>{{ signal.label }}</strong>
+                      <p>{{ signal.explanation }}</p>
+                    </div>
+                  </li>
+                </ul>
+              </section>
+            </div>
+
+            <section v-if="strongestChampion.nextTest" class="champion-next-test" aria-labelledby="champion-next-test-title">
+              <div>
+                <span class="champion-next-test-kicker">Nächster Champion-Test</span>
+                <strong id="champion-next-test-title">{{ strongestChampion.nextTest.title }}</strong>
+                <p>{{ strongestChampion.nextTest.rationale }}</p>
+                <p><strong>Aktion:</strong> {{ strongestChampion.nextTest.action }}</p>
+              </div>
+              <div>
+                <strong>Gewünschte Evidence / Erfolgskriterium</strong>
+                <ul>
+                  <li v-for="item in strongestChampion.nextTest.desiredEvidence" :key="item">{{ item }}</li>
+                </ul>
+              </div>
+            </section>
+
+            <details class="inspector-details champion-tester-details">
+              <summary>Candidate-Reihenfolge &amp; Datenbasis</summary>
+
+              <div class="champion-candidate-list">
+                <div
+                  v-for="assessment in championAssessments"
+                  :key="assessment.id"
+                  class="champion-candidate-row"
+                >
+                  <div>
+                    <strong>{{ assessment.stakeholderName }}</strong>
+                    <span v-if="assessment.stakeholderRole">{{ assessment.stakeholderRole }}</span>
+                  </div>
+                  <span class="champion-status" :class="'champion-status--' + assessment.status">
+                    {{ championAssessmentStatusLabels[assessment.status] }}
+                  </span>
+                </div>
+              </div>
+
+              <p class="champion-traceability-note">
+                Einfluss und ein lediglich eingetragener Personal Win werden transparent als strukturierte Inputs
+                behandelt, solange keine passende Behavior-Evidence sie belastbar bestätigt.
+              </p>
+
+              <RouterLink class="source-trace-link" :to="sourceTraceTarget(championTrace(strongestChampion))">
+                {{ sourceTraceLabel(championTrace(strongestChampion)) }}
+              </RouterLink>
+            </details>
+          </article>
         </section>
 
         <div class="deal-focus-grid">
