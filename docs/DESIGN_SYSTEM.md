@@ -6,12 +6,14 @@ MEDDPICC Workbench ist ein operatives Werkzeug für komplexe B2B-Opportunities.
 
 Die Oberfläche muss optimieren auf:
 
-- schnelle Orientierung
+- **Seller-Aufgaben vor Datenpflege**
+- schnelle Orientierung: „Was braucht in diesem Deal jetzt Aufmerksamkeit?“
 - klare Trennung von Evidenz und Annahme
 - hohe, aber beherrschbare Informationsdichte
-- effiziente Bearbeitung
 - sichtbare Risiken und Gaps
-- klare nächste Aktionen
+- wenige klare nächste Aktionen
+- nachvollziehbare Reasoning-Ergebnisse
+- effiziente Drill-downs auf Evidence und Source Data
 - wiederholbare Deal Reviews
 
 Die Anwendung soll wie eine ernsthafte Enterprise Workbench wirken und nicht wie eine Marketing-Website.
@@ -79,36 +81,45 @@ Diese Begriffe sind in allen Modulen konsistent zu verwenden.
 
 ## 4. Informationsarchitektur
 
-Die Opportunity ist immer der primäre Kontext.
+Die Opportunity ist immer der primäre Kontext. Die primäre Navigation folgt **Verkäufer-Workflows**, nicht der Schema-Struktur.
 
-Empfohlene Struktur:
+Zielstruktur:
 
 ```text
 Application Shell
-├── Opportunity-Header
-│   ├── Account / Opportunity-Name
-│   ├── Wert
-│   ├── Forecast Category
-│   ├── Target Close
-│   ├── Target Go-Live
+├── Opportunity Context
+│   ├── Account / Opportunity
+│   ├── Wert / Forecast
+│   ├── Target Close / Go-Live
 │   └── Speicher-/Dirty-Status
-├── Hauptnavigation
-│   ├── Übersicht
-│   ├── MEDDPICC-Bereiche
-│   ├── Evidenz
-│   ├── Risiken
-│   ├── Aktionen
-│   ├── Tools
-│   ├── Historie
-│   └── Export
-└── Arbeitsbereich
+├── Deal-Fokus
+│   ├── aktuell wichtige Gaps / Risiken
+│   ├── nächste Aktionen
+│   └── vorhandene Qualification-Übersicht
+├── Coaching-Workflows
+│   ├── Deal prüfen
+│   ├── nächste Aktion
+│   ├── Qualification Gate
+│   ├── Champion prüfen
+│   ├── Economic Buyer
+│   ├── Business Case
+│   ├── Closing / Process
+│   └── Meeting vorbereiten
+├── Source Data / Drill-down
+│   ├── Evidence / References
+│   ├── MEDDPICC-Entities
+│   ├── Risks / Actions
+│   └── Historie
+└── Review / Export
 ```
+
+Noch nicht implementierte Coaching-Services dürfen nicht als funktionsfähige Navigation vorgetäuscht werden.
 
 Standard-Interaktion:
 
-**Übersicht → MEDDPICC-Bereich → Aussage/Prozessschritt → Evidenz/Quelle**
+**Seller-Frage → Finding/Empfehlung → Begründung → Evidence/Source Data → gezielte Korrektur oder Aktion**
 
-Beim Drill-Down darf der Opportunity-Kontext nicht verloren gehen.
+Source-Data-Ansichten bleiben notwendig, sind aber sekundär. Beim Drill-down darf der Opportunity-Kontext nicht verloren gehen.
 
 ## 5. Layout
 
@@ -249,21 +260,26 @@ Ein Deal darf nicht allein wegen eines hohen Durchschnittsscores als „gesund�
 
 Ein Confidence Score beschreibt Qualifizierungs-/Evidence Confidence und **keine Win Probability**.
 
-## 10. Dashboard / Übersicht
+## 10. Deal-Fokus / Startseite
 
-Die Übersicht priorisiert Handlung vor Dekoration.
+Die Startseite ist kein klassisches KPI-Dashboard, sondern die **operative Einstiegsfläche für den Deal**.
+
+Primäre Frage:
+
+> Was braucht in diesem Deal jetzt meine Aufmerksamkeit und wo arbeite ich weiter?
 
 Empfohlene Reihenfolge:
 
-1. Opportunity- und kommerzieller Kontext
-2. kritische Gaps und Risiken
-3. nächste Aktionen
-4. MEDDPICC-Statusübersicht
-5. Prozess-/Close-Date-Warnungen
-6. Business-Case-/Value-Zusammenfassung
-7. letzte relevante Änderungen
+1. kompakter Opportunity- und Speicher-Kontext
+2. aktuell wichtigste belegte Gaps / Risiken
+3. nächste offene Aktionen
+4. verfügbare Arbeits-/Coaching-Workflows
+5. kompakte MEDDPICC-Statusübersicht
+6. nachgelagerte Detailinformationen
 
-Kein Dashboard voller gleichgewichteter KPI-Cards.
+Sobald Deal Inspector und Next Best Action implementiert sind, werden deren erklärbare Findings gegenüber manuellen Listen priorisiert.
+
+Kein Dashboard voller gleichgewichteter KPI-Cards, kein Marketing-Hero und keine künstliche globale Deal-Health-Zahl.
 
 ### MEDDPICC-Zusammenfassung
 
@@ -311,6 +327,8 @@ Regeln:
 - Wechsel von Annahme zu bestätigter Evidenz bewusst sichtbar machen
 
 Keine riesigen Single-Page-Formulare für ganz MEDDPICC.
+
+Keine CRUD-Maske allein deshalb bauen, weil ein Objekt im Schema existiert. Formulare sollen möglichst in einen konkreten Seller-Workflow eingebettet sein und nur die Informationen abfragen, die für die aktuelle Aufgabe benötigt werden.
 
 ## 13. Evidenz
 
@@ -491,6 +509,8 @@ Komponenten konsumieren Tokens statt eigene Einzelwerte zu erfinden.
 
 Vor Merge einer UI-Änderung:
 
+- [ ] Der Screen löst eine konkrete Seller-Aufgabe oder unterstützt einen klaren Drill-down.
+- [ ] Die UI bildet nicht bloß Schema-/CRM-Struktur nach.
 - [ ] Opportunity-Kontext bleibt klar.
 - [ ] Wichtigstes Gap / wichtigste Aktion ist schnell sichtbar.
 - [ ] Bestätigt/Teilweise/Annahme/Unbekannt/Risiko funktioniert nicht nur über Farbe.
@@ -503,4 +523,5 @@ Vor Merge einer UI-Änderung:
 - [ ] Motion respektiert Reduced Motion.
 - [ ] Keine unnötige Runtime-Netzwerkabhängigkeit wurde hinzugefügt.
 - [ ] Normale UI-Sprache ist Deutsch; MEDDPICC-Fachbegriffe bleiben korrekt.
+- [ ] Noch nicht implementierte Reasoning-/Coaching-Logik wird nicht vorgetäuscht.
 - [ ] Der Screen wirkt wie ein Teil eines konsistenten Produkts.
