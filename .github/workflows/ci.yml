@@ -55,6 +55,13 @@ jobs:
       - name: Produktionsbuild prüfen
         run: npm run build
 
+      - name: Production Build für Pages-Sync bereitstellen
+        uses: actions/upload-artifact@v4
+        with:
+          name: champion-tester-production-build
+          path: dist/
+          if-no-files-found: error
+
       - name: veröffentlichten Pages-Root prüfen
         run: npm run pages:check
 
