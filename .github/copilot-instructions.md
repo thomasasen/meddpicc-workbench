@@ -31,13 +31,26 @@ Beispiel: Im UI heißt der Status **„Bestätigt“**, die Sektion heißt aber 
 - bei UI/UX-Änderungen `docs/DESIGN_SYSTEM.md`
 - `AGENTS.md` für repository-weite Regeln
 
-## Produktgrenzen
+## Produktziel und Produktgrenzen
 
-MEDDPICC Workbench ist local-first und deterministisch.
+MEDDPICC Workbench ist eine **local-first, deterministische Deal-Reasoning- und Coaching-Workbench**.
 
-Kein verpflichtendes Backend, keine AI-Abhängigkeit zur Runtime, kein stiller Cloud-Sync, keine Analytics mit Opportunity-Inhalten und keine zweite kanonische Datenquelle neben der `.meddpicc`-Projektdatei einführen.
+Primäres Ziel ist nicht, MEDDPICC als acht CRUD-Masken abzubilden, sondern dem Seller konkrete Arbeit abzunehmen: Deal prüfen, Gaps erkennen, nächste Aktionen priorisieren, Qualification Gates prüfen, Champion/Economic Buyer testen, Business Value rechnen, Decision-/Paper-Process planen und Meetings vorbereiten.
 
-Das Projekt nicht zu einem allgemeinen CRM ausweiten.
+Verbindlich:
+
+- Workflows vor Datensätzen.
+- Evidence und „Unbekannt“ vor optimistischen Defaults.
+- Empfehlungen müssen Regel und Inputs erklären können.
+- Domain Services statt versteckter Business-Logik in Vue.
+- Kein verpflichtendes Backend.
+- Kein Core-Feature darf eine AI-/LLM-Runtime oder externe AI-API benötigen.
+- AI darf später optional nur als Input-Layer Candidate Evidence aus unstrukturiertem Material erzeugen; Nutzerbestätigung bleibt erforderlich.
+- Kein stiller Cloud-Sync, keine Analytics mit Opportunity-Inhalten und keine zweite kanonische Datenquelle neben der `.meddpicc`-Projektdatei.
+- Keine Account-/Kontaktverwaltung, Pipeline, Activity Timeline oder generische Task-App bauen.
+- Neue UI nicht aus der Schema-Struktur ableiten, sondern aus konkreten Seller-Aufgaben.
+
+Priorisierte Services stehen in `docs/ROADMAP.md`; `docs/PROGRESS.md` bestimmt den nächsten Slice.
 
 ## UI/UX-Regeln
 
@@ -47,6 +60,8 @@ Bei UI-Arbeiten `docs/DESIGN_SYSTEM.md` und `.agents/skills/meddpicc-ui-ux/SKILL
 
 Bevorzugen:
 
+- task-/workflow-orientierte Einstiege wie „Deal prüfen“ oder „Sind wir bereit für …?“
+- aktuelle Handlungsbedarfe vor administrativer Projektpflege
 - zugängliche Enterprise-Workbench-Muster
 - minimale/Swiss Informationshierarchie
 - informationsdichte, aber gut lesbare Layouts
@@ -63,6 +78,8 @@ Vermeiden:
 - übermäßige Animation
 - externe Webfonts/CDN-Assets als Standard
 - unnötige Charts oder Gauges
+- CRM-artige Tabellen-/Formularoberflächen ohne klaren Coaching-Workflow
+- aktive UI für Roadmap-Services, deren Domain-Logik noch nicht implementiert ist
 
 ## Vue-Konventionen
 
