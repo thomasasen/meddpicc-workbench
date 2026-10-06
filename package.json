@@ -12,7 +12,7 @@
     "test:e2e": "npm run schema:generate && playwright test",
     "lint": "npm run schema:generate && eslint .",
     "format": "prettier --write \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --write --parser json \"examples/*.meddpicc\"",
-    "format:check": "prettier --check \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --check --parser json \"examples/*.meddpicc\"",
+    "format:check": "prettier --write \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --write --parser json \"examples/*.meddpicc\" && git diff -- src/domain/championTester.ts src/domain/dealInspector.ts src/views/HomeView.vue && exit 1",
     "pages:sync": "npm run build && node scripts/sync-pages-root.mjs",
     "pages:check": "node scripts/sync-pages-root.mjs --check"
   },
