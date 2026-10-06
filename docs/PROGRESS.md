@@ -43,7 +43,7 @@ PR #28 hat den letzten dafür benötigten Slice geliefert. Damit ist das Daten-/
 
 Weitere History-/Status-Ausbauschritte werden **nicht automatisch** vorgezogen. Sie werden nur umgesetzt, wenn ein konkreter Reasoning-/Coaching-Service sie tatsächlich benötigt.
 
-Die ersten drei Reasoning-Slices sind umgesetzt: **Deal Inspector v0.1** analysiert den Projektstand rein deterministisch und zeigt die wichtigsten abgeleiteten Qualification Gaps getrennt von manuell gepflegten Risiken. Darauf aufbauend leitet die **Next Best Action Engine v0.1** wenige konkrete, erklärbare Verkäuferaktionen ab. Die **Qualification Gates v0.1** prüfen für POC/Pilot, Proposal/Pricing und Commit Forecast, ob die vorhandene Qualifizierung den nächsten Schritt fachlich trägt. Alle drei Services bleiben abgeleiteter State und verändern weder manuelle Risiken noch `project.actions`. Die Regelsets sind in `docs/DEAL_INSPECTOR_RULES.md`, `docs/NEXT_BEST_ACTION_RULES.md` und `docs/QUALIFICATION_GATES_RULES.md` dokumentiert.
+Die ersten vier Reasoning-Slices sind umgesetzt: **Deal Inspector v0.1** analysiert den Projektstand rein deterministisch und zeigt die wichtigsten abgeleiteten Qualification Gaps getrennt von manuell gepflegten Risiken. Darauf aufbauend leitet die **Next Best Action Engine v0.1** wenige konkrete, erklärbare Verkäuferaktionen ab. Die **Qualification Gates v0.1** prüfen für POC/Pilot, Proposal/Pricing und Commit Forecast, ob die vorhandene Qualifizierung den nächsten Schritt fachlich trägt. Der **Champion Tester v0.1** unterscheidet einen belastbaren Champion von einem hilfreichen Kontakt anhand beobachtbaren Verhaltens, gehärteter Evidence, Einfluss und Personal Win und leitet daraus den nächsten konkreten Champion-Test ab. Alle vier Services bleiben abgeleiteter State und verändern weder manuelle Risiken noch `project.actions`. Die Regelsets sind in `docs/DEAL_INSPECTOR_RULES.md`, `docs/NEXT_BEST_ACTION_RULES.md`, `docs/QUALIFICATION_GATES_RULES.md` und `docs/CHAMPION_TESTER_RULES.md` dokumentiert.
 
 ## Abgeschlossen
 
@@ -101,7 +101,7 @@ Umgesetzt:
 
 Bewusste Modellgrenze:
 
-Champion-Evidence hängt in Schema 0.2.0 an Behavior-Einträgen ohne stabile eigene ID. Diese Modellierung wird erst erweitert, wenn der geplante Champion Tester einen belegten Bedarf für eine stabile Behavior-Identität erzeugt.
+Champion-Evidence hängt in Schema 0.2.0 an Behavior-Einträgen ohne stabile eigene ID. Das Red Team für Champion Tester v0.1 hat keinen fachlichen Use Case gefunden, der eine eigene Behavior-ID zwingend benötigt: `stakeholderId + behavior.type + evidenceIds` reicht für die aktuelle Source Traceability. Schema 0.2.0 bleibt deshalb bewusst unverändert.
 
 ## Neue Phase 3 – Deterministische Coaching-Services
 
@@ -185,7 +185,32 @@ Bewusste Grenzen:
 
 ### 4. Champion Tester
 
-Champion anhand beobachtbarer Verhaltenssignale und Evidence testen; fehlende Signale in konkrete Champion-Tests übersetzen.
+Erster Slice v0.1 umgesetzt.
+
+Umgesetzt:
+
+- reiner, deterministischer Domain Service `assessChampions(project)` / `assessChampion(project, stakeholderId)`
+- abgeleitete Zustände Kandidat, teilweise bewiesen, belastbar und disqualifiziert ohne sichtbaren Champion Score
+- Evidence-Härtung identisch zur vorhandenen Reasoning-Schicht; Assumption, Unknown und Unconfirmed beweisen kein Champion-Signal
+- getrennte Signale für Einfluss, Personal Win, Inside Information / Bad News, Internal Selling, Access Creation und Economic-Buyer-Zugang
+- `influence` und ein bloß eingetragener `personalWin` werden transparent als strukturierte, nicht automatisch evidenzverankerte Inputs behandelt
+- `disqualified` bleibt ein kanonischer Hard Stop und kann durch Derived State nicht wieder hochgestuft werden
+- mehrere Candidates werden deterministisch priorisiert; `stakeholderId` löst verbleibende Gleichstände stabil auf
+- konkreter nächster Champion-Test mit Aktion und gewünschter Evidence / Erfolgskriterium
+- Deal Inspector verwendet dieselbe Champion-Assessment-Logik statt einer konkurrierenden Regel
+- `nba.champion.test` übernimmt den konkreten Test aus dem Champion Tester; bestehende Economic-Buyer-/Champion-Deduplizierung bleibt erhalten
+- Demo-Projekt bewertet Markus Stein bewusst nur als teilweise bewiesen und empfiehlt als nächsten Test Internal Selling
+- kompakter, responsiver Seller-Workflow im Deal-Fokus; Status wird nicht nur über Farbe vermittelt
+- Unit-Regressionen für alle geforderten Red-Team-Fälle sowie Desktop- und Mobile-Smokes
+- fachlicher Regelkatalog und Quellenreview: `docs/CHAMPION_TESTER_RULES.md`
+
+Bewusste Grenzen:
+
+- Schema 0.2.0 bleibt unverändert; Champion Behaviors erhalten in v0.1 keine künstlichen IDs
+- `influence` besitzt weiterhin keine eigene Evidence-Verknüpfung und wird deshalb nicht als evidenzbewiesen ausgegeben
+- keine Mutation von Champion-Daten, Risks oder Actions
+- keine Win Probability und kein globaler Champion Score
+- keine Kontaktverwaltung und keine AI-/LLM-Runtime
 
 ### 5. Economic Buyer Coach
 
@@ -221,18 +246,19 @@ Wichtig:
 
 ## Nächster empfohlener Slice
 
-**Champion Tester.**
+**Economic Buyer Coach.**
 
-Der nächste Slice soll den vorhandenen Champion-Stand nicht nur als Label lesen, sondern beobachtbares Verhalten und belastbare Evidence systematisch testen.
+Der nächste Slice soll den vorhandenen Economic-Buyer-Stand nicht nur anzeigen, sondern Candidate, Autorität, Zugang, wirtschaftliche Validierung und Priorität als zusammenhängenden Seller-Workflow prüfen.
 
 Erster sinnvoller Umfang:
 
-- Champion-Candidates anhand von Einfluss, Personal Win und beobachtbaren Verhaltenssignalen prüfen
-- vorhandene Behaviors wie internes Verkaufen, interne Informationen und geschaffenen Economic-Buyer-Zugang evidenzbasiert auswerten
-- fehlende Belege in einen konkreten nächsten Champion-Test übersetzen
-- Ergebnis ohne globale Score-Zahl als nachvollziehbaren Zustand formulieren, z. B. Kandidat / teilweise bewiesen / belastbar
-- vorhandene Next-Best-Action-Logik wiederverwenden statt eine zweite Task-Engine aufzubauen
-- prüfen, ob stabile Champion-Behavior-IDs für Traceability wirklich erforderlich sind; Schema nur bei belegtem Bedarf erweitern
+- Economic-Buyer-Candidates deterministisch bewerten und mehrere Candidates stabil behandeln
+- Identität und tatsächliche Budget-/Entscheidungsautorität sauber von Vermutung oder Seniorität trennen
+- direkten Zugang und echte EB-Interaktion von indirekter Champion-Kommunikation unterscheiden
+- prüfen, ob Pain, Metrics / Business Case und Investitionspriorität mit dem EB selbst validiert wurden
+- aus dem wichtigsten EB-Gap ein konkretes Gesprächsziel bzw. einen nächsten Validierungsschritt ableiten
+- vorhandene `nba.economic-buyer.advance`-Logik wiederverwenden statt eine zweite Action Engine aufzubauen
+- Champion Tester für belastbare Introduction-Pfade nutzen, ohne Champion und Economic Buyer fachlich zu vermischen
 - keine CRM-artige Kontaktverwaltung, keine Win Probability und keine AI-/LLM-Runtime
 
 ## Bewusst nicht als nächstes bauen
@@ -279,7 +305,9 @@ Ein Slice gilt erst als abgeschlossen, wenn:
 - `src/domain/dealInspector.ts`
 - `src/domain/nextBestAction.ts`
 - `src/domain/qualificationGate.ts`
+- `src/domain/championTester.ts`
 - `docs/DEAL_INSPECTOR_RULES.md`
 - `docs/NEXT_BEST_ACTION_RULES.md`
 - `docs/QUALIFICATION_GATES_RULES.md`
+- `docs/CHAMPION_TESTER_RULES.md`
 - `src/stores/projectStore.ts`
