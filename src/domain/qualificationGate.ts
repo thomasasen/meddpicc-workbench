@@ -183,6 +183,73 @@ function findingRequirement(
   }
 }
 
+function painRequirement(
+  context: GateContext,
+  id: string,
+  level: QualificationGateRequirementLevel,
+  requireImplication: boolean,
+): QualificationGateRequirement {
+  const section = context.project.meddpicc.pain
+  const supportedItems = section.items.filter(
+    (item) => supportingEvidenceIds(context.project, item.evidenceIds).length > 0,
+  )
+  const ruleIds: DealInspectorRuleId[] = requireImplication
+    ? ['pain.identified', 'pain.implication-complete']
+    : ['pain.identified']
+  const related = relatedFindings(context, ruleIds)
+  const satisfied = supportedItems.length > 0 && related.length === 0
+
+  return {
+    id,
+    level,
+    area: 'pain',
+    label: requireImplication
+      ? 'Pain ist identifiziert, evidenzbasiert und ausreichend impliziert'
+      : 'Konkreter kundenseitiger Pain ist evidenzbasiert identifiziert',
+    satisfied,
+    explanation: satisfied
+      ? requireImplication
+        ? 'Mindestens ein Pain ist mit belastbarer Evidence verknüpft; Business Impact und Konsequenz des Nicht-Handelns sind ausreichend beschrieben.'
+        : 'Mindestens ein konkreter Pain ist mit belastbarer Evidence verknüpft.'
+      : requireImplication
+        ? 'Pain, Business Impact oder Konsequenz des Nicht-Handelns sind noch nicht ausreichend evidenzbasiert qualifiziert.'
+        : 'Es fehlt noch ein konkreter Pain mit belastbarer Evidence.',
+    desiredEvidence: requireImplication
+      ? ['Konkrete Problemaussage', 'Business Impact', 'Konsequenz des Nicht-Handelns', 'Belastbare Pain-Evidence']
+      : ['Konkrete Problemaussage des Kunden', 'Geschäftliche Relevanz', 'Belastbare Pain-Evidence'],
+    nextStep: requireImplication
+      ? 'Pain, Business Impact und Konsequenz des Nicht-Handelns evidenzbasiert vervollständigen.'
+      : 'Kundenseitigen Pain konkretisieren und mit belastbarer Evidence verknüpfen.',
+    relatedFindingRuleIds: unique(related.map((finding) => finding.ruleId)),
+    evidenceIds: existingEvidenceIds(context.project, [
+      ...section.evidenceIds,
+      ...section.items.flatMap((item) => item.evidenceIds),
+    ]),
+    entityIds: section.items.map((item) => item.id),
+    inputs: [
+      {
+        path: 'meddpicc.pain.items',
+        label: 'Erfasste Pain-Items',
+        value: String(section.items.length),
+      },
+      {
+        path: 'meddpicc.pain.items[*].evidenceIds',
+        label: 'Pain-Items mit belastbarer Evidence',
+        value: String(supportedItems.length),
+      },
+      ...(requireImplication
+        ? [
+            {
+              path: 'meddpicc.pain.items[*].businessImpact',
+              label: 'Offene Pain-Implikation',
+              value: related.some((finding) => finding.ruleId === 'pain.implication-complete') ? 'ja' : 'nein',
+            },
+          ]
+        : []),
+    ],
+  }
+}
+
 function decisionCriteriaRequirement(
   context: GateContext,
   id: string,
@@ -426,28 +493,8 @@ function competitionRequirement(context: GateContext): QualificationGateRequirem
 
 function pocPilotRequirements(context: GateContext): QualificationGateRequirement[] {
   return [
-    findingRequirement(context, {
-      id: 'poc.pain',
-      level: 'required',
-      area: 'pain',
-      label: 'Konkreter kundenseitiger Pain ist identifiziert',
-      findingRuleIds: ['pain.identified'],
-      explanationWhenSatisfied: 'Ein konkreter Pain ist erfasst; der Test dient damit nicht nur generischem Produktinteresse.',
-      explanationWhenMissing: 'Ohne konkreten Pain fehlt die Grundlage, warum der Kunde überhaupt einen POC/Pilot investieren sollte.',
-      desiredEvidence: ['Konkrete Problemaussage des Kunden', 'Geschäftliche Relevanz des Problems'],
-      nextStep: 'Kundenseitigen Pain konkretisieren, bevor Presales-/POC-Ressourcen gebunden werden.',
-    }),
-    findingRequirement(context, {
-      id: 'poc.pain-implication',
-      level: 'recommended',
-      area: 'pain',
-      label: 'Business Impact und Konsequenz des Nicht-Handelns sind verstanden',
-      findingRuleIds: ['pain.implication-complete'],
-      explanationWhenSatisfied: 'Der Pain ist ausreichend impliziert, um den Test auf ein relevantes Ergebnis auszurichten.',
-      explanationWhenMissing: 'Der Pain ist bekannt, aber Business Impact oder Konsequenz des Nicht-Handelns sind noch offen.',
-      desiredEvidence: ['Business Impact', 'Konsequenz des Nicht-Handelns', 'Priorität aus Kundensicht'],
-      nextStep: 'Business Impact und Konsequenz des Nicht-Handelns vor dem Test weiter vertiefen.',
-    }),
+    painRequirement(context, 'poc.pain', 'required', false),
+    painRequirement(context, 'poc.pain-implication', 'recommended', true),
     decisionCriteriaRequirement(context, 'poc.decision-criteria', 'required'),
     findingRequirement(context, {
       id: 'poc.decision-process',
@@ -480,17 +527,7 @@ function pocPilotRequirements(context: GateContext): QualificationGateRequiremen
 
 function proposalPricingRequirements(context: GateContext): QualificationGateRequirement[] {
   return [
-    findingRequirement(context, {
-      id: 'proposal.pain',
-      level: 'required',
-      area: 'pain',
-      label: 'Konkreter kundenseitiger Pain ist identifiziert',
-      findingRuleIds: ['pain.identified'],
-      explanationWhenSatisfied: 'Das Angebot kann auf einen konkreten Kundennutzen bezogen werden.',
-      explanationWhenMissing: 'Ohne konkreten Pain wird Pricing zur isolierten Kostenfrage statt zur Value-Diskussion.',
-      desiredEvidence: ['Konkrete Problemaussage', 'geschäftliche Relevanz'],
-      nextStep: 'Pain konkretisieren, bevor Preis oder Proposal zum Mittelpunkt der Diskussion werden.',
-    }),
+    painRequirement(context, 'proposal.pain', 'required', false),
     customerConfirmedMetricsRequirement(context, 'proposal.metrics', 'required'),
     decisionCriteriaRequirement(context, 'proposal.decision-criteria', 'required'),
     economicImpactRequirement(context, 'proposal.economic-impact', 'recommended'),
@@ -524,18 +561,7 @@ function proposalPricingRequirements(context: GateContext): QualificationGateReq
 function commitForecastRequirements(context: GateContext): QualificationGateRequirement[] {
   return [
     targetCloseRequirement(context),
-    findingRequirement(context, {
-      id: 'commit.pain',
-      level: 'required',
-      area: 'pain',
-      label: 'Pain ist identifiziert und ausreichend impliziert',
-      findingRuleIds: ['pain.identified', 'pain.implication-complete'],
-      explanationWhenSatisfied: 'Problem, Business Impact und Konsequenz des Nicht-Handelns sind ausreichend qualifiziert.',
-      explanationWhenMissing:
-        'Ein Commit ohne belastbaren Pain und Business Impact beruht zu stark auf Verkäuferhoffnung statt auf Kundendringlichkeit.',
-      desiredEvidence: ['Pain', 'Business Impact', 'Konsequenz des Nicht-Handelns'],
-      nextStep: 'Pain und seine geschäftliche Konsequenz vervollständigen.',
-    }),
+    painRequirement(context, 'commit.pain', 'required', true),
     customerConfirmedMetricsRequirement(context, 'commit.metrics-confirmed', 'required'),
     economicImpactRequirement(context, 'commit.economic-impact', 'required'),
     findingRequirement(context, {
