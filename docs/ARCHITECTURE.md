@@ -11,27 +11,36 @@ Zentrale Regel:
 ## High-Level-Architektur
 
 ```text
-                 GitHub Pages
-                     │
-                     ▼
-              statische Vue-App
-                     │
-          ┌──────────┴──────────┐
-          ▼                     ▼
-    Project File I/O      deterministische
-   (.meddpicc JSON)       Domain Services
-          │                     │
-          └──────────┬──────────┘
-                     ▼
-                Pinia State
-                     │
-          ┌──────────┼──────────┐
-          ▼          ▼          ▼
-      MEDDPICC    Dashboard   Exporte
-       Module
+                    GitHub Pages
+                        │
+                        ▼
+                 statische Vue-App
+                        │
+             ┌──────────┴──────────┐
+             ▼                     ▼
+       Project File I/O       Application State
+      (.meddpicc JSON)            (Pinia)
+             │                     │
+             └──────────┬──────────┘
+                        ▼
+             strukturierte Deal-Daten
+                        │
+                        ▼
+          deterministische Domain Services
+                        │
+        ┌───────────────┼────────────────┐
+        ▼               ▼                ▼
+ Deal Inspector     Coaching Tools   Planning/Value
+ Gap / NBA / Gates   EB / Champion    Process / ROI
+        └───────────────┬────────────────┘
+                        ▼
+                 Seller-Workflows
+                        │
+                        ▼
+                  Review / Export
 ```
 
-Für v1 ist kein Application Backend vorgesehen.
+Für v1 ist kein Application Backend vorgesehen. Die geplanten „Services“ sind **logische Domain Services/Microtools innerhalb der Browser-Anwendung**. Eine Verteilung auf Netzwerk-Microservices ist kein Selbstzweck und wird nur bei einem späteren konkreten technischen Bedarf geprüft.
 
 ## Geplanter Stack
 
@@ -116,13 +125,15 @@ Wo möglich reine deterministische Funktionen.
 
 Beispiele:
 
-- ROI-Berechnung
-- Payback-Berechnung
-- Cost-of-Delay-Berechnung
-- Critical-Path-Berechnung
-- Ableitung von Qualifizierungsstatus
-- Prüfung von Evidence Completeness
-- Timeline-Konsistenzprüfung
+- Deal Inspector / Qualification Gap Rules
+- Next-Best-Action-Priorisierung
+- Qualification Gates / Pause Points
+- Champion-Evidence-Check
+- Economic-Buyer-Statuslogik
+- ROI-/Payback-/Cost-of-Delay-Berechnung
+- Decision-/Paper-Process- und Critical-Path-Berechnung
+- Meeting-Prep-Fragenauswahl
+- Evidence Completeness und Source Traceability
 - Export-Rendering
 
 Ein Domain Service kennt keine Vue-Komponenten.
@@ -142,9 +153,47 @@ Verantwortung:
 
 ### 4. UI
 
-Das UI stellt Domain State dar und sammelt Eingaben.
+Das UI stellt Domain State und Reasoning-Ergebnisse dar und sammelt gezielte Inputs.
+
+Die primäre Informationsarchitektur folgt **Seller-Workflows**, nicht der Struktur des JSON-Schemas. MEDDPICC-Entities, Stakeholder, Evidence, Risks und Actions sind wichtige Drill-down-/Bearbeitungsobjekte, aber nicht automatisch eigenständige Hauptmodule.
 
 Business Rules dürfen nicht versteckt in Komponenten liegen.
+
+### 5. Reasoning-/Coaching-Service-Grenzen
+
+Jeder Coaching-Service soll:
+
+- eine klar abgegrenzte Verkäuferfrage beantworten
+- als reine bzw. weitgehend reine Domain-Logik testbar sein
+- strukturierte Projektinputs verwenden
+- Findings mit Rule-ID/Begründung und relevanten Inputs erklären können
+- `unknown` und Annahmen respektieren
+- keine CRM-artige Datenhaltung einführen
+
+Die ersten priorisierten Services stehen in `docs/ROADMAP.md`.
+
+### 6. Optionale AI-Input-Schicht
+
+AI ist **nicht** Bestandteil der kanonischen MEDDPICC-Reasoning-Engine.
+
+Ein späterer optionaler Adapter darf unstrukturierte Inputs wie Transkripte oder freie Notizen analysieren:
+
+```text
+unstrukturierter Input
+→ optionaler AI-Adapter
+→ Candidate Evidence + Provenienz
+→ Nutzer bestätigt/korrigiert/verwirft
+→ kanonische Projektdaten
+→ deterministische Domain Services
+```
+
+Regeln:
+
+- Core bleibt vollständig ohne AI nutzbar.
+- Kein stiller Upload.
+- Kein AI-Ergebnis darf ungeprüft kanonische Projektdaten verändern.
+- Lokale und Cloud-Provider bleiben austauschbare Adapter.
+- Provider-spezifische Logik darf nicht in die Domain-Reasoning-Schicht einsickern.
 
 ## Lifecycle einer Projektdatei
 
@@ -276,7 +325,7 @@ Wo möglich stabile IDs referenzieren.
 
 ## Deterministic Rule Engine
 
-Regeln als reine Funktionen mit Tests.
+Die Rule Engine ist ein zentraler Produktbestandteil. Regeln als reine Funktionen mit Tests.
 
 Beispiel:
 
@@ -316,8 +365,10 @@ Nicht für die erste Umsetzung erforderlich:
 - PWA/Offline-Installation
 - verschlüsselte Projektdateien
 - optionaler Cloud Sync
+- optionale AI-Input-Adapter
 - CRM API Adapter
 - Team Collaboration
 - Plugin Architecture
+- physische Verteilung einzelner Domain Services als echte Netzwerk-Microservices
 
 Erst bewerten, wenn Dateimodell und lokaler Single-User-Workflow stabil sind.

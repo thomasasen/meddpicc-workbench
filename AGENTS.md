@@ -35,31 +35,73 @@ Beispiele:
 
 ## Produktziel
 
-MEDDPICC Workbench ist eine local-first Browser-Anwendung für die strukturierte Qualifizierung komplexer B2B-Opportunities nach MEDDPICC und für deterministische Deal-Planning-Werkzeuge.
+MEDDPICC Workbench ist eine **local-first Deal-Reasoning- und Coaching-Workbench für komplexe B2B-Opportunities nach MEDDPICC**.
 
-Das Produkt soll repetitive Sales-Arbeit reduzieren, ohne die fachliche Beurteilung durch den Seller zu ersetzen.
+Das Produkt soll dem Account Executive / Strategic Account Manager repetitive Analyse-, Qualifizierungs- und Planungsarbeit abnehmen. Der Schwerpunkt liegt auf **Verkäufer-Workflows und Entscheidungen**, nicht auf der Pflege von CRM-artigen Datensätzen.
+
+Verbindliche Produktlogik:
+
+- **Workflows statt Datensätze:** Ausgangspunkt sind Aufgaben wie „Deal prüfen“, „nächste Aktion bestimmen“, „POC freigeben?“, „Champion testen“, „Economic Buyer bearbeiten“, „Business Case rechnen“, „Closing Plan prüfen“ oder „Meeting vorbereiten“.
+- **Deterministisch by default:** MEDDPICC-Reasoning, Gap Detection, Priorisierung, Berechnungen und Prozessplanung werden als nachvollziehbare Domain Services umgesetzt.
+- **Evidence first:** Jede abgeleitete Aussage muss auf strukturierten Projektdaten, Evidence oder expliziten Annahmen beruhen.
+- **Unbekannt bleibt gültig:** Fehlende Informationen niemals für einen Score oder eine Empfehlung erfinden.
+- **Capture once, derive many:** Informationen möglichst einmal erfassen und in mehreren Services wiederverwenden.
+- **Keine CRM-Doppelpflege:** Account-/Kontaktverwaltung, Pipeline, Activity Timeline und generische Task-Verwaltung gehören nicht in den Core.
+- **AI nur optional als Input-Layer:** Ein späterer AI-Adapter darf unstrukturierte Inhalte in Candidate Evidence überführen. Die eigentliche MEDDPICC-Reasoning-Logik bleibt deterministisch und ohne AI vollständig nutzbar.
+- **Services sind zunächst Domain Services/Microtools:** „Microservice“ bedeutet im Produktkontext nicht automatisch ein separates Netzwerk-Backend. Eine physische Service-Trennung braucht einen eigenen technischen Grund.
+
+Priorisierte Coaching-Services gemäß Roadmap:
+
+1. Deal Inspector / Qualification Gap Engine
+2. Next Best Action Engine
+3. Qualification Gates / Pause Points
+4. Champion Tester
+5. Economic Buyer Coach
+6. Metrics & Business Case Builder
+7. Decision / Paper Process / Closing Planner
+8. Meeting Prep Coach
 
 Vor der Umsetzung eines Features sind zu lesen:
 
 1. `README.md`
 2. `docs/PROJECT_CHARTER.md`
-3. `docs/ARCHITECTURE.md`
-4. `docs/PROJECT_FILE_SPEC.md`
-5. bei UI/UX-Arbeiten zusätzlich `docs/DESIGN_SYSTEM.md`
+3. `docs/ROADMAP.md`
+4. `docs/PROGRESS.md` – bestimmt den aktuell nächsten empfohlenen Slice
+5. `docs/ARCHITECTURE.md`
+6. `docs/PROJECT_FILE_SPEC.md`
+7. bei UI/UX-Arbeiten zusätzlich `docs/DESIGN_SYSTEM.md`
+
+Bei Widersprüchen zur Feature-Priorität haben die aktuelle `ROADMAP.md` und `PROGRESS.md` Vorrang vor älteren Beschreibungen bereits implementierter Oberflächen.
 
 ## Nicht verhandelbare Architekturregeln
 
 - Die portable `.meddpicc`-Projektdatei ist die kanonische Source of Truth der Opportunity.
 - Kein verpflichtendes Backend einführen.
-- Keine AI-/LLM-Abhängigkeit zur Runtime einführen.
+- Kein Core-Feature darf eine AI-/LLM-Runtime oder externe AI-API voraussetzen.
+- Ein späterer optionaler AI-Input-Adapter muss opt-in sein, Candidate Evidence erzeugen und darf kanonische Projektdaten niemals ungeprüft verändern.
 - Opportunity- oder Projektdaten standardmäßig nicht hochladen oder synchronisieren.
-- Die Anwendung nicht zu CRM, E-Mail-Client, Kalender oder Pipeline-Management-Suite ausweiten.
-- Deterministische Berechnungen und Qualifizierungsregeln gehören in Domain Services und nicht versteckt in UI-Komponenten.
+- Die Anwendung nicht zu CRM, E-Mail-Client, Kalender, Kontaktdatenbank, Pipeline-Management-Suite, Activity Timeline oder generischer Task-App ausweiten.
+- Deterministische Berechnungen, Qualification Gaps, Priorisierungen und Empfehlungen gehören in Domain Services und nicht versteckt in UI-Komponenten.
+- Keine neuen CRUD-Oberflächen nur deshalb bauen, weil das Schema ein Feld enthält. Jede neue Arbeitsoberfläche braucht einen klaren Seller-Workflow oder Coaching-Use-Case.
+- Keine „magischen“ Gesamt-Scores oder Win-Probabilities ohne fachlich explizites, erklärbares Modell.
+- Jede abgeleitete Empfehlung muss ihre Regel und relevante Inputs nachvollziehbar machen können.
 - Annahmen, unbekannte Informationen, Kundenaussagen, Interpretationen und bestätigte Evidenz müssen unterscheidbar bleiben.
 - „Unbekannt“ ist ein gültiger Zustand.
 - Jede Schema-Änderung muss Kompatibilität und Migration berücksichtigen.
 - `schema/meddpicc-project.schema.json` ist der kanonische Dateiformatvertrag. Projekt-Typen werden daraus generiert; kein paralleles manuelles TypeScript-Dateimodell pflegen.
 - Nach Schema-Änderungen mindestens `npm run schema:generate`, Unit Tests und Production Build prüfen.
+
+## Feature-Fit-Gate
+
+Vor jedem neuen Feature beantworten:
+
+1. Welche konkrete, heute aufwändige oder fehleranfällige Arbeit des Sellers wird reduziert?
+2. Welche Entscheidung oder nächste Aktion wird dadurch besser?
+3. Kann vorhandener strukturierter Deal-Kontext wiederverwendet werden, statt neue Doppelpflege zu erzeugen?
+4. Ist die Logik deterministisch und erklärbar lösbar?
+5. Führt das Feature versehentlich in Richtung CRM-/Task-/Kontaktverwaltung?
+
+Wenn der primäre Nutzen nur „mehr Felder pflegen“ oder „mehr Daten anzeigen“ lautet, gehört das Feature wahrscheinlich nicht in den Core.
 
 ## UI/UX-Anweisung
 
@@ -121,6 +163,8 @@ Accessibility ist eine Basisanforderung und kein späterer Feinschliff.
 
 Vor Abschluss einer UI-Arbeit prüfen:
 
+- Ist innerhalb weniger Sekunden sichtbar, was im Deal Aufmerksamkeit braucht und wo der Seller weiterarbeiten sollte?
+- Unterstützt der Screen einen Verkäufer-Workflow statt eine Datenbankstruktur abzubilden?
 - Ist die wichtigste Deal-Information ohne Suchen sichtbar?
 - Lassen sich Evidenz und Annahme anhand Text/Icon unterscheiden und nicht nur anhand Farbe?
 - Kann die Aufgabe vollständig per Tastatur erledigt werden?

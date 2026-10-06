@@ -1,6 +1,6 @@
 # Beitragen
 
-MEDDPICC Workbench soll ein fokussiertes local-first Qualifizierungswerkzeug bleiben. Beiträge müssen diese Richtung erhalten.
+MEDDPICC Workbench soll eine fokussierte local-first Deal-Reasoning- und Coaching-Workbench bleiben. Beiträge müssen diese Richtung erhalten und dürfen das Produkt nicht schrittweise zu einem CRM oder einer zusätzlichen Datenpflege-Schicht machen.
 
 ## Projektsprache
 
@@ -23,12 +23,21 @@ Vor Implementierung `AGENTS.md` lesen. Bei UI/UX zusätzlich `docs/DESIGN_SYSTEM
 
 Eine Änderung sollte mindestens eine dieser Fragen mit Ja beantworten:
 
-- Reduziert sie repetitive Qualification-/Deal-Planning-Arbeit?
-- Verbessert sie Verlässlichkeit von Evidenz und Qualifizierungsstatus?
-- Macht sie ein Projekt leichter wiederaufnehmbar, reviewbar oder übergebbar?
-- Hilft sie, reale Gaps, Risiken, Abhängigkeiten oder nächste Aktionen sichtbar zu machen?
+- Reduziert sie konkrete repetitive Qualification-/Deal-Planning-Arbeit des Sellers?
+- Hilft sie, die nächste sinnvolle Sales-Aktion oder eine bessere Entscheidung abzuleiten?
+- Erkennt oder schließt sie reale Gaps, Risiken oder Prozessabhängigkeiten?
+- Verbessert sie die Verlässlichkeit und Nachvollziehbarkeit von Evidence?
+- Rechnet oder plant sie etwas, das der Seller sonst manuell rekonstruieren müsste?
+- Macht sie einen Deal leichter wiederaufnehmbar, reviewbar oder übergebbar?
 
-Wenn nicht, gehört sie wahrscheinlich nicht in den Core.
+Zusätzlich prüfen:
+
+- Entsteht nur eine weitere CRUD-/Pflegeoberfläche?
+- Werden CRM-Daten wie Kontakte, Activities, Pipeline oder generische Tasks dupliziert?
+- Könnte der gleiche Nutzen aus bereits vorhandenen Projektdaten deterministisch abgeleitet werden?
+- Ist eine AI-Komponente wirklich für unstrukturierten Input nötig oder wird sie unnötig für Reasoning eingesetzt?
+
+Wenn der Hauptnutzen „mehr Felder pflegen“ lautet, gehört die Änderung wahrscheinlich nicht in den Core.
 
 ## Architekturgrenzen
 
@@ -36,7 +45,9 @@ Nicht einführen:
 
 - verpflichtendes Backend
 - verpflichtende Benutzerkonten
-- AI-Abhängigkeit zur Runtime
+- AI-Abhängigkeit für Core-Reasoning oder Core-Workflows
+- ungeprüfte AI-Mutationen kanonischer Projektdaten
+- CRM-artige Account-/Kontakt-/Pipeline-/Activity- oder generische Task-Verwaltung
 - Telemetrie mit Zugriff auf Opportunity-Inhalte
 - stillen Upload/Sync von Projektdateien
 - zweite kanonische Datenquelle neben der `.meddpicc`-Datei
@@ -94,9 +105,12 @@ Kompatible unbekannte Felder niemals still verwerfen.
 Reine Funktionen bevorzugen für:
 
 - Berechnungen
-- Scoring
+- erklärbare Qualification-/Evidence-Bewertung
 - Gap Detection
-- Datums-/Dependency-Logik
+- Next-Best-Action-Priorisierung
+- Qualification Gates
+- Champion-/Economic-Buyer-Checks
+- Datums-/Dependency-/Closing-Logik
 - Validierung
 - Migration
 

@@ -14,7 +14,7 @@ Browser Memory
 lokales Speichern / Download
 ```
 
-Opportunity-Inhalte benötigen kein Backend und keine externe API.
+Opportunity-Inhalte benötigen im Core kein Backend und keine externe API. Sämtliche Deal-Reasoning- und Coaching-Services müssen im Standardmodus lokal/deterministisch funktionieren.
 
 ## Realistische Privacy-Aussage
 
@@ -36,6 +36,17 @@ Die Produktionsanwendung sendet Projektinhalte standardmäßig nicht an:
 - CRM-Systeme
 
 Eine spätere Integration muss explizit vom Nutzer aktiviert und klar vom lokalen Standardmodus getrennt sein.
+
+### Optionale AI-Input-Adapter
+
+Falls später AI für Transkripte, freie Notizen oder Dokumente angeboten wird:
+
+- AI ist niemals Voraussetzung für Core-Reasoning oder Coaching.
+- Vor jeder Übertragung muss für den Nutzer erkennbar sein, welche Inhalte an welchen Provider gesendet werden.
+- AI-Ausgaben gelten zunächst nur als **Candidate Evidence**.
+- Candidate Evidence darf kanonische Projektdaten erst nach bewusster Bestätigung/Korrektur verändern.
+- Provider-spezifische Verarbeitung muss vom deterministischen Domain Layer getrennt bleiben.
+- Ein lokaler/no-AI-Modus bleibt vollständig nutzbar.
 
 ## Statische Assets
 

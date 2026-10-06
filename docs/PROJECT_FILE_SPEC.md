@@ -16,6 +16,21 @@ schema/meddpicc-project.schema.json
 
 Die Datei bleibt UTF-8, menschenlesbares JSON mit eigener Dateiendung. Binäranhänge werden nicht eingebettet.
 
+## Rolle des Datenmodells im Produkt
+
+Das Dateiformat ist das **fachliche Fundament für Reasoning und Coaching**, nicht die Navigationsstruktur des Produkts.
+
+Wichtige Konsequenzen:
+
+- Ein vorhandenes Schemafeld erzeugt **keinen automatischen Anspruch auf eine eigene CRUD-Maske**.
+- Stakeholder sind keine allgemeine Kontaktverwaltung, sondern existieren nur, soweit sie für Qualification, Economic Buyer, Champion, Process oder andere Deal-Reasoning-Use-Cases benötigt werden.
+- Risks und Actions sind keine generische Risk-/Task-App, sondern tragen Qualification- und Deal-Planning-Kontext.
+- MEDDPICC-Bereiche liefern strukturierte Inputs für Deal Inspector, Qualification Gates, Champion-/EB-Coaching, Value- und Process-Services.
+- Neue persistierte Felder werden erst ergänzt, wenn ein konkreter Seller-Workflow sie benötigt und der Nutzen nicht sauber aus vorhandenen Daten ableitbar ist.
+- Abgeleitete Findings, Prioritäten, ROI/Payback oder Process-Warnungen sollen bevorzugt **neu berechnet** und nicht als zweite Wahrheit persistiert werden.
+
+Die UI folgt damit dem Prinzip **Workflow → Reasoning → Drill-down auf Source Data**, nicht **Schema → Formular**.
+
 ## Architektur des Dateivertrags
 
 Die Struktur wird genau einmal definiert:
@@ -133,6 +148,8 @@ Unterstützt werden unter anderem:
 - Detractor
 
 Zusätzlich können Einfluss, Deal-Position, Personal Win, Status und Notizen geführt werden.
+
+Diese Struktur ist ausdrücklich **keine CRM-Kontaktdatenbank**. Es werden nur Informationen geführt, die für die Qualification- und Coaching-Services fachlich benötigt werden.
 
 Economic Buyer und Champion werden nicht als einzelne feste Person im Projektmodell gespeichert. Die jeweiligen MEDDPICC-Bereiche referenzieren Stakeholder über stabile IDs.
 
@@ -361,7 +378,7 @@ Evidenz kann über `referenceId` genau einen solchen Record referenzieren. Die D
 Die Workbench nutzt diese Beziehung für Source-Traceability:
 
 ```text
-Dashboard Finding
+Reasoning-/Coaching-Finding
 → Evidence
 → Reference-Record
 → optional nutzerinitiierte externe URL
