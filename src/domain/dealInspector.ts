@@ -501,11 +501,7 @@ function championRule(project: MeddpiccProject): DealInspectorFinding | null {
   if (assessment.status === 'proven') return null
 
   const missingEvidence = assessment.openSignals
-    .filter(
-      (signal) =>
-        signal.requiredForProven &&
-        !(signal.id === 'influence' && signal.state === 'structured'),
-    )
+    .filter((signal) => signal.requiredForProven && !(signal.id === 'influence' && signal.state === 'structured'))
     .map((signal) => signal.label)
 
   return finding(project, {
