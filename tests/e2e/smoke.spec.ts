@@ -67,9 +67,10 @@ test('lädt die Standard-Demo als Deal-Fokus ohne offensichtlichen Runtime-Fehle
   await expect(page.getByRole('link', { name: /Evidenz prüfen/ })).toBeVisible()
   await expect(page.getByRole('button', { name: /Projekt bearbeiten/ })).toBeVisible()
 
-  await expect(page.getByRole('heading', { name: 'MEDDPICC-Kurzstatus' })).toBeVisible()
-  await expect(page.getByText('Economic Buyer', { exact: true }).first()).toBeVisible()
-  await expect(page.getByText(/keine Win Probability/i)).toBeVisible()
+  const qualificationSnapshot = page.locator('.qualification-section')
+  await expect(qualificationSnapshot.getByRole('heading', { name: 'MEDDPICC-Kurzstatus' })).toBeVisible()
+  await expect(qualificationSnapshot.getByText('Economic Buyer', { exact: true }).first()).toBeVisible()
+  await expect(qualificationSnapshot.getByText(/keine Win Probability/i)).toBeVisible()
 
   expect(runtimeErrors).toEqual([])
 })
