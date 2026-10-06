@@ -14,7 +14,7 @@
     "format": "prettier --write \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --write --parser json \"examples/*.meddpicc\"",
     "format:check": "prettier --check \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --check --parser json \"examples/*.meddpicc\"",
     "pages:sync": "npm run build && node scripts/sync-pages-root.mjs",
-    "pages:check": "npm run pages:sync && node scripts/emit-pages-artifacts.mjs && node -e \"process.exit(1)\""
+    "pages:check": "node scripts/sync-pages-root.mjs --check"
   },
   "dependencies": {
     "@lucide/vue": "1.51.0",
