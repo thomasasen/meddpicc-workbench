@@ -236,7 +236,10 @@ function painRule(project: MeddpiccProject, findings: readonly DealInspectorFind
   }
 }
 
-function metricsRule(project: MeddpiccProject, findings: readonly DealInspectorFinding[]): RecommendationCandidate | null {
+function metricsRule(
+  project: MeddpiccProject,
+  findings: readonly DealInspectorFinding[],
+): RecommendationCandidate | null {
   const customerConfirmationGap = findingByRule(findings, 'metrics.customer-confirmed')
   if (customerConfirmationGap) {
     return {
