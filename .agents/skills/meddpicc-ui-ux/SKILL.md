@@ -48,7 +48,15 @@ Statuslabels im UI:
 
 ## 3. Produktdesign anwenden
 
-Das Produkt ist eine **Enterprise Sales Workbench**, keine Marketing-Site.
+Das Produkt ist eine **deterministische Enterprise Sales Coaching-/Reasoning-Workbench**, keine Marketing-Site und kein CRM.
+
+Die wichtigste UX-Regel lautet:
+
+> **Seller-Workflow vor Datenstruktur.**
+
+Ein Screen soll möglichst eine konkrete Aufgabe unterstützen: Deal prüfen, Gap verstehen, nächste Aktion wählen, Qualification Gate prüfen, Champion/EB testen, Business Case rechnen, Closing Process planen oder Meeting vorbereiten.
+
+Nicht aus jedem Schemaobjekt automatisch eine Hauptnavigation oder CRUD-Maske erzeugen.
 
 Primäre Design-Einflüsse:
 
@@ -79,37 +87,39 @@ Jede abgeleitete Warnung oder Bewertung soll die zugrunde liegende Begründung b
 
 ## 5. Informationsarchitektur
 
-Standardhierarchie:
+Bevorzugte Hierarchie:
 
 ```text
 Opportunity
-├── Übersicht
-│   ├── Deal Health
-│   ├── Kritische Gaps
-│   ├── Risiken
-│   └── Nächste Aktionen
-├── MEDDPICC
-│   ├── Metrics
-│   ├── Economic Buyer
-│   ├── Decision Criteria
-│   ├── Decision Process
-│   ├── Paper Process
-│   ├── Pain
-│   ├── Champion
-│   └── Competition
-├── Evidenz
-├── Risiken
-├── Aktionen
-├── Tools
-└── Historie / Export
+├── Deal-Fokus
+│   ├── aktuell wichtig
+│   ├── Gaps / Risiken
+│   └── nächste Aktionen
+├── Coaching-Workflows
+│   ├── Deal Inspector
+│   ├── Next Best Action
+│   ├── Qualification Gates
+│   ├── Champion / Economic Buyer
+│   ├── Value / Business Case
+│   ├── Decision / Paper / Closing
+│   └── Meeting Prep
+├── Source Data / Drill-down
+│   ├── MEDDPICC-Entities
+│   ├── Evidence / References
+│   ├── Risks / Actions
+│   └── Historie
+└── Review / Export
 ```
 
-Overview → Detail → Evidenz als Drill-Down nutzen. Kontext erhalten und Rücknavigation eindeutig machen.
+Nur bereits implementierte Workflows als aktiv darstellen.
+
+Workflow → Finding → Begründung → Evidence/Source Data als bevorzugten Drill-down nutzen. Kontext erhalten und Rücknavigation eindeutig machen.
 
 ## 6. Komponentenregeln
 
 ### Formulare
 
+- nur dann eigene Formulare schaffen, wenn ein konkreter Workflow oder notwendiger Source-Data-Drill-down sie braucht
 - sichtbare Labels
 - sinnvolle fachliche Gruppierung
 - klare Unterscheidung zwischen Pflichtfeld und optional
@@ -236,6 +246,9 @@ Nicht den gesamten Upstream-Skill kopieren und nicht als Produktions-/Runtime-Ab
 
 Eine UI-Änderung ist erst fertig, wenn sie:
 
+- eine konkrete Seller-Aufgabe unterstützt oder einen notwendigen Drill-down ermöglicht
+- keine CRM-/CRUD-Doppelpflege als Hauptworkflow erzeugt
+- keine noch nicht implementierte Coaching-Logik vortäuscht
 - `docs/DESIGN_SYSTEM.md` entspricht
 - per Tastatur bedienbar ist
 - responsive funktioniert
