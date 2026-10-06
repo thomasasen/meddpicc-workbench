@@ -2,6 +2,16 @@
 
 Beschreibe, was dieser Pull Request ändert und warum.
 
+## Produkt-Fit
+
+- [ ] Der PR reduziert konkrete Seller-Arbeit oder verbessert eine Qualification-/Deal-Planning-Entscheidung.
+- [ ] Der PR bildet einen Workflow ab und nicht nur zusätzliche Datenpflege.
+- [ ] Der PR führt keine CRM-artige Account-/Kontakt-/Pipeline-/Activity-/Task-Doppelpflege ein.
+- [ ] Abgeleitete Findings/Empfehlungen sind deterministisch und erklären ihre Inputs/Regeln.
+- [ ] Kein Core-Workflow benötigt AI/LLM; optionale AI verarbeitet höchstens unstrukturierte Inputs zu Candidate Evidence.
+
+Wenn ein Punkt nicht zutrifft, im PR begründen.
+
 ## Scope
 
 - [ ] nur UI
@@ -42,6 +52,8 @@ Beschreibe hinzugefügte bzw. durchgeführte Tests.
 - [ ] Verhalten ist dort deterministisch, wo es erwartet wird.
 - [ ] Annahme und Evidenz werden nicht vermischt.
 - [ ] Business Rules liegen nicht nur versteckt in UI-Komponenten.
+- [ ] Neue UI folgt einer konkreten Seller-Aufgabe und nicht lediglich der Schema-/Datenbankstruktur.
+- [ ] Noch nicht implementierte Roadmap-Services werden im UI nicht als funktionierend vorgetäuscht.
 - [ ] Dokumentation ist aktualisiert.
 - [ ] Bei UI-Änderungen wurde `docs/DESIGN_SYSTEM.md` geprüft.
 - [ ] Es wurden keine Copyright-geschützten/proprietären Trainingstexte kopiert.
