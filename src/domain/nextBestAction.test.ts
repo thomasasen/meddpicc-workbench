@@ -19,6 +19,29 @@ describe('Next Best Action Engine', () => {
     )
   })
 
+  it('priorisiert die Demo stabil nach Voraussetzung, Dringlichkeit und fester Rule-Reihenfolge', () => {
+    const recommendations = recommendationsFor()
+
+    expect(recommendations.map((item) => item.ruleId)).toEqual([
+      'nba.economic-buyer.advance',
+      'nba.decision-process.validate',
+      'nba.paper-process.de-risk',
+      'nba.champion.test',
+    ])
+  })
+
+  it('beginnt bei fehlendem Pain nicht mit einer erfundenen ROI-Aktion', () => {
+    const project = createNewProject(
+      { accountName: 'Leere Beispiel AG', name: 'Neue Opportunity' },
+      { now: new Date('2026-10-06T12:00:00.000Z'), projectId: 'nba_pain_first' },
+    )
+
+    const recommendations = recommendationsFor(project)
+
+    expect(recommendations[0]?.ruleId).toBe('nba.pain.clarify-impact')
+    expect(recommendations.some((item) => item.ruleId === 'nba.metrics.validate-value')).toBe(false)
+  })
+
   it('identifiziert zuerst einen Economic-Buyer-Candidate, wenn keiner bekannt ist', () => {
     const project = structuredClone(defaultProject)
     project.meddpicc.economicBuyer.candidates = []
