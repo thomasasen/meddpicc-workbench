@@ -219,6 +219,27 @@ describe('Next Best Action Engine', () => {
     expect(recommendation?.title).not.toBe('Champion gezielt um direkte Economic-Buyer-Introduction bitten')
   })
 
+  it('verwendet den konkreten nächsten Test des Champion Testers statt einer zweiten Champion-Logik', () => {
+    const project = structuredClone(defaultProject)
+    const candidate = project.meddpicc.economicBuyer.candidates[0]
+    expect(candidate).toBeDefined()
+    if (!candidate) return
+
+    candidate.identityStatus = 'confirmed'
+    candidate.authorityStatus = 'confirmed'
+    candidate.directAccess = true
+    candidate.engagementStatus = 'direct'
+    candidate.priorityStatus = 'confirmed'
+
+    const recommendation = recommendationsFor(project).find((item) => item.ruleId === 'nba.champion.test')
+
+    expect(recommendation).toMatchObject({
+      title: 'Internal Selling konkret testen',
+      entityIds: ['st_champion'],
+    })
+    expect(recommendation?.desiredEvidence).toContain('Beobachtbares internes Verkaufen zugunsten der Opportunity')
+  })
+
   it('erzeugt keine persistierten project.actions', () => {
     const project = structuredClone(defaultProject)
     const originalActions = structuredClone(project.actions)
