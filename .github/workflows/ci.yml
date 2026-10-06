@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   pr-quality:
@@ -61,6 +61,31 @@ jobs:
           name: champion-tester-production-build
           path: dist/
           if-no-files-found: error
+
+      - name: Pages-Root über bestehenden Sync-Mechanismus aktualisieren
+        if: github.event.action == 'ready_for_review'
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          npm run pages:sync
+          rm -rf /tmp/pages-root
+          mkdir -p /tmp/pages-root
+          cp index.html pages-build.json /tmp/pages-root/
+          cp -a assets /tmp/pages-root/assets
+
+          git fetch origin "$HEAD_REF"
+          git checkout -B "$HEAD_REF" FETCH_HEAD
+          rm -rf assets
+          cp /tmp/pages-root/index.html /tmp/pages-root/pages-build.json .
+          cp -a /tmp/pages-root/assets ./assets
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- index.html assets pages-build.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: sync pages root for champion tester"
+            git push origin "HEAD:$HEAD_REF"
+          fi
 
       - name: veröffentlichten Pages-Root prüfen
         run: npm run pages:check
