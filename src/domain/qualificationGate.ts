@@ -4,11 +4,7 @@ import {
   type DealInspectorInput,
   type DealInspectorRuleId,
 } from './dealInspector'
-import {
-  deriveNextBestActions,
-  type NextBestActionRecommendation,
-  type NextBestActionRuleId,
-} from './nextBestAction'
+import { deriveNextBestActions, type NextBestActionRecommendation, type NextBestActionRuleId } from './nextBestAction'
 import type { MeddpiccProject, ProjectAreaKey } from './project'
 
 export const qualificationGateIds = ['poc-pilot', 'proposal-pricing', 'commit-forecast'] as const
@@ -428,7 +424,8 @@ function targetCloseRequirement(context: GateContext): QualificationGateRequirem
         ? 'Ein konkretes Target Close ist vorhanden und kann gegen Decision- und Paper-Process geprüft werden.'
         : 'Ohne konkretes Target Close ist ein Commit zeitlich nicht belastbar prüfbar.',
     desiredEvidence: ['Konkretes, kundenseitig plausibles Target Close'],
-    nextStep: 'Target Close mit dem kundenseitigen Entscheidungs- und Beschaffungsablauf abgleichen und konkret setzen.',
+    nextStep:
+      'Target Close mit dem kundenseitigen Entscheidungs- und Beschaffungsablauf abgleichen und konkret setzen.',
     relatedFindingRuleIds: [],
     evidenceIds: [],
     entityIds: [],
@@ -516,7 +513,8 @@ function pocPilotRequirements(context: GateContext): QualificationGateRequiremen
       area: 'economicBuyer',
       label: 'Economic Buyer und wirtschaftliche Priorität sind ausreichend validiert',
       findingRuleIds: ['economic-buyer.validated'],
-      explanationWhenSatisfied: 'Die wirtschaftliche Entscheidungsautorität und Priorität sind belastbar genug qualifiziert.',
+      explanationWhenSatisfied:
+        'Die wirtschaftliche Entscheidungsautorität und Priorität sind belastbar genug qualifiziert.',
       explanationWhenMissing:
         'POC-/Pilot-Ressourcen würden eingesetzt, obwohl wirtschaftliche Authority, Access oder Priorität noch nicht belastbar sind.',
       desiredEvidence: ['Economic-Buyer-Authority', 'Investitionspriorität', 'belastbarer Access-Pfad'],
@@ -570,7 +568,8 @@ function commitForecastRequirements(context: GateContext): QualificationGateRequ
       area: 'economicBuyer',
       label: 'Economic Buyer, Authority, Access und Priorität sind validiert',
       findingRuleIds: ['economic-buyer.validated'],
-      explanationWhenSatisfied: 'Die finale wirtschaftliche Entscheidungsautorität und Priorität sind ausreichend qualifiziert.',
+      explanationWhenSatisfied:
+        'Die finale wirtschaftliche Entscheidungsautorität und Priorität sind ausreichend qualifiziert.',
       explanationWhenMissing:
         'Ohne belastbare Economic-Buyer-Validierung bleibt offen, wer final entscheidet und ob die Investition tatsächlich Priorität hat.',
       desiredEvidence: [
