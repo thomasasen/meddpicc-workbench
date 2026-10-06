@@ -778,7 +778,12 @@ function saveProject() {
             <strong>Risiken &amp; Aktionen bearbeiten</strong>
             <span>Deal-Risiken und Qualification Actions pflegen</span>
           </RouterLink>
-          <button class="workspace-link workspace-link-button" type="button" @click="openProjectMetaForm">
+          <button
+            class="workspace-link workspace-link-button"
+            type="button"
+            aria-label="Projekt bearbeiten"
+            @click="openProjectMetaForm"
+          >
             <strong>Projekt bearbeiten</strong>
             <span>Opportunity-Kontext und relevante Projektdaten anpassen</span>
           </button>
