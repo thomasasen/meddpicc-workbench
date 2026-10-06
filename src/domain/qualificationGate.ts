@@ -248,6 +248,105 @@ function decisionCriteriaRequirement(
   }
 }
 
+function customerConfirmedMetricsRequirement(
+  context: GateContext,
+  id: string,
+  level: QualificationGateRequirementLevel,
+): QualificationGateRequirement {
+  const section = context.project.meddpicc.metrics
+  const confirmed = section.metrics.filter(
+    (metric) => metric.customerConfirmed && supportingEvidenceIds(context.project, metric.evidenceIds).length > 0,
+  )
+  const related = relatedFindings(context, ['metrics.customer-confirmed'])
+
+  return {
+    id,
+    level,
+    area: 'metrics',
+    label: 'Mindestens eine relevante Metric ist kundenseitig bestätigt',
+    satisfied: confirmed.length > 0,
+    explanation:
+      confirmed.length > 0
+        ? 'Mindestens eine relevante Metric ist kundenseitig bestätigt und mit belastbarer Evidence hinterlegt.'
+        : 'Es fehlt noch eine kundenseitig bestätigte Metric mit belastbarer Evidence.',
+    desiredEvidence: [
+      'Kundenseitig bestätigter Current State',
+      'Kundenseitig bestätigter Desired Outcome',
+      'Belastbare Evidence für die verwendete Metric',
+    ],
+    nextStep: 'Current State und Desired Outcome mit dem Kunden quantifizieren und evidenzbasiert bestätigen.',
+    relatedFindingRuleIds: unique(related.map((finding) => finding.ruleId)),
+    evidenceIds: existingEvidenceIds(context.project, [
+      ...section.evidenceIds,
+      ...section.metrics.flatMap((metric) => metric.evidenceIds),
+    ]),
+    entityIds: section.metrics.map((metric) => metric.id),
+    inputs: [
+      {
+        path: 'meddpicc.metrics.metrics',
+        label: 'Erfasste Metrics',
+        value: String(section.metrics.length),
+      },
+      {
+        path: 'meddpicc.metrics.metrics[*].customerConfirmed',
+        label: 'Belastbar kundenseitig bestätigte Metrics',
+        value: String(confirmed.length),
+      },
+    ],
+  }
+}
+
+function economicImpactRequirement(
+  context: GateContext,
+  id: string,
+  level: QualificationGateRequirementLevel,
+): QualificationGateRequirement {
+  const section = context.project.meddpicc.metrics
+  const supported = section.metrics.filter(
+    (metric) => metric.customerConfirmed && supportingEvidenceIds(context.project, metric.evidenceIds).length > 0,
+  )
+  const quantified = supported.filter(
+    (metric) => metric.economicImpact.value !== null && Boolean(metric.economicImpact.derivation?.trim()),
+  )
+  const related = relatedFindings(context, ['metrics.economic-impact-quantified'])
+
+  return {
+    id,
+    level,
+    area: 'metrics',
+    label: 'Wirtschaftlicher Impact ist nachvollziehbar quantifiziert',
+    satisfied: quantified.length > 0,
+    explanation:
+      quantified.length > 0
+        ? 'Mindestens eine kundenseitig bestätigte Metric besitzt einen nachvollziehbar hergeleiteten wirtschaftlichen Impact.'
+        : 'Es fehlt noch mindestens eine belastbar bestätigte Metric mit quantifiziertem und nachvollziehbar hergeleitetem Economic Impact.',
+    desiredEvidence: [
+      'Wirtschaftlich quantifizierter Nutzen mindestens einer relevanten Metric',
+      'Nachvollziehbare Herleitung des wirtschaftlichen Effekts',
+      'Belastbare Evidence für die zugrunde liegende Metric',
+    ],
+    nextStep: 'Economic Impact mindestens einer relevanten Metric gemeinsam mit dem Kunden validieren.',
+    relatedFindingRuleIds: unique(related.map((finding) => finding.ruleId)),
+    evidenceIds: existingEvidenceIds(context.project, [
+      ...section.evidenceIds,
+      ...section.metrics.flatMap((metric) => metric.evidenceIds),
+    ]),
+    entityIds: section.metrics.map((metric) => metric.id),
+    inputs: [
+      {
+        path: 'meddpicc.metrics.metrics[*].customerConfirmed',
+        label: 'Belastbar kundenseitig bestätigte Metrics',
+        value: String(supported.length),
+      },
+      {
+        path: 'meddpicc.metrics.metrics[*].economicImpact',
+        label: 'Davon mit quantifiziertem Economic Impact',
+        value: String(quantified.length),
+      },
+    ],
+  }
+}
+
 function targetCloseRequirement(context: GateContext): QualificationGateRequirement {
   const targetCloseDate = context.project.project.targetCloseDate
 
@@ -363,18 +462,7 @@ function pocPilotRequirements(context: GateContext): QualificationGateRequiremen
       desiredEvidence: ['Erforderliche Entscheidungsschritte', 'Owner', 'kundenseitige Bestätigung der Abfolge'],
       nextStep: 'Decision Process kundenseitig validieren und den konkreten Schritt nach erfolgreichem Test klären.',
     }),
-    findingRequirement(context, {
-      id: 'poc.metrics',
-      level: 'recommended',
-      area: 'metrics',
-      label: 'Relevante Metrics sind kundenseitig bestätigt',
-      findingRuleIds: ['metrics.customer-confirmed'],
-      explanationWhenSatisfied: 'Mindestens eine relevante Metric ist kundenseitig bestätigt.',
-      explanationWhenMissing:
-        'Der erwartete Nutzen ist noch nicht ausreichend kundenseitig quantifiziert; das erhöht Interpretationsspielraum nach dem Test.',
-      desiredEvidence: ['Kundenseitig bestätigter Current State', 'Desired Outcome oder messbares Verbesserungspotenzial'],
-      nextStep: 'Current State und Desired Outcome mit dem Kunden quantifizieren.',
-    }),
+    customerConfirmedMetricsRequirement(context, 'poc.metrics', 'recommended'),
     findingRequirement(context, {
       id: 'poc.economic-buyer',
       level: 'recommended',
@@ -403,31 +491,9 @@ function proposalPricingRequirements(context: GateContext): QualificationGateReq
       desiredEvidence: ['Konkrete Problemaussage', 'geschäftliche Relevanz'],
       nextStep: 'Pain konkretisieren, bevor Preis oder Proposal zum Mittelpunkt der Diskussion werden.',
     }),
-    findingRequirement(context, {
-      id: 'proposal.metrics',
-      level: 'required',
-      area: 'metrics',
-      label: 'Mindestens eine relevante Metric ist kundenseitig bestätigt',
-      findingRuleIds: ['metrics.customer-confirmed'],
-      explanationWhenSatisfied: 'Es gibt eine kundenseitig bestätigte Grundlage für Value und Proposal.',
-      explanationWhenMissing:
-        'Ohne bestätigte Metric fehlt dem Proposal eine belastbare Value-Basis; Verkäuferannahmen sollten nicht als Business Case dienen.',
-      desiredEvidence: ['Kundenseitig bestätigter Current State', 'kundenseitig bestätigter Desired Outcome'],
-      nextStep: 'Current State und Desired Outcome mit dem Kunden quantifizieren.',
-    }),
+    customerConfirmedMetricsRequirement(context, 'proposal.metrics', 'required'),
     decisionCriteriaRequirement(context, 'proposal.decision-criteria', 'required'),
-    findingRequirement(context, {
-      id: 'proposal.economic-impact',
-      level: 'recommended',
-      area: 'metrics',
-      label: 'Wirtschaftlicher Impact ist nachvollziehbar quantifiziert',
-      findingRuleIds: ['metrics.economic-impact-quantified'],
-      explanationWhenSatisfied: 'Der wirtschaftliche Nutzen ist ausreichend nachvollziehbar, um Preis gegen Value zu setzen.',
-      explanationWhenMissing:
-        'Operativer Nutzen ist erkennbar, aber die wirtschaftliche Wirkung ist noch nicht belastbar genug hergeleitet.',
-      desiredEvidence: ['Wirtschaftlicher Impact mindestens einer relevanten Metric', 'nachvollziehbare Herleitung'],
-      nextStep: 'Economic Impact einer relevanten Metric gemeinsam validieren.',
-    }),
+    economicImpactRequirement(context, 'proposal.economic-impact', 'recommended'),
     findingRequirement(context, {
       id: 'proposal.economic-buyer',
       level: 'recommended',
@@ -470,18 +536,8 @@ function commitForecastRequirements(context: GateContext): QualificationGateRequ
       desiredEvidence: ['Pain', 'Business Impact', 'Konsequenz des Nicht-Handelns'],
       nextStep: 'Pain und seine geschäftliche Konsequenz vervollständigen.',
     }),
-    findingRequirement(context, {
-      id: 'commit.metrics',
-      level: 'required',
-      area: 'metrics',
-      label: 'Metrics und wirtschaftlicher Impact sind belastbar',
-      findingRuleIds: ['metrics.customer-confirmed', 'metrics.economic-impact-quantified'],
-      explanationWhenSatisfied: 'Value und wirtschaftlicher Nutzen sind ausreichend qualifiziert.',
-      explanationWhenMissing:
-        'Der wirtschaftliche Grund für die Investition ist noch nicht belastbar genug, um einen Commit zu stützen.',
-      desiredEvidence: ['Kundenseitig bestätigte Metric', 'nachvollziehbarer wirtschaftlicher Impact'],
-      nextStep: 'Metrics und Economic Impact kundenseitig validieren.',
-    }),
+    customerConfirmedMetricsRequirement(context, 'commit.metrics-confirmed', 'required'),
+    economicImpactRequirement(context, 'commit.economic-impact', 'required'),
     findingRequirement(context, {
       id: 'commit.economic-buyer',
       level: 'required',
