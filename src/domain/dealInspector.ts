@@ -251,7 +251,9 @@ function economicBuyerRule(project: MeddpiccProject): DealInspectorFinding | nul
 
   const missing: string[] = []
   if (candidate.identityStatus !== 'confirmed') missing.push('Identität des Economic Buyers direkt bestätigen')
-  if (candidate.authorityStatus !== 'confirmed') {\n    missing.push('Finale wirtschaftliche Entscheidungsautorität bestätigen')\n  }
+  if (candidate.authorityStatus !== 'confirmed') {
+    missing.push('Finale wirtschaftliche Entscheidungsautorität bestätigen')
+  }
   if (!candidate.directAccess || candidate.engagementStatus !== 'direct') {
     missing.push('Direkten Zugang bzw. direkte Interaktion mit dem Economic Buyer herstellen')
   }
@@ -513,7 +515,9 @@ function championRule(project: MeddpiccProject): DealInspectorFinding | null {
   ) {
     missing.push('Belastbarer Informationszugang, z. B. interne Informationen oder schlechte Nachrichten')
   }
-  if (!behaviorHasEvidence(candidate, 'sold_internally')) {\n    missing.push('Beleg, dass der Champion intern für uns verkauft')\n  }
+  if (!behaviorHasEvidence(candidate, 'sold_internally')) {
+    missing.push('Beleg, dass der Champion intern für uns verkauft')
+  }
   if (
     !behaviorHasEvidence(candidate, 'created_access') &&
     !behaviorHasEvidence(candidate, 'enabled_economic_buyer_access')
