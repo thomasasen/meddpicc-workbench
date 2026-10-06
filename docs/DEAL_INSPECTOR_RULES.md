@@ -20,7 +20,7 @@ Die Regeln wurden gegen zwei im Projekt hinterlegte MEDDIC/MEDDPICC-Quellen gesp
 Die Implementierung übernimmt keine Scoring-Tabellen oder Textpassagen. Verwendet werden die gemeinsamen fachlichen Kernaussagen beider Quellen:
 
 - Pain muss konkret identifiziert und in geschäftliche Konsequenz übersetzt werden.
-- Metrics sollen kundenspezifisch, quantifizierbar und mit dem Buying Team belastbar sein.
+- Metrics sollen kundenspezifisch, quantifizierbar und mit dem Buying Team belastbar sein; nicht jede operative Metric muss einzeln monetarisiert werden, solange der wirtschaftliche Nutzen insgesamt belastbar quantifiziert ist.
 - Der Economic Buyer wird nicht über Titel oder Budgetbesitz definiert, sondern über tatsächliche wirtschaftliche Entscheidungsautorität.
 - Direkte Validierung des Economic Buyers ist stärker als eine reine Beschreibung durch Dritte.
 - Decision Process und Paper Process müssen als tatsächliche kundenseitige Abläufe verstanden werden; Verkäuferannahmen reichen nicht.
@@ -30,6 +30,7 @@ Zusätzlich gelten die Produktregeln der Workbench:
 
 - Evidence first.
 - Annahmen und Unbekannt bleiben sichtbar.
+- Eine reine Evidence-ID reicht nicht als Nachweis: `assumption`, `unknown` oder `unconfirmed` Evidence darf ein Finding nicht fälschlich schließen.
 - Keine globale Deal-Health- oder Win-Probability-Zahl.
 - Jedes Finding nennt Regel, relevante Inputs und fehlende Evidence.
 - Manuell gepflegte Risiken bleiben getrennt von abgeleiteten Inspector-Findings.
@@ -107,13 +108,17 @@ Ein fachlich leeres neues Projekt erhält nicht zusätzlich zu `pain.identified`
 
 Trigger:
 
-- eine Metric besitzt bereits Current- oder Target-Werte
-- für mindestens eine solche Metric fehlt `economicImpact.value`
+- mindestens eine Metric besitzt bereits Current- oder Target-Werte
+- keine dieser relevanten Metrics besitzt gleichzeitig einen wirtschaftlichen Wert und eine nachvollziehbare Herleitung
 
 Severity:
 
-- hoch, wenn die betroffene Metric bereits kundenseitig bestätigt ist
+- hoch, wenn mindestens eine relevante Metric bereits kundenseitig bestätigt ist
 - sonst mittel
+
+Bewusste Grenze:
+
+v0.1 verlangt nicht, jede einzelne operative Metric zu monetarisieren. Sobald mindestens eine relevante Metric den wirtschaftlichen Nutzen mit Wert und Herleitung belastbar abbildet, erzeugt diese Regel kein Finding.
 
 ### `economic-buyer.validated`
 
@@ -126,6 +131,7 @@ Geprüfte Signale:
 - wirtschaftliche Entscheidungsautorität bestätigt
 - direkter Zugang und direkte Interaktion
 - Investitionspriorität bestätigt
+- belastbare, nicht als Annahme/unbestätigt klassifizierte Evidence vorhanden
 
 Severity:
 
@@ -140,7 +146,8 @@ Bei mehreren Candidates bewertet die Regel deterministisch den am weitesten vali
 Trigger:
 
 - keine erforderlichen Schritte vorhanden oder
-- bei erforderlichen Schritten fehlen Owner, kundenseitige Bestätigung oder Evidence
+- bei erforderlichen Schritten fehlen Owner, kundenseitige Bestätigung oder belastbare Evidence
+- erforderliche Schritte sind blockiert oder als übersprungen markiert
 
 Severity:
 
@@ -157,7 +164,7 @@ Geprüfte Signale bei erforderlichen Schritten:
 - Owner
 - Status
 - Lead Time / Dauer
-- Evidence
+- belastbare Evidence
 
 Severity:
 
@@ -172,11 +179,12 @@ Die Regel berechnet noch keinen Critical Path. Sie erkennt nur fehlende Grundlag
 
 Geprüfte Signale:
 
-- hoher Einfluss
+- ausreichender interner Einfluss (medium oder high)
 - konkreter Personal Win
 - belegter interner Informationszugang
 - belegtes internes Verkaufen für die Opportunity
 - belegte Fähigkeit, relevanten internen Zugang herzustellen
+- die jeweilige Behavior-Evidence ist weder Annahme/Unbekannt noch unbestätigt
 
 Severity:
 
