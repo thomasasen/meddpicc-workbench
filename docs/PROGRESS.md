@@ -43,6 +43,8 @@ PR #28 hat den letzten dafür benötigten Slice geliefert. Damit ist das Daten-/
 
 Weitere History-/Status-Ausbauschritte werden **nicht automatisch** vorgezogen. Sie werden nur umgesetzt, wenn ein konkreter Reasoning-/Coaching-Service sie tatsächlich benötigt.
 
+Der erste Reasoning-Slice ist nun ebenfalls umgesetzt: **Deal Inspector v0.1** analysiert den Projektstand rein deterministisch und zeigt die wichtigsten abgeleiteten Qualification Gaps getrennt von manuell gepflegten Risiken. Das Regelset ist in `docs/DEAL_INSPECTOR_RULES.md` dokumentiert.
+
 ## Abgeschlossen
 
 ### Phase 0 – Foundation
@@ -107,17 +109,25 @@ Priorisierte Reihenfolge:
 
 ### 1. Deal Inspector / Qualification Gap Engine
 
-Erster empfohlener Slice.
+Erster Slice v0.1 umgesetzt.
 
-Ziel:
+Umgesetzt:
 
-- vorhandenen Projektstand analysieren
-- kritische Gaps erkennen
-- Evidence vs. Annahme vs. Unbekannt berücksichtigen
-- Findings erklären
-- Grundlage für spätere Next Best Actions schaffen
+- reiner Domain Service `inspectDeal(project)`
+- acht klar abgegrenzte Gap-Regeln für Pain, Metrics, Economic Buyer, Decision Process, Paper Process und Champion
+- stabile Rule-IDs, Severity, Begründung, fehlende Evidence, Entity-/Evidence-IDs und auslösende Inputs
+- deterministische Priorisierung ohne globale Score-Zahl
+- klare Trennung zwischen abgeleiteten Inspector-Findings und manuell gepflegten Risks
+- Deal-Fokus zeigt maximal drei priorisierte Findings mit aufklappbarer Datenbasis
+- Unit- und Browser-Regressionen für Demo und fachlich leere Projekte
 
-Der erste Slice soll **noch keine generische Scoring Engine** bauen. Er soll wenige hochrelevante, nachvollziehbare Regeln implementieren und für jede Aussage die auslösenden Inputs zeigen.
+Bewusste Grenzen:
+
+- keine Win Probability
+- keine automatische Mutation von Risks oder Actions
+- kein Critical Path
+- keine Next Best Action in diesem Service
+- kein neues Schemafeld
 
 ### 2. Next Best Action Engine
 
@@ -165,19 +175,20 @@ Wichtig:
 
 ## Nächster empfohlener Slice
 
-**Deal Inspector / Qualification Gap Engine.**
+**Next Best Action Engine.**
 
-Ein sinnvoller erster Umfang:
+Aus den offenen Deal-Inspector-Findings sollen wenige konkrete Verkäuferaktionen priorisiert werden. Der Service darf die vorhandene generische Action-Liste nicht einfach neu sortieren, sondern muss aus einem Gap eine begründete Empfehlung ableiten.
 
-- 8–15 hochwertige, klar erklärbare Gap-Regeln
-- Schwerpunkt auf Pain/Metrics, Economic Buyer, Champion, Decision Process und Paper Process
-- Severity + Begründung + fehlende Evidence
-- Drill-down auf die Datenbasis
-- keine globale „magische“ Deal-Score-Zahl
-- Unit Tests für jede Regel
-- UI zeigt nur die wichtigsten Findings, nicht alle theoretisch möglichen Hinweise
+Erster sinnvoller Umfang:
 
-Erst wenn dieser Slice belastbar funktioniert, folgt die Next Best Action Engine.
+- Inspector-Findings als primärer Input
+- 3–5 Aktionstypen für die in v0.1 abgedeckten Bereiche
+- Priorisierung nach Deal Impact, Dringlichkeit und fachlicher Abhängigkeit
+- für jede Empfehlung: „Warum jetzt?“, auslösendes Finding und gewünschte Evidence
+- keine automatische Persistierung in `project.actions`
+- keine versteckte Win Probability oder globale Deal-Health-Zahl
+- Unit Tests für jede Priorisierungsregel
+- UI zeigt wenige Empfehlungen, nicht eine neue Taskliste
 
 ## Bewusst nicht als nächstes bauen
 
@@ -220,4 +231,6 @@ Ein Slice gilt erst als abgeschlossen, wenn:
 - `src/domain/qualificationEvidence.ts`
 - `src/domain/sourceTraceability.ts`
 - `src/domain/riskAction.ts`
+- `src/domain/dealInspector.ts`
+- `docs/DEAL_INSPECTOR_RULES.md`
 - `src/stores/projectStore.ts`

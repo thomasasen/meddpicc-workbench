@@ -133,6 +133,8 @@ Beispiel:
 
 **Technik:** reine, testbare Regeln über strukturierte Projektdaten. Keine AI notwendig.
 
+**Erster Slice v0.1 umgesetzt:** acht deterministische Regeln für Pain, Metrics, Economic Buyer, Decision Process, Paper Process und Champion. Findings enthalten stabile Rule-ID, Severity, Begründung, fehlende Evidence, relevante Inputs und Evidence-/Entity-Referenzen. Die Startseite zeigt maximal drei priorisierte Inspector-Findings und hält sie bewusst von manuell gepflegten Risks getrennt. Regelkatalog: `docs/DEAL_INSPECTOR_RULES.md`.
+
 ### 3B – Next Best Action Engine
 
 Priorisiert aus den offenen Gaps **wenige konkrete nächste Sales-Aktionen** statt einer generischen Taskliste.

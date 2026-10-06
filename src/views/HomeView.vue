@@ -13,6 +13,7 @@ import {
 import { storeToRefs } from 'pinia'
 import { computed, nextTick, ref, type Component } from 'vue'
 
+import { inspectDeal, type DealInspectorFinding } from '../domain/dealInspector'
 import type { ProjectAction, ProjectAreaKey, ProjectMeta, ProjectRisk } from '../domain/project'
 import { qualificationStatusLabels, type QualificationStatusKey } from '../domain/qualificationStatus'
 import { loadProject, ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
@@ -152,6 +153,14 @@ const openActions = computed(() =>
     .slice(0, 3),
 )
 
+const allInspectorFindings = computed(() => inspectDeal(project.value))
+const inspectorFindings = computed(() => allInspectorFindings.value.slice(0, 3))
+
+const inspectorSeverityLabels: Record<DealInspectorFinding['severity'], string> = {
+  high: 'Hoch',
+  medium: 'Mittel',
+}
+
 const dateFormatter = new Intl.DateTimeFormat('de-DE', {
   day: '2-digit',
   month: '2-digit',
@@ -185,6 +194,19 @@ function riskTrace(risk: ProjectRisk): SourceTrace {
 
 function actionTrace(action: ProjectAction): SourceTrace {
   return traceActionSources(project.value, action)
+}
+
+function inspectorTrace(finding: DealInspectorFinding): SourceTrace {
+  const evidenceIds = new Set(finding.evidenceIds)
+  const evidence = project.value.evidence.filter((item) => evidenceIds.has(item.id))
+  const referenceIds = new Set(evidence.map((item) => item.referenceId).filter((id): id is string => Boolean(id)))
+  const references = project.value.references.filter((item) => referenceIds.has(item.id))
+
+  return {
+    evidence,
+    references,
+    evidenceWithoutReference: evidence.filter((item) => !item.referenceId).length,
+  }
 }
 
 function sourceTraceLabel(trace: SourceTrace): string {
@@ -685,6 +707,70 @@ function saveProject() {
           </div>
           <RouterLink class="section-action-link" to="/risks-actions">Risiken &amp; Aktionen bearbeiten</RouterLink>
         </div>
+
+        <section class="inspector-panel" aria-labelledby="inspector-title">
+          <div class="focus-panel-heading inspector-heading">
+            <div>
+              <h3 id="inspector-title">Deal Inspector</h3>
+              <p>
+                {{ allInspectorFindings.length }} deterministisch abgeleitete Qualification Gaps · maximal 3 priorisiert
+                sichtbar
+              </p>
+            </div>
+            <span class="inspector-version">Regelset v0.1</span>
+          </div>
+
+          <p class="section-note inspector-note">
+            Inspector-Findings werden aus dem aktuellen Projektstand abgeleitet und nicht als manuelle Risiken in der
+            Projektdatei gespeichert.
+          </p>
+
+          <p v-if="inspectorFindings.length === 0" class="focus-empty">
+            Die aktuellen v0.1-Regeln erkennen kein offenes Qualification Gap.
+          </p>
+
+          <ol v-else class="inspector-list">
+            <li v-for="finding in inspectorFindings" :key="finding.id" class="inspector-finding">
+              <div class="focus-meta-line">
+                <span class="risk-severity" :class="'risk-severity--' + finding.severity">
+                  {{ inspectorSeverityLabels[finding.severity] }}
+                </span>
+                <span>{{ areaLabels[finding.area] }}</span>
+                <code>{{ finding.ruleId }}</code>
+              </div>
+
+              <strong>{{ finding.title }}</strong>
+              <p>{{ finding.whyItMatters }}</p>
+
+              <details class="inspector-details">
+                <summary>Begründung &amp; Datenbasis</summary>
+
+                <div class="inspector-detail-grid">
+                  <div>
+                    <strong>Fehlende Evidenz</strong>
+                    <ul>
+                      <li v-for="item in finding.missingEvidence" :key="item">{{ item }}</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <strong>Auslösende Inputs</strong>
+                    <dl>
+                      <div v-for="input in finding.inputs" :key="input.path + input.label">
+                        <dt>{{ input.label }}</dt>
+                        <dd>{{ input.value }}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                </div>
+
+                <RouterLink class="source-trace-link" :to="sourceTraceTarget(inspectorTrace(finding))">
+                  {{ sourceTraceLabel(inspectorTrace(finding)) }}
+                </RouterLink>
+              </details>
+            </li>
+          </ol>
+        </section>
 
         <div class="deal-focus-grid">
           <section class="focus-panel" aria-labelledby="risks-title">
