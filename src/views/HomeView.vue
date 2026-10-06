@@ -976,14 +976,11 @@ function saveProject() {
           </div>
         </section>
 
-
         <section class="champion-tester-panel" aria-labelledby="champion-tester-title">
           <div class="focus-panel-heading champion-tester-heading">
             <div>
               <h3 id="champion-tester-title">Champion Tester</h3>
-              <p>
-                {{ activeChampionCount }} aktive Candidates · stärksten Candidate evidenzbasiert prüfen
-              </p>
+              <p>{{ activeChampionCount }} aktive Candidates · stärksten Candidate evidenzbasiert prüfen</p>
             </div>
             <span class="inspector-version">Regelset v0.1</span>
           </div>
@@ -1001,10 +998,7 @@ function saveProject() {
             <div class="champion-tester-candidate">
               <div>
                 <div class="focus-meta-line">
-                  <span
-                    class="champion-status"
-                    :class="'champion-status--' + strongestChampion.status"
-                  >
+                  <span class="champion-status" :class="'champion-status--' + strongestChampion.status">
                     {{ championAssessmentStatusLabels[strongestChampion.status] }}
                   </span>
                   <span>Stärkster Candidate</span>
@@ -1053,7 +1047,11 @@ function saveProject() {
               </section>
             </div>
 
-            <section v-if="strongestChampion.nextTest" class="champion-next-test" aria-labelledby="champion-next-test-title">
+            <section
+              v-if="strongestChampion.nextTest"
+              class="champion-next-test"
+              aria-labelledby="champion-next-test-title"
+            >
               <div>
                 <span class="champion-next-test-kicker">Nächster Champion-Test</span>
                 <strong id="champion-next-test-title">{{ strongestChampion.nextTest.title }}</strong>
@@ -1072,11 +1070,7 @@ function saveProject() {
               <summary>Candidate-Reihenfolge &amp; Datenbasis</summary>
 
               <div class="champion-candidate-list">
-                <div
-                  v-for="assessment in championAssessments"
-                  :key="assessment.id"
-                  class="champion-candidate-row"
-                >
+                <div v-for="assessment in championAssessments" :key="assessment.id" class="champion-candidate-row">
                   <div>
                     <strong>{{ assessment.stakeholderName }}</strong>
                     <span v-if="assessment.stakeholderRole">{{ assessment.stakeholderRole }}</span>
