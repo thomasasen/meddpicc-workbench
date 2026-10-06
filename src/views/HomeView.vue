@@ -197,9 +197,7 @@ function sourceTraceLabel(trace: SourceTrace): string {
   const remaining = trace.references.length - titles.length
   const sourceLabel = titles.join(', ') + (remaining > 0 ? ' +' + String(remaining) : '')
   const missingLabel =
-    trace.evidenceWithoutReference > 0
-      ? ' · ' + String(trace.evidenceWithoutReference) + ' ohne Quellenreferenz'
-      : ''
+    trace.evidenceWithoutReference > 0 ? ' · ' + String(trace.evidenceWithoutReference) + ' ohne Quellenreferenz' : ''
 
   return 'Quellenbasis: ' + evidenceLabel + ' · ' + sourceLabel + missingLabel
 }
@@ -564,11 +562,7 @@ function saveProject() {
         </form>
       </section>
 
-      <section
-        v-if="showProjectMetaForm"
-        class="container project-meta-editor"
-        aria-labelledby="project-meta-title"
-      >
+      <section v-if="showProjectMetaForm" class="container project-meta-editor" aria-labelledby="project-meta-title">
         <form @submit.prevent="submitProjectMeta">
           <div class="project-meta-editor-heading">
             <div>
