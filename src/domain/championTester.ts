@@ -78,9 +78,7 @@ function support(project: MeddpiccProject, ids: readonly string[]) {
   const existing = project.evidence.filter((item) => wanted.has(item.id))
   const supporting = existing.filter(
     (item) =>
-      item.classification !== 'assumption' &&
-      item.classification !== 'unknown' &&
-      item.verification !== 'unconfirmed',
+      item.classification !== 'assumption' && item.classification !== 'unknown' && item.verification !== 'unconfirmed',
   )
   return {
     all: unique(existing.map((item) => item.id)),
@@ -99,8 +97,7 @@ function behaviorEvidence(project: MeddpiccProject, person: ChampionPerson, type
     ...evidence,
     presentTypes,
     paths: presentTypes.map(
-      (type) =>
-        'meddpicc.champions.people[' + person.stakeholderId + '].behaviors[type=' + type + ']',
+      (type) => 'meddpicc.champions.people[' + person.stakeholderId + '].behaviors[type=' + type + ']',
     ),
   }
 }
@@ -224,7 +221,8 @@ function buildSignals(project: MeddpiccProject, person: ChampionPerson): Champio
       label: 'Inside Information / Bad News',
       types: ['provided_internal_information', 'shared_bad_news'],
       requiredForProven: true,
-      proven: 'Belastbare Evidence zeigt echten internen Informationszugang, einschließlich relevanter oder unangenehmer Informationen.',
+      proven:
+        'Belastbare Evidence zeigt echten internen Informationszugang, einschließlich relevanter oder unangenehmer Informationen.',
       missing: 'Es fehlt belastbare Evidence für relevante interne Informationen oder schlechte Nachrichten.',
       insufficient: 'Ein Informations-Behavior ist dokumentiert, aber nicht durch belastbare Evidence bestätigt.',
     }),
@@ -234,7 +232,8 @@ function buildSignals(project: MeddpiccProject, person: ChampionPerson): Champio
       types: ['sold_internally'],
       requiredForProven: true,
       proven: 'Belastbare Evidence zeigt, dass die Person intern aktiv für die Opportunity verkauft.',
-      missing: 'Es fehlt der zentrale Beleg, dass die Person intern aktiv verkauft und nicht nur Informationen weitergibt.',
+      missing:
+        'Es fehlt der zentrale Beleg, dass die Person intern aktiv verkauft und nicht nur Informationen weitergibt.',
       insufficient: 'Internal Selling ist dokumentiert, aber nicht durch belastbare Evidence bestätigt.',
     }),
     behaviorSignal(project, person, {
@@ -275,7 +274,11 @@ function deriveStatus(person: ChampionPerson, signals: readonly ChampionSignal[]
   return 'candidate'
 }
 
-function nextTest(person: ChampionPerson, signals: readonly ChampionSignal[], status: ChampionAssessmentStatus): ChampionNextTest | null {
+function nextTest(
+  person: ChampionPerson,
+  signals: readonly ChampionSignal[],
+  status: ChampionAssessmentStatus,
+): ChampionNextTest | null {
   if (status === 'disqualified') return null
   const influence = getSignal(signals, 'influence')
   const personalWin = getSignal(signals, 'personal-win')
@@ -288,9 +291,14 @@ function nextTest(person: ChampionPerson, signals: readonly ChampionSignal[], st
     return {
       id: 'champion-test-influence',
       title: 'Einfluss an einer echten internen Hürde testen',
-      rationale: 'Seniorität oder Selbstauskunft reichen nicht. Entscheidend ist, ob die Person intern tatsächlich etwas bewegen kann.',
-      action: 'Bitte die Person, einen relevanten internen Schritt voranzubringen, bei dem sie Stakeholder, Priorität oder Prozess aktiv beeinflussen muss.',
-      desiredEvidence: ['Beobachtbares internes Handeln mit konkretem Ergebnis', 'Nachvollziehbarer Einfluss auf relevante Stakeholder oder den Entscheidungsprozess'],
+      rationale:
+        'Seniorität oder Selbstauskunft reichen nicht. Entscheidend ist, ob die Person intern tatsächlich etwas bewegen kann.',
+      action:
+        'Bitte die Person, einen relevanten internen Schritt voranzubringen, bei dem sie Stakeholder, Priorität oder Prozess aktiv beeinflussen muss.',
+      desiredEvidence: [
+        'Beobachtbares internes Handeln mit konkretem Ergebnis',
+        'Nachvollziehbarer Einfluss auf relevante Stakeholder oder den Entscheidungsprozess',
+      ],
       expectedBehaviorTypes: ['challenged_internal_process', 'created_access'],
     }
   }
@@ -298,9 +306,14 @@ function nextTest(person: ChampionPerson, signals: readonly ChampionSignal[], st
     return {
       id: 'champion-test-personal-win-discovery',
       title: 'Personal Win konkret herausarbeiten',
-      rationale: 'Ohne eigenen Nutzen ist unklar, warum die Person dauerhaft Energie in den internen Verkauf investieren sollte.',
-      action: 'Kläre, was sich für die Person persönlich oder in ihrer Rolle verbessert, wenn die Opportunity erfolgreich umgesetzt wird, und was sie bei einem Scheitern verliert.',
-      desiredEvidence: ['Konkreter persönlicher oder rollenbezogener Nutzen', 'Nachvollziehbare Verbindung zwischen Deal-Erfolg und eigenem Erfolg'],
+      rationale:
+        'Ohne eigenen Nutzen ist unklar, warum die Person dauerhaft Energie in den internen Verkauf investieren sollte.',
+      action:
+        'Kläre, was sich für die Person persönlich oder in ihrer Rolle verbessert, wenn die Opportunity erfolgreich umgesetzt wird, und was sie bei einem Scheitern verliert.',
+      desiredEvidence: [
+        'Konkreter persönlicher oder rollenbezogener Nutzen',
+        'Nachvollziehbare Verbindung zwischen Deal-Erfolg und eigenem Erfolg',
+      ],
       expectedBehaviorTypes: ['confirmed_personal_win'],
     }
   }
@@ -308,9 +321,14 @@ function nextTest(person: ChampionPerson, signals: readonly ChampionSignal[], st
     return {
       id: 'champion-test-inside-information',
       title: 'Informationszugang mit unbequemen Fragen testen',
-      rationale: 'Ein echter Champion liefert nicht nur positive Updates, sondern hilft auch mit belastbarer interner Realität.',
-      action: 'Bitte um die wichtigsten internen Bedenken, Gegenargumente oder schlechten Nachrichten, die aktuell gegen die Opportunity sprechen.',
-      desiredEvidence: ['Konkrete interne Bedenken oder neue relevante Informationen', 'Belastbare Evidence statt unbestätigter Annahme'],
+      rationale:
+        'Ein echter Champion liefert nicht nur positive Updates, sondern hilft auch mit belastbarer interner Realität.',
+      action:
+        'Bitte um die wichtigsten internen Bedenken, Gegenargumente oder schlechten Nachrichten, die aktuell gegen die Opportunity sprechen.',
+      desiredEvidence: [
+        'Konkrete interne Bedenken oder neue relevante Informationen',
+        'Belastbare Evidence statt unbestätigter Annahme',
+      ],
       expectedBehaviorTypes: ['provided_internal_information', 'shared_bad_news'],
     }
   }
@@ -318,9 +336,14 @@ function nextTest(person: ChampionPerson, signals: readonly ChampionSignal[], st
     return {
       id: 'champion-test-internal-selling',
       title: 'Internal Selling konkret testen',
-      rationale: 'Interne Informationen und Meeting-Koordination beweisen noch nicht, dass die Person die Opportunity ohne unsere Anwesenheit aktiv verkauft.',
-      action: 'Vereinbare einen konkreten internen Verkaufsschritt: Die Person soll einen relevanten Stakeholder für Business Outcome, Priorität oder Differenzierung gewinnen und anschließend die Einwände zurückspiegeln.',
-      desiredEvidence: ['Beobachtbares internes Verkaufen zugunsten der Opportunity', 'Konkrete Rückmeldung zu Einwänden oder notwendiger Nacharbeit'],
+      rationale:
+        'Interne Informationen und Meeting-Koordination beweisen noch nicht, dass die Person die Opportunity ohne unsere Anwesenheit aktiv verkauft.',
+      action:
+        'Vereinbare einen konkreten internen Verkaufsschritt: Die Person soll einen relevanten Stakeholder für Business Outcome, Priorität oder Differenzierung gewinnen und anschließend die Einwände zurückspiegeln.',
+      desiredEvidence: [
+        'Beobachtbares internes Verkaufen zugunsten der Opportunity',
+        'Konkrete Rückmeldung zu Einwänden oder notwendiger Nacharbeit',
+      ],
       expectedBehaviorTypes: ['sold_internally'],
     }
   }
@@ -329,7 +352,8 @@ function nextTest(person: ChampionPerson, signals: readonly ChampionSignal[], st
       id: 'champion-test-personal-win-confirmation',
       title: 'Personal Win belastbar bestätigen',
       rationale: 'Der Personal Win ist beschrieben, aber noch nicht evidenzverankert.',
-      action: 'Spiegle den angenommenen Personal Win zurück und lasse die Person selbst bestätigen, warum der Erfolg für sie persönlich bzw. in ihrer Rolle relevant ist.',
+      action:
+        'Spiegle den angenommenen Personal Win zurück und lasse die Person selbst bestätigen, warum der Erfolg für sie persönlich bzw. in ihrer Rolle relevant ist.',
       desiredEvidence: ['Direkte Bestätigung des Personal Win', 'Belastbare Evidence für die eigene Motivation'],
       expectedBehaviorTypes: ['confirmed_personal_win'],
     }
@@ -338,9 +362,14 @@ function nextTest(person: ChampionPerson, signals: readonly ChampionSignal[], st
     return {
       id: 'champion-test-access-creation',
       title: 'Relevanten internen Zugang testen',
-      rationale: 'Ein Champion sollte nicht nur informieren, sondern relevante interne Türen tatsächlich öffnen können.',
-      action: 'Bitte um Zugang zu einem für die Entscheidung wichtigen Stakeholder, bei dem die Person ihren Einfluss praktisch einsetzen muss.',
-      desiredEvidence: ['Tatsächlich hergestellter Zugang zu einem relevanten Stakeholder', 'Nachvollziehbarer Beitrag der Person zur Herstellung dieses Zugangs'],
+      rationale:
+        'Ein Champion sollte nicht nur informieren, sondern relevante interne Türen tatsächlich öffnen können.',
+      action:
+        'Bitte um Zugang zu einem für die Entscheidung wichtigen Stakeholder, bei dem die Person ihren Einfluss praktisch einsetzen muss.',
+      desiredEvidence: [
+        'Tatsächlich hergestellter Zugang zu einem relevanten Stakeholder',
+        'Nachvollziehbarer Beitrag der Person zur Herstellung dieses Zugangs',
+      ],
       expectedBehaviorTypes: ['created_access'],
     }
   }
@@ -348,28 +377,44 @@ function nextTest(person: ChampionPerson, signals: readonly ChampionSignal[], st
     return {
       id: 'champion-test-economic-buyer-access',
       title: 'Economic-Buyer-Zugang als nächsten Härtetest nutzen',
-      rationale: 'Der Candidate zeigt bereits belastbares internes Verhalten. Der Zugang zum Economic Buyer ist jetzt ein besonders aussagekräftiger Test.',
-      action: 'Bitte um eine direkte, vorbereitete Introduction zum Economic Buyer mit klarem Gesprächsziel und gemeinsamem Kontext.',
-      desiredEvidence: ['Direkte Introduction bzw. bestätigter Termin mit dem Economic Buyer', 'Aktive Vorbereitung des Zugangs durch den Champion'],
+      rationale:
+        'Der Candidate zeigt bereits belastbares internes Verhalten. Der Zugang zum Economic Buyer ist jetzt ein besonders aussagekräftiger Test.',
+      action:
+        'Bitte um eine direkte, vorbereitete Introduction zum Economic Buyer mit klarem Gesprächsziel und gemeinsamem Kontext.',
+      desiredEvidence: [
+        'Direkte Introduction bzw. bestätigter Termin mit dem Economic Buyer',
+        'Aktive Vorbereitung des Zugangs durch den Champion',
+      ],
       expectedBehaviorTypes: ['enabled_economic_buyer_access'],
     }
   }
   return {
     id: 'champion-test-resilience',
     title: 'Champion unter realem Deal-Druck weiter qualifizieren',
-    rationale: 'Ein belastbarer Champion bleibt kein statischer Status. Neue interne Hürden oder schlechte Nachrichten sind weitere Qualification-Momente.',
-    action: 'Nutze die nächste reale interne Hürde, Procurement-Frage oder Gegenposition als erneuten Test, ob der Champion weiterhin aktiv verkauft und offen berichtet.',
-    desiredEvidence: ['Aktive Unterstützung bei einer realen internen Hürde', 'Offene Rückmeldung zu Gegenwind oder schlechten Nachrichten'],
+    rationale:
+      'Ein belastbarer Champion bleibt kein statischer Status. Neue interne Hürden oder schlechte Nachrichten sind weitere Qualification-Momente.',
+    action:
+      'Nutze die nächste reale interne Hürde, Procurement-Frage oder Gegenposition als erneuten Test, ob der Champion weiterhin aktiv verkauft und offen berichtet.',
+    desiredEvidence: [
+      'Aktive Unterstützung bei einer realen internen Hürde',
+      'Offene Rückmeldung zu Gegenwind oder schlechten Nachrichten',
+    ],
     expectedBehaviorTypes: ['shared_bad_news', 'challenged_internal_process', 'supported_procurement'],
   }
 }
 
 function rationale(status: ChampionAssessmentStatus, signals: readonly ChampionSignal[]): string {
-  if (status === 'disqualified') return 'Die Person ist kanonisch disqualifiziert. Abgeleitete Signale dürfen diesen Zustand nicht wieder hochstufen.'
-  if (status === 'proven') return 'Einfluss ist ausreichend strukturiert vorhanden; Personal Win, interner Informationszugang, Internal Selling und Economic-Buyer-Zugang sind durch belastbare Evidence gestützt. Einfluss selbst bleibt in Schema 0.2.0 strukturiert, nicht separat evidenzverankert.'
+  if (status === 'disqualified')
+    return 'Die Person ist kanonisch disqualifiziert. Abgeleitete Signale dürfen diesen Zustand nicht wieder hochstufen.'
+  if (status === 'proven')
+    return 'Einfluss ist ausreichend strukturiert vorhanden; Personal Win, interner Informationszugang, Internal Selling und Economic-Buyer-Zugang sind durch belastbare Evidence gestützt. Einfluss selbst bleibt in Schema 0.2.0 strukturiert, nicht separat evidenzverankert.'
   if (status === 'partially-proven') {
     const proven = signals.filter((item) => item.state === 'proven').map((item) => item.label)
-    return 'Es gibt belastbare Champion-Signale (' + proven.join(', ') + '), aber mindestens ein zentrales Kriterium ist noch nicht ausreichend bewiesen.'
+    return (
+      'Es gibt belastbare Champion-Signale (' +
+      proven.join(', ') +
+      '), aber mindestens ein zentrales Kriterium ist noch nicht ausreichend bewiesen.'
+    )
   }
   return 'Die Person bleibt ein Champion-Candidate: Es gibt noch kein belastbares beobachtbares Champion-Verhalten, das über strukturierte Angaben oder Behauptungen hinausgeht.'
 }
@@ -381,7 +426,8 @@ function readyForEbTest(person: ChampionPerson, signals: readonly ChampionSignal
     textPresent(person.personalWin) &&
     getSignal(signals, 'inside-information').state === 'proven' &&
     getSignal(signals, 'internal-selling').state === 'proven' &&
-    (getSignal(signals, 'access-creation').state === 'proven' || getSignal(signals, 'economic-buyer-access').state === 'proven')
+    (getSignal(signals, 'access-creation').state === 'proven' ||
+      getSignal(signals, 'economic-buyer-access').state === 'proven')
   )
 }
 
@@ -412,9 +458,25 @@ function assessPerson(project: MeddpiccProject, person: ChampionPerson): Champio
     openSignals: signals.filter((item) => item.state !== 'proven'),
     evidenceIds,
     structuredInputs: [
-      { path: 'meddpicc.champions.people[' + person.stakeholderId + '].status', label: 'Kanonischer Champion-Status', value: person.status, evidenceAnchoring: 'structured-only' },
-      { path: 'meddpicc.champions.people[' + person.stakeholderId + '].influence', label: 'Einfluss', value: person.influence, evidenceAnchoring: 'structured-only' },
-      { path: 'meddpicc.champions.people[' + person.stakeholderId + '].personalWin', label: 'Personal Win', value: textPresent(person.personalWin) ? person.personalWin!.trim() : 'fehlt', evidenceAnchoring: getSignal(signals, 'personal-win').state === 'proven' ? 'behavior-evidence' : 'structured-only' },
+      {
+        path: 'meddpicc.champions.people[' + person.stakeholderId + '].status',
+        label: 'Kanonischer Champion-Status',
+        value: person.status,
+        evidenceAnchoring: 'structured-only',
+      },
+      {
+        path: 'meddpicc.champions.people[' + person.stakeholderId + '].influence',
+        label: 'Einfluss',
+        value: person.influence,
+        evidenceAnchoring: 'structured-only',
+      },
+      {
+        path: 'meddpicc.champions.people[' + person.stakeholderId + '].personalWin',
+        label: 'Personal Win',
+        value: textPresent(person.personalWin) ? person.personalWin!.trim() : 'fehlt',
+        evidenceAnchoring:
+          getSignal(signals, 'personal-win').state === 'proven' ? 'behavior-evidence' : 'structured-only',
+      },
     ],
     sourceTraceability: { stakeholderId: person.stakeholderId, behaviorTypes, evidenceIds, paths },
     nextTest: nextTest(person, signals, status),
@@ -423,14 +485,20 @@ function assessPerson(project: MeddpiccProject, person: ChampionPerson): Champio
   }
 }
 
-const statusWeight: Record<ChampionAssessmentStatus, number> = { proven: 3, 'partially-proven': 2, candidate: 1, disqualified: 0 }
+const statusWeight: Record<ChampionAssessmentStatus, number> = {
+  proven: 3,
+  'partially-proven': 2,
+  candidate: 1,
+  disqualified: 0,
+}
 const stateWeight: Record<ChampionSignalState, number> = { proven: 3, structured: 2, insufficient: 1, missing: 0 }
 const influenceWeight: Record<ChampionPerson['influence'], number> = { high: 3, medium: 2, low: 1, unknown: 0 }
 
 function compare(a: ChampionAssessment, b: ChampionAssessment): number {
   const aInfluence = a.structuredInputs.find((item) => item.label === 'Einfluss')?.value as ChampionPerson['influence']
   const bInfluence = b.structuredInputs.find((item) => item.label === 'Einfluss')?.value as ChampionPerson['influence']
-  const state = (assessment: ChampionAssessment, id: ChampionSignalId) => stateWeight[getSignal(assessment.signals, id).state]
+  const state = (assessment: ChampionAssessment, id: ChampionSignalId) =>
+    stateWeight[getSignal(assessment.signals, id).state]
   return (
     statusWeight[b.status] - statusWeight[a.status] ||
     Number(b.readyForEconomicBuyerAccessTest) - Number(a.readyForEconomicBuyerAccessTest) ||
