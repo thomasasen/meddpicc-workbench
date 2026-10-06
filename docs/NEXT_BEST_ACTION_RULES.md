@@ -33,7 +33,7 @@ Fachlich geprüft wurden insbesondere:
 
 1. Schema 0.2.0 reicht für v0.1 aus. Keine Schemaerweiterung ist nötig.
 2. Die Engine darf keine Person zum Economic Buyer erklären, wenn nur ein Candidate oder eine Dritt-Aussage vorliegt.
-3. Ein Champion-Label reicht nicht. Für eine EB-Introduction müssen Influence, Personal Win, belastbarer Informationszugang und internes Verkaufen evidenzbasiert sein.
+3. Ein Champion-Label reicht nicht. Für eine EB-Introduction müssen Influence, Personal Win, belastbarer Informationszugang, internes Verkaufen und ein belegtes Access-Signal evidenzbasiert sein.
 4. „Champion um EB-Introduction bitten“ darf nicht parallel als Champion- und EB-Empfehlung doppelt erscheinen.
 5. Fehlender Pain darf nicht direkt in eine ROI-/Business-Case-Aktion übersetzt werden.
 6. Unbestätigte Metrics dürfen nicht durch Monetarisierung künstlich „gehärtet“ werden.
