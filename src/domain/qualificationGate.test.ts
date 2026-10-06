@@ -49,6 +49,11 @@ function fullyQualifiedProject() {
   if (champion) {
     champion.behaviors.push(
       {
+        type: 'confirmed_personal_win',
+        evidenceIds: ['ev_champion_01'],
+        notes: 'Hat den eigenen Personal Win belastbar bestätigt.',
+      },
+      {
         type: 'sold_internally',
         evidenceIds: ['ev_champion_01'],
         notes: 'Hat die Lösung intern aktiv vertreten.',
