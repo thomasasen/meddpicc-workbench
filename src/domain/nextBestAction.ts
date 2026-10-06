@@ -1,8 +1,4 @@
-import type {
-  DealInspectorFinding,
-  DealInspectorInput,
-  DealInspectorRuleId,
-} from './dealInspector'
+import type { DealInspectorFinding, DealInspectorInput, DealInspectorRuleId } from './dealInspector'
 import type { MeddpiccProject, ProjectAreaKey } from './project'
 
 export const nextBestActionRuleIds = [
@@ -192,10 +188,7 @@ function priorityFromFindings(findings: readonly DealInspectorFinding[]): NextBe
   return findings.some((finding) => finding.severity === 'high') ? 'high' : 'medium'
 }
 
-function painRule(
-  project: MeddpiccProject,
-  findings: readonly DealInspectorFinding[],
-): RecommendationCandidate | null {
+function painRule(project: MeddpiccProject, findings: readonly DealInspectorFinding[]): RecommendationCandidate | null {
   const missingPain = findingByRule(findings, 'pain.identified')
   if (missingPain) {
     return {
@@ -243,10 +236,7 @@ function painRule(
   }
 }
 
-function metricsRule(
-  project: MeddpiccProject,
-  findings: readonly DealInspectorFinding[],
-): RecommendationCandidate | null {
+function metricsRule(project: MeddpiccProject, findings: readonly DealInspectorFinding[]): RecommendationCandidate | null {
   const customerConfirmationGap = findingByRule(findings, 'metrics.customer-confirmed')
   if (customerConfirmationGap) {
     return {
