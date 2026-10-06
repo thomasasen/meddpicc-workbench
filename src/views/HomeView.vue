@@ -14,10 +14,7 @@ import { storeToRefs } from 'pinia'
 import { computed, nextTick, ref, type Component } from 'vue'
 
 import { inspectDeal, type DealInspectorFinding } from '../domain/dealInspector'
-import {
-  deriveNextBestActions,
-  type NextBestActionRecommendation,
-} from '../domain/nextBestAction'
+import { deriveNextBestActions, type NextBestActionRecommendation } from '../domain/nextBestAction'
 import type { ProjectAction, ProjectAreaKey, ProjectMeta, ProjectRisk } from '../domain/project'
 import { qualificationStatusLabels, type QualificationStatusKey } from '../domain/qualificationStatus'
 import { loadProject, ProjectValidationError, type ProjectValidationIssue } from '../domain/projectSchema'
@@ -811,11 +808,7 @@ function saveProject() {
           </p>
 
           <ol v-else class="next-best-action-list">
-            <li
-              v-for="recommendation in nextBestActions"
-              :key="recommendation.id"
-              class="next-best-action-item"
-            >
+            <li v-for="recommendation in nextBestActions" :key="recommendation.id" class="next-best-action-item">
               <div class="focus-meta-line">
                 <span class="risk-severity" :class="'risk-severity--' + recommendation.priority">
                   {{ nextBestActionPriorityLabels[recommendation.priority] }}
