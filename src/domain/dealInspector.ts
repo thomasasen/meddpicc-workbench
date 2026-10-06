@@ -1,3 +1,4 @@
+import { strongestChampionAssessment } from './championTester'
 import type { MeddpiccProject, ProjectAreaKey } from './project'
 
 export const dealInspectorRuleIds = [
@@ -470,31 +471,9 @@ function paperProcessRule(project: MeddpiccProject): DealInspectorFinding | null
 
 function championRule(project: MeddpiccProject): DealInspectorFinding | null {
   const section = project.meddpicc.champions
-  const candidates = section.people.filter((person) => person.status !== 'disqualified')
+  const assessment = strongestChampionAssessment(project)
 
-  const behaviorHasEvidence = (
-    person: (typeof section.people)[number],
-    type: (typeof person.behaviors)[number]['type'],
-  ) =>
-    person.behaviors.some((behavior) => behavior.type === type && hasSupportingEvidence(project, behavior.evidenceIds))
-
-  const championScore = (person: (typeof section.people)[number]) =>
-    Number(person.influence === 'medium' || person.influence === 'high') +
-    Number(textPresent(person.personalWin)) +
-    Number(
-      behaviorHasEvidence(person, 'provided_internal_information') || behaviorHasEvidence(person, 'shared_bad_news'),
-    ) +
-    Number(behaviorHasEvidence(person, 'sold_internally')) +
-    Number(
-      behaviorHasEvidence(person, 'created_access') || behaviorHasEvidence(person, 'enabled_economic_buyer_access'),
-    )
-
-  const ranked = [...candidates].sort(
-    (a, b) => championScore(b) - championScore(a) || a.stakeholderId.localeCompare(b.stakeholderId),
-  )
-  const candidate = ranked[0]
-
-  if (!candidate) {
+  if (!assessment) {
     return finding(project, {
       ruleId: 'champion.proven',
       area: 'champions',
@@ -519,65 +498,34 @@ function championRule(project: MeddpiccProject): DealInspectorFinding | null {
     })
   }
 
-  const missing: string[] = []
-  if (candidate.influence === 'unknown' || candidate.influence === 'low') {
-    missing.push('Ausreichender interner Einfluss')
-  }
-  if (!textPresent(candidate.personalWin)) missing.push('Konkreter Personal Win')
-  if (
-    !behaviorHasEvidence(candidate, 'provided_internal_information') &&
-    !behaviorHasEvidence(candidate, 'shared_bad_news')
-  ) {
-    missing.push('Belastbarer Informationszugang, z. B. interne Informationen oder schlechte Nachrichten')
-  }
-  if (!behaviorHasEvidence(candidate, 'sold_internally')) {
-    missing.push('Beleg, dass der Champion intern für uns verkauft')
-  }
-  if (
-    !behaviorHasEvidence(candidate, 'created_access') &&
-    !behaviorHasEvidence(candidate, 'enabled_economic_buyer_access')
-  ) {
-    missing.push('Beleg, dass der Champion relevanten internen Zugang herstellen kann')
-  }
+  if (assessment.status === 'proven') return null
 
-  if (missing.length === 0) return null
-
-  const evidenceIds = candidate.behaviors.flatMap((behavior) => behavior.evidenceIds)
+  const missingEvidence = assessment.openSignals
+    .filter(
+      (signal) =>
+        signal.requiredForProven &&
+        !(signal.id === 'influence' && signal.state === 'structured'),
+    )
+    .map((signal) => signal.label)
 
   return finding(project, {
     ruleId: 'champion.proven',
     area: 'champions',
-    severity: missing.length >= 3 ? 'high' : 'medium',
-    title: 'Der stärkste Champion-Candidate ist noch nicht ausreichend getestet.',
+    severity: assessment.status === 'candidate' || missingEvidence.length >= 3 ? 'high' : 'medium',
+    title:
+      assessment.status === 'candidate'
+        ? 'Der stärkste Champion-Candidate ist noch nicht durch Verhalten bewiesen.'
+        : 'Der stärkste Champion-Candidate ist erst teilweise bewiesen.',
     whyItMatters:
-      'Sympathie oder ein Champion-Label reichen nicht. Ein belastbarer Champion zeigt Einfluss, persönlichen Nutzen und konkrete interne Handlungen, die den Deal voranbringen.',
-    missingEvidence: missing,
-    evidenceIds: [...section.evidenceIds, ...evidenceIds],
-    entityIds: [candidate.stakeholderId],
-    inputs: [
-      {
-        path: `meddpicc.champions.people[${candidate.stakeholderId}].status`,
-        label: 'Champion-Status',
-        value: candidate.status,
-      },
-      {
-        path: `meddpicc.champions.people[${candidate.stakeholderId}].influence`,
-        label: 'Einfluss',
-        value: candidate.influence,
-      },
-      {
-        path: `meddpicc.champions.people[${candidate.stakeholderId}].personalWin`,
-        label: 'Personal Win',
-        value: textPresent(candidate.personalWin) ? 'vorhanden' : 'fehlt',
-      },
-      {
-        path: `meddpicc.champions.people[${candidate.stakeholderId}].behaviors`,
-        label: 'Belegte Champion-Verhaltenssignale',
-        value: String(
-          candidate.behaviors.filter((behavior) => hasSupportingEvidence(project, behavior.evidenceIds)).length,
-        ),
-      },
-    ],
+      'Ein Champion-Label, Seniorität oder Hilfsbereitschaft reichen nicht. Belastbarkeit entsteht durch Einfluss, Personal Win und nachweisbares internes Handeln.',
+    missingEvidence,
+    evidenceIds: assessment.evidenceIds,
+    entityIds: [assessment.stakeholderId],
+    inputs: assessment.structuredInputs.map((input) => ({
+      path: input.path,
+      label: input.label,
+      value: input.value,
+    })),
   })
 }
 
