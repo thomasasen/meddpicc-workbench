@@ -5,7 +5,7 @@ test('pflegt projektweite Risiken und Aktionen inklusive Risk-Verknüpfung', asy
   page.on('pageerror', (error) => runtimeErrors.push(error.message))
 
   await page.goto('/meddpicc-workbench/')
-  await page.getByRole('link', { name: 'Risiken & Aktionen' }).click()
+  await page.getByRole('link', { name: 'Risiken & Aktionen', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Risiken & Aktionen' })).toBeVisible()
 
   const riskSection = page.getByRole('region', { name: 'Risiken' })
