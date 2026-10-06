@@ -179,28 +179,23 @@ Regelkatalog: `docs/QUALIFICATION_GATES_RULES.md`.
 
 **Technik:** deterministische, testbare Domain-Regeln. Keine AI notwendig.
 
-### 3D – Champion Tester
+### 3D – Champion Tester ✅
 
 Prüft einen Champion nicht anhand eines Labels, sondern anhand nachweisbarer Verhaltenssignale.
 
-Mögliche Prüfbereiche:
+**Erster Slice v0.1 umgesetzt:** Der reine Domain Service `assessChampions(project)` / `assessChampion(project, stakeholderId)` bewertet Candidates deterministisch anhand von Einfluss, Personal Win, Inside Information / Bad News, Internal Selling, Access Creation und Economic-Buyer-Zugang. Assumption, Unknown und Unconfirmed zählen nicht als belastbare Evidence.
 
-- liefert interne Informationen
-- hilft beim Decision Process
-- verschafft Zugang zum Economic Buyer
-- verkauft intern für uns
-- besitzt Einfluss
-- hat persönlichen Nutzen / Motivation
-- unterstützt bei Wettbewerb und internen Hürden
+Der abgeleitete Zustand lautet **Kandidat**, **teilweise bewiesen**, **belastbar** oder **disqualifiziert**. Es gibt weder einen sichtbaren Champion Score noch eine Win Probability. Ein manuelles `status = confirmed` ist kein Beweis; `disqualified` bleibt dagegen ein kanonischer Hard Stop.
 
-Output:
+Das aktuelle Schema 0.2.0 bleibt bewusst unverändert. Für Source Traceability reichen in v0.1 `stakeholderId + behavior.type + evidenceIds`; stabile Behavior-IDs wären ohne zusätzlichen Workflow nur technische Bequemlichkeit. `influence` und ein bloß eingetragener `personalWin` werden deshalb transparent als strukturierte, nicht automatisch evidenzverankerte Inputs behandelt.
 
-- belegte Signale
-- fehlende Belege
-- Status „Kandidat / teilweise bewiesen / belastbar“
-- nächster sinnvoller Champion-Test
+Mehrere Candidates werden stabil priorisiert, ohne die interne Vergleichslogik als fachlich exakte Punktzahl auszugeben. Der stärkste aktive Candidate erhält einen konkreten nächsten Champion-Test mit Begründung, Aktion und gewünschter Evidence. Die bestehende Action Family `nba.champion.test` übernimmt diesen Test; Deal Inspector und Next Best Action Engine verwenden damit dieselbe Champion-Logik.
 
-**Technik:** Evidence-basierte Regeln. Keine AI notwendig.
+Die UI ist als kompakter Seller-Workflow im Deal-Fokus integriert. Sie zeigt stärksten Candidate, abgeleiteten Status, bewiesene und offene Signale, nächsten Test, Erfolgskriterium sowie Candidate-Reihenfolge und Source Traceability. Desktop und Mobile sind per Playwright abgedeckt.
+
+Regelkatalog und Quellenreview: `docs/CHAMPION_TESTER_RULES.md`.
+
+**Technik:** reine Evidence-basierte Domain-Regeln. Keine AI notwendig.
 
 ### 3E – Economic Buyer Coach
 
