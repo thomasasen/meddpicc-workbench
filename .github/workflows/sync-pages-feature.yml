@@ -1,0 +1,46 @@
+name: Feature Pages Sync
+
+on:
+  push:
+    branches:
+      - feat/next-best-action-v01
+
+permissions:
+  contents: write
+
+jobs:
+  sync-pages:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: feat/next-best-action-v01
+          fetch-depth: 0
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Abhängigkeiten installieren
+        run: npm ci --no-audit --no-fund
+
+      - name: Production Build und Pages-Root synchronisieren
+        run: |
+          npm run build
+          npm run pages:sync
+
+      - name: Generierten Pages-Root committen
+        run: |
+          if git diff --quiet -- index.html assets pages-build.json; then
+            echo "Pages-Root ist bereits synchron."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets pages-build.json
+          git commit -m "chore: sync Pages root for Next Best Action"
+          git push origin HEAD:feat/next-best-action-v01
