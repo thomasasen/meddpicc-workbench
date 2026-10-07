@@ -30,7 +30,7 @@ MEDDPICC bleibt als fachliche Orientierung sichtbar, aber nicht als erzwungener 
 
 ### Hero
 
-Der Hero erklärt in einem Satz den Nutzen und grenzt die Toolbox sichtbar vom CRM ab.
+Der Hero erklärt in einem Satz, **welche Arbeit die Toolbox erleichtert**. Interne Produktabgrenzungen wie „kein CRM“ gehören nicht in den Vordergrund der Produktoberfläche, solange sie für die konkrete Nutzung nicht erforderlich sind.
 
 ### Primäre Navigation
 
@@ -44,17 +44,24 @@ Drei gleichwertige Einstiegskarten:
 
 Tools werden nach konkreten Arbeitssituationen beziehungsweise Service-Clustern gruppiert, nicht ausschließlich nach MEDDPICC-Buchstaben.
 
+Jeder Tool-Eintrag muss schon vor dem Öffnen verständlich beantworten:
+
+- **Wann hilft mir das?**
+- **Was gebe ich ungefähr hinein?**
+- **Welches nutzbare Ergebnis bekomme ich?**
+- **Wie spart oder erleichtert mir das konkret Arbeit?**
+
 Aktive Services sind klar navigierbar. Geplante Services dürfen sichtbar sein, müssen aber eindeutig als geplant erscheinen.
 
 ### Checklists
 
 Checklists werden nach wiederkehrenden Situationen benannt, zum Beispiel Economic-Buyer-Termin, Discovery, POC oder Closing.
 
-Sie dürfen nicht wie ein Qualification Dashboard aussehen.
+Schon auf der Übersicht muss klar sein, **in welcher Situation** die Checklist genutzt wird und **welchen Fehler oder welches Vergessen** sie vermeiden hilft. Auf dem Checklist-Screen erklärt jeder Punkt seine fachliche Bedeutung so, dass er nicht falsch interpretiert wird.
 
 ### Knowledge
 
-Knowledge zeigt MEDDPICC als fachliche Referenz. Die acht Bereiche dienen der Orientierung und dürfen später auf Themenartikel führen.
+Knowledge zeigt MEDDPICC als fachliche Referenz. Jeder Eintrag wird als konkrete Verständnisfrage formuliert beziehungsweise beschreibt, **welche Unsicherheit er klärt**. Die acht Bereiche dienen der Orientierung und dürfen später auf Themenartikel führen.
 
 ## 4. Tool-Screen
 
@@ -184,6 +191,8 @@ Keine Runtime-CDNs, Analytics oder automatischen Requests mit Kundendaten. Local
 Vor Merge:
 
 - löst der Screen eine konkrete Aufgabe oder Verständnisfrage?
+- versteht der Nutzer ohne Vorwissen, **wann** ihm dieser Service hilft?
+- ist klar, **welches Ergebnis** er erhält und wie ihm das Arbeit erspart?
 - ist Tools vs. Checklists vs. Knowledge klar?
 - bleibt die Oberfläche frei von CRM-/Dashboard-Ballast?
 - sind nur notwendige Inputs sichtbar?
