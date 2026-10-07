@@ -67,6 +67,7 @@ describe('buildCustomerTimelineSvg', () => {
           duration: 5,
           durationUnit: 'calendar-days',
           owner: 'customer',
+          ownerDetail: 'Legal & Datenschutz',
           area: 'paper-process',
         },
       ],
