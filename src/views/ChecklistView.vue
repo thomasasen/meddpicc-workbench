@@ -1,0 +1,173 @@
+<script setup lang="ts">
+import { ArrowLeft, BookOpen, CheckSquare2, CircleAlert, Lightbulb, MessageCircleQuestion } from '@lucide/vue'
+import { computed, ref, watch } from 'vue'
+
+import { economicBuyerChecklists } from '../content/meddpicc/economicBuyer'
+import type { ChecklistId } from '../content/meddpicc/types'
+
+const props = defineProps<{
+  checklistId: ChecklistId
+}>()
+
+const checked = ref<Record<string, boolean>>({})
+
+const checklist = computed(() => economicBuyerChecklists[props.checklistId])
+
+watch(
+  () => props.checklistId,
+  () => {
+    checked.value = {}
+  },
+)
+
+function checkboxId(itemId: string): string {
+  return `checklist-${props.checklistId}-${itemId}`
+}
+</script>
+
+<template>
+  <div class="site-shell checklist-shell">
+    <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
+
+    <header class="site-header">
+      <div class="container header-inner toolbox-header">
+        <RouterLink class="brand" to="/" aria-label="Zurück zur MEDDPICC Toolbox">
+          <span class="brand-mark">M</span>
+          <span class="brand-copy">
+            <strong>MEDDPICC Toolbox</strong>
+            <span>Checklists</span>
+          </span>
+        </RouterLink>
+        <RouterLink class="button button-quiet button-with-icon" to="/#checklists">
+          <ArrowLeft :size="17" aria-hidden="true" />
+          Zur Checklist-Übersicht
+        </RouterLink>
+      </div>
+    </header>
+
+    <main id="main-content" class="checklist-main">
+      <section class="container checklist-hero" aria-labelledby="checklist-title">
+        <div>
+          <div class="tool-intro-meta">
+            <span class="tool-kind">Checklist</span>
+            <span>Economic Buyer</span>
+          </div>
+          <p class="eyebrow">{{ checklist.eyebrow }}</p>
+          <h1 id="checklist-title">{{ checklist.title }}</h1>
+          <p class="intro-text">{{ checklist.lead }}</p>
+        </div>
+
+        <aside class="checklist-context">
+          <div>
+            <strong>Wann nutzen?</strong>
+            <p>{{ checklist.whenToUse }}</p>
+          </div>
+          <div>
+            <strong>Was bringt es?</strong>
+            <p>{{ checklist.benefit }}</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="container checklist-list-section" aria-labelledby="checklist-items-title">
+        <div class="section-heading-row">
+          <div>
+            <p class="eyebrow">Kurz prüfen</p>
+            <h2 id="checklist-items-title">Die entscheidenden Punkte</h2>
+            <p class="section-note">
+              Hake Punkte nur als persönliche Gedankenstütze ab. Wenn du unsicher bist, öffne die Erklärung direkt
+              darunter.
+            </p>
+          </div>
+        </div>
+
+        <div class="checklist-item-list">
+          <article v-for="item in checklist.items" :key="item.id" class="checklist-item">
+            <label class="checklist-question" :for="checkboxId(item.id)">
+              <input :id="checkboxId(item.id)" v-model="checked[item.id]" type="checkbox" />
+              <span>{{ item.question }}</span>
+            </label>
+
+            <details class="checklist-item-details">
+              <summary>
+                <Lightbulb :size="17" aria-hidden="true" />
+                Erklärung und mögliche Fragen
+              </summary>
+
+              <div class="checklist-detail-grid">
+                <section>
+                  <h3>Worum geht es?</h3>
+                  <p>{{ item.meaning }}</p>
+                </section>
+
+                <section>
+                  <h3>Warum ist das relevant?</h3>
+                  <p>{{ item.whyItMatters }}</p>
+                </section>
+
+                <section>
+                  <h3>Woran erkenne ich es?</h3>
+                  <ul>
+                    <li v-for="signal in item.signals" :key="signal">{{ signal }}</li>
+                  </ul>
+                </section>
+
+                <section class="checklist-warning">
+                  <h3>
+                    <CircleAlert :size="16" aria-hidden="true" />
+                    Typische Fehlinterpretation
+                  </h3>
+                  <p>{{ item.commonMisinterpretation }}</p>
+                </section>
+
+                <section class="checklist-actions">
+                  <h3>
+                    <MessageCircleQuestion :size="16" aria-hidden="true" />
+                    Mögliche Frage oder Handlung
+                  </h3>
+                  <ul>
+                    <li v-for="action in item.possibleQuestionsOrActions" :key="action">{{ action }}</li>
+                  </ul>
+                </section>
+
+                <section v-if="item.learnMore">
+                  <h3>Mehr erfahren</h3>
+                  <p>{{ item.learnMore }}</p>
+                </section>
+              </div>
+
+              <div class="checklist-item-footer">
+                <RouterLink
+                  v-if="item.relatedKnowledge === 'economic-buyer'"
+                  class="inline-link"
+                  to="/knowledge/economic-buyer"
+                >
+                  <BookOpen :size="15" aria-hidden="true" />
+                  Economic Buyer nachschlagen
+                </RouterLink>
+                <small v-if="item.sourceNote">{{ item.sourceNote }}</small>
+              </div>
+            </details>
+          </article>
+        </div>
+
+        <div class="checklist-guidance">
+          <CheckSquare2 :size="20" aria-hidden="true" />
+          <p>
+            <strong>Offene Punkte sind Gesprächshinweise.</strong>
+            Die Checklist soll dir zeigen, was du noch verstehen oder validieren möchtest – nicht einen Deal bewerten.
+          </p>
+        </div>
+      </section>
+
+      <section class="container checklist-sources">
+        <details class="knowledge-source-details">
+          <summary>Fachliche Quellenabschnitte anzeigen</summary>
+          <ul>
+            <li v-for="source in checklist.sourceNotes" :key="source">{{ source }}</li>
+          </ul>
+        </details>
+      </section>
+    </main>
+  </div>
+</template>
