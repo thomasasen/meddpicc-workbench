@@ -2990,17 +2990,6 @@ button.microtool-card:disabled {
   color: var(--color-accent);
 }
 
-.foundation-badge {
-  flex: 0 0 auto;
-  border: 1px solid #bfdbfe;
-  border-radius: 999px;
-  background: #eff6ff;
-  color: #1d4ed8;
-  padding: 0.32rem 0.62rem;
-  font-size: 0.7rem;
-  font-weight: 720;
-}
-
 .tool-cluster-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3066,6 +3055,17 @@ button.microtool-card:disabled {
 
 .tool-row strong {
   font-size: 0.84rem;
+}
+
+.tool-row-meta {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tool-row-meta > svg {
+  color: var(--color-accent);
 }
 
 .tool-row small {
@@ -3225,8 +3225,7 @@ button.microtool-card:disabled {
     grid-template-columns: 1fr;
   }
 
-  .section-note,
-  .foundation-badge {
+  .section-note {
     align-self: flex-start;
   }
 }
