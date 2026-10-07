@@ -8,14 +8,17 @@ import type {
   TimelineArea,
   TimelineOwner,
 } from '../domain/reverseTimeline'
+import {
+  buildTimelineScale,
+  timelineSegmentPosition,
+  timelineTotalDays,
+} from '../domain/timelinePresentation'
 
 const props = defineProps<{
   plan: ReverseTimelinePlan
   title: string
   customerName: string
 }>()
-
-const DAY_MS = 86_400_000
 
 const areaLabels: Record<TimelineArea, string> = {
   'decision-process': 'Decision Process',
@@ -27,14 +30,6 @@ const ownerLabels: Record<TimelineOwner, string> = {
   customer: 'Kunde',
   seller: 'Anbieter',
   shared: 'Gemeinsam',
-}
-
-function dateMs(isoDate: string): number {
-  return Date.parse(`${isoDate}T00:00:00Z`)
-}
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(max, Math.max(min, value))
 }
 
 function formatDate(isoDate: string): string {
@@ -49,38 +44,15 @@ function shortDate(isoDate: string): string {
   }).format(new Date(`${isoDate}T00:00:00Z`))
 }
 
-const startMs = computed(() => dateMs(props.plan.latestStartDate))
-const endMs = computed(() => dateMs(props.plan.targetGoLiveDate))
-const totalDays = computed(() => Math.max(1, Math.round((endMs.value - startMs.value) / DAY_MS)))
-
-const axisTicks = computed(() => {
-  const desiredIntervals = totalDays.value <= 42 ? 4 : totalDays.value <= 120 ? 5 : 6
-  const dates = new Map<string, number>()
-
-  for (let index = 0; index <= desiredIntervals; index += 1) {
-    const rawDay = (totalDays.value * index) / desiredIntervals
-    const dayOffset = Math.round(rawDay)
-    const value = new Date(startMs.value + dayOffset * DAY_MS).toISOString().slice(0, 10)
-    dates.set(value, clamp((dayOffset / totalDays.value) * 100, 0, 100))
-  }
-
-  dates.set(props.plan.latestStartDate, 0)
-  dates.set(props.plan.targetGoLiveDate, 100)
-
-  return [...dates.entries()]
-    .map(([date, position]) => ({ date, position }))
-    .sort((a, b) => a.position - b.position)
-})
+const totalDays = computed(() => timelineTotalDays(props.plan))
+const axisTicks = computed(() => buildTimelineScale(props.plan))
 
 function segmentStyle(segment: ReverseTimelineSegment): Record<string, string> {
-  const leftDays = (dateMs(segment.startDate) - startMs.value) / DAY_MS
-  const spanDays = Math.max(0, (dateMs(segment.endDate) - dateMs(segment.startDate)) / DAY_MS)
-  const left = clamp((leftDays / totalDays.value) * 100, 0, 100)
-  const width = Math.max((spanDays / totalDays.value) * 100, 0.8)
+  const position = timelineSegmentPosition(props.plan, segment)
 
   return {
-    '--segment-left': `${left}%`,
-    '--segment-width': `${Math.min(width, 100 - left)}%`,
+    '--segment-left': `${position.leftPercent}%`,
+    '--segment-width': `${position.widthPercent}%`,
   }
 }
 
