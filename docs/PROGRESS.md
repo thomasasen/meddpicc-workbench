@@ -2,64 +2,106 @@
 
 ## Aktueller Produktstand
 
-Das Projekt wurde am 07.10.2026 von einer zentralen Deal-Workbench zu einer **MEDDPICC Microtool Toolbox** neu ausgerichtet.
+Am 07.10.2026 wurde die MEDDPICC Toolbox auf drei klare Bausteine ausgerichtet:
 
-Grund: Die bisherige Architektur verlangte für kleine Coaching-Funktionen zu viele detaillierte Informationen in einem globalen Datenmodell. Das widersprach dem gewünschten Nutzungsbild: Ein Account Manager soll ein konkretes Werkzeug öffnen, nur die dafür nötigen Inputs eingeben und ein direkt verwertbares Ergebnis erhalten.
+1. **Tools** – konkrete Arbeit berechnen, strukturieren, vorbereiten oder visualisieren.
+2. **Checklists** – kurze Lern- und Orientierungshilfen für Themen und wiederkehrende Sales-Situationen.
+3. **Knowledge** – kompakte MEDDPICC-Referenz statt erneuter Buchsuche.
 
-## Bewusste Wiederverwendung
+Die Produktoberfläche erklärt primär, **wann ein Service hilft, was er macht und welchen konkreten Nutzen der Account Manager erhält**.
 
-Beibehalten:
+## Produktiver Referenz-Slice
 
-- Vue 3 / TypeScript / Vite
-- Vue Router
-- Vitest / Playwright
-- GitHub Actions / GitHub Pages
-- Lucide
-- Design Tokens
-- Accessibility-Baseline
-- ausgewählte reine Domainlogik, wenn ein Microtool davon profitiert
+**Go-Live-Rückwärtsplanung** ist auf `main` gemergt und bleibt das Referenz-Tool.
 
-Nicht mehr Produktkern:
+Technisch vorhanden:
 
-- Opportunity-Dashboard
-- Pflichtprojekt vor Tool-Nutzung
-- Projektdatei als zwingende Source of Truth
-- Evidence-/Risks-/Actions-Pflege als Einstieg
-- Deal Inspector als Startseite
+- deterministische Rückwärtsrechnung
+- Kalender- und Arbeitstage
+- Verantwortlichkeiten und Prozessbereiche
+- Vorlauf-/Kompressionshinweis
+- kundenfähige Timeline
+- SVG-/PNG-Export
+- Unit Tests
+- Playwright Desktop/Mobile
 
-## Aktiver Slice
+## Economic Buyer – Checklists & Knowledge v0.1
 
-Branch: feat/meddpicc-toolbox-v01
+Branch: `feat/toolbox-start-checklists-knowledge`  
+PR: **#40**
 
-Ziel:
+Umgesetzt:
 
-1. neue MEDDPICC-Toolbox-Startseite
-2. erstes echtes Microtool: Go-Live-Rückwärtsplanung
-3. kundenfähiger SVG-/PNG-Export
+- gemeinsame, typisierte Content-Basis für Knowledge und Checklists
+- **Wissen → Economic Buyer**
+- **Checklist → Economic Buyer**
+- **Checklist → Economic-Buyer-Termin**
+- progressive Erklärungen pro Checklist-Punkt:
+  - Worum geht es?
+  - Warum ist das relevant?
+  - Woran erkenne ich es?
+  - typische Fehlinterpretation
+  - mögliche Frage oder Handlung
+  - optional Mehr erfahren
+- temporäre Checkboxen nur als persönliche Gedankenstütze
+- keine Score-, Gewichtungs- oder Deal-Status-Logik
+- sichtbarer fachlicher Unterschied zwischen Whyte und Lahoutifard zur Frage einzelner Economic Buyer vs. Gremium
+- Navigation direkt von der Startseite
+- responsive Desktop-/Mobile-Ansichten
+- Quellenabschnitte nachvollziehbar dokumentiert
 
-## Fachliche Basis des ersten Tools
+## QS des Economic-Buyer-Slices
 
-- Whyte: kundenorientierter Go-Live Plan, vom gewünschten Go-Live rückwärts planen, relevante Meilensteine und beteiligte Funktionen früh sichtbar machen.
-- Lahoutifard: Decision/Paper Process schriftlich und visuell als Timeline dokumentieren, Aktivitäten beider Seiten sichtbar machen, Paper Process Schritt für Schritt erfragen und antizipieren.
+CI-Lauf **#315** ist erfolgreich.
 
-Software-Regeln sind eigene Produktentscheidungen und keine behauptete offizielle MEDDPICC-Formel.
+Bestanden:
 
-## Zwischen-QS
+- Formatierung
+- ESLint
+- Unit Tests
+- Production Build
+- Playwright Desktop
+- Playwright Mobile
+- Startseiten-Regression
+- Go-Live-Rückwärtsplanung Regression
+- UI-QS-Screenshots
+- Pages-Sync und Pages-Integrität
 
-### QS 1 – Produktfit
+## Aktueller T2-Stand
 
-Bestanden: Das Tool löst eine konkrete Seller-Aufgabe und erzeugt einen mit dem Kunden nutzbaren Output, ohne CRM-/Projektpflege vorauszusetzen.
+### Umgesetzt
 
-### QS 2 – Domain-Grenze
+- Knowledge Foundation / Content-Schema
+- Economic Buyer Knowledge
+- Economic Buyer Themen-Checklist
+- Economic-Buyer-Termin Checklist
 
-Bestanden: Rückwärtsrechnung liegt in einem reinen Domain Service. UI und Export sind davon getrennt. Feiertage werden nicht still angenommen.
+### Noch offen
 
-### QS 3 – Technische / visuelle Qualität
+- Metrics
+- Decision Criteria
+- Decision Process
+- Paper Process
+- Pain / Implication
+- Champion
+- Competition
+- weitere situative Checklists wie Discovery, POC, Pricing und Closing
 
-Technische Gates bestanden: Formatierung, Lint, Unit Tests, Production Build, Pages-Integrität sowie Playwright Desktop/Mobile sind grün. Offen bleibt ausschließlich die sichtbare UI-Abnahme durch den Nutzer.
+## Nächste Roadmap-Blöcke
 
-## Nächster empfohlener Slice nach Freigabe
+Nach dem T2-Ausbau folgen die Value-&-Metrics-Tools:
 
-Metrics → Quick Payback / ROI.
+1. Quick Payback
+2. Metric Builder
+3. Cost of Delay
+4. Business Case / Value Bridge
 
-Dieser Slice testet erneut den vollständigen Produktpfad: wenige Inputs → deterministische Berechnung → verständliche Value Story → kundenfähige Visualisierung/Export.
+## Bewusste Nichtziele
+
+- Pipeline / Forecast
+- Account-/Kontaktverwaltung
+- vollständige Opportunity-Pflege
+- Activity Tracking
+- dauerhaftes MEDDPICC-Scoring
+- Deal Health / Completeness
+- Pflicht-Workflow über alle MEDDPICC-Bereiche

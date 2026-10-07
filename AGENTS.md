@@ -8,27 +8,28 @@ Die Projektsprache ist Deutsch. UI, Dokumentation, Issues, Pull Requests, Hilfet
 
 ## Produktziel
 
-MEDDPICC Toolbox ist eine local-first Sammlung fokussierter **MEDDPICC Microtools** für komplexe B2B-Sales-Aufgaben.
+MEDDPICC Toolbox ist eine local-first Sammlung fokussierter **Tools, Checklists und Wissenshilfen** für wiederkehrende Aufgaben im komplexen B2B-Vertrieb. Sie ist ausdrücklich kein ganzheitliches MEDDPICC-System und kein CRM.
 
 Verbindliche Produktlogik:
 
-- **Microtool-first:** Ausgangspunkt ist eine konkrete Aufgabe, nicht ein vollständiger Opportunity-Datensatz.
+- **Aufgabenorientiert:** Ausgangspunkt ist eine konkrete Arbeit oder Verständnisfrage, nicht ein vollständiger Opportunity-Datensatz.
+- **Drei Bausteine:** Tools vereinfachen Arbeit, Checklists erklären und orientieren, Knowledge dient als schnelle MEDDPICC-Referenz.
 - **Eigener Inputvertrag pro Tool:** Nur Informationen abfragen, die das Tool tatsächlich braucht.
 - **Kundenfähige Outputs:** Wo sinnvoll, Ergebnisse so gestalten, dass Seller sie in Präsentationen, Workshops oder gemeinsamen Plänen verwenden können.
 - **Interne Tools bleiben möglich:** Coaching-/Qualification-Tools dürfen seller-only sein.
 - **Deterministisch by default:** Berechnungen, Regeln und Prozesslogik müssen ohne AI vollständig funktionieren.
-- **Optionaler Workspace:** Ein späterer Deal Workspace darf Tool-Daten wiederverwenden, aber kein Microtool zur Projektanlage zwingen.
-- **Kein CRM-Nachbau:** Keine Pipeline-, Kontakt-, Activity- oder generische Task-Verwaltung in den Core.
+- **Optionaler Session Context:** Ergebnisse dürfen später zwischen Services weitergereicht werden, ohne daraus eine verpflichtende Deal-/Opportunity-Pflege zu machen.
+- **Kein CRM-Nachbau:** Keine Pipeline-, Forecast-, Account-, Kontakt-, Activity- oder generische Task-Verwaltung in den Core. Keine dauerhaft gepflegten MEDDPICC-Scores oder Deal-Health-Dashboards.
 - **AI optional:** AI darf später Inputs unterstützen, aber nicht Voraussetzung für Core-Logik sein.
 
 ## Feature-Fit-Gate
 
 Vor jedem neuen Feature beantworten:
 
-1. Welche konkrete Seller-Aufgabe wird einfacher?
-2. Welche minimalen Inputs sind dafür wirklich nötig?
-3. Ist der Output intern oder kundenfähig?
-4. Ist die Logik deterministisch und nachvollziehbar?
+1. Welche konkrete Seller-Aufgabe oder Verständnisfrage wird einfacher?
+2. Spart das Feature wiederkehrende Arbeit oder verhindert es eine typische Fehlinterpretation?
+3. Welche minimalen Inputs sind dafür wirklich nötig?
+4. Ist der Output intern, lernorientiert oder kundenfähig?
 5. Muss das Feature wirklich auf globalen Deal-State zugreifen?
 6. Führt es versehentlich Richtung CRM/Datenpflege?
 
@@ -36,11 +37,13 @@ Wenn ein Tool nur deshalb viele Felder braucht, weil ein globales Schema sie bes
 
 ## Architekturregeln
 
-- Microtools sind logisch unabhängig.
+- Tools sind logisch unabhängig.
+- Checklists sind Lern- und Orientierungshilfen; sie erzeugen standardmäßig keinen gespeicherten Deal-Score oder historischen Qualification-Status.
+- Knowledge-Inhalte sollen zwischen Checklists und Tool-Hilfen wiederverwendbar sein.
 - Domain-Berechnungen liegen in reinen, testbaren Services und nicht in Vue-Komponenten.
 - Tool-spezifische Inputs benötigen nicht automatisch eine Schema-Änderung.
 - Pinia nur für echten view-übergreifenden State verwenden.
-- Ein optionaler Workspace darf später Ergebnisse persistieren, aber Microtools nicht blockieren.
+- Ein optionaler Session Context darf später Ergebnisse weiterreichen, aber keine vollständige Opportunity-Pflege oder Projektanlage voraussetzen.
 - Keine verpflichtende Backend-, Cloud- oder AI-Abhängigkeit einführen.
 - Keine Runtime-CDNs für Fonts, Icons oder Scripts.
 - Kundendaten standardmäßig lokal im Browser verarbeiten.
@@ -63,7 +66,7 @@ Bei UI-Arbeiten docs/DESIGN_SYSTEM.md und docs/ICON_SYSTEM.md beachten.
 Grundrichtung:
 
 - professionelle B2B-Anwendung
-- klare MEDDPICC-Navigation
+- klare Navigation über Tools, Checklists und Knowledge; MEDDPICC bleibt fachliche Orientierung
 - wenig dekorativer Ballast
 - konkrete Tool-Aktion sofort erkennbar
 - Input und Ergebnis deutlich getrennt

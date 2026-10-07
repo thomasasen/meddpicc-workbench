@@ -1,20 +1,130 @@
 # Roadmap
 
-## Neue Produktrichtung
+## Produktdefinition
 
-Seit Oktober 2026 wird MEDDPICC Workbench als **MEDDPICC Toolbox** neu ausgerichtet: eigenständige Microtools statt verpflichtender zentraler Opportunity-Workbench.
+Die **MEDDPICC Toolbox** ist ausdrücklich **kein ganzheitliches MEDDPICC-System und kein CRM**.
 
-Die bisherige Workbench-Architektur bleibt nur als technische und fachliche Quelle für selektive Wiederverwendung.
+Sie unterstützt Account Manager bei wiederkehrenden Aufgaben im komplexen B2B-Vertrieb durch drei klar getrennte Bausteine:
+
+1. **Tools** – konkrete Arbeit vereinfachen, berechnen, strukturieren oder visualisieren.
+2. **Checklists** – vor wiederkehrenden Situationen nichts Wesentliches vergessen und MEDDPICC-Begriffe nicht falsch interpretieren.
+3. **Knowledge** – MEDDPICC-Konzepte schnell und praxisnah nachschlagen, ohne erneut im Buch suchen zu müssen.
+
+Die Toolbox verwaltet keinen Deal vollständig. Sie soll nur dort helfen, wo ein fokussierter Service einen klaren praktischen Nutzen liefert.
+
+## Harte Scope-Grenzen
+
+Die Toolbox ist kein System of Record und baut insbesondere nicht:
+
+- Pipeline- oder Forecast-Dashboards
+- Account-, Kontakt- oder Opportunity-Verwaltung
+- Activity Tracking oder generisches Task Management
+- dauerhaft gepflegte MEDDPICC-Scores
+- Deal-Health- oder Completeness-Dashboards
+- verpflichtende Stage Gates
+- historische Checklisten- oder Qualification-Pflege
+
+Ein Account Manager darf niemals das Gefühl bekommen, neben dem CRM noch ein zweites CRM pflegen zu müssen.
+
+## Produktbaustein A – Tools
+
+Ein Tool gehört in die Toolbox, wenn es eine konkrete, wiederkehrende Arbeit in wenigen Minuten sinnvoll erleichtert.
+
+Typische Ergebnisse:
+
+- Berechnung
+- Gesprächsvorbereitung
+- Strukturierung
+- Visualisierung
+- kundenfähiges Artefakt
+- kompakte interne Arbeitshilfe
+
+### Qualitätsregel für Tools
+
+**Konkrete Aufgabe öffnen → nur notwendige Inputs erfassen → nachvollziehbares Ergebnis erhalten → direkt weiterverwenden.**
+
+Ein vollständiger Opportunity-Datensatz ist niemals Voraussetzung.
+
+## Produktbaustein B – Checklists
+
+Checklists sind **Lern- und Orientierungshilfen**, keine Deal-Scorecards.
+
+Sie dienen zwei Zwecken:
+
+1. wichtige Punkte in wiederkehrenden Situationen nicht vergessen;
+2. MEDDPICC-Konzepte fachlich korrekt verstehen und typische Fehlinterpretationen vermeiden.
+
+### Informationsmodell je Checklist-Punkt
+
+Jeder Punkt soll – soweit fachlich sinnvoll – folgende Ebenen anbieten:
+
+- **Prüffrage** – der schnelle Punkt zum Überfliegen
+- **Worum geht es?** – fachliche Bedeutung
+- **Warum ist das wichtig?** – Relevanz im Verkaufsprozess
+- **Woran erkenne ich es?** – beobachtbare Hinweise oder Beispiele
+- **Typische Fehlinterpretation** – was häufig fälschlich angenommen wird
+- **Mögliche Frage oder Handlung** – wie der Account Manager den Punkt praktisch klären kann
+- **Mehr erfahren** – optionaler vertiefender Hintergrund
+
+Die Standardansicht bleibt kurz. Details werden bei Bedarf aufgeklappt.
+
+### Was Checklists ausdrücklich nicht tun
+
+- keinen Opportunity-Status erzeugen
+- keinen historischen Deal-Fortschritt speichern
+- keinen Management-Score ableiten
+- keinen Pflicht-Workflow erzwingen
+- keinen Account Manager zum vollständigen Ausfüllen zwingen
+
+## Produktbaustein C – Knowledge
+
+Knowledge ist eine kompakte, praxisnahe Referenz für MEDDPICC-Begriffe und angrenzende Konzepte.
+
+Ziel:
+
+> **Ich brauche gerade eine Erklärung – ich möchte nicht erneut im Buch nachschlagen.**
+
+Knowledge-Inhalte sollen sich auf die bereitgestellten Primärquellen stützen und Unterschiede zwischen den Autoren kenntlich machen, wenn sie fachlich relevant sind.
+
+Beispiele:
+
+- Was macht einen Champion aus?
+- Coach vs. Champion
+- Wer ist der Economic Buyer?
+- Decision Criteria
+- Validation vs. Approval
+- Decision Process vs. Paper Process
+- Identify / Indicate / Implicate Pain
+- Competition inklusive Status quo / No Decision
+- Metrics und wirtschaftlicher Impact
+
+## UX-Grundstruktur
+
+Die Startseite bietet drei primäre Einstiege:
+
+- **Tools**
+- **Checklists**
+- **Knowledge**
+
+MEDDPICC bleibt darunter als **fachliche Orientierung**, ist aber nicht die einzige Navigation und kein vollständiger Deal-Workflow.
+
+Zusätzlich gilt:
+
+> Ein Account Manager denkt häufiger „Was muss ich gerade tun?“ als „Welchen MEDDPICC-Buchstaben möchte ich bearbeiten?“
+
+Deshalb werden Werkzeuge und Checklisten nach konkreten Arbeitssituationen benannt.
+
+---
 
 ## Phase T0 – Produkt-Neustart
 
-- [x] Microtool-first Produktmodell festlegen
-- [x] MEDDPICC Startseite als Tool-Katalog definieren
-- [x] Kundenfähige vs. interne Tools unterscheiden
-- [x] Projektdatei vom Pflicht- zum optionalen Workspace-Konzept verschieben
-- [x] bestehende technische Basis selektiv weiterverwenden
+- [x] Microtool-first Produktmodell festgelegt
+- [x] vollständigen Opportunity-Datensatz als Voraussetzung entfernt
+- [x] kundenfähige und interne Services unterschieden
+- [x] Projektdatei zum optionalen Legacy-/Workspace-Konzept herabgestuft
+- [x] bestehende technische Basis selektiv weiterverwendet
 
-## Phase T1 – Referenz-Microtool: Go-Live-Rückwärtsplanung
+## Phase T1 – Referenz-Tool: Go-Live-Rückwärtsplanung
 
 - [x] eigener Inputvertrag
 - [x] deterministische Rückwärtsrechnung
@@ -26,54 +136,153 @@ Die bisherige Workbench-Architektur bleibt nur als technische und fachliche Quel
 - [x] SVG-Export
 - [x] PNG-Export
 - [x] Unit Tests
-- [x] Playwright Desktop/Mobile vorgesehen
+- [x] Playwright Desktop/Mobile
 - [x] vollständige CI grün
-- [ ] sichtbare UI-Abnahme
-- [ ] Merge
+- [x] sichtbare UI-Abnahme
+- [x] Merge in `main`
 
-## Phase T2 – Metrics Microtools
+## Phase T2 – Checklists & Knowledge Foundation
 
-Geplante Reihenfolge:
+Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hilfetexte innerhalb der Tools speisen kann.
 
-1. Quick Payback / ROI
-2. Cost of Delay
-3. Business Case / Value Bridge
+### Themen-Checklists
 
-Ziel: wenige Inputs, nachvollziehbare Formeln, kundenfähige Visualisierungen.
+- [ ] Metrics
+- [x] Economic Buyer
+- [ ] Decision Criteria
+- [ ] Decision Process
+- [ ] Paper Process
+- [ ] Pain / Implication
+- [ ] Champion
+- [ ] Competition
 
-## Phase T3 – Decision / Paper Process
+### Situative Checklists
 
-- Decision Map
-- Procurement Timeline
-- Closing Plan
-- optional später: Abhängigkeiten / Parallelisierung / Critical Path
+1. [x] Economic-Buyer-Termin
+2. [ ] Discovery Call
+3. [ ] POC / Pilot vorbereiten
+4. [ ] Pricing / kommerzielles Angebot vorbereiten
+5. [ ] Go-Live-/Decision-Process-Plan prüfen
+6. [ ] Closing / Paper Process prüfen
 
-## Phase T4 – Executive / Economic Buyer
+### Knowledge Foundation
 
-- EB Meeting Prep
-- EB Value Story
-- EB Qualification Check
+- [x] einheitliches, typisiertes Content-Schema
+- [x] kurze Standardansicht + vertiefende Erklärung
+- [x] typische Fehlinterpretationen explizit dokumentieren
+- [x] Quellenbezug je Thema nachvollziehbar halten
+- [x] Inhalte zwischen Knowledge und Checklists wiederverwenden
+- [x] Economic Buyer Knowledge als erster Referenz-Slice
+- [ ] weitere Knowledge-Bereiche ausrollen
 
-## Phase T5 – Champion
+## Phase T3 – Value & Metrics Tools
 
-Vorhandene Champion-Tester-Domainlogik wird vor einer Übernahme neu gegen das Microtool-Prinzip geprüft. Keine automatische Übernahme des früheren UI-/Projektmodells.
+Priorität:
 
-## Phase T6 – Decision Criteria / Competition / Pain
+1. **Quick Payback**
+2. **Metric Builder**
+3. **Cost of Delay**
+4. **Business Case / Value Bridge**
+
+Ziel: Pain oder Nutzen in nachvollziehbaren wirtschaftlichen Impact übersetzen.
+
+Leitprinzip:
+
+**Pain / Outcome → Metric → wirtschaftlicher Wert → Payback / Cost of Delay**
+
+Keine dauerhafte Opportunity-Pflege.
+
+## Phase T4 – Buying Process Tools
+
+Aufbauend auf der vorhandenen Go-Live-Rückwärtsplanung:
+
+- Go-Live Plan Builder
+- Decision Process Mapper
+- Paper Process Explorer
+- Dependency / Parallelization Helper
+- Procurement Prep
+
+Diese Tools strukturieren konkrete Prozessarbeit, ohne daraus einen dauerhaft gepflegten Deal-Plan im CRM-Sinn zu machen.
+
+## Phase T5 – Discovery & Pain Tools
+
+- Discovery Prep
+- Pain → Impact
+- Identify / Indicate / Implicate Helper
+- Compelling Event / Why Now Helper
+
+Ziel ist eine konkrete Gesprächs- oder Workshop-Unterstützung, kein Discovery-Protokollsystem.
+
+## Phase T6 – Decision Criteria & Differentiation Tools
+
+Priorität:
 
 - Criteria Workshop
-- Decision Matrix
-- Differentiation Matrix
-- Competition Map
-- Pain → Impact
-- Cost of Pain
+- Value Triangle
+- Danger Zone
+- POC Success Criteria
+- später optional Decision Matrix
 
-## Phase T7 – Optionaler Deal Workspace
+Die Tools sollen Entscheidungskriterien verständlich machen und Differenzierung unterstützen, nicht den gesamten Beschaffungsprozess verwalten.
 
-Erst wenn mehrere Microtools produktiv sind:
+## Phase T7 – Economic Buyer Tools
 
-- Ergebnisse einer Opportunity zuordnen
-- Inputs zwischen Tools übernehmen
-- gemeinsame Exporte / Deal Review
-- optional portables Workspace-Format weiterentwickeln
+- EB Qualifier
+- EB Meeting Prep
+- EB Access Strategy
+- EB Value Story / Executive Value Narrative
 
-Der Workspace darf Microtools nicht zur Datenpflege zwingen.
+Einzelne Funktionen wie Message Translation oder Kontaktvorbereitung werden zunächst innerhalb dieser Services gebündelt und nicht künstlich zu eigenen Produkten gemacht.
+
+## Phase T8 – Champion Tools
+
+- Champion Tester
+- Champion Development Helper
+- Internal Selling Pack
+
+Vorhandene Champion-Domainlogik darf selektiv wiederverwendet werden. Das frühere projektzentrierte UI-/Datenmodell wird nicht übernommen.
+
+## Phase T9 – Competition & Closing Tools
+
+### Competition
+
+- Competition / Alternatives Map
+- Differentiation Strategy
+- Build vs. Buy Helper
+- Status Quo / Inertia Check
+
+Competition umfasst ausdrücklich nicht nur andere Anbieter, sondern auch Eigenentwicklung, andere Initiativen, Ressourcenprioritäten und Nichtstun.
+
+### Closing
+
+- Closing Readiness Checklist
+- Paper Process Helper
+- Dependency Check
+
+Kein Closing-Dashboard und kein dauerhaft gepflegter Deal-Status.
+
+## Phase T10 – Cross-Service Convenience
+
+Erst wenn mehrere Services produktiv sind:
+
+- Ergebnisse optional an ein passendes Folgetool übergeben
+- temporärer Session Context statt globalem Opportunity-Schema
+- gemeinsame kundenfähige Exporte
+- PDF / Präsentationsformate prüfen
+- optionaler Deal Pack Export
+
+Leitregel:
+
+> **Informationen dürfen zwischen Services weitergegeben werden, müssen aber niemals zentral als vollständiger Deal gepflegt werden.**
+
+## Priorisierungsregel für neue Features
+
+Ein neues Feature wird nur aufgenommen, wenn mindestens eine dieser Fragen klar mit Ja beantwortet werden kann:
+
+- Spart es dem Account Manager wiederkehrende Arbeit?
+- Verhindert es eine typische fachliche Fehlinterpretation?
+- Bereitet es einen konkreten Kundentermin oder Sales-Schritt besser vor?
+- Erzeugt es eine hilfreiche Berechnung, Visualisierung oder kundenfähige Unterlage?
+- Macht es relevantes MEDDPICC-Wissen schneller zugänglich?
+
+Wenn der primäre Nutzen hingegen „mehr Deal-Daten erfassen, speichern oder reporten“ lautet, gehört das Feature nicht in den Core der Toolbox.

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-test('zeigt die MEDDPICC Toolbox als Microtool-Startseite', async ({ page }, testInfo) => {
+test('zeigt die MEDDPICC Toolbox mit Tools, Checklists und Knowledge', async ({ page }, testInfo) => {
   const runtimeErrors: string[] = []
   page.on('pageerror', (error) => runtimeErrors.push(error.message))
 
@@ -8,27 +8,48 @@ test('zeigt die MEDDPICC Toolbox als Microtool-Startseite', async ({ page }, tes
 
   await expect(page.getByText('MEDDPICC Toolbox', { exact: true }).first()).toBeVisible()
   await expect(
-    page.getByRole('heading', { name: 'Das passende Werkzeug für die konkrete Sales-Aufgabe.' }),
+    page.getByRole('heading', { name: 'Wiederkehrende Sales-Aufgaben schneller und sicherer erledigen.' }),
   ).toBeVisible()
 
-  for (const area of [
+  await expect(page.locator('a[href="#tools"]')).toBeVisible()
+  await expect(page.locator('a[href="#checklists"]')).toBeVisible()
+  await expect(page.locator('a[href="#knowledge"]')).toBeVisible()
+
+  await expect(page.getByRole('heading', { name: 'Eine konkrete Aufgabe erledigen' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Vor wichtigen Sales-Situationen kurz gegenprüfen' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'MEDDPICC-Fragen schnell und praxisnah klären' })).toBeVisible()
+
+  await expect(page.getByRole('link', { name: /Go-Live-Rückwärtsplanung/ })).toBeVisible()
+  await expect(page.getByText('Quick Payback', { exact: true })).toBeVisible()
+  await expect(page.getByText('Economic-Buyer-Termin', { exact: true })).toBeVisible()
+  await expect(
+    page.getByText(/Zieltermin und Schritte eingeben.*späteste Starttermine und eine teilbare Timeline/),
+  ).toBeVisible()
+  await expect(page.getByText(/Investition und Nutzen eingeben.*wann sich die Investition amortisiert/)).toBeVisible()
+  await expect(
+    page.getByText(/Was macht einen echten Champion aus.*welche Signale werden häufig überschätzt/),
+  ).toBeVisible()
+
+  for (const topic of [
     'Metrics',
     'Economic Buyer',
     'Decision Criteria',
     'Decision Process',
     'Paper Process',
-    'Identify / Implicate Pain',
+    'Pain & Implication',
     'Champion',
     'Competition',
   ]) {
-    await expect(page.getByRole('heading', { name: area, exact: true })).toBeVisible()
+    await expect(page.getByText(topic, { exact: true }).last()).toBeVisible()
   }
 
-  await expect(page.getByRole('link', { name: /Go-Live-Rückwärtsplanung/ })).toBeVisible()
-  await expect(page.getByRole('button', { name: /Business Case/ })).toBeDisabled()
-  await expect(page.getByText('Ein vollständiger Opportunity-Datensatz ist keine Voraussetzung.')).toBeVisible()
-
   expect(runtimeErrors).toEqual([])
+
+  await page.evaluate(() => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+    window.scrollTo(0, 0)
+  })
+  await page.addStyleTag({ content: '.skip-link { display: none !important; }' })
 
   await page.screenshot({
     path: testInfo.outputPath(`toolbox-start-${testInfo.project.name}.png`),

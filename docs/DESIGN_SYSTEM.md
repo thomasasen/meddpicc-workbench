@@ -2,16 +2,19 @@
 
 ## 1. Designziel
 
-Die Oberfläche unterstützt konkrete MEDDPICC Microtools. Die Startseite ist ein klarer Werkzeugkatalog; innerhalb eines Tools stehen die notwendigen Eingaben und das verwertbare Ergebnis im Mittelpunkt.
+Die Oberfläche unterstützt fokussierte Sales Services und vermeidet bewusst CRM-/Dashboard-Anmutung.
 
-Prioritäten:
+Die Startseite beantwortet zuerst die Frage:
 
-- Aufgabe vor Datenpflege
-- klare MEDDPICC-Zuordnung
-- wenige, fachlich notwendige Inputs
-- nachvollziehbare Resultate
-- kundenfähige Ergebnisse, wenn der Use Case es erlaubt
-- Accessibility und Responsive-Verhalten als Baseline
+> **Was möchtest du gerade tun?**
+
+Dafür gibt es drei primäre Einstiege:
+
+1. **Tools** – Arbeit vereinfachen
+2. **Checklists** – nichts Wichtiges vergessen
+3. **Knowledge** – schnell nachschlagen
+
+MEDDPICC bleibt als fachliche Orientierung sichtbar, aber nicht als erzwungener End-to-End-Workflow.
 
 ## 2. Designrichtung
 
@@ -25,20 +28,40 @@ Prioritäten:
 
 ## 3. Startseite
 
-Die Startseite listet die acht MEDDPICC-Bereiche:
+### Hero
 
-- Metrics
-- Economic Buyer
-- Decision Criteria
-- Decision Process
-- Paper Process
-- Identify / Implicate Pain
-- Champion
-- Competition
+Der Hero erklärt in einem Satz, **welche Arbeit die Toolbox erleichtert**. Interne Produktabgrenzungen wie „kein CRM“ gehören nicht in den Vordergrund der Produktoberfläche, solange sie für die konkrete Nutzung nicht erforderlich sind.
 
-Unter jedem Bereich stehen Microtools als klare Aktionen.
+### Primäre Navigation
 
-Jedes Tool wird sichtbar als **Kundenfähig** oder **Intern** eingeordnet. Noch nicht implementierte Tools dürfen sichtbar geplant sein, aber nicht wie funktionsfähige Navigation wirken.
+Drei gleichwertige Einstiegskarten:
+
+- Tools
+- Checklists
+- Knowledge
+
+### Tools
+
+Tools werden nach konkreten Arbeitssituationen beziehungsweise Service-Clustern gruppiert, nicht ausschließlich nach MEDDPICC-Buchstaben.
+
+Jeder Tool-Eintrag muss schon vor dem Öffnen verständlich beantworten:
+
+- **Wann hilft mir das?**
+- **Was gebe ich ungefähr hinein?**
+- **Welches nutzbare Ergebnis bekomme ich?**
+- **Wie spart oder erleichtert mir das konkret Arbeit?**
+
+Aktive Services sind klar navigierbar. Geplante Services dürfen sichtbar sein, müssen aber eindeutig als geplant erscheinen.
+
+### Checklists
+
+Checklists werden nach wiederkehrenden Situationen benannt, zum Beispiel Economic-Buyer-Termin, Discovery, POC oder Closing.
+
+Schon auf der Übersicht muss klar sein, **in welcher Situation** die Checklist genutzt wird und **welchen Fehler oder welches Vergessen** sie vermeiden hilft. Auf dem Checklist-Screen erklärt jeder Punkt seine fachliche Bedeutung so, dass er nicht falsch interpretiert wird.
+
+### Knowledge
+
+Knowledge zeigt MEDDPICC als fachliche Referenz. Jeder Eintrag wird als konkrete Verständnisfrage formuliert beziehungsweise beschreibt, **welche Unsicherheit er klärt**. Die acht Bereiche dienen der Orientierung und dürfen später auf Themenartikel führen.
 
 ## 4. Tool-Screen
 
@@ -52,20 +75,51 @@ Standardstruktur:
 6. Export, falls kundenfähig
 7. Methodik-/Grenzen-Hinweis
 
-Kein Microtool darf einen vollständigen Opportunity-Datensatz allein aus Architekturgründen verlangen.
+Kein Tool darf einen vollständigen Opportunity-Datensatz allein aus Architekturgründen verlangen.
 
-## 5. Formulare
+## 5. Checklist-Screen
+
+Standardstruktur:
+
+1. Situation oder Thema
+2. kurze Prüfpunkte
+3. Details nur bei Bedarf
+
+Ein Punkt kann enthalten:
+
+- Prüffrage
+- Worum geht es?
+- Warum ist das wichtig?
+- Woran erkenne ich es?
+- typische Fehlinterpretation
+- mögliche Frage oder Handlung
+- Mehr erfahren
+
+Die Standardansicht muss schnell scanbar bleiben. Erklärungstiefe wird progressiv aufgeklappt.
+
+Keine Deal-Gesamtbewertung, kein gespeicherter Score und kein permanenter Fortschrittsstatus.
+
+## 6. Knowledge-Screen
+
+- kurze Definition zuerst
+- praktische Bedeutung direkt danach
+- relevante Abgrenzungen sichtbar machen
+- Beispiele nur zur Erklärung
+- typische Fehlinterpretationen hervorheben
+- Quellenunterschiede kenntlich machen, wenn fachlich relevant
+- Verweise zu passenden Tools oder Checklists erlauben
+
+## 7. Formulare
 
 - jedes Feld sichtbar beschriften
 - kurze Hilfetexte nur dort, wo Interpretation nötig ist
 - fachlich gruppieren
 - sinnvolle Defaults oder Vorlagen anbieten
-- Nutzer darf Schritte ergänzen, entfernen und sortieren, wenn der Workflow es erfordert
 - Validierung direkt beim Problem
 - Eingaben nach Fehlern erhalten
 - native Input-Typen nutzen
 
-## 6. Kundenfähige Ergebnisse
+## 8. Kundenfähige Ergebnisse
 
 Kundenfähige Ansichten sollen:
 
@@ -76,7 +130,7 @@ Kundenfähige Ansichten sollen:
 - keine internen Risiko-/Score-Informationen ungefragt exportieren
 - skalierbare Formate wie SVG bevorzugen, zusätzlich PNG wenn sinnvoll
 
-## 7. Charts und Timelines
+## 9. Charts und Timelines
 
 Visualisierung nur, wenn sie die Aussage besser macht als reiner Text.
 
@@ -86,19 +140,19 @@ Jede Visualisierung braucht eine textuelle Alternative mit den wesentlichen Wert
 
 Keine Radar-Charts, Gauges, 3D-Charts oder dekorativen Diagramme.
 
-## 8. Design Tokens
+## 10. Design Tokens
 
 Bestehende zentrale Tokens für Farben, Spacing, Typografie, Radii, Borders, Focus und Motion weiterverwenden. Keine verstreuten Einzelwerte, wenn ein Token sinnvoll existiert.
 
-## 9. Typografie
+## 11. Typografie
 
 Systemfont-Strategie. Normale UI-Texte mindestens ca. 14–16 px, Metadaten nicht künstlich verkleinern. Lange deutsche und englische Fachbegriffe müssen sicher umbrechen.
 
-## 10. Status und Farbe
+## 12. Status und Farbe
 
 Bedeutung niemals ausschließlich über Farbe vermitteln. Status immer zusätzlich als Text zeigen.
 
-## 11. Accessibility
+## 13. Accessibility
 
 Mindestens:
 
@@ -113,7 +167,7 @@ Mindestens:
 - keine essenziellen Hover-only-Inhalte
 - stabile Darstellung bei Zoom/Textskalierung
 
-## 12. Responsive
+## 14. Responsive
 
 Prüfbreiten ungefähr:
 
@@ -122,25 +176,29 @@ Prüfbreiten ungefähr:
 - 1024 px
 - 1440 px
 
-Desktop darf mehrere Spalten verwenden. Mobile stapelt die Bereiche und Controls sinnvoll; horizontales Clipping ist zu vermeiden.
+Desktop darf mehrere Spalten verwenden. Mobile stapelt Bereiche und Controls sinnvoll; horizontales Clipping ist zu vermeiden.
 
-## 13. Icons
+## 15. Icons
 
-Lucide über @lucide/vue als primäre Icon-Bibliothek. Icons ergänzen Text und ersetzen MEDDPICC-Begriffe nicht.
+Lucide über `@lucide/vue` als primäre Icon-Bibliothek. Icons ergänzen Text und ersetzen Fachbegriffe nicht.
 
-## 14. Privacy
+## 16. Privacy
 
 Keine Runtime-CDNs, Analytics oder automatischen Requests mit Kundendaten. Local-first bleibt Standard.
 
-## 15. UI-Qualitätscheck
+## 17. UI-Qualitätscheck
 
 Vor Merge:
 
-- löst der Screen eine konkrete Seller-Aufgabe?
+- löst der Screen eine konkrete Aufgabe oder Verständnisfrage?
+- versteht der Nutzer ohne Vorwissen, **wann** ihm dieser Service hilft?
+- ist klar, **welches Ergebnis** er erhält und wie ihm das Arbeit erspart?
+- ist Tools vs. Checklists vs. Knowledge klar?
+- bleibt die Oberfläche frei von CRM-/Dashboard-Ballast?
 - sind nur notwendige Inputs sichtbar?
-- ist Kundenfähig vs. Intern klar?
-- ist das Ergebnis ohne Erklärung verständlich?
+- erklärt eine Checklist ihre Punkte ausreichend, ohne zum Lehrbuch zu werden?
+- ist Kundenfähig vs. intern klar, wo relevant?
+- ist das Ergebnis ohne zusätzliche Erklärung verständlich?
 - ist die Aufgabe vollständig per Tastatur bedienbar?
 - funktioniert Desktop und Mobile?
 - hat jede Visualisierung eine nichtgrafische Alternative?
-- bleibt der Screen frei von CRM-/Dashboard-Ballast?

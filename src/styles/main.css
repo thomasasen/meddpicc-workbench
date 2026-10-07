@@ -2855,3 +2855,905 @@ button.microtool-card:disabled {
     min-height: 48px;
   }
 }
+
+/* Toolbox v0.2: Tools · Checklists · Knowledge */
+.toolbox-home-v2 {
+  display: grid;
+  gap: var(--space-10);
+}
+
+.toolbox-hero {
+  display: block;
+}
+
+.toolbox-hero-copy {
+  max-width: 860px;
+}
+
+.toolbox-hero-copy .intro-text {
+  max-width: 820px;
+  margin-bottom: 0;
+}
+
+.toolbox-entry-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.toolbox-entry-card {
+  min-height: 190px;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  align-content: start;
+  gap: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  padding: var(--space-5);
+  text-decoration: none;
+  box-shadow: var(--shadow-panel);
+}
+
+.toolbox-entry-card:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 44%, var(--color-border));
+}
+
+.toolbox-entry-card > svg {
+  color: var(--color-accent);
+}
+
+.toolbox-entry-kicker {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.toolbox-entry-card > strong {
+  font-size: 1.15rem;
+}
+
+.toolbox-entry-card > span:not(.toolbox-entry-kicker):not(.toolbox-entry-link) {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.toolbox-entry-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-accent-strong);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.toolbox-section {
+  scroll-margin-top: var(--space-6);
+}
+
+.toolbox-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.toolbox-section-heading h2 {
+  margin-bottom: var(--space-2);
+}
+
+.toolbox-section-heading p:not(.eyebrow) {
+  max-width: 760px;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+}
+
+.section-note {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+.section-note svg {
+  color: var(--color-accent);
+}
+
+.tool-cluster-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.tool-cluster-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.tool-cluster-heading {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: var(--space-3);
+  border-bottom: 1px solid var(--color-divider);
+  padding: var(--space-4);
+}
+
+.tool-cluster-heading > svg {
+  color: var(--color-accent);
+  margin-top: 0.1rem;
+}
+
+.tool-cluster-heading h3,
+.tool-cluster-heading p {
+  margin: 0;
+}
+
+.tool-cluster-heading p {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+.tool-cluster-list {
+  display: grid;
+}
+
+.tool-row {
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-top: 1px solid var(--color-divider);
+  color: var(--color-text);
+  padding: var(--space-3) var(--space-4);
+  text-decoration: none;
+}
+
+.tool-row:first-child {
+  border-top: 0;
+}
+
+.tool-row > span:first-child {
+  min-width: 0;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.tool-row strong {
+  font-size: 0.84rem;
+}
+
+.tool-row-meta {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tool-row-meta > svg {
+  color: var(--color-accent);
+}
+
+.tool-row small {
+  color: var(--color-text-muted);
+  font-size: 0.73rem;
+  line-height: 1.45;
+}
+
+.tool-row--active {
+  background: var(--color-accent-soft);
+}
+
+.tool-row--active:hover {
+  background: color-mix(in srgb, var(--color-accent-soft) 74%, white);
+}
+
+.checklist-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.checklist-preview-card {
+  min-height: 126px;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  padding: var(--space-4);
+}
+
+.checklist-preview-card > svg {
+  color: var(--color-accent);
+  margin-top: 0.1rem;
+}
+
+.checklist-preview-card div {
+  display: grid;
+  align-content: start;
+  gap: var(--space-1);
+}
+
+.checklist-preview-card strong {
+  font-size: 0.84rem;
+}
+
+.checklist-preview-card p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.74rem;
+}
+
+.checklist-preview-card > .microtool-planned {
+  grid-column: 2;
+  align-self: end;
+}
+
+.checklist-explainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface-muted);
+  padding: var(--space-3) var(--space-4);
+}
+
+.checklist-explainer strong {
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+}
+
+.checklist-explainer span {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+.knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.knowledge-card {
+  min-height: 124px;
+  display: grid;
+  grid-template-columns: 36px 20px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  padding: var(--space-3);
+}
+
+.knowledge-card > svg {
+  color: var(--color-accent);
+}
+
+.knowledge-letter {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: var(--radius-control);
+  background: var(--color-dark);
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.knowledge-card > div {
+  min-width: 0;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.knowledge-card strong {
+  min-width: 0;
+  font-size: 0.78rem;
+}
+
+.knowledge-card small {
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.knowledge-card .microtool-planned {
+  grid-column: 3;
+}
+
+@media (max-width: 900px) {
+  .toolbox-entry-grid,
+  .tool-cluster-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbox-entry-card {
+    min-height: 0;
+  }
+
+  .checklist-preview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .knowledge-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .toolbox-home-v2 {
+    gap: var(--space-8);
+  }
+
+  .toolbox-section-heading,
+  .checklist-explainer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .checklist-preview-grid,
+  .knowledge-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-note {
+    align-self: flex-start;
+  }
+}
+
+/* Knowledge & Checklists v0.1 */
+.knowledge-shell,
+.checklist-shell {
+  background:
+    radial-gradient(circle at top right, rgb(37 99 235 / 0.045), transparent 30rem),
+    var(--color-bg);
+}
+
+.knowledge-main,
+.checklist-main {
+  display: grid;
+  gap: var(--space-8);
+  padding: var(--space-8) 0 var(--space-12);
+}
+
+.knowledge-hero,
+.checklist-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+  gap: var(--space-8);
+  align-items: end;
+}
+
+.knowledge-hero h1,
+.checklist-hero h1 {
+  max-width: 820px;
+}
+
+.knowledge-benefit,
+.checklist-context {
+  display: grid;
+  gap: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-panel);
+}
+
+.knowledge-benefit {
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: start;
+}
+
+.knowledge-benefit > svg {
+  color: var(--color-accent);
+}
+
+.knowledge-benefit strong,
+.checklist-context strong {
+  font-size: 0.78rem;
+}
+
+.knowledge-benefit p,
+.checklist-context p {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.checklist-context > div + div {
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--space-3);
+}
+
+.knowledge-layout,
+.knowledge-two-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.knowledge-primary-card,
+.knowledge-source-card,
+.knowledge-section,
+.checklist-list-section,
+.checklist-sources {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+}
+
+.knowledge-primary-card {
+  padding: var(--space-5);
+}
+
+.knowledge-primary-card > svg {
+  margin-bottom: var(--space-2);
+  color: var(--color-accent);
+}
+
+.knowledge-primary-card h2,
+.knowledge-section h2,
+.knowledge-source-card h2 {
+  margin-bottom: var(--space-3);
+}
+
+.knowledge-definition {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.knowledge-bullet-list,
+.knowledge-question-list,
+.knowledge-action-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.knowledge-bullet-list li {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: var(--space-2);
+  align-items: start;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.knowledge-bullet-list svg {
+  margin-top: 0.1rem;
+  color: var(--color-success-text);
+}
+
+.knowledge-question-list li,
+.knowledge-action-list li {
+  border-left: 3px solid var(--color-border-strong);
+  padding-left: var(--space-3);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.knowledge-action-list {
+  counter-reset: knowledge-action;
+}
+
+.knowledge-action-list li {
+  counter-increment: knowledge-action;
+}
+
+.knowledge-action-list li::before {
+  content: counter(knowledge-action) ". ";
+  color: var(--color-text);
+  font-weight: 750;
+}
+
+.knowledge-section,
+.checklist-list-section {
+  padding: var(--space-5);
+}
+
+.knowledge-concept-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.knowledge-concept-card {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-bg);
+  padding: var(--space-4);
+}
+
+.knowledge-concept-card > svg {
+  color: var(--color-accent);
+}
+
+.knowledge-concept-card p {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.knowledge-concept-card ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.knowledge-details-list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.knowledge-detail,
+.knowledge-source-details,
+.checklist-item-details {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-bg);
+}
+
+.knowledge-detail summary,
+.knowledge-source-details summary,
+.checklist-item-details summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.knowledge-detail summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  font-size: 0.8rem;
+}
+
+.knowledge-detail summary svg {
+  color: var(--color-warning-text);
+}
+
+.knowledge-detail > p {
+  margin: 0;
+  border-top: 1px solid var(--color-divider);
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.knowledge-source-card {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.knowledge-source-card > svg {
+  color: var(--color-accent);
+}
+
+.knowledge-author-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.knowledge-author-grid > div {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-bg);
+  padding: var(--space-3);
+}
+
+.knowledge-author-grid p,
+.knowledge-practical-takeaway {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.knowledge-practical-takeaway {
+  margin-top: var(--space-4);
+}
+
+.knowledge-source-details {
+  margin-top: var(--space-4);
+}
+
+.knowledge-source-details summary {
+  padding: var(--space-3);
+  font-size: 0.75rem;
+}
+
+.knowledge-source-details ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  border-top: 1px solid var(--color-divider);
+  padding: var(--space-3) var(--space-3) var(--space-3) 2rem;
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.checklist-item-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.checklist-item {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-bg);
+}
+
+.checklist-question {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+  padding: var(--space-4);
+  cursor: pointer;
+}
+
+.checklist-question input {
+  width: 18px;
+  height: 18px;
+  margin: 0.1rem 0 0;
+  accent-color: var(--color-accent);
+}
+
+.checklist-question span {
+  font-size: 0.88rem;
+  font-weight: 720;
+  line-height: 1.45;
+}
+
+.checklist-question:has(input:checked) span {
+  color: var(--color-text-muted);
+}
+
+.checklist-item-details {
+  margin: 0 var(--space-4) var(--space-4) 3.6rem;
+  background: var(--color-surface);
+}
+
+.checklist-item-details summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  color: var(--color-accent-strong);
+  font-size: 0.76rem;
+}
+
+.checklist-item-details summary svg {
+  color: var(--color-accent);
+}
+
+.checklist-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  border-top: 1px solid var(--color-divider);
+  padding: var(--space-4);
+}
+
+.checklist-detail-grid section {
+  min-width: 0;
+}
+
+.checklist-detail-grid h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-bottom: var(--space-2);
+  font-size: 0.76rem;
+}
+
+.checklist-detail-grid p,
+.checklist-detail-grid ul {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.checklist-detail-grid ul {
+  display: grid;
+  gap: var(--space-1);
+  padding-left: 1rem;
+}
+
+.checklist-warning,
+.checklist-actions {
+  border-radius: var(--radius-control);
+  padding: var(--space-3);
+}
+
+.checklist-warning {
+  border: 1px solid var(--color-warning-border);
+  background: var(--color-warning-soft);
+}
+
+.checklist-actions {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-muted);
+}
+
+.checklist-item-footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-top: 1px solid var(--color-divider);
+  padding: var(--space-3) var(--space-4);
+}
+
+.checklist-item-footer small {
+  max-width: 70%;
+  color: var(--color-text-muted);
+  font-size: 0.67rem;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-accent-strong);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.checklist-guidance {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+  margin-top: var(--space-4);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-muted);
+  padding: var(--space-3) var(--space-4);
+}
+
+.checklist-guidance svg {
+  color: var(--color-accent);
+}
+
+.checklist-guidance p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.checklist-guidance strong {
+  color: var(--color-text);
+}
+
+.checklist-sources {
+  padding: var(--space-4);
+}
+
+.checklist-sources .knowledge-source-details {
+  margin: 0;
+}
+
+.checklist-preview-card,
+.knowledge-card {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.checklist-preview-card--active,
+.knowledge-card--active {
+  border-color: color-mix(in srgb, var(--color-accent) 38%, var(--color-border));
+  background: var(--color-accent-soft);
+}
+
+.checklist-preview-card--active:hover,
+.knowledge-card--active:hover {
+  border-color: var(--color-accent);
+}
+
+.checklist-card-action,
+.knowledge-card-action {
+  color: var(--color-accent);
+}
+
+.checklist-preview-card > .checklist-card-action {
+  grid-column: 2;
+  align-self: end;
+  justify-self: end;
+}
+
+.knowledge-card > .knowledge-card-action {
+  grid-column: 3;
+  justify-self: end;
+}
+
+@media (max-width: 900px) {
+  .knowledge-hero,
+  .checklist-hero,
+  .knowledge-layout,
+  .knowledge-two-column,
+  .knowledge-concept-grid,
+  .knowledge-author-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .knowledge-hero,
+  .checklist-hero {
+    align-items: start;
+  }
+}
+
+@media (max-width: 640px) {
+  .knowledge-main,
+  .checklist-main {
+    padding-top: var(--space-6);
+  }
+
+  .knowledge-section,
+  .knowledge-primary-card,
+  .knowledge-source-card,
+  .checklist-list-section {
+    padding: var(--space-4);
+  }
+
+  .checklist-item-details {
+    margin: 0 var(--space-3) var(--space-3);
+  }
+
+  .checklist-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .checklist-item-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .checklist-item-footer small {
+    max-width: none;
+    text-align: left;
+  }
+}
+

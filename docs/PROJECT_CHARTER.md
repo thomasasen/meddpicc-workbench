@@ -6,63 +6,104 @@
 
 ## Problem
 
-MEDDPICC-Arbeit besteht in der Praxis aus vielen kleinen, wiederkehrenden Aufgaben: Value rechnen, Termine rückwärts planen, Entscheidungskriterien strukturieren, Paper Process visualisieren, einen Champion testen oder ein Economic-Buyer-Gespräch vorbereiten.
+Account Manager erledigen im komplexen B2B-Vertrieb regelmäßig dieselben kleinen, aber anspruchsvollen Aufgaben: Value rechnen, Termine rückwärts planen, Gespräche vorbereiten, Prozesse strukturieren oder vor einem POC beziehungsweise Closing kritische Punkte prüfen.
 
-Ein schwergewichtiges zentrales Deal-Datenmodell erzeugt dabei oft mehr Pflege als Nutzen. Besonders problematisch ist es, wenn ein Seller erst zahlreiche strukturierte Informationen erfassen muss, bevor ein einzelnes Werkzeug überhaupt verwendbar ist.
+Gleichzeitig entstehen bei MEDDPICC leicht Fehlinterpretationen – etwa wenn ein freundlicher Ansprechpartner vorschnell als Champion eingeordnet wird oder Decision Process und Paper Process vermischt werden.
+
+Ein schwergewichtiges zentrales Deal-Datenmodell löst dieses Problem nicht. Es erzeugt zusätzliche Pflege und konkurriert mit dem bestehenden CRM.
 
 ## Vision
 
-Eine Sammlung fokussierter, local-first **MEDDPICC Microtools**, die jeweils eine konkrete Seller-Aufgabe schnell und fachlich sauber lösen.
+Eine Sammlung fokussierter, local-first **Tools, Checklists und Wissenshilfen**, die genau dann unterstützen, wenn eine konkrete Aufgabe oder Verständnisfrage entsteht.
 
 Das Produktversprechen lautet:
 
-> **Konkrete Aufgabe öffnen → nur notwendige Inputs erfassen → nachvollziehbares Ergebnis erhalten → intern oder mit dem Kunden weiterverwenden.**
+> **Öffnen → konkrete Aufgabe oder Frage lösen → Ergebnis direkt weiterverwenden.**
+
+Die Toolbox erhebt ausdrücklich **keinen Anspruch, einen Deal vollständig nach MEDDPICC zu verwalten oder zu qualifizieren**.
 
 ## Primäre Nutzer
 
 - Account Executive / Strategic Account Manager
-- Sales Manager / Deal Coach
-- Deal Team
+- Sales Manager / Deal Coach als sekundärer Nutzer
+
+## Drei Produktbausteine
+
+### Tools
+
+Wiederkehrende Arbeit berechnen, strukturieren, vorbereiten oder visualisieren. Jedes Tool funktioniert eigenständig und besitzt nur die Inputs, die es wirklich benötigt.
+
+### Checklists
+
+Schnelle Lern- und Orientierungshilfen für MEDDPICC-Themen und wiederkehrende Sales-Situationen.
+
+Ein Checklist-Punkt soll nicht nur abhakbar sein, sondern auf Wunsch erklären:
+
+- Worum geht es?
+- Warum ist das wichtig?
+- Woran erkenne ich es?
+- Was wird häufig falsch interpretiert?
+- Welche Frage oder Handlung kann helfen?
+
+Checklists sind **keine Deal-Scorecards**.
+
+### Knowledge
+
+Praxisnahe Kurzreferenz für MEDDPICC-Konzepte und wichtige Abgrenzungen. Ziel ist Just-in-Time Enablement statt eines LMS oder umfangreichen Lehrwerks.
 
 ## Produktprinzipien
 
-### Microtool-first
+### Konkrete Aufgabe vor Datenpflege
 
-Jedes Tool muss eigenständig funktionieren. Ein vollständiges Opportunity-Projekt darf keine Voraussetzung sein.
+Ein Service wird nur gebaut, wenn er dem Account Manager eine konkrete, wiederkehrende Arbeit erleichtert oder eine relevante Fehlinterpretation verhindert.
 
 ### Eigener Inputvertrag pro Tool
 
-Ein Tool fragt nur Daten ab, die seine Logik tatsächlich benötigt. Eingaben sind fachlich gruppiert und werden nicht aus einem globalen Schema abgeleitet.
+Kein globales Opportunity-Schema ist Voraussetzung.
+
+### Erklären statt bewerten
+
+Checklists und Knowledge helfen beim Verständnis. Sie erzeugen keinen gespeicherten Qualification Score, Deal Health oder Forecast.
 
 ### Kundenfähige Artefakte
 
-Wo sinnvoll, erzeugt ein Tool einen Output, der in Kundenterminen, Präsentationen oder gemeinsamen Plänen genutzt werden kann.
-
-### Internes Coaching bleibt möglich
-
-Champion-, Economic-Buyer- oder Qualification-Tools dürfen bewusst seller-only sein.
+Wo sinnvoll, erzeugt ein Tool einen Output, der direkt in Kundenterminen, Präsentationen oder gemeinsamen Plänen genutzt werden kann.
 
 ### Deterministisch by default
 
 Berechnungen und regelbasierte Ableitungen funktionieren ohne AI und sind reproduzierbar.
 
-### Optionaler Workspace
+### Optionaler Kontext statt CRM
 
-Ein späterer Deal Workspace kann Inputs und Ergebnisse mehrerer Microtools bündeln. Er dient den Tools; die Tools hängen nicht von ihm ab.
+Spätere Services dürfen Ergebnisse temporär weiterreichen. Daraus darf keine verpflichtende Opportunity-Pflege entstehen.
 
-### Kein CRM-Nachbau
+## Harte Nichtziele
 
-Account-/Kontaktverwaltung, Pipeline, Activity Timeline und generische Task-Verwaltung gehören nicht in den Core.
+- vollständiges CRM
+- Pipeline- oder Forecast-Management
+- Account-/Kontaktverwaltung
+- Activity Tracking
+- verpflichtender globaler Deal-Datensatz
+- dauerhaft gepflegtes MEDDPICC-Scoring
+- Deal-Health-/Completeness-Dashboard
+- generische Task-App
+- automatische CRM-Synchronisierung als Core-Anforderung
 
-## Startstruktur
+## Informationsarchitektur
 
-Die Startseite folgt Metrics, Economic Buyer, Decision Criteria, Decision Process, Paper Process, Identify / Implicate Pain, Champion und Competition. Jeder Bereich enthält mehrere Microtools.
+Die Startseite bietet drei primäre Einstiege:
 
-## Erster Referenz-Slice
+1. **Tools**
+2. **Checklists**
+3. **Knowledge**
 
-**Decision Process → Go-Live-Rückwärtsplanung**
+MEDDPICC bleibt als fachliche Orientierung sichtbar, aber nicht als erzwungener End-to-End-Workflow.
 
-Dieses Tool dient als Architekturtest für das neue Produktmodell:
+## Erster produktiver Referenz-Slice
+
+**Tools → Go-Live & Buying Process → Go-Live-Rückwärtsplanung**
+
+Dieser Slice bestätigt das gewünschte Muster:
 
 1. schlanker, tool-spezifischer Input
 2. reine Domain-Logik
@@ -70,17 +111,6 @@ Dieses Tool dient als Architekturtest für das neue Produktmodell:
 4. kundenfähiger Export
 5. Desktop- und Mobile-Nutzbarkeit
 
-Wenn dieser Slice funktioniert, werden weitere Tools nach demselben Muster ergänzt.
+## Erfolgskriterien
 
-## Erfolgskriterien v1
-
-v1 ist erfolgreich, wenn mehrere eigenständige MEDDPICC Microtools ohne Projektanlage nutzbar sind, nur notwendige Daten erfassen, nachvollziehbare Logik besitzen, sinnvoll kombinierbar bleiben und hochwertige interne oder kundenfähige Ergebnisse erzeugen.
-
-## Nichtziele v1
-
-- vollständiges CRM
-- verpflichtender globaler Deal-Datensatz
-- Pflicht-Upload von Opportunity-Daten
-- AI als Voraussetzung
-- automatische CRM-Synchronisierung
-- Multi-User-Echtzeit-Kollaboration
+Die Toolbox ist erfolgreich, wenn ein Account Manager einzelne Services ohne Projektanlage schnell nutzen kann, Checklisten fachlich klar statt missverständlich sind und Knowledge-Inhalte relevante MEDDPICC-Fragen beantworten, ohne dass dafür ein zweites CRM gepflegt werden muss.

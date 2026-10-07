@@ -27,12 +27,16 @@ permissions:
 jobs:
   pr-quality:
     if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
       - name: Repository auschecken
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Node.js einrichten
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
@@ -55,8 +59,12 @@ jobs:
       - name: Produktionsbuild prüfen
         run: npm run build
 
-      - name: veröffentlichten Pages-Root prüfen
-        run: npm run pages:check
+      - name: Production Build als Artefakt bereitstellen
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: production-build
+          path: dist
+          if-no-files-found: error
 
       - name: Playwright Chromium installieren
         run: npx playwright install --with-deps chromium
@@ -73,6 +81,27 @@ jobs:
           name: ui-qs-screenshots
           path: test-results/**/*.png
           if-no-files-found: ignore
+
+      - name: geprüften Build in den Pages-Root synchronisieren
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        run: node scripts/sync-pages-root.mjs
+
+      - name: Pages-Build committen
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if git diff --quiet -- index.html assets pages-build.json; then
+            echo "Pages-Root ist bereits synchron."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets pages-build.json
+          git commit -m "chore: sync GitHub Pages build"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+
+      - name: veröffentlichten Pages-Root prüfen
+        run: npm run pages:check
 
   main-pages-integrity:
     if: github.event_name == 'push'
