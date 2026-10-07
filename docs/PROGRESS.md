@@ -21,8 +21,9 @@ Technisch vorhanden:
 - Verantwortlichkeiten und Prozessbereiche
 - intuitive Reihenfolgeänderung per Drag & Drop mit Tastatur-Fallback
 - Vorlauf-/Kompressionshinweis
-- kundenfähige Timeline
-- SVG-/PNG-Export
+- dynamische kundenfähige Executive-Timeline
+- zeitproportionale Datumsachse und Prozessbalken
+- SVG-/PNG-Export im gleichen Visualstil
 - Unit Tests
 - Playwright Desktop/Mobile
 
@@ -41,6 +42,35 @@ Umgesetzt:
 - Rückwärtsberechnung selbst unverändert
 
 Technische QS: CI-Lauf **#336** erfolgreich inklusive Playwright Desktop/Mobile und Pages-Integrität.
+
+### UX-Erweiterung: Customer-ready Executive Timeline
+
+Branch: `feat/reverse-timeline-executive-chart`
+
+Umgesetzt:
+
+- Roadmap-/Gantt-Hybrid mit eigener Zeile je Prozessschritt
+- dynamische Datumsachse vom spätesten Start bis zum Target Go-Live
+- semantische Achsenlabels: Kalenderwochen bei kurzen, Monatsmarken bei längeren Plänen
+- zeitproportionale Position und Breite der Prozessbalken
+- getrennte Kennzahlen für Prozessdauer und Puffer zum notwendigen Start
+- farbliche Trennung von Decision Process, Paper Process und Implementierung
+- Verantwortungsseite je Prozessschritt plus optional konkrete Person / Rolle als Owner
+- optionaler kundenseitiger Termin-Treiber / Compelling Event („Warum dieses Datum?“)
+- Übergabepunkte an jedem sequenziellen Prozesswechsel und hervorgehobenes Go-Live-Ziel
+- klar hervorgehobenes Target Go-Live
+- kurze Kundenbotschaft: wann der erste Prozessschritt spätestens starten sollte
+- Prozessdetails standardmäßig einklappbar
+- Mobile-Scroll-Hinweis und sticky Schrittnamen
+- horizontale, tastaturfokussierbare Ansicht auf kleinen Displays
+- Live-Reaktion auf geänderte Dauer, Reihenfolge und Termine
+- identische Präsentationslogik für SVG-/PNG-Export
+- Zero-Duration-Schritte bleiben als Marker sichtbar
+- Layout-Regressionscheck verhindert überlagerte/zusammengedrückte Timeline-Zeilen
+- Unit- und Playwright-Tests für die Präsentationslogik
+- Source-QA gegen Whyte und Lahoutifard in `docs/REVERSE_TIMELINE_SOURCE_QA.md`
+- bewusste Abgrenzung: Go-Live-Timeline ≠ vollständiger Go-Live Plan
+- Parallelisierung bleibt bewusst dem geplanten Dependency / Parallelization Helper vorbehalten
 
 ## Economic Buyer – Checklists & Knowledge v0.1
 

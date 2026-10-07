@@ -57,7 +57,7 @@ test('zeigt die MEDDPICC Toolbox mit Tools, Checklists und Knowledge', async ({ 
   })
 })
 
-test('rechnet einen Go-Live-Plan rückwärts und zeigt kundenfähige Exporte', async ({ page }, testInfo) => {
+test('rechnet eine Go-Live-Timeline rückwärts und zeigt kundenfähige Exporte', async ({ page }, testInfo) => {
   const runtimeErrors: string[] = []
   page.on('pageerror', (error) => runtimeErrors.push(error.message))
 
@@ -72,10 +72,15 @@ test('rechnet einen Go-Live-Plan rückwärts und zeigt kundenfähige Exporte', a
   await page.getByLabel('Target Go-Live').fill('2027-07-01')
 
   await expect(page.getByText('Spätester Start', { exact: true })).toBeVisible()
-  await expect(page.getByText('Go-Live-Plan', { exact: true }).last()).toBeVisible()
+  await expect(page.getByText('Go-Live-Timeline', { exact: true }).last()).toBeVisible()
   await expect(page.getByText('Beispielwerke GmbH', { exact: true })).toBeVisible()
-  await expect(page.getByText('Implementierung / Rollout', { exact: true }).last()).toBeVisible()
-  await expect(page.getByText('Einkauf / Procurement', { exact: true }).last()).toBeVisible()
+  const timelineChart = page.getByTestId('executive-timeline-chart')
+  await expect(timelineChart.locator('[data-segment-id="implementation"] .executive-row-label strong')).toHaveText(
+    'Implementierung / Rollout',
+  )
+  await expect(timelineChart.locator('[data-segment-id="procurement"] .executive-row-label strong')).toHaveText(
+    'Einkauf / Procurement',
+  )
   await expect(page.getByRole('button', { name: 'SVG' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'PNG' })).toBeVisible()
   await expect(page.getByText(/Feiertage werden in v0\.1 bewusst nicht automatisch eingerechnet/)).toBeVisible()

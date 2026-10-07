@@ -8,12 +8,14 @@ export type ReverseTimelineStepInput = {
   duration: number
   durationUnit: TimelineDurationUnit
   owner: TimelineOwner
+  ownerDetail?: string
   area: TimelineArea
 }
 
 export type ReverseTimelineInput = {
   targetGoLiveDate: string
   referenceDate: string
+  compellingEvent?: string
   steps: ReverseTimelineStepInput[]
 }
 
@@ -28,6 +30,7 @@ export type ReverseTimelineStatus = 'lead-time-available' | 'compression-require
 export type ReverseTimelinePlan = {
   targetGoLiveDate: string
   referenceDate: string
+  compellingEvent?: string
   latestStartDate: string
   calendarDaysToLatestStart: number
   status: ReverseTimelineStatus
@@ -150,6 +153,7 @@ export function calculateReverseTimeline(input: ReverseTimelineInput): ReverseTi
     plan: {
       targetGoLiveDate: input.targetGoLiveDate,
       referenceDate: input.referenceDate,
+      compellingEvent: input.compellingEvent?.trim() || undefined,
       latestStartDate,
       calendarDaysToLatestStart,
       status,

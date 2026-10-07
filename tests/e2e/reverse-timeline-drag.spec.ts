@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 async function stepLabels(page: import('@playwright/test').Page) {
   return page
-    .locator('.reverse-step-card input[type="text"]')
+    .locator('.reverse-step-card .reverse-step-name input[type="text"]')
     .evaluateAll((inputs) => inputs.map((input) => (input as HTMLInputElement).value))
 }
 
@@ -144,7 +144,7 @@ test('respektiert reduzierte Bewegung beim angehobenen Drag-State', async ({ pag
     }
   })
 
-  expect(reducedStyle.transform).toBe('none')
+  expect(['none', 'matrix(1, 0, 0, 1, 0, 0)']).toContain(reducedStyle.transform)
   expect(reducedStyle.boxShadow).not.toBe('none')
 
   await firstHandle.dispatchEvent('pointerup', {

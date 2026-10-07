@@ -124,6 +124,26 @@ describe('calculateReverseTimeline', () => {
     expect(result.issues).toContain('Schritt 2: ID ist nicht eindeutig.')
   })
 
+  it('führt Compelling Event und konkreten Owner als Kontext mit, ohne die Datumslogik zu verändern', () => {
+    const baseline = calculateReverseTimeline(baseInput)
+    const contextual = calculateReverseTimeline({
+      ...baseInput,
+      compellingEvent: '  Altvertrag endet am 30.06.  ',
+      steps: baseInput.steps.map((step, index) => (index === 0 ? { ...step, ownerDetail: 'Projektteam' } : step)),
+    })
+
+    expect(baseline.success).toBe(true)
+    expect(contextual.success).toBe(true)
+    if (!baseline.success || !contextual.success) return
+
+    expect(contextual.plan.compellingEvent).toBe('Altvertrag endet am 30.06.')
+    expect(contextual.plan.backwardSegments[0].ownerDetail).toBe('Projektteam')
+    expect(contextual.plan.latestStartDate).toBe(baseline.plan.latestStartDate)
+    expect(contextual.plan.backwardSegments.map(({ startDate, endDate }) => ({ startDate, endDate }))).toEqual(
+      baseline.plan.backwardSegments.map(({ startDate, endDate }) => ({ startDate, endDate })),
+    )
+  })
+
   it('mutiert die Eingabe nicht', () => {
     const input = structuredClone(baseInput)
     const before = structuredClone(input)
