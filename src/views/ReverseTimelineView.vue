@@ -134,10 +134,26 @@ function moveStep(index: number, direction: -1 | 1) {
   reorderStep(index, index + direction)
 }
 
-function stepIndexAtPoint(x: number, y: number): number {
-  const target = document.elementFromPoint(x, y)?.closest<HTMLElement>('.reverse-step-card')
-  if (!target?.dataset.stepId) return -1
-  return steps.value.findIndex((step) => step.id === target.dataset.stepId)
+function stepIndexAtPoint(y: number): number {
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.reverse-step-card'))
+  let closestIndex = -1
+  let closestDistance = Number.POSITIVE_INFINITY
+
+  for (const card of cards) {
+    if (!card.dataset.stepId) continue
+
+    const rect = card.getBoundingClientRect()
+    const distance = y < rect.top ? rect.top - y : y > rect.bottom ? y - rect.bottom : 0
+    if (distance >= closestDistance) continue
+
+    const index = steps.value.findIndex((step) => step.id === card.dataset.stepId)
+    if (index < 0) continue
+
+    closestIndex = index
+    closestDistance = distance
+  }
+
+  return closestIndex
 }
 
 function startStepDrag(event: PointerEvent, index: number) {
@@ -159,7 +175,7 @@ function moveDraggedStep(event: PointerEvent) {
 
   event.preventDefault()
   const fromIndex = steps.value.findIndex((step) => step.id === draggingStepId.value)
-  const toIndex = stepIndexAtPoint(event.clientX, event.clientY)
+  const toIndex = stepIndexAtPoint(event.clientY)
   if (fromIndex >= 0 && toIndex >= 0 && fromIndex !== toIndex) reorderStep(fromIndex, toIndex)
 }
 
