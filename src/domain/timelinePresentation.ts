@@ -100,7 +100,7 @@ export function buildTimelineScale(plan: ReverseTimelinePlan): TimelineScaleTick
 
   if (totalDays <= 42) {
     const weekStep = totalDays > 28 ? 2 : 1
-    let cursor = nextUtcMonday(plan.latestStartDate)
+    const cursor = nextUtcMonday(plan.latestStartDate)
     let weekIndex = 0
 
     while (cursor.getTime() < dateMs(plan.targetGoLiveDate)) {
