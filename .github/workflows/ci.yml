@@ -47,6 +47,12 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
+      - name: Prettier-Diff für Timeline-QS1
+        run: |
+          npx prettier --write src/components/CustomerTimelineChart.vue src/domain/timelinePresentation.test.ts
+          git diff -- src/components/CustomerTimelineChart.vue src/domain/timelinePresentation.test.ts
+          git checkout -- src/components/CustomerTimelineChart.vue src/domain/timelinePresentation.test.ts
+
       - name: Formatierung prüfen
         run: npm run format:check
 
