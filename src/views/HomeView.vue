@@ -19,8 +19,16 @@ const groups: MeddpiccGroup[] = [
     title: 'Metrics',
     description: 'Wirtschaftlichen Nutzen messbar und kundentauglich machen.',
     tools: [
-      { title: 'Business Case', description: 'Current State, Nutzen und Investition zusammenführen.', audience: 'customer' },
-      { title: 'ROI / Payback', description: 'ROI und Amortisationsdauer transparent berechnen.', audience: 'customer' },
+      {
+        title: 'Business Case',
+        description: 'Current State, Nutzen und Investition zusammenführen.',
+        audience: 'customer',
+      },
+      {
+        title: 'ROI / Payback',
+        description: 'ROI und Amortisationsdauer transparent berechnen.',
+        audience: 'customer',
+      },
       { title: 'Cost of Delay', description: 'Kosten einer Verzögerung sichtbar machen.', audience: 'customer' },
     ],
   },
@@ -29,9 +37,21 @@ const groups: MeddpiccGroup[] = [
     title: 'Economic Buyer',
     description: 'Economic Buyer identifizieren, vorbereiten und auf wirtschaftliche Priorität fokussieren.',
     tools: [
-      { title: 'EB Qualification Check', description: 'Authority, Priorität und Zugang prüfen.', audience: 'internal' },
-      { title: 'EB Meeting Prep', description: 'Gesprächsziel und relevante Business Outcomes vorbereiten.', audience: 'internal' },
-      { title: 'EB Value Story', description: 'Wirtschaftliche Argumentation für den Economic Buyer strukturieren.', audience: 'customer' },
+      {
+        title: 'EB Qualification Check',
+        description: 'Authority, Priorität und Zugang prüfen.',
+        audience: 'internal',
+      },
+      {
+        title: 'EB Meeting Prep',
+        description: 'Gesprächsziel und relevante Business Outcomes vorbereiten.',
+        audience: 'internal',
+      },
+      {
+        title: 'EB Value Story',
+        description: 'Wirtschaftliche Argumentation für den Economic Buyer strukturieren.',
+        audience: 'customer',
+      },
     ],
   },
   {
@@ -39,9 +59,21 @@ const groups: MeddpiccGroup[] = [
     title: 'Decision Criteria',
     description: 'Entscheidungskriterien gemeinsam strukturieren und Differenzierung sichtbar machen.',
     tools: [
-      { title: 'Decision Matrix', description: 'Kriterien, Gewichtung und Bewertung vergleichbar darstellen.', audience: 'customer' },
-      { title: 'Criteria Workshop', description: 'Kriterien für einen Kundenworkshop vorbereiten.', audience: 'customer' },
-      { title: 'Differentiation Map', description: 'Value, Parity und Differenzierung nachvollziehbar ordnen.', audience: 'internal' },
+      {
+        title: 'Decision Matrix',
+        description: 'Kriterien, Gewichtung und Bewertung vergleichbar darstellen.',
+        audience: 'customer',
+      },
+      {
+        title: 'Criteria Workshop',
+        description: 'Kriterien für einen Kundenworkshop vorbereiten.',
+        audience: 'customer',
+      },
+      {
+        title: 'Differentiation Map',
+        description: 'Value, Parity und Differenzierung nachvollziehbar ordnen.',
+        audience: 'internal',
+      },
     ],
   },
   {
@@ -55,8 +87,16 @@ const groups: MeddpiccGroup[] = [
         audience: 'customer',
         route: '/tools/go-live-rueckwaertsplanung',
       },
-      { title: 'Decision Map', description: 'Schritte, Owner und Abhängigkeiten visualisieren.', audience: 'customer' },
-      { title: 'Mutual Action Plan', description: 'Gemeinsame nächste Schritte mit dem Kunden strukturieren.', audience: 'customer' },
+      {
+        title: 'Decision Map',
+        description: 'Schritte, Owner und Abhängigkeiten visualisieren.',
+        audience: 'customer',
+      },
+      {
+        title: 'Mutual Action Plan',
+        description: 'Gemeinsame nächste Schritte mit dem Kunden strukturieren.',
+        audience: 'customer',
+      },
     ],
   },
   {
@@ -64,9 +104,21 @@ const groups: MeddpiccGroup[] = [
     title: 'Paper Process',
     description: 'Procurement, Legal, Security und Signatur rechtzeitig sichtbar machen.',
     tools: [
-      { title: 'Procurement Timeline', description: 'Formale Schritte und Lead Times planen.', audience: 'customer' },
-      { title: 'Closing Plan', description: 'Formale Voraussetzungen bis zur Unterschrift strukturieren.', audience: 'internal' },
-      { title: 'Paper Process Check', description: 'Versteckte Verzögerungsrisiken identifizieren.', audience: 'internal' },
+      {
+        title: 'Procurement Timeline',
+        description: 'Formale Schritte und Lead Times planen.',
+        audience: 'customer',
+      },
+      {
+        title: 'Closing Plan',
+        description: 'Formale Voraussetzungen bis zur Unterschrift strukturieren.',
+        audience: 'internal',
+      },
+      {
+        title: 'Paper Process Check',
+        description: 'Versteckte Verzögerungsrisiken identifizieren.',
+        audience: 'internal',
+      },
     ],
   },
   {
@@ -74,9 +126,17 @@ const groups: MeddpiccGroup[] = [
     title: 'Identify / Implicate Pain',
     description: 'Vom Problem zum Business Impact und zur Veränderungspriorität kommen.',
     tools: [
-      { title: 'Pain → Impact', description: 'Problem, Auswirkungen und Konsequenz des Nicht-Handelns verbinden.', audience: 'customer' },
+      {
+        title: 'Pain → Impact',
+        description: 'Problem, Auswirkungen und Konsequenz des Nicht-Handelns verbinden.',
+        audience: 'customer',
+      },
       { title: 'Cost of Pain', description: 'Geschäftliche Auswirkungen quantifizieren.', audience: 'customer' },
-      { title: 'Executive Problem Statement', description: 'Pain und Business Impact managementtauglich formulieren.', audience: 'customer' },
+      {
+        title: 'Executive Problem Statement',
+        description: 'Pain und Business Impact managementtauglich formulieren.',
+        audience: 'customer',
+      },
     ],
   },
   {
@@ -85,8 +145,16 @@ const groups: MeddpiccGroup[] = [
     description: 'Champion erkennen, entwickeln und durch konkretes Verhalten testen.',
     tools: [
       { title: 'Champion Tester', description: 'Champion-Evidence statt Sympathie prüfen.', audience: 'internal' },
-      { title: 'Champion Development', description: 'Vom Coach zum belastbaren Champion entwickeln.', audience: 'internal' },
-      { title: 'Champion Test vorbereiten', description: 'Nächsten beobachtbaren Champion-Test definieren.', audience: 'internal' },
+      {
+        title: 'Champion Development',
+        description: 'Vom Coach zum belastbaren Champion entwickeln.',
+        audience: 'internal',
+      },
+      {
+        title: 'Champion Test vorbereiten',
+        description: 'Nächsten beobachtbaren Champion-Test definieren.',
+        audience: 'internal',
+      },
     ],
   },
   {
@@ -94,9 +162,21 @@ const groups: MeddpiccGroup[] = [
     title: 'Competition',
     description: 'Direkte Anbieter, Status quo, Do Nothing und interne Alternativen sichtbar machen.',
     tools: [
-      { title: 'Competition Map', description: 'Alle relevanten Alternativen strukturiert vergleichen.', audience: 'internal' },
-      { title: 'Status quo / Do Nothing', description: 'Trägheit als echten Wettbewerber qualifizieren.', audience: 'internal' },
-      { title: 'Differentiation Matrix', description: 'Unterschiede kundenfähig gegenüberstellen.', audience: 'customer' },
+      {
+        title: 'Competition Map',
+        description: 'Alle relevanten Alternativen strukturiert vergleichen.',
+        audience: 'internal',
+      },
+      {
+        title: 'Status quo / Do Nothing',
+        description: 'Trägheit als echten Wettbewerber qualifizieren.',
+        audience: 'internal',
+      },
+      {
+        title: 'Differentiation Matrix',
+        description: 'Unterschiede kundenfähig gegenüberstellen.',
+        audience: 'customer',
+      },
     ],
   },
 ]
@@ -140,7 +220,12 @@ const groups: MeddpiccGroup[] = [
           </div>
 
           <div class="microtool-list">
-            <RouterLink v-for="tool in group.tools.filter((item) => item.route)" :key="tool.title" class="microtool" :to="tool.route!">
+            <RouterLink
+              v-for="tool in group.tools.filter((item) => item.route)"
+              :key="tool.title"
+              class="microtool"
+              :to="tool.route!"
+            >
               <span class="microtool-topline">
                 <strong>{{ tool.title }}</strong>
                 <span class="audience-badge audience-badge--customer">Kundenfähig</span>
