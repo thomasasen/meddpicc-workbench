@@ -62,9 +62,6 @@ jobs:
           path: dist
           if-no-files-found: error
 
-      - name: veröffentlichten Pages-Root prüfen
-        run: npm run pages:check
-
       - name: Playwright Chromium installieren
         run: npx playwright install --with-deps chromium
 
@@ -80,6 +77,9 @@ jobs:
           name: ui-qs-screenshots
           path: test-results/**/*.png
           if-no-files-found: ignore
+
+      - name: veröffentlichten Pages-Root prüfen
+        run: npm run pages:check
 
   main-pages-integrity:
     if: github.event_name == 'push'
