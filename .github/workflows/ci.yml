@@ -47,6 +47,30 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
+      - name: Prettier-Diff für Executive Timeline Diagnose
+        run: |
+          npx prettier --write \
+            src/components/CustomerTimelineChart.vue \
+            src/domain/timelinePresentation.test.ts \
+            src/domain/timelinePresentation.ts \
+            src/services/timelineExport.ts \
+            src/views/ReverseTimelineView.vue \
+            tests/e2e/reverse-timeline-executive-chart.spec.ts
+          git diff -- \
+            src/components/CustomerTimelineChart.vue \
+            src/domain/timelinePresentation.test.ts \
+            src/domain/timelinePresentation.ts \
+            src/services/timelineExport.ts \
+            src/views/ReverseTimelineView.vue \
+            tests/e2e/reverse-timeline-executive-chart.spec.ts
+          git checkout -- \
+            src/components/CustomerTimelineChart.vue \
+            src/domain/timelinePresentation.test.ts \
+            src/domain/timelinePresentation.ts \
+            src/services/timelineExport.ts \
+            src/views/ReverseTimelineView.vue \
+            tests/e2e/reverse-timeline-executive-chart.spec.ts
+
       - name: Formatierung prüfen
         run: npm run format:check
 
