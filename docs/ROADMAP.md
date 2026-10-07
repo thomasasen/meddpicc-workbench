@@ -147,35 +147,33 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 
 ### Themen-Checklists
 
-Geplant:
-
-- Metrics
-- Economic Buyer
-- Decision Criteria
-- Decision Process
-- Paper Process
-- Pain / Implication
-- Champion
-- Competition
+- [ ] Metrics
+- [x] Economic Buyer
+- [ ] Decision Criteria
+- [ ] Decision Process
+- [ ] Paper Process
+- [ ] Pain / Implication
+- [ ] Champion
+- [ ] Competition
 
 ### Situative Checklists
 
-Priorisierte Kandidaten:
-
-1. Economic-Buyer-Termin
-2. Discovery Call
-3. POC / Pilot vorbereiten
-4. Pricing / kommerzielles Angebot vorbereiten
-5. Go-Live-/Decision-Process-Plan prüfen
-6. Closing / Paper Process prüfen
+1. [x] Economic-Buyer-Termin
+2. [ ] Discovery Call
+3. [ ] POC / Pilot vorbereiten
+4. [ ] Pricing / kommerzielles Angebot vorbereiten
+5. [ ] Go-Live-/Decision-Process-Plan prüfen
+6. [ ] Closing / Paper Process prüfen
 
 ### Knowledge Foundation
 
-- einheitliches Content-Schema
-- kurze Standardansicht + vertiefende Erklärung
-- typische Fehlinterpretationen explizit dokumentieren
-- Quellenbezug je Thema nachvollziehbar halten
-- Inhalte zwischen Knowledge, Checklists und Tool-Hilfen wiederverwenden
+- [x] einheitliches, typisiertes Content-Schema
+- [x] kurze Standardansicht + vertiefende Erklärung
+- [x] typische Fehlinterpretationen explizit dokumentieren
+- [x] Quellenbezug je Thema nachvollziehbar halten
+- [x] Inhalte zwischen Knowledge und Checklists wiederverwenden
+- [x] Economic Buyer Knowledge als erster Referenz-Slice
+- [ ] weitere Knowledge-Bereiche ausrollen
 
 ## Phase T3 – Value & Metrics Tools
 
