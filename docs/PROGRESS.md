@@ -51,15 +51,21 @@ Umgesetzt:
 
 - Roadmap-/Gantt-Hybrid mit eigener Zeile je Prozessschritt
 - dynamische Datumsachse vom spätesten Start bis zum Target Go-Live
+- semantische Achsenlabels: Kalenderwochen bei kurzen, Monatsmarken bei längeren Plänen
 - zeitproportionale Position und Breite der Prozessbalken
+- getrennte Kennzahlen für Prozessdauer und Puffer zum notwendigen Start
 - farbliche Trennung von Decision Process, Paper Process und Implementierung
 - Owner je Prozessschritt
+- Milestone-Punkte an jedem sequenziellen Übergang und hervorgehobener Go-Live-Punkt
 - klar hervorgehobenes Target Go-Live
 - kurze Kundenbotschaft: wann der erste Prozessschritt spätestens starten sollte
+- Prozessdetails standardmäßig einklappbar
+- Mobile-Scroll-Hinweis und sticky Schrittnamen
 - horizontale, tastaturfokussierbare Ansicht auf kleinen Displays
 - Live-Reaktion auf geänderte Dauer, Reihenfolge und Termine
 - identische Präsentationslogik für SVG-/PNG-Export
 - Zero-Duration-Schritte bleiben als Marker sichtbar
+- Layout-Regressionscheck verhindert überlagerte/zusammengedrückte Timeline-Zeilen
 - Unit- und Playwright-Tests für die Präsentationslogik
 
 ## Economic Buyer – Checklists & Knowledge v0.1
