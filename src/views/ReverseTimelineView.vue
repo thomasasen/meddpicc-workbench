@@ -491,11 +491,7 @@ function statusText(): string {
           </div>
 
           <div class="customer-timeline" aria-label="Visuelle Go-Live-Timeline">
-            <CustomerTimelineChart
-              :plan="plan"
-              :title="planTitle"
-              :customer-name="customerName"
-            />
+            <CustomerTimelineChart :plan="plan" :title="planTitle" :customer-name="customerName" />
 
             <div class="timeline-detail-heading">
               <strong>Prozessschritte im Detail</strong>
