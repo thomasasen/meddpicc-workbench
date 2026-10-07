@@ -2,39 +2,15 @@
 
 ## Aktueller Produktstand
 
-Am 07.10.2026 wurde die MEDDPICC Toolbox weiter präzisiert.
-
-Die zentrale Produktgrenze lautet jetzt:
-
-> **Kein ganzheitliches MEDDPICC-System und kein CRM. Die Toolbox erleichtert wiederkehrende Arbeit und stellt Wissen genau dann bereit, wenn es gebraucht wird.**
-
-## Verbindliches Produktmodell
-
-Drei Bausteine:
+Am 07.10.2026 wurde die MEDDPICC Toolbox auf drei klare Bausteine ausgerichtet:
 
 1. **Tools** – konkrete Arbeit berechnen, strukturieren, vorbereiten oder visualisieren.
 2. **Checklists** – kurze Lern- und Orientierungshilfen für Themen und wiederkehrende Sales-Situationen.
 3. **Knowledge** – kompakte MEDDPICC-Referenz statt erneuter Buchsuche.
 
-MEDDPICC bleibt die fachliche Basis, wird aber nicht als vollständiger Deal-Workflow erzwungen.
+Die Produktoberfläche erklärt primär, **wann ein Service hilft, was er macht und welchen konkreten Nutzen der Account Manager erhält**.
 
-## Checklists
-
-Checklists sind ausdrücklich keine Deal-Scorecards.
-
-Ein Checklist-Punkt soll bei Bedarf erklären:
-
-- Worum geht es?
-- Warum ist das wichtig?
-- Woran erkenne ich es?
-- Was wird häufig falsch interpretiert?
-- Welche Frage oder Handlung kann helfen?
-
-Standardansicht: schnell scanbar. Details: progressiv aufklappbar.
-
-Keine historische Opportunity-Pflege, kein Score, kein Management-Dashboard.
-
-## Produktiver Slice
+## Produktiver Referenz-Slice
 
 **Go-Live-Rückwärtsplanung** ist auf `main` gemergt und bleibt das Referenz-Tool.
 
@@ -48,26 +24,77 @@ Technisch vorhanden:
 - SVG-/PNG-Export
 - Unit Tests
 - Playwright Desktop/Mobile
-- CI grün
 
-## Aktiver Migrations-Slice
+## Economic Buyer – Checklists & Knowledge v0.1
 
-Branch: `feat/toolbox-start-checklists-knowledge`
+Branch: `feat/toolbox-start-checklists-knowledge`  
+PR: **#40**
 
-Ziel:
+Umgesetzt:
 
-1. Roadmap auf Tools / Checklists / Knowledge festschreiben
-2. Startseite auf diese drei Einstiege migrieren
-3. bestehende Go-Live-Rückwärtsplanung prominent erhalten
-4. Checklists als Lernhilfe sichtbar machen
-5. MEDDPICC Knowledge als geplante Referenzschicht darstellen
-6. CRM-Abgrenzung in UI und Dokumentation explizit machen
+- gemeinsame, typisierte Content-Basis für Knowledge und Checklists
+- **Wissen → Economic Buyer**
+- **Checklist → Economic Buyer**
+- **Checklist → Economic-Buyer-Termin**
+- progressive Erklärungen pro Checklist-Punkt:
+  - Worum geht es?
+  - Warum ist das relevant?
+  - Woran erkenne ich es?
+  - typische Fehlinterpretation
+  - mögliche Frage oder Handlung
+  - optional Mehr erfahren
+- temporäre Checkboxen nur als persönliche Gedankenstütze
+- keine Score-, Gewichtungs- oder Deal-Status-Logik
+- sichtbarer fachlicher Unterschied zwischen Whyte und Lahoutifard zur Frage einzelner Economic Buyer vs. Gremium
+- Navigation direkt von der Startseite
+- responsive Desktop-/Mobile-Ansichten
+- Quellenabschnitte nachvollziehbar dokumentiert
 
-## Nächster funktionaler Ausbau nach dieser Migration
+## QS des Economic-Buyer-Slices
 
-**Checklists & Knowledge Foundation**.
+CI-Lauf **#315** ist erfolgreich.
 
-Danach folgen die Value-&-Metrics-Tools, beginnend mit Quick Payback und Metric Builder.
+Bestanden:
+
+- Formatierung
+- ESLint
+- Unit Tests
+- Production Build
+- Playwright Desktop
+- Playwright Mobile
+- Startseiten-Regression
+- Go-Live-Rückwärtsplanung Regression
+- UI-QS-Screenshots
+- Pages-Sync und Pages-Integrität
+
+## Aktueller T2-Stand
+
+### Umgesetzt
+
+- Knowledge Foundation / Content-Schema
+- Economic Buyer Knowledge
+- Economic Buyer Themen-Checklist
+- Economic-Buyer-Termin Checklist
+
+### Noch offen
+
+- Metrics
+- Decision Criteria
+- Decision Process
+- Paper Process
+- Pain / Implication
+- Champion
+- Competition
+- weitere situative Checklists wie Discovery, POC, Pricing und Closing
+
+## Nächste Roadmap-Blöcke
+
+Nach dem T2-Ausbau folgen die Value-&-Metrics-Tools:
+
+1. Quick Payback
+2. Metric Builder
+3. Cost of Delay
+4. Business Case / Value Bridge
 
 ## Bewusste Nichtziele
 
