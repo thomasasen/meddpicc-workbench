@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, CalendarDays, Download, FileImage, GripVertical, Plus, RotateCcw, Trash2 } from '@lucide/vue'
+import { ArrowLeft, CalendarDays, ChevronDown, Download, FileImage, GripVertical, Plus, RotateCcw, Trash2 } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 import CustomerTimelineChart from '../components/CustomerTimelineChart.vue'
@@ -258,16 +258,6 @@ async function exportPng() {
   }
 }
 
-function statusText(): string {
-  if (!plan.value) return ''
-  if (plan.value.status === 'target-before-reference') {
-    return 'Das Target Go-Live liegt vor dem Planungsdatum.'
-  }
-  if (plan.value.status === 'compression-required') {
-    return `Der späteste errechnete Start liegt ${Math.abs(plan.value.calendarDaysToLatestStart)} Kalendertage vor dem Planungsdatum. Der Plan benötigt Kompression, Parallelisierung oder einen späteren Go-Live.`
-  }
-  return `Bis zum spätesten errechneten Start verbleiben ${plan.value.calendarDaysToLatestStart} Kalendertage.`
-}
 </script>
 
 <template>
@@ -475,41 +465,31 @@ function statusText(): string {
         </div>
 
         <template v-else-if="plan">
-          <div class="reverse-summary-grid">
-            <div>
-              <span>Spätester Start</span>
-              <strong>{{ formatDate(plan.latestStartDate) }}</strong>
-            </div>
-            <div>
-              <span>Target Go-Live</span>
-              <strong>{{ formatDate(plan.targetGoLiveDate) }}</strong>
-            </div>
-            <div :class="`reverse-plan-status reverse-plan-status--${plan.status}`">
-              <span>Vorlaufprüfung</span>
-              <strong>{{ statusText() }}</strong>
-            </div>
-          </div>
-
           <div class="customer-timeline" aria-label="Visuelle Go-Live-Timeline">
             <CustomerTimelineChart :plan="plan" :title="planTitle" :customer-name="customerName" />
 
-            <div class="timeline-detail-heading">
-              <strong>Prozessschritte im Detail</strong>
-              <span>Zeitraum, Bereich und Verantwortlichkeit</span>
-            </div>
+            <details class="timeline-details">
+              <summary>
+                <span>
+                  <strong>Prozessdetails anzeigen</strong>
+                  <small>Exakte Zeiträume, Bereiche und Verantwortlichkeiten</small>
+                </span>
+                <ChevronDown class="timeline-details-chevron" :size="18" aria-hidden="true" />
+              </summary>
 
-            <ol class="timeline-detail-list">
-              <li v-for="segment in plan.chronologicalSegments" :key="segment.id">
-                <div>
-                  <strong>{{ segment.label }}</strong>
-                  <span>{{ areaLabels[segment.area] }} · {{ ownerLabels[segment.owner] }}</span>
-                </div>
-                <div class="timeline-detail-dates">
-                  <strong>{{ formatDate(segment.startDate) }} → {{ formatDate(segment.endDate) }}</strong>
-                  <span>{{ segment.duration }} {{ durationUnitLabels[segment.durationUnit] }}</span>
-                </div>
-              </li>
-            </ol>
+              <ol class="timeline-detail-list">
+                <li v-for="segment in plan.chronologicalSegments" :key="segment.id">
+                  <div>
+                    <strong>{{ segment.label }}</strong>
+                    <span>{{ areaLabels[segment.area] }} · {{ ownerLabels[segment.owner] }}</span>
+                  </div>
+                  <div class="timeline-detail-dates">
+                    <strong>{{ formatDate(segment.startDate) }} → {{ formatDate(segment.endDate) }}</strong>
+                    <span>{{ segment.duration }} {{ durationUnitLabels[segment.durationUnit] }}</span>
+                  </div>
+                </li>
+              </ol>
+            </details>
           </div>
 
           <p v-if="exportMessage" class="export-message" role="status">{{ exportMessage }}</p>
