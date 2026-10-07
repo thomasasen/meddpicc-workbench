@@ -27,7 +27,7 @@ Die bisherige Workbench-Architektur bleibt nur als technische und fachliche Quel
 - [x] PNG-Export
 - [x] Unit Tests
 - [x] Playwright Desktop/Mobile vorgesehen
-- [ ] vollständige CI grün
+- [x] vollständige CI grün
 - [ ] sichtbare UI-Abnahme
 - [ ] Merge
 
