@@ -57,7 +57,7 @@ test('zeigt die MEDDPICC Toolbox mit Tools, Checklists und Knowledge', async ({ 
   })
 })
 
-test('rechnet einen Go-Live-Plan rückwärts und zeigt kundenfähige Exporte', async ({ page }, testInfo) => {
+test('rechnet eine Go-Live-Timeline rückwärts und zeigt kundenfähige Exporte', async ({ page }, testInfo) => {
   const runtimeErrors: string[] = []
   page.on('pageerror', (error) => runtimeErrors.push(error.message))
 
@@ -72,7 +72,7 @@ test('rechnet einen Go-Live-Plan rückwärts und zeigt kundenfähige Exporte', a
   await page.getByLabel('Target Go-Live').fill('2027-07-01')
 
   await expect(page.getByText('Spätester Start', { exact: true })).toBeVisible()
-  await expect(page.getByText('Go-Live-Plan', { exact: true }).last()).toBeVisible()
+  await expect(page.getByText('Go-Live-Timeline', { exact: true }).last()).toBeVisible()
   await expect(page.getByText('Beispielwerke GmbH', { exact: true })).toBeVisible()
   const timelineChart = page.getByTestId('executive-timeline-chart')
   await expect(timelineChart.locator('[data-segment-id="implementation"] .executive-row-label strong')).toHaveText(
