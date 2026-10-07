@@ -56,7 +56,7 @@ Bestanden: Rückwärtsrechnung liegt in einem reinen Domain Service. UI und Expo
 
 ### QS 3 – Technische / visuelle Qualität
 
-Offen bis CI und sichtbare UI-Abnahme abgeschlossen sind.
+Technische Gates bestanden: Formatierung, Lint, Unit Tests, Production Build, Pages-Integrität sowie Playwright Desktop/Mobile sind grün. Offen bleibt ausschließlich die sichtbare UI-Abnahme durch den Nutzer.
 
 ## Nächster empfohlener Slice nach Freigabe
 
