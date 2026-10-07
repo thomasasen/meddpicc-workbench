@@ -254,7 +254,10 @@ const knowledgeTopics = [
           <div>
             <p class="eyebrow">Tools</p>
             <h2 id="tools-title">Eine konkrete Aufgabe erledigen</h2>
-            <p>Wähle die Aufgabe aus, die gerade ansteht. Jeder Service führt mit wenigen Eingaben zu einem direkt nutzbaren Ergebnis.</p>
+            <p>
+              Wähle die Aufgabe aus, die gerade ansteht. Jeder Service führt mit wenigen Eingaben zu einem direkt
+              nutzbaren Ergebnis.
+            </p>
           </div>
           <div class="section-note">
             <Presentation :size="18" aria-hidden="true" />
