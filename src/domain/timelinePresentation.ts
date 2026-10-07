@@ -46,9 +46,7 @@ export function buildTimelineScale(plan: ReverseTimelinePlan): TimelineScaleTick
   dates.set(plan.latestStartDate, 0)
   dates.set(plan.targetGoLiveDate, 100)
 
-  return [...dates.entries()]
-    .map(([date, position]) => ({ date, position }))
-    .sort((a, b) => a.position - b.position)
+  return [...dates.entries()].map(([date, position]) => ({ date, position })).sort((a, b) => a.position - b.position)
 }
 
 export function timelineSegmentPosition(
