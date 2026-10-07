@@ -144,7 +144,7 @@ test('respektiert reduzierte Bewegung beim angehobenen Drag-State', async ({ pag
     }
   })
 
-  expect(reducedStyle.transform).toBe('none')
+  expect(['none', 'matrix(1, 0, 0, 1, 0, 0)']).toContain(reducedStyle.transform)
   expect(reducedStyle.boxShadow).not.toBe('none')
 
   await firstHandle.dispatchEvent('pointerup', {
