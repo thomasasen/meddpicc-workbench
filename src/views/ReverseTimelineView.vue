@@ -2,6 +2,7 @@
 import { ArrowLeft, CalendarDays, Download, FileImage, GripVertical, Plus, RotateCcw, Trash2 } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
+import CustomerTimelineChart from '../components/CustomerTimelineChart.vue'
 import {
   calculateReverseTimeline,
   type ReverseTimelineStepInput,
@@ -257,10 +258,6 @@ async function exportPng() {
   }
 }
 
-function segmentFlex(span: number): string {
-  return String(Math.max(span, 2))
-}
-
 function statusText(): string {
   if (!plan.value) return ''
   if (plan.value.status === 'target-before-reference') {
@@ -494,30 +491,15 @@ function statusText(): string {
           </div>
 
           <div class="customer-timeline" aria-label="Visuelle Go-Live-Timeline">
-            <div class="customer-timeline-heading">
-              <div>
-                <strong>{{ planTitle || 'Go-Live-Plan' }}</strong>
-                <span v-if="customerName">{{ customerName }}</span>
-              </div>
-              <span>Go-Live {{ formatDate(plan.targetGoLiveDate) }}</span>
-            </div>
+            <CustomerTimelineChart
+              :plan="plan"
+              :title="planTitle"
+              :customer-name="customerName"
+            />
 
-            <div class="timeline-axis" aria-hidden="true">
-              <span>{{ formatDate(plan.latestStartDate) }}</span>
-              <span>Go-Live {{ formatDate(plan.targetGoLiveDate) }}</span>
-            </div>
-
-            <div class="timeline-bars" aria-hidden="true">
-              <div
-                v-for="segment in plan.chronologicalSegments"
-                :key="segment.id"
-                class="timeline-bar"
-                :class="`timeline-bar--${segment.area}`"
-                :style="{ flexGrow: segmentFlex(segment.calendarSpanDays) }"
-                :title="`${segment.label}: ${formatDate(segment.startDate)} bis ${formatDate(segment.endDate)}`"
-              >
-                <span>{{ segment.label }}</span>
-              </div>
+            <div class="timeline-detail-heading">
+              <strong>Prozessschritte im Detail</strong>
+              <span>Zeitraum, Bereich und Verantwortlichkeit</span>
             </div>
 
             <ol class="timeline-detail-list">
