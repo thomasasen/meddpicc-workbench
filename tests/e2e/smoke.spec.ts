@@ -16,9 +16,7 @@ test('zeigt die MEDDPICC Toolbox mit Tools, Checklists und Knowledge', async ({ 
   await expect(page.getByRole('link', { name: /Knowledge Schnell nachschlagen/ })).toBeVisible()
 
   await expect(page.getByRole('heading', { name: 'Wiederkehrende Arbeit schneller erledigen' })).toBeVisible()
-  await expect(
-    page.getByRole('heading', { name: 'Kurze Orientierung für konkrete Sales-Situationen' }),
-  ).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Kurze Orientierung für konkrete Sales-Situationen' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'MEDDPICC nachschlagen, ohne im Buch zu suchen' })).toBeVisible()
 
   await expect(page.getByRole('link', { name: /Go-Live-Rückwärtsplanung/ })).toBeVisible()
