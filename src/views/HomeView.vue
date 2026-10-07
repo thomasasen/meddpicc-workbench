@@ -129,8 +129,14 @@ const toolClusters = [
 
 const checklists = [
   {
+    label: 'Economic Buyer',
+    note: 'Kurz prüfen, ob du wirtschaftliche Autorität, Business Outcome, Value und deine Evidenz wirklich verstanden hast.',
+    route: '/checklists/economic-buyer',
+  },
+  {
     label: 'Economic-Buyer-Termin',
     note: 'Vor dem Termin in wenigen Minuten prüfen, ob Value, Fragen und gewünschtes Ergebnis sauber vorbereitet sind.',
+    route: '/checklists/economic-buyer-meeting',
   },
   {
     label: 'Discovery Call',
@@ -166,6 +172,7 @@ const knowledgeTopics = [
     label: 'Economic Buyer',
     note: 'Woran erkennst du den EB und was unterscheidet ihn von Sponsor oder Entscheider?',
     icon: UserRound,
+    route: '/knowledge/economic-buyer',
   },
   {
     code: 'D',
@@ -312,14 +319,22 @@ const knowledgeTopics = [
         </div>
 
         <div class="checklist-preview-grid">
-          <article v-for="item in checklists" :key="item.label" class="checklist-preview-card">
+          <component
+            :is="item.route ? 'RouterLink' : 'article'"
+            v-for="item in checklists"
+            :key="item.label"
+            class="checklist-preview-card"
+            :class="{ 'checklist-preview-card--active': item.route }"
+            :to="item.route"
+          >
             <ListChecks :size="18" aria-hidden="true" />
             <div>
               <strong>{{ item.label }}</strong>
               <p>{{ item.note }}</p>
             </div>
-            <span class="microtool-planned">Geplant</span>
-          </article>
+            <ArrowRight v-if="item.route" class="checklist-card-action" :size="17" aria-hidden="true" />
+            <span v-else class="microtool-planned">Geplant</span>
+          </component>
         </div>
 
         <div class="checklist-explainer">
@@ -344,15 +359,23 @@ const knowledgeTopics = [
         </div>
 
         <div class="knowledge-grid" aria-label="MEDDPICC Wissensbereiche">
-          <article v-for="topic in knowledgeTopics" :key="topic.code + topic.label" class="knowledge-card">
+          <component
+            :is="topic.route ? 'RouterLink' : 'article'"
+            v-for="topic in knowledgeTopics"
+            :key="topic.code + topic.label"
+            class="knowledge-card"
+            :class="{ 'knowledge-card--active': topic.route }"
+            :to="topic.route"
+          >
             <span class="knowledge-letter">{{ topic.code }}</span>
             <component :is="topic.icon" :size="18" aria-hidden="true" />
             <div>
               <strong>{{ topic.label }}</strong>
               <small>{{ topic.note }}</small>
             </div>
-            <span class="microtool-planned">Geplant</span>
-          </article>
+            <ArrowRight v-if="topic.route" class="knowledge-card-action" :size="17" aria-hidden="true" />
+            <span v-else class="microtool-planned">Geplant</span>
+          </component>
         </div>
       </section>
     </main>
