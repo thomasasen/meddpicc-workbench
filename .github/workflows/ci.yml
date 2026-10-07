@@ -52,8 +52,22 @@ jobs:
       - name: Unit Tests ausführen
         run: npm test
 
-      - name: Produktionsbuild prüfen
-        run: npm run build
+      - name: Production Build und Pages-Root erzeugen
+        run: npm run pages:sync
+
+      - name: Pages-Root für visuelle QS bereitstellen
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: pages-root
+          path: |
+            index.html
+            assets/
+            pages-build.json
+          retention-days: 1
+          if-no-files-found: error
+
+      - name: committed Pages-Root gegen Build prüfen
+        run: git diff --exit-code -- index.html assets pages-build.json
 
       - name: veröffentlichten Pages-Root prüfen
         run: npm run pages:check
