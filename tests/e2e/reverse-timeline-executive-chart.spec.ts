@@ -11,7 +11,11 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
   await page.getByLabel('Planungsdatum').fill('2027-01-04')
   await page.getByLabel('Target Go-Live').fill('2027-07-01')
   await page.getByLabel(/Warum dieses Datum/).fill('Altvertrag endet am 30.06.')
-  await page.locator('.reverse-step-card').first().getByLabel(/Name \/ Rolle/).fill('Projektteam')
+  await page
+    .locator('.reverse-step-card')
+    .first()
+    .getByLabel(/Name \/ Rolle/)
+    .fill('Projektteam')
 
   const chart = page.getByTestId('executive-timeline-chart')
   await expect(chart).toBeVisible()
@@ -19,7 +23,9 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
   await expect(page.getByText('Go-Live-Timeline', { exact: true }).last()).toBeVisible()
   await expect(page.getByText('Beispielwerke GmbH', { exact: true })).toBeVisible()
   await expect(page.locator('.executive-go-live').getByText('Target Go-Live', { exact: true })).toBeVisible()
-  await expect(page.locator('.executive-go-live').getByText('Altvertrag endet am 30.06.', { exact: true })).toBeVisible()
+  await expect(
+    page.locator('.executive-go-live').getByText('Altvertrag endet am 30.06.', { exact: true }),
+  ).toBeVisible()
   await expect(page.getByText('Prozessdauer', { exact: true })).toBeVisible()
   await expect(page.getByText('Puffer zum notwendigen Start', { exact: true })).toBeVisible()
   await expect(page.getByText('Zeitproportionaler Prozessplan', { exact: true })).toBeVisible()
