@@ -95,9 +95,10 @@ function starterSteps(): EditableStep[] {
 }
 
 const customerName = ref('')
-const planTitle = ref('Go-Live-Plan')
+const planTitle = ref('Go-Live-Timeline')
 const referenceDate = ref(localTodayIso())
 const targetGoLiveDate = ref('')
+const compellingEvent = ref('')
 const steps = ref<EditableStep[]>(starterSteps())
 const exportMessage = ref('')
 const draggingStepId = ref<string | null>(null)
@@ -109,6 +110,7 @@ const calculation = computed(() =>
   calculateReverseTimeline({
     targetGoLiveDate: targetGoLiveDate.value,
     referenceDate: referenceDate.value,
+    compellingEvent: compellingEvent.value,
     steps: steps.value,
   }),
 )
@@ -124,6 +126,7 @@ function addStep() {
     duration: 5,
     durationUnit: 'business-days',
     owner: 'shared',
+    ownerDetail: '',
     area: 'decision-process',
   })
 }
@@ -223,6 +226,11 @@ function resetStarterSteps() {
   steps.value = starterSteps()
 }
 
+function ownerDisplay(step: ReverseTimelineStepInput): string {
+  const detail = step.ownerDetail?.trim()
+  return detail ? `${ownerLabels[step.owner]} · ${detail}` : ownerLabels[step.owner]
+}
+
 function formatDate(isoDate: string): string {
   if (!isoDate) return '–'
   const [year, month, day] = isoDate.split('-')
@@ -230,14 +238,14 @@ function formatDate(isoDate: string): string {
 }
 
 function fileBaseName(): string {
-  const raw = customerName.value.trim() || planTitle.value.trim() || 'go-live-plan'
+  const raw = customerName.value.trim() || planTitle.value.trim() || 'go-live-timeline'
   return (
     raw
       .normalize('NFKD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-zA-Z0-9]+/g, '-')
       .replace(/^-|-$/g, '')
-      .toLowerCase() || 'go-live-plan'
+      .toLowerCase() || 'go-live-timeline'
   )
 }
 
@@ -339,6 +347,16 @@ async function exportPng() {
             <input v-model="targetGoLiveDate" type="date" required />
             <small>Von diesem Kundenziel wird rückwärts gerechnet</small>
           </label>
+          <label class="field reverse-compelling-event">
+            <span>Warum dieses Datum? <small>optional</small></span>
+            <input
+              v-model="compellingEvent"
+              type="text"
+              maxlength="240"
+              placeholder="z. B. Altvertrag endet am 30.06."
+            />
+            <small>Kundenseitiger Treiber / Compelling Event – kein internes Quartalsziel</small>
+          </label>
         </div>
       </section>
 
@@ -423,6 +441,15 @@ async function exportPng() {
                   <option value="implementation">Implementierung</option>
                 </select>
               </label>
+              <label class="field reverse-step-owner-detail">
+                <span>Name / Rolle <small>optional</small></span>
+                <input
+                  v-model="step.ownerDetail"
+                  type="text"
+                  maxlength="120"
+                  placeholder="z. B. Einkauf, Dr. Müller / Legal"
+                />
+              </label>
             </div>
 
             <div class="reverse-step-controls" aria-label="Schritt entfernen">
@@ -490,7 +517,7 @@ async function exportPng() {
                 <li v-for="segment in plan.chronologicalSegments" :key="segment.id">
                   <div>
                     <strong>{{ segment.label }}</strong>
-                    <span>{{ areaLabels[segment.area] }} · {{ ownerLabels[segment.owner] }}</span>
+                    <span>{{ areaLabels[segment.area] }} · {{ ownerDisplay(segment) }}</span>
                   </div>
                   <div class="timeline-detail-dates">
                     <strong>{{ formatDate(segment.startDate) }} → {{ formatDate(segment.endDate) }}</strong>
@@ -504,9 +531,9 @@ async function exportPng() {
           <p v-if="exportMessage" class="export-message" role="status">{{ exportMessage }}</p>
 
           <p class="timeline-method-note">
-            Methodik-Hinweis: Die Timeline bildet Dauer und Reihenfolge der eingegebenen Schritte ab. Feiertage,
-            kundenspezifische Sperrzeiten und parallele Abhängigkeiten müssen in v0.1 über eigene Schritte bzw.
-            angepasste Dauern berücksichtigt werden.
+            Methodik-Hinweis: Die Timeline zeigt einen konservativen sequenziellen Basisplan aus den eingegebenen
+            Schritten. Feiertage und kundenspezifische Sperrzeiten sind nicht automatisch eingerechnet. Parallelisierung
+            und echte Abhängigkeits-/Critical-Path-Logik gehören bewusst nicht zu dieser Version.
           </p>
         </template>
       </section>
