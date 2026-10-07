@@ -170,7 +170,7 @@ const knowledgeTopics = [
   {
     code: 'E',
     label: 'Economic Buyer',
-    note: 'Woran erkennst du den EB und was unterscheidet ihn von Sponsor oder Entscheider?',
+    note: 'Woran erkennst du den EB und was unterscheidet ihn von Champion oder fachlichem Entscheider?',
     icon: UserRound,
     route: '/knowledge/economic-buyer',
   },
