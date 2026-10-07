@@ -129,9 +129,7 @@ describe('calculateReverseTimeline', () => {
     const contextual = calculateReverseTimeline({
       ...baseInput,
       compellingEvent: '  Altvertrag endet am 30.06.  ',
-      steps: baseInput.steps.map((step, index) =>
-        index === 0 ? { ...step, ownerDetail: 'Projektteam' } : step,
-      ),
+      steps: baseInput.steps.map((step, index) => (index === 0 ? { ...step, ownerDetail: 'Projektteam' } : step)),
     })
 
     expect(baseline.success).toBe(true)
