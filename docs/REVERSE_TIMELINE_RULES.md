@@ -31,9 +31,12 @@ Die folgenden Regeln sind **Toolbox-Produktentscheidungen**, nicht als offiziell
 9. Die Kundenansicht verwendet eine zeitproportionale Executive-Timeline: Position und Breite eines Prozessbalkens ergeben sich aus den errechneten Start- und Enddaten.
 10. Arbeitstage werden für die Darstellung nicht künstlich gleich breit gemacht; maßgeblich ist der daraus resultierende Kalenderzeitraum zwischen Start und Ende.
 11. Änderungen an Dauer, Reihenfolge oder Target Go-Live aktualisieren die Visualisierung unmittelbar aus demselben deterministischen Plan.
-12. Die Visualisierung besitzt immer eine textuelle Detaildarstellung, damit exakte Daten und Verantwortlichkeiten auch ohne Grafik verständlich bleiben.
-13. Die Grafik impliziert keine Parallelisierung oder Critical-Path-Logik. In v0.1 werden die eingegebenen Schritte weiterhin sequenziell rückwärts gerechnet.
-14. SVG und PNG spiegeln denselben kundenfähigen Visualstil wider; interne Coaching-Wertungen werden dort nicht ergänzt.
+12. Die Zeitachse verwendet verständliche Periodenmarken: bei kurzen Plänen Kalenderwochen, bei längeren Plänen Monatsgrenzen; spätester Start und Target Go-Live bleiben exakte Datumsanker.
+13. Prozessdauer und Puffer zum notwendigen Start werden als unterschiedliche Kennzahlen ausgewiesen und dürfen nicht miteinander vermischt werden.
+14. Übergaben zwischen sequenziellen Prozessschritten werden als Milestone-Punkte visualisiert; daraus wird keine zusätzliche Abhängigkeits- oder Parallelisierungslogik abgeleitet.
+15. Die Visualisierung besitzt immer eine textuelle Detaildarstellung, damit exakte Daten und Verantwortlichkeiten auch ohne Grafik verständlich bleiben. Diese darf in der Kundenansicht standardmäßig eingeklappt sein.
+16. Die Grafik impliziert keine Parallelisierung oder Critical-Path-Logik. In v0.1 werden die eingegebenen Schritte weiterhin sequenziell rückwärts gerechnet.
+17. SVG und PNG spiegeln denselben kundenfähigen Visualstil wider; interne Coaching-Wertungen werden dort nicht ergänzt.
 
 ## Grenzen v0.1
 
