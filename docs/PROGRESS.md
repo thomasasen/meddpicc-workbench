@@ -55,8 +55,9 @@ Umgesetzt:
 - zeitproportionale Position und Breite der Prozessbalken
 - getrennte Kennzahlen für Prozessdauer und Puffer zum notwendigen Start
 - farbliche Trennung von Decision Process, Paper Process und Implementierung
-- Owner je Prozessschritt
-- Milestone-Punkte an jedem sequenziellen Übergang und hervorgehobener Go-Live-Punkt
+- Verantwortungsseite je Prozessschritt plus optional konkrete Person / Rolle als Owner
+- optionaler kundenseitiger Termin-Treiber / Compelling Event („Warum dieses Datum?“)
+- Übergabepunkte an jedem sequenziellen Prozesswechsel und hervorgehobenes Go-Live-Ziel
 - klar hervorgehobenes Target Go-Live
 - kurze Kundenbotschaft: wann der erste Prozessschritt spätestens starten sollte
 - Prozessdetails standardmäßig einklappbar
@@ -67,6 +68,9 @@ Umgesetzt:
 - Zero-Duration-Schritte bleiben als Marker sichtbar
 - Layout-Regressionscheck verhindert überlagerte/zusammengedrückte Timeline-Zeilen
 - Unit- und Playwright-Tests für die Präsentationslogik
+- Source-QA gegen Whyte und Lahoutifard in `docs/REVERSE_TIMELINE_SOURCE_QA.md`
+- bewusste Abgrenzung: Go-Live-Timeline ≠ vollständiger Go-Live Plan
+- Parallelisierung bleibt bewusst dem geplanten Dependency / Parallelization Helper vorbehalten
 
 ## Economic Buyer – Checklists & Knowledge v0.1
 
