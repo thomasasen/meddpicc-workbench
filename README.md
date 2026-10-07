@@ -168,9 +168,11 @@ Pfad: **Tools → Go-Live & Buying Process → Go-Live-Rückwärtsplanung**
 - Kunde und Titel optional
 - Planungsdatum
 - Target Go-Live
+- optional: kundenseitiger Termin-Treiber / Compelling Event („Warum dieses Datum?“)
 - beliebig viele Prozessschritte
 - Reihenfolge der Schritte per Drag & Drop; Tastaturbedienung über den Drag-Griff
-- pro Schritt: Bezeichnung, Dauer, Kalender-/Arbeitstage, Verantwortlichkeit und Bereich
+- pro Schritt: Bezeichnung, Dauer, Kalender-/Arbeitstage, Verantwortungsseite und Bereich
+- optional pro Schritt: konkrete Person oder Rolle als Owner
 
 ### Ergebnis
 
@@ -180,11 +182,15 @@ Pfad: **Tools → Go-Live & Buying Process → Go-Live-Rückwärtsplanung**
 - dynamische Executive-Timeline im Roadmap-/Gantt-Stil
 - zeitproportionale Prozessbalken mit semantischer Monats-/KW-Achse, Ownern und Go-Live-Ziellinie
 - klar getrennte Kennzahlen für Prozessdauer und Puffer zum notwendigen Start
-- Milestone-Punkte an den Übergaben zwischen den Prozessschritten
+- Übergabepunkte zwischen den Prozessschritten; nur das Go-Live-Ziel wird besonders hervorgehoben
 - standardmäßig eingeklappte Prozessdetails für eine ruhigere Kundenansicht
 - Mobile-Führung mit Scroll-Hinweis und sticky Schrittnamen
 - Live-Aktualisierung bei Dauer, Reihenfolge oder Go-Live-Änderungen
 - SVG- und PNG-Export im gleichen kundenfähigen Visualstil
+
+Die Funktion bleibt bewusst eine **Go-Live-Rückwärtsplanung / Go-Live-Timeline**. Der umfassendere **Go-Live Plan Builder** bleibt als separates späteres Tool vorgesehen. Parallelisierung und Critical-Path-Logik werden nicht implizit behauptet.
+
+Der Quellenabgleich für diesen Slice ist in `docs/REVERSE_TIMELINE_SOURCE_QA.md` dokumentiert.
 
 Arbeitstage berücksichtigen in v0.1 Montag bis Freitag. Feiertage werden bewusst nicht automatisch angenommen.
 
