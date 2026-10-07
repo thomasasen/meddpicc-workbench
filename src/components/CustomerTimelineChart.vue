@@ -28,6 +28,11 @@ const ownerLabels: Record<TimelineOwner, string> = {
   shared: 'Gemeinsam',
 }
 
+function ownerDisplay(segment: ReverseTimelineSegment): string {
+  const detail = segment.ownerDetail?.trim()
+  return detail ? `${ownerLabels[segment.owner]} · ${detail}` : ownerLabels[segment.owner]
+}
+
 function formatDate(isoDate: string): string {
   const [year, month, day] = isoDate.split('-')
   return `${day}.${month}.${year}`
@@ -72,7 +77,7 @@ const bufferLabel = computed(() => {
   <section class="executive-timeline" aria-labelledby="executive-timeline-title">
     <header class="executive-timeline-header">
       <div>
-        <span class="executive-timeline-kicker">Gemeinsamer Go-Live-Plan</span>
+        <span class="executive-timeline-kicker">Gemeinsame Go-Live-Timeline</span>
         <h3 id="executive-timeline-title">{{ title || 'Go-Live-Plan' }}</h3>
         <p v-if="customerName">{{ customerName }}</p>
       </div>
@@ -81,6 +86,7 @@ const bufferLabel = computed(() => {
         <Flag :size="18" aria-hidden="true" />
         <span>Target Go-Live</span>
         <strong>{{ formatDate(plan.targetGoLiveDate) }}</strong>
+        <small v-if="plan.compellingEvent">{{ plan.compellingEvent }}</small>
       </div>
     </header>
 
@@ -152,7 +158,7 @@ const bufferLabel = computed(() => {
             >
               <div class="executive-row-label">
                 <strong>{{ segment.label }}</strong>
-                <span>{{ ownerLabels[segment.owner] }}</span>
+                <span>{{ ownerDisplay(segment) }}</span>
               </div>
 
               <div class="executive-row-track">
@@ -174,8 +180,8 @@ const bufferLabel = computed(() => {
                 </div>
 
                 <span
-                  class="executive-milestone"
-                  :class="{ 'executive-milestone--go-live': segment.endDate === plan.targetGoLiveDate }"
+                  class="executive-handoff"
+                  :class="{ 'executive-handoff--go-live': segment.endDate === plan.targetGoLiveDate }"
                   :style="milestoneStyle(segment)"
                   :title="
                     segment.endDate === plan.targetGoLiveDate
@@ -205,7 +211,7 @@ const bufferLabel = computed(() => {
       </p>
       <ul>
         <li v-for="segment in plan.chronologicalSegments" :key="`accessible-${segment.id}`">
-          {{ segment.label }}, {{ areaLabels[segment.area] }}, {{ ownerLabels[segment.owner] }},
+          {{ segment.label }}, {{ areaLabels[segment.area] }}, {{ ownerDisplay(segment) }},
           {{ formatDate(segment.startDate) }} bis {{ formatDate(segment.endDate) }}, {{ segment.duration }}
           {{ segment.durationUnit === 'business-days' ? 'Arbeitstage' : 'Kalendertage' }}.
         </li>
@@ -279,6 +285,14 @@ const bufferLabel = computed(() => {
 .executive-go-live strong {
   font-size: 0.82rem;
   font-variant-numeric: tabular-nums;
+}
+
+.executive-go-live small {
+  grid-column: 2;
+  margin-top: 0.15rem;
+  color: var(--color-success-text);
+  font-size: 0.62rem;
+  line-height: 1.35;
 }
 
 .executive-timeline-story {
@@ -429,7 +443,7 @@ const bufferLabel = computed(() => {
   gap: var(--space-4);
 }
 
-.executive-milestone {
+.executive-handoff {
   position: absolute;
   z-index: 2;
   top: 50%;
@@ -443,7 +457,7 @@ const bufferLabel = computed(() => {
   transform: translate(-50%, -50%);
 }
 
-.executive-milestone--go-live {
+.executive-handoff--go-live {
   width: 12px;
   height: 12px;
   background: var(--color-confirmed);
