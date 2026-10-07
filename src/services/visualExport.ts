@@ -29,11 +29,7 @@ export function downloadSvgElement(svg: SVGSVGElement, fileName: string): void {
   downloadBlob(new Blob([source], { type: 'image/svg+xml;charset=utf-8' }), fileName)
 }
 
-export async function downloadSvgElementAsPng(
-  svg: SVGSVGElement,
-  fileName: string,
-  scale = 2,
-): Promise<void> {
+export async function downloadSvgElementAsPng(svg: SVGSVGElement, fileName: string, scale = 2): Promise<void> {
   const source = new XMLSerializer().serializeToString(svg)
   const svgUrl = URL.createObjectURL(new Blob([source], { type: 'image/svg+xml;charset=utf-8' }))
   const image = new Image()
