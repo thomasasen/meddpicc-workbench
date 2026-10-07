@@ -122,10 +122,7 @@ const bufferLabel = computed(() => {
               v-for="tick in axisTicks"
               :key="tick.date"
               class="executive-axis-tick"
-              :class="[
-                `executive-axis-tick--${tick.kind}`,
-                { 'executive-axis-tick--end': tick.position === 100 },
-              ]"
+              :class="[`executive-axis-tick--${tick.kind}`, { 'executive-axis-tick--end': tick.position === 100 }]"
               :style="{ left: `${tick.position}%` }"
             >
               {{ tick.label }}
@@ -286,7 +283,6 @@ const bufferLabel = computed(() => {
 .executive-timeline-story strong {
   color: var(--color-text);
 }
-
 
 .executive-kpi-strip {
   display: grid;
