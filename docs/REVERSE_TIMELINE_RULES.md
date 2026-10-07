@@ -22,7 +22,7 @@ Die folgenden Regeln sind **Toolbox-Produktentscheidungen**, nicht als offiziell
 
 1. Target Go-Live ist der feste Endpunkt.
 2. Schritte werden in der Eingabemaske vom Go-Live rückwärts angeordnet. Die sichtbare Reihenfolge kann primär per Drag & Drop verändert werden; derselbe Drag-Griff unterstützt für Tastaturnutzung Pfeiltasten sowie Home/End.
-3. Jeder Schritt besitzt Bezeichnung, Dauer, Kalender- oder Arbeitstage, Verantwortlichkeit und Bereich.
+3. Jeder Schritt besitzt Bezeichnung, Dauer, Kalender- oder Arbeitstage, Verantwortungsseite und Bereich; optional kann eine konkrete Person oder Rolle als Owner ergänzt werden.
 4. Die Berechnung zieht Schritt für Schritt die Dauer vom jeweils späteren Meilenstein ab.
 5. Arbeitstage sind Montag bis Freitag.
 6. Feiertage werden nicht automatisch berücksichtigt.
@@ -33,10 +33,14 @@ Die folgenden Regeln sind **Toolbox-Produktentscheidungen**, nicht als offiziell
 11. Änderungen an Dauer, Reihenfolge oder Target Go-Live aktualisieren die Visualisierung unmittelbar aus demselben deterministischen Plan.
 12. Die Zeitachse verwendet verständliche Periodenmarken: bei kurzen Plänen Kalenderwochen, bei längeren Plänen Monatsgrenzen; spätester Start und Target Go-Live bleiben exakte Datumsanker.
 13. Prozessdauer und Puffer zum notwendigen Start werden als unterschiedliche Kennzahlen ausgewiesen und dürfen nicht miteinander vermischt werden.
-14. Übergaben zwischen sequenziellen Prozessschritten werden als Milestone-Punkte visualisiert; daraus wird keine zusätzliche Abhängigkeits- oder Parallelisierungslogik abgeleitet.
+14. Übergaben zwischen sequenziellen Prozessschritten werden als Übergabepunkte visualisiert. Nicht jeder Übergang wird als fachlicher Key Milestone behauptet; daraus wird keine zusätzliche Abhängigkeits- oder Parallelisierungslogik abgeleitet.
 15. Die Visualisierung besitzt immer eine textuelle Detaildarstellung, damit exakte Daten und Verantwortlichkeiten auch ohne Grafik verständlich bleiben. Diese darf in der Kundenansicht standardmäßig eingeklappt sein.
 16. Die Grafik impliziert keine Parallelisierung oder Critical-Path-Logik. In v0.1 werden die eingegebenen Schritte weiterhin sequenziell rückwärts gerechnet.
-17. SVG und PNG spiegeln denselben kundenfähigen Visualstil wider; interne Coaching-Wertungen werden dort nicht ergänzt.
+17. Das optionale Feld „Warum dieses Datum?“ beschreibt einen kundenseitigen Termin-Treiber / Compelling Event und verändert die Datumsberechnung nicht. Rein sellerseitige Deadlines wie Quartalsende werden nicht als kundenseitiger Treiber dargestellt.
+18. Die Kundenansicht heißt Go-Live-Timeline bzw. Rückwärtsplanung. Sie wird nicht als vollständiger Go-Live Plan ausgegeben.
+19. SVG und PNG spiegeln denselben kundenfähigen Visualstil und dieselbe Semantik wider; interne Coaching-Wertungen werden dort nicht ergänzt.
+
+Der detaillierte Quellenabgleich ist in `docs/REVERSE_TIMELINE_SOURCE_QA.md` dokumentiert.
 
 ## Grenzen v0.1
 
