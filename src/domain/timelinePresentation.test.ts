@@ -1,11 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { calculateReverseTimeline, type ReverseTimelineInput } from './reverseTimeline'
-import {
-  buildTimelineScale,
-  timelineSegmentPosition,
-  timelineTotalDays,
-} from './timelinePresentation'
+import { buildTimelineScale, timelineSegmentPosition, timelineTotalDays } from './timelinePresentation'
 
 const input: ReverseTimelineInput = {
   targetGoLiveDate: '2027-04-30',
@@ -110,5 +106,4 @@ describe('timelinePresentation', () => {
       { date: '2027-04-30', position: 100 },
     ])
   })
-
 })
