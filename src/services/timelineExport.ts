@@ -31,13 +31,6 @@ function formatDate(isoDate: string): string {
   return `${day}.${month}.${year}`
 }
 
-function shortDate(isoDate: string): string {
-  return new Intl.DateTimeFormat('de-DE', {
-    day: '2-digit',
-    month: 'short',
-  }).format(new Date(`${isoDate}T00:00:00Z`))
-}
-
 function segmentColors(segment: ReverseTimelineSegment): { fill: string; stroke: string; text: string } {
   switch (segment.area) {
     case 'decision-process':
@@ -49,8 +42,18 @@ function segmentColors(segment: ReverseTimelineSegment): { fill: string; stroke:
   }
 }
 
-function durationLabel(segment: ReverseTimelineSegment): string {
-  return `${segment.duration} ${segment.durationUnit === 'business-days' ? 'AT' : 'KT'}`
+function durationLabel(segment: ReverseTimelineSegment, full = false): string {
+  const fullUnit = segment.durationUnit === 'business-days' ? 'Arbeitstage' : 'Kalendertage'
+  const shortUnit = segment.durationUnit === 'business-days' ? 'AT' : 'KT'
+  return `${segment.duration} ${full ? fullUnit : shortUnit}`
+}
+
+function bufferLabel(plan: ReverseTimelinePlan): string {
+  if (plan.status === 'target-before-reference') return 'Target vor Planungsdatum'
+  if (plan.status === 'compression-required') {
+    return `Fehlen ${Math.abs(plan.calendarDaysToLatestStart)} Kalendertage`
+  }
+  return `${plan.calendarDaysToLatestStart} Kalendertage`
 }
 
 export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: TimelineExportOptions): string {
@@ -74,7 +77,7 @@ export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: Tim
       const labelColor = tick.position === 100 ? '#166534' : '#64748b'
       return `
         <line x1="${x.toFixed(1)}" y1="${chartTop - 42}" x2="${x.toFixed(1)}" y2="${chartBottom}" stroke="${lineColor}" stroke-width="${lineWidth}"/>
-        <text x="${x.toFixed(1)}" y="${chartTop - 55}" text-anchor="${anchor}" font-size="15" font-weight="${tick.position === 100 ? 700 : 500}" fill="${labelColor}">${escapeXml(shortDate(tick.date))}</text>
+        <text x="${x.toFixed(1)}" y="${chartTop - 55}" text-anchor="${anchor}" font-size="15" font-weight="${tick.position === 100 ? 700 : 500}" fill="${labelColor}">${escapeXml(tick.label)}</text>
       `
     })
     .join('')
@@ -86,8 +89,9 @@ export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: Tim
       const x = left + (position.leftPercent / 100) * timelineWidth
       const barWidth = Math.max(8, (position.widthPercent / 100) * timelineWidth)
       const colors = segmentColors(segment)
-      const duration = durationLabel(segment)
       const canShowDuration = barWidth >= 58
+      const duration = durationLabel(segment, barWidth >= 150)
+      const milestoneX = Math.min(width - right, x + barWidth)
 
       return `
         <line x1="70" y1="${y + rowHeight}" x2="${width - right}" y2="${y + rowHeight}" stroke="#eef1f5"/>
@@ -95,6 +99,7 @@ export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: Tim
         <text x="70" y="${y + 53}" font-size="15" fill="#64748b">${escapeXml(ownerLabels[segment.owner])} · ${escapeXml(formatDate(segment.startDate))} – ${escapeXml(formatDate(segment.endDate))}</text>
         <rect x="${x.toFixed(1)}" y="${y + 18}" width="${barWidth.toFixed(1)}" height="34" rx="8" fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="1.5"/>
         ${canShowDuration ? `<text x="${(x + barWidth - 12).toFixed(1)}" y="${y + 40}" text-anchor="end" font-size="14" font-weight="700" fill="${colors.text}">${escapeXml(duration)}</text>` : ''}
+        <circle cx="${milestoneX.toFixed(1)}" cy="${y + 35}" r="${segment.endDate === plan.targetGoLiveDate ? 6 : 5}" fill="${segment.endDate === plan.targetGoLiveDate ? '#15803d' : '#2563eb'}" stroke="#ffffff" stroke-width="2"/>
       `
     })
     .join('')
@@ -103,6 +108,7 @@ export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: Tim
   const safeCustomer = escapeXml(truncate(options.customerName, 70))
   const goLive = escapeXml(formatDate(plan.targetGoLiveDate))
   const latestStart = escapeXml(formatDate(plan.latestStartDate))
+  const buffer = escapeXml(bufferLabel(plan))
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
     <rect width="100%" height="100%" fill="#ffffff"/>
@@ -118,7 +124,8 @@ export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: Tim
     <rect x="70" y="198" width="${width - 160}" height="70" rx="10" fill="#f4f7ff" stroke="#cbd9fb"/>
     <text x="96" y="228" font-size="17" fill="#475569">Um den Go-Live am <tspan font-weight="700" fill="#172033">${goLive}</tspan> zu erreichen, sollte der erste Prozessschritt spätestens am</text>
     <text x="96" y="251" font-size="17" font-weight="700" fill="#172033">${latestStart}</text>
-    <text x="${width - 96}" y="239" text-anchor="end" font-size="15" fill="#64748b">${totalDays} Kalendertage Planungsfenster</text>
+    <text x="${width - 96}" y="226" text-anchor="end" font-size="14" fill="#64748b">Prozessdauer: ${totalDays} Kalendertage</text>
+    <text x="${width - 96}" y="249" text-anchor="end" font-size="14" fill="#64748b">Puffer zum Start: ${buffer}</text>
 
     <circle cx="76" cy="296" r="5" fill="#3b82f6"/>
     <text x="90" y="301" font-size="14" fill="#64748b">Decision Process</text>
