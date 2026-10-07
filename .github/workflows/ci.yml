@@ -47,12 +47,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Prettier-Diff für Economic Buyer Diagnose
-        run: |
-          npx prettier --write src/content/meddpicc/economicBuyer.ts
-          git diff -- src/content/meddpicc/economicBuyer.ts
-          git checkout -- src/content/meddpicc/economicBuyer.ts
-
       - name: Formatierung prüfen
         run: npm run format:check
 
