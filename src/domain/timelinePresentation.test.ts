@@ -83,4 +83,32 @@ describe('timelinePresentation', () => {
     expect(timelineSegmentPosition(original, originalImplementation).widthPercent).toBe(75)
     expect(timelineSegmentPosition(changed, changedImplementation).widthPercent).toBe(50)
   })
+  it('hält Schritte mit Dauer 0 als sichtbaren Marker innerhalb der Timeline', () => {
+    const plan = planFor({
+      targetGoLiveDate: '2027-04-30',
+      referenceDate: '2027-04-01',
+      steps: [
+        {
+          id: 'milestone',
+          label: 'Finale Freigabe',
+          duration: 0,
+          durationUnit: 'calendar-days',
+          owner: 'customer',
+          area: 'decision-process',
+        },
+      ],
+    })
+
+    const segment = plan.chronologicalSegments[0]
+    const position = timelineSegmentPosition(plan, segment)
+    const ticks = buildTimelineScale(plan)
+
+    expect(position.widthPercent).toBe(0.8)
+    expect(position.leftPercent).toBe(0)
+    expect(ticks).toEqual([
+      { date: '2027-04-30', position: 0 },
+      { date: '2027-04-30', position: 100 },
+    ])
+  })
+
 })
