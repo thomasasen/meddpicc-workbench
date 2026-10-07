@@ -49,9 +49,7 @@ const validationMessage = computed(() => {
   if (steps.value.length === 0) return 'Bitte mindestens einen Schritt anlegen.'
   if (steps.value.some((step) => !step.title.trim())) return 'Jeder Schritt benötigt einen Titel.'
   if (
-    steps.value.some(
-      (step) => !Number.isInteger(step.durationBusinessDays) || Number(step.durationBusinessDays) < 1,
-    )
+    steps.value.some((step) => !Number.isInteger(step.durationBusinessDays) || Number(step.durationBusinessDays) < 1)
   ) {
     return 'Jeder Schritt benötigt mindestens einen ganzen Arbeitstag.'
   }
@@ -172,8 +170,8 @@ function printPlan() {
         <p class="eyebrow">Decision Process · kundenfähig</p>
         <h1>Go-Live-Rückwärtsplanung</h1>
         <p>
-          Vom gewünschten Go-Live rückwärts planen. So werden späteste Startpunkte für Entscheidung, Procurement,
-          Legal, Signatur und Implementierung sichtbar, bevor der Zeitplan unrealistisch wird.
+          Vom gewünschten Go-Live rückwärts planen. So werden späteste Startpunkte für Entscheidung, Procurement, Legal,
+          Signatur und Implementierung sichtbar, bevor der Zeitplan unrealistisch wird.
         </p>
       </section>
 
@@ -350,9 +348,7 @@ function printPlan() {
               <text x="1172" y="42" text-anchor="end" fill="#172033" font-size="16" font-weight="700">
                 Go-Live {{ formatDate(timeline.targetGoLiveDate) }}
               </text>
-              <text x="1172" y="70" text-anchor="end" fill="#5f6b7a" font-size="13">
-                rückwärts geplant
-              </text>
+              <text x="1172" y="70" text-anchor="end" fill="#5f6b7a" font-size="13">rückwärts geplant</text>
 
               <line x1="330" y1="112" x2="1150" y2="112" stroke="#d7dee7" stroke-width="2" />
               <line
@@ -400,9 +396,7 @@ function printPlan() {
               <text x="28" :y="svgHeight - 30" fill="#5f6b7a" font-size="11">
                 Arbeitstage = Montag–Freitag. Feiertage/Betriebsferien sind in v0.1 nicht berücksichtigt.
               </text>
-              <text x="1172" :y="svgHeight - 30" text-anchor="end" fill="#5f6b7a" font-size="11">
-                MEDDPICC Toolbox
-              </text>
+              <text x="1172" :y="svgHeight - 30" text-anchor="end" fill="#5f6b7a" font-size="11">MEDDPICC Toolbox</text>
             </svg>
           </div>
 
