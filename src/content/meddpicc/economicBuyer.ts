@@ -103,14 +103,14 @@ export const economicBuyerConcepts = {
     signals: [
       'Es gab einen direkten Austausch mit der wirtschaftlichen Entscheidungsinstanz.',
       'Alternativ liegen konkrete, mehrfach bestätigte Informationen zu Prioritäten und Kriterien vor.',
-      'Champion oder Sponsor kann erklären, wie der Economic Buyer angesprochen werden möchte und was ihm wichtig ist.',
+      'Der Champion kann erklären, wie der Economic Buyer angesprochen werden möchte und was ihm wichtig ist.',
     ],
     commonMisinterpretation:
       '„Mein Champion hält den Kontakt für unnötig – deshalb brauche ich den Economic Buyer nicht selbst zu verstehen.“',
     possibleQuestionsOrActions: [
       'Wie können wir den Economic Buyer sinnvoll einbinden, ohne den bestehenden Prozess zu umgehen?',
       'Welche Themen sollte ich vor einem Gespräch aus Sicht des Economic Buyers unbedingt verstanden haben?',
-      'Falls ein direkter Termin aktuell nicht möglich ist: Welche Kriterien und Einwände können wir über Champion oder Sponsor belastbar validieren?',
+      'Falls ein direkter Termin aktuell nicht möglich ist: Welche Kriterien, Prioritäten und Einwände kann ich mit dem Champion belastbar vorbereiten, während ich weiter an sinnvollem EB-Zugang arbeite?',
     ],
     learnMore:
       'Whyte beschreibt den Champion als wichtigen Weg zur Identifikation, Einführung und Vorbereitung, empfiehlt aber zugleich, eine eigene Engagement-Strategie zu entwickeln. Lahoutifard misst dem frühen EB-Meeting besonders hohe Bedeutung bei.',
@@ -147,11 +147,11 @@ export const economicBuyerConcepts = {
       'Eine falsche EB-Annahme führt dazu, dass Value, Zugang und Entscheidungsprozess an der falschen Person ausgerichtet werden.',
     signals: [
       'Mehrere Hinweise zur wirtschaftlichen Autorität passen zusammen.',
-      'Die Rolle wurde durch Champion, Sponsor, Prozessinformationen oder direkten Austausch bestätigt.',
+      'Die Rolle wurde durch Champion, weitere beteiligte Stakeholder, Prozessinformationen oder direkten Austausch bestätigt.',
       'Widersprüchliche Hinweise sind sichtbar und werden nicht einfach ignoriert.',
     ],
     commonMisinterpretation:
-      '„Der Kunde hat ihn Economic Sponsor genannt – weitere Validierung ist deshalb nicht nötig.“',
+      '„Er wurde mir als Entscheider genannt – weitere Validierung ist deshalb nicht nötig.“',
     possibleQuestionsOrActions: [
       'Woher wissen wir konkret, dass diese Person die wirtschaftliche Entscheidung beeinflussen oder stoppen kann?',
       'Welche unserer Informationen sind bestätigt – und welche sind noch Interpretation?',
@@ -176,7 +176,7 @@ export const economicBuyerKnowledge: KnowledgeTopic = {
     'Fachliche Zustimmung ersetzt keine wirtschaftliche Freigabe.',
     'Der Economic Buyer priorisiert das Vorhaben gegenüber anderen Investitionen und Initiativen.',
     'Seine Sicht auf Nutzen, Risiko und Time-to-Value kann von der Fachabteilung deutlich abweichen.',
-    'Direkte oder belastbar validierte Informationen reduzieren Fehlannahmen im Buying Process.',
+    'Direkter Austausch reduziert Fehlannahmen am stärksten; bis der Zugang hergestellt ist, helfen belastbar validierte Informationen bei Vorbereitung und Einordnung.',
   ],
   recognitionConceptIds: ['economic-authority', 'business-outcome', 'metrics-value', 'evidence'],
   misinterpretations: [
@@ -215,7 +215,7 @@ export const economicBuyerKnowledge: KnowledgeTopic = {
     'Was müsste diese Person sehen oder verstehen, um das Vorhaben aktiv zu unterstützen?',
   ],
   withoutDirectAccess: [
-    'Über Champion oder Sponsor klären, was der Economic Buyer erreichen will, welche Metrics zählen und welche Einwände wahrscheinlich sind.',
+    'Über den Champion klären, was der Economic Buyer erreichen will, welche Metrics zählen und welche Einwände wahrscheinlich sind.',
     'Den Nutzen eines EB-Termins begründen: Ziel ist nicht, den Champion zu umgehen, sondern wirtschaftliche Annahmen und Value direkt zu validieren.',
     'Eine kurze Executive Value Story vorbereiten, die Business Outcome, Metric und Why now verbindet.',
     'Parallel eine respektvolle eigene Zugangsstrategie prüfen, zum Beispiel Executive-to-Executive oder eine direkte, kontextreiche Ansprache.',
@@ -281,7 +281,7 @@ export const economicBuyerChecklist: ChecklistDefinition = {
     ),
     conceptChecklistItem(
       'access',
-      'Habe ich direkten Zugang oder zumindest belastbar validierte Informationen zu Prioritäten und Erwartungen?',
+      'Habe ich direkten Zugang – und falls noch nicht, weiß ich belastbar, was dem Economic Buyer wichtig ist und wie ich Zugang herstellen kann?',
       economicBuyerConcepts.access,
     ),
     conceptChecklistItem(
@@ -373,7 +373,7 @@ const meetingItems: ChecklistItem[] = [
     meaning:
       'Nutze den Termin nicht nur zum Präsentieren. Bereite Fragen vor, die wirtschaftliche Ziele, Erfolgskriterien, Priorität, Entscheidungslogik oder Risiken direkt validieren.',
     whyItMatters:
-      'Direkte Antworten reduzieren gefilterte Informationen und helfen, Annahmen aus Champion- oder Sponsor-Gesprächen zu prüfen.',
+      'Direkte Antworten reduzieren gefilterte Informationen und helfen, Annahmen aus Champion- oder anderen Stakeholder-Gesprächen zu prüfen.',
     signals: [
       'Die Fragen zielen auf Business Outcome, Metrics, Priorität oder wirtschaftliche Entscheidung.',
       'Es sind wenige hochwertige Fragen statt eines MEDDPICC-Verhörs.',
