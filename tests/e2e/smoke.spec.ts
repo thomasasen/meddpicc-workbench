@@ -74,8 +74,13 @@ test('rechnet einen Go-Live-Plan rückwärts und zeigt kundenfähige Exporte', a
   await expect(page.getByText('Spätester Start', { exact: true })).toBeVisible()
   await expect(page.getByText('Go-Live-Plan', { exact: true }).last()).toBeVisible()
   await expect(page.getByText('Beispielwerke GmbH', { exact: true })).toBeVisible()
-  await expect(page.getByText('Implementierung / Rollout', { exact: true }).last()).toBeVisible()
-  await expect(page.getByText('Einkauf / Procurement', { exact: true }).last()).toBeVisible()
+  const timelineChart = page.getByTestId('executive-timeline-chart')
+  await expect(
+    timelineChart.locator('[data-segment-id="implementation"] .executive-row-label strong'),
+  ).toHaveText('Implementierung / Rollout')
+  await expect(timelineChart.locator('[data-segment-id="procurement"] .executive-row-label strong')).toHaveText(
+    'Einkauf / Procurement',
+  )
   await expect(page.getByRole('button', { name: 'SVG' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'PNG' })).toBeVisible()
   await expect(page.getByText(/Feiertage werden in v0\.1 bewusst nicht automatisch eingerechnet/)).toBeVisible()
