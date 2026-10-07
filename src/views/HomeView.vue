@@ -222,7 +222,7 @@ const knowledgeTopics = [
 
         <div class="toolbox-header-meta">
           <Wrench :size="17" aria-hidden="true" />
-          <span>Tools · Checklists · MEDDPICC-Wissen</span>
+          <span>Berechnen · vorbereiten · nachschlagen</span>
         </div>
       </div>
     </header>
