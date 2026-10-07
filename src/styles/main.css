@@ -2674,10 +2674,29 @@ button.microtool-card:disabled {
 }
 
 .customer-timeline {
-  overflow: hidden;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.timeline-detail-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-panel);
-  background: white;
+  border-bottom: 0;
+  border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+  background: var(--color-surface);
+  padding: var(--space-4) var(--space-5) 0;
+}
+
+.timeline-detail-heading strong {
+  font-size: 0.82rem;
+}
+
+.timeline-detail-heading span {
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
 }
 
 .customer-timeline-heading {
@@ -2755,8 +2774,12 @@ button.microtool-card:disabled {
 }
 
 .timeline-detail-list {
-  margin: var(--space-5) 0 0;
-  padding: 0 var(--space-5) var(--space-5);
+  margin: calc(var(--space-4) * -1) 0 0;
+  border: 1px solid var(--color-border);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-panel) var(--radius-panel);
+  background: var(--color-surface);
+  padding: var(--space-3) var(--space-5) var(--space-5);
   list-style: none;
 }
 
@@ -2907,6 +2930,7 @@ button.microtool-card:disabled {
   }
 
   .customer-timeline-heading,
+  .timeline-detail-heading,
   .timeline-detail-list li {
     align-items: flex-start;
     flex-direction: column;
