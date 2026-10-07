@@ -138,7 +138,10 @@ const areas = [
         <aside class="toolbox-principles" aria-label="Produktprinzipien">
           <div>
             <Presentation :size="20" aria-hidden="true" />
-            <span><strong>Kundenfähig</strong> gekennzeichnete Ergebnisse sind für Präsentationen und gemeinsame Planung gedacht.</span>
+            <span
+              ><strong>Kundenfähig</strong> gekennzeichnete Ergebnisse sind für Präsentationen und gemeinsame Planung
+              gedacht.</span
+            >
           </div>
           <div>
             <CircleDollarSign :size="20" aria-hidden="true" />
