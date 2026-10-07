@@ -1,9 +1,4 @@
-import type {
-  ChecklistDefinition,
-  ChecklistItem,
-  KnowledgeTopic,
-  MeddpiccConcept,
-} from './types'
+import type { ChecklistDefinition, ChecklistItem, KnowledgeTopic, MeddpiccConcept } from './types'
 
 export const economicBuyerConcepts = {
   authority: {
@@ -172,8 +167,7 @@ export const economicBuyerKnowledge: KnowledgeTopic = {
   id: 'economic-buyer',
   eyebrow: 'Wissen · Economic Buyer',
   title: 'Economic Buyer verstehen und sicherer einordnen',
-  lead:
-    'Kläre, wer die wirtschaftliche Entscheidung tatsächlich tragen kann, welche Business Outcomes zählen und welche Annahmen du noch validieren solltest.',
+  lead: 'Kläre, wer die wirtschaftliche Entscheidung tatsächlich tragen kann, welche Business Outcomes zählen und welche Annahmen du noch validieren solltest.',
   shortDefinition:
     'Der Economic Buyer ist die wirtschaftliche Autorität hinter der Investitionsentscheidung. Entscheidend ist nicht der Titel, sondern ob diese Person oder Instanz die Investition priorisieren, freigeben oder stoppen kann und die relevanten Business Outcomes verantwortet.',
   benefit:
@@ -259,8 +253,7 @@ export const economicBuyerChecklist: ChecklistDefinition = {
   id: 'economic-buyer',
   eyebrow: 'Checklist · Economic Buyer',
   title: 'Economic Buyer: Wissen oder nur annehmen?',
-  lead:
-    'Gehe die Punkte kurz durch, wenn du prüfen möchtest, ob du die wirtschaftliche Entscheidungsinstanz wirklich verstanden hast.',
+  lead: 'Gehe die Punkte kurz durch, wenn du prüfen möchtest, ob du die wirtschaftliche Entscheidungsinstanz wirklich verstanden hast.',
   whenToUse:
     'Vor Deal Reviews, wichtigen Kundenterminen oder immer dann, wenn die Rolle des Economic Buyers bisher vor allem auf Titel, Budget oder Aussagen Dritter basiert.',
   benefit:
@@ -422,10 +415,7 @@ const meetingItems: ChecklistItem[] = [
       'Ein Next Step macht das Meeting anschlussfähig. Er kann zum Beispiel ein weiterer Termin, eine Validierung, die Einbindung eines Stakeholders oder die Bestätigung des Decision Process sein.',
     whyItMatters:
       'Ohne klaren Anschluss bleibt der Termin isoliert und wichtige Erkenntnisse werden nicht in den Buying Process übersetzt.',
-    signals: [
-      'Der nächste Schritt hat einen klaren Zweck.',
-      'Wenn möglich sind Owner und Zeitpunkt direkt vereinbar.',
-    ],
+    signals: ['Der nächste Schritt hat einen klaren Zweck.', 'Wenn möglich sind Owner und Zeitpunkt direkt vereinbar.'],
     commonMisinterpretation: '„Wir schicken danach einfach Unterlagen und warten auf Rückmeldung.“',
     possibleQuestionsOrActions: [
       'Was wäre aus Ihrer Sicht der sinnvollste nächste Schritt nach unserem heutigen Gespräch?',
@@ -440,8 +430,7 @@ export const economicBuyerMeetingChecklist: ChecklistDefinition = {
   id: 'economic-buyer-meeting',
   eyebrow: 'Checklist · Economic-Buyer-Termin',
   title: 'Economic-Buyer-Termin in wenigen Minuten vorbereiten',
-  lead:
-    'Nutze die Checklist unmittelbar vor dem Termin, um Value, Kernfragen, Commitment und den nächsten Schritt noch einmal fokussiert zu prüfen.',
+  lead: 'Nutze die Checklist unmittelbar vor dem Termin, um Value, Kernfragen, Commitment und den nächsten Schritt noch einmal fokussiert zu prüfen.',
   whenToUse:
     'Kurz vor einem geplanten Gespräch mit dem Economic Buyer oder einer wirtschaftlichen Entscheidungsinstanz.',
   benefit:
