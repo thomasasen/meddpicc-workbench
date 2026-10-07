@@ -15,7 +15,7 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
   await expect(chart).toBeVisible()
   await expect(page.getByText('Gemeinsamer Go-Live-Plan', { exact: true }).last()).toBeVisible()
   await expect(page.getByText('Beispielwerke GmbH', { exact: true })).toBeVisible()
-  await expect(page.getByText('Target Go-Live', { exact: true })).toBeVisible()
+  await expect(page.locator('.executive-go-live').getByText('Target Go-Live', { exact: true })).toBeVisible()
   await expect(page.getByText(/Kalendertage Planungsfenster/)).toBeVisible()
 
   const rows = chart.locator('.executive-chart-row')
