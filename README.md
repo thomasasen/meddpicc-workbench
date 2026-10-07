@@ -1,29 +1,40 @@
 # MEDDPICC Toolbox
 
-Eine local-first Sammlung fokussierter **MEDDPICC Microtools** für komplexe B2B-Sales-Aufgaben.
+Eine local-first Sammlung fokussierter **Tools, Checklists und Wissenshilfen** für wiederkehrende Aufgaben im komplexen B2B-Vertrieb.
 
-Das Produkt startet nicht mit einem vollständigen Deal-Datensatz, sondern mit einer konkreten Aufgabe: Business Case rechnen, Go-Live rückwärts planen, Decision Criteria strukturieren, Champion testen oder ein Economic-Buyer-Gespräch vorbereiten.
+> **Produktgrenze:** Die Toolbox ist kein ganzheitliches MEDDPICC-System und kein CRM. Sie verwaltet keinen Deal vollständig.
 
-> **Leitprinzip:** Tool zuerst, Datenmodell danach. Jedes Microtool fragt nur die Informationen ab, die es für seine Aufgabe benötigt.
+## Was die Toolbox leisten soll
 
-## Produktmodell
+Ein Account Manager soll die Anwendung öffnen können, wenn eine konkrete Aufgabe ansteht:
 
-Die Startseite ist entlang der acht MEDDPICC-Bereiche aufgebaut: Metrics, Economic Buyer, Decision Criteria, Decision Process, Paper Process, Identify / Implicate Pain, Champion und Competition.
+- einen Go-Live vom Zieltermin rückwärts planen
+- Payback oder Cost of Delay berechnen
+- einen Economic-Buyer-Termin vorbereiten
+- vor einem POC oder Closing nichts Wesentliches vergessen
+- einen MEDDPICC-Begriff oder eine typische Fehlinterpretation schnell nachschlagen
 
-Unter jedem Bereich liegen eigenständige Microtools. Ein Tool muss ohne angelegtes Opportunity-Projekt nutzbar sein.
+Die Anwendung besteht deshalb aus drei Bausteinen:
 
-Es gibt zwei Tool-Klassen:
+### Tools
 
-- **Kundenfähig** – erzeugt Ergebnisse für Präsentationen, Workshops oder gemeinsame Pläne.
-- **Intern** – unterstützt den Seller bei Qualifizierung und Coaching.
+Fokussierte Services für konkrete, wiederkehrende Arbeit. Jedes Tool besitzt einen eigenen kleinen Inputvertrag und funktioniert ohne angelegten Deal.
 
-Ein optionaler Deal Workspace kann später Ergebnisse mehrerer Tools speichern und wiederverwenden. Er ist jedoch kein Eintrittsticket für die Microtools.
+### Checklists
 
-## Erster produktiver Slice
+Lern- und Orientierungshilfen für Themen und wiederkehrende Sales-Situationen. Ein Checklist-Punkt erklärt nicht nur **was** geprüft wird, sondern auch **worum es geht, warum es wichtig ist, woran man es erkennt und was häufig falsch interpretiert wird**.
+
+Checklists erzeugen keinen gespeicherten Deal-Score und keinen Opportunity-Status.
+
+### Knowledge
+
+Kompakte, praxisnahe Referenz für MEDDPICC-Konzepte, damit der Account Manager nicht jedes Mal in den Büchern nachschlagen muss. Diese Wissensbasis kann später auch Checklists und Hilfetexte innerhalb der Tools speisen.
+
+## Aktuell produktiv
 
 ### Go-Live-Rückwärtsplanung
 
-Pfad: Decision Process → Go-Live-Rückwärtsplanung
+Pfad: Tools → Go-Live & Buying Process → Go-Live-Rückwärtsplanung
 
 Eingaben:
 
@@ -39,63 +50,49 @@ Ergebnis:
 - deterministische Rückwärtsrechnung
 - Vorlauf-/Kompressionshinweis
 - kundenfähige visuelle Timeline
-- SVG- und PNG-Export für Präsentationen
+- SVG- und PNG-Export
 
 Arbeitstage berücksichtigen in v0.1 Montag bis Freitag. Feiertage werden bewusst nicht automatisch angenommen.
 
-## MEDDPICC-Fundierung
+## Produktprinzipien
 
-Die fachliche Richtung des ersten Tools folgt zwei Primärquellen, ohne deren Texte zu reproduzieren:
+- **Konkrete Aufgabe vor Datenpflege.**
+- **Kein vollständiger Opportunity-Datensatz als Voraussetzung.**
+- **Keine Pipeline-, Account-, Kontakt- oder Activity-Verwaltung.**
+- **Keine dauerhaft gepflegten MEDDPICC-Scores.**
+- **Local-first und deterministisch by default.**
+- **Kundenfähige Outputs, wenn der Use Case es rechtfertigt.**
+- **Checklists erklären statt nur abhaken zu lassen.**
+- **MEDDPICC bleibt fachliche Orientierung, aber kein erzwungener Workflow.**
 
-- Andy Whyte beschreibt den Go-Live Plan als kundenorientierten, kollaborativen Plan, der sinnvoll vom gewünschten Go-Live rückwärts aufgebaut wird.
-- Darius Lahoutifard empfiehlt, Decision und Paper Process schriftlich und als Timeline abzubilden, Käufer- und Verkäuferaktivitäten sichtbar zu machen und administrative Schritte früh zu antizipieren.
+## Fachliche Fundierung
 
-Die konkrete Softwarelogik und Formulierungen sind eigene Produktentscheidungen.
-
-## Architekturprinzipien
-
-- **Microtool-first:** kein vollständiger MEDDPICC-Datensatz als Voraussetzung.
-- **Deterministisch by default:** gleiche Eingaben liefern gleiche Ergebnisse.
-- **Local-first:** Core-Funktionen laufen im Browser.
-- **Kein verpflichtendes Backend oder AI-Modell.**
-- **Kundenfähiger Output ist ein First-Class-Use-Case.**
-- **Kein CRM-Nachbau.**
-- **Optionaler Workspace statt Pflichtprojekt.**
-- **Microtools bleiben fachlich und technisch möglichst unabhängig.**
+Die fachliche Ausrichtung stützt sich primär auf die bereitgestellten Werke von Andy Whyte und Darius Lahoutifard. Softwarelogik, Informationsarchitektur und konkrete UI-Formulierungen sind eigene Produktentscheidungen. Unterschiede zwischen den Autoren sollen bei Knowledge-Inhalten sichtbar gemacht werden, wenn sie für die praktische Anwendung relevant sind.
 
 ## Technische Basis
-
-Weiterverwendet aus der bisherigen Workbench:
 
 - Vue 3, TypeScript, Vite und Vue Router
 - Vitest und Playwright
 - GitHub Actions / GitHub Pages
 - Lucide Icons
-- vorhandene Design Tokens und Accessibility-Baseline
+- Design Tokens und Accessibility-Baseline
+- local-first Browser-Anwendung
 
-Bestehende Projekt-, Evidence- und Deal-Reasoning-Komponenten bleiben vorerst als Legacy-/Experimentiercode erhalten, sind aber nicht mehr das primäre Produktmodell.
+Bestehende frühere Deal-/Project-Komponenten bleiben Legacy-/Experimentiercode und sind nicht mehr das primäre Produktmodell.
 
 ## Qualitätsgates
 
-Vor Merge eines Feature-PRs werden Formatierung, Lint, Unit Tests, Production Build, Pages-Integrität und Playwright für Desktop und Mobile geprüft.
-
-## Projektsprache
-
-Normale Produkt-, Dokumentations- und PR-Sprache ist Deutsch. Etablierte MEDDPICC- und technische Begriffe bleiben im Original.
-
-## Scope-Grenzen
-
-Die Toolbox ist kein CRM, kein Pipeline-System, keine Kontaktdatenbank, kein E-Mail-Client und keine generische Task-App.
+Vor Merge eines Feature-PRs werden mindestens Formatierung, Lint, Unit Tests, Production Build, Pages-Integrität und Playwright für Desktop und Mobile geprüft.
 
 ## Dokumentation
 
-- Projektauftrag: docs/PROJECT_CHARTER.md
-- Architektur: docs/ARCHITECTURE.md
-- Roadmap: docs/ROADMAP.md
-- Fortschritt: docs/PROGRESS.md
-- Design System: docs/DESIGN_SYSTEM.md
-- Regeln der Go-Live-Rückwärtsplanung: docs/REVERSE_TIMELINE_RULES.md
-- Agent-Anweisungen: AGENTS.md
+- Projektauftrag: `docs/PROJECT_CHARTER.md`
+- Architektur: `docs/ARCHITECTURE.md`
+- Roadmap: `docs/ROADMAP.md`
+- Fortschritt: `docs/PROGRESS.md`
+- Design System: `docs/DESIGN_SYSTEM.md`
+- Regeln der Go-Live-Rückwärtsplanung: `docs/REVERSE_TIMELINE_RULES.md`
+- Agent-Anweisungen: `AGENTS.md`
 
 ## Lizenz
 
