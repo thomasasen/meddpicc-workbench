@@ -28,8 +28,12 @@ Die folgenden Regeln sind **Toolbox-Produktentscheidungen**, nicht als offiziell
 6. Feiertage werden nicht automatisch berücksichtigt.
 7. Der späteste errechnete Start wird gegen ein explizites Planungsdatum verglichen.
 8. Ein negativer Vorlauf wird als Kompressionsbedarf beschrieben, nicht als automatische Deal-Niederlage.
-9. Die Visualisierung besitzt immer eine textuelle Detaildarstellung.
-10. SVG und PNG sind kundenfähige Exportformate; interne Coaching-Wertungen werden dort nicht ergänzt.
+9. Die Kundenansicht verwendet eine zeitproportionale Executive-Timeline: Position und Breite eines Prozessbalkens ergeben sich aus den errechneten Start- und Enddaten.
+10. Arbeitstage werden für die Darstellung nicht künstlich gleich breit gemacht; maßgeblich ist der daraus resultierende Kalenderzeitraum zwischen Start und Ende.
+11. Änderungen an Dauer, Reihenfolge oder Target Go-Live aktualisieren die Visualisierung unmittelbar aus demselben deterministischen Plan.
+12. Die Visualisierung besitzt immer eine textuelle Detaildarstellung, damit exakte Daten und Verantwortlichkeiten auch ohne Grafik verständlich bleiben.
+13. Die Grafik impliziert keine Parallelisierung oder Critical-Path-Logik. In v0.1 werden die eingegebenen Schritte weiterhin sequenziell rückwärts gerechnet.
+14. SVG und PNG spiegeln denselben kundenfähigen Visualstil wider; interne Coaching-Wertungen werden dort nicht ergänzt.
 
 ## Grenzen v0.1
 
