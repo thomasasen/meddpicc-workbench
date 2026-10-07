@@ -75,9 +75,9 @@ test('rechnet einen Go-Live-Plan rückwärts und zeigt kundenfähige Exporte', a
   await expect(page.getByText('Go-Live-Plan', { exact: true }).last()).toBeVisible()
   await expect(page.getByText('Beispielwerke GmbH', { exact: true })).toBeVisible()
   const timelineChart = page.getByTestId('executive-timeline-chart')
-  await expect(
-    timelineChart.locator('[data-segment-id="implementation"] .executive-row-label strong'),
-  ).toHaveText('Implementierung / Rollout')
+  await expect(timelineChart.locator('[data-segment-id="implementation"] .executive-row-label strong')).toHaveText(
+    'Implementierung / Rollout',
+  )
   await expect(timelineChart.locator('[data-segment-id="procurement"] .executive-row-label strong')).toHaveText(
     'Einkauf / Procurement',
   )
