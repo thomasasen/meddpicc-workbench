@@ -19,11 +19,28 @@ Technisch vorhanden:
 - deterministische Rückwärtsrechnung
 - Kalender- und Arbeitstage
 - Verantwortlichkeiten und Prozessbereiche
+- intuitive Reihenfolgeänderung per Drag & Drop mit Tastatur-Fallback
 - Vorlauf-/Kompressionshinweis
 - kundenfähige Timeline
 - SVG-/PNG-Export
 - Unit Tests
 - Playwright Desktop/Mobile
+
+### UX-Erweiterung: Schritt-Reihenfolge
+
+Branch: `feat/reverse-timeline-drag-reorder`  
+PR: **#41**
+
+Umgesetzt:
+
+- sichtbarer Drag-Griff je Prozessschritt
+- Reordering per Maus, Touch und Pen über Pointer Events
+- Tastatur-Fallback am selben Griff mit ↑ / ↓ / Home / End
+- Screenreader-Live-Feedback nach Positionsänderung
+- keine sichtbaren Auf-/Ab-Pfeilbuttons mehr
+- Rückwärtsberechnung selbst unverändert
+
+Technische QS: CI-Lauf **#336** erfolgreich inklusive Playwright Desktop/Mobile und Pages-Integrität.
 
 ## Economic Buyer – Checklists & Knowledge v0.1
 

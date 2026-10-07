@@ -21,7 +21,7 @@ Die Quelle beschreibt Decision Process als schrittweisen Kundenvorgang und empfi
 Die folgenden Regeln sind **Toolbox-Produktentscheidungen**, nicht als offizielle MEDDPICC-Formel behauptet:
 
 1. Target Go-Live ist der feste Endpunkt.
-2. Schritte werden in der Eingabemaske vom Go-Live rückwärts angeordnet.
+2. Schritte werden in der Eingabemaske vom Go-Live rückwärts angeordnet. Die sichtbare Reihenfolge kann primär per Drag & Drop verändert werden; derselbe Drag-Griff unterstützt für Tastaturnutzung Pfeiltasten sowie Home/End.
 3. Jeder Schritt besitzt Bezeichnung, Dauer, Kalender- oder Arbeitstage, Verantwortlichkeit und Bereich.
 4. Die Berechnung zieht Schritt für Schritt die Dauer vom jeweils späteren Meilenstein ab.
 5. Arbeitstage sind Montag bis Freitag.

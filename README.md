@@ -169,6 +169,7 @@ Pfad: **Tools → Go-Live & Buying Process → Go-Live-Rückwärtsplanung**
 - Planungsdatum
 - Target Go-Live
 - beliebig viele Prozessschritte
+- Reihenfolge der Schritte per Drag & Drop; Tastaturbedienung über den Drag-Griff
 - pro Schritt: Bezeichnung, Dauer, Kalender-/Arbeitstage, Verantwortlichkeit und Bereich
 
 ### Ergebnis

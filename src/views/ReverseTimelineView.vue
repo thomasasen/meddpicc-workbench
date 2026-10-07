@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowDown, ArrowLeft, ArrowUp, CalendarDays, Download, FileImage, Plus, RotateCcw, Trash2 } from '@lucide/vue'
+import { ArrowLeft, CalendarDays, Download, FileImage, GripVertical, Plus, RotateCcw, Trash2 } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 import {
@@ -89,6 +89,9 @@ const referenceDate = ref(localTodayIso())
 const targetGoLiveDate = ref('')
 const steps = ref<EditableStep[]>(starterSteps())
 const exportMessage = ref('')
+const draggingStepId = ref<string | null>(null)
+const reorderAnnouncement = ref('')
+let activePointerId: number | null = null
 let stepCounter = 0
 
 const calculation = computed(() =>
@@ -119,11 +122,90 @@ function removeStep(index: number) {
   steps.value.splice(index, 1)
 }
 
+function reorderStep(fromIndex: number, toIndex: number) {
+  if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || toIndex >= steps.value.length) return
+
+  const [step] = steps.value.splice(fromIndex, 1)
+  steps.value.splice(toIndex, 0, step)
+  reorderAnnouncement.value = `${step.label} ist jetzt Position ${toIndex + 1}.`
+}
+
 function moveStep(index: number, direction: -1 | 1) {
-  const target = index + direction
-  if (target < 0 || target >= steps.value.length) return
-  const [step] = steps.value.splice(index, 1)
-  steps.value.splice(target, 0, step)
+  reorderStep(index, index + direction)
+}
+
+function stepIndexAtPoint(y: number): number {
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.reverse-step-card'))
+  let closestIndex = -1
+  let closestDistance = Number.POSITIVE_INFINITY
+
+  for (const card of cards) {
+    if (!card.dataset.stepId) continue
+
+    const rect = card.getBoundingClientRect()
+    const distance = y < rect.top ? rect.top - y : y > rect.bottom ? y - rect.bottom : 0
+    if (distance >= closestDistance) continue
+
+    const index = steps.value.findIndex((step) => step.id === card.dataset.stepId)
+    if (index < 0) continue
+
+    closestIndex = index
+    closestDistance = distance
+  }
+
+  return closestIndex
+}
+
+function startStepDrag(event: PointerEvent, index: number) {
+  if (event.pointerType === 'mouse' && event.button !== 0) return
+
+  const step = steps.value[index]
+  draggingStepId.value = step.id
+  activePointerId = event.pointerId
+
+  try {
+    ;(event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId)
+  } catch {
+    // Synthetic test events may not create an active browser pointer. Reordering still works without capture.
+  }
+}
+
+function moveDraggedStep(event: PointerEvent) {
+  if (!draggingStepId.value || event.pointerId !== activePointerId) return
+
+  event.preventDefault()
+  const fromIndex = steps.value.findIndex((step) => step.id === draggingStepId.value)
+  const toIndex = stepIndexAtPoint(event.clientY)
+  if (fromIndex >= 0 && toIndex >= 0 && fromIndex !== toIndex) reorderStep(fromIndex, toIndex)
+}
+
+function finishStepDrag(event: PointerEvent) {
+  if (event.pointerId !== activePointerId) return
+
+  const target = event.currentTarget as HTMLElement
+  try {
+    if (target.hasPointerCapture?.(event.pointerId)) target.releasePointerCapture(event.pointerId)
+  } catch {
+    // Pointer capture may already be gone after cancellation or a synthetic event.
+  }
+  draggingStepId.value = null
+  activePointerId = null
+}
+
+function handleDragKey(event: KeyboardEvent, index: number) {
+  if (event.key === 'ArrowUp') {
+    event.preventDefault()
+    moveStep(index, -1)
+  } else if (event.key === 'ArrowDown') {
+    event.preventDefault()
+    moveStep(index, 1)
+  } else if (event.key === 'Home') {
+    event.preventDefault()
+    reorderStep(index, 0)
+  } else if (event.key === 'End') {
+    event.preventDefault()
+    reorderStep(index, steps.value.length - 1)
+  }
 }
 
 function resetStarterSteps() {
@@ -269,8 +351,9 @@ function statusText(): string {
           <div>
             <p class="eyebrow">2 · Prozess</p>
             <h2 id="steps-title">Schritte vom Go-Live rückwärts</h2>
-            <p class="section-note">
-              Der oberste Schritt liegt direkt vor dem Go-Live. Darunter folgen die jeweils früher notwendigen Schritte.
+            <p id="reverse-step-order-help" class="section-note">
+              Ziehe die Schritte am Griff in die gewünschte Reihenfolge. Der oberste Schritt liegt direkt vor dem
+              Go-Live; darunter folgen die jeweils früher notwendigen Schritte.
             </p>
           </div>
           <div class="reverse-step-actions">
@@ -285,9 +368,32 @@ function statusText(): string {
           </div>
         </div>
 
-        <div class="reverse-step-list">
-          <article v-for="(step, index) in steps" :key="step.id" class="reverse-step-card">
-            <div class="reverse-step-position" :aria-label="`Position ${index + 1}`">{{ index + 1 }}</div>
+        <p class="sr-only" aria-live="polite">{{ reorderAnnouncement }}</p>
+
+        <div class="reverse-step-list" aria-describedby="reverse-step-order-help">
+          <article
+            v-for="(step, index) in steps"
+            :key="step.id"
+            class="reverse-step-card"
+            :class="{ 'reverse-step-card--dragging': draggingStepId === step.id }"
+            :data-step-id="step.id"
+          >
+            <div class="reverse-step-leading">
+              <button
+                class="reverse-drag-handle"
+                type="button"
+                :aria-label="`${step.label} verschieben. Ziehen oder Pfeiltasten verwenden.`"
+                title="Ziehen zum Sortieren · Pfeiltasten für Tastatur"
+                @pointerdown="startStepDrag($event, index)"
+                @pointermove="moveDraggedStep"
+                @pointerup="finishStepDrag"
+                @pointercancel="finishStepDrag"
+                @keydown="handleDragKey($event, index)"
+              >
+                <GripVertical :size="18" aria-hidden="true" />
+              </button>
+              <div class="reverse-step-position" :aria-label="`Position ${index + 1}`">{{ index + 1 }}</div>
+            </div>
 
             <div class="reverse-step-fields">
               <label class="field reverse-step-name">
@@ -323,25 +429,7 @@ function statusText(): string {
               </label>
             </div>
 
-            <div class="reverse-step-controls" aria-label="Schritt sortieren oder entfernen">
-              <button
-                class="icon-action"
-                type="button"
-                :disabled="index === 0"
-                :aria-label="`${step.label} nach oben`"
-                @click="moveStep(index, -1)"
-              >
-                <ArrowUp :size="17" aria-hidden="true" />
-              </button>
-              <button
-                class="icon-action"
-                type="button"
-                :disabled="index === steps.length - 1"
-                :aria-label="`${step.label} nach unten`"
-                @click="moveStep(index, 1)"
-              >
-                <ArrowDown :size="17" aria-hidden="true" />
-              </button>
+            <div class="reverse-step-controls" aria-label="Schritt entfernen">
               <button
                 class="icon-action icon-action--danger"
                 type="button"

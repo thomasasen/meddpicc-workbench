@@ -2516,13 +2516,56 @@ button.microtool-card:disabled {
 
 .reverse-step-card {
   display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) auto;
+  grid-template-columns: 78px minmax(0, 1fr) auto;
   gap: var(--space-3);
   align-items: end;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-panel);
   background: var(--color-bg);
   padding: var(--space-3);
+  transition:
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast),
+    background-color var(--motion-fast);
+}
+
+.reverse-step-card--dragging {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  box-shadow: var(--shadow-panel);
+}
+
+.reverse-step-leading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.reverse-drag-handle {
+  width: 36px;
+  height: 40px;
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.reverse-drag-handle:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent-strong);
+}
+
+.reverse-drag-handle:active,
+.reverse-step-card--dragging .reverse-drag-handle {
+  cursor: grabbing;
+  border-color: var(--color-accent);
+  color: var(--color-accent-strong);
 }
 
 .reverse-step-position {
@@ -2754,12 +2797,23 @@ button.microtool-card:disabled {
 }
 
 @media (max-width: 1080px) {
-  .toolbox-area,
-  .reverse-step-card {
+  .toolbox-area {
     grid-template-columns: 1fr;
   }
 
+  .reverse-step-card {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .reverse-step-leading {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
   .reverse-step-fields {
+    grid-column: 1 / -1;
+    grid-row: 2;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -2768,7 +2822,9 @@ button.microtool-card:disabled {
   }
 
   .reverse-step-controls {
-    padding-left: 45px;
+    grid-column: 2;
+    grid-row: 1;
+    padding-left: 0;
   }
 
   .reverse-context-grid {
@@ -2839,6 +2895,15 @@ button.microtool-card:disabled {
 
   .reverse-step-controls {
     padding-left: 0;
+  }
+
+  .reverse-drag-handle {
+    width: 40px;
+    height: 44px;
+  }
+
+  .reverse-step-position {
+    height: 44px;
   }
 
   .customer-timeline-heading,
@@ -3757,3 +3822,13 @@ button.microtool-card:disabled {
   }
 }
 
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
