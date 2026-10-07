@@ -7,7 +7,9 @@ test('zeigt die MEDDPICC Toolbox als Microtool-Startseite', async ({ page }) => 
   await page.goto('/meddpicc-workbench/')
 
   await expect(page.getByText('MEDDPICC Toolbox', { exact: true }).first()).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Das passende Werkzeug für die konkrete Sales-Aufgabe.' })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Das passende Werkzeug für die konkrete Sales-Aufgabe.' }),
+  ).toBeVisible()
 
   for (const area of [
     'Metrics',
