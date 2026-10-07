@@ -42,6 +42,28 @@ test('sortiert Go-Live-Schritte intuitiv per Drag und per Tastatur', async ({ pa
     clientX: handleBox.x + handleBox.width / 2,
     clientY: handleBox.y + handleBox.height / 2,
   })
+  const liftedCard = page.locator('.reverse-step-card').first()
+  await expect(liftedCard).toHaveClass(/reverse-step-card--dragging/)
+
+  const liftedStyle = await liftedCard.evaluate((element) => {
+    const style = window.getComputedStyle(element)
+    return {
+      transform: style.transform,
+      boxShadow: style.boxShadow,
+      zIndex: style.zIndex,
+    }
+  })
+
+  expect(liftedStyle.transform).not.toBe('none')
+  expect(liftedStyle.boxShadow).not.toBe('none')
+  expect(liftedStyle.zIndex).toBe('4')
+
+  await page.addStyleTag({ content: '.skip-link { display: none !important; }' })
+  await page.screenshot({
+    path: testInfo.outputPath(`reverse-timeline-drag-lift-${testInfo.project.name}.png`),
+    fullPage: true,
+  })
+
   await firstHandle.dispatchEvent('pointermove', {
     pointerId,
     pointerType: 'touch',
@@ -90,5 +112,47 @@ test('sortiert Go-Live-Schritte intuitiv per Drag und per Tastatur', async ({ pa
   await page.screenshot({
     path: testInfo.outputPath(`reverse-timeline-drag-${testInfo.project.name}.png`),
     fullPage: true,
+  })
+})
+
+test('respektiert reduzierte Bewegung beim angehobenen Drag-State', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/meddpicc-workbench/#/tools/reverse-timeline')
+
+  const firstHandle = page.getByRole('button', { name: /Implementierung.*Rollout verschieben/ })
+  const handleBox = await firstHandle.boundingBox()
+
+  expect(handleBox).not.toBeNull()
+  if (!handleBox) return
+
+  const pointerId = 43
+  await firstHandle.dispatchEvent('pointerdown', {
+    pointerId,
+    pointerType: 'touch',
+    isPrimary: true,
+    button: 0,
+    clientX: handleBox.x + handleBox.width / 2,
+    clientY: handleBox.y + handleBox.height / 2,
+  })
+
+  const liftedCard = page.locator('.reverse-step-card').first()
+  const reducedStyle = await liftedCard.evaluate((element) => {
+    const style = window.getComputedStyle(element)
+    return {
+      transform: style.transform,
+      boxShadow: style.boxShadow,
+    }
+  })
+
+  expect(reducedStyle.transform).toBe('none')
+  expect(reducedStyle.boxShadow).not.toBe('none')
+
+  await firstHandle.dispatchEvent('pointerup', {
+    pointerId,
+    pointerType: 'touch',
+    isPrimary: true,
+    button: 0,
+    clientX: handleBox.x + handleBox.width / 2,
+    clientY: handleBox.y + handleBox.height / 2,
   })
 })
