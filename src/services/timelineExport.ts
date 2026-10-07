@@ -36,10 +36,7 @@ function segmentFill(segment: ReverseTimelineSegment): string {
   }
 }
 
-export function buildCustomerTimelineSvg(
-  plan: ReverseTimelinePlan,
-  options: TimelineExportOptions,
-): string {
+export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: TimelineExportOptions): string {
   const width = 1600
   const left = 390
   const right = 80
@@ -128,7 +125,10 @@ export async function downloadTimelinePng(svg: string, fileName: string): Promis
 
     context.drawImage(image, 0, 0)
     const pngBlob = await new Promise<Blob>((resolve, reject) => {
-      canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('PNG konnte nicht erzeugt werden.'))), 'image/png')
+      canvas.toBlob(
+        (blob) => (blob ? resolve(blob) : reject(new Error('PNG konnte nicht erzeugt werden.'))),
+        'image/png',
+      )
     })
 
     downloadBlob(pngBlob, fileName)
