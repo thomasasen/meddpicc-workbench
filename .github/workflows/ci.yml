@@ -66,6 +66,14 @@ jobs:
           PLAYWRIGHT_PREBUILT: '1'
         run: npm run test:e2e
 
+      - name: UI-QS-Screenshots bereitstellen
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ui-qs-screenshots
+          path: test-results/**/*.png
+          if-no-files-found: ignore
+
   main-pages-integrity:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest

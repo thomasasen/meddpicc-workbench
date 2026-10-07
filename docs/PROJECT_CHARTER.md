@@ -2,185 +2,85 @@
 
 ## Arbeitstitel
 
-**MEDDPICC Workbench**
+**MEDDPICC Toolbox**
 
 ## Problem
 
-Komplexe B2B-Opportunities sammeln im Laufe eines Sales Cycles große Mengen an Qualifizierungswissen. Viele CRM-Implementierungen speichern davon nur eine stark komprimierte Momentaufnahme: einen Economic Buyer, einen Champion, ein Close Date, einen Wettbewerber oder wenige Notizen.
+MEDDPICC-Arbeit besteht in der Praxis aus vielen kleinen, wiederkehrenden Aufgaben: Value rechnen, Termine rückwärts planen, Entscheidungskriterien strukturieren, Paper Process visualisieren, einen Champion testen oder ein Economic-Buyer-Gespräch vorbereiten.
 
-Dabei gehen genau die Informationen verloren, die für belastbare Qualifizierung wichtig sind:
-
-- Woher stammt eine Aussage?
-- Ist sie Fakt, Kundenaussage, Interpretation oder Annahme?
-- Was ist noch unbekannt?
-- Welche Evidenz stützt eine Schlussfolgerung?
-- Was hat sich über die Zeit verändert?
-- Welches Gap erzeugt Deal-Risiko?
-- Welche Aktion schließt dieses Gap?
-- Wie greifen Decision Process, Paper Process und Implementierungszeitplan ineinander?
-
-Gute Pflege per Hand erzeugt gleichzeitig viel repetitive administrative Arbeit.
+Ein schwergewichtiges zentrales Deal-Datenmodell erzeugt dabei oft mehr Pflege als Nutzen. Besonders problematisch ist es, wenn ein Seller erst zahlreiche strukturierte Informationen erfassen muss, bevor ein einzelnes Werkzeug überhaupt verwendbar ist.
 
 ## Vision
 
-Eine **local-first MEDDPICC Deal-Reasoning- und Coaching-Workbench**, die rigorose Qualifizierung so praktikabel macht, dass sie während des gesamten komplexen Sales Cycles kontinuierlich genutzt werden kann.
+Eine Sammlung fokussierter, local-first **MEDDPICC Microtools**, die jeweils eine konkrete Seller-Aufgabe schnell und fachlich sauber lösen.
 
-Die Anwendung übernimmt mechanische und regelbasierte Denkarbeit. Die fachliche Beurteilung bleibt beim Seller.
+Das Produktversprechen lautet:
 
-Das Produktversprechen ist nicht „MEDDPICC digital pflegen“, sondern **„aus vorhandenem Dealwissen schneller die richtige nächste Arbeit ableiten“**.
-
-Beispiele:
-
-- Qualification Gaps deterministisch erkennen und erklären
-- wenige Next Best Actions priorisieren
-- vor POC, Pricing, Proposal oder Commit Qualification Gates prüfen
-- Champion und Economic Buyer anhand Evidence testen
-- ROI, Payback und Cost of Delay berechnen
-- Decision Process und Paper Process auf Lücken, Dependencies und unrealistische Termine prüfen
-- rückwärts vom Target Close / Go-Live planen
-- Meeting Prep aus aktuellen Gaps und Gesprächszielen ableiten
-- konsistente Deal Reviews erzeugen
-
-## Produktversprechen
-
-Nach dem Öffnen einer portablen `.meddpicc`-Projektdatei soll ein Seller sofort verstehen:
-
-1. was bestätigt ist
-2. was nur teilweise belegt ist
-3. was Annahme ist
-4. was unbekannt ist
-5. was riskant ist
-6. was als Nächstes passieren sollte
-
-## Projektsprache
-
-Die Projektsprache ist Deutsch.
-
-MEDDPICC-Fachbegriffe wie `Economic Buyer`, `Decision Process`, `Paper Process`, `Champion` oder `Competition` bleiben im Original. Code und technische Identifier bleiben Englisch.
+> **Konkrete Aufgabe öffnen → nur notwendige Inputs erfassen → nachvollziehbares Ergebnis erhalten → intern oder mit dem Kunden weiterverwenden.**
 
 ## Primäre Nutzer
 
-### Account Executive / Strategic Account Manager
-
-Benötigt eine belastbare Arbeitsdatei für eine komplexe Opportunity, ohne parallele Tabellen und Dokumente pflegen zu müssen.
-
-### Sales Manager
-
-Möchte einen Deal anhand Evidenz statt Seller-Optimismus prüfen und die wenigen wirklich kritischen Gaps erkennen.
-
-### Deal Team
-
-Benötigt eine gemeinsame, portable Darstellung von Qualifizierung, Prozess, Value, Risiken und nächsten Aktionen.
-
-## Primäre Use Cases
-
-### Bestehende Opportunity öffnen
-
-Eine `.meddpicc`-Datei wird aus CRM oder Ablage geladen, in der Workbench bearbeitet und anschließend wieder gespeichert.
-
-### Deal prüfen
-
-Der Deal Inspector zeigt die wenigen kritischen Qualification Gaps, Risiken und fehlenden Belege und erklärt die zugrunde liegenden Regeln und Inputs.
-
-### Nächste Aktion bestimmen
-
-Aus den offenen Gaps priorisiert die Workbench wenige konkrete Sales-Aktionen und erklärt, warum diese jetzt wichtiger sind als andere.
-
-### Qualification Gate prüfen
-
-Vor ressourcenintensiven Schritten wie POC, Proposal, Pricing oder Commit prüft die Workbench deterministisch, welche Voraussetzungen erfüllt bzw. noch offen sind.
-
-### Deal Review vorbereiten
-
-Die Workbench erzeugt einen strukturierten Deal Review direkt aus dem aktuellen Projektstand.
-
-### Business Case pflegen
-
-Annahmen oder kundenseitig bestätigte Werte werden aktualisiert und Value, ROI, Payback und Cost of Delay deterministisch neu berechnet.
-
-### Close Date schützen
-
-Decision Process, Paper Process und Go-Live-Planung werden kombiniert, um unrealistische Termine, fehlende Schritte und Abhängigkeiten sichtbar zu machen.
+- Account Executive / Strategic Account Manager
+- Sales Manager / Deal Coach
+- Deal Team
 
 ## Produktprinzipien
 
-### Workflows statt Datensätze
+### Microtool-first
 
-Die primäre UI folgt Seller-Aufgaben wie „Deal prüfen“, „Champion testen“ oder „Business Case rechnen“. Das Projektschema ist ein Datenfundament und kein Auftrag, für jedes Feld eine CRUD-Oberfläche zu bauen.
+Jedes Tool muss eigenständig funktionieren. Ein vollständiges Opportunity-Projekt darf keine Voraussetzung sein.
+
+### Eigener Inputvertrag pro Tool
+
+Ein Tool fragt nur Daten ab, die seine Logik tatsächlich benötigt. Eingaben sind fachlich gruppiert und werden nicht aus einem globalen Schema abgeleitet.
+
+### Kundenfähige Artefakte
+
+Wo sinnvoll, erzeugt ein Tool einen Output, der in Kundenterminen, Präsentationen oder gemeinsamen Plänen genutzt werden kann.
+
+### Internes Coaching bleibt möglich
+
+Champion-, Economic-Buyer- oder Qualification-Tools dürfen bewusst seller-only sein.
 
 ### Deterministisch by default
 
-MEDDPICC-Reasoning, Gap Detection, Priorisierung, Berechnungen und Prozessplanung müssen ohne AI-/LLM-Runtime funktionieren. Gleiche Inputs liefern gleiche Ergebnisse.
+Berechnungen und regelbasierte Ableitungen funktionieren ohne AI und sind reproduzierbar.
 
-### AI ist optionaler Input, nicht die Reasoning Engine
+### Optionaler Workspace
 
-Eine spätere AI-Funktion darf unstrukturierte Texte in Candidate Evidence überführen. Candidate Evidence wird erst nach Bestätigung zum kanonischen Projektwissen.
+Ein späterer Deal Workspace kann Inputs und Ergebnisse mehrerer Microtools bündeln. Er dient den Tools; die Tools hängen nicht von ihm ab.
 
-### Evidenz ist ein First-Class-Objekt
+### Kein CRM-Nachbau
 
-Eine Qualifizierungsaussage ohne Provenienz ist schwächer als dieselbe Aussage mit Quelle, Datum, Kontext und Klassifikation.
+Account-/Kontaktverwaltung, Pipeline, Activity Timeline und generische Task-Verwaltung gehören nicht in den Core.
 
-### Unbekannt ist ein gültiger Zustand
+## Startstruktur
 
-Das Tool darf niemals dazu zwingen, Daten zu erfinden, nur um einen Score zu vervollständigen.
+Die Startseite folgt Metrics, Economic Buyer, Decision Criteria, Decision Process, Paper Process, Identify / Implicate Pain, Champion und Competition. Jeder Bereich enthält mehrere Microtools.
 
-### Scoring muss erklärbar sein
+## Erster Referenz-Slice
 
-Ein Score ohne zugrunde liegende Evidenz ist nicht hilfreich. Jeder abgeleitete Status muss auf konkrete Projektdaten und deterministische Regeln zurückführbar sein.
+**Decision Process → Go-Live-Rückwärtsplanung**
 
-### Berechnungen müssen reproduzierbar sein
+Dieses Tool dient als Architekturtest für das neue Produktmodell:
 
-Gleiche Projektdatei und gleiche App-Version müssen zum gleichen berechneten Ergebnis führen.
+1. schlanker, tool-spezifischer Input
+2. reine Domain-Logik
+3. direkt verständliche Visualisierung
+4. kundenfähiger Export
+5. Desktop- und Mobile-Nutzbarkeit
 
-### Projektdateien müssen portabel bleiben
+Wenn dieser Slice funktioniert, werden weitere Tools nach demselben Muster ergänzt.
 
-Ein Projekt darf nicht von Browserprofil, einzelner Maschine oder proprietärem Backend abhängen.
+## Erfolgskriterien v1
 
-### Das Tool ist kein CRM
+v1 ist erfolgreich, wenn mehrere eigenständige MEDDPICC Microtools ohne Projektanlage nutzbar sind, nur notwendige Daten erfassen, nachvollziehbare Logik besitzen, sinnvoll kombinierbar bleiben und hochwertige interne oder kundenfähige Ergebnisse erzeugen.
 
-Account-Stammdaten, E-Mail, Activity Capture, Pipeline Rollups und Contact Management liegen außerhalb des Kernscopes.
+## Nichtziele v1
 
-## Erfolgskriterien für v1
-
-v1 ist erfolgreich, wenn ein Nutzer:
-
-- eine portable `.meddpicc`-Datei zuverlässig erstellen, öffnen, validieren, migrieren und speichern kann
-- Evidence, Annahmen und unbekannte Informationen sauber unterscheiden und auf Quellen zurückführen kann
-- einen Deal Inspector nutzen kann, der kritische Qualification Gaps nachvollziehbar erkennt
-- wenige Next Best Actions mit klarer Begründung erhält
-- Qualification Gates vor POC, Proposal, Pricing, Commit und ähnlichen Schritten nutzen kann
-- Champion und Economic Buyer evidence-basiert prüfen kann
-- Value / ROI / Payback / Cost of Delay deterministisch berechnen kann
-- Decision Process und Paper Process inklusive Dependencies und Closing-Timeline prüfen kann
-- ein nächstes Meeting aus Deal-Gaps fokussiert vorbereiten kann
-- einen verwendbaren Deal Review exportieren kann
-- alle Core-Funktionen ohne AI-/LLM-Runtime und ohne verpflichtendes Backend nutzen kann
-
-## Nichtziele für v1
-
-- CRM-artige Account- oder Kontaktverwaltung
-- Pipeline Board und Pipeline Rollups
-- Activity Timeline oder generische Task-App
-- AI als Voraussetzung für Deal-Reasoning oder Empfehlungen
-- automatische Meeting-Transkription
-- automatische CRM-Synchronisation
-- E-Mail-/Kalender-Integration
+- vollständiges CRM
+- verpflichtender globaler Deal-Datensatz
+- Pflicht-Upload von Opportunity-Daten
+- AI als Voraussetzung
+- automatische CRM-Synchronisierung
 - Multi-User-Echtzeit-Kollaboration
-- Cloud-Projektspeicher
-- Enterprise Identity Management
-- eingebettetes Dokumentarchiv
-
-Diese Themen können später bewertet werden, dürfen aber v1 nicht architektonisch belasten.
-
-## Qualitätsstandard
-
-Die Anwendung soll für reale Opportunity-Daten in folgendem begrenztem Sinn geeignet sein:
-
-- kein absichtlicher Runtime-Upload von Projektdaten
-- keine Analytics-Abhängigkeit mit Zugriff auf Projektinhalte
-- klare Trennung von gespeicherter Datei und temporärem Browser-State
-- Validierung vor Öffnen und Speichern
-- Tests für deterministische Berechnungen
-- Tests für Schema-Migration
-- kein stiller Datenverlust
-- klare Warnung bei nicht unterstützter zukünftiger Schema-Version

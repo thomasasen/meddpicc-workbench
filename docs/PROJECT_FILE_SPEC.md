@@ -1,4 +1,4 @@
-# Spezifikation der MEDDPICC-Projektdatei
+> **Produktmodell-Hinweis 07.10.2026:** MEDDPICC Toolbox ist inzwischen microtool-first. Die Projektdatei ist kein Pflicht-Einstieg mehr, sondern ein möglicher späterer optionaler Deal-Workspace. Bei Widersprüchen haben AGENTS.md, PROJECT_CHARTER.md, ARCHITECTURE.md und ROADMAP.md Vorrang.\n\n# Spezifikation der MEDDPICC-Projektdatei
 
 ## Zweck
 
