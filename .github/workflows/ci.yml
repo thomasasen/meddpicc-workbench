@@ -65,6 +65,21 @@ jobs:
       - name: veröffentlichten Pages-Root prüfen
         run: npm run pages:check
 
+      - name: Pages-Artefakte für Synchronisierung erzeugen
+        if: failure()
+        run: npm run pages:sync
+
+      - name: Pages-Artefakte bereitstellen
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: pages-sync
+          path: |
+            index.html
+            pages-build.json
+            assets/
+          if-no-files-found: error
+
       - name: Playwright Chromium installieren
         run: npx playwright install --with-deps chromium
 
