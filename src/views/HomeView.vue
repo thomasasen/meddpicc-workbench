@@ -3,7 +3,6 @@ import {
   ArrowRight,
   Award,
   Calculator,
-  CircleDollarSign,
   FileText,
   Flame,
   ListChecks,
@@ -14,92 +13,97 @@ import {
   Wrench,
 } from '@lucide/vue'
 
-const areas = [
+const pillars = [
   {
-    code: 'M',
-    title: 'Metrics',
-    description: 'Wert quantifizieren und finanzielle Wirkung verständlich machen.',
-    icon: Calculator,
-    tools: [
-      { label: 'Business Case', note: 'ROI, Payback und Value Bridge', customerReady: true },
-      { label: 'Cost of Delay', note: 'Kosten des Wartens sichtbar machen', customerReady: true },
-    ],
+    id: 'tools',
+    title: 'Tools',
+    kicker: 'Arbeit vereinfachen',
+    description: 'Berechnen, strukturieren und visualisieren – für konkrete, wiederkehrende Sales-Aufgaben.',
+    icon: Wrench,
   },
   {
-    code: 'E',
-    title: 'Economic Buyer',
-    description: 'Economic Buyer identifizieren, vorbereiten und auf Business Outcomes ausrichten.',
-    icon: UserRound,
-    tools: [
-      { label: 'EB Meeting Prep', note: 'Gespräch fokussiert vorbereiten', customerReady: false },
-      { label: 'EB Value Story', note: 'Executive Value Narrative', customerReady: true },
-    ],
-  },
-  {
-    code: 'D',
-    title: 'Decision Criteria',
-    description: 'Entscheidungskriterien strukturieren und Differenzierung herausarbeiten.',
+    id: 'checklists',
+    title: 'Checklists',
+    kicker: 'Nichts Wichtiges vergessen',
+    description: 'Kurze Prüfpunkte mit Erklärungen, Beispielen und typischen Fehlinterpretationen.',
     icon: ListChecks,
-    tools: [
-      { label: 'Criteria Workshop', note: 'Kriterien gemeinsam strukturieren', customerReady: true },
-      { label: 'Decision Matrix', note: 'Kriterien vergleichbar machen', customerReady: true },
-    ],
   },
   {
-    code: 'D',
-    title: 'Decision Process',
-    description: 'Kundenseitige Schritte, Abhängigkeiten und Termine in einen belastbaren Plan bringen.',
+    id: 'knowledge',
+    title: 'Knowledge',
+    kicker: 'Schnell nachschlagen',
+    description: 'MEDDPICC-Konzepte praxisnah verstehen, ohne erneut im Buch suchen zu müssen.',
+    icon: FileText,
+  },
+]
+
+const toolClusters = [
+  {
+    title: 'Go-Live & Buying Process',
+    description: 'Termine, Schritte und Verantwortlichkeiten verständlich machen.',
     icon: Route,
     tools: [
       {
         label: 'Go-Live-Rückwärtsplanung',
-        note: 'Vom Zieltermin rückwärts planen',
-        customerReady: true,
+        note: 'Vom Zieltermin rückwärts planen und eine kundenfähige Timeline erzeugen.',
         route: '/tools/reverse-timeline',
+        customerReady: true,
       },
-      { label: 'Decision Map', note: 'Entscheidungsweg visualisieren', customerReady: true },
+      { label: 'Go-Live Plan Builder', note: 'Aus Prozessschritten einen gemeinsamen Plan machen.', customerReady: true },
+      { label: 'Paper Process Explorer', note: 'Legal, Procurement und Freigaben strukturiert aufdecken.' },
     ],
   },
   {
-    code: 'P',
-    title: 'Paper Process',
-    description: 'Legal, Procurement, Vertrag und Freigaben frühzeitig planbar machen.',
-    icon: FileText,
+    title: 'Value & Metrics',
+    description: 'Wirtschaftlichen Wert schnell nachvollziehbar machen.',
+    icon: Calculator,
     tools: [
-      { label: 'Procurement Timeline', note: 'Paper Process visualisieren', customerReady: true },
-      { label: 'Closing Plan', note: 'Administrative Schritte planen', customerReady: true },
+      { label: 'Quick Payback', note: 'Amortisationszeit mit wenigen Eingaben berechnen.', customerReady: true },
+      { label: 'Metric Builder', note: 'Pain oder Outcome in belastbare Metrics übersetzen.' },
+      { label: 'Cost of Delay', note: 'Kosten des Wartens sichtbar machen.', customerReady: true },
+      { label: 'Business Case', note: 'Wert, Kosten und Annahmen kompakt zusammenführen.', customerReady: true },
     ],
   },
   {
-    code: 'I',
-    title: 'Identify / Implicate Pain',
-    description: 'Pain in konkrete geschäftliche Auswirkungen und Dringlichkeit übersetzen.',
+    title: 'Discovery, Pain & Differentiation',
+    description: 'Gespräche vorbereiten und Erkenntnisse in verwertbare Argumentation übersetzen.',
     icon: Flame,
     tools: [
-      { label: 'Pain → Impact', note: 'Problem, Konsequenz und Outcome verbinden', customerReady: true },
-      { label: 'Cost of Pain', note: 'Wirtschaftliche Auswirkung quantifizieren', customerReady: true },
+      { label: 'Discovery Prep', note: 'Konkreten Discovery-Termin fokussiert vorbereiten.' },
+      { label: 'Pain → Impact', note: 'Problem, Konsequenz und Business Impact verbinden.' },
+      { label: 'Value Triangle', note: 'Relevante Differenzierung aus Kundensicht herausarbeiten.', customerReady: true },
     ],
   },
   {
-    code: 'C',
-    title: 'Champion',
-    description: 'Champion-Verhalten testen und gezielte nächste Tests ableiten.',
-    icon: Award,
+    title: 'Economic Buyer, Champion & Competition',
+    description: 'Wiederkehrende strategische Arbeit rund um Stakeholder und Alternativen unterstützen.',
+    icon: UserRound,
     tools: [
-      { label: 'Champion Tester', note: 'Interne Wirkung evidenzbasiert prüfen', customerReady: false },
-      { label: 'Champion Development', note: 'Nächsten Champion-Test planen', customerReady: false },
+      { label: 'EB Meeting Prep', note: 'Economic-Buyer-Termin strukturiert vorbereiten.' },
+      { label: 'Champion Tester', note: 'Champion-Verhalten anhand konkreter Merkmale hinterfragen.' },
+      { label: 'Competition / Alternatives Map', note: 'Vendor, Build, andere Initiative und Status quo betrachten.' },
     ],
   },
-  {
-    code: 'C',
-    title: 'Competition',
-    description: 'Wettbewerb einschließlich Status quo und Do Nothing sichtbar machen.',
-    icon: Swords,
-    tools: [
-      { label: 'Competition Map', note: 'Alternativen und Positionierung strukturieren', customerReady: false },
-      { label: 'Differentiation Matrix', note: 'Relevante Differenzierung darstellen', customerReady: true },
-    ],
-  },
+]
+
+const checklists = [
+  { label: 'Economic-Buyer-Termin', note: 'Vor dem Termin die entscheidenden Punkte prüfen.' },
+  { label: 'Discovery Call', note: 'Pain, Impact, Stakeholder und nächste Erkenntnisse im Blick behalten.' },
+  { label: 'POC / Pilot', note: 'Success Criteria, Commitment und den Prozess danach klären.' },
+  { label: 'Pricing / Angebot', note: 'Vor kommerziellem Angebot Value und Entscheidungsweg überprüfen.' },
+  { label: 'Go-Live / Decision Process', note: 'Plan, Verantwortlichkeiten und Abhängigkeiten plausibilisieren.' },
+  { label: 'Closing / Paper Process', note: 'Administrative Schritte und Freigaben nicht zu spät entdecken.' },
+]
+
+const knowledgeTopics = [
+  { code: 'M', label: 'Metrics', icon: Calculator },
+  { code: 'E', label: 'Economic Buyer', icon: UserRound },
+  { code: 'D', label: 'Decision Criteria', icon: ListChecks },
+  { code: 'D', label: 'Decision Process', icon: Route },
+  { code: 'P', label: 'Paper Process', icon: FileText },
+  { code: 'I', label: 'Pain & Implication', icon: Flame },
+  { code: 'C', label: 'Champion', icon: Award },
+  { code: 'C', label: 'Competition', icon: Swords },
 ]
 </script>
 
@@ -113,80 +117,141 @@ const areas = [
           <span class="brand-mark">M</span>
           <span class="brand-copy">
             <strong>MEDDPICC Toolbox</strong>
-            <span>Microtools für komplexe Deals</span>
+            <span>Praktische Sales Services</span>
           </span>
         </RouterLink>
 
         <div class="toolbox-header-meta">
           <Wrench :size="17" aria-hidden="true" />
-          <span>Local-first · deterministisch · ohne CRM-Pflicht</span>
+          <span>Kein CRM · keine Deal-Pflege · fokussierte Arbeitshilfen</span>
         </div>
       </div>
     </header>
 
-    <main id="main-content" class="toolbox-main">
-      <section class="container toolbox-intro" aria-labelledby="toolbox-title">
-        <div>
-          <p class="eyebrow">MEDDPICC Microtools</p>
-          <h1 id="toolbox-title">Das passende Werkzeug für die konkrete Sales-Aufgabe.</h1>
+    <main id="main-content" class="toolbox-main toolbox-home-v2">
+      <section class="container toolbox-hero" aria-labelledby="toolbox-title">
+        <div class="toolbox-hero-copy">
+          <p class="eyebrow">MEDDPICC Toolbox</p>
+          <h1 id="toolbox-title">Das richtige Werkzeug genau dann, wenn du es brauchst.</h1>
           <p class="intro-text">
-            Jedes Microtool funktioniert eigenständig und fragt nur die Informationen ab, die für genau diese Aufgabe
-            benötigt werden. Ein vollständiger Opportunity-Datensatz ist keine Voraussetzung.
+            Die Toolbox verwaltet keinen Deal vollständig. Sie vereinfacht wiederkehrende Aufgaben, hilft bei
+            typischen Sales-Situationen und erklärt MEDDPICC-Konzepte so, dass du nicht jedes Mal im Buch nachschlagen
+            musst.
           </p>
         </div>
 
-        <aside class="toolbox-principles" aria-label="Produktprinzipien">
-          <div>
-            <Presentation :size="20" aria-hidden="true" />
-            <span
-              ><strong>Kundenfähig</strong> gekennzeichnete Ergebnisse sind für Präsentationen und gemeinsame Planung
-              gedacht.</span
-            >
-          </div>
-          <div>
-            <CircleDollarSign :size="20" aria-hidden="true" />
-            <span>Berechnungen bleiben nachvollziehbar und reproduzierbar.</span>
-          </div>
+        <aside class="toolbox-boundary" aria-label="Abgrenzung der Toolbox">
+          <strong>Bewusst kein CRM</strong>
+          <p>Keine Pipeline, keine Opportunity-Pflege, kein dauerhaftes MEDDPICC-Scoring.</p>
+          <span>Öffnen → nutzen → Ergebnis weiterverwenden.</span>
         </aside>
       </section>
 
-      <section class="container toolbox-area-list" aria-label="MEDDPICC Bereiche und Microtools">
-        <article v-for="area in areas" :key="area.code + area.title" class="toolbox-area">
-          <div class="toolbox-area-heading">
-            <div class="toolbox-letter" aria-hidden="true">{{ area.code }}</div>
-            <div class="toolbox-area-copy">
-              <div class="toolbox-area-title">
-                <component :is="area.icon" :size="20" :stroke-width="2" aria-hidden="true" />
-                <h2>{{ area.title }}</h2>
-              </div>
-              <p>{{ area.description }}</p>
-            </div>
-          </div>
+      <section class="container toolbox-entry-grid" aria-label="Einstiege in die Toolbox">
+        <a v-for="pillar in pillars" :key="pillar.id" class="toolbox-entry-card" :href="'#' + pillar.id">
+          <component :is="pillar.icon" :size="22" :stroke-width="2" aria-hidden="true" />
+          <span class="toolbox-entry-kicker">{{ pillar.kicker }}</span>
+          <strong>{{ pillar.title }}</strong>
+          <span>{{ pillar.description }}</span>
+          <span class="toolbox-entry-link">Öffnen <ArrowRight :size="16" aria-hidden="true" /></span>
+        </a>
+      </section>
 
-          <div class="microtool-grid">
-            <component
-              :is="tool.route ? 'RouterLink' : 'button'"
-              v-for="tool in area.tools"
-              :key="tool.label"
-              class="microtool-card"
-              :class="{ 'microtool-card--active': tool.route }"
-              :to="tool.route"
-              :disabled="!tool.route"
-              :aria-disabled="tool.route ? undefined : 'true'"
-            >
-              <span class="microtool-card-copy">
-                <span class="microtool-card-title">
-                  <strong>{{ tool.label }}</strong>
-                  <span v-if="tool.customerReady" class="tool-kind tool-kind--customer">Kundenfähig</span>
-                  <span v-else class="tool-kind">Intern</span>
-                </span>
-                <span>{{ tool.note }}</span>
-              </span>
-              <ArrowRight v-if="tool.route" :size="18" aria-hidden="true" />
-              <span v-else class="microtool-planned">Geplant</span>
-            </component>
+      <section id="tools" class="container toolbox-section" aria-labelledby="tools-title">
+        <div class="toolbox-section-heading">
+          <div>
+            <p class="eyebrow">Tools</p>
+            <h2 id="tools-title">Wiederkehrende Arbeit schneller erledigen</h2>
+            <p>Jedes Tool funktioniert eigenständig und fragt nur die Informationen ab, die es wirklich braucht.</p>
           </div>
-        </article>
+          <div class="section-note">
+            <Presentation :size="18" aria-hidden="true" />
+            <span>Kundenfähige Ergebnisse sind entsprechend markiert.</span>
+          </div>
+        </div>
+
+        <div class="tool-cluster-grid">
+          <article v-for="cluster in toolClusters" :key="cluster.title" class="tool-cluster-card">
+            <div class="tool-cluster-heading">
+              <component :is="cluster.icon" :size="20" aria-hidden="true" />
+              <div>
+                <h3>{{ cluster.title }}</h3>
+                <p>{{ cluster.description }}</p>
+              </div>
+            </div>
+
+            <div class="tool-cluster-list">
+              <component
+                :is="tool.route ? 'RouterLink' : 'div'"
+                v-for="tool in cluster.tools"
+                :key="tool.label"
+                class="tool-row"
+                :class="{ 'tool-row--active': tool.route }"
+                :to="tool.route"
+              >
+                <span>
+                  <strong>{{ tool.label }}</strong>
+                  <small>{{ tool.note }}</small>
+                </span>
+                <span v-if="tool.customerReady" class="tool-kind tool-kind--customer">Kundenfähig</span>
+                <ArrowRight v-else-if="tool.route" :size="17" aria-hidden="true" />
+                <span v-else class="microtool-planned">Geplant</span>
+              </component>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="checklists" class="container toolbox-section" aria-labelledby="checklists-title">
+        <div class="toolbox-section-heading">
+          <div>
+            <p class="eyebrow">Checklists</p>
+            <h2 id="checklists-title">Kurze Orientierung für konkrete Sales-Situationen</h2>
+            <p>
+              Kein Score und kein Deal-Status. Jeder Punkt erklärt, worum es geht, warum er wichtig ist, woran du ihn
+              erkennst und welche Fehlinterpretationen häufig vorkommen.
+            </p>
+          </div>
+          <span class="foundation-badge">Foundation als nächster Roadmap-Schritt</span>
+        </div>
+
+        <div class="checklist-preview-grid">
+          <article v-for="item in checklists" :key="item.label" class="checklist-preview-card">
+            <ListChecks :size="18" aria-hidden="true" />
+            <div>
+              <strong>{{ item.label }}</strong>
+              <p>{{ item.note }}</p>
+            </div>
+            <span class="microtool-planned">Geplant</span>
+          </article>
+        </div>
+
+        <div class="checklist-explainer">
+          <strong>Ein Checklist-Punkt ist mehr als ein Häkchen.</strong>
+          <span>Prüffrage → Bedeutung → Warum wichtig? → Erkennungsmerkmale → typische Fehlinterpretation → mögliche Frage oder Handlung.</span>
+        </div>
+      </section>
+
+      <section id="knowledge" class="container toolbox-section" aria-labelledby="knowledge-title">
+        <div class="toolbox-section-heading">
+          <div>
+            <p class="eyebrow">Knowledge</p>
+            <h2 id="knowledge-title">MEDDPICC nachschlagen, ohne im Buch zu suchen</h2>
+            <p>
+              Kompakte, praxisnahe Erklärungen bilden die gemeinsame Wissensbasis für Checklists und Hilfetexte in den
+              Tools.
+            </p>
+          </div>
+        </div>
+
+        <div class="knowledge-grid" aria-label="MEDDPICC Wissensbereiche">
+          <article v-for="topic in knowledgeTopics" :key="topic.code + topic.label" class="knowledge-card">
+            <span class="knowledge-letter">{{ topic.code }}</span>
+            <component :is="topic.icon" :size="18" aria-hidden="true" />
+            <strong>{{ topic.label }}</strong>
+            <span class="microtool-planned">Geplant</span>
+          </article>
+        </div>
       </section>
     </main>
   </div>
