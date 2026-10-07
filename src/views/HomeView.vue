@@ -49,7 +49,11 @@ const toolClusters = [
         route: '/tools/reverse-timeline',
         customerReady: true,
       },
-      { label: 'Go-Live Plan Builder', note: 'Aus Prozessschritten einen gemeinsamen Plan machen.', customerReady: true },
+      {
+        label: 'Go-Live Plan Builder',
+        note: 'Aus Prozessschritten einen gemeinsamen Plan machen.',
+        customerReady: true,
+      },
       { label: 'Paper Process Explorer', note: 'Legal, Procurement und Freigaben strukturiert aufdecken.' },
     ],
   },
@@ -71,7 +75,11 @@ const toolClusters = [
     tools: [
       { label: 'Discovery Prep', note: 'Konkreten Discovery-Termin fokussiert vorbereiten.' },
       { label: 'Pain → Impact', note: 'Problem, Konsequenz und Business Impact verbinden.' },
-      { label: 'Value Triangle', note: 'Relevante Differenzierung aus Kundensicht herausarbeiten.', customerReady: true },
+      {
+        label: 'Value Triangle',
+        note: 'Relevante Differenzierung aus Kundensicht herausarbeiten.',
+        customerReady: true,
+      },
     ],
   },
   {
@@ -81,7 +89,10 @@ const toolClusters = [
     tools: [
       { label: 'EB Meeting Prep', note: 'Economic-Buyer-Termin strukturiert vorbereiten.' },
       { label: 'Champion Tester', note: 'Champion-Verhalten anhand konkreter Merkmale hinterfragen.' },
-      { label: 'Competition / Alternatives Map', note: 'Vendor, Build, andere Initiative und Status quo betrachten.' },
+      {
+        label: 'Competition / Alternatives Map',
+        note: 'Vendor, Build, andere Initiative und Status quo betrachten.',
+      },
     ],
   },
 ]
@@ -134,9 +145,8 @@ const knowledgeTopics = [
           <p class="eyebrow">MEDDPICC Toolbox</p>
           <h1 id="toolbox-title">Das richtige Werkzeug genau dann, wenn du es brauchst.</h1>
           <p class="intro-text">
-            Die Toolbox verwaltet keinen Deal vollständig. Sie vereinfacht wiederkehrende Aufgaben, hilft bei
-            typischen Sales-Situationen und erklärt MEDDPICC-Konzepte so, dass du nicht jedes Mal im Buch nachschlagen
-            musst.
+            Die Toolbox verwaltet keinen Deal vollständig. Sie vereinfacht wiederkehrende Aufgaben, hilft bei typischen
+            Sales-Situationen und erklärt MEDDPICC-Konzepte so, dass du nicht jedes Mal im Buch nachschlagen musst.
           </p>
         </div>
 
@@ -228,7 +238,10 @@ const knowledgeTopics = [
 
         <div class="checklist-explainer">
           <strong>Ein Checklist-Punkt ist mehr als ein Häkchen.</strong>
-          <span>Prüffrage → Bedeutung → Warum wichtig? → Erkennungsmerkmale → typische Fehlinterpretation → mögliche Frage oder Handlung.</span>
+          <span>
+            Prüffrage → Bedeutung → Warum wichtig? → Erkennungsmerkmale → typische Fehlinterpretation → mögliche Frage
+            oder Handlung.
+          </span>
         </div>
       </section>
 
