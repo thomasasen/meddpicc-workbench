@@ -17,22 +17,22 @@ const pillars = [
   {
     id: 'tools',
     title: 'Tools',
-    kicker: 'Arbeit vereinfachen',
-    description: 'Berechnen, strukturieren und visualisieren – für konkrete, wiederkehrende Sales-Aufgaben.',
+    kicker: 'Aufgabe erledigen',
+    description: 'Berechnen, vorbereiten oder visualisieren und direkt ein nutzbares Ergebnis erhalten.',
     icon: Wrench,
   },
   {
     id: 'checklists',
     title: 'Checklists',
-    kicker: 'Nichts Wichtiges vergessen',
-    description: 'Kurze Prüfpunkte mit Erklärungen, Beispielen und typischen Fehlinterpretationen.',
+    kicker: 'Sicher vorbereiten',
+    description: 'Vor wichtigen Sales-Situationen die entscheidenden Punkte kurz prüfen und richtig einordnen.',
     icon: ListChecks,
   },
   {
     id: 'knowledge',
-    title: 'Knowledge',
-    kicker: 'Schnell nachschlagen',
-    description: 'MEDDPICC-Konzepte praxisnah verstehen, ohne erneut im Buch suchen zu müssen.',
+    title: 'Wissen',
+    kicker: 'Schnell verstehen',
+    description: 'MEDDPICC-Begriffe, Zusammenhänge und typische Fehlinterpretationen gezielt nachschlagen.',
     icon: FileText,
   },
 ]
@@ -40,81 +40,169 @@ const pillars = [
 const toolClusters = [
   {
     title: 'Go-Live & Buying Process',
-    description: 'Termine, Schritte und Verantwortlichkeiten verständlich machen.',
+    description: 'Zeitplan und Entscheidungsweg gemeinsam mit dem Kunden greifbar machen.',
     icon: Route,
     tools: [
       {
         label: 'Go-Live-Rückwärtsplanung',
-        note: 'Vom Zieltermin rückwärts planen und eine kundenfähige Timeline erzeugen.',
+        note: 'Zieltermin und Schritte eingeben – du erhältst späteste Starttermine und eine teilbare Timeline.',
         route: '/tools/reverse-timeline',
         customerReady: true,
       },
       {
         label: 'Go-Live Plan Builder',
-        note: 'Aus Prozessschritten einen gemeinsamen Plan machen.',
+        note: 'Prozessschritte und Verantwortliche zusammenführen – daraus entsteht ein gemeinsamer Go-Live-Plan.',
         customerReady: true,
       },
-      { label: 'Paper Process Explorer', note: 'Legal, Procurement und Freigaben strukturiert aufdecken.' },
+      {
+        label: 'Paper Process Explorer',
+        note: 'Legal, Procurement und Freigaben Schritt für Schritt durchgehen – damit späte Überraschungen sichtbar werden.',
+      },
     ],
   },
   {
     title: 'Value & Metrics',
-    description: 'Wirtschaftlichen Wert schnell nachvollziehbar machen.',
+    description: 'Geschäftlichen Nutzen schneller quantifizieren und verständlich kommunizieren.',
     icon: Calculator,
     tools: [
-      { label: 'Quick Payback', note: 'Amortisationszeit mit wenigen Eingaben berechnen.', customerReady: true },
-      { label: 'Metric Builder', note: 'Pain oder Outcome in belastbare Metrics übersetzen.' },
-      { label: 'Cost of Delay', note: 'Kosten des Wartens sichtbar machen.', customerReady: true },
-      { label: 'Business Case', note: 'Wert, Kosten und Annahmen kompakt zusammenführen.', customerReady: true },
+      {
+        label: 'Quick Payback',
+        note: 'Investition und Nutzen eingeben – du siehst sofort, wann sich die Investition amortisiert.',
+        customerReady: true,
+      },
+      {
+        label: 'Metric Builder',
+        note: 'Aus Pain oder gewünschtem Outcome eine belastbare Kennzahl mit nachvollziehbarer Logik ableiten.',
+      },
+      {
+        label: 'Cost of Delay',
+        note: 'Den wirtschaftlichen Effekt einer Verzögerung pro Woche oder Monat sichtbar machen.',
+        customerReady: true,
+      },
+      {
+        label: 'Business Case',
+        note: 'Nutzen, Kosten und Annahmen strukturiert zusammenführen – als Grundlage für die Kundendiskussion.',
+        customerReady: true,
+      },
     ],
   },
   {
     title: 'Discovery, Pain & Differentiation',
-    description: 'Gespräche vorbereiten und Erkenntnisse in verwertbare Argumentation übersetzen.',
+    description: 'Gespräche gezielter führen und aus Erkenntnissen verwertbare Argumentation machen.',
     icon: Flame,
     tools: [
-      { label: 'Discovery Prep', note: 'Konkreten Discovery-Termin fokussiert vorbereiten.' },
-      { label: 'Pain → Impact', note: 'Problem, Konsequenz und Business Impact verbinden.' },
+      {
+        label: 'Discovery Prep',
+        note: 'Vor dem Kundentermin relevante Themen und Fragen strukturieren – statt unvorbereitet in Discovery zu gehen.',
+      },
+      {
+        label: 'Pain → Impact',
+        note: 'Vom beschriebenen Problem zu Konsequenz und Business Impact kommen – damit Pain nicht abstrakt bleibt.',
+      },
       {
         label: 'Value Triangle',
-        note: 'Relevante Differenzierung aus Kundensicht herausarbeiten.',
+        note: 'Kundenbedarf, eigene Stärke und Wettbewerb gegenüberstellen – um echte Differenzierung herauszuarbeiten.',
         customerReady: true,
       },
     ],
   },
   {
     title: 'Economic Buyer, Champion & Competition',
-    description: 'Wiederkehrende strategische Arbeit rund um Stakeholder und Alternativen unterstützen.',
+    description: 'Stakeholder und Alternativen besser einordnen und Termine gezielter vorbereiten.',
     icon: UserRound,
     tools: [
-      { label: 'EB Meeting Prep', note: 'Economic-Buyer-Termin strukturiert vorbereiten.' },
-      { label: 'Champion Tester', note: 'Champion-Verhalten anhand konkreter Merkmale hinterfragen.' },
+      {
+        label: 'EB Meeting Prep',
+        note: 'Economic-Buyer-Termin auf Value, Kernfragen und gewünschtes Commitment vorbereiten.',
+      },
+      {
+        label: 'Champion Tester',
+        note: 'An konkreten Verhaltensmerkmalen prüfen, ob ein Kontakt tatsächlich als Champion belastbar ist.',
+      },
       {
         label: 'Competition / Alternatives Map',
-        note: 'Vendor, Build, andere Initiative und Status quo betrachten.',
+        note: 'Vendor, Eigenbau, andere Initiative und Status quo sichtbar machen – damit du gegen die echte Alternative verkaufst.',
       },
     ],
   },
 ]
 
 const checklists = [
-  { label: 'Economic-Buyer-Termin', note: 'Vor dem Termin die entscheidenden Punkte prüfen.' },
-  { label: 'Discovery Call', note: 'Pain, Impact, Stakeholder und nächste Erkenntnisse im Blick behalten.' },
-  { label: 'POC / Pilot', note: 'Success Criteria, Commitment und den Prozess danach klären.' },
-  { label: 'Pricing / Angebot', note: 'Vor kommerziellem Angebot Value und Entscheidungsweg überprüfen.' },
-  { label: 'Go-Live / Decision Process', note: 'Plan, Verantwortlichkeiten und Abhängigkeiten plausibilisieren.' },
-  { label: 'Closing / Paper Process', note: 'Administrative Schritte und Freigaben nicht zu spät entdecken.' },
+  {
+    label: 'Economic-Buyer-Termin',
+    note: 'Vor dem Termin in wenigen Minuten prüfen, ob Value, Fragen und gewünschtes Ergebnis sauber vorbereitet sind.',
+  },
+  {
+    label: 'Discovery Call',
+    note: 'Vor dem Gespräch prüfen, ob du Pain, Impact, Stakeholder und den nächsten Erkenntnisschritt im Blick hast.',
+  },
+  {
+    label: 'POC / Pilot',
+    note: 'Vor dem Start klären, was Erfolg bedeutet, wer committed ist und was nach einem erfolgreichen POC passiert.',
+  },
+  {
+    label: 'Pricing / Angebot',
+    note: 'Vor dem Angebot prüfen, ob Value, Entscheidungsweg und kommerzieller Kontext ausreichend verstanden sind.',
+  },
+  {
+    label: 'Go-Live / Decision Process',
+    note: 'Zeitplan, Verantwortlichkeiten und Abhängigkeiten kurz gegenprüfen, bevor der Plan mit dem Kunden geteilt wird.',
+  },
+  {
+    label: 'Closing / Paper Process',
+    note: 'Vor der Schlussphase prüfen, ob Freigaben, Einkauf, Legal und Signaturweg wirklich geklärt sind.',
+  },
 ]
 
 const knowledgeTopics = [
-  { code: 'M', label: 'Metrics', icon: Calculator },
-  { code: 'E', label: 'Economic Buyer', icon: UserRound },
-  { code: 'D', label: 'Decision Criteria', icon: ListChecks },
-  { code: 'D', label: 'Decision Process', icon: Route },
-  { code: 'P', label: 'Paper Process', icon: FileText },
-  { code: 'I', label: 'Pain & Implication', icon: Flame },
-  { code: 'C', label: 'Champion', icon: Award },
-  { code: 'C', label: 'Competition', icon: Swords },
+  {
+    code: 'M',
+    label: 'Metrics',
+    note: 'Wann ist eine Metric belastbar und wie wird daraus wirtschaftlicher Impact?',
+    icon: Calculator,
+  },
+  {
+    code: 'E',
+    label: 'Economic Buyer',
+    note: 'Woran erkennst du den EB und was unterscheidet ihn von Sponsor oder Entscheider?',
+    icon: UserRound,
+  },
+  {
+    code: 'D',
+    label: 'Decision Criteria',
+    note: 'Welche Kriterien beeinflussen die Auswahl und wie lassen sie sich richtig einordnen?',
+    icon: ListChecks,
+  },
+  {
+    code: 'D',
+    label: 'Decision Process',
+    note: 'Wie unterscheiden sich Validation und Approval und wer entscheidet wann?',
+    icon: Route,
+  },
+  {
+    code: 'P',
+    label: 'Paper Process',
+    note: 'Welche administrativen Schritte liegen zwischen Entscheidung und Unterschrift?',
+    icon: FileText,
+  },
+  {
+    code: 'I',
+    label: 'Pain & Implication',
+    note: 'Wie wird aus einem Problem eine relevante geschäftliche Konsequenz?',
+    icon: Flame,
+  },
+  {
+    code: 'C',
+    label: 'Champion',
+    note: 'Was macht einen echten Champion aus und welche Signale werden häufig überschätzt?',
+    icon: Award,
+  },
+  {
+    code: 'C',
+    label: 'Competition',
+    note: 'Warum gehören Status quo, Eigenbau und andere Initiativen genauso zum Wettbewerb?',
+    icon: Swords,
+  },
 ]
 </script>
 
@@ -134,7 +222,7 @@ const knowledgeTopics = [
 
         <div class="toolbox-header-meta">
           <Wrench :size="17" aria-hidden="true" />
-          <span>Kein CRM · keine Deal-Pflege · fokussierte Arbeitshilfen</span>
+          <span>Tools · Checklists · MEDDPICC-Wissen</span>
         </div>
       </div>
     </header>
@@ -143,18 +231,12 @@ const knowledgeTopics = [
       <section class="container toolbox-hero" aria-labelledby="toolbox-title">
         <div class="toolbox-hero-copy">
           <p class="eyebrow">MEDDPICC Toolbox</p>
-          <h1 id="toolbox-title">Das richtige Werkzeug genau dann, wenn du es brauchst.</h1>
+          <h1 id="toolbox-title">Wiederkehrende Sales-Aufgaben schneller und sicherer erledigen.</h1>
           <p class="intro-text">
-            Die Toolbox verwaltet keinen Deal vollständig. Sie vereinfacht wiederkehrende Aufgaben, hilft bei typischen
-            Sales-Situationen und erklärt MEDDPICC-Konzepte so, dass du nicht jedes Mal im Buch nachschlagen musst.
+            Nutze ein passendes Tool für konkrete Arbeit, eine Checklist zur Vorbereitung oder die Wissenshilfe, wenn du
+            einen MEDDPICC-Punkt kurz und praxisnah nachschlagen möchtest.
           </p>
         </div>
-
-        <aside class="toolbox-boundary" aria-label="Abgrenzung der Toolbox">
-          <strong>Bewusst kein CRM</strong>
-          <p>Keine Pipeline, keine Opportunity-Pflege, kein dauerhaftes MEDDPICC-Scoring.</p>
-          <span>Öffnen → nutzen → Ergebnis weiterverwenden.</span>
-        </aside>
       </section>
 
       <section class="container toolbox-entry-grid" aria-label="Einstiege in die Toolbox">
@@ -163,7 +245,7 @@ const knowledgeTopics = [
           <span class="toolbox-entry-kicker">{{ pillar.kicker }}</span>
           <strong>{{ pillar.title }}</strong>
           <span>{{ pillar.description }}</span>
-          <span class="toolbox-entry-link">Öffnen <ArrowRight :size="16" aria-hidden="true" /></span>
+          <span class="toolbox-entry-link">Ansehen <ArrowRight :size="16" aria-hidden="true" /></span>
         </a>
       </section>
 
@@ -171,8 +253,8 @@ const knowledgeTopics = [
         <div class="toolbox-section-heading">
           <div>
             <p class="eyebrow">Tools</p>
-            <h2 id="tools-title">Wiederkehrende Arbeit schneller erledigen</h2>
-            <p>Jedes Tool funktioniert eigenständig und fragt nur die Informationen ab, die es wirklich braucht.</p>
+            <h2 id="tools-title">Eine konkrete Aufgabe erledigen</h2>
+            <p>Wähle die Aufgabe aus, die gerade ansteht. Jeder Service führt mit wenigen Eingaben zu einem direkt nutzbaren Ergebnis.</p>
           </div>
           <div class="section-note">
             <Presentation :size="18" aria-hidden="true" />
@@ -218,10 +300,10 @@ const knowledgeTopics = [
         <div class="toolbox-section-heading">
           <div>
             <p class="eyebrow">Checklists</p>
-            <h2 id="checklists-title">Kurze Orientierung für konkrete Sales-Situationen</h2>
+            <h2 id="checklists-title">Vor wichtigen Sales-Situationen kurz gegenprüfen</h2>
             <p>
-              Kein Score und kein Deal-Status. Jeder Punkt erklärt, worum es geht, warum er wichtig ist, woran du ihn
-              erkennst und welche Fehlinterpretationen häufig vorkommen.
+              Nutze eine Checklist direkt vor einem Termin oder Prozessschritt. Zu jedem Punkt bekommst du bei Bedarf
+              eine Erklärung, Erkennungsmerkmale, typische Fehlinterpretationen und eine mögliche Frage oder Handlung.
             </p>
           </div>
         </div>
@@ -238,10 +320,10 @@ const knowledgeTopics = [
         </div>
 
         <div class="checklist-explainer">
-          <strong>Ein Checklist-Punkt ist mehr als ein Häkchen.</strong>
+          <strong>So hilft dir ein einzelner Punkt:</strong>
           <span>
-            Prüffrage → Bedeutung → Warum wichtig? → Erkennungsmerkmale → typische Fehlinterpretation → mögliche Frage
-            oder Handlung.
+            Prüffrage → Bedeutung → Warum relevant? → Woran erkenne ich es? → typische Fehlinterpretation → mögliche
+            Frage oder Handlung.
           </span>
         </div>
       </section>
@@ -249,11 +331,11 @@ const knowledgeTopics = [
       <section id="knowledge" class="container toolbox-section" aria-labelledby="knowledge-title">
         <div class="toolbox-section-heading">
           <div>
-            <p class="eyebrow">Knowledge</p>
-            <h2 id="knowledge-title">MEDDPICC nachschlagen, ohne im Buch zu suchen</h2>
+            <p class="eyebrow">Wissen</p>
+            <h2 id="knowledge-title">MEDDPICC-Fragen schnell und praxisnah klären</h2>
             <p>
-              Kompakte, praxisnahe Erklärungen bilden die gemeinsame Wissensbasis für Checklists und Hilfetexte in den
-              Tools.
+              Öffne genau das Thema, bei dem du unsicher bist. Die Wissenshilfe erklärt Bedeutung, praktische Anwendung
+              und typische Fehlinterpretationen kompakt.
             </p>
           </div>
         </div>
@@ -262,7 +344,10 @@ const knowledgeTopics = [
           <article v-for="topic in knowledgeTopics" :key="topic.code + topic.label" class="knowledge-card">
             <span class="knowledge-letter">{{ topic.code }}</span>
             <component :is="topic.icon" :size="18" aria-hidden="true" />
-            <strong>{{ topic.label }}</strong>
+            <div>
+              <strong>{{ topic.label }}</strong>
+              <small>{{ topic.note }}</small>
+            </div>
             <span class="microtool-planned">Geplant</span>
           </article>
         </div>
