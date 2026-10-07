@@ -47,12 +47,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Prettier-Diff für Drag-Test Diagnose
-        run: |
-          npx prettier --write tests/e2e/reverse-timeline-drag.spec.ts
-          git diff -- tests/e2e/reverse-timeline-drag.spec.ts
-          git checkout -- tests/e2e/reverse-timeline-drag.spec.ts
-
       - name: Formatierung prüfen
         run: npm run format:check
 
