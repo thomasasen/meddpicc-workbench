@@ -178,7 +178,11 @@ Pfad: **Tools → Go-Live & Buying Process → Go-Live-Rückwärtsplanung**
 - deterministische Rückwärtsrechnung
 - Vorlauf-/Kompressionshinweis
 - dynamische Executive-Timeline im Roadmap-/Gantt-Stil
-- zeitproportionale Prozessbalken mit Datumsachse, Ownern und Go-Live-Ziellinie
+- zeitproportionale Prozessbalken mit semantischer Monats-/KW-Achse, Ownern und Go-Live-Ziellinie
+- klar getrennte Kennzahlen für Prozessdauer und Puffer zum notwendigen Start
+- Milestone-Punkte an den Übergaben zwischen den Prozessschritten
+- standardmäßig eingeklappte Prozessdetails für eine ruhigere Kundenansicht
+- Mobile-Führung mit Scroll-Hinweis und sticky Schrittnamen
 - Live-Aktualisierung bei Dauer, Reihenfolge oder Go-Live-Änderungen
 - SVG- und PNG-Export im gleichen kundenfähigen Visualstil
 
