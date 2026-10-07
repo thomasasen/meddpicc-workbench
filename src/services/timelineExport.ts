@@ -42,6 +42,11 @@ function segmentColors(segment: ReverseTimelineSegment): { fill: string; stroke:
   }
 }
 
+function ownerDisplay(segment: ReverseTimelineSegment): string {
+  const detail = segment.ownerDetail?.trim()
+  return detail ? `${ownerLabels[segment.owner]} · ${detail}` : ownerLabels[segment.owner]
+}
+
 function durationLabel(segment: ReverseTimelineSegment, full = false): string {
   const fullUnit = segment.durationUnit === 'business-days' ? 'Arbeitstage' : 'Kalendertage'
   const shortUnit = segment.durationUnit === 'business-days' ? 'AT' : 'KT'
@@ -91,35 +96,37 @@ export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: Tim
       const colors = segmentColors(segment)
       const canShowDuration = barWidth >= 58
       const duration = durationLabel(segment, barWidth >= 150)
-      const milestoneX = Math.min(width - right, x + barWidth)
+      const handoffX = Math.min(width - right, x + barWidth)
 
       return `
         <line x1="70" y1="${y + rowHeight}" x2="${width - right}" y2="${y + rowHeight}" stroke="#eef1f5"/>
         <text x="70" y="${y + 29}" font-size="21" font-weight="650" fill="#172033">${escapeXml(truncate(segment.label, 34))}</text>
-        <text x="70" y="${y + 53}" font-size="15" fill="#64748b">${escapeXml(ownerLabels[segment.owner])} · ${escapeXml(formatDate(segment.startDate))} – ${escapeXml(formatDate(segment.endDate))}</text>
+        <text x="70" y="${y + 53}" font-size="15" fill="#64748b">${escapeXml(ownerDisplay(segment))} · ${escapeXml(formatDate(segment.startDate))} – ${escapeXml(formatDate(segment.endDate))}</text>
         <rect x="${x.toFixed(1)}" y="${y + 18}" width="${barWidth.toFixed(1)}" height="34" rx="8" fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="1.5"/>
         ${canShowDuration ? `<text x="${(x + barWidth - 12).toFixed(1)}" y="${y + 40}" text-anchor="end" font-size="14" font-weight="700" fill="${colors.text}">${escapeXml(duration)}</text>` : ''}
-        <circle cx="${milestoneX.toFixed(1)}" cy="${y + 35}" r="${segment.endDate === plan.targetGoLiveDate ? 6 : 5}" fill="${segment.endDate === plan.targetGoLiveDate ? '#15803d' : '#2563eb'}" stroke="#ffffff" stroke-width="2"/>
+        <circle cx="${handoffX.toFixed(1)}" cy="${y + 35}" r="${segment.endDate === plan.targetGoLiveDate ? 6 : 5}" fill="${segment.endDate === plan.targetGoLiveDate ? '#15803d' : '#2563eb'}" stroke="#ffffff" stroke-width="2"/>
       `
     })
     .join('')
 
-  const safeTitle = escapeXml(truncate(options.title || 'Go-Live-Plan', 70))
+  const safeTitle = escapeXml(truncate(options.title || 'Go-Live-Timeline', 70))
   const safeCustomer = escapeXml(truncate(options.customerName, 70))
   const goLive = escapeXml(formatDate(plan.targetGoLiveDate))
   const latestStart = escapeXml(formatDate(plan.latestStartDate))
   const buffer = escapeXml(bufferLabel(plan))
+  const compellingEvent = plan.compellingEvent ? escapeXml(truncate(plan.compellingEvent, 42)) : ''
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
     <rect width="100%" height="100%" fill="#ffffff"/>
     <rect x="45" y="36" width="${width - 90}" height="${height - 72}" rx="18" fill="#ffffff" stroke="#d7dee7"/>
-    <text x="70" y="88" font-size="16" font-weight="750" letter-spacing="1.4" fill="#1d4ed8">GEMEINSAMER GO-LIVE-PLAN</text>
+    <text x="70" y="88" font-size="16" font-weight="750" letter-spacing="1.4" fill="#1d4ed8">GEMEINSAME GO-LIVE-TIMELINE</text>
     <text x="70" y="130" font-size="36" font-weight="700" fill="#172033">${safeTitle}</text>
     ${safeCustomer ? `<text x="70" y="163" font-size="19" fill="#5f6b7a">${safeCustomer}</text>` : ''}
     
-    <rect x="${width - 335}" y="66" width="245" height="72" rx="10" fill="#f0fdf4" stroke="#bbf7d0"/>
-    <text x="${width - 312}" y="92" font-size="13" font-weight="700" fill="#166534">TARGET GO-LIVE</text>
-    <text x="${width - 312}" y="120" font-size="22" font-weight="700" fill="#166534">${goLive}</text>
+    <rect x="${width - 390}" y="66" width="300" height="${compellingEvent ? 94 : 72}" rx="10" fill="#f0fdf4" stroke="#bbf7d0"/>
+    <text x="${width - 367}" y="92" font-size="13" font-weight="700" fill="#166534">TARGET GO-LIVE</text>
+    <text x="${width - 367}" y="120" font-size="22" font-weight="700" fill="#166534">${goLive}</text>
+    ${compellingEvent ? `<text x="${width - 367}" y="143" font-size="12" fill="#166534">Treiber: ${compellingEvent}</text>` : ''}
 
     <rect x="70" y="198" width="${width - 160}" height="70" rx="10" fill="#f4f7ff" stroke="#cbd9fb"/>
     <text x="96" y="228" font-size="17" fill="#475569">Um den Go-Live am <tspan font-weight="700" fill="#172033">${goLive}</tspan> zu erreichen, sollte der erste Prozessschritt spätestens am</text>
