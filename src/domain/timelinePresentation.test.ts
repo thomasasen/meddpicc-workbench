@@ -56,7 +56,10 @@ describe('timelinePresentation', () => {
     const plan = planFor({
       ...input,
       targetGoLiveDate: '2027-08-31',
-      steps: [{ ...input.steps[0], duration: 120 }, { ...input.steps[1], duration: 30 }],
+      steps: [
+        { ...input.steps[0], duration: 120 },
+        { ...input.steps[1], duration: 30 },
+      ],
     })
     const ticks = buildTimelineScale(plan)
     const periods = ticks.filter((tick) => tick.kind === 'period')
