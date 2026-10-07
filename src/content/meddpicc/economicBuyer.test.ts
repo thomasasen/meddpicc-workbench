@@ -65,6 +65,13 @@ describe('Economic Buyer content model', () => {
     }
   })
 
+  it('behandelt validierte Informationen nicht als Ersatz für Economic-Buyer-Zugang', () => {
+    const accessItem = economicBuyerChecklists['economic-buyer'].items.find((item) => item.id === 'access')
+
+    expect(accessItem?.question).toContain('direkten Zugang')
+    expect(accessItem?.question).toContain('wie ich Zugang herstellen kann')
+  })
+
   it('macht den Autorenunterschied zur Anzahl möglicher Economic Buyer sichtbar', () => {
     expect(economicBuyerKnowledge.authorPerspective.whyte).toContain('mehreren Personen')
     expect(economicBuyerKnowledge.authorPerspective.lahoutifard).toContain('finalen Wort')
