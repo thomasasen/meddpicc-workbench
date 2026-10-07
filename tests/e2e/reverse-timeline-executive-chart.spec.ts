@@ -34,9 +34,26 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
   const details = page.locator('.timeline-details')
   await expect(details).not.toHaveAttribute('open', '')
   await expect(details.getByText('Finale Entscheidung', { exact: true })).not.toBeVisible()
-  await details.locator('summary').click()
-  await expect(details).toHaveAttribute('open', '')
-  await expect(details.getByText('Finale Entscheidung', { exact: true })).toBeVisible()
+
+  const layout = await chart.evaluate((element) => {
+    const rows = [...element.querySelectorAll<HTMLElement>('.executive-chart-row')]
+    const milestone = element.querySelector<HTMLElement>('.executive-milestone')
+    return {
+      height: element.getBoundingClientRect().height,
+      rowDisplays: rows.map((row) => window.getComputedStyle(row).display),
+      rowPositions: rows.map((row) => window.getComputedStyle(row).position),
+      rowTop: rows.map((row) => row.getBoundingClientRect().top),
+      milestonePosition: milestone ? window.getComputedStyle(milestone).position : '',
+    }
+  })
+
+  expect(layout.height).toBeGreaterThan(350)
+  expect(layout.rowDisplays.every((display) => display === 'grid')).toBe(true)
+  expect(layout.rowPositions.every((position) => position === 'static')).toBe(true)
+  expect(layout.milestonePosition).toBe('absolute')
+  for (let index = 1; index < layout.rowTop.length; index += 1) {
+    expect(layout.rowTop[index] - layout.rowTop[index - 1]).toBeGreaterThan(50)
+  }
 
   const implementationBar = chart.locator('[data-segment-id="implementation"] .executive-segment')
   const beforeStyle = await implementationBar.getAttribute('style')
@@ -77,4 +94,8 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
     path: testInfo.outputPath(`executive-timeline-${testInfo.project.name}.png`),
     fullPage: true,
   })
+
+  await details.locator('summary').click()
+  await expect(details).toHaveAttribute('open', '')
+  await expect(details.getByText('Finale Entscheidung', { exact: true })).toBeVisible()
 })
