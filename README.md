@@ -65,7 +65,7 @@ Tools erledigen eine konkrete Aufgabe: berechnen, vorbereiten, strukturieren ode
 
 | Funktion | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
-| **EB Qualifier** | ⚪ Geplant | Hilft zu prüfen, ob eine Person tatsächlich die wirtschaftliche Entscheidungsautorität besitzt. | Du vermeidest, einen Sponsor oder fachlichen Entscheider fälschlich als Economic Buyer einzuordnen. |
+| **EB Qualifier** | ⚪ Geplant | Hilft zu prüfen, ob eine Person tatsächlich die wirtschaftliche Entscheidungsautorität besitzt. | Du vermeidest, einen Champion oder fachlichen Entscheider fälschlich als Economic Buyer einzuordnen. |
 | **EB Meeting Prep** | ⚪ Geplant | Bereitet einen Termin mit dem Economic Buyer auf Value, Kernfragen, relevante Metrics und gewünschtes Commitment vor. | Du kannst einen seltenen Executive-Termin fokussierter nutzen und gehst mit einem klaren Ziel statt einer normalen Produktpräsentation hinein. |
 | **EB Access Strategy** | ⚪ Geplant | Strukturiert mögliche Wege zum Economic Buyer und bewertet sinnvolle nächste Schritte. | Du erhältst konkrete Optionen, wenn du noch keinen direkten EB-Zugang hast, statt dich ausschließlich auf deinen aktuellen Ansprechpartner zu verlassen. |
 | **EB Value Story / Executive Value Narrative** | ⚪ Geplant | Verdichtet Pain, Metrics, Nutzen und Why Now zu einer managementgerechten Value Story. | Du kannst deinen Business Value auf die Informationsbedürfnisse eines Executives zuschneiden und vermeidest zu technische oder zu detaillierte Gespräche. |
@@ -135,7 +135,7 @@ Die Wissenshilfe ist für Situationen gedacht, in denen du einen MEDDPICC-Begrif
 | Wissensbereich | Status | Welche Frage beantwortet er? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
 | **Metrics** | 🟡 Als Nächstes | Wann ist eine Metric belastbar und wie wird daraus wirtschaftlicher Impact? | Du kannst Metrics schneller korrekt anwenden und vermeidest unklare oder nicht validierte Nutzenbehauptungen. |
-| **Economic Buyer** | ✅ Umgesetzt | Woran erkennst du den Economic Buyer und wie unterscheidet er sich von Sponsor oder fachlichem Entscheider? | Du kannst Rollen sicherer einordnen und weißt, worauf es bei EB-Zugang und EB-Gesprächen wirklich ankommt. |
+| **Economic Buyer** | ✅ Umgesetzt | Woran erkennst du den Economic Buyer und wie unterscheidet er sich von Champion oder fachlichem Entscheider? | Du kannst Rollen sicherer einordnen und weißt, worauf es bei EB-Zugang und EB-Gesprächen wirklich ankommt. |
 | **Decision Criteria** | 🟡 Als Nächstes | Welche Kriterien beeinflussen die Auswahl und wie lassen sie sich strukturieren? | Du kannst Entscheidungskriterien schneller verstehen, hinterfragen und in Kundengesprächen gezielter bearbeiten. |
 | **Decision Process** | 🟡 Als Nächstes | Wie unterscheiden sich Validation und Approval und wer entscheidet wann? | Du verstehst den tatsächlichen Entscheidungsweg besser und kannst gezielter nach offenen Schritten fragen. |
 | **Paper Process** | 🟡 Als Nächstes | Welche administrativen Schritte liegen zwischen Entscheidung und Unterschrift? | Du kannst Einkauf, Legal, Security und Signaturweg früher berücksichtigen und besser vom Decision Process unterscheiden. |
