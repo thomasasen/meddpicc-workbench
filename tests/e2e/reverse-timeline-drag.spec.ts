@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test'
 
 async function stepLabels(page: import('@playwright/test').Page) {
-  return page.locator('.reverse-step-card input[type="text"]').evaluateAll((inputs) =>
-    inputs.map((input) => (input as HTMLInputElement).value),
-  )
+  return page
+    .locator('.reverse-step-card input[type="text"]')
+    .evaluateAll((inputs) => inputs.map((input) => (input as HTMLInputElement).value))
 }
 
 test('sortiert Go-Live-Schritte intuitiv per Drag und per Tastatur', async ({ page }, testInfo) => {
