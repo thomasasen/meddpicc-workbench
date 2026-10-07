@@ -7,15 +7,19 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
   await page.goto('/meddpicc-workbench/#/tools/reverse-timeline')
 
   await page.getByLabel('Kunde optional').fill('Beispielwerke GmbH')
-  await page.getByLabel('Titel').fill('Gemeinsamer Go-Live-Plan')
+  await page.getByLabel('Titel').fill('Go-Live-Timeline')
   await page.getByLabel('Planungsdatum').fill('2027-01-04')
   await page.getByLabel('Target Go-Live').fill('2027-07-01')
+  await page.getByLabel(/Warum dieses Datum/).fill('Altvertrag endet am 30.06.')
+  await page.locator('.reverse-step-card').first().getByLabel(/Name \/ Rolle/).fill('Projektteam')
 
   const chart = page.getByTestId('executive-timeline-chart')
   await expect(chart).toBeVisible()
-  await expect(page.getByText('Gemeinsamer Go-Live-Plan', { exact: true }).last()).toBeVisible()
+  await expect(page.getByText('Gemeinsame Go-Live-Timeline', { exact: true })).toBeVisible()
+  await expect(page.getByText('Go-Live-Timeline', { exact: true }).last()).toBeVisible()
   await expect(page.getByText('Beispielwerke GmbH', { exact: true })).toBeVisible()
   await expect(page.locator('.executive-go-live').getByText('Target Go-Live', { exact: true })).toBeVisible()
+  await expect(page.locator('.executive-go-live').getByText('Altvertrag endet am 30.06.', { exact: true })).toBeVisible()
   await expect(page.getByText('Prozessdauer', { exact: true })).toBeVisible()
   await expect(page.getByText('Puffer zum notwendigen Start', { exact: true })).toBeVisible()
   await expect(page.getByText('Zeitproportionaler Prozessplan', { exact: true })).toBeVisible()
@@ -24,8 +28,9 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
   await expect(rows).toHaveCount(5)
   await expect(rows.nth(0).locator('.executive-row-label strong')).toHaveText('Finale Entscheidung')
   await expect(rows.nth(4).locator('.executive-row-label strong')).toHaveText('Implementierung / Rollout')
-  await expect(chart.locator('.executive-milestone')).toHaveCount(5)
-  await expect(chart.locator('.executive-milestone--go-live')).toHaveCount(1)
+  await expect(rows.nth(4).locator('.executive-row-label span')).toHaveText('Gemeinsam · Projektteam')
+  await expect(chart.locator('.executive-handoff')).toHaveCount(5)
+  await expect(chart.locator('.executive-handoff--go-live')).toHaveCount(1)
 
   const monthTicks = chart.locator('.executive-axis-tick--period')
   await expect(monthTicks.first()).toBeVisible()
@@ -37,20 +42,20 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
 
   const layout = await chart.evaluate((element) => {
     const rows = [...element.querySelectorAll<HTMLElement>('.executive-chart-row')]
-    const milestone = element.querySelector<HTMLElement>('.executive-milestone')
+    const handoff = element.querySelector<HTMLElement>('.executive-handoff')
     return {
       height: element.getBoundingClientRect().height,
       rowDisplays: rows.map((row) => window.getComputedStyle(row).display),
       rowPositions: rows.map((row) => window.getComputedStyle(row).position),
       rowTop: rows.map((row) => row.getBoundingClientRect().top),
-      milestonePosition: milestone ? window.getComputedStyle(milestone).position : '',
+      handoffPosition: handoff ? window.getComputedStyle(handoff).position : '',
     }
   })
 
   expect(layout.height).toBeGreaterThan(350)
   expect(layout.rowDisplays.every((display) => display === 'grid')).toBe(true)
   expect(layout.rowPositions.every((position) => position === 'static')).toBe(true)
-  expect(layout.milestonePosition).toBe('absolute')
+  expect(layout.handoffPosition).toBe('absolute')
   for (let index = 1; index < layout.rowTop.length; index += 1) {
     expect(layout.rowTop[index] - layout.rowTop[index - 1]).toBeGreaterThan(50)
   }
