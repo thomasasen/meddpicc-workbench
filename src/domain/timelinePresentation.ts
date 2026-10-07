@@ -25,6 +25,13 @@ export function timelineTotalDays(plan: ReverseTimelinePlan): number {
 }
 
 export function buildTimelineScale(plan: ReverseTimelinePlan): TimelineScaleTick[] {
+  if (plan.latestStartDate === plan.targetGoLiveDate) {
+    return [
+      { date: plan.latestStartDate, position: 0 },
+      { date: plan.targetGoLiveDate, position: 100 },
+    ]
+  }
+
   const totalDays = timelineTotalDays(plan)
   const startMs = dateMs(plan.latestStartDate)
   const desiredIntervals = totalDays <= 42 ? 4 : totalDays <= 120 ? 5 : 6
@@ -52,11 +59,12 @@ export function timelineSegmentPosition(
   const startMs = dateMs(plan.latestStartDate)
   const leftDays = (dateMs(segment.startDate) - startMs) / DAY_MS
   const spanDays = Math.max(0, (dateMs(segment.endDate) - dateMs(segment.startDate)) / DAY_MS)
-  const leftPercent = clamp((leftDays / totalDays) * 100, 0, 100)
-  const widthPercent = Math.max((spanDays / totalDays) * 100, 0.8)
+  const rawLeftPercent = clamp((leftDays / totalDays) * 100, 0, 100)
+  const widthPercent = Math.min(Math.max((spanDays / totalDays) * 100, 0.8), 100)
+  const leftPercent = Math.min(rawLeftPercent, 100 - widthPercent)
 
   return {
     leftPercent,
-    widthPercent: Math.min(widthPercent, 100 - leftPercent),
+    widthPercent,
   }
 }
