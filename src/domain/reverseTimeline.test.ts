@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  calculateReverseTimeline,
-  type ReverseTimelineInput,
-} from './reverseTimeline'
+import { calculateReverseTimeline, type ReverseTimelineInput } from './reverseTimeline'
 
 const baseInput: ReverseTimelineInput = {
   targetGoLiveDate: '2027-07-01',
@@ -141,9 +138,6 @@ describe('calculateReverseTimeline', () => {
 
     expect(result.success).toBe(true)
     if (!result.success) return
-    expect(result.plan.chronologicalSegments.map((segment) => segment.id)).toEqual([
-      'legal',
-      'implementation',
-    ])
+    expect(result.plan.chronologicalSegments.map((segment) => segment.id)).toEqual(['legal', 'implementation'])
   })
 })
