@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { ArrowLeft, CalendarDays, ChevronDown, Download, FileImage, GripVertical, Plus, RotateCcw, Trash2 } from '@lucide/vue'
+import {
+  ArrowLeft,
+  CalendarDays,
+  ChevronDown,
+  Download,
+  FileImage,
+  GripVertical,
+  Plus,
+  RotateCcw,
+  Trash2,
+} from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 import CustomerTimelineChart from '../components/CustomerTimelineChart.vue'
@@ -257,7 +267,6 @@ async function exportPng() {
     exportMessage.value = error instanceof Error ? error.message : 'PNG-Export ist fehlgeschlagen.'
   }
 }
-
 </script>
 
 <template>

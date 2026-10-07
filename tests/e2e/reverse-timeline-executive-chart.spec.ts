@@ -59,9 +59,10 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
     expect(scrollMetrics.scrollWidth).toBeGreaterThan(scrollMetrics.clientWidth)
     await expect(page.locator('.executive-scroll-hint')).toBeVisible()
 
-    const stickyLabelPosition = await rows.nth(0).locator('.executive-row-label').evaluate(
-      (element) => window.getComputedStyle(element).position,
-    )
+    const stickyLabelPosition = await rows
+      .nth(0)
+      .locator('.executive-row-label')
+      .evaluate((element) => window.getComputedStyle(element).position)
     expect(stickyLabelPosition).toBe('sticky')
   }
 

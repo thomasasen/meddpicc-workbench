@@ -127,74 +127,74 @@ const bufferLabel = computed(() => {
 
     <div class="executive-timeline-scroll-shell">
       <div class="executive-timeline-scroll" tabindex="0" aria-label="Zeitplan horizontal anzeigen">
-      <div class="executive-chart" data-testid="executive-timeline-chart" aria-hidden="true">
-        <div class="executive-chart-axis">
-          <div class="executive-chart-axis-label">Prozessschritt</div>
-          <div class="executive-chart-axis-track">
-            <span
-              v-for="tick in axisTicks"
-              :key="tick.date"
-              class="executive-axis-tick"
-              :class="[`executive-axis-tick--${tick.kind}`, { 'executive-axis-tick--end': tick.position === 100 }]"
-              :style="{ left: `${tick.position}%` }"
-            >
-              {{ tick.label }}
-            </span>
-          </div>
-        </div>
-
-        <div class="executive-chart-body">
-          <div
-            v-for="segment in plan.chronologicalSegments"
-            :key="segment.id"
-            class="executive-chart-row"
-            :data-segment-id="segment.id"
-          >
-            <div class="executive-row-label">
-              <strong>{{ segment.label }}</strong>
-              <span>{{ ownerLabels[segment.owner] }}</span>
-            </div>
-
-            <div class="executive-row-track">
+        <div class="executive-chart" data-testid="executive-timeline-chart" aria-hidden="true">
+          <div class="executive-chart-axis">
+            <div class="executive-chart-axis-label">Prozessschritt</div>
+            <div class="executive-chart-axis-track">
               <span
                 v-for="tick in axisTicks"
-                :key="`${segment.id}-${tick.date}`"
-                class="executive-grid-line"
-                :class="{ 'executive-grid-line--go-live': tick.position === 100 }"
+                :key="tick.date"
+                class="executive-axis-tick"
+                :class="[`executive-axis-tick--${tick.kind}`, { 'executive-axis-tick--end': tick.position === 100 }]"
                 :style="{ left: `${tick.position}%` }"
-              ></span>
-
-              <div
-                class="executive-segment"
-                :class="`executive-segment--${segment.area}`"
-                :style="segmentStyle(segment)"
-                :title="`${segment.label}: ${formatDate(segment.startDate)} bis ${formatDate(segment.endDate)}`"
               >
-                <span class="executive-segment-duration">{{ durationLabel(segment) }}</span>
+                {{ tick.label }}
+              </span>
+            </div>
+          </div>
+
+          <div class="executive-chart-body">
+            <div
+              v-for="segment in plan.chronologicalSegments"
+              :key="segment.id"
+              class="executive-chart-row"
+              :data-segment-id="segment.id"
+            >
+              <div class="executive-row-label">
+                <strong>{{ segment.label }}</strong>
+                <span>{{ ownerLabels[segment.owner] }}</span>
               </div>
 
-              <span
-                class="executive-milestone"
-                :class="{ 'executive-milestone--go-live': segment.endDate === plan.targetGoLiveDate }"
-                :style="milestoneStyle(segment)"
-                :title="
-                  segment.endDate === plan.targetGoLiveDate
-                    ? `Target Go-Live ${formatDate(segment.endDate)}`
-                    : `Übergabe am ${formatDate(segment.endDate)}`
-                "
-              ></span>
+              <div class="executive-row-track">
+                <span
+                  v-for="tick in axisTicks"
+                  :key="`${segment.id}-${tick.date}`"
+                  class="executive-grid-line"
+                  :class="{ 'executive-grid-line--go-live': tick.position === 100 }"
+                  :style="{ left: `${tick.position}%` }"
+                ></span>
+
+                <div
+                  class="executive-segment"
+                  :class="`executive-segment--${segment.area}`"
+                  :style="segmentStyle(segment)"
+                  :title="`${segment.label}: ${formatDate(segment.startDate)} bis ${formatDate(segment.endDate)}`"
+                >
+                  <span class="executive-segment-duration">{{ durationLabel(segment) }}</span>
+                </div>
+
+                <span
+                  class="executive-milestone"
+                  :class="{ 'executive-milestone--go-live': segment.endDate === plan.targetGoLiveDate }"
+                  :style="milestoneStyle(segment)"
+                  :title="
+                    segment.endDate === plan.targetGoLiveDate
+                      ? `Target Go-Live ${formatDate(segment.endDate)}`
+                      : `Übergabe am ${formatDate(segment.endDate)}`
+                  "
+                ></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="executive-chart-footer">
+            <div></div>
+            <div class="executive-go-live-line-label">
+              <span>Start {{ formatDate(plan.latestStartDate) }}</span>
+              <strong>Go-Live {{ formatDate(plan.targetGoLiveDate) }}</strong>
             </div>
           </div>
         </div>
-
-        <div class="executive-chart-footer">
-          <div></div>
-          <div class="executive-go-live-line-label">
-            <span>Start {{ formatDate(plan.latestStartDate) }}</span>
-            <strong>Go-Live {{ formatDate(plan.targetGoLiveDate) }}</strong>
-          </div>
-        </div>
-      </div>
       </div>
     </div>
 
@@ -423,7 +423,6 @@ const bufferLabel = computed(() => {
 
 .executive-chart-axis,
 .executive-chart-row,
-
 .executive-milestone {
   position: absolute;
   z-index: 2;
