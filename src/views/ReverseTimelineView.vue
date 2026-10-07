@@ -269,8 +269,8 @@ function printPlan() {
           <p v-if="validationMessage" class="validation-message" role="status">{{ validationMessage }}</p>
 
           <p class="method-note">
-            Rechenbasis v0.1: Montag bis Freitag gelten als Arbeitstage. Feiertage und kundenspezifische
-            Betriebsferien sind noch nicht berücksichtigt.
+            Rechenbasis v0.1: Montag bis Freitag gelten als Arbeitstage. Feiertage und kundenspezifische Betriebsferien
+            sind noch nicht berücksichtigt.
           </p>
         </section>
 
@@ -281,15 +281,30 @@ function printPlan() {
               <h2 id="result-title">Go-Live-Plan</h2>
             </div>
             <div class="export-actions">
-              <button class="button button-secondary button-with-icon" type="button" :disabled="!timeline" @click="exportSvg">
+              <button
+                class="button button-secondary button-with-icon"
+                type="button"
+                :disabled="!timeline"
+                @click="exportSvg"
+              >
                 <Download :size="16" aria-hidden="true" />
                 SVG
               </button>
-              <button class="button button-secondary button-with-icon" type="button" :disabled="!timeline" @click="exportPng">
+              <button
+                class="button button-secondary button-with-icon"
+                type="button"
+                :disabled="!timeline"
+                @click="exportPng"
+              >
                 <Download :size="16" aria-hidden="true" />
                 PNG
               </button>
-              <button class="button button-secondary button-with-icon" type="button" :disabled="!timeline" @click="printPlan">
+              <button
+                class="button button-secondary button-with-icon"
+                type="button"
+                :disabled="!timeline"
+                @click="printPlan"
+              >
                 <Printer :size="16" aria-hidden="true" />
                 PDF / Drucken
               </button>
