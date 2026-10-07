@@ -61,7 +61,10 @@ export async function downloadSvgElementAsPng(
     context.drawImage(image, 0, 0, width, height)
 
     const png = await new Promise<Blob>((resolve, reject) => {
-      canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('PNG konnte nicht erzeugt werden.'))), 'image/png')
+      canvas.toBlob(
+        (blob) => (blob ? resolve(blob) : reject(new Error('PNG konnte nicht erzeugt werden.'))),
+        'image/png',
+      )
     })
 
     downloadBlob(png, fileName)
