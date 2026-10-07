@@ -2,64 +2,79 @@
 
 ## Aktueller Produktstand
 
-Das Projekt wurde am 07.10.2026 von einer zentralen Deal-Workbench zu einer **MEDDPICC Microtool Toolbox** neu ausgerichtet.
+Am 07.10.2026 wurde die MEDDPICC Toolbox weiter präzisiert.
 
-Grund: Die bisherige Architektur verlangte für kleine Coaching-Funktionen zu viele detaillierte Informationen in einem globalen Datenmodell. Das widersprach dem gewünschten Nutzungsbild: Ein Account Manager soll ein konkretes Werkzeug öffnen, nur die dafür nötigen Inputs eingeben und ein direkt verwertbares Ergebnis erhalten.
+Die zentrale Produktgrenze lautet jetzt:
 
-## Bewusste Wiederverwendung
+> **Kein ganzheitliches MEDDPICC-System und kein CRM. Die Toolbox erleichtert wiederkehrende Arbeit und stellt Wissen genau dann bereit, wenn es gebraucht wird.**
 
-Beibehalten:
+## Verbindliches Produktmodell
 
-- Vue 3 / TypeScript / Vite
-- Vue Router
-- Vitest / Playwright
-- GitHub Actions / GitHub Pages
-- Lucide
-- Design Tokens
-- Accessibility-Baseline
-- ausgewählte reine Domainlogik, wenn ein Microtool davon profitiert
+Drei Bausteine:
 
-Nicht mehr Produktkern:
+1. **Tools** – konkrete Arbeit berechnen, strukturieren, vorbereiten oder visualisieren.
+2. **Checklists** – kurze Lern- und Orientierungshilfen für Themen und wiederkehrende Sales-Situationen.
+3. **Knowledge** – kompakte MEDDPICC-Referenz statt erneuter Buchsuche.
 
-- Opportunity-Dashboard
-- Pflichtprojekt vor Tool-Nutzung
-- Projektdatei als zwingende Source of Truth
-- Evidence-/Risks-/Actions-Pflege als Einstieg
-- Deal Inspector als Startseite
+MEDDPICC bleibt die fachliche Basis, wird aber nicht als vollständiger Deal-Workflow erzwungen.
 
-## Aktiver Slice
+## Checklists
 
-Branch: feat/meddpicc-toolbox-v01
+Checklists sind ausdrücklich keine Deal-Scorecards.
+
+Ein Checklist-Punkt soll bei Bedarf erklären:
+
+- Worum geht es?
+- Warum ist das wichtig?
+- Woran erkenne ich es?
+- Was wird häufig falsch interpretiert?
+- Welche Frage oder Handlung kann helfen?
+
+Standardansicht: schnell scanbar. Details: progressiv aufklappbar.
+
+Keine historische Opportunity-Pflege, kein Score, kein Management-Dashboard.
+
+## Produktiver Slice
+
+**Go-Live-Rückwärtsplanung** ist auf `main` gemergt und bleibt das Referenz-Tool.
+
+Technisch vorhanden:
+
+- deterministische Rückwärtsrechnung
+- Kalender- und Arbeitstage
+- Verantwortlichkeiten und Prozessbereiche
+- Vorlauf-/Kompressionshinweis
+- kundenfähige Timeline
+- SVG-/PNG-Export
+- Unit Tests
+- Playwright Desktop/Mobile
+- CI grün
+
+## Aktiver Migrations-Slice
+
+Branch: `feat/toolbox-start-checklists-knowledge`
 
 Ziel:
 
-1. neue MEDDPICC-Toolbox-Startseite
-2. erstes echtes Microtool: Go-Live-Rückwärtsplanung
-3. kundenfähiger SVG-/PNG-Export
+1. Roadmap auf Tools / Checklists / Knowledge festschreiben
+2. Startseite auf diese drei Einstiege migrieren
+3. bestehende Go-Live-Rückwärtsplanung prominent erhalten
+4. Checklists als Lernhilfe sichtbar machen
+5. MEDDPICC Knowledge als geplante Referenzschicht darstellen
+6. CRM-Abgrenzung in UI und Dokumentation explizit machen
 
-## Fachliche Basis des ersten Tools
+## Nächster funktionaler Ausbau nach dieser Migration
 
-- Whyte: kundenorientierter Go-Live Plan, vom gewünschten Go-Live rückwärts planen, relevante Meilensteine und beteiligte Funktionen früh sichtbar machen.
-- Lahoutifard: Decision/Paper Process schriftlich und visuell als Timeline dokumentieren, Aktivitäten beider Seiten sichtbar machen, Paper Process Schritt für Schritt erfragen und antizipieren.
+**Checklists & Knowledge Foundation**.
 
-Software-Regeln sind eigene Produktentscheidungen und keine behauptete offizielle MEDDPICC-Formel.
+Danach folgen die Value-&-Metrics-Tools, beginnend mit Quick Payback und Metric Builder.
 
-## Zwischen-QS
+## Bewusste Nichtziele
 
-### QS 1 – Produktfit
-
-Bestanden: Das Tool löst eine konkrete Seller-Aufgabe und erzeugt einen mit dem Kunden nutzbaren Output, ohne CRM-/Projektpflege vorauszusetzen.
-
-### QS 2 – Domain-Grenze
-
-Bestanden: Rückwärtsrechnung liegt in einem reinen Domain Service. UI und Export sind davon getrennt. Feiertage werden nicht still angenommen.
-
-### QS 3 – Technische / visuelle Qualität
-
-Technische Gates bestanden: Formatierung, Lint, Unit Tests, Production Build, Pages-Integrität sowie Playwright Desktop/Mobile sind grün. Offen bleibt ausschließlich die sichtbare UI-Abnahme durch den Nutzer.
-
-## Nächster empfohlener Slice nach Freigabe
-
-Metrics → Quick Payback / ROI.
-
-Dieser Slice testet erneut den vollständigen Produktpfad: wenige Inputs → deterministische Berechnung → verständliche Value Story → kundenfähige Visualisierung/Export.
+- Pipeline / Forecast
+- Account-/Kontaktverwaltung
+- vollständige Opportunity-Pflege
+- Activity Tracking
+- dauerhaftes MEDDPICC-Scoring
+- Deal Health / Completeness
+- Pflicht-Workflow über alle MEDDPICC-Bereiche
