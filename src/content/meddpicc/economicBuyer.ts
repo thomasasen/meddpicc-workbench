@@ -150,8 +150,7 @@ export const economicBuyerConcepts = {
       'Die Rolle wurde durch Champion, weitere beteiligte Stakeholder, Prozessinformationen oder direkten Austausch bestätigt.',
       'Widersprüchliche Hinweise sind sichtbar und werden nicht einfach ignoriert.',
     ],
-    commonMisinterpretation:
-      '„Er wurde mir als Entscheider genannt – weitere Validierung ist deshalb nicht nötig.“',
+    commonMisinterpretation: '„Er wurde mir als Entscheider genannt – weitere Validierung ist deshalb nicht nötig.“',
     possibleQuestionsOrActions: [
       'Woher wissen wir konkret, dass diese Person die wirtschaftliche Entscheidung beeinflussen oder stoppen kann?',
       'Welche unserer Informationen sind bestätigt – und welche sind noch Interpretation?',
