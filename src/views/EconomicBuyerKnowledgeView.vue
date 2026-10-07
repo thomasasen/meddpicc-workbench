@@ -116,11 +116,7 @@ const recognitionConcepts = computed(() =>
         </div>
 
         <div class="knowledge-details-list">
-          <details
-            v-for="item in economicBuyerKnowledge.misinterpretations"
-            :key="item.claim"
-            class="knowledge-detail"
-          >
+          <details v-for="item in economicBuyerKnowledge.misinterpretations" :key="item.claim" class="knowledge-detail">
             <summary>
               <CircleAlert :size="18" aria-hidden="true" />
               <span>{{ item.claim }}</span>
