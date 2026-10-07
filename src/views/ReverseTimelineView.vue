@@ -1,15 +1,5 @@
 <script setup lang="ts">
-import {
-  ArrowDown,
-  ArrowLeft,
-  ArrowUp,
-  CalendarDays,
-  Download,
-  FileImage,
-  Plus,
-  RotateCcw,
-  Trash2,
-} from '@lucide/vue'
+import { ArrowDown, ArrowLeft, ArrowUp, CalendarDays, Download, FileImage, Plus, RotateCcw, Trash2 } from '@lucide/vue'
 import { computed, ref } from 'vue'
 
 import {
@@ -19,11 +9,7 @@ import {
   type TimelineDurationUnit,
   type TimelineOwner,
 } from '../domain/reverseTimeline'
-import {
-  buildCustomerTimelineSvg,
-  downloadTimelinePng,
-  downloadTimelineSvg,
-} from '../services/timelineExport'
+import { buildCustomerTimelineSvg, downloadTimelinePng, downloadTimelineSvg } from '../services/timelineExport'
 
 type EditableStep = ReverseTimelineStepInput
 
@@ -152,12 +138,14 @@ function formatDate(isoDate: string): string {
 
 function fileBaseName(): string {
   const raw = customerName.value.trim() || planTitle.value.trim() || 'go-live-plan'
-  return raw
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-zA-Z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-    .toLowerCase() || 'go-live-plan'
+  return (
+    raw
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+      .toLowerCase() || 'go-live-plan'
+  )
 }
 
 function svgForExport(): string | null {
@@ -240,8 +228,8 @@ function statusText(): string {
         <aside class="tool-source-note">
           <CalendarDays :size="22" aria-hidden="true" />
           <p>
-            Die Berechnung ist rein deterministisch. Arbeitstage berücksichtigen Montag bis Freitag; Feiertage werden
-            in v0.1 bewusst nicht automatisch eingerechnet.
+            Die Berechnung ist rein deterministisch. Arbeitstage berücksichtigen Montag bis Freitag; Feiertage werden in
+            v0.1 bewusst nicht automatisch eingerechnet.
           </p>
         </aside>
       </section>
@@ -336,13 +324,31 @@ function statusText(): string {
             </div>
 
             <div class="reverse-step-controls" aria-label="Schritt sortieren oder entfernen">
-              <button class="icon-action" type="button" :disabled="index === 0" :aria-label="`${step.label} nach oben`" @click="moveStep(index, -1)">
+              <button
+                class="icon-action"
+                type="button"
+                :disabled="index === 0"
+                :aria-label="`${step.label} nach oben`"
+                @click="moveStep(index, -1)"
+              >
                 <ArrowUp :size="17" aria-hidden="true" />
               </button>
-              <button class="icon-action" type="button" :disabled="index === steps.length - 1" :aria-label="`${step.label} nach unten`" @click="moveStep(index, 1)">
+              <button
+                class="icon-action"
+                type="button"
+                :disabled="index === steps.length - 1"
+                :aria-label="`${step.label} nach unten`"
+                @click="moveStep(index, 1)"
+              >
                 <ArrowDown :size="17" aria-hidden="true" />
               </button>
-              <button class="icon-action icon-action--danger" type="button" :disabled="steps.length <= 1" :aria-label="`${step.label} entfernen`" @click="removeStep(index)">
+              <button
+                class="icon-action icon-action--danger"
+                type="button"
+                :disabled="steps.length <= 1"
+                :aria-label="`${step.label} entfernen`"
+                @click="removeStep(index)"
+              >
                 <Trash2 :size="17" aria-hidden="true" />
               </button>
             </div>
@@ -444,8 +450,8 @@ function statusText(): string {
 
           <p class="timeline-method-note">
             Methodik-Hinweis: Die Timeline bildet Dauer und Reihenfolge der eingegebenen Schritte ab. Feiertage,
-            kundenspezifische Sperrzeiten und parallele Abhängigkeiten müssen in v0.1 über eigene Schritte bzw. angepasste
-            Dauern berücksichtigt werden.
+            kundenspezifische Sperrzeiten und parallele Abhängigkeiten müssen in v0.1 über eigene Schritte bzw.
+            angepasste Dauern berücksichtigt werden.
           </p>
         </template>
       </section>
