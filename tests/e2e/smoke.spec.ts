@@ -61,6 +61,11 @@ test('rechnet einen Go-Live-Plan rückwärts und zeigt kundenfähige Exporte', a
 
   expect(runtimeErrors).toEqual([])
 
+  await page.evaluate(() => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+    window.scrollTo(0, 0)
+  })
+
   await page.screenshot({
     path: testInfo.outputPath(`reverse-timeline-${testInfo.project.name}.png`),
     fullPage: true,
