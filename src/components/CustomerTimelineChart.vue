@@ -8,11 +8,7 @@ import type {
   TimelineArea,
   TimelineOwner,
 } from '../domain/reverseTimeline'
-import {
-  buildTimelineScale,
-  timelineSegmentPosition,
-  timelineTotalDays,
-} from '../domain/timelinePresentation'
+import { buildTimelineScale, timelineSegmentPosition, timelineTotalDays } from '../domain/timelinePresentation'
 
 const props = defineProps<{
   plan: ReverseTimelinePlan
@@ -162,8 +158,8 @@ function durationLabel(segment: ReverseTimelineSegment): string {
       <ul>
         <li v-for="segment in plan.chronologicalSegments" :key="`accessible-${segment.id}`">
           {{ segment.label }}, {{ areaLabels[segment.area] }}, {{ ownerLabels[segment.owner] }},
-          {{ formatDate(segment.startDate) }} bis {{ formatDate(segment.endDate) }},
-          {{ segment.duration }} {{ segment.durationUnit === 'business-days' ? 'Arbeitstage' : 'Kalendertage' }}.
+          {{ formatDate(segment.startDate) }} bis {{ formatDate(segment.endDate) }}, {{ segment.duration }}
+          {{ segment.durationUnit === 'business-days' ? 'Arbeitstage' : 'Kalendertage' }}.
         </li>
       </ul>
     </div>
