@@ -423,6 +423,12 @@ const bufferLabel = computed(() => {
 
 .executive-chart-axis,
 .executive-chart-row,
+.executive-chart-footer {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: var(--space-4);
+}
+
 .executive-milestone {
   position: absolute;
   z-index: 2;
@@ -442,12 +448,6 @@ const bufferLabel = computed(() => {
   height: 12px;
   background: var(--color-confirmed);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-confirmed) 28%, transparent);
-}
-
-.executive-chart-footer {
-  display: grid;
-  grid-template-columns: 230px minmax(0, 1fr);
-  gap: var(--space-4);
 }
 
 .executive-chart-axis {
