@@ -33,13 +33,6 @@ function formatDate(isoDate: string): string {
   return `${day}.${month}.${year}`
 }
 
-function shortDate(isoDate: string): string {
-  return new Intl.DateTimeFormat('de-DE', {
-    day: '2-digit',
-    month: 'short',
-  }).format(new Date(`${isoDate}T00:00:00Z`))
-}
-
 const totalDays = computed(() => timelineTotalDays(props.plan))
 const axisTicks = computed(() => buildTimelineScale(props.plan))
 
@@ -53,8 +46,19 @@ function segmentStyle(segment: ReverseTimelineSegment): Record<string, string> {
 }
 
 function durationLabel(segment: ReverseTimelineSegment): string {
-  return `${segment.duration} ${segment.durationUnit === 'business-days' ? 'AT' : 'KT'}`
+  const position = timelineSegmentPosition(props.plan, segment)
+  const fullUnit = segment.durationUnit === 'business-days' ? 'Arbeitstage' : 'Kalendertage'
+  const shortUnit = segment.durationUnit === 'business-days' ? 'AT' : 'KT'
+  return position.widthPercent >= 14 ? `${segment.duration} ${fullUnit}` : `${segment.duration} ${shortUnit}`
 }
+
+const bufferLabel = computed(() => {
+  if (props.plan.status === 'target-before-reference') return 'Target vor Planungsdatum'
+  if (props.plan.status === 'compression-required') {
+    return `Fehlen ${Math.abs(props.plan.calendarDaysToLatestStart)} Kalendertage`
+  }
+  return `${props.plan.calendarDaysToLatestStart} Kalendertage`
+})
 </script>
 
 <template>
@@ -81,13 +85,32 @@ function durationLabel(segment: ReverseTimelineSegment): string {
       </p>
     </div>
 
+    <div class="executive-kpi-strip" aria-label="Kernkennzahlen des Go-Live-Plans">
+      <div>
+        <span>Spätester Start</span>
+        <strong>{{ formatDate(plan.latestStartDate) }}</strong>
+      </div>
+      <div>
+        <span>Prozessdauer</span>
+        <strong>{{ totalDays }} Kalendertage</strong>
+      </div>
+      <div :class="`executive-kpi-buffer executive-kpi-buffer--${plan.status}`">
+        <span>Puffer zum notwendigen Start</span>
+        <strong>{{ bufferLabel }}</strong>
+      </div>
+      <div>
+        <span>Target Go-Live</span>
+        <strong>{{ formatDate(plan.targetGoLiveDate) }}</strong>
+      </div>
+    </div>
+
     <div class="executive-timeline-meta" aria-label="Legende und Planungsfenster">
       <div class="executive-timeline-legend">
         <span><i class="area-dot area-dot--decision-process"></i>Decision Process</span>
         <span><i class="area-dot area-dot--paper-process"></i>Paper Process</span>
         <span><i class="area-dot area-dot--implementation"></i>Implementierung</span>
       </div>
-      <span class="executive-window">{{ totalDays }} Kalendertage Planungsfenster</span>
+      <span class="executive-window">Zeitproportionaler Prozessplan</span>
     </div>
 
     <div class="executive-timeline-scroll" tabindex="0" aria-label="Zeitplan horizontal anzeigen">
@@ -99,10 +122,13 @@ function durationLabel(segment: ReverseTimelineSegment): string {
               v-for="tick in axisTicks"
               :key="tick.date"
               class="executive-axis-tick"
-              :class="{ 'executive-axis-tick--end': tick.position === 100 }"
+              :class="[
+                `executive-axis-tick--${tick.kind}`,
+                { 'executive-axis-tick--end': tick.position === 100 },
+              ]"
               :style="{ left: `${tick.position}%` }"
             >
-              {{ shortDate(tick.date) }}
+              {{ tick.label }}
             </span>
           </div>
         </div>
@@ -261,6 +287,43 @@ function durationLabel(segment: ReverseTimelineSegment): string {
   color: var(--color-text);
 }
 
+
+.executive-kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin: var(--space-4) var(--space-5) 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-border);
+}
+
+.executive-kpi-strip > div {
+  min-width: 0;
+  display: grid;
+  gap: 0.18rem;
+  background: var(--color-surface);
+  padding: var(--space-3);
+}
+
+.executive-kpi-strip span {
+  color: var(--color-text-muted);
+  font-size: 0.64rem;
+  font-weight: 650;
+}
+
+.executive-kpi-strip strong {
+  color: var(--color-text);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.executive-kpi-buffer--compression-required strong,
+.executive-kpi-buffer--target-before-reference strong {
+  color: var(--color-warning-text);
+}
+
 .executive-timeline-meta {
   display: flex;
   align-items: center;
@@ -374,10 +437,19 @@ function durationLabel(segment: ReverseTimelineSegment): string {
   transform: none;
 }
 
+.executive-axis-tick--start,
+.executive-axis-tick--end {
+  font-weight: 750;
+}
+
+.executive-axis-tick--start {
+  transform: none;
+  color: var(--color-accent-strong);
+}
+
 .executive-axis-tick--end {
   transform: translateX(-100%);
   color: var(--color-success-text);
-  font-weight: 750;
 }
 
 .executive-chart-body {
@@ -509,8 +581,13 @@ function durationLabel(segment: ReverseTimelineSegment): string {
     width: 100%;
   }
 
-  .executive-timeline-story {
+  .executive-timeline-story,
+  .executive-kpi-strip {
     margin-inline: var(--space-4);
+  }
+
+  .executive-kpi-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .executive-timeline-meta {
