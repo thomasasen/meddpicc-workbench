@@ -14,7 +14,12 @@ describe('Go-Live-Rückwärtsplanung', () => {
       steps: [
         { id: 'implementation', title: 'Implementierung', owner: 'Projektteam', durationBusinessDays: 65 },
         { id: 'contract', title: 'Vertrag & Signatur', owner: 'Legal / Einkauf', durationBusinessDays: 5 },
-        { id: 'legal', title: 'Legal, Datenschutz & Security', owner: 'Legal / DSB / IT-Security', durationBusinessDays: 15 },
+        {
+          id: 'legal',
+          title: 'Legal, Datenschutz & Security',
+          owner: 'Legal / DSB / IT-Security',
+          durationBusinessDays: 15,
+        },
         { id: 'procurement', title: 'Procurement / Bestellung', owner: 'Einkauf', durationBusinessDays: 10 },
         { id: 'decision', title: 'Finale Entscheidung', owner: 'Buying Committee', durationBusinessDays: 5 },
       ],
