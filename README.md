@@ -26,7 +26,7 @@ Tools erledigen eine konkrete Aufgabe: berechnen, vorbereiten, strukturieren ode
 
 | Funktion | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
-| **Go-Live-Rückwärtsplanung** | ✅ Umgesetzt | Du gibst Target Go-Live und die notwendigen Prozessschritte mit Dauer und Verantwortlichkeit ein. Das Tool rechnet vom Go-Live rückwärts und erstellt eine visuelle Timeline. | Du erkennst sofort, **wann welcher Schritt spätestens starten muss**, ob der gewünschte Go-Live realistisch ist und kannst die Timeline direkt mit dem Kunden teilen. |
+| **Go-Live-Rückwärtsplanung** | ✅ Umgesetzt | Du gibst Target Go-Live und die notwendigen Prozessschritte mit Dauer und Verantwortlichkeit ein. Das Tool rechnet rückwärts und erzeugt eine dynamische Executive-Timeline mit proportionaler Zeitachse. | Du erkennst sofort, **wann welcher Schritt spätestens starten muss**, wie viel Zeit jeder Prozessblock beansprucht und kannst dieselbe hochwertige Übersicht direkt im Kundengespräch oder als SVG/PNG verwenden. |
 | **Go-Live Plan Builder** | ⚪ Geplant | Führt Prozessschritte, Termine und Verantwortlichkeiten zu einem gemeinsamen Go-Live-Plan zusammen. | Du musst einen gemeinsamen Plan nicht jedes Mal manuell in PowerPoint oder Excel aufbauen und kannst Verantwortlichkeiten mit dem Kunden schneller abstimmen. |
 | **Decision Process Mapper** | ⚪ Geplant | Visualisiert, wie fachliche Validierung, Freigaben und endgültige Entscheidung beim Kunden ablaufen. | Du erkennst leichter, **wer wann was entscheiden muss** und wo im Buying Process noch Unklarheiten bestehen. |
 | **Paper Process Explorer** | ⚪ Geplant | Führt Schritt für Schritt durch Einkauf, Legal, Datenschutz, Security, Vertrag und Signatur. | Du deckst administrative Schritte früher auf und reduzierst das Risiko, dass ein vermeintlich gewonnener Deal kurz vor Abschluss durch unbekannte Prozesse verzögert wird. |
@@ -177,8 +177,10 @@ Pfad: **Tools → Go-Live & Buying Process → Go-Live-Rückwärtsplanung**
 - spätester errechneter Start
 - deterministische Rückwärtsrechnung
 - Vorlauf-/Kompressionshinweis
-- kundenfähige visuelle Timeline
-- SVG- und PNG-Export
+- dynamische Executive-Timeline im Roadmap-/Gantt-Stil
+- zeitproportionale Prozessbalken mit Datumsachse, Ownern und Go-Live-Ziellinie
+- Live-Aktualisierung bei Dauer, Reihenfolge oder Go-Live-Änderungen
+- SVG- und PNG-Export im gleichen kundenfähigen Visualstil
 
 Arbeitstage berücksichtigen in v0.1 Montag bis Freitag. Feiertage werden bewusst nicht automatisch angenommen.
 
