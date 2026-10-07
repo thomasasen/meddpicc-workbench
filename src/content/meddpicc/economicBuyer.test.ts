@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  economicBuyerChecklists,
-  economicBuyerConcepts,
-  economicBuyerKnowledge,
-} from './economicBuyer'
+import { economicBuyerChecklists, economicBuyerConcepts, economicBuyerKnowledge } from './economicBuyer'
 
 function collectKeys(value: unknown, keys = new Set<string>()): Set<string> {
   if (!value || typeof value !== 'object') return keys
