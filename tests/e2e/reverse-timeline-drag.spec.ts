@@ -115,7 +115,6 @@ test('sortiert Go-Live-Schritte intuitiv per Drag und per Tastatur', async ({ pa
   })
 })
 
-
 test('respektiert reduzierte Bewegung beim angehobenen Drag-State', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/meddpicc-workbench/#/tools/reverse-timeline')
