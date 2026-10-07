@@ -8,22 +8,28 @@ test('zeigt die MEDDPICC Toolbox mit Tools, Checklists und Knowledge', async ({ 
 
   await expect(page.getByText('MEDDPICC Toolbox', { exact: true }).first()).toBeVisible()
   await expect(
-    page.getByRole('heading', { name: 'Das richtige Werkzeug genau dann, wenn du es brauchst.' }),
+    page.getByRole('heading', { name: 'Wiederkehrende Sales-Aufgaben schneller und sicherer erledigen.' }),
   ).toBeVisible()
 
   await expect(page.locator('a[href="#tools"]')).toBeVisible()
   await expect(page.locator('a[href="#checklists"]')).toBeVisible()
   await expect(page.locator('a[href="#knowledge"]')).toBeVisible()
 
-  await expect(page.getByRole('heading', { name: 'Wiederkehrende Arbeit schneller erledigen' })).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Kurze Orientierung für konkrete Sales-Situationen' })).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'MEDDPICC nachschlagen, ohne im Buch zu suchen' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Eine konkrete Aufgabe erledigen' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Vor wichtigen Sales-Situationen kurz gegenprüfen' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'MEDDPICC-Fragen schnell und praxisnah klären' })).toBeVisible()
 
   await expect(page.getByRole('link', { name: /Go-Live-Rückwärtsplanung/ })).toBeVisible()
   await expect(page.getByText('Quick Payback', { exact: true })).toBeVisible()
   await expect(page.getByText('Economic-Buyer-Termin', { exact: true })).toBeVisible()
   await expect(
-    page.getByText('Keine Pipeline, keine Opportunity-Pflege, kein dauerhaftes MEDDPICC-Scoring.'),
+    page.getByText(/Zieltermin und Schritte eingeben.*späteste Starttermine und eine teilbare Timeline/),
+  ).toBeVisible()
+  await expect(
+    page.getByText(/Investition und Nutzen eingeben.*wann sich die Investition amortisiert/),
+  ).toBeVisible()
+  await expect(
+    page.getByText(/Was macht einen echten Champion aus.*welche Signale werden häufig überschätzt/),
   ).toBeVisible()
 
   for (const topic of [
