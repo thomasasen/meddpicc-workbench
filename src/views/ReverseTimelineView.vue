@@ -146,7 +146,12 @@ function startStepDrag(event: PointerEvent, index: number) {
   const step = steps.value[index]
   draggingStepId.value = step.id
   activePointerId = event.pointerId
-  ;(event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId)
+
+  try {
+    ;(event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId)
+  } catch {
+    // Synthetic test events may not create an active browser pointer. Reordering still works without capture.
+  }
 }
 
 function moveDraggedStep(event: PointerEvent) {
@@ -162,7 +167,11 @@ function finishStepDrag(event: PointerEvent) {
   if (event.pointerId !== activePointerId) return
 
   const target = event.currentTarget as HTMLElement
-  if (target.hasPointerCapture?.(event.pointerId)) target.releasePointerCapture(event.pointerId)
+  try {
+    if (target.hasPointerCapture?.(event.pointerId)) target.releasePointerCapture(event.pointerId)
+  } catch {
+    // Pointer capture may already be gone after cancellation or a synthetic event.
+  }
   draggingStepId.value = null
   activePointerId = null
 }
