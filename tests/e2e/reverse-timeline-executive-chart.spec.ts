@@ -29,9 +29,7 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
 
   await page.locator('.reverse-step-card').first().getByLabel('Dauer').fill('30')
 
-  await expect
-    .poll(async () => implementationBar.getAttribute('style'))
-    .not.toBe(beforeStyle)
+  await expect.poll(async () => implementationBar.getAttribute('style')).not.toBe(beforeStyle)
 
   await expect(page.getByText(/sollte der erste Prozessschritt spätestens am/)).toBeVisible()
   await expect(page.getByText('Decision Process', { exact: true }).last()).toBeVisible()
