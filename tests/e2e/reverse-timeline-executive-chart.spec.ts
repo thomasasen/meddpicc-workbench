@@ -16,12 +16,27 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
   await expect(page.getByText('Gemeinsamer Go-Live-Plan', { exact: true }).last()).toBeVisible()
   await expect(page.getByText('Beispielwerke GmbH', { exact: true })).toBeVisible()
   await expect(page.locator('.executive-go-live').getByText('Target Go-Live', { exact: true })).toBeVisible()
-  await expect(page.getByText(/Kalendertage Planungsfenster/)).toBeVisible()
+  await expect(page.getByText('Prozessdauer', { exact: true })).toBeVisible()
+  await expect(page.getByText('Puffer zum notwendigen Start', { exact: true })).toBeVisible()
+  await expect(page.getByText('Zeitproportionaler Prozessplan', { exact: true })).toBeVisible()
 
   const rows = chart.locator('.executive-chart-row')
   await expect(rows).toHaveCount(5)
   await expect(rows.nth(0).locator('.executive-row-label strong')).toHaveText('Finale Entscheidung')
   await expect(rows.nth(4).locator('.executive-row-label strong')).toHaveText('Implementierung / Rollout')
+  await expect(chart.locator('.executive-milestone')).toHaveCount(5)
+  await expect(chart.locator('.executive-milestone--go-live')).toHaveCount(1)
+
+  const monthTicks = chart.locator('.executive-axis-tick--period')
+  await expect(monthTicks.first()).toBeVisible()
+  await expect(monthTicks.first()).not.toContainText('KW ')
+
+  const details = page.locator('.timeline-details')
+  await expect(details).not.toHaveAttribute('open', '')
+  await expect(details.getByText('Finale Entscheidung', { exact: true })).not.toBeVisible()
+  await details.locator('summary').click()
+  await expect(details).toHaveAttribute('open', '')
+  await expect(details.getByText('Finale Entscheidung', { exact: true })).toBeVisible()
 
   const implementationBar = chart.locator('[data-segment-id="implementation"] .executive-segment')
   const beforeStyle = await implementationBar.getAttribute('style')
@@ -42,6 +57,12 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
       scrollWidth: element.scrollWidth,
     }))
     expect(scrollMetrics.scrollWidth).toBeGreaterThan(scrollMetrics.clientWidth)
+    await expect(page.locator('.executive-scroll-hint')).toBeVisible()
+
+    const stickyLabelPosition = await rows.nth(0).locator('.executive-row-label').evaluate(
+      (element) => window.getComputedStyle(element).position,
+    )
+    expect(stickyLabelPosition).toBe('sticky')
   }
 
   expect(runtimeErrors).toEqual([])
