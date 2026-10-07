@@ -1,4 +1,4 @@
-# MEDDPICC Workbench – Copilot-Anweisungen
+> **Produktmodell-Hinweis 07.10.2026:** MEDDPICC Toolbox ist inzwischen microtool-first. Die Projektdatei ist kein Pflicht-Einstieg mehr, sondern ein möglicher späterer optionaler Deal-Workspace. Bei Widersprüchen haben AGENTS.md, PROJECT_CHARTER.md, ARCHITECTURE.md und ROADMAP.md Vorrang.\n\n# MEDDPICC Workbench – Copilot-Anweisungen
 
 Vor der Code-Generierung gilt die Repository-Dokumentation als Source of Truth.
 
