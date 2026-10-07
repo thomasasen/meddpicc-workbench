@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 async function stepLabels(page: import('@playwright/test').Page) {
   return page
-    .locator('.reverse-step-card input[type="text"]')
+    .locator('.reverse-step-card .reverse-step-name input[type="text"]')
     .evaluateAll((inputs) => inputs.map((input) => (input as HTMLInputElement).value))
 }
 
