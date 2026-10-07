@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
+import ChecklistView from '../views/ChecklistView.vue'
+import EconomicBuyerKnowledgeView from '../views/EconomicBuyerKnowledgeView.vue'
 import EvidenceView from '../views/EvidenceView.vue'
 import HomeView from '../views/HomeView.vue'
 import ReverseTimelineView from '../views/ReverseTimelineView.vue'
@@ -18,6 +20,23 @@ const router = createRouter({
       path: '/tools/reverse-timeline',
       name: 'reverse-timeline',
       component: ReverseTimelineView,
+    },
+    {
+      path: '/knowledge/economic-buyer',
+      name: 'knowledge-economic-buyer',
+      component: EconomicBuyerKnowledgeView,
+    },
+    {
+      path: '/checklists/economic-buyer',
+      name: 'checklist-economic-buyer',
+      component: ChecklistView,
+      props: { checklistId: 'economic-buyer' },
+    },
+    {
+      path: '/checklists/economic-buyer-meeting',
+      name: 'checklist-economic-buyer-meeting',
+      component: ChecklistView,
+      props: { checklistId: 'economic-buyer-meeting' },
     },
     {
       path: '/evidence',
