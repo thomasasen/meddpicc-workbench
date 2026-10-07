@@ -43,9 +43,11 @@ describe('buildCustomerTimelineSvg', () => {
     expect(svg).toContain('01.07.2027')
     expect(svg).toContain('Implementierung / Rollout')
     expect(svg).toContain('Legal / Datenschutz')
-    expect(svg).toContain('Kalendertage Planungsfenster')
+    expect(svg).toContain('Prozessdauer: 40 Kalendertage')
+    expect(svg).toContain('Puffer zum Start:')
     expect(svg).toContain('#22c55e')
     expect(svg).toContain('#8b5cf6')
+    expect(svg).toContain('#15803d')
   })
 
   it('escaped kundenspezifische Texte im SVG', () => {
