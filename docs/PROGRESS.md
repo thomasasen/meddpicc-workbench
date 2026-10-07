@@ -21,8 +21,9 @@ Technisch vorhanden:
 - Verantwortlichkeiten und Prozessbereiche
 - intuitive Reihenfolgeänderung per Drag & Drop mit Tastatur-Fallback
 - Vorlauf-/Kompressionshinweis
-- kundenfähige Timeline
-- SVG-/PNG-Export
+- dynamische kundenfähige Executive-Timeline
+- zeitproportionale Datumsachse und Prozessbalken
+- SVG-/PNG-Export im gleichen Visualstil
 - Unit Tests
 - Playwright Desktop/Mobile
 
@@ -41,6 +42,25 @@ Umgesetzt:
 - Rückwärtsberechnung selbst unverändert
 
 Technische QS: CI-Lauf **#336** erfolgreich inklusive Playwright Desktop/Mobile und Pages-Integrität.
+
+### UX-Erweiterung: Customer-ready Executive Timeline
+
+Branch: `feat/reverse-timeline-executive-chart`
+
+Umgesetzt:
+
+- Roadmap-/Gantt-Hybrid mit eigener Zeile je Prozessschritt
+- dynamische Datumsachse vom spätesten Start bis zum Target Go-Live
+- zeitproportionale Position und Breite der Prozessbalken
+- farbliche Trennung von Decision Process, Paper Process und Implementierung
+- Owner je Prozessschritt
+- klar hervorgehobenes Target Go-Live
+- kurze Kundenbotschaft: wann der erste Prozessschritt spätestens starten sollte
+- horizontale, tastaturfokussierbare Ansicht auf kleinen Displays
+- Live-Reaktion auf geänderte Dauer, Reihenfolge und Termine
+- identische Präsentationslogik für SVG-/PNG-Export
+- Zero-Duration-Schritte bleiben als Marker sichtbar
+- Unit- und Playwright-Tests für die Präsentationslogik
 
 ## Economic Buyer – Checklists & Knowledge v0.1
 
