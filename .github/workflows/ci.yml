@@ -47,6 +47,12 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
+      - name: Prettier-Diff für finalen Smoke-Test
+        run: |
+          npx prettier --write tests/e2e/smoke.spec.ts
+          git diff -- tests/e2e/smoke.spec.ts
+          git checkout -- tests/e2e/smoke.spec.ts
+
       - name: Formatierung prüfen
         run: npm run format:check
 
