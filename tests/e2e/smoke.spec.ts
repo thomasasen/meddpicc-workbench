@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-test('zeigt die MEDDPICC Toolbox als Microtool-Startseite', async ({ page }) => {
+test('zeigt die MEDDPICC Toolbox als Microtool-Startseite', async ({ page }, testInfo) => {
   const runtimeErrors: string[] = []
   page.on('pageerror', (error) => runtimeErrors.push(error.message))
 
@@ -29,9 +29,14 @@ test('zeigt die MEDDPICC Toolbox als Microtool-Startseite', async ({ page }) => 
   await expect(page.getByText('Ein vollständiger Opportunity-Datensatz ist keine Voraussetzung.')).toBeVisible()
 
   expect(runtimeErrors).toEqual([])
+
+  await page.screenshot({
+    path: testInfo.outputPath(`toolbox-start-${testInfo.project.name}.png`),
+    fullPage: true,
+  })
 })
 
-test('rechnet einen Go-Live-Plan rückwärts und zeigt kundenfähige Exporte', async ({ page }) => {
+test('rechnet einen Go-Live-Plan rückwärts und zeigt kundenfähige Exporte', async ({ page }, testInfo) => {
   const runtimeErrors: string[] = []
   page.on('pageerror', (error) => runtimeErrors.push(error.message))
 
@@ -55,6 +60,11 @@ test('rechnet einen Go-Live-Plan rückwärts und zeigt kundenfähige Exporte', a
   await expect(page.getByText(/Feiertage werden in v0\.1 bewusst nicht automatisch eingerechnet/)).toBeVisible()
 
   expect(runtimeErrors).toEqual([])
+
+  await page.screenshot({
+    path: testInfo.outputPath(`reverse-timeline-${testInfo.project.name}.png`),
+    fullPage: true,
+  })
 })
 
 test('validiert fehlerhafte Timeline-Eingaben verständlich', async ({ page }) => {
