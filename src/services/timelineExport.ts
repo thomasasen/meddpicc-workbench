@@ -1,13 +1,5 @@
-import type {
-  ReverseTimelinePlan,
-  ReverseTimelineSegment,
-  TimelineOwner,
-} from '../domain/reverseTimeline'
-import {
-  buildTimelineScale,
-  timelineSegmentPosition,
-  timelineTotalDays,
-} from '../domain/timelinePresentation'
+import type { ReverseTimelinePlan, ReverseTimelineSegment, TimelineOwner } from '../domain/reverseTimeline'
+import { buildTimelineScale, timelineSegmentPosition, timelineTotalDays } from '../domain/timelinePresentation'
 
 export type TimelineExportOptions = {
   title: string
