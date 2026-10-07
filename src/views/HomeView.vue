@@ -203,9 +203,11 @@ const knowledgeTopics = [
                   <strong>{{ tool.label }}</strong>
                   <small>{{ tool.note }}</small>
                 </span>
-                <span v-if="tool.customerReady" class="tool-kind tool-kind--customer">Kundenfähig</span>
-                <ArrowRight v-else-if="tool.route" :size="17" aria-hidden="true" />
-                <span v-else class="microtool-planned">Geplant</span>
+                <span class="tool-row-meta">
+                  <span v-if="tool.customerReady" class="tool-kind tool-kind--customer">Kundenfähig</span>
+                  <ArrowRight v-if="tool.route" :size="17" aria-hidden="true" />
+                  <span v-else class="microtool-planned">Geplant</span>
+                </span>
               </component>
             </div>
           </article>
@@ -222,7 +224,6 @@ const knowledgeTopics = [
               erkennst und welche Fehlinterpretationen häufig vorkommen.
             </p>
           </div>
-          <span class="foundation-badge">Foundation als nächster Roadmap-Schritt</span>
         </div>
 
         <div class="checklist-preview-grid">
