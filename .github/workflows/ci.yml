@@ -29,10 +29,15 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: write
 
     steps:
       - name: Repository auschecken
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
 
       - name: Node.js einrichten
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
@@ -67,6 +72,18 @@ jobs:
             pages-build.json
           retention-days: 1
           if-no-files-found: error
+
+      - name: generierten Pages-Root mit PR-Branch synchronisieren
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if git diff --quiet -- index.html assets pages-build.json; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- index.html assets pages-build.json
+          git commit -m "chore: sync generated Pages root"
+          git push origin "HEAD:${{ github.head_ref }}"
 
       - name: committed Pages-Root gegen Build prüfen
         run: git diff --exit-code -- index.html assets pages-build.json
