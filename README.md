@@ -104,7 +104,7 @@ Jeder Checklist-Punkt soll bei Bedarf erklären:
 
 | Checklist | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
-| **Economic-Buyer-Termin** | 🟡 Als Nächstes | Prüft vor dem Termin, ob Value, Metrics, Kernfragen und gewünschtes Ergebnis ausreichend vorbereitet sind. | Du kannst dich in wenigen Minuten auf einen wichtigen Executive-Termin vorbereiten und übersiehst weniger kritische Punkte. |
+| **Economic-Buyer-Termin** | ✅ Umgesetzt | Prüft vor dem Termin, ob Value, Metrics, Kernfragen und gewünschtes Ergebnis ausreichend vorbereitet sind. | Du kannst dich in wenigen Minuten auf einen wichtigen Executive-Termin vorbereiten und übersiehst weniger kritische Punkte. |
 | **Discovery Call** | 🟡 Als Nächstes | Prüft vor einem Discovery-Gespräch Pain, Impact, Stakeholder, Hypothesen und gewünschte Erkenntnisse. | Du gehst strukturierter ins Gespräch und kannst vorhandene Gesprächszeit gezielter nutzen. |
 | **POC / Pilot** | 🟡 Als Nächstes | Prüft Success Criteria, Verantwortliche, Commitment, Entscheidungsweg und den Prozess nach erfolgreichem POC. | Du reduzierst das Risiko eines aufwendigen POCs, der technisch funktioniert, aber anschließend keine Entscheidung auslöst. |
 | **Pricing / Angebot** | 🟡 Als Nächstes | Prüft vor dem kommerziellen Angebot, ob Value, Entscheidungsweg und kommerzieller Kontext ausreichend verstanden sind. | Du verschickst Pricing seltener zu früh und kannst Preis stärker im Kontext des geschaffenen Value positionieren. |
@@ -116,7 +116,7 @@ Jeder Checklist-Punkt soll bei Bedarf erklären:
 | Checklist | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
 | **Metrics** | 🟡 Als Nächstes | Erklärt und prüft die wichtigsten Merkmale einer belastbaren Metric. | Du kannst schnell gegenprüfen, ob eine Kennzahl wirklich aussagekräftig ist oder nur eine unvalidierte Annahme darstellt. |
-| **Economic Buyer** | 🟡 Als Nächstes | Erklärt die zentralen Merkmale des Economic Buyers und typische Verwechslungen. | Du kannst Kontakte sicherer einordnen und vermeidest, Titel oder Seniorität mit echter wirtschaftlicher Entscheidungsautorität gleichzusetzen. |
+| **Economic Buyer** | ✅ Umgesetzt | Erklärt die zentralen Merkmale des Economic Buyers und typische Verwechslungen. | Du kannst Kontakte sicherer einordnen und vermeidest, Titel oder Seniorität mit echter wirtschaftlicher Entscheidungsautorität gleichzusetzen. |
 | **Decision Criteria** | 🟡 Als Nächstes | Hilft, relevante Kriterien zu erkennen, einzuordnen und auf Vollständigkeit zu prüfen. | Du erkennst leichter, welche Kriterien die Auswahl wirklich beeinflussen und wo dir noch Wissen fehlt. |
 | **Decision Process** | 🟡 Als Nächstes | Erklärt Validation, Approval, beteiligte Rollen und typische Prozesslücken. | Du kannst schneller prüfen, ob du den tatsächlichen Weg zur Entscheidung verstanden hast. |
 | **Paper Process** | 🟡 Als Nächstes | Erklärt die administrativen Schritte zwischen Entscheidung und Unterschrift. | Du weißt, welche Fragen du zu Einkauf, Legal oder Signatur stellen solltest und verwechselst Paper Process nicht mit dem fachlichen Decision Process. |
@@ -128,12 +128,14 @@ Jeder Checklist-Punkt soll bei Bedarf erklären:
 
 ## Wissen
 
+**Economic Buyer ist der erste vollständig umgesetzte Wissensbereich.** Die Seite erklärt Definition, praktische Bedeutung, Erkennungsmerkmale, typische Fehlinterpretationen, mögliche Fragen, Vorgehen ohne direkten Zugang und den relevanten Unterschied zwischen Whyte und Lahoutifard.
+
 Die Wissenshilfe ist für Situationen gedacht, in denen du einen MEDDPICC-Begriff **kurz, korrekt und praxisnah nachschlagen** möchtest, ohne erneut im Buch suchen zu müssen.
 
 | Wissensbereich | Status | Welche Frage beantwortet er? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
 | **Metrics** | 🟡 Als Nächstes | Wann ist eine Metric belastbar und wie wird daraus wirtschaftlicher Impact? | Du kannst Metrics schneller korrekt anwenden und vermeidest unklare oder nicht validierte Nutzenbehauptungen. |
-| **Economic Buyer** | 🟡 Als Nächstes | Woran erkennst du den Economic Buyer und wie unterscheidet er sich von Sponsor oder fachlichem Entscheider? | Du kannst Rollen sicherer einordnen und weißt, worauf es bei EB-Zugang und EB-Gesprächen wirklich ankommt. |
+| **Economic Buyer** | ✅ Umgesetzt | Woran erkennst du den Economic Buyer und wie unterscheidet er sich von Sponsor oder fachlichem Entscheider? | Du kannst Rollen sicherer einordnen und weißt, worauf es bei EB-Zugang und EB-Gesprächen wirklich ankommt. |
 | **Decision Criteria** | 🟡 Als Nächstes | Welche Kriterien beeinflussen die Auswahl und wie lassen sie sich strukturieren? | Du kannst Entscheidungskriterien schneller verstehen, hinterfragen und in Kundengesprächen gezielter bearbeiten. |
 | **Decision Process** | 🟡 Als Nächstes | Wie unterscheiden sich Validation und Approval und wer entscheidet wann? | Du verstehst den tatsächlichen Entscheidungsweg besser und kannst gezielter nach offenen Schritten fragen. |
 | **Paper Process** | 🟡 Als Nächstes | Welche administrativen Schritte liegen zwischen Entscheidung und Unterschrift? | Du kannst Einkauf, Legal, Security und Signaturweg früher berücksichtigen und besser vom Decision Process unterscheiden. |
