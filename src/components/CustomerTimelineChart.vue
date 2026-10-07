@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CalendarRange, Flag } from '@lucide/vue'
+import { CalendarRange, Flag, MoveHorizontal } from '@lucide/vue'
 import { computed } from 'vue'
 
 import type {
@@ -42,6 +42,13 @@ function segmentStyle(segment: ReverseTimelineSegment): Record<string, string> {
   return {
     '--segment-left': `${position.leftPercent}%`,
     '--segment-width': `${position.widthPercent}%`,
+  }
+}
+
+function milestoneStyle(segment: ReverseTimelineSegment): Record<string, string> {
+  const position = timelineSegmentPosition(props.plan, segment)
+  return {
+    '--milestone-left': `${Math.min(100, position.leftPercent + position.widthPercent)}%`,
   }
 }
 
@@ -113,7 +120,13 @@ const bufferLabel = computed(() => {
       <span class="executive-window">Zeitproportionaler Prozessplan</span>
     </div>
 
-    <div class="executive-timeline-scroll" tabindex="0" aria-label="Zeitplan horizontal anzeigen">
+    <div class="executive-scroll-hint" aria-hidden="true">
+      <MoveHorizontal :size="16" />
+      Seitlich wischen, um den gesamten Zeitplan zu sehen
+    </div>
+
+    <div class="executive-timeline-scroll-shell">
+      <div class="executive-timeline-scroll" tabindex="0" aria-label="Zeitplan horizontal anzeigen">
       <div class="executive-chart" data-testid="executive-timeline-chart" aria-hidden="true">
         <div class="executive-chart-axis">
           <div class="executive-chart-axis-label">Prozessschritt</div>
@@ -159,6 +172,17 @@ const bufferLabel = computed(() => {
               >
                 <span class="executive-segment-duration">{{ durationLabel(segment) }}</span>
               </div>
+
+              <span
+                class="executive-milestone"
+                :class="{ 'executive-milestone--go-live': segment.endDate === plan.targetGoLiveDate }"
+                :style="milestoneStyle(segment)"
+                :title="
+                  segment.endDate === plan.targetGoLiveDate
+                    ? `Target Go-Live ${formatDate(segment.endDate)}`
+                    : `Übergabe am ${formatDate(segment.endDate)}`
+                "
+              ></span>
             </div>
           </div>
         </div>
@@ -170,6 +194,7 @@ const bufferLabel = computed(() => {
             <strong>Go-Live {{ formatDate(plan.targetGoLiveDate) }}</strong>
           </div>
         </div>
+      </div>
       </div>
     </div>
 
@@ -370,10 +395,19 @@ const bufferLabel = computed(() => {
   white-space: nowrap;
 }
 
+.executive-scroll-hint {
+  display: none;
+}
+
+.executive-timeline-scroll-shell {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--color-divider);
+}
+
 .executive-timeline-scroll {
   overflow-x: auto;
   overscroll-behavior-inline: contain;
-  border-top: 1px solid var(--color-divider);
   scrollbar-width: thin;
 }
 
@@ -389,6 +423,28 @@ const bufferLabel = computed(() => {
 
 .executive-chart-axis,
 .executive-chart-row,
+
+.executive-milestone {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: var(--milestone-left);
+  width: 10px;
+  height: 10px;
+  border: 2px solid white;
+  border-radius: 999px;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-accent) 48%, var(--color-border));
+  transform: translate(-50%, -50%);
+}
+
+.executive-milestone--go-live {
+  width: 12px;
+  height: 12px;
+  background: var(--color-confirmed);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-confirmed) 28%, transparent);
+}
+
 .executive-chart-footer {
   display: grid;
   grid-template-columns: 230px minmax(0, 1fr);
@@ -582,6 +638,28 @@ const bufferLabel = computed(() => {
     margin-inline: var(--space-4);
   }
 
+  .executive-scroll-hint {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0 var(--space-4) var(--space-2);
+    color: var(--color-text-muted);
+    font-size: 0.67rem;
+    font-weight: 650;
+  }
+
+  .executive-timeline-scroll-shell::after {
+    position: absolute;
+    z-index: 8;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 36px;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.9));
+    content: '';
+    pointer-events: none;
+  }
+
   .executive-kpi-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -598,7 +676,29 @@ const bufferLabel = computed(() => {
   .executive-chart-axis,
   .executive-chart-row,
   .executive-chart-footer {
-    grid-template-columns: 205px minmax(0, 1fr);
+    grid-template-columns: 164px minmax(0, 1fr);
+  }
+
+  .executive-chart-axis-label,
+  .executive-row-label {
+    position: sticky;
+    z-index: 6;
+    left: 0;
+    background: var(--color-surface);
+    box-shadow: 10px 0 14px -14px rgb(23 32 51 / 0.45);
+  }
+
+  .executive-chart-axis-label {
+    align-self: stretch;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 8px;
+  }
+
+  .executive-row-label {
+    align-self: stretch;
+    align-content: center;
+    padding-right: var(--space-2);
   }
 }
 
