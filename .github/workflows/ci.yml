@@ -44,7 +44,14 @@ jobs:
         run: npm ci --no-audit --no-fund
 
       - name: Formatierung prüfen
-        run: npm run format:check
+        run: |
+          if ! npm run format:check; then
+            npm run format
+            echo "::group::Erforderliche Prettier-Änderungen"
+            git diff -- src tests scripts schema '*.ts' '*.js' '*.json'
+            echo "::endgroup::"
+            exit 1
+          fi
 
       - name: Linting ausführen
         run: npm run lint
