@@ -24,7 +24,7 @@ test('sortiert Go-Live-Schritte intuitiv per Drag und per Tastatur', async ({ pa
     'Finale Entscheidung',
   ])
 
-  const firstHandle = page.getByRole('button', { name: /Implementierung / Rollout verschieben/ })
+  const firstHandle = page.getByRole('button', { name: /Implementierung.*Rollout verschieben/ })
   const targetCard = page.locator('.reverse-step-card').nth(2)
   const handleBox = await firstHandle.boundingBox()
   const targetBox = await targetCard.boundingBox()
@@ -67,7 +67,7 @@ test('sortiert Go-Live-Schritte intuitiv per Drag und per Tastatur', async ({ pa
     'Finale Entscheidung',
   ])
 
-  const implementationHandle = page.getByRole('button', { name: /Implementierung / Rollout verschieben/ })
+  const implementationHandle = page.getByRole('button', { name: /Implementierung.*Rollout verschieben/ })
   await implementationHandle.focus()
   await implementationHandle.press('ArrowUp')
 
