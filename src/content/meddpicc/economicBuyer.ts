@@ -27,7 +27,8 @@ export const economicBuyerConcepts = {
     ],
     learnMore:
       'Whyte warnt sowohl vor dem Budget-Holder-Fehler als auch davor, automatisch eine zu weit entfernte C-Level-Person zum Economic Buyer zu erklären. Entscheidend ist die tatsächliche Autorität im konkreten Vorhaben.',
-    sourceNote: 'Whyte → Economic Buyer: Identifying the Economic Buyer / Qualifying Criteria; Lahoutifard → Chapter Four: Economic Buyer.',
+    sourceNote:
+      'Whyte → Economic Buyer: Identifying the Economic Buyer / Qualifying Criteria; Lahoutifard → Chapter Four: Economic Buyer.',
   },
   businessOutcome: {
     id: 'business-outcome',
@@ -49,7 +50,8 @@ export const economicBuyerConcepts = {
     ],
     learnMore:
       'Whyte empfiehlt, mit dem Economic Buyer über Business Objectives und Outcomes statt über „bells and whistles“ zu sprechen. Lahoutifard formuliert denselben Gedanken als „WHY“-Frequenz für Top Management.',
-    sourceNote: 'Whyte → Talk in the Language of the Economic Buyer / How Economic Buyers Make Decisions; Lahoutifard → Tune Your Sales Pitch to the Right Frequency.',
+    sourceNote:
+      'Whyte → Talk in the Language of the Economic Buyer / How Economic Buyers Make Decisions; Lahoutifard → Tune Your Sales Pitch to the Right Frequency.',
   },
   metricsValue: {
     id: 'metrics-value',
@@ -71,7 +73,8 @@ export const economicBuyerConcepts = {
     ],
     learnMore:
       'Whyte schlägt vor, den Economic Buyer nach seinem eigenen Erfolgsindikator zu fragen. Lahoutifard betont, Metrics je Stakeholder auf die passende wirtschaftliche Bedeutung zu übersetzen.',
-    sourceNote: 'Whyte → First Interaction Guidance / How Economic Buyers Make Decisions; Lahoutifard → How to Align Metrics with Your Message.',
+    sourceNote:
+      'Whyte → First Interaction Guidance / How Economic Buyers Make Decisions; Lahoutifard → How to Align Metrics with Your Message.',
   },
   decisionCriteria: {
     id: 'decision-criteria',
@@ -93,7 +96,8 @@ export const economicBuyerConcepts = {
     ],
     learnMore:
       'Whyte beschreibt Cost, Completion und Confidence als typische Perspektiven des Economic Buyers. Die Toolbox behandelt sie als Denkhilfe, nicht als starre offizielle MEDDPICC-Formel.',
-    sourceNote: 'Whyte → How Economic Buyers Make Decisions; Lahoutifard → Chapter Four: The Meeting with the Economic Buyer.',
+    sourceNote:
+      'Whyte → How Economic Buyers Make Decisions; Lahoutifard → Chapter Four: The Meeting with the Economic Buyer.',
   },
   access: {
     id: 'access',
@@ -115,7 +119,8 @@ export const economicBuyerConcepts = {
     ],
     learnMore:
       'Whyte beschreibt den Champion als wichtigen Weg zur Identifikation, Einführung und Vorbereitung, empfiehlt aber zugleich, eine eigene Engagement-Strategie zu entwickeln. Lahoutifard misst dem frühen EB-Meeting besonders hohe Bedeutung bei.',
-    sourceNote: 'Whyte → Your Champion and the Economic Buyer / Other Ways to Engage; Lahoutifard → The Meeting with the Economic Buyer.',
+    sourceNote:
+      'Whyte → Your Champion and the Economic Buyer / Other Ways to Engage; Lahoutifard → The Meeting with the Economic Buyer.',
   },
   commitment: {
     id: 'commitment',
@@ -370,7 +375,8 @@ const meetingItems: ChecklistItem[] = [
   },
   {
     id: 'core-questions',
-    question: 'Habe ich wenige Kernfragen vorbereitet, die ich nur vom Economic Buyer sinnvoll beantworten lassen kann?',
+    question:
+      'Habe ich wenige Kernfragen vorbereitet, die ich nur vom Economic Buyer sinnvoll beantworten lassen kann?',
     meaning:
       'Nutze den Termin nicht nur zum Präsentieren. Bereite Fragen vor, die wirtschaftliche Ziele, Erfolgskriterien, Priorität, Entscheidungslogik oder Risiken direkt validieren.',
     whyItMatters:
@@ -395,7 +401,8 @@ const meetingItems: ChecklistItem[] = [
       'Relevante Risiken oder Einwände sind als Hypothesen vorbereitet.',
       'Es gibt keine Absicht, kritische Themen im Termin bewusst zu vermeiden.',
     ],
-    commonMisinterpretation: '„Wenn der Champion keine Einwände nennt, wird der Economic Buyer wahrscheinlich auch keine haben.“',
+    commonMisinterpretation:
+      '„Wenn der Champion keine Einwände nennt, wird der Economic Buyer wahrscheinlich auch keine haben.“',
     possibleQuestionsOrActions: [
       'Welche vergleichbaren Investitionen sind in der Vergangenheit schwierig gelaufen und warum?',
       'Was bereitet Ihnen bei einem Vorhaben dieser Art am meisten Sorge?',
