@@ -6,6 +6,16 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 
 > **Was hilft mir bei meiner aktuellen Aufgabe – und wie komme ich schnell zu einem brauchbaren Ergebnis?**
 
+
+### Metrics – Knowledge und Checklist
+
+**Feature-PR (vor technischer und sichtbarer UI-Abnahme noch nicht auf `main`):**
+
+- **Wissen → Metrics:** Definition, Before-/After-State, Economic Impact, M1-Proof-Points vs. kundenspezifische M2-Metrics, Validierung sowie Sichtweisen von Whyte und Lahoutifard.
+- **Checklist → Metrics:** sieben kompakte Prüfpunkte mit Erklärung, Erkennungsmerkmalen, typischen Fehlinterpretationen und konkreten Discovery-Fragen.
+- Die Content-Basis wird zwischen Knowledge und Checklist wiederverwendet. Checkboxen sind nur temporäre Denkhilfen, kein Deal-Score.
+- Die fachliche Quellenprüfung steht unter [Metrics Source QA](docs/METRICS_SOURCE_QA.md).
+
 ## Status
 
 | Status | Bedeutung |
