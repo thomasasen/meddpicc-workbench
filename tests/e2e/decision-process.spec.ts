@@ -10,7 +10,17 @@ test('Decision-Process-Wissen ist erreichbar und unterscheidet die drei Prozesse
   ).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Was, wie und bis zur Unterschrift' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Validation, Business Approval und Paper Process' })).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Fünf gefährliche Kurzschlüsse' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Typische Kurzschlüsse' })).toBeVisible()
+
+  await expect(page.getByRole('heading', { name: 'Die Timeline braucht Aufgaben auf beiden Seiten' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Kundenseite' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Verkäuferseite' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Warum muss der Kunde gerade jetzt entscheiden?' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Go-Live-Rückwärtsplanung öffnen' })).toHaveAttribute(
+    'href',
+    /\/tools\/reverse-timeline/,
+  )
+  await expect(page.getByText('Wiederholte Auskunftsverweigerung', { exact: false })).not.toBeVisible()
 
   const sources = page.locator('main > section:last-of-type > details')
   await expect(sources).not.toHaveAttribute('open')
