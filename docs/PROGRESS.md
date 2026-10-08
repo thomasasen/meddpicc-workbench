@@ -172,12 +172,12 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 - Discovery-Call-Knowledge (in `main`)
 - Decision Criteria Knowledge und Themen-Checklist (in `main`)
 - Decision Process Knowledge und Themen-Checklist (PR #48, in `main`)
+- Paper Process Knowledge und Themen-Checklist (PR #49, in `main`)
+- Pain / Implication Knowledge und Themen-Checklist (PR #50, in `main`)
 
 ### Noch offen
 
-- Paper Process (PR #49 am 08.10.2026 in `main` gemergt, Squash `2504170512cd9d5475e50b6dbea9be97064825a6`)
-- Pain / Implication (neuer Feature-Branch; noch nicht gemergt)
-- Champion
+- Champion (Feature-Branch zur Draft-Abnahme, nicht gemergt)
 - Competition
 - weitere situative Checklists wie POC, Pricing und Closing
 
@@ -194,8 +194,9 @@ Umgesetzt und am **08.10.2026 nach Nutzerfreigabe per General-Merge** gemergt: h
 - Standalone-Knowledge-/Checklist-Slice: kein Criteria Workshop, keine Decision Matrix, kein automatisches Scoring und kein CRM.
 - **Decision Process:** PR #48 am 08.10.2026 nach Nutzerfreigabe in `main` gemergt (Commit `af750f861a596001b3af1f299faa8bc729cf80c2`).
 - **Paper Process:** PR #49 nach CI und visueller Freigabe am 08.10.2026 in `main` gemergt; Quellenmatrix in `docs/PAPER_PROCESS_SOURCE_QA.md`.
-- **Pain / Implication:** neuer Knowledge-/Checklist-Slice im Feature-Branch, Quellennachweis und zwei simulierte Red-Teams unter `docs/PAIN_IMPLICATION_SOURCE_QA.md`; visuelle Freigabe und Merge bleiben offen.
-- Nach Pain / Implication folgen Champion und Competition.
+- **Pain / Implication:** PR #50 am 08.10.2026 per Squash-Merge nach `main` übernommen (`a84d1b0d8be23db9d9ca8eec0a3531a96840a4f5`), vollständiger PR-Qualitätslauf CI #529 erfolgreich (https://github.com/thomasasen/meddpicc-workbench/actions/runs/37838466957). Der separate Push-`main-pages-integrity`-Lauf ist unabhängig zu prüfen und hier nicht pauschal als grün behauptet.
+- **Champion:** Quellenmatrix, zehn Prüfthemen und Knowledge-Seite auf eigenem Feature-Branch in Arbeit; `docs/CHAMPION_SOURCE_QA.md` enthält simulierte Red-Teams und Abnahmegrenzen. **Noch kein Merge und keine visuelle Nutzerfreigabe.**
+- Danach bleibt Competition als offener T2-Slice.
 
 ## Nächste Roadmap-Blöcke
 

@@ -169,6 +169,11 @@ const checklists = [
     route: '/checklists/pain-implication',
   },
   {
+    label: 'Champion',
+    note: 'Einfluss, interne Fürsprache, Personal Win und nächste faire Tests anhand konkreter Handlungen prüfen.',
+    route: '/checklists/champion',
+  },
+  {
     label: 'POC / Pilot',
     note: 'Vor dem Start klären, was Erfolg bedeutet, wer committed ist und was nach einem erfolgreichen POC passiert.',
   },
@@ -241,6 +246,7 @@ const knowledgeTopics = [
     label: 'Champion',
     note: 'Was macht einen echten Champion aus und welche Signale werden häufig überschätzt?',
     icon: Award,
+    route: '/knowledge/champion',
   },
   {
     code: 'C',
