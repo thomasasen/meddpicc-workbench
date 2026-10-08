@@ -143,6 +143,33 @@ import {
         </div>
       </section>
 
+      <section class="container knowledge-section" aria-labelledby="engagement-title">
+        <div class="section-heading-row">
+          <div>
+            <p class="eyebrow">Qualifizierung & Feedback</p>
+            <h2 id="engagement-title">Kriterien mitgestalten und Kundenbewertung erfragen</h2>
+            <p class="section-note">
+              Ein fehlender Kriterienkatalog ist nicht automatisch eine Chance. Und selbst wenn wir die Kriterien kennen,
+              kennen wir damit noch nicht die tatsächliche Einschätzung des Kunden zu unserer Lösung.
+            </p>
+          </div>
+        </div>
+        <div class="knowledge-concept-grid">
+          <article
+            v-for="step in decisionCriteriaKnowledge.engagementGuidance"
+            :key="step.title"
+            class="knowledge-concept-card"
+          >
+            <MessageCircleQuestion :size="19" aria-hidden="true" />
+            <div>
+              <h3>{{ step.title }}</h3>
+              <p>{{ step.meaning }}</p>
+              <p><strong>Nachfragen:</strong> {{ step.question }}</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section class="container knowledge-section" aria-labelledby="triangle-title">
         <div class="section-heading-row">
           <div>
