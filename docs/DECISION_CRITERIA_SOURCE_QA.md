@@ -39,7 +39,7 @@ Stand: 08.10.2026. Quellen wurden aus den im Chat bereitgestellten Original-EPUB
 - [x] Beispielsprache auf hypothetische Aussagen und Nachfragen begrenzt
 - [x] Reproduzierbare Unit- und Playwright-Tests implementiert
 - [x] Vorheriger CI-Lauf #456 grün – https://github.com/thomasasen/meddpicc-workbench/actions/runs/37773584286
-- [ ] Erneute CI nach Red-Team-Korrekturen vollständig grün
-- [x] Desktop-/Mobile-Screenshots aus Lauf #453 für Knowledge und Checklist visuell geprüft; kein auffälliges Overflow oder Quellen-Label in der Standardansicht
-- [ ] Sichtfreigabe erteilt
-- [ ] PR nach Sichtfreigabe gemergt
+- [x] Erneute CI nach Red-Team-Korrekturen **#466** und final gegen `main` gerichtete PR-CI **#470** vollständig grün: https://github.com/thomasasen/meddpicc-workbench/actions/runs/37778247899
+- [x] Desktop-/Mobile-Screenshots aus Lauf #453 für die ursprüngliche Knowledge-/Checklist-Fassung visuell geprüft; nach Red-Team-Änderungen erneut automatische Playwright-Desktop-/Mobile-Prüfung in CI #470 bestanden. Die Mergefreigabe erfolgte durch den Nutzer.
+- [x] Ausdrückliche Nutzeranweisung zum General-Merge am 08.10.2026 erteilt (Mergefreigabe)
+- [x] PR #47 am 08.10.2026 in `main` gemergt: https://github.com/thomasasen/meddpicc-workbench/pull/47
