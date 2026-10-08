@@ -36,6 +36,7 @@ const knowledgeLabels: Record<KnowledgeTopicId, string> = {
   'decision-process': 'Decision Process',
   'paper-process': 'Paper Process',
   'pain-implication': 'Pain / Implication',
+  champion: 'Champion',
 }
 
 const checklistContextLabel = computed(() => checklistLabels[props.checklistId])
