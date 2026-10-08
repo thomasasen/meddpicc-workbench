@@ -47,17 +47,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Discovery-Ergaenzungen einmalig formatieren
-        run: |
-          npx prettier --write src/content/meddpicc/discoveryCall.test.ts src/content/meddpicc/discoveryCall.ts src/views/DiscoveryCallKnowledgeView.vue
-          if ! git diff --quiet -- src/content/meddpicc/discoveryCall.test.ts src/content/meddpicc/discoveryCall.ts src/views/DiscoveryCallKnowledgeView.vue; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src/content/meddpicc/discoveryCall.test.ts src/content/meddpicc/discoveryCall.ts src/views/DiscoveryCallKnowledgeView.vue
-            git commit -m "style: format Discovery source techniques"
-            git push origin HEAD:${{ github.event.pull_request.head.ref }}
-          fi
-
       - name: Formatierung prüfen
         run: npm run format:check
 
