@@ -16,6 +16,16 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 - Die Content-Basis wird zwischen Knowledge und Checklist wiederverwendet. Checkboxen sind nur temporäre Denkhilfen, kein Deal-Score.
 - Die fachliche Quellenprüfung steht unter [Metrics Source QA](docs/METRICS_SOURCE_QA.md).
 
+### Discovery Call – MEDDPICC und SPICED
+
+**Feature-PR (noch nicht auf `main`, finale QS/UI-Freigabe offen):**
+
+- **Checklist → Discovery Call:** neun persönliche Prüfpunkte vor, während und nach dem Gespräch; offene Lücken statt künstlicher Score.
+- **Wissen → Discovery Call:** Whytes kontinuierliche Discovery und Two-Sided Discovery, Lahoutifards positive T.H.E.D.-Fragen, zusätzlich das SPICED-Modell von Winning by Design.
+- **ACE-Einstieg:** Appreciate, Check End Time, End Goal nach dem offiziellen Blueprint „The Perfect Discovery Call“.
+- Fachliche Belege, Grenzen und Unterschiede in [Discovery Call Source QA](docs/DISCOVERY_CALL_SOURCE_QA.md).
+- Keine Deal-Pflege, kein Transcript, kein KI-Zwang.
+
 ## Status
 
 | Status | Bedeutung |
