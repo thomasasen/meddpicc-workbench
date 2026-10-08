@@ -129,6 +129,11 @@ const toolClusters = [
 
 const checklists = [
   {
+    label: 'Metrics',
+    note: 'Prüfen, ob Nutzen messbar, kundenspezifisch, wirtschaftlich relevant und validiert ist.',
+    route: '/checklists/metrics',
+  },
+  {
     label: 'Economic Buyer',
     note: 'Kurz prüfen, ob du wirtschaftliche Autorität, Business Outcome, Value und deine Evidenz wirklich verstanden hast.',
     route: '/checklists/economic-buyer',
@@ -166,6 +171,7 @@ const knowledgeTopics = [
     label: 'Metrics',
     note: 'Wann ist eine Metric belastbar und wie wird daraus wirtschaftlicher Impact?',
     icon: Calculator,
+    route: '/knowledge/metrics',
   },
   {
     code: 'E',
