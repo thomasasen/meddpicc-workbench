@@ -154,6 +154,11 @@ const checklists = [
     route: '/checklists/decision-criteria',
   },
   {
+    label: 'Decision Process',
+    note: 'Vor POC, Auswahl und Forecast prüfen, ob Freigaben, Entscheider, Meilensteine und Abhängigkeiten belastbar sind.',
+    route: '/checklists/decision-process',
+  },
+  {
     label: 'POC / Pilot',
     note: 'Vor dem Start klären, was Erfolg bedeutet, wer committed ist und was nach einem erfolgreichen POC passiert.',
   },
@@ -205,6 +210,7 @@ const knowledgeTopics = [
     label: 'Decision Process',
     note: 'Wie unterscheiden sich Validation und Approval und wer entscheidet wann?',
     icon: Route,
+    route: '/knowledge/decision-process',
   },
   {
     code: 'P',
