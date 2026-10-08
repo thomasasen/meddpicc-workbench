@@ -151,15 +151,15 @@ import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/disc
                 <li v-for="source in discoveryCallKnowledge.sourceNotes" :key="source">
                   {{ source }}
                 </li>
-              </ul>
-              <li>
-                <a
+                <li>
+                  <a
                   class="inline-link"
                   href="https://winningbydesign.com/spiced-framework/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >Originaldefinition von SPICED bei Winning by Design</a>
-              </li>
+                </li>
+              </ul>
             </details>
           </div>
         </article>
