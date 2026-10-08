@@ -14,7 +14,7 @@ test('Software Payback: freie Projektmodellierung, Leermodus und Originalbild', 
   await projectMode(page)
   await expect(page.getByText('Noch keine Kostenpositionen erfasst.')).toBeVisible()
   await expect(page.getByText('Noch keine Kunden-Metric.', { exact: false })).toBeVisible()
-  await expect(page.getByTestId('sustained-payback')).toContainText('Nicht erreicht')
+  await expect(page.getByTestId('project-empty')).toContainText('keine wirtschaftliche Aussage')
   await page.evaluate(() => window.scrollTo(0, 0))
   await page.screenshot({
     path: testInfo.outputPath('software-payback-empty-' + testInfo.project.name + '.png'),
@@ -102,7 +102,7 @@ test('Software Payback: responsive, direkte Navigation und Tastatur', async ({ p
   await page.keyboard.press('Enter')
   await expect(page.getByRole('heading', { name: 'Einfacher Payback' })).toBeVisible()
   await page.getByRole('button', { name: 'Softwareprojekt & Kunden-Metrics' }).click()
-  await expect(page.getByTestId('sustained-payback')).toContainText('Nicht erreicht')
+  await expect(page.getByTestId('project-empty')).toContainText('keine wirtschaftliche Aussage')
   await page.getByRole('link', { name: 'Alle Microtools' }).click()
   await expect(page).toHaveURL(/meddpicc-workbench\/#\//)
 })
