@@ -20,7 +20,7 @@ export const decisionProcessPhases = [
   {
     title: 'Paper Process (gesonderter Prüfpfad)',
     description:
-      'Einkauf, Legal, Datenschutz, Security, Bestellung und Zeichnung gehören zum gesondert zu prüfenden administrativen Kaufweg. Viele Aufgaben beginnen nach der Auswahl, einzelne Prüfungen aber bereits früher oder parallel. Lahoutifard ordnet administrative, rechtliche und kommerzielle Aspekte ausdrücklich auch dem Approval zu.',
+      'Einkauf, Legal, Datenschutz, Security, Bestellung und Zeichnung gehören zum gesondert zu prüfenden administrativen Kaufweg. Viele Aufgaben beginnen nach der Auswahl, einzelne Prüfungen aber bereits früher oder parallel. Rechtliche, administrative und kommerzielle Freigaben überschneiden sich deshalb teilweise mit Business Approval.',
     evidence:
       'Der formale Weg bis zur Unterschrift wurde mit den zuständigen Stellen geklärt und mit ausreichend Vorlauf eingeplant.',
     question: 'Welche Vertrags- und Bestellschritte sind auch nach der Auswahl noch erforderlich?',
@@ -31,11 +31,12 @@ export const decisionProcessConcepts = {
   map: {
     id: 'map',
     meaning:
-      'Halte die kundenseitigen Phasen von der Evaluierung bis zum Beschluss fest. Benenne pro Schritt das erwartete Ergebnis und die Freigabebedingung.',
+      'Halte die kundenseitigen Phasen von der Evaluierung bis zum Beschluss schriftlich fest, einschließlich Aufgaben auf Käufer- und Verkäuferseite. Benenne pro Schritt Ergebnis, Verantwortliche und Freigabebedingung.',
     whyItMatters:
       'Ohne nachvollziehbaren Kundenprozess verwechselt man Vertriebsgespräche leicht mit echten Kaufentscheidungen.',
     signals: [
       'Der Kunde beschreibt konkrete Phasen und die Reihenfolge oder Parallelität.',
+      'Aufgaben, Meilensteine und Zusagen beider Seiten sind schriftlich abgestimmt.',
       'Jede entscheidende Stufe hat ein Ergebnis, das als erreicht oder offen überprüfbar ist.',
     ],
     commonMisinterpretation:
@@ -103,7 +104,7 @@ export const decisionProcessConcepts = {
   timeline: {
     id: 'timeline',
     meaning:
-      'Kläre Entscheidungen, Dauer, Sitzungszyklen, Abhängigkeiten, Puffer und den gewünschten Go-Live. Plane bei Bedarf gemeinsam rückwärts.',
+      'Kläre Entscheidungen, Dauer, Sitzungszyklen, Abhängigkeiten, Puffer und den gewünschten Go-Live. Verifiziere den tatsächlichen wirtschaftlichen Zeitdruck beim Economic Buyer und plane gemeinsam rückwärts.',
     whyItMatters:
       'Ein Quartalsende beim Verkäufer ist keine Kundendeadline. Auch echte Kundentermine belegen ohne Abhängigkeiten und Konsequenzen noch keinen realistischen Abschlusszeitpunkt; prüfe zudem die wahrgenommene geschäftliche Dringlichkeit beim Economic Buyer.',
     signals: [
@@ -246,15 +247,16 @@ export const decisionProcessKnowledge = {
     'Welche Schritte können nach Ihrer internen Vorgabe gleichzeitig beginnen?',
     'Was ist Ihr geschäftlicher Grund, jetzt zu entscheiden, und wie sieht der Economic Buyer die Folgen eines Aufschubs?',
     'Wer kann mit uns den Weg bis zur Bestellung und Unterschrift gesondert durchgehen?',
+    'Welche Partner oder Dienstleister kennen mögliche versteckte Freigabeanforderungen aus Erfahrung?',
   ],
   pitfalls: [
     {
       claim: '„Wir sind bereits im Business Approval, die Technik schauen wir später an.“',
-      explanation: 'Business Approval vor jeder erkennbaren technischen Validation ist bei Whyte eine Red Flag. Prüfpfad und zuständige Abnehmer sofort klären.',
+      explanation: 'Business Approval vor jeder erkennbaren technischen Validation ist ein Warnsignal. Prüfpfad und zuständige Abnehmer sofort klären.',
     },
     {
       claim: '„Wir schicken alles, der Kunde meldet sich dann.“',
-      explanation: 'Lahoutifard fordert einen beidseitigen Ablauf mit konkreten Aufgaben auf Käufer- und Verkäuferseite. Einseitige Aktivitäten sind kein Mutual Commitment.',
+      explanation: 'Ein beidseitiger Ablauf braucht konkrete Aufgaben auf Käufer- und Verkäuferseite. Einseitige Aktivitäten sind kein Mutual Commitment.',
     },
     {
       claim: '„Wir brauchen die Unterschrift bis zu unserem Quartalsende.“',
@@ -363,7 +365,7 @@ export const decisionProcessChecklist: ChecklistDefinition = {
     'Du erkennst fehlende Freigaben, nicht beteiligte Entscheider und unrealistische Zeitpläne, bevor sie deinen Deal blockieren.',
   items: [
     makeChecklistItem(
-      'Kenne ich die tatsächlichen kundenseitigen Schritte bis zur Auswahlentscheidung?',
+      'Kenne ich den Entscheidungsweg und sind die Aufgaben beider Seiten abgestimmt?',
       decisionProcessConcepts.map,
     ),
     makeChecklistItem(
@@ -379,7 +381,7 @@ export const decisionProcessChecklist: ChecklistDefinition = {
       decisionProcessConcepts.evidence,
     ),
     makeChecklistItem(
-      'Haben die Meilensteine Termine, Verantwortliche und nachvollziehbare Abhängigkeiten?',
+      'Sind Compelling Event, Meilensteine, Verantwortliche und Abhängigkeiten geklärt?',
       decisionProcessConcepts.timeline,
     ),
     makeChecklistItem(
