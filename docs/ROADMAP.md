@@ -154,7 +154,8 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] **PR #48 · Decision Process Knowledge + Themen-Checklist** ist nach technischer und visueller Freigabe am 08.10.2026 in `main` gemergt.
 - [x] **PR #49 · Paper Process Knowledge + Themen-Checklist** am 08.10.2026 mit Squash-Commit `2504170512cd9d5475e50b6dbea9be97064825a6` in `main` gemergt; CI/Pages waren erfolgreich.
 - [x] **PR #50 · Pain / Implication Knowledge + Themen-Checklist** am 08.10.2026 in `main` gemergt (Squash `a84d1b0d8be23db9d9ca8eec0a3531a96840a4f5`, PR-CI #529 erfolgreich).
-- **Aktueller Draft-Slice:** Champion Knowledge + Themen-Checklist; ausdrücklich nur nach technischer und visueller Freigabe mergen. Die eigenständigen Champion-Tools bleiben T8.
+- [x] **PR #51 · Champion Knowledge + Themen-Checklist** am 08.10.2026 per Squash-Merge (`5391d84e96bdff4e2490caa022de61ef8f84ba3b`) in `main` übernommen.
+- **Aktueller Draft-Slice:** Competition Knowledge + Themen-Checklist; erst nach technischer und visueller Nutzerfreigabe mergen. T6 Value Triangle / Decision Matrix und T9 Competition-Microtools bleiben geplant.
 
 ### Themen-Checklists
 
@@ -164,8 +165,8 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Decision Process (PR #48, in `main`)
 - [x] Paper Process (PR #49, in `main`)
 - [x] Pain / Implication (PR #50, in `main`)
-- [ ] Champion (Feature-Branch zur Draft-Abnahme; nicht gemergt)
-- [ ] Competition
+- [x] Champion (PR #51, in `main`)
+- [ ] Competition (Feature-Branch in Draft-Abnahme; Merge offen)
 
 ### Situative Checklists
 
@@ -190,7 +191,8 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Decision Process Knowledge (PR #48, in `main`)
 - [x] Paper Process Knowledge (PR #49, in `main`)
 - [x] Pain / Implication Knowledge (PR #50, in `main`)
-- [ ] Champion Knowledge (neuer Feature-Branch, visuelle Freigabe und Merge offen)
+- [x] Champion Knowledge (PR #51, in `main`)
+- [ ] Competition Knowledge (Draft, visuelle Freigabe offen)
 - [ ] weitere Knowledge-Bereiche ausrollen
 
 ## Phase T3 – Value & Metrics Tools
