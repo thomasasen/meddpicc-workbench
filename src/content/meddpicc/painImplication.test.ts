@@ -72,7 +72,7 @@ describe('Pain / Implication: Quellen und Abgrenzungen', () => {
   it('besitzt weder Score noch gespeicherten Qualifizierungsstatus', () => {
     expect(Object.keys(painImplicationKnowledge)).not.toContain('score')
     expect(Object.keys(painImplicationChecklist)).not.toContain('score')
-    expect(painImplicationChecklist.sourceNotes.join(' ')).toContain('keine')
+    expect(painImplicationChecklist.sourceNotes.join(' ')).toContain('weder Deal-Score noch Speicherung')
     expect(painImplicationKnowledge.sourceNotes.join(' ')).toContain('Praxisableitung')
   })
 })
