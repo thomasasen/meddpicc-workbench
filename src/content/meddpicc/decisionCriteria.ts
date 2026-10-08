@@ -49,12 +49,12 @@ export const valueTriangleZones = [
     code: 'Value',
     meaning: 'Der Kunde benötigt die Fähigkeit; wir können sie nachweislich bieten, die relevante Alternative nicht.',
     action:
-      'Mit Kundenbeleg und Business Impact absichern – keine Alleinstellung ohne verlässlichen Vergleich behaupten.',
+      'Kundennutzen, nachgewiesenen Unterschied und relevante Metrics gemeinsam verifizieren; die Differenzierung in Demo und POC gezielt belegen.',
   },
   {
     code: 'Danger',
     meaning: 'Der Kunde benötigt die Fähigkeit; eine Alternative bietet sie, wir derzeit nicht.',
-    action: 'Geschäftlichen Grund und tatsächliches Risiko klären; Grenzen offenlegen, keine falschen Zusagen.',
+    action: 'Ursprung und Notwendigkeit der Anforderung prüfen, sachliche Alternativen besprechen und den eigenen Mangel offenlegen; keine falschen Zusagen.',
   },
   {
     code: 'Parity',
@@ -64,7 +64,7 @@ export const valueTriangleZones = [
   {
     code: 'Unique Differentiators',
     meaning: 'Wir bieten eine besondere Fähigkeit, die Alternative nicht – der Kunde verlangt sie bisher aber nicht.',
-    action: 'Den möglichen Nutzen sachlich untersuchen, statt automatisch Value zu unterstellen.',
+    action: 'Mit konkreten Kundenbeispielen und Metrics prüfen, ob die Fähigkeit ein bislang unerkanntes Bedürfnis erfüllt; erst nach Bestätigung kann daraus Value werden.',
   },
   {
     code: 'Custom Needs',
@@ -88,15 +88,17 @@ export const decisionCriteriaConcepts = {
     id: 'origin',
     meaning: 'Ermittle vorhandene Dokumente, informelle Absprachen und mögliche Quellen der Anforderungen.',
     whyItMatters:
-      'Ein vermeintlicher Kriterienkatalog kann von wenigen Stakeholdern, Beratern oder einem Wettbewerber geprägt sein.',
+      'Ein vorhandener Kriterienkatalog kann von wenigen Stakeholdern, Beratern oder einem Wettbewerber geprägt sein. Fehlen klare Kriterien ganz, kann das auf einen noch nicht ausreichend vorbereiteten Kaufprozess hindeuten.',
     signals: [
       'Das zuständige Team bestätigt, ob ein Kriterienkatalog existiert.',
       'Entstehung, Eigentümer und letzte Validierung sind geklärt.',
+      'Falls keine Kriterien vorliegen, ist geklärt, ob mehrere Stakeholder eine gemeinsame Evaluation überhaupt tragen.',
     ],
-    commonMisinterpretation: 'Ein RFP-Dokument ist automatisch vollständig, objektiv und endgültig.',
+    commonMisinterpretation: 'Ein RFP-Dokument ist automatisch vollständig und endgültig – oder das Fehlen eines Kriterienkatalogs ist automatisch eine Verkaufschance.',
     possibleQuestionsOrActions: [
       'Wer hat die Kriterien zusammengestellt, und welche Quellen haben sie geprägt?',
       'Welche Anforderungen sind intern bereits abgestimmt und welche noch offen?',
+      'Falls noch keine Kriterien existieren: Wer möchte wirklich evaluieren, und wie erzielen wir gemeinsam Klarheit?',
     ],
     sourceNote: 'Whyte → Decision Criteria: Establishing the Status of the Decision Criteria.',
   },
@@ -186,7 +188,7 @@ export const decisionCriteriaConcepts = {
     meaning:
       'Prüfe Kundenrelevanz, eigene Fähigkeiten und belegbare Alternativen inklusive Status quo und Eigenentwicklung.',
     whyItMatters:
-      'Differenzierung zählt nur, wenn sie für den Kunden relevant und gegenüber Alternativen nachweisbar ist.',
+      'Differenzierung zählt nur, wenn sie für den Kunden relevant und gegenüber Alternativen nachweisbar ist. Die Value-Zone soll gestärkt, die Danger-Zone sachlich untersucht werden.',
     signals: [
       'Der Kunde benennt die verglichenen Alternativen.',
       'Unsere und fremde Fähigkeiten sind mit belastbaren Informationen belegt oder als unklar markiert.',
@@ -198,6 +200,25 @@ export const decisionCriteriaConcepts = {
       'Welche dieser Unterschiede beeinflussen Ihre Entscheidung tatsächlich?',
     ],
     sourceNote: 'Lahoutifard → Chapter Five: The Value Triangle, Value, Danger, Parity.',
+  },
+  customerEvaluation: {
+    id: 'customer-evaluation',
+    meaning:
+      'Erfrage beim Kunden zu jedem wichtigen Kriterium, wie er die eigene Lösung beurteilt, welche Nachweise fehlen und wo konkrete Bedenken bestehen.',
+    whyItMatters:
+      'Die tatsächliche Bewertung des Kunden kann von unserer internen Einschätzung abweichen. Probleme lassen sich vor der finalen Entscheidung besser klären als danach.',
+    signals: [
+      'Ein relevanter Stakeholder gibt differenziertes Feedback zu Stärken, Lücken oder Unsicherheiten.',
+      'Es ist klar, wer die Bewertung abgibt und ob sie bereits intern abgestimmt ist.',
+      'Für kritische Bedenken gibt es eine vereinbarte Klärung oder eine ehrliche Einschränkung.',
+    ],
+    commonMisinterpretation:
+      'Unsere interne Bewertung von 9/10 bedeutet automatisch, dass der Kunde uns genauso bewertet.',
+    possibleQuestionsOrActions: [
+      'Wenn Sie unsere Lösung anhand Ihrer Kriterien beurteilen: Wo erfüllen wir Ihre Erwartungen und wo sehen Sie noch Lücken?',
+      'Welche Anforderung oder welches Bedenken könnte uns trotz positivem Demo-Feedback ausschließen?',
+    ],
+    sourceNote: 'Whyte → Decision Criteria: Taking Score.',
   },
   validation: {
     id: 'validation',
@@ -247,6 +268,7 @@ export const decisionCriteriaKnowledge = {
     'Technische Eignung, wirtschaftliche Rechtfertigung und Vertrauen in den Anbieter können unabhängig voneinander entscheidend sein.',
     'Mit Blick auf Pain, Use Case und Metrics lassen sich relevante Kriterien sachlich konkretisieren.',
     'Ein Test sollte nicht nur technisch bestehen, sondern eine vereinbarte Bewertung und einen nächsten Entscheidungsschritt ermöglichen.',
+    'Erfrage beim Kunden ausdrücklich die tatsächliche Bewertung deiner Lösung je Kriterium und mögliche Bedenken.',
   ],
   recognitionConceptIds: ['origin', 'business', 'priorities', 'owners'],
   misinterpretations: [
@@ -290,6 +312,7 @@ export const decisionCriteriaKnowledge = {
     'Technical, Economic und Relationship mit den jeweiligen Stakeholdern abgleichen.',
     'Muss-Kriterien, Wünsche und Prioritäten ausdrücklich vom Kunden validieren lassen.',
     'Alternative Angebote und Status quo mit belegbaren Unterschieden prüfen.',
+    'Beim Kunden erfragen, wie die eigene Lösung pro Kriterium abschneidet, welche Bedenken bestehen und wo Nachweise fehlen.',
     'Akzeptanzkriterien, Evidenzlücken und nächsten Entscheidungsschritt gemeinsam festlegen.',
   ],
   examples: [
@@ -313,6 +336,29 @@ export const decisionCriteriaKnowledge = {
       boundary: 'Ein gewünschtes Datum allein belegt weder Priorität noch einen Economic Case oder Critical Event.',
     },
   ],
+  engagementGuidance: [
+    {
+      title: 'Wenn Kriterien fehlen',
+      meaning:
+        'Ein fehlender Kriterienkatalog kann auf einen frühen Evaluationsstand oder auf mangelnde Kaufreife hindeuten. Prüfe, ob mehrere Stakeholder wirklich an einer gemeinsamen Bewertung interessiert sind.',
+      question:
+        'Wer müsste mit uns die entscheidenden Anforderungen definieren, bevor wir sinnvoll evaluieren können?',
+    },
+    {
+      title: 'Kriterien sinnvoll mitgestalten',
+      meaning:
+        'Nutze Discovery, Use Cases und Metrics, um relevante Anforderungen gemeinsam mit dem Kunden zu präzisieren. Eigene Stärken dürfen als Hypothese eingebracht werden, aber nicht als bereits bestätigter Bedarf gelten.',
+      question:
+        'Wäre diese Fähigkeit angesichts Ihres Ziels ein sinnvolles zusätzliches Bewertungskriterium?',
+    },
+    {
+      title: 'Kundenbewertung statt Verkäufer-Score',
+      meaning:
+        'Lass den Kunden die Erfüllung der tatsächlich relevanten Kriterien selbst einordnen. Hole auch negatives Feedback und offene Bedenken ein; notiere Unsicherheit statt eine Bewertung zu erfinden.',
+      question:
+        'Wie schneiden wir aus Ihrer Sicht bei den wichtigsten Kriterien ab – und wo haben Sie noch Zweifel?',
+    },
+  ],
   differences: [
     {
       author: 'Andy Whyte',
@@ -328,7 +374,7 @@ export const decisionCriteriaKnowledge = {
     },
   ],
   practicalTakeaway:
-    'Erst Kundenrelevanz und Entscheidungsmaßstab klären, dann die eigene Lösung einordnen. Offene Anforderungen werden validiert, nicht per Verkäufer-Score entschieden.',
+    'Kundenrelevanz und Kriterien klären, mit relevanten Stakeholdern sinnvoll ausgestalten und die tatsächliche Kundenbewertung erfragen. Eigene Scores ersetzen kein Kundenfeedback.',
   sourceNotes: [
     'Andy Whyte → MEDDICC, Kapitel Decision Criteria: Establishing the Status of the Decision Criteria; The Three Types; Technical/Economic/Relationship; Influencing.',
     'Darius Lahoutifard → Always Be Qualifying, Chapter Five: Decision Criteria; Vendor/Partner Criteria; Financial Justification; Capability Validation; The Value Triangle; Chapter Ten: Say No To Qualify.',
@@ -394,6 +440,11 @@ export const decisionCriteriaChecklist: ChecklistDefinition = {
       'alternatives',
       'Kenne ich relevante Alternativen und die Belege für Value, Danger und Parity?',
       decisionCriteriaConcepts.alternatives,
+    ),
+    conceptChecklistItem(
+      'customer-evaluation',
+      'Kenne ich die tatsächliche Kundenbewertung unserer Lösung und die wichtigsten Bedenken?',
+      decisionCriteriaConcepts.customerEvaluation,
     ),
     conceptChecklistItem(
       'validation',
