@@ -6,6 +6,7 @@ import DecisionProcessKnowledgeView from '../views/DecisionProcessKnowledgeView.
 import DiscoveryCallKnowledgeView from '../views/DiscoveryCallKnowledgeView.vue'
 import EconomicBuyerKnowledgeView from '../views/EconomicBuyerKnowledgeView.vue'
 import MetricsKnowledgeView from '../views/MetricsKnowledgeView.vue'
+import PainImplicationKnowledgeView from '../views/PainImplicationKnowledgeView.vue'
 import PaperProcessKnowledgeView from '../views/PaperProcessKnowledgeView.vue'
 import EvidenceView from '../views/EvidenceView.vue'
 import HomeView from '../views/HomeView.vue'
@@ -58,6 +59,17 @@ const router = createRouter({
       name: 'checklist-decision-process',
       component: ChecklistView,
       props: { checklistId: 'decision-process' },
+    },
+    {
+      path: '/knowledge/pain-implication',
+      name: 'knowledge-pain-implication',
+      component: PainImplicationKnowledgeView,
+    },
+    {
+      path: '/checklists/pain-implication',
+      name: 'checklist-pain-implication',
+      component: ChecklistView,
+      props: { checklistId: 'pain-implication' },
     },
     {
       path: '/knowledge/paper-process',

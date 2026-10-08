@@ -164,6 +164,11 @@ const checklists = [
     route: '/checklists/paper-process',
   },
   {
+    label: 'Pain / Implication',
+    note: 'Symptom, Ursache, quantifizierte Wirkung, Käuferkonsequenz und echte Dringlichkeit auseinanderhalten.',
+    route: '/checklists/pain-implication',
+  },
+  {
     label: 'POC / Pilot',
     note: 'Vor dem Start klären, was Erfolg bedeutet, wer committed ist und was nach einem erfolgreichen POC passiert.',
   },
@@ -229,6 +234,7 @@ const knowledgeTopics = [
     label: 'Pain & Implication',
     note: 'Wie wird aus einem Problem eine relevante geschäftliche Konsequenz?',
     icon: Flame,
+    route: '/knowledge/pain-implication',
   },
   {
     code: 'C',
