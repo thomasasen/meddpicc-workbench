@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 
+// prettier-ignore
 test('Pain-Wissen: Navigation, fachliche Stufen, Quellen, Links und Screenshot', async ({ page }, testInfo) => {
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
@@ -35,6 +36,7 @@ test('Pain-Wissen: Navigation, fachliche Stufen, Quellen, Links und Screenshot',
   await expect(page.getByRole('heading', { name: 'Pain / Implication: Wie belastbar ist die Konsequenz?' })).toBeVisible()
 })
 
+// prettier-ignore
 test('Pain-Checklist: zehn Punkte, Details, temporäre Haken, Quellen und Screenshot', async ({ page }, testInfo) => {
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
@@ -70,6 +72,7 @@ test('Pain-Checklist: zehn Punkte, Details, temporäre Haken, Quellen und Screen
   })
 })
 
+// prettier-ignore
 test('Pain-Screens haben bei 375, 768, 1024 und 1440 px keinen horizontalen Overflow', async ({ page }) => {
   for (const width of [375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 812 })
