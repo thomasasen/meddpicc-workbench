@@ -67,7 +67,8 @@ const toolClusters = [
     tools: [
       {
         label: 'Quick Payback',
-        note: 'Investition und Nutzen eingeben – du siehst sofort, wann sich die Investition amortisiert.',
+        note: 'Einmalige Investition, realisierbaren Jahresnutzen und Zusatzkosten eingeben – einfache Amortisation in Monaten sehen.',
+        route: '/tools/quick-payback',
         customerReady: true,
       },
       {

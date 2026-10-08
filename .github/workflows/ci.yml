@@ -105,14 +105,47 @@ jobs:
 
 
       - name: Knowledge-/Checklist-Abnahmebilder als überprüfbare Einzeldateien bereitstellen
-        if: github.event.pull_request.head.repo.full_name == github.repository && (startsWith(github.head_ref, 'feature/champion-') || startsWith(github.head_ref, 'feature/competition-'))
+        if: github.event.pull_request.head.repo.full_name == github.repository && (startsWith(github.head_ref, 'feature/champion-') || startsWith(github.head_ref, 'feature/competition-') || startsWith(github.head_ref, 'feature/quick-payback-'))
         run: |
           mkdir -p docs/review-screenshots
-          if [[ "${{ github.head_ref }}" == feature/competition-* ]]; then
-            topic=competition
+          if [[ "${{ github.head_ref }}" == feature/quick-payback-* ]]; then
+            names=(
+              quick-payback-empty-desktop-chromium.png
+              quick-payback-empty-mobile-chromium.png
+              quick-payback-result-desktop-chromium.png
+              quick-payback-result-mobile-chromium.png
+            )
           else
-            topic=champion
+            if [[ "${{ github.head_ref }}" == feature/competition-* ]]; then
+              topic=competition
+            else
+              topic=champion
+            fi
+            names=(
+              "$topic-knowledge-desktop-chromium.png"
+              "$topic-knowledge-mobile-chromium.png"
+              "$topic-checklist-desktop-chromium.png"
+              "$topic-checklist-mobile-chromium.png"
+            )
           fi
+          for name in "${names[@]}"; do
+            source="$(find test-results -type f -name "$name" -print -quit)"
+            if [ -z "$source" ]; then
+              echo "::error::Playwright-Screenshot fehlt: $name"
+              exit 1
+            fi
+            cp "$source" "docs/review-screenshots/$name"
+          done
+          git add docs/review-screenshots
+          if git diff --cached --quiet; then
+            echo "Abnahmebilder sind bereits aktuell."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "test: publish browser review screenshots"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          exit 0
           for name in \
             "$topic-knowledge-desktop-chromium.png" \
             "$topic-knowledge-mobile-chromium.png" \
