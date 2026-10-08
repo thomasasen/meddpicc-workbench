@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {
-  ArrowLeft,
-  CheckCircle2,
-  CircleAlert,
-  Lightbulb,
-  MessageCircleQuestion,
-  Route,
-  Calculator,
-} from '@lucide/vue'
+import { ArrowLeft, CheckCircle2, CircleAlert, Lightbulb, MessageCircleQuestion, Route, Calculator } from '@lucide/vue'
 import { computed } from 'vue'
 
 import { metricsConcepts, metricsKnowledge } from '../content/meddpicc/metrics'

@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {
-  ArrowLeft,
-  BookOpen,
-  CircleAlert,
-  Compass,
-  ListChecks,
-  MessageCircleQuestion,
-  Route,
-} from '@lucide/vue'
+import { ArrowLeft, BookOpen, CircleAlert, Compass, ListChecks, MessageCircleQuestion, Route } from '@lucide/vue'
 
 import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/discoveryCall'
 </script>

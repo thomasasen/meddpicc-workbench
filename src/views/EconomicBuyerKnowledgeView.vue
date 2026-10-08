@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {
-  ArrowLeft,
-  CheckCircle2,
-  CircleAlert,
-  Lightbulb,
-  MessageCircleQuestion,
-  Route,
-  UserRound,
-} from '@lucide/vue'
+import { ArrowLeft, CheckCircle2, CircleAlert, Lightbulb, MessageCircleQuestion, Route, UserRound } from '@lucide/vue'
 import { computed } from 'vue'
 
 import { economicBuyerConcepts, economicBuyerKnowledge } from '../content/meddpicc/economicBuyer'
