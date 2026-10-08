@@ -7,7 +7,7 @@ describe('Champion: Quellen, Evidenz und Abgrenzungen', () => {
   it('hat exakt Whytes drei explizite Kriterien', () => {
     expect(championKnowledge.whyteCriteria.map((item) => item.id)).toEqual(['einfluss', 'intern', 'motivation'])
     expect(championKnowledge.perspectives.map((item) => item.author)).toEqual(['Andy Whyte', 'Darius Lahoutifard'])
-    expect(championKnowledge.perspectives[1].summary).toContain('keine identische')
+    expect(championKnowledge.perspectives[1].summary).toContain('nicht einfach Whytes identische')
   })
 
   it('trennt Kontakt, Coach, Kandidat und erprobten Champion', () => {
