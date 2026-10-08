@@ -47,17 +47,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Metrics-Formatierung einmalig normalisieren
-        run: |
-          npx prettier --write src/content/meddpicc/metrics.ts src/views/MetricsKnowledgeView.vue tests/e2e/metrics.spec.ts
-          if ! git diff --quiet -- src/content/meddpicc/metrics.ts src/views/MetricsKnowledgeView.vue tests/e2e/metrics.spec.ts; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src/content/meddpicc/metrics.ts src/views/MetricsKnowledgeView.vue tests/e2e/metrics.spec.ts
-            git commit -m "style: format Metrics content, view and tests"
-            git push origin HEAD:${{ github.event.pull_request.head.ref }}
-          fi
-
       - name: Formatierung prüfen
         run: npm run format:check
 
