@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 
+// prettier-ignore
 test('Champion Knowledge: Navigation, Quellen und echter Browser-Screenshot', async ({ page }, testInfo) => {
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
@@ -31,6 +32,7 @@ test('Champion Knowledge: Navigation, Quellen und echter Browser-Screenshot', as
   await expect(page.getByRole('heading', { name: 'Champion: Wo ist unsere Evidenz belastbar?' })).toBeVisible()
 })
 
+// prettier-ignore
 test('Champion Checklist: zehn Punkte, flüchtige Haken und echter Browser-Screenshot', async ({ page }, testInfo) => {
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
@@ -62,6 +64,7 @@ test('Champion Checklist: zehn Punkte, flüchtige Haken und echter Browser-Scree
   await page.screenshot({ path: testInfo.outputPath('champion-checklist-' + testInfo.project.name + '.png'), fullPage: true })
 })
 
+// prettier-ignore
 test('Champion-Seiten: 375/768/1024/1440 Pixel ohne horizontalen Overflow', async ({ page }) => {
   for (const width of [375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 812 })
@@ -77,6 +80,7 @@ test('Champion-Seiten: 375/768/1024/1440 Pixel ohne horizontalen Overflow', asyn
   }
 })
 
+// prettier-ignore
 test('Champion: Querverweise und Tastaturbedienung', async ({ page }) => {
   await page.goto('/meddpicc-workbench/#/knowledge/champion')
   await page.getByRole('link', { name: 'Decision Process nachschlagen' }).click()
