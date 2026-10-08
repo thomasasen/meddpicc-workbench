@@ -64,7 +64,7 @@ export const decisionProcessConcepts = {
       'Welche Ergebnisse müssen vorliegen, damit die fachliche Prüfung als bestanden gilt?',
       'Wer bestätigt diese Ergebnisse verbindlich, und was passiert bei offenen Punkten?',
     ],
-    sourceNote: 'Whyte → Decision Process: Technical Validation; Lahoutifard → Chapter Six: Validation.',
+    sourceNote: 'Whyte → Decision Process: Technical Validation; Lahoutifard → Chapter Six: Decision & Paper Process (Validation-Absatz).',
   },
   approval: {
     id: 'approval',
@@ -82,7 +82,7 @@ export const decisionProcessConcepts = {
       'Wer spricht die Auswahl aus, wer bestätigt sie und wer könnte widersprechen?',
       'Wann und mit welchen Unterlagen befasst sich das Entscheidungsgremium damit?',
     ],
-    sourceNote: 'Whyte → Decision Process: Business Approval; Lahoutifard → Chapter Six: Approval.',
+    sourceNote: 'Whyte → Decision Process: Business Approval; Lahoutifard → Chapter Six: Decision & Paper Process (Approval-Absatz).',
   },
   evidence: {
     id: 'evidence',
@@ -345,7 +345,7 @@ export const decisionProcessKnowledge = {
   practicalTakeaway:
     'Ein belastbarer Decision Process ist ein gemeinsam dokumentierter, beidseitig verantworteter und mit den Zuständigen abgeglichener Entscheidungsweg, kein sellerseitiger Wunschplan. Unbekannte Schritte sind Qualifizierungslücken, aus denen die nächste Kundenfrage folgt.',
   sourceNotes: [
-    'Andy Whyte → MEDDICC, Kapitel Decision Process: Uncovering the Decision Process; Technical Validation; Business Approval; Go-Live Plan; Influencing the Decision Process; Measure Progress Against the Decision Process.',
+    'Andy Whyte → MEDDICC, Kapitel Decision Process: Uncovering the Decision Process and Progressing Through it; There are Two Parts: Validation and Approval; Technical Validation; Business Approval; Decision Process and Go-Live Plan; Influence the Timing; Add Additional Steps; Measure Progress Against the Decision Process, Not Effort and Engagement.',
     'Darius Lahoutifard → Always Be Qualifying, Chapter Six: Decision & Paper Process; Paper Process; Compelling Event.',
     'Die deutschen Discovery-Fragen und der CRM-Fall sind eigenständige Praxisformulierungen, keine wörtlichen Zitate. In den sourceNote-Feldern bezeichnen Chapter-Six-Themen teils Absätze, keine eigenständigen Zwischenüberschriften.',
   ],
