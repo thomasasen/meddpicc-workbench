@@ -24,7 +24,7 @@ describe('Decision Process: fachliche und technische Verträge', () => {
 
   it('unterstellt keinen linearen Zwang und keine automatische POC-Kaufzusage', () => {
     expect(decisionProcessPhases[1]?.description).toContain('parallel')
-    expect(decisionProcessConcepts.commitment.commonMisinterpretation).toContain('keine Zusage')
+    expect(decisionProcessConcepts.commitment.commonMisinterpretation).toContain('bereits eine Zusage')
     expect(decisionProcessConcepts.boundaries.commonMisinterpretation).toContain('Auftrag')
     expect(decisionProcessConcepts.influence.commonMisinterpretation).toContain('streichen')
   })
