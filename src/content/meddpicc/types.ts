@@ -1,7 +1,7 @@
-export type KnowledgeTopicId = 'economic-buyer' | 'metrics' | 'discovery-call' | 'decision-criteria' | 'decision-process' | 'decision-process'
+export type KnowledgeTopicId = 'economic-buyer' | 'metrics' | 'discovery-call' | 'decision-criteria' | 'decision-process'
 
 export type ChecklistId =
-  'economic-buyer' | 'economic-buyer-meeting' | 'metrics' | 'discovery-call' | 'decision-criteria'
+  'economic-buyer' | 'economic-buyer-meeting' | 'metrics' | 'discovery-call' | 'decision-criteria' | 'decision-process'
 
 export interface MeddpiccConcept {
   id: string
