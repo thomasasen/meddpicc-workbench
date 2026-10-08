@@ -98,4 +98,17 @@ Dies ist **eine erneute kritische Simulation**, kein Review der beiden Autoren. 
 - Die Empfehlung, Buyer- und Seller-Aufgaben schriftlich gegenüberzustellen, stammt aus Lahoutifards größerem Decision-Process-Rahmen; ihre Anwendung im Paper Process ist eine **begründete Praxisübertragung**.
 - Die unterschiedlichen Schwerpunkte bleiben ausdrücklich erhalten: Whyte = eigener Paper-Process-Qualifikationsbereich mit Process/People/Timing; Lahoutifard = formale administrative Untermenge seines Decision Process.
 
-Die technische Wiederholung der CI nach diesen Korrekturen wird separat mit konkretem Run belegt, sobald sie tatsächlich abgeschlossen ist. Bis dahin gilt ausschließlich der ältere grüne Run #496 für die frühere Branch-Version. **Kein Merge ohne ausdrückliche visuelle Freigabe.**
+### Abschlussprüfung nach dem zweiten Red-Team
+
+**[GitHub Actions, Run #513](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37813370045): erfolgreich.**
+
+- `npm run format:check`: bestanden.
+- `npm run lint`: bestanden, null Fehler. Die 125 bestehenden Warnungen stammen aus zwei unveränderten Legacy-Views.
+- `npm test`: **162 bestandene Unit-Tests in 25 Dateien**, inklusive der vier zusätzlichen Paper-Process-Regressionstests.
+- `npm run build`: bestanden, einschließlich TypeScript.
+- `npm run test:e2e`: **49 bestandene Browser-Tests**, Desktop/Mobile inklusive 375/768/1024/1440-Pixel-Overflow-Prüfung.
+- `npm run pages:check`: bestanden; geprüfter Build wurde mit Pages-Root synchronisiert.
+- **[Vier echte aktuelle Browser-Screenshots, Artefakt aus Run #513](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37813370045/artifacts/11565912978)**; Knowledge und Checklist je Desktop/Mobile. Visuell kontrolliert: lesbares Responsive-Layout, keine ungewollten gestreckten Elemente oder Überlappungen im Standardzustand.
+- Die unveränderte CI-Workflow-Datei entspricht wieder `main`; keine temporären Änderungen am Workflow verbleiben im PR.
+
+**Kein Merge ohne ausdrückliche visuelle Freigabe.** PR #49 bleibt Draft.
