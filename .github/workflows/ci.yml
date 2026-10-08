@@ -47,6 +47,19 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
+      - name: Quick Payback initial formatieren und im Feature-Branch speichern
+        if: startsWith(github.head_ref, 'feature/quick-payback-')
+        run: |
+          npm run format
+          if git diff --quiet -- src tests; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src tests
+          git commit -m "style: format quick payback source and tests"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+
       - name: Formatierung prüfen
         run: npm run format:check
 
@@ -104,7 +117,7 @@ jobs:
         run: npm run pages:check
 
 
-      - name: Knowledge-/Checklist-Abnahmebilder als überprüfbare Einzeldateien bereitstellen
+      - name: Abnahmebilder als überprüfbare Einzeldateien bereitstellen
         if: github.event.pull_request.head.repo.full_name == github.repository && (startsWith(github.head_ref, 'feature/champion-') || startsWith(github.head_ref, 'feature/competition-') || startsWith(github.head_ref, 'feature/quick-payback-'))
         run: |
           mkdir -p docs/review-screenshots
@@ -129,28 +142,6 @@ jobs:
             )
           fi
           for name in "${names[@]}"; do
-            source="$(find test-results -type f -name "$name" -print -quit)"
-            if [ -z "$source" ]; then
-              echo "::error::Playwright-Screenshot fehlt: $name"
-              exit 1
-            fi
-            cp "$source" "docs/review-screenshots/$name"
-          done
-          git add docs/review-screenshots
-          if git diff --cached --quiet; then
-            echo "Abnahmebilder sind bereits aktuell."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "test: publish browser review screenshots"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
-          exit 0
-          for name in \
-            "$topic-knowledge-desktop-chromium.png" \
-            "$topic-knowledge-mobile-chromium.png" \
-            "$topic-checklist-desktop-chromium.png" \
-            "$topic-checklist-mobile-chromium.png"; do
             source="$(find test-results -type f -name "$name" -print -quit)"
             if [ -z "$source" ]; then
               echo "::error::Playwright-Screenshot fehlt: $name"

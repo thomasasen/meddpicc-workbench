@@ -58,9 +58,17 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 - **Checklist → Champion:** zehn fachliche Prüffragen mit Evidenz, Fehlinterpretationen und Next Steps. Häkchen flüchtig, kein Deal-Score und keine Kontakt-/Opportunity-Pflege.
 - [Primärquellenmatrix und simulierte fachliche Red-Teams](docs/CHAMPION_SOURCE_QA.md). Champion Tester, Development Helper und Internal Selling Pack bleiben für T8 geplant.
 
+### Quick Payback – Value & Metrics Tool (T3)
+
+**Implementierung auf `feature/quick-payback-tool`, visuelle/technische Draft-Abnahme offen; kein Merge auf `main`.**
+
+- [Quick-Payback-Tool](/meddpicc-workbench/#/tools/quick-payback) mit drei EUR-Inputs, transparenter Formel, Grenzfällen, fiktivem Demo und kopierbarer Schätzung.
+- Ohne Login, Deal-State, Datenspeicherung, AI oder Backend. Kein ROI, keine finanzielle Freigabe und kein Forecast.
+- [Primärquellen, simulierte Red-Teams und QA-Gates](docs/QUICK_PAYBACK_SOURCE_QA.md).
+
 ### Competition – Knowledge und Themen-Checklist
 
-**Neuer T2-Feature-Branch zur technischen und visuellen Draft-Abnahme; nicht in `main`.**
+**Seit PR #52 am 09.10.2026 in `main` (Squash-Commit `c4e99ec682452c29998f33a128deadd8225c90d3`; CI [#37848576751](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37848576751) erfolgreich).**
 
 - **Wissen → Competition:** vier Alternativarten, kundenseitige Evidenz, Political/Technical/Commercial, Value-Triangle-Zonen, faire Differenzierung und ein ausdrücklich frei konstruiertes CRM-/SaaS-Beispiel.
 - **Checklist → Competition:** zehn unabhängige Prüffragen mit Signalen, Fehlinterpretationen und sinnvollen nächsten Discovery-Fragen; Checkboxen bleiben flüchtig.
@@ -98,7 +106,7 @@ Tools erledigen eine konkrete Aufgabe: berechnen, vorbereiten, strukturieren ode
 
 | Funktion | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
-| **Quick Payback** | 🟡 Als Nächstes | Berechnet aus Investition und wirtschaftlichem Nutzen, nach welcher Zeit sich die Investition amortisiert. | Du kannst dem Kunden schnell und verständlich zeigen, **wann der Break-even erreicht wird**, ohne selbst Formeln oder Excel aufzubauen. |
+| **Quick Payback** | 🟡 In Draft-Abnahme | Berechnet aus einmaliger Anfangsinvestition, realisierbarem Bruttonutzen pro Jahr und jährlichen Zusatzkosten den einfachen Payback ab Nutzenbeginn. | Du kannst dem Kunden schnell und verständlich zeigen, **wann der Break-even erreicht wird**, ohne selbst Formeln oder Excel aufzubauen. |
 | **Metric Builder** | 🟡 Als Nächstes | Hilft, aus einem Pain oder gewünschten Outcome eine belastbare, nachvollziehbare Kennzahl abzuleiten. | Du kommst schneller von Aussagen wie „das kostet uns viel Zeit“ zu einer Metric, mit der sich ein Business Case wirklich begründen lässt. |
 | **Cost of Delay** | 🟡 Als Nächstes | Berechnet, welchen wirtschaftlichen Wert der Kunde pro Woche oder Monat verliert, wenn sich die Veränderung verzögert. | Du kannst **Why now?** quantifizieren und Dringlichkeit mit wirtschaftlichen Auswirkungen statt nur mit Bauchgefühl begründen. |
 | **Business Case / Value Bridge** | 🟡 Als Nächstes | Führt Nutzen, Kosten, Annahmen und relevante Metrics zu einem nachvollziehbaren Business Case zusammen. | Du erhältst schneller eine belastbare Grundlage für die Kundendiskussion und kannst Value konsistent gegenüber Management und Economic Buyer darstellen. |
@@ -183,7 +191,7 @@ Jeder Checklist-Punkt soll bei Bedarf erklären:
 | **Paper Process** | ✅ Umgesetzt | Erklärt die administrativen Schritte zwischen Entscheidung und Unterschrift. | Du weißt, welche Fragen du zu Einkauf, Legal oder Signatur stellen solltest und verwechselst Paper Process nicht mit dem fachlichen Decision Process. |
 | **Pain / Implication** | ✅ Umgesetzt | Hilft zu prüfen, ob ein Pain nur beschrieben oder tatsächlich hinsichtlich seiner Konsequenzen verstanden wurde. | Du kannst schneller erkennen, ob genügend Business Relevanz vorhanden ist oder Discovery noch tiefer gehen muss. |
 | **Champion** | ✅ Umgesetzt | Erklärt die Merkmale eines Champions und typische Fehlinterpretationen wie Sympathie oder hohe Aktivität. | Du kannst Champion-Qualität besser beurteilen und weißt, welche Verhaltenssignale wirklich relevant sind. |
-| **Competition** | 🟡 In Draft-Abnahme | Erweitert den Wettbewerbsbegriff über direkte Anbieter hinaus. | Du vergisst Status quo, Eigenbau oder andere interne Prioritäten nicht als reale Alternativen. |
+| **Competition** | ✅ Umgesetzt | Erweitert den Wettbewerbsbegriff über direkte Anbieter hinaus. | Du vergisst Status quo, Eigenbau oder andere interne Prioritäten nicht als reale Alternativen. |
 
 ---
 

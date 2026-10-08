@@ -155,7 +155,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] **PR #49 · Paper Process Knowledge + Themen-Checklist** am 08.10.2026 mit Squash-Commit `2504170512cd9d5475e50b6dbea9be97064825a6` in `main` gemergt; CI/Pages waren erfolgreich.
 - [x] **PR #50 · Pain / Implication Knowledge + Themen-Checklist** am 08.10.2026 in `main` gemergt (Squash `a84d1b0d8be23db9d9ca8eec0a3531a96840a4f5`, PR-CI #529 erfolgreich).
 - [x] **PR #51 · Champion Knowledge + Themen-Checklist** am 08.10.2026 per Squash-Merge (`5391d84e96bdff4e2490caa022de61ef8f84ba3b`) in `main` übernommen.
-- **Aktueller Draft-Slice:** Competition Knowledge + Themen-Checklist; erst nach technischer und visueller Nutzerfreigabe mergen. T6 Value Triangle / Decision Matrix und T9 Competition-Microtools bleiben geplant.
+- **Competition PR #52** ist am 09.10.2026 mit `c4e99ec682452c29998f33a128deadd8225c90d3` in `main` gemergt. T6 Value Triangle / Decision Matrix und T9 Competition-Microtools bleiben geplant.
 
 ### Themen-Checklists
 
@@ -166,7 +166,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Paper Process (PR #49, in `main`)
 - [x] Pain / Implication (PR #50, in `main`)
 - [x] Champion (PR #51, in `main`)
-- [ ] Competition (Feature-Branch in Draft-Abnahme; Merge offen)
+- [x] Competition (PR #52 in `main`)
 
 ### Situative Checklists
 
@@ -192,10 +192,13 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Paper Process Knowledge (PR #49, in `main`)
 - [x] Pain / Implication Knowledge (PR #50, in `main`)
 - [x] Champion Knowledge (PR #51, in `main`)
-- [ ] Competition Knowledge (Draft, visuelle Freigabe offen)
+- [x] Competition Knowledge (PR #52 in `main`)
 - [ ] weitere Knowledge-Bereiche ausrollen
 
 ## Phase T3 – Value & Metrics Tools
+
+**Aktueller Draft-Slice:** Quick Payback auf `feature/quick-payback-tool` (lokales Tool und Quellenprüfung, Merge nur nach ausdrücklicher visueller Nutzerfreigabe). Metric Builder, Cost of Delay und Business Case / Value Bridge bleiben geplant.
+
 
 Priorität:
 
