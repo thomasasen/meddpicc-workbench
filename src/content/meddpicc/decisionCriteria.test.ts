@@ -77,7 +77,9 @@ describe('Decision Criteria: content and source contract', () => {
     expect(decisionCriteriaKnowledge.engagementGuidance[1]?.meaning).toContain('gemeinsam')
     expect(valueTriangleZones.find((zone) => zone.code === 'Value')?.action).toContain('Metrics')
     expect(valueTriangleZones.find((zone) => zone.code === 'Danger')?.action).toContain('Anforderung')
-    expect(valueTriangleZones.find((zone) => zone.code === 'Unique Differentiators')?.action).toContain('Kundenbeispielen')
+    expect(valueTriangleZones.find((zone) => zone.code === 'Unique Differentiators')?.action).toContain(
+      'Kundenbeispielen',
+    )
   })
 
   it('keeps all book provenance available separately from user-facing explanations', () => {

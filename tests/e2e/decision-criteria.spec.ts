@@ -11,9 +11,7 @@ test('Decision-Criteria-Wissen ist erreichbar und Quellen bleiben zunächst unsi
   ).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Was sind Decision Criteria?' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Das Value Triangle richtig nutzen' })).toBeVisible()
-  await expect(
-    page.getByRole('heading', { name: 'Kriterien mitgestalten und Kundenbewertung erfragen' }),
-  ).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Kriterien mitgestalten und Kundenbewertung erfragen' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Kundenbewertung statt Verkäufer-Score' })).toBeVisible()
 
   for (const label of ['Value', 'Danger', 'Parity', 'Unique Differentiators', 'Custom Needs']) {

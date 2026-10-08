@@ -149,8 +149,8 @@ import {
             <p class="eyebrow">Qualifizierung & Feedback</p>
             <h2 id="engagement-title">Kriterien mitgestalten und Kundenbewertung erfragen</h2>
             <p class="section-note">
-              Ein fehlender Kriterienkatalog ist nicht automatisch eine Chance. Und selbst wenn wir die Kriterien kennen,
-              kennen wir damit noch nicht die tatsächliche Einschätzung des Kunden zu unserer Lösung.
+              Ein fehlender Kriterienkatalog ist nicht automatisch eine Chance. Und selbst wenn wir die Kriterien
+              kennen, kennen wir damit noch nicht die tatsächliche Einschätzung des Kunden zu unserer Lösung.
             </p>
           </div>
         </div>

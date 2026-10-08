@@ -54,7 +54,8 @@ export const valueTriangleZones = [
   {
     code: 'Danger',
     meaning: 'Der Kunde benötigt die Fähigkeit; eine Alternative bietet sie, wir derzeit nicht.',
-    action: 'Ursprung und Notwendigkeit der Anforderung prüfen, sachliche Alternativen besprechen und den eigenen Mangel offenlegen; keine falschen Zusagen.',
+    action:
+      'Ursprung und Notwendigkeit der Anforderung prüfen, sachliche Alternativen besprechen und den eigenen Mangel offenlegen; keine falschen Zusagen.',
   },
   {
     code: 'Parity',
@@ -64,7 +65,8 @@ export const valueTriangleZones = [
   {
     code: 'Unique Differentiators',
     meaning: 'Wir bieten eine besondere Fähigkeit, die Alternative nicht – der Kunde verlangt sie bisher aber nicht.',
-    action: 'Mit konkreten Kundenbeispielen und Metrics prüfen, ob die Fähigkeit ein bislang unerkanntes Bedürfnis erfüllt; erst nach Bestätigung kann daraus Value werden.',
+    action:
+      'Mit konkreten Kundenbeispielen und Metrics prüfen, ob die Fähigkeit ein bislang unerkanntes Bedürfnis erfüllt; erst nach Bestätigung kann daraus Value werden.',
   },
   {
     code: 'Custom Needs',
@@ -94,7 +96,8 @@ export const decisionCriteriaConcepts = {
       'Entstehung, Eigentümer und letzte Validierung sind geklärt.',
       'Falls keine Kriterien vorliegen, ist geklärt, ob mehrere Stakeholder eine gemeinsame Evaluation überhaupt tragen.',
     ],
-    commonMisinterpretation: 'Ein RFP-Dokument ist automatisch vollständig und endgültig – oder das Fehlen eines Kriterienkatalogs ist automatisch eine Verkaufschance.',
+    commonMisinterpretation:
+      'Ein RFP-Dokument ist automatisch vollständig und endgültig – oder das Fehlen eines Kriterienkatalogs ist automatisch eine Verkaufschance.',
     possibleQuestionsOrActions: [
       'Wer hat die Kriterien zusammengestellt, und welche Quellen haben sie geprägt?',
       'Welche Anforderungen sind intern bereits abgestimmt und welche noch offen?',
@@ -341,22 +344,19 @@ export const decisionCriteriaKnowledge = {
       title: 'Wenn Kriterien fehlen',
       meaning:
         'Ein fehlender Kriterienkatalog kann auf einen frühen Evaluationsstand oder auf mangelnde Kaufreife hindeuten. Prüfe, ob mehrere Stakeholder wirklich an einer gemeinsamen Bewertung interessiert sind.',
-      question:
-        'Wer müsste mit uns die entscheidenden Anforderungen definieren, bevor wir sinnvoll evaluieren können?',
+      question: 'Wer müsste mit uns die entscheidenden Anforderungen definieren, bevor wir sinnvoll evaluieren können?',
     },
     {
       title: 'Kriterien sinnvoll mitgestalten',
       meaning:
         'Nutze Discovery, Use Cases und Metrics, um relevante Anforderungen gemeinsam mit dem Kunden zu präzisieren. Eigene Stärken dürfen als Hypothese eingebracht werden, aber nicht als bereits bestätigter Bedarf gelten.',
-      question:
-        'Wäre diese Fähigkeit angesichts Ihres Ziels ein sinnvolles zusätzliches Bewertungskriterium?',
+      question: 'Wäre diese Fähigkeit angesichts Ihres Ziels ein sinnvolles zusätzliches Bewertungskriterium?',
     },
     {
       title: 'Kundenbewertung statt Verkäufer-Score',
       meaning:
         'Lass den Kunden die Erfüllung der tatsächlich relevanten Kriterien selbst einordnen. Hole auch negatives Feedback und offene Bedenken ein; notiere Unsicherheit statt eine Bewertung zu erfinden.',
-      question:
-        'Wie schneiden wir aus Ihrer Sicht bei den wichtigsten Kriterien ab – und wo haben Sie noch Zweifel?',
+      question: 'Wie schneiden wir aus Ihrer Sicht bei den wichtigsten Kriterien ab – und wo haben Sie noch Zweifel?',
     },
   ],
   differences: [
