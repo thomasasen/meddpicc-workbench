@@ -17,7 +17,7 @@ describe('Decision Process: fachliche und technische Verträge', () => {
     expect(decisionProcessPhases.map((item) => item.title)).toEqual([
       'Technical Validation',
       'Business Approval',
-      'Paper Process (separat prüfen)',
+      'Paper Process (gesonderter Prüfpfad)',
     ])
     expect(decisionProcessKnowledge.lead).not.toMatch(/Whyte|Lahoutifard|Buch/)
   })
@@ -35,6 +35,41 @@ describe('Decision Process: fachliche und technische Verträge', () => {
     expect(decisionProcessConcepts.timeline.meaning).toContain('Abhängigkeiten')
     expect(decisionProcessConcepts.changes.meaning).toContain('neu')
     expect(decisionProcessConcepts.alignment.signals.length).toBeGreaterThan(1)
+  })
+
+  it('bildet die tatsächliche Reihenfolge nach Whyte mit möglicher Überlappung ab', () => {
+    expect(decisionProcessPhases[1]?.description).toContain('In der Regel folgt')
+    expect(decisionProcessPhases[1]?.description).toContain('parallel')
+    expect(decisionProcessPhases[1]?.description).toContain('Warnsignal')
+    expect(decisionProcessPhases[2]?.description).toContain('früher oder parallel')
+  })
+
+  it('bewahrt Lahoutifards finanzielle, administrative und rechtliche Approval-Semantik', () => {
+    expect(decisionProcessPhases[2]?.description).toContain('Business Approval')
+    expect(decisionProcessKnowledge.perspectives[1]?.summary).toContain('rechtlichen')
+    expect(decisionProcessKnowledge.perspectives[1]?.summary).toContain('kommerziellen')
+  })
+
+  it('verlangt Käufer- und Verkäuferaktivitäten sowie einen EB-validierten Compelling Event', () => {
+    expect(decisionProcessKnowledge.balancedPlan.map((item) => item.title)).toEqual([
+      'Kundenseite',
+      'Verkäuferseite',
+    ])
+    expect(decisionProcessKnowledge.compellingEvent.meaning).toContain('Economic Buyer')
+    expect(decisionProcessKnowledge.compellingEvent.meaning).toContain('ROI')
+    expect(decisionProcessKnowledge.compellingEvent.proof).toContain('Economic Buyer bestätigt')
+    expect(decisionProcessKnowledge.goLivePlanning.join(' ')).toContain('Implementierungsdauer')
+    expect(decisionProcessChecklist.items[0]?.question).toContain('beider Seiten')
+    expect(decisionProcessChecklist.items[4]?.question).toContain('Compelling Event')
+  })
+
+  it('verwendet echte Kapitelüberschriften statt erfundener Quellensektionen', () => {
+    const sourceNotes = decisionProcessChecklist.items.map((item) => item.sourceNote ?? '').join(' ')
+    expect(sourceNotes).not.toContain('Conditional Closing')
+    expect(sourceNotes).not.toContain('Decision Process Timeline')
+    expect(sourceNotes).not.toContain('Socializing the Go-Live Plan')
+    expect(sourceNotes).toContain('Add Additional Steps')
+    expect(decisionProcessKnowledge.sourceNotes.join(' ')).toContain('Compelling Event')
   })
 
   it('bietet zehn ausführliche, nicht dauerhaft gespeicherte Checklist-Punkte', () => {
