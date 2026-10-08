@@ -47,17 +47,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Einmalige Prettier-Korrektur für Decision Criteria
-        run: |
-          npx prettier --write src/content/meddpicc/decisionCriteria.ts src/content/meddpicc/types.ts src/views/ChecklistView.vue src/views/DecisionCriteriaKnowledgeView.vue
-          if ! git diff --quiet -- src/content/meddpicc/decisionCriteria.ts src/content/meddpicc/types.ts src/views/ChecklistView.vue src/views/DecisionCriteriaKnowledgeView.vue; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src/content/meddpicc/decisionCriteria.ts src/content/meddpicc/types.ts src/views/ChecklistView.vue src/views/DecisionCriteriaKnowledgeView.vue
-            git commit -m "style: format Decision Criteria content and views"
-            git push origin HEAD:${{ github.event.pull_request.head.ref }}
-          fi
-
       - name: Formatierung prüfen
         run: npm run format:check
 
