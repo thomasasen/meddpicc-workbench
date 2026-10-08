@@ -3,6 +3,7 @@ import { ArrowLeft, BookOpen, CheckSquare2, CircleAlert, Lightbulb, MessageCircl
 import { computed, ref, watch } from 'vue'
 
 import { championChecklist } from '../content/meddpicc/champion'
+import { competitionChecklist } from '../content/meddpicc/competition'
 import { decisionCriteriaChecklist } from '../content/meddpicc/decisionCriteria'
 import { decisionProcessChecklist } from '../content/meddpicc/decisionProcess'
 import { discoveryCallChecklist } from '../content/meddpicc/discoveryCall'
@@ -26,6 +27,7 @@ const checklistLabels: Record<ChecklistId, string> = {
   'paper-process': 'Paper Process',
   'pain-implication': 'Pain / Implication',
   champion: 'Champion',
+  competition: 'Competition',
 }
 
 const knowledgeLabels: Record<KnowledgeTopicId, string> = {
@@ -37,6 +39,7 @@ const knowledgeLabels: Record<KnowledgeTopicId, string> = {
   'paper-process': 'Paper Process',
   'pain-implication': 'Pain / Implication',
   champion: 'Champion',
+  competition: 'Competition',
 }
 
 const checklistContextLabel = computed(() => checklistLabels[props.checklistId])
@@ -53,6 +56,7 @@ const checklist = computed(() => {
   if (props.checklistId === 'paper-process') return paperProcessChecklist
   if (props.checklistId === 'pain-implication') return painImplicationChecklist
   if (props.checklistId === 'champion') return championChecklist
+  if (props.checklistId === 'competition') return competitionChecklist
   if (props.checklistId === 'discovery-call') return discoveryCallChecklist
   if (props.checklistId === 'metrics') return metricsChecklists.metrics
   return economicBuyerChecklists[props.checklistId]

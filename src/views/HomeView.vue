@@ -174,6 +174,11 @@ const checklists = [
     route: '/checklists/champion',
   },
   {
+    label: 'Competition',
+    note: 'Rival Solutions, Eigenbau, andere Prioritäten und Inertia evidenzbasiert qualifizieren.',
+    route: '/checklists/competition',
+  },
+  {
     label: 'POC / Pilot',
     note: 'Vor dem Start klären, was Erfolg bedeutet, wer committed ist und was nach einem erfolgreichen POC passiert.',
   },
@@ -253,6 +258,7 @@ const knowledgeTopics = [
     label: 'Competition',
     note: 'Warum gehören Status quo, Eigenbau und andere Initiativen genauso zum Wettbewerb?',
     icon: Swords,
+    route: '/knowledge/competition',
   },
 ]
 </script>

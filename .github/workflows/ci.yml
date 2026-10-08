@@ -104,15 +104,20 @@ jobs:
         run: npm run pages:check
 
 
-      - name: Champion-Abnahmebilder als überprüfbare Einzeldateien bereitstellen
-        if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'feature/champion-')
+      - name: Knowledge-/Checklist-Abnahmebilder als überprüfbare Einzeldateien bereitstellen
+        if: github.event.pull_request.head.repo.full_name == github.repository && (startsWith(github.head_ref, 'feature/champion-') || startsWith(github.head_ref, 'feature/competition-'))
         run: |
           mkdir -p docs/review-screenshots
+          if [[ "${{ github.head_ref }}" == feature/competition-* ]]; then
+            topic=competition
+          else
+            topic=champion
+          fi
           for name in \
-            champion-knowledge-desktop-chromium.png \
-            champion-knowledge-mobile-chromium.png \
-            champion-checklist-desktop-chromium.png \
-            champion-checklist-mobile-chromium.png; do
+            "$topic-knowledge-desktop-chromium.png" \
+            "$topic-knowledge-mobile-chromium.png" \
+            "$topic-checklist-desktop-chromium.png" \
+            "$topic-checklist-mobile-chromium.png"; do
             source="$(find test-results -type f -name "$name" -print -quit)"
             if [ -z "$source" ]; then
               echo "::error::Playwright-Screenshot fehlt: $name"
@@ -127,7 +132,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "test: publish Champion browser review screenshots"
+          git commit -m "test: publish browser review screenshots"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
 
   main-pages-integrity:
