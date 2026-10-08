@@ -48,7 +48,7 @@ describe('Pain / Implication: Quellen und Abgrenzungen', () => {
     expect(painImplicationKnowledge.scenario.title).toContain('Konstruiertes')
     const steps = painImplicationKnowledge.scenario.steps.map((step) => step.detail).join(' ')
     expect(steps).toContain('Rechenannahme')
-    expect(steps).toContain('nicht Kundendaten')
+    expect(steps).toContain('Weder Personenanzahl noch Zeit')
     expect(painImplicationKnowledge.evidenceLevels.map((item) => item.title)).toContain('Verkäuferhypothese')
     expect(painImplicationKnowledge.evidenceLevels.map((item) => item.title)).toContain('Bestätigte Kundenevidenz')
     expect(painImplicationKnowledge.redFlags[3]?.explanation).toContain('keine Kundenfrist')
