@@ -26,6 +26,14 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 - Fachliche Belege, Grenzen und Unterschiede in [Discovery Call Source QA](docs/DISCOVERY_CALL_SOURCE_QA.md).
 - Keine Deal-Pflege, kein Transcript, kein KI-Zwang.
 
+### Decision Process – Knowledge und Checklist
+
+**Implementiert auf einem Feature-Branch, visuelle Abnahme vor Merge erforderlich.**
+
+- **Wissen → Decision Process:** Technical Validation, Business Approval, Entscheidungsrechte, Gremien, Zeitpunkte, Abhängigkeiten und klare Abgrenzung zu Decision Criteria und Paper Process.
+- **Checklist → Decision Process:** zehn nachvollziehbare Prüfungen mit konkreten Fragen und typischen Fehlinterpretationen; keine gespeicherten Scores oder Deal-Daten.
+- Der fachliche Quellenabgleich und das simulierte Autoren-Red-Team stehen in [Decision Process Source QA](docs/DECISION_PROCESS_SOURCE_QA.md).
+
 ## Status
 
 | Status | Bedeutung |
