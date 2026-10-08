@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowLeft, Calculator, ClipboardCopy, RotateCcw } from '@lucide/vue'
 import { computed, ref } from 'vue'
+import SoftwarePaybackPanel from '../components/SoftwarePaybackPanel.vue'
 
 import {
   buildQuickPaybackSummary,
@@ -10,6 +11,7 @@ import {
   type QuickPaybackInput,
 } from '../domain/quickPayback'
 
+const calculationMode = ref<'quick' | 'project'>('quick')
 const upfrontInvestmentEur = ref('')
 const annualRealizableBenefitEur = ref('')
 const annualIncrementalOperatingCostEur = ref('0')
@@ -90,11 +92,24 @@ async function copySummary() {
         </div>
         <h1 id="quick-title">In wie vielen Monaten rechnet sich die Investition?</h1>
         <p class="intro-text">
-          Drei EUR-Werte genügen für eine einfache Payback-Schätzung. Berücksichtige nur wirtschaftliche Effekte, die
-          tatsächlich realisierbar sind. Die Rechnung ersetzt keinen validierten Business Case.
+          {{ calculationMode === 'quick'
+            ? 'Drei EUR-Werte genügen für eine einfache Payback-Schätzung ab regelmäßigem Nutzenbeginn.'
+            : 'Modelliere Softwareprojekt, SaaS-Kosten, Status quo und beliebig viele kundenspezifische Metrics im monatlichen Verlauf.' }}
+          Die Rechnung ersetzt keinen vom Kunden validierten Business Case.
         </p>
       </section>
 
+      <nav class="container quick-mode-choice" aria-label="Berechnungsmodus">
+        <button type="button" class="button" :class="calculationMode === 'quick' ? 'button-primary' : 'button-secondary'"
+          :aria-pressed="calculationMode === 'quick'" @click="calculationMode = 'quick'">
+          Schnellberechnung
+        </button>
+        <button type="button" class="button" :class="calculationMode === 'project' ? 'button-primary' : 'button-secondary'"
+          :aria-pressed="calculationMode === 'project'" @click="calculationMode = 'project'">
+          Softwareprojekt &amp; Kunden-Metrics
+        </button>
+      </nav>
+      <template v-if="calculationMode === 'quick'">
       <div class="container quick-grid">
         <section class="quick-panel quick-form" aria-labelledby="quick-input-heading">
           <div class="quick-panel-heading">
@@ -278,6 +293,9 @@ async function copySummary() {
         <p class="quick-copy-status" role="status">{{ copyMessage }}</p>
       </section>
 
+      </template>
+      <SoftwarePaybackPanel v-else class="container" />
+
       <section class="container quick-related" aria-label="Passende Wissenshilfen">
         <h2>Was vor dem Kundengespräch zu prüfen ist</h2>
         <p>Welche Ausgangszahlen und Einsparungen sind belastbar, wer trägt den Business Pain und wer entscheidet?</p>
@@ -303,10 +321,12 @@ async function copySummary() {
               Entscheidungskriterien sind notwendig.
             </p>
             <p>
-              <strong>Eigene Modellentscheidung:</strong> konstanter jährlicher Bruttonutzen minus zusätzliche jährliche
-              Kosten, geteilt durch zwölf Monate; Einmalinvestition separat. Nicht berücksichtigt sind Ramp-up, Steuern,
-              Finanzierung, Inflation, Kapitalkosten, zeitlich variable Zahlungen oder Alternativinvestitionen. Dies ist
-              weder ein vollständiger Business Case noch ROI, NPV oder Forecast.
+              <strong>Eigene Modellentscheidung:</strong> Im Quick-Modus gilt ein gleichmäßiger Jahresnettonutzen.
+              Der Projektmodus simuliert dagegen nachvollziehbare Monatswerte für Einmalkosten, SaaS, Bestandssysteme,
+              Nutzenbeginn und Ramp-up. Jahreskosten werden zur wirtschaftlichen Betrachtung auf zwölf Monate verteilt;
+              echte Vorauszahlungen, Liquidität, Steuern, Inflation, Finanzierung, Kapitalkosten, NPV und IRR werden
+              nicht modelliert. Datenherkunft und kontrollierte Doppelzählung sind eigene Produktregeln, keine
+              vermeintliche Autorenfreigabe.
             </p>
           </div>
         </details>
@@ -330,6 +350,16 @@ async function copySummary() {
   clip-path: none;
 }
 
+.quick-mode-choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+.quick-mode-choice .button[aria-pressed='true'] { font-weight: 780; }
+@media (max-width: 560px) {
+  .quick-mode-choice .button { width: 100%; }
+}
 .quick-main {
   padding: var(--space-8) 0 var(--space-12);
 }
