@@ -149,7 +149,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 
 - **PR #46 „Discovery Call + SPICED“:** vollständig implementiert, CI #445 grün, **Draft / Sichtfreigabe ausstehend / nicht in `main`**.
 - **Quellen-UX:** Bei Discovery Call, Economic Buyer, Metrics und allen aktuellen Checklists Quellen nur ganz unten, standardmäßig eingeklappt; Implementierung liegt aktuell im PR-#46-Branch, Projektregel in `AGENTS.md`.
-- **Nächster Slice: Decision Criteria (T2, noch nicht implementiert).** Selbstständige Knowledge-Seite plus Themen-Checklist, **keine** frühe Decision-Matrix- oder Criteria-Workshop-App.
+- **Aktueller Slice: Decision Criteria (T2, Implementierung im neuen Draft-PR zur QA/Sichtfreigabe).** Selbstständige Knowledge-Seite plus Themen-Checklist, **keine** frühe Decision-Matrix- oder Criteria-Workshop-App.
 - Implementation-Handoff: `docs/prompts/DECISION_CRITERIA_IMPLEMENTATION.md`; geprüfte Fachbasis: `docs/DECISION_CRITERIA_SOURCE_BRIEF.md`.
 - **Abhängigkeit vor normalem Feature-PR:** erst #46 nach sichtbarer Nutzerfreigabe mergen, dann Decision Criteria auf `main` entwickeln; alternativ Draft als sauberer stacked PR auf #46.
 - Danach priorisiert: Decision Process, Paper Process, Pain / Implication, Champion, Competition.
@@ -158,7 +158,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 
 - [x] Metrics
 - [x] Economic Buyer
-- [ ] Decision Criteria
+- [x] Decision Criteria (Feature-PR, noch nicht gemergt)
 - [ ] Decision Process
 - [ ] Paper Process
 - [ ] Pain / Implication
@@ -184,6 +184,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Economic Buyer Knowledge als erster Referenz-Slice
 - [x] Metrics Knowledge als zweiter quellengeprüfter Themen-Slice
 - [x] Discovery Call als ergänzender SPICED-Wissensbereich
+- [x] Decision Criteria Knowledge als dritter quellengeprüfter Themen-Slice (Feature-PR)
 - [ ] weitere Knowledge-Bereiche ausrollen
 
 ## Phase T3 – Value & Metrics Tools

@@ -165,7 +165,7 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 
 ### Noch offen
 
-- Decision Criteria
+- Decision Criteria: technische CI abgeschlossen, Nutzer-Sichtfreigabe vor Merge noch offen
 - Decision Process
 - Paper Process
 - Pain / Implication
@@ -173,17 +173,25 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 - Competition
 - weitere situative Checklists wie POC, Pricing und Closing
 
-## Nächste Priorität: Decision Criteria – vorbereitet, noch nicht implementiert
+## Decision Criteria – Knowledge & Themen-Checklist (Feature-PR, QA offen)
 
 **Als nächster eigenständiger Knowledge-/Checklist-Slice nach Discovery Call festgelegt am 08.10.2026.**
 
 - Umsetzungs-Prompt für Codex: `docs/prompts/DECISION_CRITERIA_IMPLEMENTATION.md`
 - Fachliches, aus den bereitgestellten EPUB-Kapiteln geprüftes Briefing: `docs/DECISION_CRITERIA_SOURCE_BRIEF.md`
-- Ziel: `/knowledge/decision-criteria` und `/checklists/decision-criteria` mit praxisnahen Erklärungen, Entscheidungsmaßstäben, Kriterienarten, Kundenevidenz, Differenzierung und kritischen Fehlinterpretationen.
+- Implementiert auf `feat/decision-criteria-knowledge-checklist`: `/knowledge/decision-criteria` und `/checklists/decision-criteria`, inkl. Navigation von der Startseite.
+- Zehn vollständige Checklist-Punkte und temporäre Checkboxen; fachliche Differenzierung und sieben Value-Triangle-Zonen als Knowledge.
+- Unit Tests sowie Playwright Desktop/Mobile inkl. Overflow- und Quellen-Disclosure-Tests hinzugefügt.
+- Fachlicher QA-Nachweis: `docs/DECISION_CRITERIA_SOURCE_QA.md`.
+- **Red-Team-Gegencheck 08.10.2026:** beide Original-EPUBs erneut geprüft, simulierte Autorenperspektiven in `docs/DECISION_CRITERIA_RED_TEAM.md` dokumentiert. Korrekturen zu Whytes *Taking Score*, fehlenden Kriterien als Kaufreife-Risiko und aktiver Nutzung des Value Triangle eingebaut.
+- **Red-Team-QA nach Änderung:** zusätzliche Unit-/Browser-Assertions ergänzt; vorangegangener CI #456 bezieht sich noch auf den Stand **vor** diesen Korrekturen. Neue CI ausstehend.
+- **Technische QS abgeschlossen:** Standard-CI #456 vollständig grün (Format, Lint, Unit, Build, Playwright Desktop/Mobile, Pages-Check): https://github.com/thomasasen/meddpicc-workbench/actions/runs/37773584286.
+- **Visuelle QS:** Desktop-/Mobile-Fullpage-Screenshots aus CI #453 kontrolliert, keine Auffälligkeiten; Quellen sind standardmäßig eingeklappt.
+- **PR #47:** https://github.com/thomasasen/meddpicc-workbench/pull/47, gestapelt auf PR #46. **Ausdrückliche Nutzer-Sichtfreigabe ausstehend; kein Merge**.
 - Methodisch explizit: Whytes Technical/Economic/Relationship und Lahoutifards Vendor/Partner/Financial Justification/Capability Validation sowie Value Triangle (Value, Danger, Parity usw.); Gemeinsamkeiten ohne falsche Gleichsetzung zeigen.
 - Keine Decision Matrix, kein Criteria-Workshop-Tool, kein automatisches Deal-Scoring: diese Instrumente gehören später zur Phase T6.
 - Abhängigkeit: PR #46 vor einem normalen `main`-basierten Decision-Criteria-PR erst freigeben und mergen; alternativ sauberer **stacked Draft-PR** auf #46, niemals unbeabsichtigt PR #46 mitmergen.
-- Decision Criteria ist im Produkt **noch offen**. Weder Tests noch UI noch neuer PR sind dafür bereits implementiert.
+- Decision Criteria ist **implementiert, aber noch nicht freigegeben bzw. gemergt**. Keine Produktionsreife ohne erfolgreiche CI und visuelle Nutzerabnahme.
 - Fachliche Reihenfolge danach: **Decision Process**, **Paper Process**, anschließend Pain/Implication, Champion, Competition.
 
 ## Nächste Roadmap-Blöcke

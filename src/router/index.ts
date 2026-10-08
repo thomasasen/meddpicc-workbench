@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import ChecklistView from '../views/ChecklistView.vue'
+import DecisionCriteriaKnowledgeView from '../views/DecisionCriteriaKnowledgeView.vue'
 import DiscoveryCallKnowledgeView from '../views/DiscoveryCallKnowledgeView.vue'
 import EconomicBuyerKnowledgeView from '../views/EconomicBuyerKnowledgeView.vue'
 import MetricsKnowledgeView from '../views/MetricsKnowledgeView.vue'
@@ -33,6 +34,17 @@ const router = createRouter({
       name: 'checklist-discovery-call',
       component: ChecklistView,
       props: { checklistId: 'discovery-call' },
+    },
+    {
+      path: '/knowledge/decision-criteria',
+      name: 'knowledge-decision-criteria',
+      component: DecisionCriteriaKnowledgeView,
+    },
+    {
+      path: '/checklists/decision-criteria',
+      name: 'checklist-decision-criteria',
+      component: ChecklistView,
+      props: { checklistId: 'decision-criteria' },
     },
     {
       path: '/knowledge/metrics',

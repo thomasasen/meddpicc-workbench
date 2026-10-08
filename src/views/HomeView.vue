@@ -149,6 +149,11 @@ const checklists = [
     route: '/checklists/discovery-call',
   },
   {
+    label: 'Decision Criteria',
+    note: 'Anforderungen, Muss-Kriterien, Gewichtung, Business Impact und echten Wettbewerb kritisch prüfen.',
+    route: '/checklists/decision-criteria',
+  },
+  {
     label: 'POC / Pilot',
     note: 'Vor dem Start klären, was Erfolg bedeutet, wer committed ist und was nach einem erfolgreichen POC passiert.',
   },
@@ -193,6 +198,7 @@ const knowledgeTopics = [
     label: 'Decision Criteria',
     note: 'Welche Kriterien beeinflussen die Auswahl und wie lassen sie sich richtig einordnen?',
     icon: ListChecks,
+    route: '/knowledge/decision-criteria',
   },
   {
     code: 'D',
