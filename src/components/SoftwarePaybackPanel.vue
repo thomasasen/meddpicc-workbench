@@ -582,6 +582,13 @@ async function exportPng() {
               {{ month }}
             </text>
             <text x="450" y="274" text-anchor="middle" font-size="13" fill="#374151">Projektmonat</text>
+            <text x="90" y="302" font-size="14" font-weight="700" fill="#172033">
+              {{ plan?.sustainedBreakEvenMonth === null ? 'Amortisation bis Monat ' + horizon + ' nicht erreicht' :
+                'Amortisation bis Betrachtungsende: Projektmonat ' + plan?.sustainedBreakEvenMonth }}
+            </text>
+            <text x="90" y="326" font-size="13" fill="#374151">
+              {{ 'Kumulierter wirtschaftlicher Saldo: ' + formatEuro(plan?.cumulativeEur ?? 0) + ' · Schätzung' }}
+            </text>
           </svg>
           <figcaption>
             Der Verlauf basiert ausschließlich auf den sichtbaren Kosten und angerechneten Kunden-Metrics.
