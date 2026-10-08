@@ -201,7 +201,7 @@ describe('Monatliche Softwarewirtschaftlichkeit', () => {
       id: 'renewal',
       name: 'Zusätzlicher Projektaufwand',
       kind: 'one-time',
-      amountEur: 250000,
+      amountEur: 150000,
       period: 'monthly',
       startMonth: 20,
     })
