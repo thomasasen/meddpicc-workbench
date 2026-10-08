@@ -147,7 +147,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 
 ### Themen-Checklists
 
-- [ ] Metrics
+- [x] Metrics
 - [x] Economic Buyer
 - [ ] Decision Criteria
 - [ ] Decision Process
@@ -173,6 +173,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Quellenbezug je Thema nachvollziehbar halten
 - [x] Inhalte zwischen Knowledge und Checklists wiederverwenden
 - [x] Economic Buyer Knowledge als erster Referenz-Slice
+- [x] Metrics Knowledge als zweiter quellengeprüfter Themen-Slice
 - [ ] weitere Knowledge-Bereiche ausrollen
 
 ## Phase T3 – Value & Metrics Tools
