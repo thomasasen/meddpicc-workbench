@@ -1,6 +1,6 @@
-export type KnowledgeTopicId = 'economic-buyer'
+export type KnowledgeTopicId = 'economic-buyer' | 'metrics'
 
-export type ChecklistId = 'economic-buyer' | 'economic-buyer-meeting'
+export type ChecklistId = 'economic-buyer' | 'economic-buyer-meeting' | 'metrics'
 
 export interface MeddpiccConcept {
   id: string
@@ -30,6 +30,7 @@ export interface KnowledgeTopic {
   misinterpretations: KnowledgeMisinterpretation[]
   discoveryQuestions: string[]
   withoutDirectAccess: string[]
+  practiceActions?: string[]
   authorPerspective: {
     whyte: string
     lahoutifard: string
