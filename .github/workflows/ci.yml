@@ -47,19 +47,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Quick Payback initial formatieren und im Feature-Branch speichern
-        if: startsWith(github.head_ref, 'feature/quick-payback-')
-        run: |
-          npm run format
-          if git diff --quiet -- src tests; then
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src tests
-          git commit -m "style: format quick payback source and tests"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
-
       - name: Formatierung prüfen
         run: npm run format:check
 

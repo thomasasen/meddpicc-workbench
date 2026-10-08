@@ -25,7 +25,7 @@ test('zeigt die MEDDPICC Toolbox mit Tools, Checklists und Knowledge', async ({ 
   await expect(
     page.getByText(/Zieltermin und Schritte eingeben.*späteste Starttermine und eine teilbare Timeline/),
   ).toBeVisible()
-  await expect(page.getByText(/Investition und Nutzen eingeben.*wann sich die Investition amortisiert/)).toBeVisible()
+  await expect(page.getByText(/Einmalige Investition, realisierbaren Jahresnutzen und Zusatzkosten eingeben.*Amortisation in Monaten/)).toBeVisible()
   await expect(
     page.getByText(/Was macht einen echten Champion aus.*welche Signale werden häufig überschätzt/),
   ).toBeVisible()

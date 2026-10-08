@@ -99,6 +99,8 @@ B ist ein **adversariales Code-/Textreview**, keine echte Autorenschaft. Technis
 
 ## 6. Quality Gates / Bilder / Review
 
-*Noch auszuführen und mit konkreten Logs/Dateilinks zu belegen.* Verlangt sind `npm ci --no-audit --no-fund`, `npm run format:check`, `npm run lint`, `npm test`, `npm run build`, `npm run test:e2e`, `npm run pages:check` nach Pages-Sync sowie Chromium Desktop/Mobile.
+**Erster vollständiger Lauf: [CI #37853933215](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37853933215), fehlgeschlagen.** npm ci, Formatierung, ESLint, Unit-Tests und Build waren erfolgreich. Playwright meldete **77 bestanden, 4 fehlgeschlagen, 1 übersprungen** (Desktop/Mobile). Zwei Fehlschläge: alter `smoke.spec.ts`-Erwartungstext nach bewusst geänderter Quick-Payback-Kachel; zwei Fehlschläge: Test für Nullinvestition hatte 60.000 EUR laufende Zusatzkosten stehen lassen und stellte danach nur Bruttonutzen 10 EUR ein, folglich fachlich korrekt **kein Payback** statt erwarteter 0 Monate. **Fix:** Smoke-Erwartung an tatsächliche Kachel angepasst; E2E-Sonderfall setzt Betriebskosten vor positivem Zero-Investment-Ergebnis auf 0. Diese vier Fehler werden nicht als Rechenfehler kaschiert. Screenshot-CI konnte wegen gescheitertem Browsergate noch keine vier Abnahmebilder in den Branch committen. Nachtest steht aus.
+
+*Folgelauf mit konkreten Logs/Dateilinks zu belegen.* Verlangt sind `npm ci --no-audit --no-fund`, `npm run format:check`, `npm run lint`, `npm test`, `npm run build`, `npm run test:e2e`, `npm run pages:check` nach Pages-Sync sowie Chromium Desktop/Mobile.
 
 Screenshot-Ziel: `docs/review-screenshots/quick-payback-empty-desktop-chromium.png`, `quick-payback-empty-mobile-chromium.png`, `quick-payback-result-desktop-chromium.png`, `quick-payback-result-mobile-chromium.png`. Originale müssen von Playwright stammen, nicht von einem Mockup. Keine Bilder als fertig markieren, bevor echte Dateien und Dimensionen geprüft sind.

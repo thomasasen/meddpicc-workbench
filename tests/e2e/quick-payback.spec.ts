@@ -63,6 +63,7 @@ test('Quick Payback: ungültige Zahlen, Grenzfälle, Demo, Reset und Quellen', a
   await expect(page.getByText('Unter diesen Annahmen kein einfacher Payback erreichbar.')).toBeVisible()
   await page.getByLabel('Einmalige Anfangsinvestition (EUR)').fill('0')
   await expect(page.getByText('Keine aussagekräftige positive Amortisation.')).toBeVisible()
+  await page.getByLabel('Jährliche zusätzliche laufende Kosten (EUR/Jahr)').fill('0')
   await benefit.fill('10')
   await expect(page.locator('.quick-duration')).toContainText('0,0')
   await benefit.fill('-1')
