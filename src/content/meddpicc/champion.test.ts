@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { championChecklist, championKnowledge } from './champion'
 
+// prettier-ignore
 describe('Champion: Quellen, Evidenz und Abgrenzungen', () => {
   it('hat exakt Whytes drei explizite Kriterien', () => {
     expect(championKnowledge.whyteCriteria.map((item) => item.id)).toEqual(['einfluss', 'intern', 'motivation'])
