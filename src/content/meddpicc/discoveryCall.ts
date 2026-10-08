@@ -279,6 +279,31 @@ export const discoveryCallKnowledge = {
         'The SPICED Framework (15.04.2022); The Perfect Discovery Call (09.05.2022); SPICED Framework / MEDDIC and SPICED 2023.',
     },
   ],
+  whyteBigQuestions: [
+    'Was funktioniert im aktuellen Ablauf gut?',
+    'Was funktioniert nicht wie gewünscht?',
+    'Welche positiven Folgen hat es, wenn es gut läuft?',
+    'Welche negativen Folgen hat es, wenn es nicht funktioniert?',
+    'Welche Menschen, Teams oder Kunden betrifft das?',
+    'Wie groß ist der Aufwand oder wirtschaftliche Schaden?',
+    'Warum wurde das Thema bislang nicht gelöst?',
+  ],
+  lahouThed: [
+    { code: 'T', name: 'Tell me', prompt: 'Erzählen Sie mir mehr über ...' },
+    { code: 'H', name: 'How', prompt: 'Wie läuft das bei Ihnen heute ab?' },
+    { code: 'E', name: 'Explain', prompt: 'Können Sie mir erklären, wie es dazu kommt?' },
+    { code: 'D', name: 'Describe', prompt: 'Beschreiben Sie mir bitte einen konkreten Fall.' },
+  ],
+  twoSidedExample: {
+    first: 'Sie sagen, die Bearbeitung dauert lange. Wie lange dauert sie heute?',
+    deepen: 'Wodurch entsteht diese Zeit, wie häufig passiert das und was bedeutet das für Ihre Ziele?',
+    caution: 'Die Zahl ist zunächst eine Kundenaussage oder Schätzung, bis sie überprüft wurde.',
+  },
+  ace: [
+    { code: 'A', name: 'Appreciate', meaning: 'Für die Zeit und Teilnahme danken.' },
+    { code: 'C', name: 'Check End Time', meaning: 'Verfügbare Gesprächszeit bestätigen.' },
+    { code: 'E', name: 'End Goal', meaning: 'Gemeinsames Ziel des Gesprächs vereinbaren.' },
+  ],
   flow: [
     {
       title: 'Vorbereitung',
