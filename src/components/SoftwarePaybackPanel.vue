@@ -173,7 +173,7 @@ function graphMarkup(): string {
   const clone = svg.cloneNode(true) as SVGSVGElement
   clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
   clone.setAttribute('width', '1200')
-  clone.setAttribute('height', '380')
+  clone.setAttribute('height', '440')
   clone.setAttribute('style', 'background:#ffffff;font-family:system-ui,sans-serif')
   return new XMLSerializer().serializeToString(clone)
 }
@@ -209,7 +209,7 @@ async function exportPng() {
       })
       const canvas = document.createElement('canvas')
       canvas.width = 1200
-      canvas.height = 380
+      canvas.height = 440
       const ctx = canvas.getContext('2d')
       if (!ctx) throw new Error('Canvas nicht verfügbar')
       ctx.fillStyle = '#ffffff'
@@ -509,6 +509,10 @@ async function exportPng() {
           <li v-for="issue in result.issues" :key="issue">{{ issue }}</li>
         </ul>
       </div>
+      <p v-else-if="costs.length === 0 && metrics.length === 0" class="software-empty" data-testid="project-empty">
+        Lege zuerst eine Kostenposition und eine Kunden-Metric an oder öffne das ausdrücklich fiktive Beispiel.
+        Bis dahin wird keine wirtschaftliche Aussage erzeugt.
+      </p>
       <template v-else>
         <div class="software-kpis">
           <div>
@@ -537,13 +541,13 @@ async function exportPng() {
           kumulierter Saldo. Kein Garantie-, Cashflow- oder ROI-Versprechen.
         </p>
         <figure class="software-figure">
-          <svg ref="svgRef" viewBox="0 0 900 280" role="img" aria-labelledby="software-chart-title software-chart-desc">
+          <svg ref="svgRef" viewBox="0 0 900 340" role="img" aria-labelledby="software-chart-title software-chart-desc">
             <title id="software-chart-title">Kumulierter wirtschaftlicher Saldo je Projektmonat</title>
             <desc id="software-chart-desc">
               Linie des kumulierten EUR-Saldos von Projektmonat 0 bis {{ horizon }}. Die nachfolgende Tabelle enthält
               die zugänglichen Zahlenwerte.
             </desc>
-            <rect x="0" y="0" width="900" height="280" fill="#ffffff" />
+            <rect x="0" y="0" width="900" height="340" fill="#ffffff" />
             <text x="90" y="25" font-size="15" font-weight="700" fill="#172033">
               Softwareprojekt · Kumulierter Saldo (EUR)
             </text>
@@ -592,7 +596,8 @@ async function exportPng() {
           </button>
         </div>
         <p role="status">{{ exportStatus }}</p>
-        <div class="software-table-wrap">
+        <p class="software-table-hint">Tabelle auf kleineren Bildschirmen horizontal scrollen. Per Tastatur zuerst die Tabelle fokussieren.</p>
+        <div class="software-table-wrap" tabindex="0" role="region" aria-label="Monatswerte, horizontal scrollbar">
           <table class="software-table">
             <caption>
               Barrierefreie Monatsübersicht, Werte gerundet auf EUR
@@ -649,6 +654,12 @@ async function exportPng() {
 .software-block {
   display: grid;
   gap: var(--space-4);
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-panel);
+  padding: var(--space-5);
 }
 .software-heading,
 .software-entry-heading {
@@ -807,6 +818,11 @@ async function exportPng() {
   max-width: 100%;
   overflow-x: auto;
 }
+.software-table-hint {
+  margin: 0;
+  font-size: 0.83rem;
+  color: var(--color-text-muted);
+}
 .software-table {
   width: 100%;
   border-collapse: collapse;
@@ -865,6 +881,9 @@ async function exportPng() {
   }
   .software-entry {
     padding: var(--space-3);
+  }
+  .software-block {
+    padding: var(--space-4);
   }
 }
 </style>
