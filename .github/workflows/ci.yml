@@ -47,12 +47,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Prettier-Diff für Export-Hotfix
-        run: |
-          npx prettier --write src/services/timelineExport.ts src/services/timelineExport.test.ts tests/e2e/reverse-timeline-export.spec.ts
-          git diff -- src/services/timelineExport.ts src/services/timelineExport.test.ts tests/e2e/reverse-timeline-export.spec.ts
-          git checkout -- src/services/timelineExport.ts src/services/timelineExport.test.ts tests/e2e/reverse-timeline-export.spec.ts
-
       - name: Formatierung prüfen
         run: npm run format:check
 
