@@ -510,8 +510,8 @@ async function exportPng() {
         </ul>
       </div>
       <p v-else-if="costs.length === 0 && metrics.length === 0" class="software-empty" data-testid="project-empty">
-        Lege zuerst eine Kostenposition und eine Kunden-Metric an oder öffne das ausdrücklich fiktive Beispiel.
-        Bis dahin wird keine wirtschaftliche Aussage erzeugt.
+        Lege zuerst eine Kostenposition und eine Kunden-Metric an oder öffne das ausdrücklich fiktive Beispiel. Bis
+        dahin wird keine wirtschaftliche Aussage erzeugt.
       </p>
       <template v-else>
         <div class="software-kpis">
@@ -583,8 +583,11 @@ async function exportPng() {
             </text>
             <text x="450" y="274" text-anchor="middle" font-size="13" fill="#374151">Projektmonat</text>
             <text x="90" y="302" font-size="14" font-weight="700" fill="#172033">
-              {{ plan?.sustainedBreakEvenMonth === null ? 'Amortisation bis Monat ' + horizon + ' nicht erreicht' :
-                'Amortisation bis Betrachtungsende: Projektmonat ' + plan?.sustainedBreakEvenMonth }}
+              {{
+                plan?.sustainedBreakEvenMonth === null
+                  ? 'Amortisation bis Monat ' + horizon + ' nicht erreicht'
+                  : 'Amortisation bis Betrachtungsende: Projektmonat ' + plan?.sustainedBreakEvenMonth
+              }}
             </text>
             <text x="90" y="326" font-size="13" fill="#374151">
               {{ 'Kumulierter wirtschaftlicher Saldo: ' + formatEuro(plan?.cumulativeEur ?? 0) + ' · Schätzung' }}
@@ -603,7 +606,9 @@ async function exportPng() {
           </button>
         </div>
         <p role="status">{{ exportStatus }}</p>
-        <p class="software-table-hint">Tabelle auf kleineren Bildschirmen horizontal scrollen. Per Tastatur zuerst die Tabelle fokussieren.</p>
+        <p class="software-table-hint">
+          Tabelle auf kleineren Bildschirmen horizontal scrollen. Per Tastatur zuerst die Tabelle fokussieren.
+        </p>
         <div class="software-table-wrap" tabindex="0" role="region" aria-label="Monatswerte, horizontal scrollbar">
           <table class="software-table">
             <caption>
