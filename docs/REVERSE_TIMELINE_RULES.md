@@ -39,6 +39,9 @@ Die folgenden Regeln sind **Toolbox-Produktentscheidungen**, nicht als offiziell
 17. Das optionale Feld „Warum dieses Datum?“ beschreibt einen kundenseitigen Termin-Treiber / Compelling Event und verändert die Datumsberechnung nicht. Rein sellerseitige Deadlines wie Quartalsende werden nicht als kundenseitiger Treiber dargestellt.
 18. Die Kundenansicht heißt Go-Live-Timeline bzw. Rückwärtsplanung. Sie wird nicht als vollständiger Go-Live Plan ausgegeben.
 19. SVG und PNG spiegeln denselben kundenfähigen Visualstil und dieselbe Semantik wider; interne Coaching-Wertungen werden dort nicht ergänzt.
+20. Der Export verwendet explizit denselben Sans-Systemschrift-Stack wie die UI und darf nicht auf die SVG-Default-Serifenschrift zurückfallen.
+21. Der Export besitzt getrennte Layout-Zonen für Header, Summary, Legende, Zeitachse, Prozesszeilen und Footer. Zwischen diesen Zonen gelten feste Abstände; die Go-Live-Linie und der Endmarker bleiben innerhalb einer rechten Safe Area.
+22. Vor der PNG-Rasterisierung wird auf `document.fonts.ready` gewartet, damit verfügbare UI-Schriften vor dem Rendering geladen sind.
 
 Der detaillierte Quellenabgleich ist in `docs/REVERSE_TIMELINE_SOURCE_QA.md` dokumentiert.
 

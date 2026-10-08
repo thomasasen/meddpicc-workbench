@@ -53,6 +53,55 @@ describe('buildCustomerTimelineSvg', () => {
     expect(svg).toContain('#22c55e')
     expect(svg).toContain('#8b5cf6')
     expect(svg).toContain('#15803d')
+    expect(svg).toContain(
+      "font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+    )
+    expect(svg).toContain('id="export-summary"')
+    expect(svg).toContain('id="export-legend"')
+    expect(svg).toContain('id="export-axis"')
+    expect(svg).toContain('id="export-rows"')
+    expect(svg).toContain('id="export-footer"')
+    expect(svg).toContain('data-export-safe-right="120"')
+  })
+
+  it('trennt Summary, Legende, Achse und Timeline in stabile Export-Zonen', () => {
+    const result = calculateReverseTimeline({
+      targetGoLiveDate: '2026-12-31',
+      referenceDate: '2026-10-08',
+      steps: [
+        {
+          id: 'implementation',
+          label: 'Implementierung / Rollout',
+          duration: 60,
+          durationUnit: 'business-days',
+          owner: 'shared',
+          area: 'implementation',
+        },
+        {
+          id: 'legal',
+          label: 'Legal / Datenschutz',
+          duration: 15,
+          durationUnit: 'business-days',
+          owner: 'customer',
+          area: 'paper-process',
+        },
+      ],
+    })
+
+    expect(result.success).toBe(true)
+    if (!result.success) return
+
+    const svg = buildCustomerTimelineSvg(result.plan, {
+      title: 'Go-Live-Timeline',
+      customerName: '',
+    })
+
+    expect(svg).toContain('id="export-summary" data-zone="summary" data-y="194" data-height="84"')
+    expect(svg).toContain('id="export-legend" data-zone="legend" data-y="318"')
+    expect(svg).toContain('id="export-axis" data-zone="axis" data-y="366"')
+    expect(svg).toContain('id="export-rows" data-zone="rows" data-y="386"')
+    expect(svg).toContain('Puffer zum Start: Fehlen')
+    expect(svg).toContain('fill="#9a3412"')
   })
 
   it('escaped kundenspezifische Texte im SVG', () => {
