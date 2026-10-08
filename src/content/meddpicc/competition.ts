@@ -12,7 +12,17 @@ function point(
   sourceNote: string,
   relatedKnowledge: ChecklistItem['relatedKnowledge'] = 'competition',
 ): ChecklistItem {
-  return { id, question, meaning, whyItMatters, signals, commonMisinterpretation, possibleQuestionsOrActions, sourceNote, relatedKnowledge }
+  return {
+    id,
+    question,
+    meaning,
+    whyItMatters,
+    signals,
+    commonMisinterpretation,
+    possibleQuestionsOrActions,
+    sourceNote,
+    relatedKnowledge,
+  }
 }
 
 // prettier-ignore
