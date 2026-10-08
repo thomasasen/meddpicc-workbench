@@ -1,6 +1,6 @@
 # Decision Criteria – Originalquellen-Gegencheck und simuliertes Autoren-Red-Team
 
-Stand: 08.10.2026 · Prüfung von PR #47, basierend auf dem weiterhin offenen PR #46.
+Stand: 08.10.2026 · Historischer fachlicher Gegencheck vor dem General-Merge. PR #46 und #47 wurden anschließend nacheinander in `main` gemergt.
 
 > **Wichtig:** Die Autoren wurden **nicht** kontaktiert. Das Red Team ist eine **simulierte fachliche Prüfung aus zwei dokumentierten Perspektiven**, die ausschließlich anhand der Originaltexte von Andy Whyte und Darius Lahoutifard rekonstruiert wurden. Es handelt sich nicht um Originalzitate oder reale Zustimmung der Autoren.
 
@@ -80,5 +80,5 @@ Die Abbildung ist ein Modell der **konkreten geprüften Alternativen**, keine Be
 
 - Unit-Tests prüfen nun ausdrücklich `customerEvaluation`, *Taking Score*, Kaufreife bei fehlenden Kriterien sowie die Aktionen für Value, Danger und Unique Differentiators.
 - Playwright prüft den neuen Knowledge-Block und nun **10** Checklist-Punkte.
-- **CI nach den Korrekturen erneut ausführen**; ein vorangegangener grüner CI-Lauf bestätigt die Änderungen dieses Reviews noch nicht.
-- PR #47 bleibt Draft, keine Nutzer-Sichtfreigabe, kein Merge. PR #46 bleibt ebenfalls unverändert offen.
+- **CI nach den Korrekturen erfolgreich:** vollständige Prüfung [#466](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37775141084), anschließend nach Retargeting auf `main` erneut [#470](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37778247899).
+- **General-Merge am 08.10.2026:** PR #46 und PR #47 nach ausdrücklicher Nutzeranweisung und grünen Checks erfolgreich nach `main` gemergt. Dieser Bericht dient weiterhin als nachvollziehbare fachliche QA-Dokumentation.
