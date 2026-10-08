@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import ChecklistView from '../views/ChecklistView.vue'
+import DiscoveryCallKnowledgeView from '../views/DiscoveryCallKnowledgeView.vue'
 import EconomicBuyerKnowledgeView from '../views/EconomicBuyerKnowledgeView.vue'
 import MetricsKnowledgeView from '../views/MetricsKnowledgeView.vue'
 import EvidenceView from '../views/EvidenceView.vue'
@@ -21,6 +22,17 @@ const router = createRouter({
       path: '/tools/reverse-timeline',
       name: 'reverse-timeline',
       component: ReverseTimelineView,
+    },
+    {
+      path: '/knowledge/discovery-call',
+      name: 'knowledge-discovery-call',
+      component: DiscoveryCallKnowledgeView,
+    },
+    {
+      path: '/checklists/discovery-call',
+      name: 'checklist-discovery-call',
+      component: ChecklistView,
+      props: { checklistId: 'discovery-call' },
     },
     {
       path: '/knowledge/metrics',
