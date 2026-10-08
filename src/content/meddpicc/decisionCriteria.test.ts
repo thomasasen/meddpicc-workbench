@@ -51,9 +51,9 @@ describe('Decision Criteria: content and source contract', () => {
     expect(decisionCriteriaKnowledge.misinterpretations.length).toBeGreaterThanOrEqual(5)
   })
 
-  it('offers nine fully explained checklist items without persistent qualification scores', () => {
+  it('offers ten fully explained checklist items without persistent qualification scores', () => {
     const ids = decisionCriteriaChecklist.items.map((item) => item.id)
-    expect(ids).toHaveLength(9)
+    expect(ids).toHaveLength(10)
     expect(new Set(ids).size).toBe(ids.length)
     for (const item of decisionCriteriaChecklist.items) {
       expect(item.question.length).toBeGreaterThan(10)
@@ -67,6 +67,17 @@ describe('Decision Criteria: content and source contract', () => {
     }
     expect(Object.keys(decisionCriteriaChecklist)).not.toContain('score')
     expect(Object.keys(decisionCriteriaKnowledge)).not.toContain('score')
+  })
+
+  it('elicits customer-side ratings, recognizes missing criteria as a risk and models proactive influence', () => {
+    expect(decisionCriteriaConcepts.customerEvaluation.commonMisinterpretation).toContain('interne Bewertung')
+    expect(decisionCriteriaConcepts.customerEvaluation.sourceNote).toContain('Taking Score')
+    expect(decisionCriteriaConcepts.origin.whyItMatters).toContain('vorbereiteten Kaufprozess')
+    expect(decisionCriteriaKnowledge.engagementGuidance).toHaveLength(3)
+    expect(decisionCriteriaKnowledge.engagementGuidance[1]?.meaning).toContain('gemeinsam')
+    expect(valueTriangleZones.find((zone) => zone.code === 'Value')?.action).toContain('Metrics')
+    expect(valueTriangleZones.find((zone) => zone.code === 'Danger')?.action).toContain('Anforderung')
+    expect(valueTriangleZones.find((zone) => zone.code === 'Unique Differentiators')?.action).toContain('Kundenbeispielen')
   })
 
   it('keeps all book provenance available separately from user-facing explanations', () => {
