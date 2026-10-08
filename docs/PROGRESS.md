@@ -127,6 +127,29 @@ Branch: `feat/metrics-knowledge-checklist`
 - Unit- und Playwright-Tests für Content, Navigation, Desktop und Mobile
 - keine Scoring-Logik und keine persistente Opportunity-Datenpflege
 
+## Discovery Call – Checklists & Knowledge (PR #46, wartet auf Sichtfreigabe)
+
+Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpicc-workbench/pull/46 · **Draft, offen, nicht gemergt** (Stand 08.10.2026).
+
+- Checklist → Discovery Call: 9 erklärende Prüfpunkte mit rein temporären Checkboxen
+- Wissen → Discovery Call: inhaltlich anhand Whyte und Lahoutifard geprüft, ergänzt um SPICED
+- SPICED S–P–I–CE–D mit natürlichen Einstiegs-/Vertiefungsfragen, MEDDPICC-Brücken und Evidenzlücken
+- ACE (Appreciate, Check End Time, End Goal) als praktischer Gesprächseinstieg
+- T.H.E.D., sieben Frageabsichten und vertiefendes Nachfragen
+- Source-QA-Matrix: `docs/DISCOVERY_CALL_SOURCE_QA.md`
+- **CI #445 vollständig erfolgreich**: Formatierung, Lint, Unit Tests, Build, Playwright Desktop/Mobile und Pages-Integrität (https://github.com/thomasasen/meddpicc-workbench/actions/runs/37756165637)
+- Desktop-/Mobile-Screenshots für Nutzerabnahme verfügbar
+- **Offene Freigabe:** sichtbare UI durch Nutzer abnehmen lassen; bis dahin kein Merge
+- kein CRM, keine KI-Runtime, kein Call-Protokoll und kein Deal-Scoring
+
+### Quellen-UX-Regel (08.10.2026)
+
+- Für **Discovery Call, Metrics und Economic Buyer** sind sichtbare Autoren-/Buchlabels aus Fachkarten, Überschriften und Erklärungstexten entfernt.
+- **Wissensseiten und sämtliche aktuellen Checklists** zeigen die Quellen und ggf. Unterschiede der Autoren nur am **Seitenende** im **standardmäßig geschlossenen** Bereich „Quellen und fachliche Einordnung anzeigen“.
+- Source-Notizen bleiben in den typisierten Datenmodellen und QA-Dokumenten erhalten; nur die Darstellung ändert sich.
+- Die verbindliche Designregel wurde in `AGENTS.md` festgehalten.
+- **Diese UX-Änderung liegt derzeit ausschließlich auf dem PR-#46-Branch**. Bereits gemergte Seiten in `main` sind bis zum Merge davon noch nicht betroffen.
+
 ## Aktueller T2-Stand
 
 ### Umgesetzt
@@ -137,6 +160,8 @@ Branch: `feat/metrics-knowledge-checklist`
 - Economic Buyer Knowledge
 - Economic Buyer Themen-Checklist
 - Economic-Buyer-Termin Checklist
+- Discovery-Call-Checklist (Feature-PR)
+- Discovery-Call-Knowledge (Feature-PR)
 
 ### Noch offen
 
@@ -146,7 +171,20 @@ Branch: `feat/metrics-knowledge-checklist`
 - Pain / Implication
 - Champion
 - Competition
-- weitere situative Checklists wie Discovery, POC, Pricing und Closing
+- weitere situative Checklists wie POC, Pricing und Closing
+
+## Nächste Priorität: Decision Criteria – vorbereitet, noch nicht implementiert
+
+**Als nächster eigenständiger Knowledge-/Checklist-Slice nach Discovery Call festgelegt am 08.10.2026.**
+
+- Umsetzungs-Prompt für Codex: `docs/prompts/DECISION_CRITERIA_IMPLEMENTATION.md`
+- Fachliches, aus den bereitgestellten EPUB-Kapiteln geprüftes Briefing: `docs/DECISION_CRITERIA_SOURCE_BRIEF.md`
+- Ziel: `/knowledge/decision-criteria` und `/checklists/decision-criteria` mit praxisnahen Erklärungen, Entscheidungsmaßstäben, Kriterienarten, Kundenevidenz, Differenzierung und kritischen Fehlinterpretationen.
+- Methodisch explizit: Whytes Technical/Economic/Relationship und Lahoutifards Vendor/Partner/Financial Justification/Capability Validation sowie Value Triangle (Value, Danger, Parity usw.); Gemeinsamkeiten ohne falsche Gleichsetzung zeigen.
+- Keine Decision Matrix, kein Criteria-Workshop-Tool, kein automatisches Deal-Scoring: diese Instrumente gehören später zur Phase T6.
+- Abhängigkeit: PR #46 vor einem normalen `main`-basierten Decision-Criteria-PR erst freigeben und mergen; alternativ sauberer **stacked Draft-PR** auf #46, niemals unbeabsichtigt PR #46 mitmergen.
+- Decision Criteria ist im Produkt **noch offen**. Weder Tests noch UI noch neuer PR sind dafür bereits implementiert.
+- Fachliche Reihenfolge danach: **Decision Process**, **Paper Process**, anschließend Pain/Implication, Champion, Competition.
 
 ## Nächste Roadmap-Blöcke
 

@@ -1,14 +1,5 @@
 <script setup lang="ts">
-import {
-  ArrowLeft,
-  BookOpen,
-  CheckCircle2,
-  CircleAlert,
-  Lightbulb,
-  MessageCircleQuestion,
-  Route,
-  UserRound,
-} from '@lucide/vue'
+import { ArrowLeft, CheckCircle2, CircleAlert, Lightbulb, MessageCircleQuestion, Route, UserRound } from '@lucide/vue'
 import { computed } from 'vue'
 
 import { economicBuyerConcepts, economicBuyerKnowledge } from '../content/meddpicc/economicBuyer'
@@ -146,12 +137,15 @@ const recognitionConcepts = computed(() =>
         </article>
       </section>
 
-      <section class="container knowledge-section" aria-labelledby="authors-title">
-        <article class="knowledge-source-card">
-          <BookOpen :size="21" aria-hidden="true" />
-          <div>
-            <p class="eyebrow">Fachlicher Hinweis</p>
-            <h2 id="authors-title">Whyte und Lahoutifard setzen hier unterschiedliche Akzente</h2>
+      <section class="container knowledge-section" aria-label="Praxis und Quellen">
+        <article class="knowledge-primary-card">
+          <p class="knowledge-practical-takeaway">
+            <strong>Für die Praxis:</strong> {{ economicBuyerKnowledge.authorPerspective.practicalTakeaway }}
+          </p>
+        </article>
+        <details class="knowledge-source-details">
+          <summary>Quellen und fachliche Einordnung anzeigen</summary>
+          <div class="knowledge-source-card">
             <div class="knowledge-author-grid">
               <div>
                 <strong>Andy Whyte</strong>
@@ -162,18 +156,11 @@ const recognitionConcepts = computed(() =>
                 <p>{{ economicBuyerKnowledge.authorPerspective.lahoutifard }}</p>
               </div>
             </div>
-            <p class="knowledge-practical-takeaway">
-              <strong>Für die Praxis:</strong> {{ economicBuyerKnowledge.authorPerspective.practicalTakeaway }}
-            </p>
-
-            <details class="knowledge-source-details">
-              <summary>Quellenabschnitte anzeigen</summary>
-              <ul>
-                <li v-for="source in economicBuyerKnowledge.sourceNotes" :key="source">{{ source }}</li>
-              </ul>
-            </details>
+            <ul>
+              <li v-for="source in economicBuyerKnowledge.sourceNotes" :key="source">{{ source }}</li>
+            </ul>
           </div>
-        </article>
+        </details>
       </section>
     </main>
   </div>

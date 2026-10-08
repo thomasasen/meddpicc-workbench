@@ -13,16 +13,19 @@ test('Metrics-Wissen von der Toolbox öffnen und Quellen-/Praxisbezug prüfen', 
   await expect(page.getByRole('heading', { name: 'Was sind Metrics?' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Woran erkenne ich eine belastbare Metric?' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Vom Pain zur Metric' })).toBeVisible()
-  await expect(page.getByText('Andy Whyte', { exact: true })).toBeVisible()
-  await expect(page.getByText('Darius Lahoutifard', { exact: true })).toBeVisible()
+  await expect(page.getByText('Andy Whyte', { exact: true })).not.toBeVisible()
+  await expect(page.getByText('Darius Lahoutifard', { exact: true })).not.toBeVisible()
 
   const misinterpretation = page.locator('.knowledge-detail').first()
   await misinterpretation.locator('summary').click()
   await expect(misinterpretation.locator('p')).toBeVisible()
 
-  const sourceDetails = page.getByText('Quellenabschnitte anzeigen')
+  const sourceDetails = page.getByText('Quellen und fachliche Einordnung anzeigen')
   await sourceDetails.click()
+  await expect(page.getByText('Andy Whyte', { exact: true })).toBeVisible()
+  await expect(page.getByText('Darius Lahoutifard', { exact: true })).toBeVisible()
   await expect(page.getByText(/Metrics 1 \(M1\)/)).toBeVisible()
+  await sourceDetails.click()
 
   expect(errors).toEqual([])
   await page.evaluate(() => {

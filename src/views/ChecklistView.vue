@@ -2,6 +2,7 @@
 import { ArrowLeft, BookOpen, CheckSquare2, CircleAlert, Lightbulb, MessageCircleQuestion } from '@lucide/vue'
 import { computed, ref, watch } from 'vue'
 
+import { discoveryCallChecklist } from '../content/meddpicc/discoveryCall'
 import { economicBuyerChecklists } from '../content/meddpicc/economicBuyer'
 import { metricsChecklists } from '../content/meddpicc/metrics'
 import type { ChecklistId } from '../content/meddpicc/types'
@@ -13,6 +14,7 @@ const props = defineProps<{
 const checked = ref<Record<string, boolean>>({})
 
 const checklist = computed(() => {
+  if (props.checklistId === 'discovery-call') return discoveryCallChecklist
   if (props.checklistId === 'metrics') return metricsChecklists.metrics
   return economicBuyerChecklists[props.checklistId]
 })
@@ -54,7 +56,13 @@ function checkboxId(itemId: string): string {
         <div>
           <div class="tool-intro-meta">
             <span class="tool-kind">Checklist</span>
-            <span>{{ props.checklistId === 'metrics' ? 'Metrics' : 'Economic Buyer' }}</span>
+            <span>{{
+              props.checklistId === 'metrics'
+                ? 'Metrics'
+                : props.checklistId === 'discovery-call'
+                  ? 'Discovery Call'
+                  : 'Economic Buyer'
+            }}</span>
           </div>
           <p class="eyebrow">{{ checklist.eyebrow }}</p>
           <h1 id="checklist-title">{{ checklist.title }}</h1>
@@ -147,9 +155,15 @@ function checkboxId(itemId: string): string {
                   :to="'/knowledge/' + item.relatedKnowledge"
                 >
                   <BookOpen :size="15" aria-hidden="true" />
-                  {{ item.relatedKnowledge === 'metrics' ? 'Metrics' : 'Economic Buyer' }} nachschlagen
+                  {{
+                    item.relatedKnowledge === 'metrics'
+                      ? 'Metrics'
+                      : item.relatedKnowledge === 'discovery-call'
+                        ? 'Discovery Call'
+                        : 'Economic Buyer'
+                  }}
+                  nachschlagen
                 </RouterLink>
-                <small v-if="item.sourceNote">{{ item.sourceNote }}</small>
               </div>
             </details>
           </article>
@@ -166,9 +180,13 @@ function checkboxId(itemId: string): string {
 
       <section class="container checklist-sources">
         <details class="knowledge-source-details">
-          <summary>Fachliche Quellenabschnitte anzeigen</summary>
+          <summary>Quellen und fachliche Einordnung anzeigen</summary>
           <ul>
             <li v-for="source in checklist.sourceNotes" :key="source">{{ source }}</li>
+            <li v-for="item in checklist.items" :key="item.id">
+              <strong>{{ item.question }}</strong>
+              <span v-if="item.sourceNote"> – {{ item.sourceNote }}</span>
+            </li>
           </ul>
         </details>
       </section>

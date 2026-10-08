@@ -13,8 +13,13 @@ test('öffnet Economic Buyer Wissen von der Startseite und erklärt das Thema pr
   await expect(page.getByRole('heading', { name: 'Was ist ein Economic Buyer?' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Typische Fehlinterpretationen' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Welche Fragen helfen mir?' })).toBeVisible()
+  await expect(page.getByText('Andy Whyte', { exact: true })).not.toBeVisible()
+  await expect(page.getByText('Darius Lahoutifard', { exact: true })).not.toBeVisible()
+  const sourceDetails = page.getByText('Quellen und fachliche Einordnung anzeigen')
+  await sourceDetails.click()
   await expect(page.getByText('Andy Whyte', { exact: true })).toBeVisible()
   await expect(page.getByText('Darius Lahoutifard', { exact: true })).toBeVisible()
+  await sourceDetails.click()
 
   const firstMisinterpretation = page.locator('.knowledge-detail').first()
   await firstMisinterpretation.locator('summary').click()
