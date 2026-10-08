@@ -9,11 +9,38 @@ import { economicBuyerChecklists } from '../content/meddpicc/economicBuyer'
 import { metricsChecklists } from '../content/meddpicc/metrics'
 import { painImplicationChecklist } from '../content/meddpicc/painImplication'
 import { paperProcessChecklist } from '../content/meddpicc/paperProcess'
-import type { ChecklistId } from '../content/meddpicc/types'
+import type { ChecklistId, KnowledgeTopicId } from '../content/meddpicc/types'
 
 const props = defineProps<{
   checklistId: ChecklistId
 }>()
+
+const checklistLabels: Record<ChecklistId, string> = {
+  'economic-buyer': 'Economic Buyer',
+  'economic-buyer-meeting': 'Economic Buyer',
+  metrics: 'Metrics',
+  'discovery-call': 'Discovery Call',
+  'decision-criteria': 'Decision Criteria',
+  'decision-process': 'Decision Process',
+  'paper-process': 'Paper Process',
+  'pain-implication': 'Pain / Implication',
+}
+
+const knowledgeLabels: Record<KnowledgeTopicId, string> = {
+  'economic-buyer': 'Economic Buyer',
+  metrics: 'Metrics',
+  'discovery-call': 'Discovery Call',
+  'decision-criteria': 'Decision Criteria',
+  'decision-process': 'Decision Process',
+  'paper-process': 'Paper Process',
+  'pain-implication': 'Pain / Implication',
+}
+
+const checklistContextLabel = computed(() => checklistLabels[props.checklistId])
+
+function knowledgeLabel(topic: KnowledgeTopicId | undefined): string {
+  return topic ? knowledgeLabels[topic] : ''
+}
 
 const checked = ref<Record<string, boolean>>({})
 
@@ -64,21 +91,7 @@ function checkboxId(itemId: string): string {
         <div>
           <div class="tool-intro-meta">
             <span class="tool-kind">Checklist</span>
-            <span>{{
-              props.checklistId === 'decision-process'
-                ? 'Decision Process'
-                : props.checklistId === 'paper-process'
-                  ? 'Paper Process'
-                  : props.checklistId === 'pain-implication'
-                    ? 'Pain / Implication'
-                  : props.checklistId === 'decision-criteria'
-                    ? 'Decision Criteria'
-                    : props.checklistId === 'metrics'
-                      ? 'Metrics'
-                      : props.checklistId === 'discovery-call'
-                        ? 'Discovery Call'
-                        : 'Economic Buyer'
-            }}</span>
+            <span>{{ checklistContextLabel }}</span>
           </div>
           <p class="eyebrow">{{ checklist.eyebrow }}</p>
           <h1 id="checklist-title">{{ checklist.title }}</h1>
@@ -171,21 +184,7 @@ function checkboxId(itemId: string): string {
                   :to="'/knowledge/' + item.relatedKnowledge"
                 >
                   <BookOpen :size="15" aria-hidden="true" />
-                  {{
-                    item.relatedKnowledge === 'decision-process'
-                      ? 'Decision Process'
-                      : item.relatedKnowledge === 'paper-process'
-                        ? 'Paper Process'
-                        : item.relatedKnowledge === 'pain-implication'
-                          ? 'Pain / Implication'
-                        : item.relatedKnowledge === 'decision-criteria'
-                          ? 'Decision Criteria'
-                          : item.relatedKnowledge === 'metrics'
-                            ? 'Metrics'
-                            : item.relatedKnowledge === 'discovery-call'
-                              ? 'Discovery Call'
-                              : 'Economic Buyer'
-                  }}
+                  {{ knowledgeLabel(item.relatedKnowledge) }}
                   nachschlagen
                 </RouterLink>
               </div>
