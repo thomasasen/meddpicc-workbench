@@ -21,7 +21,7 @@ export const economicBuyerConcepts = {
       'Welche Person müsste dem Business Case zustimmen, damit die Investition tatsächlich freigegeben wird?',
     ],
     learnMore:
-      'Whyte warnt sowohl vor dem Budget-Holder-Fehler als auch davor, automatisch eine zu weit entfernte C-Level-Person zum Economic Buyer zu erklären. Entscheidend ist die tatsächliche Autorität im konkreten Vorhaben.',
+      'Weder ein Budget Holder noch automatisch die ranghöchste Führungsperson ist zwingend der Economic Buyer. Entscheidend ist die tatsächliche wirtschaftliche Autorität im konkreten Vorhaben.',
     sourceNote:
       'Whyte → Economic Buyer: Identifying the Economic Buyer / Qualifying Criteria; Lahoutifard → Chapter Four: Economic Buyer.',
   },
@@ -44,7 +44,7 @@ export const economicBuyerConcepts = {
       'Was wäre für Sie ein sichtbares Zeichen dafür, dass die Investition erfolgreich war?',
     ],
     learnMore:
-      'Whyte empfiehlt, mit dem Economic Buyer über Business Objectives und Outcomes statt über „bells and whistles“ zu sprechen. Lahoutifard formuliert denselben Gedanken als „WHY“-Frequenz für Top Management.',
+      'Sprich mit dem Economic Buyer über Business Objectives, Outcomes und die wirtschaftliche Wirkung, nicht vorrangig über Produktfunktionen.',
     sourceNote:
       'Whyte → Talk in the Language of the Economic Buyer / How Economic Buyers Make Decisions; Lahoutifard → Tune Your Sales Pitch to the Right Frequency.',
   },
@@ -67,7 +67,7 @@ export const economicBuyerConcepts = {
       'Wann müsste der Nutzen sichtbar werden, damit die Investition für Sie attraktiv ist?',
     ],
     learnMore:
-      'Whyte schlägt vor, den Economic Buyer nach seinem eigenen Erfolgsindikator zu fragen. Lahoutifard betont, Metrics je Stakeholder auf die passende wirtschaftliche Bedeutung zu übersetzen.',
+      'Frage den Economic Buyer nach seinen eigenen Erfolgsindikatoren und übersetze Metrics in die für ihn relevante wirtschaftliche Bedeutung.',
     sourceNote:
       'Whyte → First Interaction Guidance / How Economic Buyers Make Decisions; Lahoutifard → How to Align Metrics with Your Message.',
   },
@@ -90,7 +90,7 @@ export const economicBuyerConcepts = {
       'Was müsste im Business Case noch klarer werden, damit Sie eine Entscheidung treffen können?',
     ],
     learnMore:
-      'Whyte beschreibt Cost, Completion und Confidence als typische Perspektiven des Economic Buyers. Die Toolbox behandelt sie als Denkhilfe, nicht als starre offizielle MEDDPICC-Formel.',
+      'Cost, Completion und Confidence helfen, typische Perspektiven auf eine Investition zu betrachten. Sie sind eine Denkhilfe, keine starre Qualifizierungsformel.',
     sourceNote:
       'Whyte → How Economic Buyers Make Decisions; Lahoutifard → Chapter Four: The Meeting with the Economic Buyer.',
   },
@@ -113,7 +113,7 @@ export const economicBuyerConcepts = {
       'Falls ein direkter Termin aktuell nicht möglich ist: Welche Kriterien, Prioritäten und Einwände kann ich mit dem Champion belastbar vorbereiten, während ich weiter an sinnvollem EB-Zugang arbeite?',
     ],
     learnMore:
-      'Whyte beschreibt den Champion als wichtigen Weg zur Identifikation, Einführung und Vorbereitung, empfiehlt aber zugleich, eine eigene Engagement-Strategie zu entwickeln. Lahoutifard misst dem frühen EB-Meeting besonders hohe Bedeutung bei.',
+      'Nutze den Champion, um die wirtschaftliche Autorität zu identifizieren, Termine vorzubereiten und Zugang herzustellen. Plane gleichzeitig eine passende eigene Kontaktstrategie.',
     sourceNote:
       'Whyte → Your Champion and the Economic Buyer / Other Ways to Engage; Lahoutifard → The Meeting with the Economic Buyer.',
   },
@@ -136,7 +136,7 @@ export const economicBuyerConcepts = {
       'Wen sollten wir für den nächsten Schritt gemeinsam einbinden?',
     ],
     learnMore:
-      'Whyte empfiehlt, Meetings mit klaren Actions und Owners zu schließen. Lahoutifard verbindet das EB-Meeting ebenfalls mit konkreten nächsten Schritten und der Validierung des Decision Process.',
+      'Schließe das Meeting mit klaren Handlungen, Zuständigkeiten und einer gemeinsamen Bestätigung der nächsten Schritte im Decision Process.',
     sourceNote: 'Whyte → Close Strong / Follow-Up; Lahoutifard → The Meeting with the Economic Buyer.',
   },
   evidence: {
@@ -157,7 +157,7 @@ export const economicBuyerConcepts = {
       'Welche Person könnte unsere Annahme zur Entscheidungsautorität verlässlich bestätigen?',
     ],
     learnMore:
-      'Beide Autoren zeigen, dass die Identifikation des Economic Buyers aktiv qualifiziert werden muss. Die Toolbox macht daraus keine Punktzahl, sondern fordert nachvollziehbare Hinweise.',
+      'Die Identifikation des Economic Buyers muss anhand nachvollziehbarer Hinweise qualifiziert werden. Es geht um tatsächliche Autorität, nicht um eine Punktzahl.',
     sourceNote: 'Whyte → Identifying the Economic Buyer; Lahoutifard → How do you find the EB?',
   },
 } satisfies Record<string, MeddpiccConcept>
@@ -182,7 +182,7 @@ export const economicBuyerKnowledge: KnowledgeTopic = {
     {
       claim: '„Der höchste Titel muss der Economic Buyer sein.“',
       explanation:
-        'Zu senior kann genauso falsch sein wie zu junior. Whyte beschreibt ausdrücklich den Fehler, automatisch den CEO zu nominieren, obwohl diese Person vom konkreten Decision Process zu weit entfernt sein kann.',
+        'Zu senior kann genauso falsch sein wie zu junior. Der CEO ist nicht automatisch der Economic Buyer, wenn die Person vom konkreten Decision Process zu weit entfernt ist.',
     },
     {
       claim: '„Wer das Budget besitzt, ist automatisch der Economic Buyer.“',
