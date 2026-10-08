@@ -87,8 +87,8 @@ const recognitionConcepts = computed(() =>
             <p class="eyebrow">Einordnen</p>
             <h2 id="recognition-title">Woran erkenne ich eine belastbare Metric?</h2>
             <p class="section-note">
-              Die Kriterien sind Denkhilfen und kein Score. Zahlen aus Referenzprojekten sind erst dann kundenspezifische
-              Evidenz, wenn die Annahmen mit dem aktuellen Kunden überprüft wurden.
+              Die Kriterien sind Denkhilfen und kein Score. Zahlen aus Referenzprojekten sind erst dann
+              kundenspezifische Evidenz, wenn die Annahmen mit dem aktuellen Kunden überprüft wurden.
             </p>
           </div>
         </div>

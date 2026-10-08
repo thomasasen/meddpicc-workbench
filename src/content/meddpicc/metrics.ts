@@ -67,8 +67,7 @@ export const metricsConcepts = {
     ],
     learnMore:
       'Lahoutifard strukturiert den Economic Impact über Revenue, Cost und Risk. Whyte betont, dass Metrics den Business Case für die Investition stützen und nicht nur Produkt-KPIs abbilden.',
-    sourceNote:
-      'Whyte → Metrics 2 (M2) / Summary of Metrics; Lahoutifard → Metrics and the Economic Impact.',
+    sourceNote: 'Whyte → Metrics 2 (M2) / Summary of Metrics; Lahoutifard → Metrics and the Economic Impact.',
   },
   proofToCustomerMetric: {
     id: 'proof-to-customer-metric',
@@ -90,8 +89,7 @@ export const metricsConcepts = {
     ],
     learnMore:
       'Whyte trennt M1 als Proof Points bestehender Kunden von M2 als kundenspezifisch erarbeiteten Metrics bzw. ROI. Lahoutifard unterscheidet ebenfalls bestehende Kunden als Quelle glaubwürdiger Beispiele von Metrics, die mit dem Prospect selbst erarbeitet werden.',
-    sourceNote:
-      'Whyte → Metrics 1 (M1) / Metrics 2 (M2); Lahoutifard → Sources of Metrics.',
+    sourceNote: 'Whyte → Metrics 1 (M1) / Metrics 2 (M2); Lahoutifard → Sources of Metrics.',
   },
   customerValidation: {
     id: 'customer-validation',
@@ -104,8 +102,7 @@ export const metricsConcepts = {
       'Der Champion kann die Rechenlogik selbst erklären.',
       'Die Metric hält auch kritischen Rückfragen anderer Stakeholder stand.',
     ],
-    commonMisinterpretation:
-      '„Wenn die Excel-Rechnung mathematisch stimmt, ist die Metric automatisch validiert.“',
+    commonMisinterpretation: '„Wenn die Excel-Rechnung mathematisch stimmt, ist die Metric automatisch validiert.“',
     possibleQuestionsOrActions: [
       'Welche Eingangsgrößen würden Sie selbst für diese Rechnung verwenden?',
       'Welche Annahme würden Sie intern am ehesten hinterfragen?',
