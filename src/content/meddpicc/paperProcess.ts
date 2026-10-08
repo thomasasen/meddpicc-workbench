@@ -180,7 +180,7 @@ const paperProcessItems: ChecklistItem[] = [
       'Rekonstruiere den tatsächlichen administrativen Prozess bis zum Abschluss. Unbekannte Schritte bleiben offen, auch wenn du bevorzugter Anbieter bist.',
     whyItMatters: 'Der Verkäufer-Funnel ersetzt keine kundenseitige Beschaffungslogik.',
     signals: [
-      'Kunde beschreibt alle bekannten Stationen samt Abschlusskriterium; offene Annahmen sind kenntlich gemacht.'
+      'Kunde beschreibt alle bekannten Stationen samt Abschlusskriterium; offene Annahmen sind kenntlich gemacht.',
       'Schriftlicher Plan unterscheidet Kundengenehmigungen von angebotenen Seller-Beiträgen.'
     ],
     commonMisinterpretation: 'Der Zuschlag sei bereits eine verbindliche Kaufzusage.',
@@ -342,7 +342,7 @@ const paperProcessItems: ChecklistItem[] = [
     whyItMatters:
       'Ein Seller-Angebot oder internes Meeting ist kein Käuferabschluss. Selbst unterschriebene Unterlagen müssen im vorhandenen Vertriebsprozess korrekt erfasst werden, ohne dass diese Checklist ein CRM ersetzt.',
     signals: [
-      'Zuständige Person bestätigt erledigte Kundenschritte; die erforderliche Bestellung oder Signatur ist tatsächlich dokumentiert.'
+      'Zuständige Person bestätigt erledigte Kundenschritte; die erforderliche Bestellung oder Signatur ist tatsächlich dokumentiert.',
       'Bestell-/Signaturtermin und Implementierungsdauer passen zum Go-Live.',
     ],
     commonMisinterpretation:
