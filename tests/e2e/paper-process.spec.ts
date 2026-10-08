@@ -1,11 +1,15 @@
 import { expect, test } from '@playwright/test'
 
-test('Paper-Process-Wissen ist über die Startseite erreichbar und grenzt die Prozesse ab', async ({ page }, testInfo) => {
+test('Paper-Process-Wissen ist über die Startseite erreichbar und grenzt die Prozesse ab', async ({
+  page,
+}, testInfo) => {
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
   await page.goto('/meddpicc-workbench/')
   await page.locator('a[href$="#/knowledge/paper-process"]').click()
-  await expect(page.getByRole('heading', { name: 'Paper Process: den Weg bis zur Unterschrift verstehen' })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Paper Process: den Weg bis zur Unterschrift verstehen' }),
+  ).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Entscheidung, Approval und Paper Process' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Prozess, Personen und Timing' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Was je nach Kunde dazugehören kann' })).toBeVisible()

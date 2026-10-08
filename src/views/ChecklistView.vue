@@ -67,13 +67,13 @@ function checkboxId(itemId: string): string {
                 ? 'Decision Process'
                 : props.checklistId === 'paper-process'
                   ? 'Paper Process'
-                : props.checklistId === 'decision-criteria'
-                  ? 'Decision Criteria'
-                  : props.checklistId === 'metrics'
-                    ? 'Metrics'
-                    : props.checklistId === 'discovery-call'
-                      ? 'Discovery Call'
-                      : 'Economic Buyer'
+                  : props.checklistId === 'decision-criteria'
+                    ? 'Decision Criteria'
+                    : props.checklistId === 'metrics'
+                      ? 'Metrics'
+                      : props.checklistId === 'discovery-call'
+                        ? 'Discovery Call'
+                        : 'Economic Buyer'
             }}</span>
           </div>
           <p class="eyebrow">{{ checklist.eyebrow }}</p>
@@ -172,13 +172,13 @@ function checkboxId(itemId: string): string {
                       ? 'Decision Process'
                       : item.relatedKnowledge === 'paper-process'
                         ? 'Paper Process'
-                      : item.relatedKnowledge === 'decision-criteria'
-                        ? 'Decision Criteria'
-                        : item.relatedKnowledge === 'metrics'
-                          ? 'Metrics'
-                          : item.relatedKnowledge === 'discovery-call'
-                            ? 'Discovery Call'
-                            : 'Economic Buyer'
+                        : item.relatedKnowledge === 'decision-criteria'
+                          ? 'Decision Criteria'
+                          : item.relatedKnowledge === 'metrics'
+                            ? 'Metrics'
+                            : item.relatedKnowledge === 'discovery-call'
+                              ? 'Discovery Call'
+                              : 'Economic Buyer'
                   }}
                   nachschlagen
                 </RouterLink>

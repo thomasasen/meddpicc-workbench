@@ -21,50 +21,59 @@ export const paperProcessKnowledge = {
     {
       title: 'Business Approval',
       definition: 'Wer genehmigt Nutzen, Finanzierung und kaufmännische Bedingungen?',
-      example: 'Eine zuständige Führungskraft oder ein Gremium gibt die Investition frei. Freigabe und Vertragsprüfung können sich überschneiden.',
+      example:
+        'Eine zuständige Führungskraft oder ein Gremium gibt die Investition frei. Freigabe und Vertragsprüfung können sich überschneiden.',
     },
     {
       title: 'Paper Process',
       definition: 'Wie wird aus der beabsichtigten Beauftragung eine formale Bestellung oder Unterschrift?',
-      example: 'Der kundenspezifische Bestell- und Vertragsweg wird mit Einkauf, Legal und den weiteren beteiligten Stellen geklärt.',
+      example:
+        'Der kundenspezifische Bestell- und Vertragsweg wird mit Einkauf, Legal und den weiteren beteiligten Stellen geklärt.',
     },
   ],
   dimensions: [
     {
       title: 'Prozess',
-      meaning: 'Welche Schritte und Dokumente sind hier tatsächlich notwendig? Was muss vorher abgeschlossen sein, was darf parallel laufen?',
+      meaning:
+        'Welche Schritte und Dokumente sind hier tatsächlich notwendig? Was muss vorher abgeschlossen sein, was darf parallel laufen?',
       question: 'Was passiert nach der Auswahl bis zur Bestellung – und was passiert danach noch?',
     },
     {
       title: 'Personen',
-      meaning: 'Wer verantwortet, prüft und genehmigt jeden Schritt? Wer darf unterschreiben und wer vertritt die Person bei Abwesenheit?',
+      meaning:
+        'Wer verantwortet, prüft und genehmigt jeden Schritt? Wer darf unterschreiben und wer vertritt die Person bei Abwesenheit?',
       question: 'Mit wem können wir die einzelnen Stationen unmittelbar gegenprüfen?',
     },
     {
       title: 'Timing',
-      meaning: 'Welche Bearbeitungszeiten, Sitzungsrhythmen, Abwesenheiten und Rückläufe wurden kundenseitig bestätigt?',
+      meaning:
+        'Welche Bearbeitungszeiten, Sitzungsrhythmen, Abwesenheiten und Rückläufe wurden kundenseitig bestätigt?',
       question: 'Wie lange dauert das in einem vergleichbaren Einkaufsvorgang tatsächlich?',
     },
   ],
   examples: [
     {
       title: 'Einkauf und Lieferantenanlage',
-      detail: 'Falls erforderlich: Lieferantenregistrierung, Konditionenklärung oder Beschaffungsfreigabe. Nicht jeder Kunde nutzt denselben Einkaufspfad.',
+      detail:
+        'Falls erforderlich: Lieferantenregistrierung, Konditionenklärung oder Beschaffungsfreigabe. Nicht jeder Kunde nutzt denselben Einkaufspfad.',
       owner: 'Procurement oder die konkret zuständige Einkaufsstelle',
     },
     {
       title: 'Vertrag und Dokumente',
-      detail: 'Je nach Deal beispielsweise Vertragsentwurf, Rahmenvertrag (MSA), Leistungsbeschreibung (SOW) oder Vereinbarung zur Auftragsverarbeitung (AVV).',
+      detail:
+        'Je nach Deal beispielsweise Vertragsentwurf, Rahmenvertrag (MSA), Leistungsbeschreibung (SOW) oder Vereinbarung zur Auftragsverarbeitung (AVV).',
       owner: 'Legal, Vertragsverantwortliche und gegebenenfalls Datenschutz',
     },
     {
       title: 'Security und Datenschutz',
-      detail: 'Falls relevant: Fragebögen, Prüfberichte, AVV und weitere interne Freigaben. Einzelne Prüfungen lassen sich möglicherweise frühzeitig starten.',
+      detail:
+        'Falls relevant: Fragebögen, Prüfberichte, AVV und weitere interne Freigaben. Einzelne Prüfungen lassen sich möglicherweise frühzeitig starten.',
       owner: 'IT-Security und Datenschutzverantwortliche',
     },
     {
       title: 'Budget, Bestellung, Unterschrift',
-      detail: 'Kläre, ob Budgetbestätigung, Bestellnummer (PO) und Signatur notwendig sind und welcher Schritt wovon abhängt. Kein universeller Ablauf.',
+      detail:
+        'Kläre, ob Budgetbestätigung, Bestellnummer (PO) und Signatur notwendig sind und welcher Schritt wovon abhängt. Kein universeller Ablauf.',
       owner: 'Budgetverantwortliche, Einkauf und zeichnungsbefugte Person',
     },
   ],
@@ -138,7 +147,8 @@ export const paperProcessKnowledge = {
   perspectives: [
     {
       author: 'Andy Whyte',
-      source: 'MEDDICC → PAPER PROCESS: You Need Your Champion; The 3 Key Elements of any Paper Process; Paper Process and Go-Live Plan; Paper Process and your Sales Process.',
+      source:
+        'MEDDICC → PAPER PROCESS: You Need Your Champion; The 3 Key Elements of any Paper Process; Paper Process and Go-Live Plan; Paper Process and your Sales Process.',
       summary:
         'Eigenes MEDDPICC-Element mit den Achsen Prozess, Personen und Timing. Champion und gemeinsame Go-Live-Planung helfen, Abhängigkeiten, Vertretungen und Laufzeiten bis zur Signatur zu prüfen.',
     },
@@ -160,77 +170,121 @@ const paperProcessItems: ChecklistItem[] = [
   {
     id: 'customer-chain',
     question: 'Ist der kundenseitige Weg von der Auswahl bis zur Bestellung wirklich bekannt?',
-    meaning: 'Rekonstruiere den tatsächlichen administrativen Prozess bis zum Abschluss. Unbekannte Schritte bleiben offen, auch wenn du bevorzugter Anbieter bist.',
+    meaning:
+      'Rekonstruiere den tatsächlichen administrativen Prozess bis zum Abschluss. Unbekannte Schritte bleiben offen, auch wenn du bevorzugter Anbieter bist.',
     whyItMatters: 'Der Verkäufer-Funnel ersetzt keine kundenseitige Beschaffungslogik.',
-    signals: ['Kunde beschreibt alle bekannten Stationen samt Abschlusskriterium.', 'Offene Schritte werden als offene Fragen sichtbar.'],
+    signals: [
+      'Kunde beschreibt alle bekannten Stationen samt Abschlusskriterium.',
+      'Offene Schritte werden als offene Fragen sichtbar.',
+    ],
     commonMisinterpretation: 'Der Zuschlag sei bereits eine verbindliche Kaufzusage.',
-    possibleQuestionsOrActions: ['Was passiert danach, und was danach?', 'Wer bestätigt die vollständige Prozesskette?'],
+    possibleQuestionsOrActions: [
+      'Was passiert danach, und was danach?',
+      'Wer bestätigt die vollständige Prozesskette?',
+    ],
     relatedKnowledge: 'paper-process',
     sourceNote: 'Whyte → PAPER PROCESS: The Process; Lahoutifard → Chapter Six: Paper Process.',
   },
   {
     id: 'stakeholders',
     question: 'Sind für jeden relevanten Schritt zuständige Personen und Vertretungen benannt?',
-    meaning: 'Ermittle die fachlich zuständigen Verantwortlichen, Entscheider und eine mögliche Vertretung bei Abwesenheit.',
+    meaning:
+      'Ermittle die fachlich zuständigen Verantwortlichen, Entscheider und eine mögliche Vertretung bei Abwesenheit.',
     whyItMatters: 'Ohne tatsächliche Zuständigkeit wird ein Termin schnell zu einer bloßen Erwartung.',
     signals: ['Verantwortliche Person je Station bekannt.', 'Verfügbarkeit und gegebenenfalls Vertretung abgeklärt.'],
     commonMisinterpretation: 'Der Champion kenne alle Rollen und könne sie selbst ersetzen.',
-    possibleQuestionsOrActions: ['Wer ist bei Einkauf und Legal verantwortlich?', 'Wer springt bei Urlaub oder Krankheit ein?'],
+    possibleQuestionsOrActions: [
+      'Wer ist bei Einkauf und Legal verantwortlich?',
+      'Wer springt bei Urlaub oder Krankheit ein?',
+    ],
     relatedKnowledge: 'paper-process',
     sourceNote: 'Whyte → PAPER PROCESS: The People; You Need Your Champion.',
   },
   {
     id: 'procurement',
     question: 'Ist geklärt, ob Einkauf oder Lieferantenanlage einbezogen werden müssen?',
-    meaning: 'Prüfe die tatsächlichen Beschaffungsvorgaben des Kunden. Eine Lieferantenanlage kann erforderlich sein, muss es aber nicht.',
+    meaning:
+      'Prüfe die tatsächlichen Beschaffungsvorgaben des Kunden. Eine Lieferantenanlage kann erforderlich sein, muss es aber nicht.',
     whyItMatters: 'Ein unbekannter Einkaufsschritt kann die Bestellung verzögern, auch nach der Auswahl.',
-    signals: ['Einkauf bestätigt seinen konkreten Ablauf oder die Nichtzuständigkeit.', 'Benötigte Unterlagen sind identifiziert.'],
+    signals: [
+      'Einkauf bestätigt seinen konkreten Ablauf oder die Nichtzuständigkeit.',
+      'Benötigte Unterlagen sind identifiziert.',
+    ],
     commonMisinterpretation: 'Jeder Deal durchlaufe dieselbe starre Einkaufskette.',
-    possibleQuestionsOrActions: ['Wie lösen Sie bei vergleichbaren SaaS-Projekten Bestellungen aus?', 'Brauchen Sie eine neue Lieferantenanlage?'],
+    possibleQuestionsOrActions: [
+      'Wie lösen Sie bei vergleichbaren SaaS-Projekten Bestellungen aus?',
+      'Brauchen Sie eine neue Lieferantenanlage?',
+    ],
     relatedKnowledge: 'paper-process',
-    sourceNote: 'Lahoutifard → Chapter Six: Paper Process (Procurement); Praxisbeispiel Lieferantenanlage: nicht durch Primärquellen belegt.',
+    sourceNote:
+      'Lahoutifard → Chapter Six: Paper Process (Procurement); Praxisbeispiel Lieferantenanlage: nicht durch Primärquellen belegt.',
   },
   {
     id: 'contract',
     question: 'Sind Vertragsprüfung, Unterlagen und mögliche Verhandlungspunkte geklärt?',
-    meaning: 'Erfrage, ob Legal eingebunden ist und welche Unterlagen der konkrete Deal benötigt, beispielsweise MSA oder SOW.',
+    meaning:
+      'Erfrage, ob Legal eingebunden ist und welche Unterlagen der konkrete Deal benötigt, beispielsweise MSA oder SOW.',
     whyItMatters: 'Unbekannte Vertragsklauseln können einen scheinbar fertigen Abschluss blockieren.',
     signals: ['Zuständiges Legal-Team und Dokumentenstand bestätigt.', 'Offene Vertragsfragen und Rückläufe benannt.'],
     commonMisinterpretation: 'Ein verschickter Vertragsentwurf bedeute bereits rechtliche Freigabe.',
-    possibleQuestionsOrActions: ['Welche Vertragsfassung prüfen Sie?', 'Können wir kritische Klauseln vorab gemeinsam identifizieren?'],
+    possibleQuestionsOrActions: [
+      'Welche Vertragsfassung prüfen Sie?',
+      'Können wir kritische Klauseln vorab gemeinsam identifizieren?',
+    ],
     relatedKnowledge: 'paper-process',
     sourceNote: 'Whyte → PAPER PROCESS: Early-Stages; Lahoutifard → Chapter Six: Paper Process (Legal).',
   },
   {
     id: 'data-security',
     question: 'Sind Datenschutz- und Security-Prüfungen dort eingeplant, wo sie nötig sind?',
-    meaning: 'Prüfe, ob dieser SaaS-Kauf eine AVV, Security-Prüfung oder weitere Nachweise auslöst. Nicht jede Organisation verlangt dieselben Schritte.',
+    meaning:
+      'Prüfe, ob dieser SaaS-Kauf eine AVV, Security-Prüfung oder weitere Nachweise auslöst. Nicht jede Organisation verlangt dieselben Schritte.',
     whyItMatters: 'Solche Prüfungen können auf dem kritischen Pfad liegen oder möglicherweise früher stattfinden.',
-    signals: ['Zuständige Stellen bestätigen Bedarf und Status.', 'Unabhängige Prüfungen werden nur zulässig parallel geplant.'],
-    commonMisinterpretation: 'Security und Datenschutz seien in jedem Deal Pflicht und immer erst nach der Auswahl dran.',
-    possibleQuestionsOrActions: ['Gibt es eine notwendige Security- oder Datenschutzprüfung?', 'Dürfen wir Unterlagen bereits vor der Auswahl einreichen?'],
+    signals: [
+      'Zuständige Stellen bestätigen Bedarf und Status.',
+      'Unabhängige Prüfungen werden nur zulässig parallel geplant.',
+    ],
+    commonMisinterpretation:
+      'Security und Datenschutz seien in jedem Deal Pflicht und immer erst nach der Auswahl dran.',
+    possibleQuestionsOrActions: [
+      'Gibt es eine notwendige Security- oder Datenschutzprüfung?',
+      'Dürfen wir Unterlagen bereits vor der Auswahl einreichen?',
+    ],
     relatedKnowledge: 'paper-process',
-    sourceNote: 'Whyte → PAPER PROCESS: Summary of Paper Process (Security); AVV als situatives Praxisbeispiel: nicht durch Primärquellen belegt.',
+    sourceNote:
+      'Whyte → PAPER PROCESS: Summary of Paper Process (Security); AVV als situatives Praxisbeispiel: nicht durch Primärquellen belegt.',
   },
   {
     id: 'approval-po',
     question: 'Sind kaufmännische Freigabe, Budget und möglicher PO-Prozess getrennt geprüft?',
-    meaning: 'Unterscheide wirtschaftliche Genehmigung von der administrativen Ausstellung einer Bestellung. Eine PO-Nummer ist nicht überall der einzige Vertragsweg.',
+    meaning:
+      'Unterscheide wirtschaftliche Genehmigung von der administrativen Ausstellung einer Bestellung. Eine PO-Nummer ist nicht überall der einzige Vertragsweg.',
     whyItMatters: 'Ein freigegebenes Budget beweist nicht, dass Einkauf oder Vertragsabschluss erledigt sind.',
     signals: ['Zuständige Stelle bestätigt Freigabestatus.', 'Ob und wann eine PO erforderlich ist, ist geklärt.'],
     commonMisinterpretation: 'Budget vorhanden bedeute Bestellung erfolgt.',
-    possibleQuestionsOrActions: ['Wer bestätigt die Finanzierung formal?', 'Ist eine PO notwendig, und welcher Schritt löst sie aus?'],
+    possibleQuestionsOrActions: [
+      'Wer bestätigt die Finanzierung formal?',
+      'Ist eine PO notwendig, und welcher Schritt löst sie aus?',
+    ],
     relatedKnowledge: 'paper-process',
     sourceNote: 'Lahoutifard → Chapter Six: Decision & Paper Process (Approval; Purchase Order).',
   },
   {
     id: 'signatory',
     question: 'Sind Unterschriftsberechtigung und tatsächlicher Signaturweg bestätigt?',
-    meaning: 'Finde heraus, wer für den konkreten Vorgang zeichnen darf und wie die Unterlagen zur Unterschrift gelangen.',
-    whyItMatters: 'Auch bereits abgestimmte Vertragsdokumente können durch Abwesenheit oder fehlende Zeichnungsbefugnis hängen bleiben.',
-    signals: ['Kundenseitige Signaturperson und Verfügbarkeit bestätigt.', 'Bei Bedarf ist eine zulässige Vertretung bekannt.'],
+    meaning:
+      'Finde heraus, wer für den konkreten Vorgang zeichnen darf und wie die Unterlagen zur Unterschrift gelangen.',
+    whyItMatters:
+      'Auch bereits abgestimmte Vertragsdokumente können durch Abwesenheit oder fehlende Zeichnungsbefugnis hängen bleiben.',
+    signals: [
+      'Kundenseitige Signaturperson und Verfügbarkeit bestätigt.',
+      'Bei Bedarf ist eine zulässige Vertretung bekannt.',
+    ],
     commonMisinterpretation: 'Der Projektleiter könne automatisch für das Unternehmen unterschreiben.',
-    possibleQuestionsOrActions: ['Wer ist hierfür zeichnungsberechtigt?', 'Was passiert, wenn diese Person nicht verfügbar ist?'],
+    possibleQuestionsOrActions: [
+      'Wer ist hierfür zeichnungsberechtigt?',
+      'Was passiert, wenn diese Person nicht verfügbar ist?',
+    ],
     relatedKnowledge: 'paper-process',
     sourceNote: 'Whyte → PAPER PROCESS: The Process; The People.',
   },
@@ -239,31 +293,51 @@ const paperProcessItems: ChecklistItem[] = [
     question: 'Sind Dauer, Fristen und Abwesenheiten mit zuständigen Stellen bestätigt?',
     meaning: 'Trenne einen gewünschten Termin von nachgewiesenen Bearbeitungszeiten und echten Kundendeadlines.',
     whyItMatters: 'Unbestätigte Laufzeiten erzeugen Scheingenauigkeit im Forecast.',
-    signals: ['Bearbeitungszeiten stammen aus kundenseitiger Auskunft.', 'Kritische Termine und Abwesenheiten sind berücksichtigt.'],
+    signals: [
+      'Bearbeitungszeiten stammen aus kundenseitiger Auskunft.',
+      'Kritische Termine und Abwesenheiten sind berücksichtigt.',
+    ],
     commonMisinterpretation: 'Unser Quartalsende sei automatisch ein kundenseitiger Compelling Event.',
-    possibleQuestionsOrActions: ['Wie lange dauert dieser Schritt üblicherweise bei Ihnen?', 'Welche Frist oder Sitzung könnte den Termin gefährden?'],
+    possibleQuestionsOrActions: [
+      'Wie lange dauert dieser Schritt üblicherweise bei Ihnen?',
+      'Welche Frist oder Sitzung könnte den Termin gefährden?',
+    ],
     relatedKnowledge: 'paper-process',
     sourceNote: 'Whyte → PAPER PROCESS: The Timing; Lahoutifard → Chapter Six: Compelling Event.',
   },
   {
     id: 'dependencies',
     question: 'Sind echte Abhängigkeiten und zulässige parallele Schritte geklärt?',
-    meaning: 'Stelle fest, welche Stationen aufeinander warten müssen und welche Unterlagen früher bearbeitet werden dürfen.',
-    whyItMatters: 'Pauschales Hintereinanderschalten verlängert den Abschluss; unerlaubte Abkürzungen schaffen neue Risiken.',
+    meaning:
+      'Stelle fest, welche Stationen aufeinander warten müssen und welche Unterlagen früher bearbeitet werden dürfen.',
+    whyItMatters:
+      'Pauschales Hintereinanderschalten verlängert den Abschluss; unerlaubte Abkürzungen schaffen neue Risiken.',
     signals: ['Kunde benennt echte Vorbedingungen.', 'Parallelisierung wurde mit zuständigen Teams abgestimmt.'],
     commonMisinterpretation: 'Alle Paper-Process-Schritte seien immer linear oder dürften beliebig abgekürzt werden.',
-    possibleQuestionsOrActions: ['Was muss zwingend vorher erledigt sein?', 'Welche Prüfung kann zulässig parallel laufen?'],
+    possibleQuestionsOrActions: [
+      'Was muss zwingend vorher erledigt sein?',
+      'Welche Prüfung kann zulässig parallel laufen?',
+    ],
     relatedKnowledge: 'paper-process',
     sourceNote: 'Whyte → PAPER PROCESS: Summary of Paper Process; Lahoutifard → Chapter Six: Paper Process.',
   },
   {
     id: 'evidence-golive',
     question: 'Ist der tatsächliche Kundenfortschritt nachgewiesen und der Go-Live realistisch?',
-    meaning: 'Vergleiche Käuferbestätigungen und Dokumentenstand mit dem rückwärts geplanten Termin einschließlich Implementierung.',
-    whyItMatters: 'Ein Seller-Angebot oder internes Meeting ist kein Käuferabschluss. Fehlende Implementierungszeit verschiebt den realistischen Go-Live.',
-    signals: ['Zuständige Person bestätigt erledigte Kundenschritte.', 'Bestell-/Signaturtermin und Implementierungsdauer passen zum Go-Live.'],
-    commonMisinterpretation: 'Ein versendetes Angebot oder eine ausgewählte Lösung garantiere den Abschluss und rechtzeitigen Go-Live.',
-    possibleQuestionsOrActions: ['Welches Kundenergebnis belegt die erledigte Freigabe?', 'Bis wann muss unterschrieben sein, damit die Implementierung gelingt?'],
+    meaning:
+      'Vergleiche Käuferbestätigungen und Dokumentenstand mit dem rückwärts geplanten Termin einschließlich Implementierung.',
+    whyItMatters:
+      'Ein Seller-Angebot oder internes Meeting ist kein Käuferabschluss. Fehlende Implementierungszeit verschiebt den realistischen Go-Live.',
+    signals: [
+      'Zuständige Person bestätigt erledigte Kundenschritte.',
+      'Bestell-/Signaturtermin und Implementierungsdauer passen zum Go-Live.',
+    ],
+    commonMisinterpretation:
+      'Ein versendetes Angebot oder eine ausgewählte Lösung garantiere den Abschluss und rechtzeitigen Go-Live.',
+    possibleQuestionsOrActions: [
+      'Welches Kundenergebnis belegt die erledigte Freigabe?',
+      'Bis wann muss unterschrieben sein, damit die Implementierung gelingt?',
+    ],
     relatedKnowledge: 'paper-process',
     sourceNote: 'Whyte → PAPER PROCESS: Paper Process and Go-Live Plan; Lahoutifard → Chapter Six: Paper Process.',
   },

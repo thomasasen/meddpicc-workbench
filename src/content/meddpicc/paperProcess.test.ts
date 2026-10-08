@@ -15,10 +15,7 @@ describe('Paper Process: Quellen, Grenzen und Checklistenvertrag', () => {
   })
 
   it('erhält die voneinander abweichenden Autorendefinitionen', () => {
-    expect(paperProcessKnowledge.perspectives.map((item) => item.author)).toEqual([
-      'Andy Whyte',
-      'Darius Lahoutifard',
-    ])
+    expect(paperProcessKnowledge.perspectives.map((item) => item.author)).toEqual(['Andy Whyte', 'Darius Lahoutifard'])
     expect(paperProcessKnowledge.perspectives[0]?.summary).toContain('Eigenes MEDDPICC-Element')
     expect(paperProcessKnowledge.perspectives[1]?.summary).toContain('Decision Process')
     expect(paperProcessChecklist.sourceNotes.join(' ')).toContain('Approval')
@@ -26,7 +23,9 @@ describe('Paper Process: Quellen, Grenzen und Checklistenvertrag', () => {
 
   it('fordert echte Zuständigkeit, Evidenz, Fristen und Zeichnungsweg', () => {
     expect(paperProcessKnowledge.dimensions.map((item) => item.title)).toEqual(['Prozess', 'Personen', 'Timing'])
-    const all = paperProcessChecklist.items.map((item) => item.question + item.meaning + item.signals.join(' ')).join(' ')
+    const all = paperProcessChecklist.items
+      .map((item) => item.question + item.meaning + item.signals.join(' '))
+      .join(' ')
     expect(all).toContain('Verantwortlichen')
     expect(all).toContain('bestätigt')
     expect(all).toContain('Unterschriftsberechtigung')
@@ -47,9 +46,9 @@ describe('Paper Process: Quellen, Grenzen und Checklistenvertrag', () => {
   it('baut Implementierungsdauer ein und verwechselt Verkäuferarbeit nicht mit Käuferfortschritt', () => {
     expect(paperProcessKnowledge.planning.join(' ')).toContain('Implementierungsdauer')
     expect(paperProcessKnowledge.practiceActions.join(' ')).toContain('Seller-Artefakte')
-    expect(paperProcessChecklist.items.find((item) => item.id === 'evidence-golive')?.commonMisinterpretation).toContain(
-      'garantiere',
-    )
+    expect(
+      paperProcessChecklist.items.find((item) => item.id === 'evidence-golive')?.commonMisinterpretation,
+    ).toContain('garantiere')
   })
 
   it('verwendet zehn vollständige temporäre Prüfpunkte ohne Score', () => {

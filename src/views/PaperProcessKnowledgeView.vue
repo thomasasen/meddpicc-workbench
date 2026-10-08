@@ -92,7 +92,9 @@ import { paperProcessKnowledge } from '../content/meddpicc/paperProcess'
             <FileCheck :size="19" aria-hidden="true" />
             <div>
               <h3>{{ item.title }}</h3>
-              <p><strong>{{ item.definition }}</strong></p>
+              <p>
+                <strong>{{ item.definition }}</strong>
+              </p>
               <p>{{ item.example }}</p>
             </div>
           </article>
@@ -134,7 +136,11 @@ import { paperProcessKnowledge } from '../content/meddpicc/paperProcess'
           </div>
         </div>
         <div class="knowledge-concept-grid">
-          <article v-for="example in paperProcessKnowledge.examples" :key="example.title" class="knowledge-concept-card">
+          <article
+            v-for="example in paperProcessKnowledge.examples"
+            :key="example.title"
+            class="knowledge-concept-card"
+          >
             <FileCheck :size="19" aria-hidden="true" />
             <div>
               <h3>{{ example.title }}</h3>
