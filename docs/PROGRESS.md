@@ -114,11 +114,11 @@ Bestanden:
 - UI-QS-Screenshots
 - Pages-Sync und Pages-Integrität
 
-## Metrics – Checklists & Knowledge v0.1 (Feature-PR)
+## Metrics – Checklists & Knowledge v0.1 (PR #45)
 
 Branch: `feat/metrics-knowledge-checklist`
 
-**CI #412 vollständig grün, Screenshots Desktop/Mobile visuell geprüft.** PR #45 bleibt dennoch als Draft ungemergt, bis die Nutzerfreigabe vorliegt:
+**Fachlicher Quellenabgleich mit Whyte und Lahoutifard am 08.10.2026 bestätigt; CI #412 vollständig grün, Screenshots Desktop/Mobile visuell geprüft.** Umsetzung:
 
 - Wissen → Metrics (Definition, Business Impact, Before-/After, M1 vs. M2, ROI-Abgrenzung)
 - Checklist → Metrics (7 Punkte mit progressiven Erklärungen, lokalen Checkboxen)
@@ -132,8 +132,8 @@ Branch: `feat/metrics-knowledge-checklist`
 ### Umgesetzt
 
 - Knowledge Foundation / Content-Schema
-- Metrics Knowledge (Feature-PR; Merge ausstehend)
-- Metrics Themen-Checklist (Feature-PR; Merge ausstehend)
+- Metrics Knowledge
+- Metrics Themen-Checklist
 - Economic Buyer Knowledge
 - Economic Buyer Themen-Checklist
 - Economic-Buyer-Termin Checklist
