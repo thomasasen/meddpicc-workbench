@@ -159,7 +159,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 ### Situative Checklists
 
 1. [x] Economic-Buyer-Termin
-2. [ ] Discovery Call
+2. [x] Discovery Call
 3. [ ] POC / Pilot vorbereiten
 4. [ ] Pricing / kommerzielles Angebot vorbereiten
 5. [ ] Go-Live-/Decision-Process-Plan prüfen
@@ -174,6 +174,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Inhalte zwischen Knowledge und Checklists wiederverwenden
 - [x] Economic Buyer Knowledge als erster Referenz-Slice
 - [x] Metrics Knowledge als zweiter quellengeprüfter Themen-Slice
+- [x] Discovery Call als ergänzender SPICED-Wissensbereich
 - [ ] weitere Knowledge-Bereiche ausrollen
 
 ## Phase T3 – Value & Metrics Tools
