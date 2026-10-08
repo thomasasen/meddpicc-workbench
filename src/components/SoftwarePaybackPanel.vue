@@ -292,7 +292,13 @@ async function exportPng() {
           /></label>
           <label v-if="cost.kind !== 'one-time'" class="field"
             ><span>Endmonat (optional)</span>
-            <input :value="cost.endMonth ?? ''" @input="setOptionalEndMonth(cost, $event)" type="number" min="0" :max="horizon" placeholder="Bis zum Ende"
+            <input
+              :value="cost.endMonth ?? ''"
+              @input="setOptionalEndMonth(cost, $event)"
+              type="number"
+              min="0"
+              :max="horizon"
+              placeholder="Bis zum Ende"
           /></label>
           <label v-if="cost.kind === 'avoided-legacy'" class="field"
             ><span>Wirkungsgruppe gegen Doppelerfassung</span>
@@ -430,7 +436,13 @@ async function exportPng() {
           /></label>
           <label class="field"
             ><span>Letzter Nutzenmonat (optional)</span>
-            <input :value="metric.endMonth ?? ''" @input="setOptionalEndMonth(metric, $event)" type="number" min="1" :max="horizon" placeholder="Bis zum Ende"
+            <input
+              :value="metric.endMonth ?? ''"
+              @input="setOptionalEndMonth(metric, $event)"
+              type="number"
+              min="1"
+              :max="horizon"
+              placeholder="Bis zum Ende"
           /></label>
           <label class="field software-full"
             ><span>Wie wird die wirtschaftliche Wirkung realisiert? / Datenquelle</span>
