@@ -12,15 +12,15 @@ export const decisionProcessPhases = [
   {
     title: 'Business Approval',
     description:
-      'Befugte Personen oder Gremien entscheiden über Priorität, Nutzen, Risiko, Finanzierung und Auswahl. Die Freigabe kann von der technischen Prüfung abhängen oder teilweise parallel vorbereitet werden.',
+      'Befugte Personen oder Gremien entscheiden über Priorität, Nutzen, Risiko, Finanzierung und Auswahl. In der Regel folgt Business Approval auf die technische Prüfung; Teile können parallel laufen. Wenn Approval ohne erkennbaren technischen Prüfpfad bereits vorher beginnt, ist das ein Warnsignal.',
     evidence:
       'Entscheidungsbefugte, Veto-Rechte, Gremium, Sitzungstermin und bestätigter Beschluss sind nachvollziehbar.',
     question: 'Wer kann das Vorhaben noch stoppen, und in welchem Termin wird die Auswahl verbindlich beschlossen?',
   },
   {
-    title: 'Paper Process (separat prüfen)',
+    title: 'Paper Process (gesonderter Prüfpfad)',
     description:
-      'Nach der fachlichen Auswahl können noch Einkauf, Legal, Datenschutz, Security, Bestellung und Zeichnung folgen. Organisatorisch können Teile früher oder parallel starten.',
+      'Einkauf, Legal, Datenschutz, Security, Bestellung und Zeichnung gehören zum gesondert zu prüfenden administrativen Kaufweg. Viele Aufgaben beginnen nach der Auswahl, einzelne Prüfungen aber bereits früher oder parallel. Lahoutifard ordnet administrative, rechtliche und kommerzielle Aspekte ausdrücklich auch dem Approval zu.',
     evidence:
       'Der formale Weg bis zur Unterschrift wurde mit den zuständigen Stellen geklärt und mit ausreichend Vorlauf eingeplant.',
     question: 'Welche Vertrags- und Bestellschritte sind auch nach der Auswahl noch erforderlich?',
@@ -45,7 +45,7 @@ export const decisionProcessConcepts = {
       'Was muss nach dem POC passieren, bevor Ihr Unternehmen uns als Anbieter auswählt?',
     ],
     sourceNote:
-      'Whyte → Decision Process: Uncovering the Decision Process; Lahoutifard → Chapter Six: Decision & Paper Process.',
+      'Whyte → Decision Process: Uncovering the Decision Process and Progressing Through it; Lahoutifard → Chapter Six: Decision & Paper Process.',
   },
   validation: {
     id: 'validation',
@@ -98,14 +98,14 @@ export const decisionProcessConcepts = {
       'Wer könnte diesen Prozessschritt aus eigener Zuständigkeit bestätigen?',
       'Ist das bereits beschlossen, so geplant oder noch unsere Annahme?',
     ],
-    sourceNote: 'Whyte → Decision Process: Progressing Through It; Never Assume Your Go-Live Plan Is Correct.',
+    sourceNote: 'Whyte → Decision Process: Uncovering the Decision Process and Progressing Through it; Never Assume Your Go-Live Plan is Correct.',
   },
   timeline: {
     id: 'timeline',
     meaning:
       'Kläre Entscheidungen, Dauer, Sitzungszyklen, Abhängigkeiten, Puffer und den gewünschten Go-Live. Plane bei Bedarf gemeinsam rückwärts.',
     whyItMatters:
-      'Ein Quartalsende beim Verkäufer ist keine Kundendeadline. Auch echte Kundentermine belegen ohne Abhängigkeiten und Konsequenzen noch keinen realistischen Abschlusszeitpunkt.',
+      'Ein Quartalsende beim Verkäufer ist keine Kundendeadline. Auch echte Kundentermine belegen ohne Abhängigkeiten und Konsequenzen noch keinen realistischen Abschlusszeitpunkt; prüfe zudem die wahrgenommene geschäftliche Dringlichkeit beim Economic Buyer.',
     signals: [
       'Meilensteine mit kundenseitigen Eigentümern und realistischen Zeiten liegen vor.',
       'Abhängigkeiten und Engpässe sind mit dem Kunden durchgesprochen.',
@@ -116,13 +116,13 @@ export const decisionProcessConcepts = {
       'Wann tagt das Gremium tatsächlich, und bis wann müssen Unterlagen eingereicht sein?',
       'Was passiert geschäftlich, wenn der Go-Live um vier Wochen rutscht?',
     ],
-    sourceNote: 'Whyte → Decision Process and Go-Live Plan; Lahoutifard → Chapter Six: Decision Process Timeline.',
+    sourceNote: 'Whyte → Decision Process: Decision Process and Go-Live Plan; Lahoutifard → Chapter Six: Decision & Paper Process.',
   },
   alignment: {
     id: 'alignment',
     meaning:
       'Stimme den Entscheidungsweg mit den betroffenen Fachbereichen, dem Champion und bei relevanten Freigaben dem Economic Buyer ab.',
-    whyItMatters: 'Ein einzelner Kontakt kennt selten alle zusätzlichen Anforderungen und politischen Abhängigkeiten.',
+    whyItMatters: 'Ein einzelner Kontakt kennt selten alle zusätzlichen Anforderungen und politischen Abhängigkeiten. Wiederholte Verweigerung des kundenseitigen Prozessabgleichs ist ein ernstes Qualifizierungsrisiko.',
     signals: [
       'Technische, fachliche und wirtschaftliche Perspektiven wurden überprüft.',
       'Widersprüche zwischen Stakeholdern wurden angesprochen.',
@@ -132,7 +132,7 @@ export const decisionProcessConcepts = {
       'Wer sollte unseren gemeinsamen Ablaufplan ebenfalls gegenprüfen?',
       'Mit wem sollten wir frühzeitig über mögliche Freigabehemmnisse sprechen?',
     ],
-    sourceNote: 'Whyte → Decision Process: Socializing the Go-Live Plan; Lahoutifard → Chapter Six.',
+    sourceNote: 'Whyte → Decision Process: Never Assume Your Go-Live Plan is Correct; Lahoutifard → Chapter Six: Decision & Paper Process.',
   },
   boundaries: {
     id: 'boundaries',
@@ -166,7 +166,7 @@ export const decisionProcessConcepts = {
       'Hat sich seit unserem letzten Abgleich etwas im Entscheidungsweg geändert?',
       'Welcher neue Schritt gefährdet den Termin und wer kann ihn verbindlich klären?',
     ],
-    sourceNote: 'Whyte → Decision Process: Rarely Less, Always More; Lahoutifard → Chapter Six.',
+    sourceNote: 'Whyte → Decision Process: Rarely Less, Always More!; Lahoutifard → Chapter Six: Decision & Paper Process.',
   },
   commitment: {
     id: 'commitment',
@@ -184,7 +184,7 @@ export const decisionProcessConcepts = {
       'Wenn wir die gemeinsam definierten Kriterien erfüllen: Welcher Entscheidungsschritt folgt konkret?',
       'Können wir direkt nach der Auswertung einen Termin mit den für die Auswahl zuständigen Personen vereinbaren?',
     ],
-    sourceNote: 'Lahoutifard → Economic Buyer / Chapter Six: Conditional Closing; Whyte → Decision Process.',
+    sourceNote: 'Whyte → Decision Process: Uncovering the Decision Process and Progressing Through it; Lahoutifard → Chapter Six: Decision & Paper Process.',
   },
   influence: {
     id: 'influence',
@@ -198,10 +198,10 @@ export const decisionProcessConcepts = {
     ],
     commonMisinterpretation: 'Ein Seller könne obligatorische interne Freigaben aus dem Prozess streichen.',
     possibleQuestionsOrActions: [
-      'Welche Vorbereitung könnten wir parallel beginnen, ohne Ihre Prüfschritte zu überspringen?',
-      'Welche Aktivität ist zwingend, welche lässt sich nach Ihrer Einschätzung vereinfachen?',
+      'Welche Legal- oder Security-Unterlagen könnten wir frühzeitig parallel bereitstellen, ohne Ihre Prüfschritte zu überspringen?',
+      'Könnte eine passende Kundenreferenz oder eine zusätzliche unabhängige Prüfung die Entscheidung sinnvoll unterstützen? Welche Pflichtschritte dürfen wir keinesfalls umgehen?',
     ],
-    sourceNote: 'Whyte → Decision Process: Influencing the Timing; Lahoutifard → Chapter Ten: Say No to Qualify.',
+    sourceNote: 'Whyte → Decision Process: Influence the Timing / Add Additional Steps; Lahoutifard → Chapter Six: Decision & Paper Process.',
   },
 } satisfies Record<string, MeddpiccConcept>
 
@@ -237,15 +237,33 @@ export const decisionProcessKnowledge = {
   ],
   discoveryQuestions: [
     'Wie ist bei Ihnen die letzte vergleichbare Softwareentscheidung abgelaufen?',
+    'Könnten wir die Schritte und Verantwortlichkeiten auf beiden Seiten in einer gemeinsamen Timeline festhalten?',
     'Welche Prüfungen müssen die Fachbereiche abschließen, bevor Ihre Organisation eine Auswahl trifft?',
     'Wer empfiehlt die Lösung, wer genehmigt sie und wer könnte den Beschluss verhindern?',
     'Wann tagt das Gremium und welche Unterlagen müssen dafür wie früh vorliegen?',
     'Wer bestätigt, dass der POC die vereinbarten Anforderungen erfüllt?',
     'Was geschieht nach positivem POC-Ergebnis konkret – und wer entscheidet dann?',
     'Welche Schritte können nach Ihrer internen Vorgabe gleichzeitig beginnen?',
+    'Was ist Ihr geschäftlicher Grund, jetzt zu entscheiden, und wie sieht der Economic Buyer die Folgen eines Aufschubs?',
     'Wer kann mit uns den Weg bis zur Bestellung und Unterschrift gesondert durchgehen?',
   ],
   pitfalls: [
+    {
+      claim: '„Wir sind bereits im Business Approval, die Technik schauen wir später an.“',
+      explanation: 'Business Approval vor jeder erkennbaren technischen Validation ist bei Whyte eine Red Flag. Prüfpfad und zuständige Abnehmer sofort klären.',
+    },
+    {
+      claim: '„Wir schicken alles, der Kunde meldet sich dann.“',
+      explanation: 'Lahoutifard fordert einen beidseitigen Ablauf mit konkreten Aufgaben auf Käufer- und Verkäuferseite. Einseitige Aktivitäten sind kein Mutual Commitment.',
+    },
+    {
+      claim: '„Wir brauchen die Unterschrift bis zu unserem Quartalsende.“',
+      explanation: 'Das ist noch kein Compelling Event auf Kundenseite. Der Economic Buyer muss die geschäftlichen Folgen der Verzögerung verstehen und bestätigen.',
+    },
+    {
+      claim: '„Der Kunde erklärt seinen Entscheidungsweg grundsätzlich nicht.“',
+      explanation: 'Wiederholte Auskunftsverweigerung kann laut Whyte ein schweres Qualifizierungsrisiko sein und eine Disqualifizierung rechtfertigen.',
+    },
     {
       claim: '„Der POC läuft gut – also sind wir fast durch.“',
       explanation:
@@ -277,29 +295,57 @@ export const decisionProcessKnowledge = {
     'Validierung und Business Approval unterscheiden; mögliche Parallelität kundenseitig bestätigen lassen.',
     'Entscheidungsweg mit mehreren relevanten Stakeholdern besprechen und fehlende oder widersprüchliche Aussagen markieren.',
     'Nach jedem erreichten Meilenstein eine klare Bestätigung und den nächsten kundenseitigen Schritt einholen.',
-    'Paper Process früh separat erkunden und die Termine rückwärts vom gewünschten Go-Live prüfen.',
+    'Paper Process früh gesondert erkunden und vom bestätigten Kundenziel einschließlich Implementierungsdauer rückwärts bis zum heutigen Zeitpunkt planen.',
+  ],
+  balancedPlan: [
+    {
+      title: 'Kundenseite',
+      meaning:
+        'POC-Erfolg gemeinsam abnehmen, Economic Buyer und Gremien einbinden, Entscheidungsunterlagen bereitstellen, Freigaben terminieren und zuständige Personen benennen.',
+      question: 'Welche nächsten beiden Schritte übernimmt Ihr Team selbst – und bis wann?',
+    },
+    {
+      title: 'Verkäuferseite',
+      meaning:
+        'Demo, Referenzen, technische Nachweise, Angebot und Vertragsunterlagen passend zu den bestätigten Kundenschritten liefern; keine Aktivitäten ohne Anschluss an eine Kundenentscheidung.',
+      question: 'Welche Unterlagen und Unterstützung brauchen Sie von uns für Ihren nächsten Beschluss?',
+    },
+  ],
+  compellingEvent: {
+    headline: 'Warum muss der Kunde gerade jetzt entscheiden?',
+    meaning:
+      'Ein Compelling Event ist eine vom Economic Buyer wahrgenommene geschäftliche Deadline für die Kauf- oder Vertragsentscheidung. Ein Verkäuferquartalsende oder ein bloßer Go-Live-Wunsch reicht nicht. Fehlt ein äußeres Ereignis, lässt sich über gemeinsam validierte Metrics, ROI sowie entgangenen Umsatz oder vermeidbare Kosten eine wirtschaftliche Dringlichkeit prüfen – aber kein Termin frei erfinden.',
+    question:
+      'Welche geschäftliche Konsequenz hätte es für Sie und die Investitionsentscheidung, wenn Sie erst im nächsten Quartal entscheiden?',
+    proof:
+      'Zu validieren: Economic Buyer bestätigt den Zeitdruck, dessen Ursache und die Konsequenz einer Verzögerung.',
+  },
+  goLivePlanning: [
+    'Ausgangspunkt ist ein kundenseitig bestätigtes Zielereignis mit wirtschaftlichem Hintergrund.',
+    'Von dort rückwärts Implementierungsdauer, Vertrags- und Bestellweg sowie erforderliche Validierungs- und Freigabeschritte einplanen.',
+    'Für jede Aktivität Kundeneigentümer oder Seller-Eigentümer, Nachweis, Frist und Abhängigkeiten vereinbaren; Änderungen gemeinsam nachverfolgen.',
   ],
   perspectives: [
     {
       author: 'Andy Whyte',
       summary:
-        'Betont den vollständigen, wiederholt validierten Buying Process, Technical Validation und Business Approval sowie kundenseitige Bestätigung statt bloßer Vertriebsaktivität. Der gemeinsame Go-Live-Plan macht Abhängigkeiten und neue Schritte sichtbar.',
+        'Betont den wiederholt validierten Buying Process, Technical Validation typischerweise vor Business Approval, kundenseitig bestätigte Schritte statt Verkäuferaktivität sowie die rückwärts geplante Go-Live-Timeline. Warnt besonders vor unerkannten Zusatzschritten und Freigabeabkürzungen.',
       source:
-        'MEDDICC → Decision Process: From the What to the How; Validation and Approval; Go-Live Plan; Measure Progress Against the Decision Process.',
+        'MEDDICC → Decision Process: From the What to the How; There are Two Parts: Validation and Approval; Decision Process and Go-Live Plan; Measure Progress Against the Decision Process, Not Effort and Engagement.',
     },
     {
       author: 'Darius Lahoutifard',
       summary:
-        'Strukturiert Validation und Approval und empfiehlt, den Ablauf gemeinsam zu dokumentieren und zeitlich zu optimieren. Behandelt den Paper Process als gesondert zu erforschenden administrativen Teil des größeren Kaufprozesses.',
-      source: 'Always Be Qualifying → Chapter Six: Decision & Paper Process; Chapter Ten: Say No to Qualify.',
+        'Ordnet Validation den technischen und funktionalen Aspekten zu, Approval auch finanziellen, administrativen, rechtlichen und kommerziellen Aspekten. Fordert eine schriftliche, beidseitige Timeline, aktives Ermitteln des Paper Process und einen vom Economic Buyer empfundenen Compelling Event.',
+      source: 'Always Be Qualifying → Chapter Six: Decision & Paper Process; Paper Process; Compelling Event.',
     },
   ],
   practicalTakeaway:
-    'Ein belastbarer Decision Process ist ein mit den Zuständigen abgeglichener Entscheidungsweg, kein sellerseitiger Wunschplan. Unbekannte Schritte sind Qualifizierungslücken, aus denen die nächste Kundenfrage folgt.',
+    'Ein belastbarer Decision Process ist ein gemeinsam dokumentierter, beidseitig verantworteter und mit den Zuständigen abgeglichener Entscheidungsweg, kein sellerseitiger Wunschplan. Unbekannte Schritte sind Qualifizierungslücken, aus denen die nächste Kundenfrage folgt.',
   sourceNotes: [
     'Andy Whyte → MEDDICC, Kapitel Decision Process: Uncovering the Decision Process; Technical Validation; Business Approval; Go-Live Plan; Influencing the Decision Process; Measure Progress Against the Decision Process.',
-    'Darius Lahoutifard → Always Be Qualifying, Chapter Six: Decision & Paper Process; Chapter Ten: Say No to Qualify.',
-    'Die deutschen Discovery-Fragen und der CRM-Fall sind eigenständige Praxisformulierungen, keine wörtlichen Zitate.',
+    'Darius Lahoutifard → Always Be Qualifying, Chapter Six: Decision & Paper Process; Paper Process; Compelling Event.',
+    'Die deutschen Discovery-Fragen und der CRM-Fall sind eigenständige Praxisformulierungen, keine wörtlichen Zitate. In den sourceNote-Feldern bezeichnen Chapter-Six-Themen teils Absätze, keine eigenständigen Zwischenüberschriften.',
   ],
 } as const
 
