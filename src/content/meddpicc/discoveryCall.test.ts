@@ -36,12 +36,7 @@ describe('Discovery Call: books + SPICED source contract', () => {
 
   it('includes seven Whyte question intentions, T.H.E.D. and original ACE', () => {
     expect(discoveryCallKnowledge.whyteBigQuestions).toHaveLength(7)
-    expect(discoveryCallKnowledge.lahouThed.map((item) => item.code)).toEqual([
-      'T',
-      'H',
-      'E',
-      'D',
-    ])
+    expect(discoveryCallKnowledge.lahouThed.map((item) => item.code)).toEqual(['T', 'H', 'E', 'D'])
     expect(discoveryCallKnowledge.ace.map((item) => item.code)).toEqual(['A', 'C', 'E'])
     expect(discoveryCallKnowledge.twoSidedExample.caution).toContain('überprüft')
   })
