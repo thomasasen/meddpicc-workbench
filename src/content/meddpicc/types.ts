@@ -1,5 +1,11 @@
 export type KnowledgeTopicId =
-  'economic-buyer' | 'metrics' | 'discovery-call' | 'decision-criteria' | 'decision-process' | 'paper-process' | 'pain-implication'
+  | 'economic-buyer'
+  | 'metrics'
+  | 'discovery-call'
+  | 'decision-criteria'
+  | 'decision-process'
+  | 'paper-process'
+  | 'pain-implication'
 
 export type ChecklistId =
   | 'economic-buyer'
@@ -8,7 +14,8 @@ export type ChecklistId =
   | 'discovery-call'
   | 'decision-criteria'
   | 'decision-process'
-  | 'paper-process' | 'pain-implication'
+  | 'paper-process'
+  | 'pain-implication'
 
 export interface MeddpiccConcept {
   id: string
