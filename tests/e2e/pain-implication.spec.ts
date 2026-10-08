@@ -84,6 +84,15 @@ test('Pain-Screens haben bei 375, 768, 1024 und 1440 px keinen horizontalen Over
         content: document.documentElement.scrollWidth,
       }))
       expect(size.content, `width=${width} path=${path}`).toBeLessThanOrEqual(size.viewport)
+      const firstDetails = page.locator('main details').first()
+      await firstDetails.locator('summary').click()
+      const expandedSize = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        content: document.documentElement.scrollWidth,
+      }))
+      expect(expandedSize.content, `expanded width=${width} path=${path}`).toBeLessThanOrEqual(
+        expandedSize.viewport,
+      )
     }
   }
 })
