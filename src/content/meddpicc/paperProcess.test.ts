@@ -71,14 +71,14 @@ describe('Paper Process: Quellen, Grenzen und Checklistenvertrag', () => {
 
   it('trennt sellerseitige Deadline vom Economic-Buyer-Compelling-Event und erkennt neue Genehmigungsgrenzen', () => {
     expect(paperProcessKnowledge.redFlags.find((item) => item.claim.includes('Quartalsende'))?.explanation).toContain(
-      'kein'
+      'belegt aber keinen kundenseitigen Compelling Event',
     )
     expect(paperProcessKnowledge.dimensions.find((item) => item.title === 'Timing')?.meaning).toContain(
-      'Seller-Fristen'
+      'Seller-Fristen',
     )
     expect(paperProcessKnowledge.planning.join(' ')).toContain('Genehmigungsschwellen')
     expect(paperProcessChecklist.items.find((item) => item.id === 'approval-po')?.meaning).toContain(
-      'Freigabegrenzen'
+      'Freigabegrenzen',
     )
   })
 
@@ -86,10 +86,10 @@ describe('Paper Process: Quellen, Grenzen und Checklistenvertrag', () => {
     expect(paperProcessKnowledge.practiceActions.join(' ')).toContain('schriftlich festhalten')
     expect(paperProcessKnowledge.practiceActions.join(' ')).toContain('Seller')
     expect(paperProcessChecklist.items.find((item) => item.id === 'dependencies')?.meaning).toContain(
-      'ohne den administrativen Ablauf eigenmächtig zu verändern'
+      'ohne den administrativen Ablauf eigenmächtig zu verändern',
     )
     expect(paperProcessChecklist.items.find((item) => item.id === 'evidence-golive')?.signals.join(' ')).toContain(
-      'Signatur'
+      'Signatur',
     )
     expect(paperProcessKnowledge.discoveryQuestions.join(' ')).toContain('Verzögerungen')
   })
