@@ -51,10 +51,7 @@ describe('Decision Process: fachliche und technische Verträge', () => {
   })
 
   it('verlangt Käufer- und Verkäuferaktivitäten sowie einen EB-validierten Compelling Event', () => {
-    expect(decisionProcessKnowledge.balancedPlan.map((item) => item.title)).toEqual([
-      'Kundenseite',
-      'Verkäuferseite',
-    ])
+    expect(decisionProcessKnowledge.balancedPlan.map((item) => item.title)).toEqual(['Kundenseite', 'Verkäuferseite'])
     expect(decisionProcessKnowledge.compellingEvent.meaning).toContain('Economic Buyer')
     expect(decisionProcessKnowledge.compellingEvent.meaning).toContain('ROI')
     expect(decisionProcessKnowledge.compellingEvent.proof).toContain('Economic Buyer bestätigt')

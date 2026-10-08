@@ -64,7 +64,8 @@ export const decisionProcessConcepts = {
       'Welche Ergebnisse müssen vorliegen, damit die fachliche Prüfung als bestanden gilt?',
       'Wer bestätigt diese Ergebnisse verbindlich, und was passiert bei offenen Punkten?',
     ],
-    sourceNote: 'Whyte → Decision Process: Technical Validation; Lahoutifard → Chapter Six: Decision & Paper Process (Validation-Absatz).',
+    sourceNote:
+      'Whyte → Decision Process: Technical Validation; Lahoutifard → Chapter Six: Decision & Paper Process (Validation-Absatz).',
   },
   approval: {
     id: 'approval',
@@ -82,7 +83,8 @@ export const decisionProcessConcepts = {
       'Wer spricht die Auswahl aus, wer bestätigt sie und wer könnte widersprechen?',
       'Wann und mit welchen Unterlagen befasst sich das Entscheidungsgremium damit?',
     ],
-    sourceNote: 'Whyte → Decision Process: Business Approval; Lahoutifard → Chapter Six: Decision & Paper Process (Approval-Absatz).',
+    sourceNote:
+      'Whyte → Decision Process: Business Approval; Lahoutifard → Chapter Six: Decision & Paper Process (Approval-Absatz).',
   },
   evidence: {
     id: 'evidence',
@@ -99,7 +101,8 @@ export const decisionProcessConcepts = {
       'Wer könnte diesen Prozessschritt aus eigener Zuständigkeit bestätigen?',
       'Ist das bereits beschlossen, so geplant oder noch unsere Annahme?',
     ],
-    sourceNote: 'Whyte → Decision Process: Uncovering the Decision Process and Progressing Through it; Never Assume Your Go-Live Plan is Correct.',
+    sourceNote:
+      'Whyte → Decision Process: Uncovering the Decision Process and Progressing Through it; Never Assume Your Go-Live Plan is Correct.',
   },
   timeline: {
     id: 'timeline',
@@ -117,13 +120,15 @@ export const decisionProcessConcepts = {
       'Wann tagt das Gremium tatsächlich, und bis wann müssen Unterlagen eingereicht sein?',
       'Was passiert geschäftlich, wenn der Go-Live um vier Wochen rutscht?',
     ],
-    sourceNote: 'Whyte → Decision Process: Decision Process and Go-Live Plan; Lahoutifard → Chapter Six: Decision & Paper Process.',
+    sourceNote:
+      'Whyte → Decision Process: Decision Process and Go-Live Plan; Lahoutifard → Chapter Six: Decision & Paper Process.',
   },
   alignment: {
     id: 'alignment',
     meaning:
       'Stimme den Entscheidungsweg mit den betroffenen Fachbereichen, dem Champion und bei relevanten Freigaben dem Economic Buyer ab.',
-    whyItMatters: 'Ein einzelner Kontakt kennt selten alle zusätzlichen Anforderungen und politischen Abhängigkeiten. Wiederholte Verweigerung des kundenseitigen Prozessabgleichs ist ein ernstes Qualifizierungsrisiko.',
+    whyItMatters:
+      'Ein einzelner Kontakt kennt selten alle zusätzlichen Anforderungen und politischen Abhängigkeiten. Wiederholte Verweigerung des kundenseitigen Prozessabgleichs ist ein ernstes Qualifizierungsrisiko.',
     signals: [
       'Technische, fachliche und wirtschaftliche Perspektiven wurden überprüft.',
       'Widersprüche zwischen Stakeholdern wurden angesprochen.',
@@ -133,7 +138,8 @@ export const decisionProcessConcepts = {
       'Wer sollte unseren gemeinsamen Ablaufplan ebenfalls gegenprüfen?',
       'Mit wem sollten wir frühzeitig über mögliche Freigabehemmnisse sprechen?',
     ],
-    sourceNote: 'Whyte → Decision Process: Never Assume Your Go-Live Plan is Correct; Lahoutifard → Chapter Six: Decision & Paper Process.',
+    sourceNote:
+      'Whyte → Decision Process: Never Assume Your Go-Live Plan is Correct; Lahoutifard → Chapter Six: Decision & Paper Process.',
   },
   boundaries: {
     id: 'boundaries',
@@ -167,7 +173,8 @@ export const decisionProcessConcepts = {
       'Hat sich seit unserem letzten Abgleich etwas im Entscheidungsweg geändert?',
       'Welcher neue Schritt gefährdet den Termin und wer kann ihn verbindlich klären?',
     ],
-    sourceNote: 'Whyte → Decision Process: Rarely Less, Always More!; Lahoutifard → Chapter Six: Decision & Paper Process.',
+    sourceNote:
+      'Whyte → Decision Process: Rarely Less, Always More!; Lahoutifard → Chapter Six: Decision & Paper Process.',
   },
   commitment: {
     id: 'commitment',
@@ -185,7 +192,8 @@ export const decisionProcessConcepts = {
       'Wenn wir die gemeinsam definierten Kriterien erfüllen: Welcher Entscheidungsschritt folgt konkret?',
       'Können wir direkt nach der Auswertung einen Termin mit den für die Auswahl zuständigen Personen vereinbaren?',
     ],
-    sourceNote: 'Whyte → Decision Process: Uncovering the Decision Process and Progressing Through it; Lahoutifard → Chapter Six: Decision & Paper Process.',
+    sourceNote:
+      'Whyte → Decision Process: Uncovering the Decision Process and Progressing Through it; Lahoutifard → Chapter Six: Decision & Paper Process.',
   },
   influence: {
     id: 'influence',
@@ -202,7 +210,8 @@ export const decisionProcessConcepts = {
       'Welche Legal- oder Security-Unterlagen könnten wir frühzeitig parallel bereitstellen, ohne Ihre Prüfschritte zu überspringen?',
       'Könnte eine passende Kundenreferenz oder eine zusätzliche unabhängige Prüfung die Entscheidung sinnvoll unterstützen? Welche Pflichtschritte dürfen wir keinesfalls umgehen?',
     ],
-    sourceNote: 'Whyte → Decision Process: Influence the Timing / Add Additional Steps; Lahoutifard → Chapter Six: Decision & Paper Process.',
+    sourceNote:
+      'Whyte → Decision Process: Influence the Timing / Add Additional Steps; Lahoutifard → Chapter Six: Decision & Paper Process.',
   },
 } satisfies Record<string, MeddpiccConcept>
 
@@ -252,19 +261,23 @@ export const decisionProcessKnowledge = {
   pitfalls: [
     {
       claim: '„Wir sind bereits im Business Approval, die Technik schauen wir später an.“',
-      explanation: 'Business Approval vor jeder erkennbaren technischen Validation ist ein Warnsignal. Prüfpfad und zuständige Abnehmer sofort klären.',
+      explanation:
+        'Business Approval vor jeder erkennbaren technischen Validation ist ein Warnsignal. Prüfpfad und zuständige Abnehmer sofort klären.',
     },
     {
       claim: '„Wir schicken alles, der Kunde meldet sich dann.“',
-      explanation: 'Ein beidseitiger Ablauf braucht konkrete Aufgaben auf Käufer- und Verkäuferseite. Einseitige Aktivitäten sind kein Mutual Commitment.',
+      explanation:
+        'Ein beidseitiger Ablauf braucht konkrete Aufgaben auf Käufer- und Verkäuferseite. Einseitige Aktivitäten sind kein Mutual Commitment.',
     },
     {
       claim: '„Wir brauchen die Unterschrift bis zu unserem Quartalsende.“',
-      explanation: 'Das ist noch kein Compelling Event auf Kundenseite. Der Economic Buyer muss die geschäftlichen Folgen der Verzögerung verstehen und bestätigen.',
+      explanation:
+        'Das ist noch kein Compelling Event auf Kundenseite. Der Economic Buyer muss die geschäftlichen Folgen der Verzögerung verstehen und bestätigen.',
     },
     {
       claim: '„Der Kunde erklärt seinen Entscheidungsweg grundsätzlich nicht.“',
-      explanation: 'Wiederholte Auskunftsverweigerung kann laut Whyte ein schweres Qualifizierungsrisiko sein und eine Disqualifizierung rechtfertigen.',
+      explanation:
+        'Wiederholte Auskunftsverweigerung kann laut Whyte ein schweres Qualifizierungsrisiko sein und eine Disqualifizierung rechtfertigen.',
     },
     {
       claim: '„Der POC läuft gut – also sind wir fast durch.“',

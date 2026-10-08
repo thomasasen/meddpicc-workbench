@@ -138,7 +138,11 @@ import { decisionProcessKnowledge, decisionProcessPhases } from '../content/medd
           </div>
         </div>
         <div class="knowledge-concept-grid">
-          <article v-for="part in decisionProcessKnowledge.balancedPlan" :key="part.title" class="knowledge-concept-card">
+          <article
+            v-for="part in decisionProcessKnowledge.balancedPlan"
+            :key="part.title"
+            class="knowledge-concept-card"
+          >
             <Workflow :size="19" aria-hidden="true" />
             <div>
               <h3>{{ part.title }}</h3>
@@ -176,12 +180,13 @@ import { decisionProcessKnowledge, decisionProcessPhases } from '../content/medd
         </div>
         <article class="knowledge-primary-card">
           <p>
-            Ein CRM-POC wurde durchgeführt. Der Projektleiter bezeichnet ihn als erfolgreich und erwartet die Auswahl im Steering Committee. Einkauf
-            und Legal wurden noch nicht einbezogen. Die Geschäftsführung kennt den Business Case, hat die Investition
-            aber nicht bestätigt.
+            Ein CRM-POC wurde durchgeführt. Der Projektleiter bezeichnet ihn als erfolgreich und erwartet die Auswahl im
+            Steering Committee. Einkauf und Legal wurden noch nicht einbezogen. Die Geschäftsführung kennt den Business
+            Case, hat die Investition aber nicht bestätigt.
           </p>
           <p>
-            <strong>Bekannt:</strong> Der Test wurde durchgeführt und der Projektleiter bewertet ihn positiv. <strong>Nicht belegt:</strong>
+            <strong>Bekannt:</strong> Der Test wurde durchgeführt und der Projektleiter bewertet ihn positiv.
+            <strong>Nicht belegt:</strong>
             formale POC-Abnahme, wirtschaftliches Commitment, tatsächlicher Gremiumsbeschluss und der Ablauf bis zur
             Bestellung. Das sind unterschiedliche Qualifizierungslücken.
           </p>
