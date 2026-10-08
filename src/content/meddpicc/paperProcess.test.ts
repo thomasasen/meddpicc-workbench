@@ -51,6 +51,49 @@ describe('Paper Process: Quellen, Grenzen und Checklistenvertrag', () => {
     ).toContain('garantiere')
   })
 
+  it('nimmt die vorgezogene NDA-Prüfung und mögliche kommerzielle Verhandlungslücken ernst', () => {
+    const contract = paperProcessChecklist.items.find((item) => item.id === 'contract')
+    expect(contract?.meaning).toContain('NDA')
+    expect(contract?.meaning).toContain('vor kommerziellen Zusagen')
+    expect(contract?.commonMisinterpretation).toContain('NDA sei eine Kaufzusage')
+    expect(paperProcessKnowledge.examples.find((item) => item.title === 'Vertrag und Dokumente')?.detail).toContain(
+      'frühe NDA',
+    )
+    expect(paperProcessKnowledge.practiceActions.join(' ')).toContain('vor verbindlichen kommerziellen Zusagen')
+  })
+
+  it('verlangt gebriefte und verfügbare Personen statt einer bloßen Champion-Zusage', () => {
+    const stakeholders = paperProcessChecklist.items.find((item) => item.id === 'stakeholders')
+    expect(stakeholders?.meaning).toContain('informiert')
+    expect(stakeholders?.signals.join(' ')).toContain('gebrieft')
+    expect(paperProcessKnowledge.practiceActions.join(' ')).toContain('Den Champion konkret bestätigen lassen')
+  })
+
+  it('trennt sellerseitige Deadline vom Economic-Buyer-Compelling-Event und erkennt neue Genehmigungsgrenzen', () => {
+    expect(paperProcessKnowledge.redFlags.find((item) => item.claim.includes('Quartalsende'))?.explanation).toContain(
+      'kein'
+    )
+    expect(paperProcessKnowledge.dimensions.find((item) => item.title === 'Timing')?.meaning).toContain(
+      'Seller-Fristen'
+    )
+    expect(paperProcessKnowledge.planning.join(' ')).toContain('Genehmigungsschwellen')
+    expect(paperProcessChecklist.items.find((item) => item.id === 'approval-po')?.meaning).toContain(
+      'Freigabegrenzen'
+    )
+  })
+
+  it('fordert beidseitige Schriftlichkeit, regelkonforme Parallelisierung und belegbaren Kaufabschluss', () => {
+    expect(paperProcessKnowledge.practiceActions.join(' ')).toContain('schriftlich festhalten')
+    expect(paperProcessKnowledge.practiceActions.join(' ')).toContain('Seller')
+    expect(paperProcessChecklist.items.find((item) => item.id === 'dependencies')?.meaning).toContain(
+      'ohne den administrativen Ablauf eigenmächtig zu verändern'
+    )
+    expect(paperProcessChecklist.items.find((item) => item.id === 'evidence-golive')?.signals.join(' ')).toContain(
+      'Signatur'
+    )
+    expect(paperProcessKnowledge.discoveryQuestions.join(' ')).toContain('Verzögerungen')
+  })
+
   it('verwendet zehn vollständige temporäre Prüfpunkte ohne Score', () => {
     expect(paperProcessChecklist.items).toHaveLength(10)
     expect(new Set(paperProcessChecklist.items.map((item) => item.id)).size).toBe(10)
