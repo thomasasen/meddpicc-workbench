@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { painImplicationChecklist, painImplicationKnowledge } from './painImplication'
 
+// prettier-ignore
 describe('Pain / Implication: Quellen und Abgrenzungen', () => {
   it('trennt Whytes drei I und die ergänzende Perspektive Lahoutifards', () => {
     expect(painImplicationKnowledge.stages.map((stage) => stage.title)).toEqual([
