@@ -11,6 +11,10 @@ test('Decision-Criteria-Wissen ist erreichbar und Quellen bleiben zunächst unsi
   ).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Was sind Decision Criteria?' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Das Value Triangle richtig nutzen' })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Kriterien mitgestalten und Kundenbewertung erfragen' }),
+  ).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Kundenbewertung statt Verkäufer-Score' })).toBeVisible()
 
   for (const label of ['Value', 'Danger', 'Parity', 'Unique Differentiators', 'Custom Needs']) {
     await expect(page.getByRole('heading', { name: label, exact: true })).toBeVisible()
@@ -33,7 +37,7 @@ test('Decision-Criteria-Wissen ist erreichbar und Quellen bleiben zunächst unsi
   })
 })
 
-test('Decision-Criteria-Checklist enthält neun Punkte ohne gespeicherte Checks', async ({ page }, testInfo) => {
+test('Decision-Criteria-Checklist enthält zehn Punkte ohne gespeicherte Checks', async ({ page }, testInfo) => {
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
   await page.goto('/meddpicc-workbench/')
@@ -42,7 +46,7 @@ test('Decision-Criteria-Checklist enthält neun Punkte ohne gespeicherte Checks'
   await expect(
     page.getByRole('heading', { name: 'Decision Criteria: prüfe, was die Entscheidung wirklich trägt' }),
   ).toBeVisible()
-  await expect(page.getByRole('checkbox')).toHaveCount(9)
+  await expect(page.getByRole('checkbox')).toHaveCount(10)
   await page.getByRole('checkbox').first().check()
   await expect(page.getByRole('checkbox').first()).toBeChecked()
 
