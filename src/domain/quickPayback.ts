@@ -1,7 +1,5 @@
 export type QuickPaybackField =
-  | 'upfrontInvestmentEur'
-  | 'annualRealizableBenefitEur'
-  | 'annualIncrementalOperatingCostEur'
+  'upfrontInvestmentEur' | 'annualRealizableBenefitEur' | 'annualIncrementalOperatingCostEur'
 
 export type QuickPaybackInput = Record<QuickPaybackField, string>
 export type QuickPaybackNumbers = Record<QuickPaybackField, number>
@@ -97,16 +95,27 @@ export function buildQuickPaybackSummary(
     ' realisierbarer Bruttonutzen pro Jahr und ' +
     costs +
     ' zusätzliche laufende Kosten pro Jahr. '
-  const net = 'Angenommener Nettonutzen: ' + formatEuro(annualNetBenefitEur) +
-    ' pro Jahr (' + formatEuro(monthlyNetBenefitEur, 4) + ' pro Monat). '
+  const net =
+    'Angenommener Nettonutzen: ' +
+    formatEuro(annualNetBenefitEur) +
+    ' pro Jahr (' +
+    formatEuro(monthlyNetBenefitEur, 4) +
+    ' pro Monat). '
   let conclusion: string
   if (result.kind === 'payback' && months !== null) {
-    conclusion = 'Einfacher, undiskontierter Payback: ' + formatMonths(months) + ' Monate ab Beginn des regelmäßigen Nutzenzuflusses. '
+    conclusion =
+      'Einfacher, undiskontierter Payback: ' +
+      formatMonths(months) +
+      ' Monate ab Beginn des regelmäßigen Nutzenzuflusses. '
   } else if (result.kind === 'zero-investment') {
     conclusion = 'Rechnerisch 0 Monate ab Nutzenbeginn, weil keine Anfangsinvestition angesetzt ist. '
   } else {
     conclusion = 'Unter diesen Annahmen kein positiver einfacher Payback ableitbar. '
   }
-  return intro + net + conclusion +
+  return (
+    intro +
+    net +
+    conclusion +
     'Konstanter Nutzen und konstante Zusatzkosten unterstellt; Anlaufphase, variable Zahlungsströme, Steuern und Kapitalkosten nicht berücksichtigt. Zahlen und Realisierbarkeit sind vor einer Investitionsentscheidung kundenseitig zu validieren.'
+  )
 }

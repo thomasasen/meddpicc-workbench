@@ -13,8 +13,7 @@ const standard: QuickPaybackInput = {
   annualRealizableBenefitEur: '400.000',
   annualIncrementalOperatingCostEur: '0',
 }
-const run = (overrides: Partial<QuickPaybackInput> = {}) =>
-  calculateQuickPayback({ ...standard, ...overrides })
+const run = (overrides: Partial<QuickPaybackInput> = {}) => calculateQuickPayback({ ...standard, ...overrides })
 
 describe('Quick Payback: reine Berechnung und klare Modellgrenzen', () => {
   it('überträgt Lahoutifards 200k/400k-Dimensionsbeispiel auf EUR: 6 Monate', () => {
@@ -79,7 +78,9 @@ describe('Quick Payback: reine Berechnung und klare Modellgrenzen', () => {
     expect(positive.kind).toBe('zero-investment')
     if (positive.kind === 'zero-investment') expect(positive.months).toBe(0)
     expect(run({ upfrontInvestmentEur: '0', annualRealizableBenefitEur: '0' }).kind).toBe('no-financial-gain')
-    expect(run({ upfrontInvestmentEur: '0', annualRealizableBenefitEur: '0', annualIncrementalOperatingCostEur: '1' }).kind).toBe('no-financial-gain')
+    expect(
+      run({ upfrontInvestmentEur: '0', annualRealizableBenefitEur: '0', annualIncrementalOperatingCostEur: '1' }).kind,
+    ).toBe('no-financial-gain')
   })
 
   it('zeigt ohne vollständige Eingaben keine erfundene Kennzahl', () => {

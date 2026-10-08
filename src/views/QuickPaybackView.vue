@@ -90,8 +90,8 @@ async function copySummary() {
         </div>
         <h1 id="quick-title">In wie vielen Monaten rechnet sich die Investition?</h1>
         <p class="intro-text">
-          Drei EUR-Werte genügen für eine einfache Payback-Schätzung. Berücksichtige nur wirtschaftliche Effekte,
-          die tatsächlich realisierbar sind. Die Rechnung ersetzt keinen validierten Business Case.
+          Drei EUR-Werte genügen für eine einfache Payback-Schätzung. Berücksichtige nur wirtschaftliche Effekte, die
+          tatsächlich realisierbar sind. Die Rechnung ersetzt keinen validierten Business Case.
         </p>
       </section>
 
@@ -123,7 +123,8 @@ async function copySummary() {
               @input="copyMessage = ''"
             />
             <small id="quick-upfront-help">
-              Einmalige Lösungskosten, Einrichtung, Implementierung und indirekte Einmalkosten. Nicht erneut jährlich zählen.
+              Einmalige Lösungskosten, Einrichtung, Implementierung und indirekte Einmalkosten. Nicht erneut jährlich
+              zählen.
             </small>
             <small v-if="errorFor('upfrontInvestmentEur')" id="quick-upfront-error" class="quick-error" role="alert">
               {{ errorFor('upfrontInvestmentEur') }}
@@ -144,10 +145,15 @@ async function copySummary() {
               @input="copyMessage = ''"
             />
             <small id="quick-benefit-help">
-              Nur begründete Kostenersparnis, vermiedene Kosten oder zusätzlicher Deckungsbeitrag.
-              Zeitgewinn ist nicht automatisch Geldersparnis; Mehrumsatz ist nicht Gewinn. Keine Effekte doppelt zählen.
+              Nur begründete Kostenersparnis, vermiedene Kosten oder zusätzlicher Deckungsbeitrag. Zeitgewinn ist nicht
+              automatisch Geldersparnis; Mehrumsatz ist nicht Gewinn. Keine Effekte doppelt zählen.
             </small>
-            <small v-if="errorFor('annualRealizableBenefitEur')" id="quick-benefit-error" class="quick-error" role="alert">
+            <small
+              v-if="errorFor('annualRealizableBenefitEur')"
+              id="quick-benefit-error"
+              class="quick-error"
+              role="alert"
+            >
               {{ errorFor('annualRealizableBenefitEur') }}
             </small>
           </label>
@@ -168,15 +174,18 @@ async function copySummary() {
               Zum Beispiel zusätzliche Lizenz-, Betriebs- oder Supportkosten. 0 bedeutet ausdrücklich keine angesetzten
               Mehrkosten. Bereits netto erfassten Nutzen nicht nochmals um dieselben Kosten kürzen.
             </small>
-            <small v-if="errorFor('annualIncrementalOperatingCostEur')" id="quick-operating-error" class="quick-error" role="alert">
+            <small
+              v-if="errorFor('annualIncrementalOperatingCostEur')"
+              id="quick-operating-error"
+              class="quick-error"
+              role="alert"
+            >
               {{ errorFor('annualIncrementalOperatingCostEur') }}
             </small>
           </label>
 
           <div class="quick-actions">
-            <button class="button button-secondary" type="button" @click="loadDemo">
-              Fiktives Beispiel einsetzen
-            </button>
+            <button class="button button-secondary" type="button" @click="loadDemo">Fiktives Beispiel einsetzen</button>
             <button class="button button-quiet button-with-icon" type="button" @click="reset">
               <RotateCcw :size="16" aria-hidden="true" />
               Zurücksetzen
@@ -238,8 +247,10 @@ async function copySummary() {
                 {{ formatEuro(model.annualNetBenefitEur) }}
               </p>
               <p v-if="model.kind === 'payback'">
-                Monate = {{ formatEuro(model.inputs.upfrontInvestmentEur) }} ÷
-                ({{ formatEuro(model.annualNetBenefitEur) }} / 12)
+                Monate = {{ formatEuro(model.inputs.upfrontInvestmentEur) }} ÷ ({{
+                  formatEuro(model.annualNetBenefitEur)
+                }}
+                / 12)
               </p>
               <p v-else>Eine Division für die Payback-Dauer ist hier nicht sinnvoll.</p>
             </div>
@@ -282,22 +293,20 @@ async function copySummary() {
           <summary>Quellen und fachliche Einordnung anzeigen</summary>
           <div class="quick-sources-content">
             <p>
-              <strong>Darius Lahoutifard:</strong> <em>Always Be Qualifying</em>, Chapter Nine,
-              „ROI vs. Payback Period“ und „The Process to Pitch the Payback Period“.
-              Payback wird in Zeit statt als ROI-Prozentwert ausgedrückt; Metrics müssen wirtschaftlich übersetzt
-              und Kosten berücksichtigt werden.
+              <strong>Darius Lahoutifard:</strong> <em>Always Be Qualifying</em>, Chapter Nine, „ROI vs. Payback Period“
+              und „The Process to Pitch the Payback Period“. Payback wird in Zeit statt als ROI-Prozentwert ausgedrückt;
+              Metrics müssen wirtschaftlich übersetzt und Kosten berücksichtigt werden.
             </p>
             <p>
-              <strong>Andy Whyte:</strong> <em>MEDDICC</em>, „METRICS“ und
-              „Metrics 2 (M2's) – Return on Investment“, „ECONOMIC BUYER“ sowie
-              „Economic Decision Criteria“. Kundenspezifisch validierte Wertannahmen und weitere
+              <strong>Andy Whyte:</strong> <em>MEDDICC</em>, „METRICS“ und „Metrics 2 (M2's) – Return on Investment“,
+              „ECONOMIC BUYER“ sowie „Economic Decision Criteria“. Kundenspezifisch validierte Wertannahmen und weitere
               Entscheidungskriterien sind notwendig.
             </p>
             <p>
-              <strong>Eigene Modellentscheidung:</strong> konstanter jährlicher Bruttonutzen minus zusätzliche
-              jährliche Kosten, geteilt durch zwölf Monate; Einmalinvestition separat. Nicht berücksichtigt
-              sind Ramp-up, Steuern, Finanzierung, Inflation, Kapitalkosten, zeitlich variable Zahlungen oder
-              Alternativinvestitionen. Dies ist weder ein vollständiger Business Case noch ROI, NPV oder Forecast.
+              <strong>Eigene Modellentscheidung:</strong> konstanter jährlicher Bruttonutzen minus zusätzliche jährliche
+              Kosten, geteilt durch zwölf Monate; Einmalinvestition separat. Nicht berücksichtigt sind Ramp-up, Steuern,
+              Finanzierung, Inflation, Kapitalkosten, zeitlich variable Zahlungen oder Alternativinvestitionen. Dies ist
+              weder ein vollständiger Business Case noch ROI, NPV oder Forecast.
             </p>
           </div>
         </details>

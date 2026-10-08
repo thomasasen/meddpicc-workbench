@@ -15,10 +15,15 @@ test('Quick Payback: Startseite, leerer Zustand und Original-Screenshot', async 
   await page.locator('a[href$="#/tools/quick-payback"]').click()
   await expect(page).toHaveURL(/#\/tools\/quick-payback/)
   await expect(page.getByRole('heading', { name: 'In wie vielen Monaten rechnet sich die Investition?' })).toBeVisible()
-  await expect(page.getByText('Gib Anfangsinvestition und jährlichen Bruttonutzen ein.', { exact: false })).toBeVisible()
+  await expect(
+    page.getByText('Gib Anfangsinvestition und jährlichen Bruttonutzen ein.', { exact: false }),
+  ).toBeVisible()
   await expect(page.getByLabel('Jährliche zusätzliche laufende Kosten (EUR/Jahr)')).toHaveValue('0')
   await expect(page.getByLabel('Einmalige Anfangsinvestition (EUR)')).toHaveValue('')
-  await page.screenshot({ path: testInfo.outputPath('quick-payback-empty-' + testInfo.project.name + '.png'), fullPage: true })
+  await page.screenshot({
+    path: testInfo.outputPath('quick-payback-empty-' + testInfo.project.name + '.png'),
+    fullPage: true,
+  })
   expect(errors).toEqual([])
 })
 
@@ -31,7 +36,10 @@ test('Quick Payback: Berechnung, Copy, Live-Aktualisierung und Original-Screensh
   await expect(page.getByText('180.000,00', { exact: false }).first()).toBeVisible()
   await expect(page.getByText('15.000,00', { exact: false }).first()).toBeVisible()
   await expect(page.getByText('linear und undiskontiert', { exact: false })).toBeVisible()
-  await page.screenshot({ path: testInfo.outputPath('quick-payback-result-' + testInfo.project.name + '.png'), fullPage: true })
+  await page.screenshot({
+    path: testInfo.outputPath('quick-payback-result-' + testInfo.project.name + '.png'),
+    fullPage: true,
+  })
   await page.getByLabel('Einmalige Anfangsinvestition (EUR)').fill('90.000')
   await expect(page.locator('.quick-duration')).toContainText('6,0')
   await page.getByLabel('Einmalige Anfangsinvestition (EUR)').fill('120.000')
@@ -83,7 +91,9 @@ test('Quick Payback: responsive Breiten, Quellen und Eingabefehler ohne Horizont
     expect(wide, 'Ergebnis / Quellen: ' + width).toBeLessThanOrEqual(0)
     await page.getByLabel('Einmalige Anfangsinvestition (EUR)').fill('falsch')
     await expect(page.getByText('Bitte korrigiere die markierten Beträge.')).toBeVisible()
-    const invalidWide = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+    const invalidWide = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    )
     expect(invalidWide, 'Fehlerzustand: ' + width).toBeLessThanOrEqual(0)
   }
 })
