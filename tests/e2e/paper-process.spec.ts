@@ -14,6 +14,8 @@ test('Paper-Process-Wissen ist über die Startseite erreichbar und grenzt die Pr
   await expect(page.getByRole('heading', { name: 'Prozess, Personen und Timing' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Was je nach Kunde dazugehören kann' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Typische gefährliche Kurzschlüsse' })).toBeVisible()
+  await expect(page.getByText('Schon eine frühe NDA vor dem POC', { exact: false })).toBeVisible()
+  await expect(page.getByText('Seller-Fristen können intern helfen', { exact: false })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Go-Live-Rückwärtsplanung öffnen' })).toHaveAttribute(
     'href',
     /\/tools\/reverse-timeline/,
@@ -53,6 +55,12 @@ test('Paper-Process-Checklist erklärt zehn Fragen, Quellen und temporäre Häkc
     page.getByRole('heading', { name: 'Paper Process: Ist der Weg zum Auftrag wirklich geklärt?' }),
   ).toBeVisible()
   await expect(page.getByRole('checkbox')).toHaveCount(10)
+  const contract = page.locator('.checklist-item').filter({
+    hasText: 'Sind Vertragsprüfung, Unterlagen und mögliche Verhandlungspunkte geklärt?',
+  })
+  await contract.locator('summary').click()
+  await expect(contract.getByText('ob eine NDA', { exact: false })).toBeVisible()
+  await contract.locator('summary').click()
   await page.getByRole('checkbox').first().check()
   await expect(page.getByRole('checkbox').first()).toBeChecked()
   const first = page.locator('.checklist-item').first()
