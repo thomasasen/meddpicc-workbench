@@ -77,9 +77,7 @@ describe('Paper Process: Quellen, Grenzen und Checklistenvertrag', () => {
       'Seller-Fristen',
     )
     expect(paperProcessKnowledge.planning.join(' ')).toContain('Genehmigungsschwellen')
-    expect(paperProcessChecklist.items.find((item) => item.id === 'approval-po')?.meaning).toContain(
-      'Freigabegrenzen',
-    )
+    expect(paperProcessChecklist.items.find((item) => item.id === 'approval-po')?.meaning).toContain('Freigabegrenzen')
   })
 
   it('fordert beidseitige Schriftlichkeit, regelkonforme Parallelisierung und belegbaren Kaufabschluss', () => {
