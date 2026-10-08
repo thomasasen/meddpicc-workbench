@@ -41,13 +41,13 @@ export const paperProcessKnowledge = {
     {
       title: 'Personen',
       meaning:
-        'Wer verantwortet, prüft und genehmigt jeden Schritt? Wer darf unterschreiben und wer vertritt die Person bei Abwesenheit?',
+        'Wer verantwortet, prüft und genehmigt jeden Schritt? Sind diese Personen rechtzeitig informiert, gebrieft und verfügbar? Wer darf unterschreiben und wer vertritt die Person bei Abwesenheit?',
       question: 'Mit wem können wir die einzelnen Stationen unmittelbar gegenprüfen?',
     },
     {
       title: 'Timing',
       meaning:
-        'Welche Bearbeitungszeiten, Sitzungsrhythmen, Abwesenheiten und Rückläufe wurden kundenseitig bestätigt?',
+        'Welche Bearbeitungszeiten, Sitzungsrhythmen, Abwesenheiten und Rückläufe wurden kundenseitig bestätigt? Seller-Fristen können intern helfen, sind aber kein Kunden-Compelling-Event.',
       question: 'Wie lange dauert das in einem vergleichbaren Einkaufsvorgang tatsächlich?',
     },
   ],
@@ -61,7 +61,7 @@ export const paperProcessKnowledge = {
     {
       title: 'Vertrag und Dokumente',
       detail:
-        'Je nach Deal beispielsweise Vertragsentwurf, Rahmenvertrag (MSA), Leistungsbeschreibung (SOW) oder Vereinbarung zur Auftragsverarbeitung (AVV).',
+        'Schon eine frühe NDA vor dem POC kann bei strittigen Klauseln Legal aufhalten. Später sind je nach Deal etwa Vertragsentwurf, Rahmenvertrag (MSA), Leistungsbeschreibung (SOW) oder AVV relevant.',
       owner: 'Legal, Vertragsverantwortliche und gegebenenfalls Datenschutz',
     },
     {
@@ -81,6 +81,7 @@ export const paperProcessKnowledge = {
     'Vom benötigten Go-Live-Termin ausgehen und zuerst die reale Implementierungsdauer samt kundenseitigen Vorleistungen klären.',
     'Den spätesten Vertrags- beziehungsweise Bestelltermin daraus ableiten, nicht aus dem Verkäufer-Quartalsende.',
     'Bearbeitungsdauern, Freigaben, Abwesenheiten und echte Abhängigkeiten mit den zuständigen Stellen prüfen.',
+    'Bei geänderten Preisen, Leistungsumfang oder Vertragsbedingungen prüfen, ob neue Genehmigungsschwellen und Verantwortliche gelten.',
     'Unabhängige Prüfungen wie Legal oder Security nur dann parallelisieren, wenn die kundenseitigen Regeln das erlauben.',
     'Nach neuen Unterlagen, geänderten Preisen oder Stakeholderwechseln den Plan erneut bestätigen lassen.',
   ],
@@ -121,13 +122,14 @@ export const paperProcessKnowledge = {
     {
       claim: '„Unser Quartalsende ist die harte Deadline des Kunden.“',
       explanation:
-        'Der Verkäufertermin ist kein kundenseitiger Compelling Event. Für einen realistischen Go-Live müssen der Kundendruck und die Umsetzungsschritte getrennt geklärt sein.',
+        'Eine interne Verkäuferdeadline kann den Abschluss organisieren und beschleunigen (Whytes Timing-Perspektive), belegt aber keinen kundenseitigen Compelling Event. Den wirtschaftlichen Grund für „Why Now?“ muss der Kunde beziehungsweise Economic Buyer bestätigen.',
     },
   ],
   discoveryQuestions: [
     'Angenommen, die Auswahl wird bestätigt: Was genau passiert danach bis zur Bestellung?',
     'Wer aus Ihrem Einkauf kennt diesen Weg im Detail und könnte ihn kurz mit uns durchgehen?',
     'Welche Vertragsteile oder Nachweise sollten Legal und Security schon jetzt sehen?',
+    'Ist schon unsere NDA oder ein früher Vertragsentwurf ein möglicher Engpass, den wir vor der finalen Auswahl klären dürfen?',
     'Wer bestätigt die Mittel, wer löst die Bestellung aus und wer darf unterschreiben?',
     'Wann sind die zuständigen Personen verfügbar und wie lange brauchen die einzelnen Prüfungen erfahrungsgemäß?',
     'Wo hängt ein Schritt zwingend vom vorherigen ab, und was könnten wir parallel vorbereiten?',
@@ -136,11 +138,14 @@ export const paperProcessKnowledge = {
   ],
   practiceActions: [
     'Den Prozess mit dem Champion zunächst skizzieren und explizite Lücken markieren.',
+    'Den gemeinsamen Ablauf schriftlich festhalten: Was liefern wir als Seller, welche Prüfungen und Freigaben erledigt die Kundenseite tatsächlich?',
     'Procurement, Legal, Datenschutz und Security nur dort einbeziehen, wo der konkrete Kundenvorgang dies erfordert.',
     'Pro Schritt zuständige Person, notwendiges Ergebnis und erwartete Dauer direkt gegenprüfen.',
+    'Den Champion konkret bestätigen lassen, dass die betroffenen Stellen den Vorgang kennen, über den Inhalt gebrieft sind und im geplanten Zeitraum handeln können.',
     'Die Zeichnungsbefugnis und eine mögliche Vertretung bestätigen lassen.',
     'Seller-Artefakte von Kundenhandlungen trennen und nur bestätigte Käuferereignisse als Fortschritt behandeln.',
     'Die kritischen Abhängigkeiten im gemeinsamen Go-Live-Plan prüfen und bei Änderungen erneut abstimmen.',
+    'Bereits vor verbindlichen kommerziellen Zusagen klären, welche Vertrags- und Einkaufsbedingungen noch verhandelt werden müssen.'
   ],
   practicalTakeaway:
     'Der nächste sinnvolle Schritt ist nicht noch ein Sales-Meeting, sondern die Bestätigung der tatsächlich fehlenden Kundenstation mit der jeweils zuständigen Person.',
@@ -150,13 +155,13 @@ export const paperProcessKnowledge = {
       source:
         'MEDDICC → PAPER PROCESS: You Need Your Champion; The 3 Key Elements of any Paper Process; Paper Process and Go-Live Plan; Paper Process and your Sales Process.',
       summary:
-        'Eigenes MEDDPICC-Element mit den Achsen Prozess, Personen und Timing. Champion und gemeinsame Go-Live-Planung helfen, Abhängigkeiten, Vertretungen und Laufzeiten bis zur Signatur zu prüfen.',
+        'Eigenes MEDDPICC-Element mit Prozess, Personen und Timing. Whyte warnt vor frühen NDA-Blockern, fordert informierte und verfügbare Beteiligte und erlaubt eine interne Seller-Deadline zur Steuerung, ohne daraus Kundendruck abzuleiten.',
     },
     {
       author: 'Darius Lahoutifard',
       source: 'Always Be Qualifying → Chapter Six – Decision & Paper Process → Paper Process; Compelling Event.',
       summary:
-        'Formal-administrativer Teil des weiter gefassten Decision Process mit Bezug zum finanziellen, rechtlichen und kommerziellen Approval. Durch wiederholtes Nachfragen wird die gesamte Kette bis zur Bestellung sichtbar; unabhängige Schritte lassen sich gegebenenfalls vorziehen.',
+        'Formal-administrativer Teil des weiter gefassten Decision Process: Procurement, Legal und Approval sind zu erfragen, nicht zu umgehen. Wiederholtes Nachfragen legt die Kette bis zur Bestellung offen; ein schriftlich balancierter Käufer-/Verkäuferplan ist eine Übertragung seiner Decision-Process-Empfehlung.',
     },
   ],
   sourceNotes: [
@@ -174,8 +179,8 @@ const paperProcessItems: ChecklistItem[] = [
       'Rekonstruiere den tatsächlichen administrativen Prozess bis zum Abschluss. Unbekannte Schritte bleiben offen, auch wenn du bevorzugter Anbieter bist.',
     whyItMatters: 'Der Verkäufer-Funnel ersetzt keine kundenseitige Beschaffungslogik.',
     signals: [
-      'Kunde beschreibt alle bekannten Stationen samt Abschlusskriterium.',
-      'Offene Schritte werden als offene Fragen sichtbar.',
+      'Kunde beschreibt alle bekannten Stationen samt Abschlusskriterium; offene Annahmen sind kenntlich gemacht.'
+      'Schriftlicher Plan unterscheidet Kundengenehmigungen von angebotenen Seller-Beiträgen.'
     ],
     commonMisinterpretation: 'Der Zuschlag sei bereits eine verbindliche Kaufzusage.',
     possibleQuestionsOrActions: [
@@ -183,22 +188,25 @@ const paperProcessItems: ChecklistItem[] = [
       'Wer bestätigt die vollständige Prozesskette?',
     ],
     relatedKnowledge: 'paper-process',
-    sourceNote: 'Whyte → PAPER PROCESS: The Process; Lahoutifard → Chapter Six: Paper Process.',
+    sourceNote: 'Whyte → PAPER PROCESS → The 3 Key Elements of any Paper Process: 1. The Process; Lahoutifard → Chapter Six → Paper Process.',
   },
   {
     id: 'stakeholders',
     question: 'Sind für jeden relevanten Schritt zuständige Personen und Vertretungen benannt?',
     meaning:
-      'Ermittle die fachlich zuständigen Verantwortlichen, Entscheider und eine mögliche Vertretung bei Abwesenheit.',
+      'Ermittle die Verantwortlichen, Genehmiger und eine mögliche Vertretung. Der Champion muss mit ihnen prüfen, ob sie über den Vorgang informiert, vorbereitet und im vereinbarten Zeitraum verfügbar sind.',
     whyItMatters: 'Ohne tatsächliche Zuständigkeit wird ein Termin schnell zu einer bloßen Erwartung.',
-    signals: ['Verantwortliche Person je Station bekannt.', 'Verfügbarkeit und gegebenenfalls Vertretung abgeklärt.'],
+    signals: [
+      'Verantwortliche Person je Station bekannt und rechtzeitig über Unterlagen und Termin gebrieft.',
+      'Verfügbarkeit und gegebenenfalls Vertretung abgeklärt.',
+    ],
     commonMisinterpretation: 'Der Champion kenne alle Rollen und könne sie selbst ersetzen.',
     possibleQuestionsOrActions: [
       'Wer ist bei Einkauf und Legal verantwortlich?',
       'Wer springt bei Urlaub oder Krankheit ein?',
     ],
     relatedKnowledge: 'paper-process',
-    sourceNote: 'Whyte → PAPER PROCESS: The People; You Need Your Champion.',
+    sourceNote: 'Whyte → PAPER PROCESS → You Need Your Champion; The 3 Key Elements of any Paper Process: 2. The People.',
   },
   {
     id: 'procurement',
@@ -217,22 +225,23 @@ const paperProcessItems: ChecklistItem[] = [
     ],
     relatedKnowledge: 'paper-process',
     sourceNote:
-      'Lahoutifard → Chapter Six: Paper Process (Procurement); Praxisbeispiel Lieferantenanlage: nicht durch Primärquellen belegt.',
+      'Lahoutifard → Chapter Six → Paper Process (Procurement im Fließtext); Lieferantenanlage: nicht durch Primärquellen belegt.',
   },
   {
     id: 'contract',
     question: 'Sind Vertragsprüfung, Unterlagen und mögliche Verhandlungspunkte geklärt?',
     meaning:
-      'Erfrage, ob Legal eingebunden ist und welche Unterlagen der konkrete Deal benötigt, beispielsweise MSA oder SOW.',
-    whyItMatters: 'Unbekannte Vertragsklauseln können einen scheinbar fertigen Abschluss blockieren.',
+      'Erfrage schon früh, ob eine NDA oder besondere Vertragsklauseln die Discovery/den POC blockieren könnten. Vor kommerziellen Zusagen klären, welche Dokumente und Bedingungen Legal tatsächlich prüfen oder verhandeln muss; MSA und SOW sind nur Beispiele.',
+    whyItMatters: 'Strittige NDA-Klauseln können bereits den Einstieg stoppen. Späte Vertragsverhandlungen können Verhandlungsspielraum und Closing-Termin gefährden.',
     signals: ['Zuständiges Legal-Team und Dokumentenstand bestätigt.', 'Offene Vertragsfragen und Rückläufe benannt.'],
-    commonMisinterpretation: 'Ein verschickter Vertragsentwurf bedeute bereits rechtliche Freigabe.',
+    commonMisinterpretation: 'Eine unterzeichnete NDA sei eine Kaufzusage; oder ein verschickter Vertragsentwurf bedeute bereits rechtliche Freigabe.',
     possibleQuestionsOrActions: [
       'Welche Vertragsfassung prüfen Sie?',
       'Können wir kritische Klauseln vorab gemeinsam identifizieren?',
+      'Welche Klauseln sollten wir klären, bevor Preis und Leistungsumfang verbindlich abgestimmt werden?',
     ],
     relatedKnowledge: 'paper-process',
-    sourceNote: 'Whyte → PAPER PROCESS: Early-Stages; Lahoutifard → Chapter Six: Paper Process (Legal).',
+    sourceNote: 'Whyte → PAPER PROCESS → Paper Process and your Sales Process: Early-Stages; Mid-Stages; Lahoutifard → Chapter Six → Paper Process (Legal im Fließtext).',
   },
   {
     id: 'data-security',
@@ -252,22 +261,25 @@ const paperProcessItems: ChecklistItem[] = [
     ],
     relatedKnowledge: 'paper-process',
     sourceNote:
-      'Whyte → PAPER PROCESS: Summary of Paper Process (Security); AVV als situatives Praxisbeispiel: nicht durch Primärquellen belegt.',
+      'Whyte → PAPER PROCESS → Summary of Paper Process (Security-Freigaben im Fließtext); AVV: situatives Praxisbeispiel, nicht durch Primärquellen belegt.',
   },
   {
     id: 'approval-po',
     question: 'Sind kaufmännische Freigabe, Budget und möglicher PO-Prozess getrennt geprüft?',
     meaning:
-      'Unterscheide wirtschaftliche Genehmigung von der administrativen Ausstellung einer Bestellung. Eine PO-Nummer ist nicht überall der einzige Vertragsweg.',
-    whyItMatters: 'Ein freigegebenes Budget beweist nicht, dass Einkauf oder Vertragsabschluss erledigt sind.',
-    signals: ['Zuständige Stelle bestätigt Freigabestatus.', 'Ob und wann eine PO erforderlich ist, ist geklärt.'],
+      'Unterscheide wirtschaftliche Genehmigung von der administrativen Bestellung. Prüfe bei verändertem Auftragswert oder Leistungsumfang neue Freigabegrenzen; eine PO-Nummer ist nicht überall der einzige Vertragsweg.',
+    whyItMatters: 'Ein freigegebenes Budget beweist nicht, dass der Bestellvorgang abgeschlossen ist. Eine Änderung der kommerziellen Parameter kann eine zusätzliche Freigabe erfordern.',
+    signals: [
+      'Zuständige Stelle bestätigt Freigabestatus und relevante Genehmigungsgrenzen.',
+      'Ob und wann eine PO erforderlich ist, ist geklärt.',
+    ],
     commonMisinterpretation: 'Budget vorhanden bedeute Bestellung erfolgt.',
     possibleQuestionsOrActions: [
       'Wer bestätigt die Finanzierung formal?',
       'Ist eine PO notwendig, und welcher Schritt löst sie aus?',
     ],
     relatedKnowledge: 'paper-process',
-    sourceNote: 'Lahoutifard → Chapter Six: Decision & Paper Process (Approval; Purchase Order).',
+    sourceNote: 'Whyte → PAPER PROCESS (Genehmigungsgrenzen); Lahoutifard → Chapter Six – Decision & Paper Process (Approval und Purchase Order im Fließtext).',
   },
   {
     id: 'signatory',
@@ -286,7 +298,7 @@ const paperProcessItems: ChecklistItem[] = [
       'Was passiert, wenn diese Person nicht verfügbar ist?',
     ],
     relatedKnowledge: 'paper-process',
-    sourceNote: 'Whyte → PAPER PROCESS: The Process; The People.',
+    sourceNote: 'Whyte → PAPER PROCESS → The 3 Key Elements of any Paper Process: 1. The Process; 2. The People.',
   },
   {
     id: 'timing',
@@ -297,21 +309,21 @@ const paperProcessItems: ChecklistItem[] = [
       'Bearbeitungszeiten stammen aus kundenseitiger Auskunft.',
       'Kritische Termine und Abwesenheiten sind berücksichtigt.',
     ],
-    commonMisinterpretation: 'Unser Quartalsende sei automatisch ein kundenseitiger Compelling Event.',
+    commonMisinterpretation: 'Eine Verkäuferdeadline sei automatisch die wirtschaftlich begründete Kundenfrist; ein internes Vertriebsziel darf dennoch separat geplant werden.',
     possibleQuestionsOrActions: [
       'Wie lange dauert dieser Schritt üblicherweise bei Ihnen?',
       'Welche Frist oder Sitzung könnte den Termin gefährden?',
     ],
     relatedKnowledge: 'paper-process',
-    sourceNote: 'Whyte → PAPER PROCESS: The Timing; Lahoutifard → Chapter Six: Compelling Event.',
+    sourceNote: 'Whyte → PAPER PROCESS → The 3 Key Elements of any Paper Process: 3. The Timing; Lahoutifard → Chapter Six → Compelling Event.',
   },
   {
     id: 'dependencies',
     question: 'Sind echte Abhängigkeiten und zulässige parallele Schritte geklärt?',
     meaning:
-      'Stelle fest, welche Stationen aufeinander warten müssen und welche Unterlagen früher bearbeitet werden dürfen.',
+      'Ermittle die vom Kunden vorgeschriebenen Stationen und ihre Abhängigkeiten. Prüfe mit zuständigen Stellen, welche Unterlagen schon früher bearbeitet werden dürfen, ohne den administrativen Ablauf eigenmächtig zu verändern.',
     whyItMatters:
-      'Pauschales Hintereinanderschalten verlängert den Abschluss; unerlaubte Abkürzungen schaffen neue Risiken.',
+      'Unnötiges Hintereinanderschalten verlängert den Abschluss; das eigenmächtige Umgehen vorgeschriebener Genehmigungen ist keine zulässige Beschleunigung.',
     signals: ['Kunde benennt echte Vorbedingungen.', 'Parallelisierung wurde mit zuständigen Teams abgestimmt.'],
     commonMisinterpretation: 'Alle Paper-Process-Schritte seien immer linear oder dürften beliebig abgekürzt werden.',
     possibleQuestionsOrActions: [
@@ -325,11 +337,11 @@ const paperProcessItems: ChecklistItem[] = [
     id: 'evidence-golive',
     question: 'Ist der tatsächliche Kundenfortschritt nachgewiesen und der Go-Live realistisch?',
     meaning:
-      'Vergleiche Käuferbestätigungen und Dokumentenstand mit dem rückwärts geplanten Termin einschließlich Implementierung.',
+      'Vergleiche bestätigte Kundenfreigaben, Bestell-/Signaturbelege und den rückwärts geplanten Termin einschließlich Implementierung. Halte Buyer-Schritte und Seller-Leistungen getrennt fest.',
     whyItMatters:
-      'Ein Seller-Angebot oder internes Meeting ist kein Käuferabschluss. Fehlende Implementierungszeit verschiebt den realistischen Go-Live.',
+      'Ein Seller-Angebot oder internes Meeting ist kein Käuferabschluss. Selbst unterschriebene Unterlagen müssen im vorhandenen Vertriebsprozess korrekt erfasst werden, ohne dass diese Checklist ein CRM ersetzt.',
     signals: [
-      'Zuständige Person bestätigt erledigte Kundenschritte.',
+      'Zuständige Person bestätigt erledigte Kundenschritte; die erforderliche Bestellung oder Signatur ist tatsächlich dokumentiert.'
       'Bestell-/Signaturtermin und Implementierungsdauer passen zum Go-Live.',
     ],
     commonMisinterpretation:
@@ -352,7 +364,7 @@ export const paperProcessChecklist: ChecklistDefinition = {
   benefit: 'Du machst administrative Risiken sichtbar, ohne den Deal künstlich zu bewerten.',
   items: paperProcessItems,
   sourceNotes: [
-    'Andy Whyte → MEDDICC → PAPER PROCESS: The Process; The People; The Timing; Paper Process and Go-Live Plan.',
+    'Andy Whyte → MEDDICC → PAPER PROCESS → The 3 Key Elements of any Paper Process: 1. The Process; 2. The People; 3. The Timing; Paper Process and Go-Live Plan; Paper Process and your Sales Process.',
     'Darius Lahoutifard → Always Be Qualifying → Chapter Six – Decision & Paper Process → Paper Process.',
     'Autorenunterschied: Whyte behandelt Paper Process separat; Lahoutifard als Teil des Decision Process mit administrativem Approval.',
     'Situative Praxisbeispiele (MSA/SOW, AVV, Lieferantenanlage) sind keine laut Primärquellen universell vorgeschriebenen Schritte.',
