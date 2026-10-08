@@ -6,6 +6,7 @@ export type KnowledgeTopicId =
   | 'decision-process'
   | 'paper-process'
   | 'pain-implication'
+  | 'champion'
 
 export type ChecklistId =
   | 'economic-buyer'
@@ -16,6 +17,7 @@ export type ChecklistId =
   | 'decision-process'
   | 'paper-process'
   | 'pain-implication'
+  | 'champion'
 
 export interface MeddpiccConcept {
   id: string
