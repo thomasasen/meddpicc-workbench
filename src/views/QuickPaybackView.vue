@@ -92,207 +92,221 @@ async function copySummary() {
         </div>
         <h1 id="quick-title">In wie vielen Monaten rechnet sich die Investition?</h1>
         <p class="intro-text">
-          {{ calculationMode === 'quick'
-            ? 'Drei EUR-Werte genügen für eine einfache Payback-Schätzung ab regelmäßigem Nutzenbeginn.'
-            : 'Modelliere Softwareprojekt, SaaS-Kosten, Status quo und beliebig viele kundenspezifische Metrics im monatlichen Verlauf.' }}
+          {{
+            calculationMode === 'quick'
+              ? 'Drei EUR-Werte genügen für eine einfache Payback-Schätzung ab regelmäßigem Nutzenbeginn.'
+              : 'Modelliere Softwareprojekt, SaaS-Kosten, Status quo und beliebig viele kundenspezifische Metrics im monatlichen Verlauf.'
+          }}
           Die Rechnung ersetzt keinen vom Kunden validierten Business Case.
         </p>
       </section>
 
       <nav class="container quick-mode-choice" aria-label="Berechnungsmodus">
-        <button type="button" class="button" :class="calculationMode === 'quick' ? 'button-primary' : 'button-secondary'"
-          :aria-pressed="calculationMode === 'quick'" @click="calculationMode = 'quick'">
+        <button
+          type="button"
+          class="button"
+          :class="calculationMode === 'quick' ? 'button-primary' : 'button-secondary'"
+          :aria-pressed="calculationMode === 'quick'"
+          @click="calculationMode = 'quick'"
+        >
           Schnellberechnung
         </button>
-        <button type="button" class="button" :class="calculationMode === 'project' ? 'button-primary' : 'button-secondary'"
-          :aria-pressed="calculationMode === 'project'" @click="calculationMode = 'project'">
+        <button
+          type="button"
+          class="button"
+          :class="calculationMode === 'project' ? 'button-primary' : 'button-secondary'"
+          :aria-pressed="calculationMode === 'project'"
+          @click="calculationMode = 'project'"
+        >
           Softwareprojekt &amp; Kunden-Metrics
         </button>
       </nav>
       <template v-if="calculationMode === 'quick'">
-      <div class="container quick-grid">
-        <section class="quick-panel quick-form" aria-labelledby="quick-input-heading">
-          <div class="quick-panel-heading">
-            <div>
-              <p class="eyebrow">1 · Eingaben</p>
-              <h2 id="quick-input-heading">Wirtschaftliche Annahmen</h2>
+        <div class="container quick-grid">
+          <section class="quick-panel quick-form" aria-labelledby="quick-input-heading">
+            <div class="quick-panel-heading">
+              <div>
+                <p class="eyebrow">1 · Eingaben</p>
+                <h2 id="quick-input-heading">Wirtschaftliche Annahmen</h2>
+              </div>
+              <Calculator :size="22" aria-hidden="true" />
             </div>
-            <Calculator :size="22" aria-hidden="true" />
-          </div>
 
-          <p class="quick-format-help" id="quick-format-help">
-            Beträge in EUR, ohne Währungssymbol. Deutsche Schreibweise: 12345,67 oder 12.345,67.
-          </p>
+            <p class="quick-format-help" id="quick-format-help">
+              Beträge in EUR, ohne Währungssymbol. Deutsche Schreibweise: 12345,67 oder 12.345,67.
+            </p>
 
-          <label class="field quick-field" for="quick-upfront">
-            <span>Einmalige Anfangsinvestition (EUR)</span>
-            <input
-              id="quick-upfront"
-              v-model="upfrontInvestmentEur"
-              type="text"
-              inputmode="decimal"
-              autocomplete="off"
-              placeholder="z. B. 120.000"
-              :aria-invalid="Boolean(errorFor('upfrontInvestmentEur'))"
-              aria-describedby="quick-upfront-help quick-upfront-error quick-format-help"
-              @input="copyMessage = ''"
-            />
-            <small id="quick-upfront-help">
-              Einmalige Lösungskosten, Einrichtung, Implementierung und indirekte Einmalkosten. Nicht erneut jährlich
-              zählen.
-            </small>
-            <small v-if="errorFor('upfrontInvestmentEur')" id="quick-upfront-error" class="quick-error" role="alert">
-              {{ errorFor('upfrontInvestmentEur') }}
-            </small>
-          </label>
+            <label class="field quick-field" for="quick-upfront">
+              <span>Einmalige Anfangsinvestition (EUR)</span>
+              <input
+                id="quick-upfront"
+                v-model="upfrontInvestmentEur"
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                placeholder="z. B. 120.000"
+                :aria-invalid="Boolean(errorFor('upfrontInvestmentEur'))"
+                aria-describedby="quick-upfront-help quick-upfront-error quick-format-help"
+                @input="copyMessage = ''"
+              />
+              <small id="quick-upfront-help">
+                Einmalige Lösungskosten, Einrichtung, Implementierung und indirekte Einmalkosten. Nicht erneut jährlich
+                zählen.
+              </small>
+              <small v-if="errorFor('upfrontInvestmentEur')" id="quick-upfront-error" class="quick-error" role="alert">
+                {{ errorFor('upfrontInvestmentEur') }}
+              </small>
+            </label>
 
-          <label class="field quick-field" for="quick-benefit">
-            <span>Jährlicher realisierbarer Bruttonutzen (EUR/Jahr)</span>
-            <input
-              id="quick-benefit"
-              v-model="annualRealizableBenefitEur"
-              type="text"
-              inputmode="decimal"
-              autocomplete="off"
-              placeholder="z. B. 240.000"
-              :aria-invalid="Boolean(errorFor('annualRealizableBenefitEur'))"
-              aria-describedby="quick-benefit-help quick-benefit-error quick-format-help"
-              @input="copyMessage = ''"
-            />
-            <small id="quick-benefit-help">
-              Nur begründete Kostenersparnis, vermiedene Kosten oder zusätzlicher Deckungsbeitrag. Zeitgewinn ist nicht
-              automatisch Geldersparnis; Mehrumsatz ist nicht Gewinn. Keine Effekte doppelt zählen.
-            </small>
-            <small
-              v-if="errorFor('annualRealizableBenefitEur')"
-              id="quick-benefit-error"
-              class="quick-error"
-              role="alert"
-            >
-              {{ errorFor('annualRealizableBenefitEur') }}
-            </small>
-          </label>
+            <label class="field quick-field" for="quick-benefit">
+              <span>Jährlicher realisierbarer Bruttonutzen (EUR/Jahr)</span>
+              <input
+                id="quick-benefit"
+                v-model="annualRealizableBenefitEur"
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                placeholder="z. B. 240.000"
+                :aria-invalid="Boolean(errorFor('annualRealizableBenefitEur'))"
+                aria-describedby="quick-benefit-help quick-benefit-error quick-format-help"
+                @input="copyMessage = ''"
+              />
+              <small id="quick-benefit-help">
+                Nur begründete Kostenersparnis, vermiedene Kosten oder zusätzlicher Deckungsbeitrag. Zeitgewinn ist
+                nicht automatisch Geldersparnis; Mehrumsatz ist nicht Gewinn. Keine Effekte doppelt zählen.
+              </small>
+              <small
+                v-if="errorFor('annualRealizableBenefitEur')"
+                id="quick-benefit-error"
+                class="quick-error"
+                role="alert"
+              >
+                {{ errorFor('annualRealizableBenefitEur') }}
+              </small>
+            </label>
 
-          <label class="field quick-field" for="quick-operating">
-            <span>Jährliche zusätzliche laufende Kosten (EUR/Jahr)</span>
-            <input
-              id="quick-operating"
-              v-model="annualIncrementalOperatingCostEur"
-              type="text"
-              inputmode="decimal"
-              autocomplete="off"
-              :aria-invalid="Boolean(errorFor('annualIncrementalOperatingCostEur'))"
-              aria-describedby="quick-operating-help quick-operating-error quick-format-help"
-              @input="copyMessage = ''"
-            />
-            <small id="quick-operating-help">
-              Zum Beispiel zusätzliche Lizenz-, Betriebs- oder Supportkosten. 0 bedeutet ausdrücklich keine angesetzten
-              Mehrkosten. Bereits netto erfassten Nutzen nicht nochmals um dieselben Kosten kürzen.
-            </small>
-            <small
-              v-if="errorFor('annualIncrementalOperatingCostEur')"
-              id="quick-operating-error"
-              class="quick-error"
-              role="alert"
-            >
-              {{ errorFor('annualIncrementalOperatingCostEur') }}
-            </small>
-          </label>
+            <label class="field quick-field" for="quick-operating">
+              <span>Jährliche zusätzliche laufende Kosten (EUR/Jahr)</span>
+              <input
+                id="quick-operating"
+                v-model="annualIncrementalOperatingCostEur"
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                :aria-invalid="Boolean(errorFor('annualIncrementalOperatingCostEur'))"
+                aria-describedby="quick-operating-help quick-operating-error quick-format-help"
+                @input="copyMessage = ''"
+              />
+              <small id="quick-operating-help">
+                Zum Beispiel zusätzliche Lizenz-, Betriebs- oder Supportkosten. 0 bedeutet ausdrücklich keine
+                angesetzten Mehrkosten. Bereits netto erfassten Nutzen nicht nochmals um dieselben Kosten kürzen.
+              </small>
+              <small
+                v-if="errorFor('annualIncrementalOperatingCostEur')"
+                id="quick-operating-error"
+                class="quick-error"
+                role="alert"
+              >
+                {{ errorFor('annualIncrementalOperatingCostEur') }}
+              </small>
+            </label>
 
-          <div class="quick-actions">
-            <button class="button button-secondary" type="button" @click="loadDemo">Fiktives Beispiel einsetzen</button>
-            <button class="button button-quiet button-with-icon" type="button" @click="reset">
-              <RotateCcw :size="16" aria-hidden="true" />
-              Zurücksetzen
+            <div class="quick-actions">
+              <button class="button button-secondary" type="button" @click="loadDemo">
+                Fiktives Beispiel einsetzen
+              </button>
+              <button class="button button-quiet button-with-icon" type="button" @click="reset">
+                <RotateCcw :size="16" aria-hidden="true" />
+                Zurücksetzen
+              </button>
+            </div>
+            <p v-if="isDemo" class="quick-demo-note">Fiktives Beispiel. Keine Kunden- oder Referenzzahlen.</p>
+          </section>
+
+          <section class="quick-panel quick-result" aria-labelledby="quick-result-heading">
+            <p class="eyebrow">2 · Ergebnis</p>
+            <h2 id="quick-result-heading">Einfacher Payback</h2>
+            <div v-if="calculation.kind === 'empty'" class="quick-empty" role="status">
+              Gib Anfangsinvestition und jährlichen Bruttonutzen ein. Die zusätzlichen laufenden Kosten sind bereits
+              sichtbar mit 0 EUR vorbelegt.
+            </div>
+            <div v-else-if="calculation.kind === 'invalid'" class="quick-empty" role="status">
+              Bitte korrigiere die markierten Beträge. Bis dahin wird kein Ergebnis berechnet.
+            </div>
+            <div v-else-if="model" class="quick-calculated" aria-live="polite" aria-atomic="true">
+              <template v-if="model.kind === 'payback' && model.months !== null">
+                <p class="quick-duration">{{ formatMonths(model.months) }} <span>Monate</span></p>
+                <p class="quick-result-description">Einfacher, undiskontierter Payback ab regelmäßigem Nutzenbeginn.</p>
+              </template>
+              <template v-else-if="model.kind === 'zero-investment'">
+                <p class="quick-duration">0,0 <span>Monate</span></p>
+                <p class="quick-result-description">
+                  Rechnerischer Sonderfall ohne angesetzte Anfangsinvestition, keine Zusage für eine kostenlose Lösung.
+                </p>
+              </template>
+              <template v-else-if="model.kind === 'no-payback'">
+                <p class="quick-negative">Unter diesen Annahmen kein einfacher Payback erreichbar.</p>
+                <p>Die jährlichen Zusatzkosten erreichen oder übersteigen den realisierbaren Bruttonutzen.</p>
+              </template>
+              <template v-else>
+                <p class="quick-negative">Keine aussagekräftige positive Amortisation.</p>
+                <p>Ohne Anfangsinvestition und positiven Nettozufluss ergibt sich kein positiver Finanznutzen.</p>
+              </template>
+
+              <dl class="quick-metrics">
+                <div>
+                  <dt>Jährlicher Nettonutzen</dt>
+                  <dd>{{ formatEuro(model.annualNetBenefitEur) }} <small>/ Jahr</small></dd>
+                </div>
+                <div>
+                  <dt>Monatlicher Nettonutzen</dt>
+                  <dd>{{ formatEuro(model.monthlyNetBenefitEur, 4) }} <small>/ Monat</small></dd>
+                </div>
+                <div>
+                  <dt>Einmalige Anfangsinvestition</dt>
+                  <dd>{{ formatEuro(model.inputs.upfrontInvestmentEur) }}</dd>
+                </div>
+              </dl>
+
+              <div class="quick-formula">
+                <h3>Rechenweg</h3>
+                <p>
+                  Jahresnettonutzen = {{ formatEuro(model.inputs.annualRealizableBenefitEur) }} −
+                  {{ formatEuro(model.inputs.annualIncrementalOperatingCostEur) }} =
+                  {{ formatEuro(model.annualNetBenefitEur) }}
+                </p>
+                <p v-if="model.kind === 'payback'">
+                  Monate = {{ formatEuro(model.inputs.upfrontInvestmentEur) }} ÷ ({{
+                    formatEuro(model.annualNetBenefitEur)
+                  }}
+                  / 12)
+                </p>
+                <p v-else>Eine Division für die Payback-Dauer ist hier nicht sinnvoll.</p>
+              </div>
+            </div>
+
+            <p class="quick-model-note">
+              <strong>Modellgrenze:</strong> linear und undiskontiert; ab Beginn des angenommenen regelmäßigen
+              Nutzenzuflusses, nicht ab Vertrag, Auszahlung oder Projektstart. Keine Anlaufphase oder variablen
+              Cashflows.
+            </p>
+          </section>
+        </div>
+
+        <section v-if="model" class="container quick-panel quick-share" aria-labelledby="quick-share-heading">
+          <div class="quick-share-title">
+            <div>
+              <p class="eyebrow">3 · Weitergeben</p>
+              <h2 id="quick-share-heading">Kundenfähige Zusammenfassung</h2>
+            </div>
+            <button class="button button-primary button-with-icon" type="button" @click="copySummary">
+              <ClipboardCopy :size="17" aria-hidden="true" />
+              Zusammenfassung kopieren
             </button>
           </div>
-          <p v-if="isDemo" class="quick-demo-note">Fiktives Beispiel. Keine Kunden- oder Referenzzahlen.</p>
+          <p class="quick-copy-text">{{ message }}</p>
+          <p class="quick-copy-status" role="status">{{ copyMessage }}</p>
         </section>
-
-        <section class="quick-panel quick-result" aria-labelledby="quick-result-heading">
-          <p class="eyebrow">2 · Ergebnis</p>
-          <h2 id="quick-result-heading">Einfacher Payback</h2>
-          <div v-if="calculation.kind === 'empty'" class="quick-empty" role="status">
-            Gib Anfangsinvestition und jährlichen Bruttonutzen ein. Die zusätzlichen laufenden Kosten sind bereits
-            sichtbar mit 0 EUR vorbelegt.
-          </div>
-          <div v-else-if="calculation.kind === 'invalid'" class="quick-empty" role="status">
-            Bitte korrigiere die markierten Beträge. Bis dahin wird kein Ergebnis berechnet.
-          </div>
-          <div v-else-if="model" class="quick-calculated" aria-live="polite" aria-atomic="true">
-            <template v-if="model.kind === 'payback' && model.months !== null">
-              <p class="quick-duration">{{ formatMonths(model.months) }} <span>Monate</span></p>
-              <p class="quick-result-description">Einfacher, undiskontierter Payback ab regelmäßigem Nutzenbeginn.</p>
-            </template>
-            <template v-else-if="model.kind === 'zero-investment'">
-              <p class="quick-duration">0,0 <span>Monate</span></p>
-              <p class="quick-result-description">
-                Rechnerischer Sonderfall ohne angesetzte Anfangsinvestition, keine Zusage für eine kostenlose Lösung.
-              </p>
-            </template>
-            <template v-else-if="model.kind === 'no-payback'">
-              <p class="quick-negative">Unter diesen Annahmen kein einfacher Payback erreichbar.</p>
-              <p>Die jährlichen Zusatzkosten erreichen oder übersteigen den realisierbaren Bruttonutzen.</p>
-            </template>
-            <template v-else>
-              <p class="quick-negative">Keine aussagekräftige positive Amortisation.</p>
-              <p>Ohne Anfangsinvestition und positiven Nettozufluss ergibt sich kein positiver Finanznutzen.</p>
-            </template>
-
-            <dl class="quick-metrics">
-              <div>
-                <dt>Jährlicher Nettonutzen</dt>
-                <dd>{{ formatEuro(model.annualNetBenefitEur) }} <small>/ Jahr</small></dd>
-              </div>
-              <div>
-                <dt>Monatlicher Nettonutzen</dt>
-                <dd>{{ formatEuro(model.monthlyNetBenefitEur, 4) }} <small>/ Monat</small></dd>
-              </div>
-              <div>
-                <dt>Einmalige Anfangsinvestition</dt>
-                <dd>{{ formatEuro(model.inputs.upfrontInvestmentEur) }}</dd>
-              </div>
-            </dl>
-
-            <div class="quick-formula">
-              <h3>Rechenweg</h3>
-              <p>
-                Jahresnettonutzen = {{ formatEuro(model.inputs.annualRealizableBenefitEur) }} −
-                {{ formatEuro(model.inputs.annualIncrementalOperatingCostEur) }} =
-                {{ formatEuro(model.annualNetBenefitEur) }}
-              </p>
-              <p v-if="model.kind === 'payback'">
-                Monate = {{ formatEuro(model.inputs.upfrontInvestmentEur) }} ÷ ({{
-                  formatEuro(model.annualNetBenefitEur)
-                }}
-                / 12)
-              </p>
-              <p v-else>Eine Division für die Payback-Dauer ist hier nicht sinnvoll.</p>
-            </div>
-          </div>
-
-          <p class="quick-model-note">
-            <strong>Modellgrenze:</strong> linear und undiskontiert; ab Beginn des angenommenen regelmäßigen
-            Nutzenzuflusses, nicht ab Vertrag, Auszahlung oder Projektstart. Keine Anlaufphase oder variablen Cashflows.
-          </p>
-        </section>
-      </div>
-
-      <section v-if="model" class="container quick-panel quick-share" aria-labelledby="quick-share-heading">
-        <div class="quick-share-title">
-          <div>
-            <p class="eyebrow">3 · Weitergeben</p>
-            <h2 id="quick-share-heading">Kundenfähige Zusammenfassung</h2>
-          </div>
-          <button class="button button-primary button-with-icon" type="button" @click="copySummary">
-            <ClipboardCopy :size="17" aria-hidden="true" />
-            Zusammenfassung kopieren
-          </button>
-        </div>
-        <p class="quick-copy-text">{{ message }}</p>
-        <p class="quick-copy-status" role="status">{{ copyMessage }}</p>
-      </section>
-
       </template>
       <SoftwarePaybackPanel v-else class="container" />
 
@@ -321,8 +335,8 @@ async function copySummary() {
               Entscheidungskriterien sind notwendig.
             </p>
             <p>
-              <strong>Eigene Modellentscheidung:</strong> Im Quick-Modus gilt ein gleichmäßiger Jahresnettonutzen.
-              Der Projektmodus simuliert dagegen nachvollziehbare Monatswerte für Einmalkosten, SaaS, Bestandssysteme,
+              <strong>Eigene Modellentscheidung:</strong> Im Quick-Modus gilt ein gleichmäßiger Jahresnettonutzen. Der
+              Projektmodus simuliert dagegen nachvollziehbare Monatswerte für Einmalkosten, SaaS, Bestandssysteme,
               Nutzenbeginn und Ramp-up. Jahreskosten werden zur wirtschaftlichen Betrachtung auf zwölf Monate verteilt;
               echte Vorauszahlungen, Liquidität, Steuern, Inflation, Finanzierung, Kapitalkosten, NPV und IRR werden
               nicht modelliert. Datenherkunft und kontrollierte Doppelzählung sind eigene Produktregeln, keine
@@ -356,9 +370,13 @@ async function copySummary() {
   gap: var(--space-2);
   margin-bottom: var(--space-6);
 }
-.quick-mode-choice .button[aria-pressed='true'] { font-weight: 780; }
+.quick-mode-choice .button[aria-pressed='true'] {
+  font-weight: 780;
+}
 @media (max-width: 560px) {
-  .quick-mode-choice .button { width: 100%; }
+  .quick-mode-choice .button {
+    width: 100%;
+  }
 }
 .quick-main {
   padding: var(--space-8) 0 var(--space-12);

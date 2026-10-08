@@ -88,11 +88,11 @@ function validateCosts(costs: SoftwareCost[], horizon: number, issues: string[])
     if (!validMoney(cost.amountEur)) issues.push(where + ': Betrag muss zwischen 0 und 1 Billion EUR liegen.')
     if (!['monthly', 'annual'].includes(cost.period)) issues.push(where + ': ungültige Zahlungsperiode.')
     if (!validMonth(cost.startMonth, horizon)) issues.push(where + ': Startmonat ungültig.')
-    if (cost.endMonth !== undefined &&
-      (!validMonth(cost.endMonth, horizon) || cost.endMonth < cost.startMonth)) {
+    if (cost.endMonth !== undefined && (!validMonth(cost.endMonth, horizon) || cost.endMonth < cost.startMonth)) {
       issues.push(where + ': Endmonat liegt außerhalb der Laufzeit.')
     }
-    if (cost.kind === 'one-time' && cost.endMonth !== undefined) issues.push(where + ': einmaliger Aufwand hat keinen Endmonat.')
+    if (cost.kind === 'one-time' && cost.endMonth !== undefined)
+      issues.push(where + ': einmaliger Aufwand hat keinen Endmonat.')
   }
 }
 
@@ -104,11 +104,11 @@ export function annualMetricPotential(metric: CustomerMetric): number | null {
     case 'process':
       return metric.annualVolume * (metric.before - metric.after)
     case 'time':
-      return metric.annualVolume * (metric.before - metric.after) / 60 * metric.hourlyCostEur
+      return ((metric.annualVolume * (metric.before - metric.after)) / 60) * metric.hourlyCostEur
     case 'conversion':
-      return metric.annualVolume * (metric.after - metric.before) / 100 * metric.valuePerEventEur
+      return ((metric.annualVolume * (metric.after - metric.before)) / 100) * metric.valuePerEventEur
     case 'quality':
-      return metric.annualVolume * (metric.before - metric.after) / 100 * metric.valuePerEventEur
+      return ((metric.annualVolume * (metric.before - metric.after)) / 100) * metric.valuePerEventEur
     case 'qualitative':
       return null
   }
@@ -135,8 +135,10 @@ function validateMetrics(metrics: CustomerMetric[], horizon: number, issues: str
     if (!Number.isInteger(metric.rampMonths) || metric.rampMonths < 1 || metric.rampMonths > horizon) {
       issues.push(where + ': Ramp-up muss zwischen 1 und Laufzeit in Monaten liegen.')
     }
-    if (metric.endMonth !== undefined &&
-      (!validMonth(metric.endMonth, horizon) || metric.endMonth < metric.startMonth)) {
+    if (
+      metric.endMonth !== undefined &&
+      (!validMonth(metric.endMonth, horizon) || metric.endMonth < metric.startMonth)
+    ) {
       issues.push(where + ': Nutzenende ungültig.')
     }
     for (const [key, value] of [
@@ -149,10 +151,10 @@ function validateMetrics(metrics: CustomerMetric[], horizon: number, issues: str
     ] as const) {
       if (!validMoney(value)) issues.push(where + ': ' + key + ' ist ungültig.')
     }
-    if ((metric.formula === 'conversion') && (metric.before > 100 || metric.after > 100)) {
+    if (metric.formula === 'conversion' && (metric.before > 100 || metric.after > 100)) {
       issues.push(where + ': Conversion-Werte müssen Prozentwerte 0 bis 100 sein.')
     }
-    if ((metric.formula === 'quality') && (metric.before > 100 || metric.after > 100)) {
+    if (metric.formula === 'quality' && (metric.before > 100 || metric.after > 100)) {
       issues.push(where + ': Fehlerquoten müssen Prozentwerte 0 bis 100 sein.')
     }
     const potential = annualMetricPotential(metric)
@@ -179,8 +181,10 @@ function active(cost: SoftwareCost, month: number): boolean {
 
 export function calculateSoftwarePayback(input: SoftwarePaybackInput): SoftwarePaybackResult {
   const issues: string[] = []
-  if (input.horizonMonths !== 36 && input.horizonMonths !== 60) issues.push('Betrachtungshorizont muss 36 oder 60 Monate sein.')
-  if (input.costs.length > 100 || input.metrics.length > 100) issues.push('Maximal 100 Kostenpositionen und 100 Metrics möglich.')
+  if (input.horizonMonths !== 36 && input.horizonMonths !== 60)
+    issues.push('Betrachtungshorizont muss 36 oder 60 Monate sein.')
+  if (input.costs.length > 100 || input.metrics.length > 100)
+    issues.push('Maximal 100 Kostenpositionen und 100 Metrics möglich.')
   if (issues.length) return { success: false, issues }
   validateCosts(input.costs, input.horizonMonths, issues)
   validateMetrics(input.metrics, input.horizonMonths, issues)
@@ -201,23 +205,36 @@ export function calculateSoftwarePayback(input: SoftwarePaybackInput): SoftwareP
   }
   for (const [group, members] of groupCount) {
     if (members.length > 1) {
-      issues.push('Mögliche Doppelzählung in Wirkungsgruppe "' + group + '": ' +
-        members.join(', ') + '. Bitte nur einen finanziellen Effekt je Wirkungsgruppe anrechnen.')
+      issues.push(
+        'Mögliche Doppelzählung in Wirkungsgruppe "' +
+          group +
+          '": ' +
+          members.join(', ') +
+          '. Bitte nur einen finanziellen Effekt je Wirkungsgruppe anrechnen.',
+      )
     }
   }
   if (issues.length) return { success: false, issues }
 
   const countedMetrics = input.metrics
-    .filter(m => m.included && m.treatment === 'realized' && m.formula !== 'risk' && m.formula !== 'qualitative')
-    .map(m => ({ id: m.id, name: m.name, annualEur: annualMetricPotential(m) ?? 0, evidence: m.evidence }))
-  const includedIds = new Set(countedMetrics.map(m => m.id))
-  const nonMonetized = input.metrics.filter(m => !includedIds.has(m.id)).map(m => ({
-    id: m.id, name: m.name, annualPotentialEur: annualMetricPotential(m),
-    reason: m.treatment === 'capacity' ? 'Kapazitätsgewinn ist kein belegter Geldzufluss.'
-      : m.treatment === 'risk' || m.formula === 'risk' ? 'Risikoannahmen bleiben außerhalb der konservativen Basisrechnung.'
-      : m.formula === 'qualitative' || m.treatment === 'nonfinancial' ? 'Operative Metric ohne nachgewiesene EUR-Wirkung.'
-      : 'Nicht zur Basisrechnung hinzugefügt.',
-  }))
+    .filter((m) => m.included && m.treatment === 'realized' && m.formula !== 'risk' && m.formula !== 'qualitative')
+    .map((m) => ({ id: m.id, name: m.name, annualEur: annualMetricPotential(m) ?? 0, evidence: m.evidence }))
+  const includedIds = new Set(countedMetrics.map((m) => m.id))
+  const nonMonetized = input.metrics
+    .filter((m) => !includedIds.has(m.id))
+    .map((m) => ({
+      id: m.id,
+      name: m.name,
+      annualPotentialEur: annualMetricPotential(m),
+      reason:
+        m.treatment === 'capacity'
+          ? 'Kapazitätsgewinn ist kein belegter Geldzufluss.'
+          : m.treatment === 'risk' || m.formula === 'risk'
+            ? 'Risikoannahmen bleiben außerhalb der konservativen Basisrechnung.'
+            : m.formula === 'qualitative' || m.treatment === 'nonfinancial'
+              ? 'Operative Metric ohne nachgewiesene EUR-Wirkung.'
+              : 'Nicht zur Basisrechnung hinzugefügt.',
+    }))
 
   const months: MonthFlow[] = []
   let cumulativeEur = 0
@@ -234,10 +251,14 @@ export function calculateSoftwarePayback(input: SoftwarePaybackInput): SoftwareP
       else newCostEur += value
     }
     for (const metric of input.metrics) {
-      if (!includedIds.has(metric.id) || month < metric.startMonth ||
-        (metric.endMonth !== undefined && month > metric.endMonth)) continue
+      if (
+        !includedIds.has(metric.id) ||
+        month < metric.startMonth ||
+        (metric.endMonth !== undefined && month > metric.endMonth)
+      )
+        continue
       const share = Math.min(1, (month - metric.startMonth + 1) / metric.rampMonths)
-      metricBenefitEur += (annualMetricPotential(metric) ?? 0) / 12 * share
+      metricBenefitEur += ((annualMetricPotential(metric) ?? 0) / 12) * share
     }
     const totalBenefitEur = avoidedLegacyEur + metricBenefitEur
     const netEur = totalBenefitEur - newCostEur
@@ -248,13 +269,14 @@ export function calculateSoftwarePayback(input: SoftwarePaybackInput): SoftwareP
   }
 
   // Ohne jemals erlittene negative Nettoposition wird kein "zurückverdienter" Aufwand behauptet.
-  const hadCost = input.costs.some(c => c.kind !== 'avoided-legacy' && c.amountEur > 0)
+  const hadCost = input.costs.some((c) => c.kind !== 'avoided-legacy' && c.amountEur > 0)
   let firstBreakEvenMonth: number | null = null
   if (hadCost && benefitTotalEur > 0) {
-    const wasNegative = months.some(m => m.cumulativeEur < -EPS)
+    const wasNegative = months.some((m) => m.cumulativeEur < -EPS)
     if (wasNegative) {
-      firstBreakEvenMonth = months.findIndex((m, i) =>
-        i > 0 && m.cumulativeEur >= -EPS && months[i - 1]!.cumulativeEur < -EPS)
+      firstBreakEvenMonth = months.findIndex(
+        (m, i) => i > 0 && m.cumulativeEur >= -EPS && months[i - 1]!.cumulativeEur < -EPS,
+      )
       if (firstBreakEvenMonth < 0) firstBreakEvenMonth = null
     } else {
       firstBreakEvenMonth = 0
@@ -263,29 +285,51 @@ export function calculateSoftwarePayback(input: SoftwarePaybackInput): SoftwareP
   let sustainedBreakEvenMonth: number | null = null
   if (firstBreakEvenMonth !== null) {
     for (let i = firstBreakEvenMonth; i < months.length; i++) {
-      if (months.slice(i).every(m => m.cumulativeEur >= -EPS)) {
+      if (months.slice(i).every((m) => m.cumulativeEur >= -EPS)) {
         sustainedBreakEvenMonth = i
         break
       }
     }
   }
   return {
-    success: true, months, firstBreakEvenMonth, sustainedBreakEvenMonth,
-    costTotalEur, benefitTotalEur, cumulativeEur,
-    countedMetrics, nonMonetized,
-    unresolvedAssumptions: countedMetrics.filter(m => m.evidence !== 'customer-reviewed').length,
+    success: true,
+    months,
+    firstBreakEvenMonth,
+    sustainedBreakEvenMonth,
+    costTotalEur,
+    benefitTotalEur,
+    cumulativeEur,
+    countedMetrics,
+    nonMonetized,
+    unresolvedAssumptions: countedMetrics.filter((m) => m.evidence !== 'customer-reviewed').length,
   }
 }
 
 export function newMetric(id: string, formula: MetricFormula = 'direct'): CustomerMetric {
   return {
-    id, name: 'Neue Kunden-Metric', formula,
-    treatment: formula === 'time' ? 'capacity' : formula === 'risk' ? 'risk' :
-      formula === 'qualitative' ? 'nonfinancial' : 'realized',
-    evidence: 'hypothesis', evidenceNote: '', effectGroup: id, included: false,
-    annualAmountEur: 0, annualVolume: 0, before: 0, after: 0,
-    hourlyCostEur: 0, valuePerEventEur: 0,
-    startMonth: 1, rampMonths: 1,
+    id,
+    name: 'Neue Kunden-Metric',
+    formula,
+    treatment:
+      formula === 'time'
+        ? 'capacity'
+        : formula === 'risk'
+          ? 'risk'
+          : formula === 'qualitative'
+            ? 'nonfinancial'
+            : 'realized',
+    evidence: 'hypothesis',
+    evidenceNote: '',
+    effectGroup: id,
+    included: false,
+    annualAmountEur: 0,
+    annualVolume: 0,
+    before: 0,
+    after: 0,
+    hourlyCostEur: 0,
+    valuePerEventEur: 0,
+    startMonth: 1,
+    rampMonths: 1,
   }
 }
 
@@ -297,10 +341,16 @@ export function exampleSoftwareProject(): SoftwarePaybackInput {
       { id: 'setup', name: 'Implementierung', kind: 'one-time', amountEur: 120000, period: 'monthly', startMonth: 0 },
       { id: 'saas', name: 'SaaS-Lizenzen', kind: 'saas', amountEur: 3000, period: 'monthly', startMonth: 1 },
     ],
-    metrics: [{
-      ...metric, name: 'Wirtschaftlicher CRM-Nutzen', annualAmountEur: 180000,
-      startMonth: 7, effectGroup: 'crm-gesamtwert', included: true,
-      evidenceNote: 'Fiktive Modellannahme, noch nicht vom Kunden belegt.',
-    }],
+    metrics: [
+      {
+        ...metric,
+        name: 'Wirtschaftlicher CRM-Nutzen',
+        annualAmountEur: 180000,
+        startMonth: 7,
+        effectGroup: 'crm-gesamtwert',
+        included: true,
+        evidenceNote: 'Fiktive Modellannahme, noch nicht vom Kunden belegt.',
+      },
+    ],
   }
 }

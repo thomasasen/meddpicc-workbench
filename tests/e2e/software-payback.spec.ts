@@ -10,14 +10,15 @@ async function projectMode(page: import('@playwright/test').Page) {
 
 test('Software Payback: freie Projektmodellierung, Leermodus und Originalbild', async ({ page }, testInfo) => {
   const errors: string[] = []
-  page.on('pageerror', err => errors.push(err.message))
+  page.on('pageerror', (err) => errors.push(err.message))
   await projectMode(page)
   await expect(page.getByText('Noch keine Kostenpositionen erfasst.')).toBeVisible()
   await expect(page.getByText('Noch keine Kunden-Metric.', { exact: false })).toBeVisible()
   await expect(page.getByTestId('sustained-payback')).toContainText('Nicht erreicht')
   await page.evaluate(() => window.scrollTo(0, 0))
   await page.screenshot({
-    path: testInfo.outputPath('software-payback-empty-' + testInfo.project.name + '.png'), fullPage: true,
+    path: testInfo.outputPath('software-payback-empty-' + testInfo.project.name + '.png'),
+    fullPage: true,
   })
   await page.getByRole('button', { name: 'Einmalkosten' }).click()
   await expect(page.getByText('Einmaliger Aufwand')).toBeVisible()
@@ -30,7 +31,7 @@ test('Software Payback: freie Projektmodellierung, Leermodus und Originalbild', 
 
 test('Software Payback: SaaS-Vorlauf, Metriken, Berechnung, Export und Originalbild', async ({ page }, testInfo) => {
   const errors: string[] = []
-  page.on('pageerror', err => errors.push(err.message))
+  page.on('pageerror', (err) => errors.push(err.message))
   await projectMode(page)
   await page.getByRole('button', { name: 'Fiktives Softwareprojekt einsetzen' }).click()
   await expect(page.getByTestId('sustained-payback')).toHaveText('Monat 18')
@@ -38,7 +39,8 @@ test('Software Payback: SaaS-Vorlauf, Metriken, Berechnung, Export und Originalb
   await expect(page.getByRole('figure')).toBeVisible()
   await page.evaluate(() => window.scrollTo(0, 0))
   await page.screenshot({
-    path: testInfo.outputPath('software-payback-result-' + testInfo.project.name + '.png'), fullPage: true,
+    path: testInfo.outputPath('software-payback-result-' + testInfo.project.name + '.png'),
+    fullPage: true,
   })
 
   await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
@@ -63,7 +65,8 @@ test('Software Payback: dieselbe Wirkungsgruppe blockiert Doppelzählung', async
   await page.getByRole('button', { name: 'Metric hinzufügen' }).click()
   const second = page.locator('.software-entry').filter({ has: page.getByText('Metric 2 · Neue Kunden-Metric') })
   await second.getByLabel('Wirkungsgruppe').fill('crm-gesamtwert')
-  await second.getByLabel('Wie wird die wirtschaftliche Wirkung realisiert? / Datenquelle')
+  await second
+    .getByLabel('Wie wird die wirtschaftliche Wirkung realisiert? / Datenquelle')
     .fill('Fiktive zusätzliche Kennzahl, möglicherweise identisch.')
   await second.getByLabel('Finanzielle Wirkung in Basisrechnung berücksichtigen').check()
   await expect(page.getByText('Mögliche Doppelzählung', { exact: false })).toBeVisible()
@@ -90,8 +93,9 @@ test('Software Payback: responsive, direkte Navigation und Tastatur', async ({ p
     await projectMode(page)
     await page.getByRole('button', { name: 'Fiktives Softwareprojekt einsetzen' }).click()
     await expect(page.getByTestId('sustained-payback')).toHaveText('Monat 18')
-    const overflow = await page.evaluate(() =>
-      document.documentElement.scrollWidth - document.documentElement.clientWidth)
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    )
     expect(overflow, 'horizontal overflow at ' + width).toBeLessThanOrEqual(0)
   }
   await page.getByRole('button', { name: 'Schnellberechnung' }).focus()
