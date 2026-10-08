@@ -3,7 +3,10 @@ import { readFile } from 'node:fs/promises'
 import { expect, test } from '@playwright/test'
 
 test('exportiert die Go-Live-Timeline mit sauberem Layout und UI-Typografie', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name.includes('mobile'), 'Der Export ist viewport-unabhängig und wird einmal visuell geprüft.')
+  test.skip(
+    testInfo.project.name.includes('mobile'),
+    'Der Export ist viewport-unabhängig und wird einmal visuell geprüft.',
+  )
 
   await page.goto('/meddpicc-workbench/#/tools/reverse-timeline')
 
@@ -21,7 +24,9 @@ test('exportiert die Go-Live-Timeline mit sauberem Layout und UI-Typografie', as
 
   const svg = await readFile(svgPath, 'utf8')
   expect(svg).toContain('data-export-safe-right="120"')
-  expect(svg).toContain("font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif")
+  expect(svg).toContain(
+    "font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+  )
 
   const pngDownloadPromise = page.waitForEvent('download')
   await page.getByRole('button', { name: 'PNG' }).click()
