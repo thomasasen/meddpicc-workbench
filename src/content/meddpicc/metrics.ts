@@ -20,7 +20,7 @@ export const metricsConcepts = {
       'Welche Veränderung wäre nach der Einführung realistisch messbar?',
     ],
     learnMore:
-      'Whyte definiert Metrics als quantifizierbare Maße des Werts. Lahoutifard beschreibt denselben Kern als Übersetzung subjektiver Vorteile in objektiv messbare Gewinne.',
+      'Eine Metric übersetzt qualitative Nutzenversprechen in quantifizierbaren Geschäftswert und verbindet die Wirkung mit nachvollziehbaren Zahlen.',
     sourceNote:
       'Whyte → Metrics: Definition / Metrics and Discovery; Lahoutifard → Chapter Three: What is a Metric? / How to Collect Data.',
   },
@@ -43,7 +43,7 @@ export const metricsConcepts = {
       'Woran würden Sie nach der Einführung erkennen, dass sich der Zustand tatsächlich verbessert hat?',
     ],
     learnMore:
-      'Lahoutifard hebt den Before-/After-Vergleich ausdrücklich als Merkmal guter Metrics hervor. Whyte empfiehlt, vom Kundenziel rückwärts zu denken und den Beitrag der Lösung zu quantifizieren.',
+      'Der Before-/After-Vergleich macht sichtbar, wie weit der heutige Zustand vom angestrebten Ziel entfernt ist. Den Wert leitest du vom Kundenziel rückwärts ab.',
     sourceNote:
       'Whyte → Metrics: working backwards from customer goals; Lahoutifard → Chapter Three: Result of an “After-State” Comparison.',
   },
@@ -66,7 +66,7 @@ export const metricsConcepts = {
       'Welche Annahmen müssen wir gemeinsam bestätigen, bevor wir daraus einen Business Impact ableiten?',
     ],
     learnMore:
-      'Lahoutifard strukturiert den Economic Impact über Revenue, Cost und Risk. Whyte betont, dass Metrics den Business Case für die Investition stützen und nicht nur Produkt-KPIs abbilden.',
+      'Wirtschaftlicher Impact zeigt sich etwa in zusätzlichem Umsatz, niedrigeren Kosten oder reduziertem Risiko. Er ist mehr als eine technische Produkt-KPI.',
     sourceNote: 'Whyte → Metrics 2 (M2) / Summary of Metrics; Lahoutifard → Metrics and the Economic Impact.',
   },
   proofToCustomerMetric: {
@@ -88,7 +88,7 @@ export const metricsConcepts = {
       'Welche Verbesserung würden Sie selbst für realistisch und relevant halten?',
     ],
     learnMore:
-      'Whyte trennt M1 als Proof Points bestehender Kunden von M2 als kundenspezifisch erarbeiteten Metrics bzw. ROI. Lahoutifard unterscheidet ebenfalls bestehende Kunden als Quelle glaubwürdiger Beispiele von Metrics, die mit dem Prospect selbst erarbeitet werden.',
+      'M1-Proof-Points stammen aus bestehenden Kundenprojekten. M2-Metrics bzw. der kundenspezifische ROI werden dagegen mit dem aktuellen Kunden aus dessen Zahlen und Situation entwickelt.',
     sourceNote: 'Whyte → Metrics 1 (M1) / Metrics 2 (M2); Lahoutifard → Sources of Metrics.',
   },
   customerValidation: {
@@ -109,7 +109,7 @@ export const metricsConcepts = {
       'Könnten Sie diese Metric Ihrem Economic Buyer mit denselben Zahlen erklären?',
     ],
     learnMore:
-      'Whyte fordert früh Consensus mit dem Champion und später breitere Zustimmung. Lahoutifard nennt Champion-Support bzw. Champion-Autorenschaft ausdrücklich als Merkmal guter Metrics.',
+      'Validiere die Metric möglichst früh mit dem Champion und hole im weiteren Verlauf Zustimmung relevanter Stakeholder ein. Kundenseitige Mitwirkung schafft Glaubwürdigkeit.',
     sourceNote:
       'Whyte → Metrics and Your Sales Process: Early/Mid/Late Consensus; Lahoutifard → Chapter Three: Champion Supported and/or Authored.',
   },
@@ -132,7 +132,7 @@ export const metricsConcepts = {
       'Versteht ein Executive die wirtschaftliche Aussage ohne Produktdetail?',
     ],
     learnMore:
-      'Whyte fordert Klarheit und stakeholdergerechte Sprache. Lahoutifard nennt Everyday Language und Storytelling als Kennzeichen guter Metrics.',
+      'Erkläre die wirtschaftliche Aussage in verständlichen Worten und anhand eines greifbaren Beispiels, damit unterschiedliche Stakeholder sie selbst weitergeben können.',
     sourceNote:
       'Whyte → Metrics and Clarity / Metrics and Storytelling; Lahoutifard → Chapter Three: Everyday Language / Tells a Story.',
   },
@@ -155,7 +155,7 @@ export const metricsConcepts = {
       'Welche zeitliche Konsequenz würde der Kunde selbst intern vertreten?',
     ],
     learnMore:
-      'Whyte verbindet Metrics ausdrücklich mit „Why buy now?“ und warnt zugleich davor, unvalidierte Value-Argumente erst spät gegen Procurement einzusetzen.',
+      'Nutze validierte Metrics, um ein echtes „Why now?“ sichtbar zu machen. Ungeprüfte Nutzenrechnungen sollten nicht erst während der Beschaffung als Druckmittel auftauchen.',
     sourceNote:
       'Whyte → Metrics and Urgency / Metrics and Procurement; Lahoutifard → Chapter Three: Metrics and the Economic Impact.',
   },
@@ -186,7 +186,7 @@ export const metricsKnowledge: KnowledgeTopic = {
     {
       claim: '„Unser Referenzkunde hat 30 % erreicht – also ist 30 % unsere Metric für diesen Deal.“',
       explanation:
-        'Whytes M1-Proof-Points schaffen Glaubwürdigkeit und Hypothesen. Die kundenspezifische M2 muss mit dem Zielkunden aus dessen Situation heraus erarbeitet und validiert werden.',
+        'M1-Proof-Points schaffen Glaubwürdigkeit und Arbeitshypothesen. Die kundenspezifische M2 muss aus der Situation des aktuellen Kunden erarbeitet und validiert werden.',
     },
     {
       claim: '„Eine Produkt-KPI ist automatisch eine MEDDPICC-Metric.“',
@@ -196,7 +196,7 @@ export const metricsKnowledge: KnowledgeTopic = {
     {
       claim: '„ROI und Metric sind dasselbe.“',
       explanation:
-        'Einzelne Kennzahlen und ein vollständiger ROI sind nicht automatisch identisch. Whyte bezeichnet kundenspezifisch erarbeitete M2 ausdrücklich als Return on Investment (ROI). Ob eine einzelne Metric bereits einen ROI abbildet, hängt von Inhalt und Rechenlogik ab.',
+        'Einzelne Kennzahlen und ein vollständiger Return on Investment (ROI) sind nicht automatisch identisch. M2 beschreibt den kundenspezifischen ROI-Bezug. Ob eine einzelne Metric bereits einen ROI abbildet, hängt von Inhalt und Rechenlogik ab.',
     },
     {
       claim: '„Wenn meine Rechnung korrekt ist, braucht der Kunde sie nur noch abzunicken.“',
