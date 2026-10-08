@@ -51,3 +51,25 @@ Stand: 2026-10-08. Die Bewertungen sind **simulierte fachliche Perspektiven**, k
 Testdateien: `src/content/meddpicc/paperProcess.test.ts` und `tests/e2e/paper-process.spec.ts`. Die Browser-Suite erstellt vier echte Screenshots (Knowledge/Checklist × Desktop/Mobile) sowie Overflow-Messungen bei 375/768/1024/1440 px. Die tatsächlichen Lauf- und CI-Ergebnisse werden in den GitHub-Actions-Logs und im PR-Abschlussstatus ausgewiesen; ein grüner Zustand wird nicht vor der Ausführung behauptet.
 
 **Merge-Gate:** Ohne ausdrückliche visuelle Nutzerfreigabe bleibt der Pull Request Draft. Kein Merge.
+
+## 5. Tatsächlich ausgeführte Prüfungen (CI #496)
+
+[GitHub Actions, Run #496](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37809375932) – **erfolgreich beendet**, Original-Workflow unverändert.
+
+| Qualitätsgate | Ergebnis |
+| --- | --- |
+| `npm run format:check` | bestanden |
+| `npm run lint` | bestanden, 0 Fehler; 125 Warnungen in den bereits vorhandenen, hier nicht geänderten `DiscoveryCallKnowledgeView.vue` und `RisksActionsView.vue` |
+| `npm test` | 158 Tests in 25 Dateien bestanden, inklusive Paper Process |
+| `npm run build` | bestanden, inklusive Vue/TypeScript |
+| `npm run test:e2e` | 49 Playwright-Tests bestanden, Desktop- und Mobile-Projekte |
+| `npm run pages:check` | bestanden, Pages-Root entspricht gebautem Stand |
+
+Die vier unverfälschten Browseraufnahmen befinden sich im Actions-Artefakt
+[ui-qs-screenshots – Run #496](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37809375932/artifacts/11565185641).
+Es enthält `paper-process-knowledge-desktop-chromium.png`, `paper-process-knowledge-mobile-chromium.png`,
+`paper-process-checklist-desktop-chromium.png` und `paper-process-checklist-mobile-chromium.png`.
+Die Dateien wurden zusätzlich nach dem Download visuell auf Desktop- und Mobile-Layout geprüft.
+Die Warnungen in zwei nicht geänderten Legacy-Views wurden bewusst nicht in diesem Feature behoben.
+
+**Kein Merge:** PR #49 bleibt bis zu einer expliziten Nutzerfreigabe im Draft-Status.
