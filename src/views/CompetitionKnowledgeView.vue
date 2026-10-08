@@ -38,9 +38,9 @@ import { competitionKnowledge as competition } from '../content/meddpicc/competi
           <p class="eyebrow">Alternativen · Entscheider · Kundenevidenz</p>
           <h1 id="competition-title">{{ competition.title }}</h1>
           <p class="intro-text">{{ competition.lead }}</p>
-          <RouterLink class="button button-primary button-with-icon" to="/checklists/competition">
+          <RouterLink class="button button-primary button-with-icon" to="/checklists/competition" aria-label="Competition-Checklist öffnen">
             <ListChecks :size="18" aria-hidden="true" />
-            Competition-Checklist öffnen
+            Checklist öffnen
           </RouterLink>
         </div>
         <aside class="knowledge-benefit">
