@@ -171,11 +171,11 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 - Discovery-Call-Checklist (in `main`)
 - Discovery-Call-Knowledge (in `main`)
 - Decision Criteria Knowledge und Themen-Checklist (in `main`)
+- Decision Process Knowledge und Themen-Checklist (PR #48, in `main`)
 
 ### Noch offen
 
-- Decision Process
-- Paper Process
+- Paper Process (Feature-Branch, Draft; technische und visuelle Freigabe noch offen)
 - Pain / Implication
 - Champion
 - Competition
@@ -192,7 +192,9 @@ Umgesetzt und am **08.10.2026 nach Nutzerfreigabe per General-Merge** gemergt: h
 - Methodische Nachweise: `docs/DECISION_CRITERIA_SOURCE_QA.md` und `docs/DECISION_CRITERIA_SOURCE_BRIEF.md`.
 - **[CI #470 vollständig grün](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37778247899)** (Format, Lint, Unit, Build, Playwright Desktop/Mobile, Pages-Check), danach mit Merge-Commit `38ab593bad7ed9e1e047302ba719500e6ffae604` in `main` übernommen.
 - Standalone-Knowledge-/Checklist-Slice: kein Criteria Workshop, keine Decision Matrix, kein automatisches Scoring und kein CRM.
-- Nächste T2-Slices: **Decision Process** und **Paper Process**, danach Pain / Implication, Champion und Competition.
+- **Decision Process:** PR #48 am 08.10.2026 nach Nutzerfreigabe in `main` gemergt (Commit `af750f861a596001b3af1f299faa8bc729cf80c2`).
+- **Paper Process:** eigener Knowledge-/Checklist-Slice im Feature-Branch, Primärquellenabgleich unter `docs/PAPER_PROCESS_SOURCE_QA.md`; Merge bleibt bis zur visuellen Freigabe gesperrt.
+- Nach Paper Process folgen Pain / Implication, Champion und Competition.
 
 ## Nächste Roadmap-Blöcke
 
