@@ -83,8 +83,27 @@ Erneuter eigenständiger Angriff auf die tatsächlich angelegten `src/content/me
 
 | Gate | Tatsächliches Ergebnis |
 | --- | --- |
-| Format, Lint, Unit, Build, Playwright Desktop/Mobile, Pages-Root | Ausstehend |
-| 375/768/1024/1440, Fokus, Konsole, Overflow, Details | Ausstehend |
-| Screenshots Knowledge/Checklist Desktop/Mobile, visuelle Prüfung | Ausstehend |
-| GitHub-PR-CI, Pages-Integrität auf main | Ausstehend / getrennt prüfen |
-| Merge-Sperre | Feature-Branch; keine Änderung an `main` erlaubt |
+| `npm run format:check` | **Bestanden** – CI #536, Prettier meldet keine Abweichungen |
+| `npm run lint` | **Bestanden** – CI #536; vorhandene Lint-Warnungen im Legacy-Code sind von Erfolg zu unterscheiden |
+| `npm test` | **Bestanden** – 27 Testdateien, **177/177 Vitest-Tests**, darunter acht Champion-Content-Tests |
+| `npm run build` | **Bestanden** – TypeScript-Prüfung und Vite-Produktionsbuild |
+| `npm run test:e2e` | **Bestanden** – **63 erfolgreich, 1 bestehender Skip**, Desktop + Mobile Chromium |
+| `npm run pages:check` | **Bestanden** – nach `pages:sync` bzw. bestehendem CI-Sync, Pages-Root und Manifest konsistent |
+| Responsive 375/768/1024/1440, Browser-Konsole, Details, Quellen-Fold, Checkbox-Reset, Fokus/Links | Playwright-Assertions bestanden, einschließlich geöffneter Detailbereiche; kein horizontaler Overflow in den getesteten Viewports |
+| Visuelle Inspektion der vier Browserbilder | **Durchgeführt** – alle vier aus dem echten CI-Artefakt extrahiert und geöffnet, Mobile-Seiten zusätzlich in Kopf-/Mittel-/Endabschnitten geprüft. Kein abgeschnittener Header, Text, Checkbox-Label oder Quellenabschluss sichtbar. Mobile Knowledge ist erwartbar lang; optionale Detailbereiche reduzieren die Erstansicht. |
+| PR-Qualitätslauf | **[CI #536 erfolgreich](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37842739559)**; vorheriger vollständiger erfolgreicher Lauf [#534](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37842338053) |
+| Historie vorheriger Korrekturen | CI #532: fehlerhafte Testtext-Assertion, korrigiert. CI #533: fehlendes `champion` in `knowledgeLabels`, korrigiert. Nachfolgende vollständige CI #534 und #536 erfolgreich. Kein Fehlschlag verschwiegen. |
+| Separater `main-pages-integrity`-Run nach PR #50 | **Nicht unabhängig verifiziert.** PR-Branch-Pages-Integrität #536 bestanden, aber das ist nicht dasselbe wie der separate `main`-Push-Check. |
+| Merge-Sperre | PR #51 bleibt zur Nutzerabnahme Draft und ungemergt; `main` war beim Check weiterhin bei `a84d1b0d8be23db9d9ca8eec0a3531a96840a4f5`. |
+
+### Vier echte Browser-Screenshots
+
+Die vier Bilder stammen aus dem [CI-Artefakt `ui-qs-screenshots` von #536](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37842739559/artifacts/11578277883), wurden zusätzlich als direkte PNG-Dateien auf dem Feature-Branch veröffentlicht und sowohl anhand ihrer GitHub-Blob-SHAs als auch visuell geprüft.
+
+1. [Champion Knowledge Desktop (PNG)](https://github.com/thomasasen/meddpicc-workbench/blob/feature/champion-knowledge-checklist/docs/review-screenshots/champion-knowledge-desktop-chromium.png)
+2. [Champion Knowledge Mobile (PNG)](https://github.com/thomasasen/meddpicc-workbench/blob/feature/champion-knowledge-checklist/docs/review-screenshots/champion-knowledge-mobile-chromium.png)
+3. [Champion Checklist Desktop (PNG)](https://github.com/thomasasen/meddpicc-workbench/blob/feature/champion-knowledge-checklist/docs/review-screenshots/champion-checklist-desktop-chromium.png)
+4. [Champion Checklist Mobile (PNG)](https://github.com/thomasasen/meddpicc-workbench/blob/feature/champion-knowledge-checklist/docs/review-screenshots/champion-checklist-mobile-chromium.png)
+
+**Manuelle Abnahme:** 1) Titel/Hierarchie/Lesbarkeit Desktop und Mobile, 2) Coach-Kandidat-Champion-Abgrenzung, 3) drei Kriterien und zusätzliche Perspektiven, 4) Checklist-Details/temporäre Häkchen, 5) Quellen standardmäßig geschlossen und am Ende.
+
