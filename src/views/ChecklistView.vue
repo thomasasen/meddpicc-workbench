@@ -7,6 +7,7 @@ import { decisionProcessChecklist } from '../content/meddpicc/decisionProcess'
 import { discoveryCallChecklist } from '../content/meddpicc/discoveryCall'
 import { economicBuyerChecklists } from '../content/meddpicc/economicBuyer'
 import { metricsChecklists } from '../content/meddpicc/metrics'
+import { paperProcessChecklist } from '../content/meddpicc/paperProcess'
 import type { ChecklistId } from '../content/meddpicc/types'
 
 const props = defineProps<{
@@ -18,6 +19,7 @@ const checked = ref<Record<string, boolean>>({})
 const checklist = computed(() => {
   if (props.checklistId === 'decision-criteria') return decisionCriteriaChecklist
   if (props.checklistId === 'decision-process') return decisionProcessChecklist
+  if (props.checklistId === 'paper-process') return paperProcessChecklist
   if (props.checklistId === 'discovery-call') return discoveryCallChecklist
   if (props.checklistId === 'metrics') return metricsChecklists.metrics
   return economicBuyerChecklists[props.checklistId]
@@ -63,6 +65,8 @@ function checkboxId(itemId: string): string {
             <span>{{
               props.checklistId === 'decision-process'
                 ? 'Decision Process'
+                : props.checklistId === 'paper-process'
+                  ? 'Paper Process'
                 : props.checklistId === 'decision-criteria'
                   ? 'Decision Criteria'
                   : props.checklistId === 'metrics'
@@ -166,6 +170,8 @@ function checkboxId(itemId: string): string {
                   {{
                     item.relatedKnowledge === 'decision-process'
                       ? 'Decision Process'
+                      : item.relatedKnowledge === 'paper-process'
+                        ? 'Paper Process'
                       : item.relatedKnowledge === 'decision-criteria'
                         ? 'Decision Criteria'
                         : item.relatedKnowledge === 'metrics'
