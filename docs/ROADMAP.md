@@ -145,20 +145,19 @@ Deshalb werden Werkzeuge und Checklisten nach konkreten Arbeitssituationen benan
 
 Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hilfetexte innerhalb der Tools speisen kann.
 
-### Aktueller Stand und nächster Slot (08.10.2026)
+### General-Merge / Stand 08.10.2026
 
-- **PR #46 „Discovery Call + SPICED“:** vollständig implementiert, CI #445 grün, **Draft / Sichtfreigabe ausstehend / nicht in `main`**.
-- **Quellen-UX:** Bei Discovery Call, Economic Buyer, Metrics und allen aktuellen Checklists Quellen nur ganz unten, standardmäßig eingeklappt; Implementierung liegt aktuell im PR-#46-Branch, Projektregel in `AGENTS.md`.
-- **Aktueller Slice: Decision Criteria (T2, Implementierung im neuen Draft-PR zur QA/Sichtfreigabe).** Selbstständige Knowledge-Seite plus Themen-Checklist, **keine** frühe Decision-Matrix- oder Criteria-Workshop-App.
-- Implementation-Handoff: `docs/prompts/DECISION_CRITERIA_IMPLEMENTATION.md`; geprüfte Fachbasis: `docs/DECISION_CRITERIA_SOURCE_BRIEF.md`.
-- **Abhängigkeit vor normalem Feature-PR:** erst #46 nach sichtbarer Nutzerfreigabe mergen, dann Decision Criteria auf `main` entwickeln; alternativ Draft als sauberer stacked PR auf #46.
-- Danach priorisiert: Decision Process, Paper Process, Pain / Implication, Champion, Competition.
+- [x] **PR #46 · Discovery Call + SPICED** inklusive Quellen-UX nach erfolgreicher CI #468 in `main` gemergt.
+- [x] **PR #47 · Decision Criteria Knowledge + Themen-Checklist** inklusive der drei Red-Team-Korrekturen nach CI #470 in `main` gemergt.
+- [x] **Quellen-UX verbindlich:** Autoren und Quellen bei Discovery Call, Economic Buyer, Metrics, Decision Criteria und sämtlichen aktuellen Checklists **nur ganz unten, standardmäßig eingeklappt**; Produktregel in `AGENTS.md`.
+- [x] Veralteten PR #38 zur Foundation als überholt geschlossen; die aktuelle Go-Live-Rückwärtsplanung und Toolbox-Foundation bleiben auf `main`.
+- **Als Nächstes:** T2-Slices Decision Process, danach Paper Process. Die umfassenden Decision-Criteria-Tools (Value Triangle, Criteria Workshop, Decision Matrix) bleiben in T6.
 
 ### Themen-Checklists
 
 - [x] Metrics
 - [x] Economic Buyer
-- [x] Decision Criteria (Feature-PR, noch nicht gemergt)
+- [x] Decision Criteria (in `main`)
 - [ ] Decision Process
 - [ ] Paper Process
 - [ ] Pain / Implication
@@ -184,7 +183,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Economic Buyer Knowledge als erster Referenz-Slice
 - [x] Metrics Knowledge als zweiter quellengeprüfter Themen-Slice
 - [x] Discovery Call als ergänzender SPICED-Wissensbereich
-- [x] Decision Criteria Knowledge als dritter quellengeprüfter Themen-Slice (Feature-PR)
+- [x] Decision Criteria Knowledge als dritter quellengeprüfter Themen-Slice (in `main`)
 - [ ] weitere Knowledge-Bereiche ausrollen
 
 ## Phase T3 – Value & Metrics Tools
