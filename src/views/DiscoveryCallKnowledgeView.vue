@@ -2,7 +2,6 @@
 import {
   ArrowLeft,
   BookOpen,
-  CheckCircle2,
   CircleAlert,
   Compass,
   ListChecks,
@@ -61,8 +60,8 @@ import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/disc
       <section class="container knowledge-section" aria-labelledby="book-methods-title">
         <div class="section-heading-row">
           <div>
-            <p class="eyebrow">Primärquellen · Whyte und Lahoutifard</p>
-            <h2 id="book-methods-title">Die Gesprächstechniken aus den Büchern</h2>
+            <p class="eyebrow">Gesprächsführung</p>
+            <h2 id="book-methods-title">Praktische Fragetechniken für die Discovery</h2>
             <p class="section-note">
               Frageabsichten und Gesprächstechniken, keine Liste, die du von oben nach unten abfragen musst.
             </p>
@@ -72,50 +71,46 @@ import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/disc
           <article class="knowledge-concept-card">
             <BookOpen :size="19" aria-hidden="true" />
             <div>
-              <h3>Whytes sieben große Fragen</h3>
+              <h3>Sieben zentrale Frageabsichten</h3>
               <p>Mit diesen sieben Absichten erkundest du Erfolge, Hürden und Folgen.</p>
               <ol>
                 <li v-for="question in discoveryCallKnowledge.whyteBigQuestions" :key="question">
                   {{ question }}
                 </li>
               </ol>
-              <small>Quelle: Whyte → Discovery: The Big Questions.</small>
             </div>
           </article>
           <article class="knowledge-concept-card">
             <BookOpen :size="19" aria-hidden="true" />
             <div>
-              <h3>Lahoutifards T.H.E.D.-Fragen</h3>
+              <h3>Offen fragen mit T.H.E.D.</h3>
               <p>Eine sanfte, offene Gesprächsführung, ohne dem Kunden ein Problem einzureden.</p>
               <ul>
                 <li v-for="item in discoveryCallKnowledge.lahouThed" :key="item.code">
                   <strong>{{ item.code }} · {{ item.name }}:</strong> {{ item.prompt }}
                 </li>
               </ul>
-              <small>Quelle: Lahoutifard → Chapter Seven: How to Identify the Pain?</small>
             </div>
           </article>
           <article class="knowledge-concept-card">
             <MessageCircleQuestion :size="19" aria-hidden="true" />
             <div>
-              <h3>Whytes Two-Sided Discovery</h3>
+              <h3>Gezielt in die Tiefe fragen</h3>
               <p><strong>Erste Vertiefung:</strong> {{ discoveryCallKnowledge.twoSidedExample.first }}</p>
               <p><strong>Eine Ebene tiefer:</strong> {{ discoveryCallKnowledge.twoSidedExample.deepen }}</p>
               <p><strong>Achtung:</strong> {{ discoveryCallKnowledge.twoSidedExample.caution }}</p>
-              <small>Quelle: Whyte → Discovery: Two-Sided Discovery.</small>
             </div>
           </article>
           <article class="knowledge-concept-card">
             <Route :size="19" aria-hidden="true" />
             <div>
-              <h3>Ergänzung: ACE nach Winning by Design</h3>
+              <h3>Den Gesprächseinstieg mit ACE gestalten</h3>
               <p>Ein klarer, kurzer Einstieg in das Gespräch.</p>
               <ul>
                 <li v-for="item in discoveryCallKnowledge.ace" :key="item.code">
                   <strong>{{ item.code }} · {{ item.name }}:</strong> {{ item.meaning }}
                 </li>
               </ul>
-              <small>Quelle: Original-Blueprint The Perfect Discovery Call, S. 3.</small>
             </div>
           </article>
         </div>
@@ -124,7 +119,7 @@ import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/disc
       <section class="container knowledge-section" aria-labelledby="spiced-title">
         <div class="section-heading-row">
           <div>
-            <p class="eyebrow">SPICED nach Winning by Design</p>
+            <p class="eyebrow">SPICED · Gesprächsstruktur</p>
             <h2 id="spiced-title">Fünf Perspektiven für die Discovery</h2>
             <p class="section-note">
               Kein Fragebogen zum Abarbeiten. Folge der Antwort des Kunden, fasse zusammen und prüfe Aussagen. Nicht
@@ -190,12 +185,14 @@ import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/disc
         </article>
       </section>
 
-      <section class="container knowledge-section" aria-labelledby="authors-title">
-        <article class="knowledge-source-card">
-          <BookOpen :size="21" aria-hidden="true" />
-          <div>
-            <p class="eyebrow">Quellenlage</p>
-            <h2 id="authors-title">Originalbücher und die ergänzende SPICED-Methodik</h2>
+      <section class="container knowledge-section" aria-label="Quellen und fachliche Einordnung">
+        <details class="knowledge-source-details">
+          <summary>Quellen und fachliche Einordnung anzeigen</summary>
+          <div class="knowledge-source-card">
+            <p>
+              Die Fragen sind deutschsprachige Praxisformulierungen und keine wörtlichen Zitate oder verbindlichen
+              Pflichtfragen. SPICED und ACE ergänzen die MEDDPICC-Qualifizierung.
+            </p>
             <div class="knowledge-concept-grid">
               <div v-for="viewpoint in discoveryCallKnowledge.differences" :key="viewpoint.author">
                 <h3>{{ viewpoint.author }}</h3>
@@ -203,30 +200,20 @@ import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/disc
                 <small>{{ viewpoint.source }}</small>
               </div>
             </div>
-            <p class="knowledge-practical-takeaway">
-              <CheckCircle2 :size="17" aria-hidden="true" />
-              Die konkreten deutschsprachigen Fragen sind Praxisformulierungen, keine wörtlichen Buchzitate und keine
-              offiziellen SPICED-Pflichtfragen.
-            </p>
-            <details class="knowledge-source-details">
-              <summary>Primär- und Originalquellen anzeigen</summary>
-              <ul>
-                <li v-for="source in discoveryCallKnowledge.sourceNotes" :key="source">
-                  {{ source }}
-                </li>
-                <li>
-                  <a
-                    class="inline-link"
-                    href="https://winningbydesign.com/spiced-framework/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >Originaldefinition von SPICED bei Winning by Design</a
-                  >
-                </li>
-              </ul>
-            </details>
+            <ul>
+              <li v-for="source in discoveryCallKnowledge.sourceNotes" :key="source">{{ source }}</li>
+              <li>
+                <a
+                  class="inline-link"
+                  href="https://winningbydesign.com/spiced-framework/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >SPICED-Originaldefinition aufrufen</a
+                >
+              </li>
+            </ul>
           </div>
-        </article>
+        </details>
       </section>
     </main>
   </div>
