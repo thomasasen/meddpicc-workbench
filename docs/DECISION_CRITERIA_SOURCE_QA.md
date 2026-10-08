@@ -36,7 +36,7 @@ Stand: 08.10.2026. Quellen wurden aus den im Chat bereitgestellten Original-EPUB
 - [x] Kriterienmodelle und sieben Zonen fachlich mit EPUB-Text abgeglichen
 - [x] Beispielsprache auf hypothetische Aussagen und Nachfragen begrenzt
 - [x] Reproduzierbare Unit- und Playwright-Tests implementiert
-- [ ] CI-Gates komplett grün (nach Lauf eintragen)
-- [ ] Desktop-/Mobile-Screenshots visuell geprüft
+- [x] CI-Gates vollständig grün: #456 – https://github.com/thomasasen/meddpicc-workbench/actions/runs/37773584286
+- [x] Desktop-/Mobile-Screenshots aus Lauf #453 für Knowledge und Checklist visuell geprüft; kein auffälliges Overflow oder Quellen-Label in der Standardansicht
 - [ ] Sichtfreigabe erteilt
 - [ ] PR nach Sichtfreigabe gemergt
