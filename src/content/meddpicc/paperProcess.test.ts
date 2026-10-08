@@ -26,7 +26,7 @@ describe('Paper Process: Quellen, Grenzen und Checklistenvertrag', () => {
 
   it('fordert echte Zuständigkeit, Evidenz, Fristen und Zeichnungsweg', () => {
     expect(paperProcessKnowledge.dimensions.map((item) => item.title)).toEqual(['Prozess', 'Personen', 'Timing'])
-    const all = paperProcessChecklist.items.map((item) => item.meaning + item.signals.join(' ')).join(' ')
+    const all = paperProcessChecklist.items.map((item) => item.question + item.meaning + item.signals.join(' ')).join(' ')
     expect(all).toContain('Verantwortlichen')
     expect(all).toContain('bestätigt')
     expect(all).toContain('Unterschriftsberechtigung')
