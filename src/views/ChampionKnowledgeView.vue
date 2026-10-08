@@ -15,6 +15,7 @@ import { championKnowledge as champion } from '../content/meddpicc/champion'
 </script>
 
 <template>
+  <!-- prettier-ignore -->
   <div class="site-shell knowledge-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
     <header class="site-header">
