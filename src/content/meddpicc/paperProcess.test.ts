@@ -54,7 +54,7 @@ describe('Paper Process: Quellen, Grenzen und Checklistenvertrag', () => {
   it('nimmt die vorgezogene NDA-Prüfung und mögliche kommerzielle Verhandlungslücken ernst', () => {
     const contract = paperProcessChecklist.items.find((item) => item.id === 'contract')
     expect(contract?.meaning).toContain('NDA')
-    expect(contract?.meaning).toContain('vor kommerziellen Zusagen')
+    expect(contract?.meaning).toContain('Vor kommerziellen Zusagen')
     expect(contract?.commonMisinterpretation).toContain('NDA sei eine Kaufzusage')
     expect(paperProcessKnowledge.examples.find((item) => item.title === 'Vertrag und Dokumente')?.detail).toContain(
       'frühe NDA',
