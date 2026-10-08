@@ -1,5 +1,13 @@
 # Projektfortschritt / Handoff
 
+## General-Merge am 08.10.2026
+
+- **PR #46 · Discovery Call / SPICED:** in `main` gemergt (Merge `32f8e5dd6e39d63b0d7c0dd95c46377741061197`). Qualitätsprüfung: [CI #468](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37777949492) vollständig grün; anschließender `main`-Check [#469](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37778158370) grün.
+- **PR #47 · Decision Criteria:** in `main` gemergt (Merge `38ab593bad7ed9e1e047302ba719500e6ffae604`). Quellen-Red-Team-Korrekturen einschließlich `Taking Score` integriert; [CI #470](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37778247899) vollständig grün.
+- **PR #38 · alte Toolbox Foundation:** als überholt und nicht konfliktfrei mergebar geschlossen, **ohne den alten Branch in `main` zu übernehmen**. Toolbox-Pivot und Go-Live-Rückwärtsplanung sind bereits aus neueren Umsetzungen auf `main` vorhanden.
+- Keine offenen Pull Requests nach dem General-Merge; die vorhandenen Fachbereiche und Navigation liegen auf `main`.
+- Die Post-Merge-`main`-CI für PR #47 wird separat überprüft; fachliche Freigabe erfolgte mit der ausdrücklichen Nutzeranweisung zum General-Merge.
+
 ## Aktueller Produktstand
 
 Am 07.10.2026 wurde die MEDDPICC Toolbox auf drei klare Bausteine ausgerichtet:
@@ -127,9 +135,9 @@ Branch: `feat/metrics-knowledge-checklist`
 - Unit- und Playwright-Tests für Content, Navigation, Desktop und Mobile
 - keine Scoring-Logik und keine persistente Opportunity-Datenpflege
 
-## Discovery Call – Checklists & Knowledge (PR #46, wartet auf Sichtfreigabe)
+## Discovery Call – Checklists & Knowledge (PR #46, in main)
 
-Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpicc-workbench/pull/46 · **Draft, offen, nicht gemergt** (Stand 08.10.2026).
+Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpicc-workbench/pull/46 · **am 08.10.2026 nach erfolgreicher CI und Nutzerfreigabe in `main` gemergt**.
 
 - Checklist → Discovery Call: 9 erklärende Prüfpunkte mit rein temporären Checkboxen
 - Wissen → Discovery Call: inhaltlich anhand Whyte und Lahoutifard geprüft, ergänzt um SPICED
@@ -139,7 +147,7 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 - Source-QA-Matrix: `docs/DISCOVERY_CALL_SOURCE_QA.md`
 - **CI #445 vollständig erfolgreich**: Formatierung, Lint, Unit Tests, Build, Playwright Desktop/Mobile und Pages-Integrität (https://github.com/thomasasen/meddpicc-workbench/actions/runs/37756165637)
 - Desktop-/Mobile-Screenshots für Nutzerabnahme verfügbar
-- **Offene Freigabe:** sichtbare UI durch Nutzer abnehmen lassen; bis dahin kein Merge
+- **Freigabe / Merge:** ausdrücklicher Nutzerwunsch zum General-Merge am 08.10.2026; PR #46 nach erfolgreichem CI-Lauf #468 gemergt.
 - kein CRM, keine KI-Runtime, kein Call-Protokoll und kein Deal-Scoring
 
 ### Quellen-UX-Regel (08.10.2026)
@@ -148,7 +156,7 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 - **Wissensseiten und sämtliche aktuellen Checklists** zeigen die Quellen und ggf. Unterschiede der Autoren nur am **Seitenende** im **standardmäßig geschlossenen** Bereich „Quellen und fachliche Einordnung anzeigen“.
 - Source-Notizen bleiben in den typisierten Datenmodellen und QA-Dokumenten erhalten; nur die Darstellung ändert sich.
 - Die verbindliche Designregel wurde in `AGENTS.md` festgehalten.
-- **Diese UX-Änderung liegt derzeit ausschließlich auf dem PR-#46-Branch**. Bereits gemergte Seiten in `main` sind bis zum Merge davon noch nicht betroffen.
+- **Die Quellen-UX-Regel ist jetzt in `main` wirksam** und gilt als Standard für kommende Themen.
 
 ## Aktueller T2-Stand
 
@@ -160,12 +168,12 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 - Economic Buyer Knowledge
 - Economic Buyer Themen-Checklist
 - Economic-Buyer-Termin Checklist
-- Discovery-Call-Checklist (Feature-PR)
-- Discovery-Call-Knowledge (Feature-PR)
+- Discovery-Call-Checklist (in `main`)
+- Discovery-Call-Knowledge (in `main`)
+- Decision Criteria Knowledge und Themen-Checklist (in `main`)
 
 ### Noch offen
 
-- Decision Criteria: technische CI abgeschlossen, Nutzer-Sichtfreigabe vor Merge noch offen
 - Decision Process
 - Paper Process
 - Pain / Implication
@@ -173,26 +181,18 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 - Competition
 - weitere situative Checklists wie POC, Pricing und Closing
 
-## Decision Criteria – Knowledge & Themen-Checklist (Feature-PR, QA offen)
+## Decision Criteria – Knowledge & Themen-Checklist (PR #47, in main)
 
-**Als nächster eigenständiger Knowledge-/Checklist-Slice nach Discovery Call festgelegt am 08.10.2026.**
+Umgesetzt und am **08.10.2026 nach Nutzerfreigabe per General-Merge** gemergt: https://github.com/thomasasen/meddpicc-workbench/pull/47.
 
-- Umsetzungs-Prompt für Codex: `docs/prompts/DECISION_CRITERIA_IMPLEMENTATION.md`
-- Fachliches, aus den bereitgestellten EPUB-Kapiteln geprüftes Briefing: `docs/DECISION_CRITERIA_SOURCE_BRIEF.md`
-- Implementiert auf `feat/decision-criteria-knowledge-checklist`: `/knowledge/decision-criteria` und `/checklists/decision-criteria`, inkl. Navigation von der Startseite.
-- Zehn vollständige Checklist-Punkte und temporäre Checkboxen; fachliche Differenzierung und sieben Value-Triangle-Zonen als Knowledge.
-- Unit Tests sowie Playwright Desktop/Mobile inkl. Overflow- und Quellen-Disclosure-Tests hinzugefügt.
-- Fachlicher QA-Nachweis: `docs/DECISION_CRITERIA_SOURCE_QA.md`.
-- **Red-Team-Gegencheck 08.10.2026:** beide Original-EPUBs erneut geprüft, simulierte Autorenperspektiven in `docs/DECISION_CRITERIA_RED_TEAM.md` dokumentiert. Korrekturen zu Whytes *Taking Score*, fehlenden Kriterien als Kaufreife-Risiko und aktiver Nutzung des Value Triangle eingebaut.
-- **Red-Team-QA nach Änderung:** zusätzliche Unit-/Browser-Assertions ergänzt; vorangegangener CI #456 bezieht sich noch auf den Stand **vor** diesen Korrekturen. Neue CI ausstehend.
-- **Technische QS abgeschlossen:** Standard-CI #456 vollständig grün (Format, Lint, Unit, Build, Playwright Desktop/Mobile, Pages-Check): https://github.com/thomasasen/meddpicc-workbench/actions/runs/37773584286.
-- **Visuelle QS:** Desktop-/Mobile-Fullpage-Screenshots aus CI #453 kontrolliert, keine Auffälligkeiten; Quellen sind standardmäßig eingeklappt.
-- **PR #47:** https://github.com/thomasasen/meddpicc-workbench/pull/47, gestapelt auf PR #46. **Ausdrückliche Nutzer-Sichtfreigabe ausstehend; kein Merge**.
-- Methodisch explizit: Whytes Technical/Economic/Relationship und Lahoutifards Vendor/Partner/Financial Justification/Capability Validation sowie Value Triangle (Value, Danger, Parity usw.); Gemeinsamkeiten ohne falsche Gleichsetzung zeigen.
-- Keine Decision Matrix, kein Criteria-Workshop-Tool, kein automatisches Deal-Scoring: diese Instrumente gehören später zur Phase T6.
-- Abhängigkeit: PR #46 vor einem normalen `main`-basierten Decision-Criteria-PR erst freigeben und mergen; alternativ sauberer **stacked Draft-PR** auf #46, niemals unbeabsichtigt PR #46 mitmergen.
-- Decision Criteria ist **implementiert, aber noch nicht freigegeben bzw. gemergt**. Keine Produktionsreife ohne erfolgreiche CI und visuelle Nutzerabnahme.
-- Fachliche Reihenfolge danach: **Decision Process**, **Paper Process**, anschließend Pain/Implication, Champion, Competition.
+- Routen: `/knowledge/decision-criteria` und `/checklists/decision-criteria`, von der Startseite erreichbar.
+- **10** vollständige Checklist-Punkte mit progressiven Erklärungen und temporären Checkboxen – keine Deal-/Score-Persistenz.
+- Whytes Technical/Economic/Relationship, Lahoutifards Vendor/Partner/Financial Justification/Capability Validation und sämtliche sieben Value-Triangle-Zonen werden fachlich richtig und ohne falsche Gleichsetzung dargestellt.
+- Red-Team-Gegencheck anhand der bereitgestellten Original-EPUBs: `docs/DECISION_CRITERIA_RED_TEAM.md`. Umgesetzt: **Taking Score / tatsächliche Kundenbewertung**, fehlende Kriterien als Kaufreife-Signal und aktive Nutzung von Value/Danger/Unique Differentiators.
+- Methodische Nachweise: `docs/DECISION_CRITERIA_SOURCE_QA.md` und `docs/DECISION_CRITERIA_SOURCE_BRIEF.md`.
+- **[CI #470 vollständig grün](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37778247899)** (Format, Lint, Unit, Build, Playwright Desktop/Mobile, Pages-Check), danach mit Merge-Commit `38ab593bad7ed9e1e047302ba719500e6ffae604` in `main` übernommen.
+- Standalone-Knowledge-/Checklist-Slice: kein Criteria Workshop, keine Decision Matrix, kein automatisches Scoring und kein CRM.
+- Nächste T2-Slices: **Decision Process** und **Paper Process**, danach Pain / Implication, Champion und Competition.
 
 ## Nächste Roadmap-Blöcke
 
