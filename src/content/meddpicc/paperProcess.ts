@@ -122,7 +122,7 @@ export const paperProcessKnowledge = {
     {
       claim: '„Unser Quartalsende ist die harte Deadline des Kunden.“',
       explanation:
-        'Eine interne Verkäuferdeadline kann den Abschluss organisieren und beschleunigen (Whytes Timing-Perspektive), belegt aber keinen kundenseitigen Compelling Event. Den wirtschaftlichen Grund für „Why Now?“ muss der Kunde beziehungsweise Economic Buyer bestätigen.',
+        'Eine interne Verkäuferdeadline kann den Abschluss organisieren und beschleunigen, belegt aber keinen kundenseitigen Compelling Event. Den wirtschaftlichen Grund für „Why Now?“ muss der Kunde beziehungsweise Economic Buyer bestätigen.',
     },
   ],
   discoveryQuestions: [
@@ -130,6 +130,7 @@ export const paperProcessKnowledge = {
     'Wer aus Ihrem Einkauf kennt diesen Weg im Detail und könnte ihn kurz mit uns durchgehen?',
     'Welche Vertragsteile oder Nachweise sollten Legal und Security schon jetzt sehen?',
     'Ist schon unsere NDA oder ein früher Vertragsentwurf ein möglicher Engpass, den wir vor der finalen Auswahl klären dürfen?',
+    'Welche vergleichbaren Vertrags- oder Einkaufsprozesse haben Sie durchlaufen, und was hat dabei schon einmal zu Verzögerungen geführt?',
     'Wer bestätigt die Mittel, wer löst die Bestellung aus und wer darf unterschreiben?',
     'Wann sind die zuständigen Personen verfügbar und wie lange brauchen die einzelnen Prüfungen erfahrungsgemäß?',
     'Wo hängt ein Schritt zwingend vom vorherigen ab, und was könnten wir parallel vorbereiten?',
