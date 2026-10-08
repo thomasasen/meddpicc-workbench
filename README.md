@@ -9,7 +9,7 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 
 ### Metrics – Knowledge und Checklist
 
-**Feature-PR (vor technischer und sichtbarer UI-Abnahme noch nicht auf `main`):**
+**Feature-PR #45: technische CI #412 grün, Screenshots geprüft; bis zur Nutzerfreigabe weiterhin Draft und nicht auf `main`.**
 
 - **Wissen → Metrics:** Definition, Before-/After-State, Economic Impact, M1-Proof-Points vs. kundenspezifische M2-Metrics, Validierung sowie Sichtweisen von Whyte und Lahoutifard.
 - **Checklist → Metrics:** sieben kompakte Prüfpunkte mit Erklärung, Erkennungsmerkmalen, typischen Fehlinterpretationen und konkreten Discovery-Fragen.
