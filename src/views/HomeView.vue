@@ -146,6 +146,7 @@ const checklists = [
   {
     label: 'Discovery Call',
     note: 'Vor dem Gespräch prüfen, ob du Pain, Impact, Stakeholder und den nächsten Erkenntnisschritt im Blick hast.',
+    route: '/checklists/discovery-call',
   },
   {
     label: 'POC / Pilot',
@@ -166,6 +167,13 @@ const checklists = [
 ]
 
 const knowledgeTopics = [
+  {
+    code: 'D',
+    label: 'Discovery Call',
+    note: 'MEDDPICC-gerechte Discovery und SPICED-Fragen: von Situation über Impact zur Entscheidung.',
+    icon: Flame,
+    route: '/knowledge/discovery-call',
+  },
   {
     code: 'M',
     label: 'Metrics',
