@@ -164,7 +164,6 @@ function checkboxId(itemId: string): string {
                   }}
                   nachschlagen
                 </RouterLink>
-                <small v-if="item.sourceNote">{{ item.sourceNote }}</small>
               </div>
             </details>
           </article>
@@ -181,9 +180,13 @@ function checkboxId(itemId: string): string {
 
       <section class="container checklist-sources">
         <details class="knowledge-source-details">
-          <summary>Fachliche Quellenabschnitte anzeigen</summary>
+          <summary>Quellen und fachliche Einordnung anzeigen</summary>
           <ul>
             <li v-for="source in checklist.sourceNotes" :key="source">{{ source }}</li>
+            <li v-for="item in checklist.items" :key="item.id">
+              <strong>{{ item.question }}</strong>
+              <span v-if="item.sourceNote"> – {{ item.sourceNote }}</span>
+            </li>
           </ul>
         </details>
       </section>
