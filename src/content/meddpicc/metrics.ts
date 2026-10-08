@@ -68,7 +68,7 @@ export const metricsConcepts = {
     learnMore:
       'Lahoutifard strukturiert den Economic Impact über Revenue, Cost und Risk. Whyte betont, dass Metrics den Business Case für die Investition stützen und nicht nur Produkt-KPIs abbilden.',
     sourceNote:
-      'Whyte → Metrics and ROI / Summary of Metrics; Lahoutifard → Metrics and the Economic Impact.',
+      'Whyte → Metrics 2 (M2) / Summary of Metrics; Lahoutifard → Metrics and the Economic Impact.',
   },
   proofToCustomerMetric: {
     id: 'proof-to-customer-metric',
@@ -199,7 +199,7 @@ export const metricsKnowledge: KnowledgeTopic = {
     {
       claim: '„ROI und Metric sind dasselbe.“',
       explanation:
-        'Metrics liefern zentrale Eingangsgrößen und Wertbelege für einen ROI oder Business Case. Der ROI ist die daraus abgeleitete wirtschaftliche Betrachtung der Investition, nicht die einzelne Metric selbst.',
+        'Einzelne Kennzahlen und ein vollständiger ROI sind nicht automatisch identisch. Whyte bezeichnet kundenspezifisch erarbeitete M2 ausdrücklich als Return on Investment (ROI). Ob eine einzelne Metric bereits einen ROI abbildet, hängt von Inhalt und Rechenlogik ab.',
     },
     {
       claim: '„Wenn meine Rechnung korrekt ist, braucht der Kunde sie nur noch abzunicken.“',
