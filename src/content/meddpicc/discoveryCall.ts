@@ -104,22 +104,22 @@ export const discoveryCallConcepts = {
   opening: {
     id: 'discovery-opening',
     meaning:
-      'Du stimmst Ziel, Erwartungen und Gesprächsrahmen ab. Ein guter Einstieg lädt den Kunden ein, seine Situation selbst zu erklären – statt mit Produktfolie oder Problem-Unterstellung zu beginnen.',
+      'Du stimmst Ziel, Erwartungen und Gesprächsrahmen ab. Winning by Design bietet dafür ACE: Appreciate (für die Zeit danken), Check End Time (verfügbare Zeit prüfen), End Goal (gemeinsames Ziel bestätigen). Danach lädt eine offene Frage zur eigenen Sicht des Kunden ein.',
     whyItMatters:
       'Lahoutifard empfiehlt, mit offenen, gegebenenfalls positiven Fragen zu beginnen. Winning by Design betont einen klaren Gesprächseinstieg vor der Diagnose.',
     signals: [
-      'Der Kunde kann seinen Anlass und sein gewünschtes Gesprächsergebnis nennen.',
-      'Du klärst, was für ihn heute wichtig ist und wie viel Zeit ihr habt.',
+      'Das Gesprächsziel ist beiderseitig abgestimmt und die verfügbare Zeit bestätigt.',
+      'Der Kunde kann sagen, was für ihn heute wichtig ist und was zusätzlich auf die Agenda gehört.',
       'Deine ersten Fragen sind offen, respektvoll und nicht suggestiv.',
     ],
     commonMisinterpretation:
       '„Discovery beginnt am besten mit zehn schnellen Schmerzfragen oder einem vollständigen Produktpitch.“',
     possibleQuestionsOrActions: [
-      '„Was wäre für Sie ein gutes Ergebnis unseres Gesprächs?“',
+      '„Danke für Ihre Zeit. Passt unser Zeitrahmen noch? Mein Ziel wäre, Ihre Situation zu verstehen und gemeinsam sinnvolle nächste Schritte zu finden. Was ist Ihnen heute besonders wichtig?“',
       '„Was funktioniert in Ihrem heutigen Ansatz bereits besonders gut?“',
     ],
     sourceNote:
-      'Lahoutifard → Chapter Seven: How to Identify the Pain?, Language is Important; Winning by Design → The Perfect Discovery Call (Summary).',
+      'Lahoutifard → Chapter Seven: How to Identify the Pain?, Language is Important; Winning by Design → The Perfect Discovery Call (PDF): ACE your opening.',
   },
   situation: {
     id: 'discovery-situation',
@@ -298,7 +298,7 @@ export const discoveryCallKnowledge = {
     },
     {
       title: 'Einstieg',
-      detail: 'Anlass, gewünschtes Gesprächsergebnis und Rahmen klären. Positiv und offen starten.',
+      detail: 'Mit ACE öffnen: für Zeit danken, Zeitrahmen prüfen, Endziel abgleichen. Dann Agenda und gewünschtes Ergebnis des Kunden erfragen.',
       question: 'Was funktioniert heute gut, und was möchten Sie verbessern?',
     },
     {
@@ -330,7 +330,7 @@ export const discoveryCallKnowledge = {
     'Darius Lahoutifard → Always Be Qualifying: Chapter Three – Metrics; Chapter Seven – Identify Pain; Chapter Ten – Say No To Qualify and to Close.',
     'Winning by Design → The SPICED Framework: https://winningbydesign.com/resources/blueprints/the-spiced-framework/',
     'Winning by Design → SPICED Framework (Definitionen): https://winningbydesign.com/spiced-framework/',
-    'Winning by Design → The Perfect Discovery Call: https://winningbydesign.com/resources/blueprints/the-perfect-discovery-call/',
+    'Winning by Design → The Perfect Discovery Call (Original-Blueprint PDF): https://winningbydesign.com/wp-content/uploads/2022/05/Winning-by-Design_Blueprint_The-Perfect-Discovery-Call.pdf',
     'Winning by Design → MEDDIC and SPICED 2023 – Two Different Approaches: https://winningbydesign.com/resources/blog/meddic-and-spiced-2023-two-different-approaches-2/',
   ],
 }
