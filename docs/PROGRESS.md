@@ -127,6 +127,18 @@ Branch: `feat/metrics-knowledge-checklist`
 - Unit- und Playwright-Tests für Content, Navigation, Desktop und Mobile
 - keine Scoring-Logik und keine persistente Opportunity-Datenpflege
 
+## Discovery Call – Checklists & Knowledge (Feature-PR)
+
+Branch: `feat/discovery-call-spiced` · **vor QA/UI-Abnahme noch nicht gemergt**
+
+- Checklist → Discovery Call: 9 erklärende Prüfpunkte mit rein temporären Checkboxen
+- Wissen → Discovery Call: Primärquellenvergleich Whyte / Lahoutifard und ergänzende SPICED-Originalmethodik
+- SPICED S–P–I–CE–D mit natürlichen Einstiegs-/Vertiefungsfragen, MEDDPICC-Brücken und Evidenzlücken
+- ACE (Appreciate, Check End Time, End Goal) aus Original-Blueprint „The Perfect Discovery Call“
+- Source-QA-Matrix: `docs/DISCOVERY_CALL_SOURCE_QA.md`
+- Unit Tests und Playwright Desktop/Mobile zur QS angelegt
+- kein CRM, keine KI-Runtime, kein Call-Protokoll und kein Deal-Scoring
+
 ## Aktueller T2-Stand
 
 ### Umgesetzt
@@ -137,6 +149,8 @@ Branch: `feat/metrics-knowledge-checklist`
 - Economic Buyer Knowledge
 - Economic Buyer Themen-Checklist
 - Economic-Buyer-Termin Checklist
+- Discovery-Call-Checklist (Feature-PR)
+- Discovery-Call-Knowledge (Feature-PR)
 
 ### Noch offen
 
@@ -146,7 +160,7 @@ Branch: `feat/metrics-knowledge-checklist`
 - Pain / Implication
 - Champion
 - Competition
-- weitere situative Checklists wie Discovery, POC, Pricing und Closing
+- weitere situative Checklists wie POC, Pricing und Closing
 
 ## Nächste Roadmap-Blöcke
 
