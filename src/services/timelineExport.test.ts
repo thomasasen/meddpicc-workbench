@@ -53,7 +53,9 @@ describe('buildCustomerTimelineSvg', () => {
     expect(svg).toContain('#22c55e')
     expect(svg).toContain('#8b5cf6')
     expect(svg).toContain('#15803d')
-    expect(svg).toContain("font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif")
+    expect(svg).toContain(
+      "font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+    )
     expect(svg).toContain('id="export-summary"')
     expect(svg).toContain('id="export-legend"')
     expect(svg).toContain('id="export-axis"')
