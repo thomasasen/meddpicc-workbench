@@ -1,10 +1,20 @@
 <script setup lang="ts">
-import { ArrowLeft, BookOpen, CheckCircle2, CircleAlert, Compass, ListChecks, MessageCircleQuestion, Route } from '@lucide/vue'
+import {
+  ArrowLeft,
+  BookOpen,
+  CheckCircle2,
+  CircleAlert,
+  Compass,
+  ListChecks,
+  MessageCircleQuestion,
+  Route,
+} from '@lucide/vue'
 
 import { painImplicationKnowledge as pain } from '../content/meddpicc/painImplication'
 </script>
 
 <template>
+  <!-- prettier-ignore -->
   <div class="site-shell knowledge-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
 
