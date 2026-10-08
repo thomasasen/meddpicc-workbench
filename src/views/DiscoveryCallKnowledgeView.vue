@@ -58,6 +58,69 @@ import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/disc
         </aside>
       </section>
 
+      <section class="container knowledge-section" aria-labelledby="book-methods-title">
+        <div class="section-heading-row">
+          <div>
+            <p class="eyebrow">Primärquellen · Whyte und Lahoutifard</p>
+            <h2 id="book-methods-title">Die Gesprächstechniken aus den Büchern</h2>
+            <p class="section-note">
+              Frageabsichten und Gesprächstechniken, keine Liste, die du von oben nach unten abfragen musst.
+            </p>
+          </div>
+        </div>
+        <div class="knowledge-concept-grid">
+          <article class="knowledge-concept-card">
+            <BookOpen :size="19" aria-hidden="true" />
+            <div>
+              <h3>Whytes sieben große Fragen</h3>
+              <p>Mit diesen sieben Absichten erkundest du Erfolge, Hürden und Folgen.</p>
+              <ol>
+                <li v-for="question in discoveryCallKnowledge.whyteBigQuestions" :key="question">
+                  {{ question }}
+                </li>
+              </ol>
+              <small>Quelle: Whyte → Discovery: The Big Questions.</small>
+            </div>
+          </article>
+          <article class="knowledge-concept-card">
+            <BookOpen :size="19" aria-hidden="true" />
+            <div>
+              <h3>Lahoutifards T.H.E.D.-Fragen</h3>
+              <p>Eine sanfte, offene Gesprächsführung, ohne dem Kunden ein Problem einzureden.</p>
+              <ul>
+                <li v-for="item in discoveryCallKnowledge.lahouThed" :key="item.code">
+                  <strong>{{ item.code }} · {{ item.name }}:</strong> {{ item.prompt }}
+                </li>
+              </ul>
+              <small>Quelle: Lahoutifard → Chapter Seven: How to Identify the Pain?</small>
+            </div>
+          </article>
+          <article class="knowledge-concept-card">
+            <MessageCircleQuestion :size="19" aria-hidden="true" />
+            <div>
+              <h3>Whytes Two-Sided Discovery</h3>
+              <p><strong>Erste Vertiefung:</strong> {{ discoveryCallKnowledge.twoSidedExample.first }}</p>
+              <p><strong>Eine Ebene tiefer:</strong> {{ discoveryCallKnowledge.twoSidedExample.deepen }}</p>
+              <p><strong>Achtung:</strong> {{ discoveryCallKnowledge.twoSidedExample.caution }}</p>
+              <small>Quelle: Whyte → Discovery: Two-Sided Discovery.</small>
+            </div>
+          </article>
+          <article class="knowledge-concept-card">
+            <Route :size="19" aria-hidden="true" />
+            <div>
+              <h3>Ergänzung: ACE nach Winning by Design</h3>
+              <p>Ein klarer, kurzer Einstieg in das Gespräch.</p>
+              <ul>
+                <li v-for="item in discoveryCallKnowledge.ace" :key="item.code">
+                  <strong>{{ item.code }} · {{ item.name }}:</strong> {{ item.meaning }}
+                </li>
+              </ul>
+              <small>Quelle: Original-Blueprint The Perfect Discovery Call, S. 3.</small>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section class="container knowledge-section" aria-labelledby="spiced-title">
         <div class="section-heading-row">
           <div>
