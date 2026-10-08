@@ -1,4 +1,5 @@
-export type KnowledgeTopicId = 'economic-buyer' | 'metrics' | 'discovery-call' | 'decision-criteria' | 'decision-process'
+export type KnowledgeTopicId =
+  'economic-buyer' | 'metrics' | 'discovery-call' | 'decision-criteria' | 'decision-process'
 
 export type ChecklistId =
   'economic-buyer' | 'economic-buyer-meeting' | 'metrics' | 'discovery-call' | 'decision-criteria' | 'decision-process'

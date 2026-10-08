@@ -10,10 +10,7 @@ import {
   Workflow,
 } from '@lucide/vue'
 
-import {
-  decisionProcessKnowledge,
-  decisionProcessPhases,
-} from '../content/meddpicc/decisionProcess'
+import { decisionProcessKnowledge, decisionProcessPhases } from '../content/meddpicc/decisionProcess'
 </script>
 
 <template>
@@ -87,11 +84,17 @@ import {
           </div>
         </div>
         <div class="knowledge-concept-grid">
-          <article v-for="item in decisionProcessKnowledge.distinctions" :key="item.title" class="knowledge-concept-card">
+          <article
+            v-for="item in decisionProcessKnowledge.distinctions"
+            :key="item.title"
+            class="knowledge-concept-card"
+          >
             <Workflow :size="19" aria-hidden="true" />
             <div>
               <h3>{{ item.title }}</h3>
-              <p><strong>{{ item.definition }}</strong></p>
+              <p>
+                <strong>{{ item.definition }}</strong>
+              </p>
               <p>{{ item.example }}</p>
             </div>
           </article>
@@ -104,8 +107,8 @@ import {
             <p class="eyebrow">Kundenseitige Etappen</p>
             <h2 id="phases-title">Validation, Business Approval und Paper Process</h2>
             <p class="section-note">
-              Typische Struktur, kein verpflichtend linearer Ablauf. Vorbereitungen können parallel laufen;
-              die tatsächlichen Abhängigkeiten bestätigt nur der Kunde.
+              Typische Struktur, kein verpflichtend linearer Ablauf. Vorbereitungen können parallel laufen; die
+              tatsächlichen Abhängigkeiten bestätigt nur der Kunde.
             </p>
           </div>
         </div>
@@ -131,19 +134,19 @@ import {
         </div>
         <article class="knowledge-primary-card">
           <p>
-            Ein CRM-POC war technisch erfolgreich. Der Projektleiter erwartet die Auswahl im Steering Committee.
-            Einkauf und Legal wurden noch nicht einbezogen. Die Geschäftsführung kennt den Business Case, hat
-            die Investition aber nicht bestätigt.
+            Ein CRM-POC war technisch erfolgreich. Der Projektleiter erwartet die Auswahl im Steering Committee. Einkauf
+            und Legal wurden noch nicht einbezogen. Die Geschäftsführung kennt den Business Case, hat die Investition
+            aber nicht bestätigt.
           </p>
           <p>
             <strong>Bekannt:</strong> Ein technischer Test wurde durchgeführt. <strong>Nicht belegt:</strong>
-            formale POC-Abnahme, wirtschaftliches Commitment, tatsächlicher Gremiumsbeschluss und der Ablauf
-            bis zur Bestellung. Das sind unterschiedliche Qualifizierungslücken.
+            formale POC-Abnahme, wirtschaftliches Commitment, tatsächlicher Gremiumsbeschluss und der Ablauf bis zur
+            Bestellung. Das sind unterschiedliche Qualifizierungslücken.
           </p>
           <p>
-            <strong>Nächste Aktion:</strong> Mit dem Projektleiter die zuständigen Abnehmer, die Beschlussvorlage,
-            den Gremiumstermin und den separaten Paper Process samt Verantwortlichen klären. Danach die
-            Schritte mit den beteiligten Personen validieren.
+            <strong>Nächste Aktion:</strong> Mit dem Projektleiter die zuständigen Abnehmer, die Beschlussvorlage, den
+            Gremiumstermin und den separaten Paper Process samt Verantwortlichen klären. Danach die Schritte mit den
+            beteiligten Personen validieren.
           </p>
         </article>
       </section>
