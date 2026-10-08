@@ -47,17 +47,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Einmalig aktualisierte Paper-Process-Dateien mit Prettier formatieren
-        run: |
-          npm run format
-          if ! git diff --quiet -- src tests; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src tests
-            git commit -m "style: normalize second Paper Process review with Prettier"
-            git push origin HEAD:feature/paper-process-knowledge-checklist
-          fi
-
       - name: Formatierung prüfen
         run: npm run format:check
 
