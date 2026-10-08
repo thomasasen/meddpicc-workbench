@@ -18,7 +18,8 @@ test('Software Payback: freie Projektmodellierung, Leermodus und Originalbild', 
   await page.evaluate(() => window.scrollTo(0, 0))
   await page.screenshot({
     path: testInfo.outputPath('software-payback-empty-' + testInfo.project.name + '.png'),
-    fullPage: true, scale: 'css',
+    fullPage: true,
+    scale: 'css',
   })
   await page.getByRole('button', { name: 'Einmalkosten' }).click()
   await expect(page.getByText('Einmaliger Aufwand')).toBeVisible()
@@ -40,7 +41,8 @@ test('Software Payback: SaaS-Vorlauf, Metriken, Berechnung, Export und Originalb
   await page.evaluate(() => window.scrollTo(0, 0))
   await page.screenshot({
     path: testInfo.outputPath('software-payback-result-' + testInfo.project.name + '.png'),
-    fullPage: true, scale: 'css',
+    fullPage: true,
+    scale: 'css',
   })
 
   await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
