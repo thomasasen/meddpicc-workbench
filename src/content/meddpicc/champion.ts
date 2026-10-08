@@ -72,7 +72,7 @@ export const championChecklist: ChecklistDefinition = {
       'Gibt es konkrete Hinweise auf interne Fürsprache, auch wenn wir selbst nicht im Raum sind?',
       'Ein Champion vertritt die Lösung in öffentlichen, privaten oder wettbewerbsbezogenen Gesprächen; Aussagen darüber sind erst Indizien.',
       'Der eigentliche Wert entsteht bei internen Diskussionen ohne externen Seller.',
-      ['Aus internen Fragen folgt eine konkrete gemeinsame Vorbereitung.', 'Andere Stakeholder greifen eine begründete Empfehlung auf oder vereinbaren eine Folgerunde.'],
+      ['Interne Einwände werden vom Kunden konkret beschrieben; die Antworten werden gemeinsam vorbereitet.', 'Andere Stakeholder greifen eine begründete Empfehlung auf oder vereinbaren eine Folgerunde.'],
       'Die Person sagt, sie verkauft intern, daher ist interne Advocacy bewiesen.',
       ['Welche Rückfragen oder Gegenargumente sind intern aufgetaucht?', 'Welche beobachtbare nächste Entscheidung oder Teilnahme hat sich daraus ergeben?'],
       'Whyte → CHAMPION → The Public Champion Sell; The Private Champion Sell; The Competitor Champion Sell; Lahoutifard → Chapter Eight → Champions vs. Coaches.'),
@@ -185,7 +185,7 @@ export const championKnowledge = {
       { role: 'Kontakt → Coach', detail: 'Ein engagierter CRM-Projektleiter sendet technische Informationen und beantwortet Fragen. Das ist nützliche Orientierung; interne Fürsprache und EB-Zugang sind nicht belegt.', next: 'Nach dem Buying Committee und den relevanten Einwänden fragen, ohne Status zu unterstellen.' },
       { role: 'Coach bleibt Coach', detail: 'Der Projektleiter kann keine Entscheider zusammenbringen. Sein Beitrag bleibt trotzdem wertvoll und muss nicht als Versagen gewertet werden.', next: 'Gemeinsam klären, welche andere Person eine bereichsübergreifende Perspektive besitzt.' },
       { role: 'Zweite Person → Kandidatin', detail: 'Eine fachliche Bereichsleiterin beschreibt einen eigenen Nutzen aus einem besseren CRM-Prozess und bietet an, die Wertargumentation mit Finance abzugleichen.', next: 'Motive offen bestätigen und einen realistischen gemeinsamen Schritt vereinbaren.' },
-      { role: 'Kandidatin → erprobte Fürsprecherin', detail: 'Die Bereichsleiterin organisiert eine gemeinsame Diskussion zu Business Value; die Beteiligten stellen konkrete Einwände, auf die eine überarbeitete Value Story folgt.', next: 'Reichweite und Ergebnis der internen Unterstützung weiter prüfen. Eine Budgetzusage ist damit noch nicht belegt.' },
+      { role: 'Kandidatin → erprobte Fürsprecherin', detail: 'Die Bereichsleiterin berichtet von ihrer internen Value-Diskussion ohne Anbieter. Im anschließenden gemeinsamen Termin greift Finance die Argumente eigenständig auf, stellt konkrete Einwände und vereinbart eine weitere Prüfung. Die interne Darstellung bleibt zunächst eine Kundenaussage; das Verhalten von Finance ist separat beobachtbar.', next: 'Reichweite und weitere Schritte prüfen. Eine Finance-Rückfrage und ein Folgetermin belegen noch weder die Budgetzusage noch die gesamte interne Wirkung.' },
     ],
   },
   questions: [
