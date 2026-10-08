@@ -61,6 +61,61 @@ Prüfgrundlage: die Original-EPUBs und das geplante fachliche Inhaltsmodell. Die
 
 **Vorabentscheidung:** Knowledge ist eine kurze Erstansicht mit vier Arten, Evidenzgrenzen, drei Analyseachsen und vertiefenden Details. Die Checklist umfasst zehn unabhängige Punkte, ohne Datenpersistenz. Fiktiver CRM-Fall wird als fiktiv ausgezeichnet. Priorität A: Zonentrennung und keine erdachte Wettbewerber-Evidenz. Priorität B: Quellen-Fold/Responsive/Tastatur. Keine Aussage zur bereits bestandenen UI-Qualität in dieser Runde.
 
-## Runde B – Nachprüfung am implementierten Code
+## Runde B – tatsächliche Nachprüfung an Implementierung, Tests und Screenshots
 
-Wird nach tatsächlich vorliegenden CI-/Browserergebnissen ergänzt; vorher dürfen keine erfolgreichen Gates oder Bildprüfungen behauptet werden.
+Simulierte adversariale Fachprüfung aus beiden Autorenperspektiven, **keine direkte Mitwirkung oder Freigabe der Autoren**. Geprüft wurden die real implementierten Vue-Views, die Competition-Contentdatei, zehn Checklist-Einträge, die automatisierten Testprotokolle und die tatsächlich erzeugten vier Browserbilder. Folgende Prüfungen beziehen sich auf konkrete Aussagen des geschriebenen Codes und sind keine fiktiven Testresultate.
+
+### Whyte – sechs substantielle Nachprüfungen
+
+| Tatsächlicher Code und Whyte-Fundstelle | Kritischer Einwand | Entscheidung, Korrektur, Commit | Reale Prüf-Evidenz |
+| --- | --- | --- | --- |
+| competition.ts: types; COMPETITION → Types of Competition | Sind vier Alternativarten korrekt, Budget und Ressourcen statt nur Vendor-Vergleich? | **Beibehalten:** rival, build, projects und inertia werden getrennt gezeigt; konkurrierende Prioritäten ausdrücklich erfasst. | Vitest vier IDs; Playwright vier sichtbare Arten, Desktop-/Mobile-Knowledgebild. |
+| competition.ts: types.inertia, deepDives; COMPETITION → Inertia; Signs your Deal is Heading for Inertia | Werden schwache Metrics, fehlender EB-Zugang oder No Decision als sichere Loss-Prognose ausgegeben? | **Beibehalten:** Warnsignale nur als Validierungsauftrag; No Decision und praktischer Status quo begrifflich unterschieden. | Vitest Inertia-Grenze; Playwright Details und Red Flags. |
+| competition.ts: types.build und Checklist build; COMPETITION → Building Internally | Werden politische Interessen, IP, Kontrolle und interner Sponsor von einem simplen Technik-/Kostenvergleich verdrängt? | **Beibehalten:** Build politisch und technisch qualifizieren; kein generelles „Buy ist billiger“. | Vitest keine pauschale Build-Wirtschaftlichkeit; E2E gerenderter Checklist-Punkt. |
+| competition.ts: perspectives und deepDives; COMPETITION → Competitive Strategy; The Competitive Strategy Plan | In der ersten Version waren Political/Technical/Commercial korrekt, der interne Strategy Plan aber zu schwach dargestellt. | **Tatsächlich ergänzt:** neuer aufklappbarer Abschnitt zu Strengths, Weaknesses, Political, Technical, Commercial, Traps, Counter-Traps, Proof-Points und Education. Commit **1f562fbe4dbc76931c5511fc575e213b7443905d**. Kein vorgezogenes T9-Microtool. | Finale Knowledge-Screenshots und CI #37847325580, sieben Knowledge-Details als DOM bedienbar. |
+| competition.ts: Deep Dive zu Trap-Fragen; COMPETITION → Do Not Knock; DON’T KNOCK THE COMPETITION → Trap-Setting Questions | Würde die Toolbox Whytes offensives Trap Setting unterschlagen oder ungeprüft zum Angriff auf Konkurrenten machen? | **Beibehalten mit offengelegter Grenze:** Whytes Taktik ausdrücklich erwähnt; Forderung nach offenen, überprüfbaren Fragen und ohne FUD ist unsere ethische Praxisableitung, nicht eine fingierte Autorenregel. | Vitest Attribution, geschlossener Quellenbereich und aufklappbare Details im E2E. |
+| CompetitionKnowledgeView.vue: Querverweise; COMPETITION → Competition and your Sales Process | Sind zusätzliche Links auf kleinen Displays wirklich zugänglich? | **Korrigiert nach echtem Fehler:** Ein horizontaler Overflow bis x=401 bei 375 px lag am Inline-Link „Paper Process“; diagnostiziert im Browser, Links in eigene Zeilen umgebaut. Commit **0b1dd618a11eb49cad279cc27685f1df781c2222**. | Final 71 erfolgreiche Playwright-Tests, alle 375/768/1024/1440-Viewport-Prüfungen; finaler Mobile-Screenshot ohne Clipping. |
+
+### Lahoutifard – sechs substantielle Nachprüfungen
+
+| Tatsächlicher Code und Lahoutifard-Fundstelle | Kritischer Einwand | Entscheidung, tatsächlicher Stand | Reale Prüf-Evidenz |
+| --- | --- | --- | --- |
+| competition.ts: sourceNotes; Chapter Two → Where do we cover the Competition? | Wird ihm ein eigenständiges Competition-Kapitel oder Whytes vierteilige Liste fälschlich zugeschrieben? | **Beibehalten:** explizit kein separates Competition-Kapitel, sondern Einbettung in Metrics, Decision Criteria und Champion. | Vitest Autorenattribution, Quellenbereiche am Seitenende. |
+| competition.ts: zones; Chapter Five → The Value Triangle; Analysis of The Decision Criteria Triangle | Sind alle sieben Zonen mit unverwechselbaren Definitionen vorhanden? | **Beibehalten:** PARITY, MARKET TRENDS, USELESS, UNIQUE DIFFERENTIATORS, VALUE, DANGER und CUSTOM NEEDS, jeweils eigene ID. Kein T6-Tool. | Vitest exakte sieben IDs; Playwright aufklappbare Zone VALUE, Knowledge-Screenshot. |
+| competition.ts: zones.value und unique-differentiators; Chapter Five → Most important zones | Wird eine vom Kunden nicht verlangte Besonderheit fälschlich als VALUE verkauft? | **Beibehalten:** VALUE erst bei gefordertem Käuferkriterium mit relativ validiertem Erfüllungsunterschied; UNIQUE bleibt ohne Käuferbedarf ein anderer Fall. | Vitest VALUE/UNIQUE, Browser-Karten und Checklist value. |
+| competition.ts: zones.danger und parity; Chapter Five → Most important zones; How to Act on Each Zone? | Wird eine Vermutung über eine andere Lösung bereits als DANGER oder PARITY als Value bezeichnet? | **Beibehalten:** DANGER benötigt bestätigtes Kriterium und relativen Lösungsnachweis, PARITY belegt keine Differenzierung; unbekannte Fähigkeiten bleiben unbekannt. | Vitest DANGER/PARITY, E2E der Details und Evidenzstufen. |
+| competition.ts: differentiation, Checklist kriterien und impact; Chapter Three → Metrics; Chapter Five → Decision Criteria | Beschränkt sich die Positionierung auf Features statt auf Käuferkriterien und wirtschaftlich geprüfte Metrics? | **Beibehalten:** Pain → Kriterium → Proof-Points → valide Metrics → kundenspezifische Value Story, ohne unbelegte ROI- oder Preisdaten. | Vitest unerlaubte Markt-Claims; E2E Querverweise Metrics, Pain und Decision Criteria. |
+| competition.ts: perspectives.Political, Deep Dive Champion; Chapter Two → Competition; Chapter Eight → Champion | Wird der gegnerische Champion ignoriert oder die interne Fürsprache ungeprüft aus Verkäuferoptimismus abgeleitet? | **Beibehalten:** tatsächliche Wirkung und Stakeholder-Interessen prüfen; Kundenbericht, bestätigter Vorgang, Hypothese und Unbekannt getrennt; keine illegitime Internabeschaffung. | Vitest vier Evidenzstufen; E2E Champion-Link und CRM-Szenario. |
+
+**Tatsächliche Korrekturen aufgrund der Qualitätsprüfung:** (1) Prettier-konforme Helper-Formatierung in Commit **84a56b5af8d889a411806c82e8d0ac2612920ed3**; (2) ausdrückliche Strategy-Plan-Ergänzung in **1f562fbe4dbc76931c5511fc575e213b7443905d**; (3) 375-px-Overflow nach DOM-Diagnose in **0b1dd618a11eb49cad279cc27685f1df781c2222** beseitigt. Die Diagnostik wurde mit Commit **875f6753f3c2726f47ae24a37acdeb1dc1b1448c** ergänzt. Keine anderen Änderungen fälschlich als aus Runde B verursacht ausgegeben.
+
+### Qualitätsgates – reale GitHub-Actions-Protokolle
+
+| Lauf | Faktisches Ergebnis |
+| --- | --- |
+| [#37845899632](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37845899632) | Fehlgeschlagener Formatcheck; spätere Gates liefen nicht. Daraufhin Prettier-Fix. |
+| [#37845981379](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37845981379) | 69 erfolgreiche Playwright-Tests, 1 bestehender Skip, **2 Fehler** am 375px-Overflow (Dokument 401px). |
+| [#37846487539](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37846487539) | Eine anfängliche Verkürzung der CTA löste das Problem **nicht**: erneut 69 erfolgreich, 1 Skip, 2 Overflow-Fehler. |
+| [#37846914657](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37846914657) | Diagnostischer Browserlauf zeigte das rechts ausufernde Inline-Element „Paper Process“ bei x=401; danach gezielter UI-Fix. |
+| **[Finaler erfolgreicher CI-Lauf #37847325580](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37847325580)** | **npm ci, format:check, lint, test, build, test:e2e, Pages-Sync und pages:check erfolgreich.** 190/190 Vitest-Tests aus 28 Testdateien, 71 erfolgreiche Playwright-Tests, 1 bestehender Skip. Lint: 0 Fehler, 125 Warnungen. Vite Chunk-Size-Hinweis und Node-/Actions-Hinweise ohne Gate-Abbruch. |
+
+**Browser-QA:** Desktop Chromium, Mobile Chromium (Pixel 5), über die Startseite und direkte Hash-Routen; Checkboxen unabhängig und nach Reload zurückgesetzt; Details geöffnet/geschlossen; Quellen geschlossen am Seitenende; Links zu Metrics, Pain, Decision Criteria, Decision Process, Economic Buyer, Champion, Paper Process; Fokus/Tastatur und Page Errors; Overflow für **375, 768, 1024, 1440 px**, inklusive geöffneter Details. Bestätigt ist Chromium, nicht Firefox/WebKit.
+
+### Genau vier echte Fullpage-Screenshots aus dem erfolgreichen Lauf
+
+Alle vier PNG-Dateien wurden tatsächlich über GitHub Actions aus Playwright Chromium erstellt, im Feature-Branch publiziert, aus dem [erfolgreichen CI-Artefakt](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37847325580/artifacts/11580545980) heruntergeladen und als echte Originalbilder geöffnet; die beiden langen Mobile-Ansichten zusätzlich in Abschnitten:
+
+1. [Competition Knowledge Desktop](https://github.com/thomasasen/meddpicc-workbench/blob/feature/competition-knowledge-checklist/docs/review-screenshots/competition-knowledge-desktop-chromium.png) – 1280 × 5049 px
+2. [Competition Knowledge Mobile](https://github.com/thomasasen/meddpicc-workbench/blob/feature/competition-knowledge-checklist/docs/review-screenshots/competition-knowledge-mobile-chromium.png) – 1081 × 24126 physische Pixel
+3. [Competition Checklist Desktop](https://github.com/thomasasen/meddpicc-workbench/blob/feature/competition-knowledge-checklist/docs/review-screenshots/competition-checklist-desktop-chromium.png) – 1280 × 1957 px
+4. [Competition Checklist Mobile](https://github.com/thomasasen/meddpicc-workbench/blob/feature/competition-knowledge-checklist/docs/review-screenshots/competition-checklist-mobile-chromium.png) – 1081 × 7942 physische Pixel
+
+**Echte visuelle Befunde:** Header, Typografie, vier Alternativarten, drei Analyseperspektiven, Value-Triangle-Labels, Knowledge-Karten, Checkbox-Fragen und Schaltflächen sind in den jeweiligen Formaten vollständig und lesbar. Auf Mobile brechen die Titel und Checklist-Texte um; Quellen und Buttons sind weder abgeschnitten noch überlagert. Die Querverweise sind nach dem Overflow-Fix umbrechend. Die Quellen stehen unten und sind geschlossen. Die Knowledge-Seite ist mobil sehr lang (umfangreiche Inhalte), bleibt aber durch standardmäßig geschlossene Detailbereiche nutzbar. **Geöffnete Details selbst wurden funktional per Playwright geprüft; die vier Vollseitenbilder zeigen bewusst die geschlossene Erstansicht.** Keine Screenshots mit Puppen-HTML oder Bildgenerator.
+
+**Commit-/Gültigkeitsgrenze:** Der erfolgreiche Testlauf prüfte den letzten UI-/Inhaltscommit **0b1dd618a11eb49cad279cc27685f1df781c2222**. Das CI-System hat später den Build/Pages-Root synchronisiert und vier Original-Screenshots in den Feature-Branch committed. Nachfolgende Änderungen ausschließlich an Markdown-Dokumentation verändern kein getestetes Programmverhalten. Der finale GitHub-HEAD wird separat vor Abschluss kontrolliert.
+
+### Offene Grenzen und konkrete visuelle Abnahme
+
+Ohne verifizierte kundenseitige Käuferkriterien und Lösungsvergleiche ist eine konkrete Value-Triangle-Zuordnung nicht zulässig; die Knowledge-Seite vergibt sie deshalb nicht. Keine Wettbewerberdatenbank, Berechnungen, Score oder Deal-State. Auch die vorhandenen 125 Lint-Warnungen und die Länge der mobilen Knowledge-Seite sind offen benannt.
+
+Vor einem späteren Merge bitte ausdrücklich prüfen und freigeben: **(1)** Hierarchie/Lesbarkeit Desktop und Mobile, einschließlich Mobile-Länge, **(2)** vier Alternativarten getrennt von Political/Technical/Commercial, **(3)** VALUE/UNIQUE/DANGER sowie klare Evidenzgrenzen, **(4)** zehn unabhängige flüchtige Checkboxen mit erklärenden Details, **(5)** eingeklappter Quellenbereich am Seitenende. **Keine Merge-Freigabe liegt vor.**
