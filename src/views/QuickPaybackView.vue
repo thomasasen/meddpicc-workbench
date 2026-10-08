@@ -316,6 +316,20 @@ async function copySummary() {
 </template>
 
 <style scoped>
+.quick-shell .skip-link {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(100%);
+}
+
+.quick-shell .skip-link:focus {
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip-path: none;
+}
+
 .quick-main {
   padding: var(--space-8) 0 var(--space-12);
 }
