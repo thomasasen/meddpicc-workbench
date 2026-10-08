@@ -1,6 +1,6 @@
 # Decision Criteria – fachliches Source-Briefing für die nächste Implementierung
 
-Stand: 08.10.2026 · Arbeitsgrundlage für den nächsten Feature-PR. **Noch kein implementiertes Feature.**
+Stand: 08.10.2026 · **Historisches fachliches Umsetzungsbriefing.** Die Umsetzung wurde nach Quellen-Red-Team und CI in PR #47 abgeschlossen und in `main` gemergt. Aktueller Fachnachweis: `docs/DECISION_CRITERIA_SOURCE_QA.md` und `docs/DECISION_CRITERIA_RED_TEAM.md`.
 
 ## Verifizierte Primärquellen
 
