@@ -107,22 +107,64 @@ import { decisionProcessKnowledge, decisionProcessPhases } from '../content/medd
             <p class="eyebrow">Kundenseitige Etappen</p>
             <h2 id="phases-title">Validation, Business Approval und Paper Process</h2>
             <p class="section-note">
-              Typische Struktur, kein verpflichtend linearer Ablauf. Vorbereitungen können parallel laufen; die
-              tatsächlichen Abhängigkeiten bestätigt nur der Kunde.
+              Die technische Validierung steht typischerweise zuerst. Business Approval kann sich damit überschneiden;
+              ein Approval ohne erkennbaren technischen Prüfpfad ist ein Warnsignal. Paper Process ist ein eigener,
+              teils schon früher beginnender administrativer Prüfpfad.
             </p>
           </div>
         </div>
         <div class="knowledge-concept-grid">
-          <article v-for="(phase, index) in decisionProcessPhases" :key="phase.title" class="knowledge-concept-card">
+          <article v-for="phase in decisionProcessPhases" :key="phase.title" class="knowledge-concept-card">
             <Route :size="19" aria-hidden="true" />
             <div>
-              <h3>{{ index + 1 }}. {{ phase.title }}</h3>
+              <h3>{{ phase.title }}</h3>
               <p>{{ phase.description }}</p>
               <p><strong>Benötigte Evidenz:</strong> {{ phase.evidence }}</p>
               <p><strong>Nachfrage:</strong> {{ phase.question }}</p>
             </div>
           </article>
         </div>
+      </section>
+
+      <section class="container knowledge-section" aria-labelledby="mutual-plan-title">
+        <div class="section-heading-row">
+          <div>
+            <p class="eyebrow">Gemeinsamer Entscheidungsplan</p>
+            <h2 id="mutual-plan-title">Die Timeline braucht Aufgaben auf beiden Seiten</h2>
+            <p class="section-note">
+              Eine Demo-Liste des Verkäufers reicht nicht. Eine gemeinsame Timeline zeigt sowohl Kundenentscheidungen
+              als auch die dafür nötigen Beiträge des Anbieters. Beide Seiten bestätigen ihre Verpflichtungen.
+            </p>
+          </div>
+        </div>
+        <div class="knowledge-concept-grid">
+          <article v-for="part in decisionProcessKnowledge.balancedPlan" :key="part.title" class="knowledge-concept-card">
+            <Workflow :size="19" aria-hidden="true" />
+            <div>
+              <h3>{{ part.title }}</h3>
+              <p>{{ part.meaning }}</p>
+              <p><strong>Konkrete Frage:</strong> {{ part.question }}</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="container knowledge-section knowledge-two-column" aria-label="Compelling Event und Go-Live-Plan">
+        <article class="knowledge-primary-card">
+          <p class="eyebrow">Compelling Event</p>
+          <h2>{{ decisionProcessKnowledge.compellingEvent.headline }}</h2>
+          <p>{{ decisionProcessKnowledge.compellingEvent.meaning }}</p>
+          <p><strong>Discovery-Frage:</strong> {{ decisionProcessKnowledge.compellingEvent.question }}</p>
+          <p><strong>Evidenz:</strong> {{ decisionProcessKnowledge.compellingEvent.proof }}</p>
+        </article>
+        <article class="knowledge-primary-card">
+          <p class="eyebrow">Go-Live rückwärts planen</p>
+          <h2>Vom Kundenziel bis zur heutigen Entscheidung</h2>
+          <ol class="knowledge-action-list">
+            <li v-for="point in decisionProcessKnowledge.goLivePlanning" :key="point">{{ point }}</li>
+          </ol>
+          <RouterLink class="inline-link" to="/tools/reverse-timeline">Go-Live-Rückwärtsplanung öffnen</RouterLink>
+        </article>
       </section>
 
       <section class="container knowledge-section" aria-labelledby="example-title">
@@ -155,7 +197,7 @@ import { decisionProcessKnowledge, decisionProcessPhases } from '../content/medd
         <div class="section-heading-row">
           <div>
             <p class="eyebrow">Rote Flaggen</p>
-            <h2 id="mistakes-title">Fünf gefährliche Kurzschlüsse</h2>
+            <h2 id="mistakes-title">Typische Kurzschlüsse</h2>
           </div>
         </div>
         <div class="knowledge-details-list">
