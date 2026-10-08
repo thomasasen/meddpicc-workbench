@@ -33,7 +33,7 @@ export const spicedElements: SpicedElement[] = [
     openingQuestion: 'An welcher Stelle hält Sie dieser Ablauf heute am stärksten auf?',
     followUpQuestion: 'Was passiert dadurch konkret – und wen betrifft es außer Ihrem Team?',
     evidenceGap: 'Ein Funktionswunsch ist ohne erkennbares Problem noch kein bestätigter Pain.',
-    meddpiccBridge: 'Identify Pain bei Lahoutifard; vertiefte Implication bei Whyte.',
+    meddpiccBridge: 'Identify Pain und Implicate the Pain als vertiefende Qualifizierung.',
   },
   {
     id: 'impact',
@@ -83,7 +83,7 @@ export const discoveryCallConcepts = {
     meaning:
       'Vorab recherchierst du Organisation, Branche, Gesprächspartner und bereits bekannte Initiativen. Daraus leitest du überprüfbare Hypothesen ab, keine als Fakten getarnten Annahmen.',
     whyItMatters:
-      'Vorbereitung ist bei Whyte Voraussetzung für Glaubwürdigkeit und verhindert Fragen, die der Kunde mit öffentlich verfügbaren Informationen beantworten müsste.',
+      'Gute Vorbereitung schafft Glaubwürdigkeit und vermeidet unnötige Fragen zu öffentlich verfügbaren Unternehmensdaten.',
     signals: [
       'Du kennst den geschäftlichen Anlass des Gesprächs und die beteiligten Rollen.',
       'Du kannst relevante Fakten, Vermutungen und offene Fragen auseinanderhalten.',
@@ -99,9 +99,9 @@ export const discoveryCallConcepts = {
   opening: {
     id: 'discovery-opening',
     meaning:
-      'Du stimmst Ziel, Erwartungen und Gesprächsrahmen ab. Winning by Design bietet dafür ACE: Appreciate (für die Zeit danken), Check End Time (verfügbare Zeit prüfen), End Goal (gemeinsames Ziel bestätigen). Danach lädt eine offene Frage zur eigenen Sicht des Kunden ein.',
+      'Du stimmst Ziel, Erwartungen und Gesprächsrahmen mit ACE ab: Appreciate (für die Zeit danken), Check End Time (verfügbare Zeit prüfen), End Goal (gemeinsames Ziel bestätigen). Danach lässt du den Kunden seine Sicht beschreiben.',
     whyItMatters:
-      'Lahoutifard empfiehlt, mit offenen, gegebenenfalls positiven Fragen zu beginnen. Winning by Design betont einen klaren Gesprächseinstieg vor der Diagnose.',
+      'Mit offenen, gerne auch positiven Fragen entsteht ein Gespräch statt eines Verhörs. Ein klarer Einstieg schafft einen gemeinsamen Rahmen, bevor die Diagnose beginnt.',
     signals: [
       'Das Gesprächsziel ist beiderseitig abgestimmt und die verfügbare Zeit bestätigt.',
       'Der Kunde kann sagen, was für ihn heute wichtig ist und was zusätzlich auf die Agenda gehört.',
@@ -139,7 +139,7 @@ export const discoveryCallConcepts = {
     meaning:
       'Du gehst von konkreten Reibungsverlusten, unerreichten Zielen oder Risiken aus und prüfst deren Ursachen. Du bleibst beim Kundenproblem, statt sofort eine Funktion zu verkaufen.',
     whyItMatters:
-      'Lahoutifard trennt geschäftliche Probleme und fehlende Fähigkeiten. Whyte fordert, Pain über die erste Antwort hinaus zu untersuchen.',
+      'Geschäftliche Probleme und fehlende Fähigkeiten sind nicht dasselbe. Vertiefe Pain über die erste Antwort hinaus, bevor du eine Lösung anbietest.',
     signals: [
       'Der Kunde beschreibt selbst ein spezifisches, relevantes Problem.',
       'Du kennst mindestens eine Ursache oder ein wiederkehrendes Beispiel.',
@@ -158,7 +158,7 @@ export const discoveryCallConcepts = {
     meaning:
       'Du fragst nach den Folgen bei Nicht-Handeln und nach einem gewünschten besseren Zustand. Wenn möglich grenzt ihr die wirtschaftliche Größenordnung gemeinsam ein; zusätzlich beachtest du persönliche Konsequenzen.',
     whyItMatters:
-      'Whyte verbindet das Vertiefen von Pain mit dessen Konsequenzen und Quantifizierung. Lahoutifard fordert Consequence und Desired Outcome. SPICED ergänzt ausdrücklich emotionalen Impact.',
+      'Prüfe die Konsequenzen des Pain, den gewünschten Outcome und wenn möglich die Größenordnung. Beachte neben rationalem auch emotionalen Impact.',
     signals: [
       'Die Folgen des Problems sind für ein konkretes Geschäfts- oder Bereichsziel verständlich.',
       'Kundenseitige Größen, Annahmen oder ein klarer Plan zur Validierung sind benannt.',
@@ -177,7 +177,7 @@ export const discoveryCallConcepts = {
     meaning:
       'Du klärst, ob ein Termin, Meilenstein oder externer Treiber tatsächliche Dringlichkeit erzeugt und was der Kunde bei Versäumnis riskiert.',
     whyItMatters:
-      'Lahoutifard verknüpft Urgency und Compelling Event mit dem Pain; SPICED stellt Critical Event als eigenes Diagnoseelement heraus.',
+      'Dringlichkeit entsteht erst durch eine konkrete Konsequenz des Pain oder ein relevantes Ereignis. Ein Critical Event benötigt daher mehr als nur ein Datum.',
     signals: [
       'Der Zeitpunkt wird vom Kunden oder einem externen Sachverhalt her begründet.',
       'Die Folgen einer Verschiebung sind konkret nachvollziehbar.',
@@ -215,7 +215,7 @@ export const discoveryCallConcepts = {
     meaning:
       'Du hörst aktiv zu, paraphrasierst und fragst entlang der Kundenantwort tiefer. Die Reihenfolge ist flexibel: Gute Discovery folgt dem Gespräch, nicht fünf fest vorgeschriebenen Fragen.',
     whyItMatters:
-      'Whyte nennt „Always Be Curious“, aktives Zuhören und Two-Sided Discovery ausdrücklich als Kern guter Discovery.',
+      'Sei neugierig, höre aktiv zu und vertiefe wichtige Antworten auch von einer zweiten Seite, statt nur die nächste Frage abzulesen.',
     signals: [
       'Du lässt den Kunden ausreden und spiegelst entscheidende Aussagen zurück.',
       'Du prüfst deine Interpretation mit einer Rückfrage.',
@@ -234,7 +234,7 @@ export const discoveryCallConcepts = {
     meaning:
       'Du fasst die bestätigten Erkenntnisse zusammen, trennst Beobachtung von offenen Annahmen und vereinbarst einen sinnvollen nächsten Lern- oder Entscheidungsschritt mit Verantwortlichkeit.',
     whyItMatters:
-      'Discovery soll zu besseren Entscheidungen und nächsten Schritten führen, nicht bloß zu mehr Verkäufernotizen. Winning by Design empfiehlt Zusammenfassung und Validierung.',
+      'Discovery soll zu besseren Entscheidungen und konkreten nächsten Schritten führen, nicht bloß zu mehr Verkäufernotizen. Fasse das Gehörte zusammen und lass es bestätigen.',
     signals: [
       'Der Kunde bestätigt oder korrigiert deine Zusammenfassung.',
       'Offene Lücken sind sichtbar und nicht als beantwortet markiert.',
@@ -253,7 +253,7 @@ export const discoveryCallConcepts = {
 
 export const discoveryCallKnowledge = {
   title: 'Discovery Call: erst verstehen, dann empfehlen',
-  lead: 'Andy Whytes und Darius Lahoutifards Discovery-Prinzipien führen das Gespräch. SPICED ergänzt eine nachvollziehbare Struktur für Situation, Pain, Impact, Critical Event und Decision.',
+  lead: 'Führe Discovery-Gespräche strukturiert, ohne einen Fragenkatalog abzuhaken. SPICED hilft dir dabei, Situation, Pain, Impact, Critical Event und Decision gezielt zu vertiefen.',
   principle:
     'Discovery ist weder Produktpitch noch einmalige Qualifizierungsprüfung. Ein guter Call erzeugt ein genaueres, vom Kunden überprüftes Verständnis – und zeigt offen, was noch unbekannt ist.',
   differences: [
