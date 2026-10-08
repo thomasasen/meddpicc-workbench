@@ -66,7 +66,7 @@ export const spicedElements: SpicedElement[] = [
     code: 'D',
     name: 'Decision',
     meaning:
-      'Wie eine Entscheidung tatsächlich zustande kommt: Beteiligte, Bewertungskriterien, Alternativen, Abwägungen und erforderliche Schritte.',
+      'Wie eine Entscheidung tatsächlich zustande kommt: Beteiligte, Bewertungskriterien, Alternativen, Abwägungen und erforderliche Prozessschritte.',
     openingQuestion:
       'Woran werden Sie intern festmachen, welche Lösung die richtige ist – und wer muss diese Sicht mittragen?',
     followUpQuestion: 'Welche Schritte stehen nach der fachlichen Bewertung bis zur Freigabe und Beauftragung noch an?',
