@@ -87,7 +87,7 @@ export const paperProcessKnowledge = {
     {
       claim: '„Wir haben den Zuschlag, der Auftrag ist sicher.“',
       explanation:
-        'Eine fachliche Auswahl ist weder die endgültige kaufmännische Genehmigung noch ein wirksamer Vertrag. Welche Schritte fehlen, ist zunächst offen.',
+        'Eine fachliche Auswahl ist keine endgültige kaufmännische Genehmigung und kein wirksamer Vertrag. Welche Schritte fehlen, ist zunächst offen.',
     },
     {
       claim: '„Unser Champion sagt, das sei alles geregelt.“',
