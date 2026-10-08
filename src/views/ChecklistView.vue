@@ -62,10 +62,10 @@ function checkboxId(itemId: string): string {
               props.checklistId === 'decision-criteria'
                 ? 'Decision Criteria'
                 : props.checklistId === 'metrics'
-                ? 'Metrics'
-                : props.checklistId === 'discovery-call'
-                  ? 'Discovery Call'
-                  : 'Economic Buyer'
+                  ? 'Metrics'
+                  : props.checklistId === 'discovery-call'
+                    ? 'Discovery Call'
+                    : 'Economic Buyer'
             }}</span>
           </div>
           <p class="eyebrow">{{ checklist.eyebrow }}</p>
@@ -163,10 +163,10 @@ function checkboxId(itemId: string): string {
                     item.relatedKnowledge === 'decision-criteria'
                       ? 'Decision Criteria'
                       : item.relatedKnowledge === 'metrics'
-                      ? 'Metrics'
-                      : item.relatedKnowledge === 'discovery-call'
-                        ? 'Discovery Call'
-                        : 'Economic Buyer'
+                        ? 'Metrics'
+                        : item.relatedKnowledge === 'discovery-call'
+                          ? 'Discovery Call'
+                          : 'Economic Buyer'
                   }}
                   nachschlagen
                 </RouterLink>

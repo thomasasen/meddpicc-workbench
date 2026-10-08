@@ -127,7 +127,11 @@ import {
           </ol>
         </article>
         <div class="knowledge-concept-grid">
-          <article v-for="example in decisionCriteriaKnowledge.examples" :key="example.title" class="knowledge-concept-card">
+          <article
+            v-for="example in decisionCriteriaKnowledge.examples"
+            :key="example.title"
+            class="knowledge-concept-card"
+          >
             <MessageCircleQuestion :size="19" aria-hidden="true" />
             <div>
               <h3>{{ example.title }}</h3>
@@ -170,7 +174,11 @@ import {
           </div>
         </div>
         <div class="knowledge-details-list">
-          <details v-for="mistake in decisionCriteriaKnowledge.misinterpretations" :key="mistake.claim" class="knowledge-detail">
+          <details
+            v-for="mistake in decisionCriteriaKnowledge.misinterpretations"
+            :key="mistake.claim"
+            class="knowledge-detail"
+          >
             <summary>
               <CircleAlert :size="18" aria-hidden="true" />
               <span>{{ mistake.claim }}</span>
@@ -209,8 +217,8 @@ import {
           <summary>Quellen und fachliche Einordnung anzeigen</summary>
           <div class="knowledge-source-card">
             <p>
-              Die Fragen und Beispiele sind praxisorientierte deutsche Formulierungen, keine wörtlichen Zitate.
-              Die beiden Kriterienmodelle sind bewusst nicht gleichgesetzt.
+              Die Fragen und Beispiele sind praxisorientierte deutsche Formulierungen, keine wörtlichen Zitate. Die
+              beiden Kriterienmodelle sind bewusst nicht gleichgesetzt.
             </p>
             <div class="knowledge-author-grid">
               <div v-for="viewpoint in decisionCriteriaKnowledge.differences" :key="viewpoint.author">
