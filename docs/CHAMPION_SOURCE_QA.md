@@ -52,7 +52,32 @@ Ein Account Manager soll ohne Deal-Datensatz zwischen freundlichem Kontakt, Coac
 
 ## Simuliertes Red-Team NACH Implementierung
 
-Noch offen bis zur tatsächlichen Prüfung der implementierten Dateien und E2E-Flows. Diese Sektion wird erst nach der Implementierung mit konkreten Beobachtungen und angewandten Korrekturen ersetzt.
+Erneuter eigenständiger Angriff auf die tatsächlich angelegten `src/content/meddpicc/champion.ts`, `ChampionKnowledgeView.vue`, `ChecklistView.vue` und die neuen Vitest-/Playwright-Spezifikationen. Erneut **simulierte Fachperspektiven**, keine Aussage der echten Autoren. Prüflage vor der CI: Code-/Content-Inspektion; automatisierte Tests separat unten.
+
+| Perspektive / Angriff auf die Implementierung | Originalbezug | Konkreter Befund und Änderung bzw. Abgrenzung | Prüfmethode |
+| --- | --- | --- | --- |
+| W1: Im konstruierten Fall wird die Bereichsleiterin bereits nach bloßer Organisation eines Termins zum „erprobten Champion“ | Whyte, `The Private Champion Sell`, `Testing Champions` | **Berechtigter Fehler, im Code korrigiert:** Situation beschreibt nun ausdrücklich nur die **Kundenaussage** über ihre interne Value-Diskussion und separat die **beobachtbare Reaktion** von Finance. Weder Budgetzusage noch vollständige Wirksamkeit wird daraus behauptet. | `champion.test.ts` (Szenario), Sichtprüfung in Knowledge |
+| W2: Drei Kriterien könnten unter der generischen Überschrift unkenntlich werden | Whyte, `The Criteria of a Champion` | `whyteCriteria` bindet exakt die drei typisierten Checklist-Items `einfluss/intern/motivation`; Autorenherkunft nur unten im Quellendetail. Kein zusätzlicher Score. Keine weitere Änderung nötig. | Content-Test Kriterien-IDs und Quellen |
+| W3: „Einfluss“ könnte durch den VP-Titel ersetzt werden | Whyte, `Power and Influence doesn’t necessarily mean seniority` | Die konkrete Warnung „Sie ist VP“ steht in `einfluss`; vergangene Wirkung und relevante Gruppen sind Gegencheck. | Content-Test Einfluss |
+| W4: Das Three-Why-Training könnte einen beliebigen Pitch statt des validierten Kundennutzens fördern | Whyte, `The Three Why’s`, `Educate your Champion on MEDDICC` | `enablement` verbindet Pain und **kundenseitig validierte Metrics**, die Checklist verweist auf echte Einwände. Keine vorfabrizierte Verkaufsmappe. | Content-/View-Inspektion |
+| W5: Späte Fachzustimmung könnte fälschlich Vertragssicherheit bedeuten | Whyte, `Champion and Procurement`, `Champion and Legal` | `buyerAndCommittee` und Punkt `grenzen` trennen fachliches Ja und Zeichnung; echter Paper-Process-Link. | Unit und Browser-Link |
+| W6: Internes Handeln darf nicht mit unbeobachteten privaten Gesprächen „belegt“ werden | Whyte, `The Private Champion Sell` | **Korrektur:** Signaltext nun explizit „Interne Einwände werden vom Kunden konkret beschrieben“; Code und Beispiel trennen berichtete Ereignisse von unabhängigem Verhalten. | Checklist-Signal und Szenario |
+| L1: Mehrere Champions werden möglicherweise zur Pflicht | Lahoutifard, `Could There Be More Than One Champion?` | `buyerAndCommittee` sagt ausdrücklich „möglich, nicht pauschal vorgeschrieben“; technische/fachliche/wirtschaftliche Gruppen differenziert. | Unit-Test |
+| L2: EB-Nennung ersetzt EB-Zugang oder EB-Verweigerung wird als Lüge behandelt | Lahoutifard, `Access to the Economic Buyer`, `Test the Champion` | `zugang` prüft realistische Wege und nennt Hürden; Red Flag „Fake-Champion“ korrigiert die vorschnelle Bewertung. | Unit-Test und Knowledge-Fold |
+| L3: Personal Win wird als vom Seller vermutete Beförderung präsentiert | Lahoutifard, `Personal Win` | `motivation` verlangt selbst beschriebene Ziele; Beförderung ist explizite Fehlinterpretation, kein Beweis. | Unit-Test |
+| L4: Ein guter Coach wird entwertet | Lahoutifard, `Champions vs. Coaches` | Vier Rollen sind getrennt. Im frei konstruierten Beispiel bleibt ein Projektleiter bewusst als hilfreicher Coach ohne Abwertung. | Rollen-Test und E2E |
+| L5: Demo-Begeisterung wird in Handlungsbeweis umetikettiert | Lahoutifard, `How to Find Champions DURING Demos`, `Test the Champion` | Prüffrage `wert` trennt Demo-Interesse von belastbarer interner Value Story; `test` fordert faire konkrete Aktion. | Unit-/Checklist-Inspektion |
+| L6: Eine persönliche Beziehung wird gegenüber Lahoutifard unterschlagen | Lahoutifard, `Favorable Relation with You` | Positive Arbeitsbeziehung steht explizit unter ergänzender Perspektive; Quellen-Appendix weist auf Lahoutifards stärkeren Freundschaftsfokus vs. Whyte hin. | Source-Appendix-E2E |
+
+### Änderungsevidenz aus dem zweiten Durchgang
+
+1. **Inhaltliche Korrektur** der vierten Szenario-Stufe: bloßer Meeting-Termin war zu wenig für Advocacy. Jetzt sind gemeldete interne Gespräche und unabhängig sichtbare Finance-Folgen getrennt; Budgetzusage verneint. Datei: `src/content/meddpicc/champion.ts`.
+2. **Inhaltliche Korrektur** eines zu großzügigen Signals für interne Fürsprache. Datei: gleicher Content, Element `intern`.
+3. **Regressionstest angepasst** auf die präzisierte Evidenzaussage im Szenario; darüber hinaus Tests für VP-Titel, EB-Zugang, Motivation, Coaches, vertrauliche Unterlagen, Mehrfach-Champions und Paper Process.
+4. **Nicht als Autorenregel präsentiert:** Vermeidung von Geheimnissen, Regelbrüchen und Freizeit-Loyalitätstests ist eigene verantwortliche Umsetzung. Die Bücher enthalten teils andere operative Beispiele; diese sind nicht ungeprüft als „Muss“ übernommen worden.
+5. **Offene Grenze:** Die UI kann keine außerhalb des Anbieters stattfindenden internen Gespräche verifizieren. Sie schult zur Trennung von Beobachtung, Bericht und Annahme. Keine Deal- oder Nutzerqualifikation wird gespeichert.
+
+
 
 ## Technische Abnahmematrix
 
