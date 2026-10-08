@@ -153,7 +153,8 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Veralteten PR #38 zur Foundation als überholt geschlossen; die aktuelle Go-Live-Rückwärtsplanung und Toolbox-Foundation bleiben auf `main`.
 - [x] **PR #48 · Decision Process Knowledge + Themen-Checklist** ist nach technischer und visueller Freigabe am 08.10.2026 in `main` gemergt.
 - [x] **PR #49 · Paper Process Knowledge + Themen-Checklist** am 08.10.2026 mit Squash-Commit `2504170512cd9d5475e50b6dbea9be97064825a6` in `main` gemergt; CI/Pages waren erfolgreich.
-- **Aktueller Draft-Slice:** Pain / Implication Knowledge + Themen-Checklist; Merge nur nach technischer QS und ausdrücklicher visueller Freigabe. Decision-Criteria-Tools bleiben in T6.
+- [x] **PR #50 · Pain / Implication Knowledge + Themen-Checklist** am 08.10.2026 in `main` gemergt (Squash `a84d1b0d8be23db9d9ca8eec0a3531a96840a4f5`, PR-CI #529 erfolgreich).
+- **Aktueller Draft-Slice:** Champion Knowledge + Themen-Checklist; ausdrücklich nur nach technischer und visueller Freigabe mergen. Die eigenständigen Champion-Tools bleiben T8.
 
 ### Themen-Checklists
 
@@ -162,8 +163,8 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Decision Criteria (in `main`)
 - [x] Decision Process (PR #48, in `main`)
 - [x] Paper Process (PR #49, in `main`)
-- [ ] Pain / Implication (Feature-Branch; visuelle Abnahme und Merge offen)
-- [ ] Champion
+- [x] Pain / Implication (PR #50, in `main`)
+- [ ] Champion (Feature-Branch zur Draft-Abnahme; nicht gemergt)
 - [ ] Competition
 
 ### Situative Checklists
@@ -188,7 +189,8 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Decision Criteria Knowledge als dritter quellengeprüfter Themen-Slice (in `main`)
 - [x] Decision Process Knowledge (PR #48, in `main`)
 - [x] Paper Process Knowledge (PR #49, in `main`)
-- [ ] Pain / Implication Knowledge (Feature-Branch, Merge/Freigabe offen)
+- [x] Pain / Implication Knowledge (PR #50, in `main`)
+- [ ] Champion Knowledge (neuer Feature-Branch, visuelle Freigabe und Merge offen)
 - [ ] weitere Knowledge-Bereiche ausrollen
 
 ## Phase T3 – Value & Metrics Tools
