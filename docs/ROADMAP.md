@@ -151,15 +151,16 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] **PR #47 · Decision Criteria Knowledge + Themen-Checklist** inklusive der drei Red-Team-Korrekturen nach CI #470 in `main` gemergt.
 - [x] **Quellen-UX verbindlich:** Autoren und Quellen bei Discovery Call, Economic Buyer, Metrics, Decision Criteria und sämtlichen aktuellen Checklists **nur ganz unten, standardmäßig eingeklappt**; Produktregel in `AGENTS.md`.
 - [x] Veralteten PR #38 zur Foundation als überholt geschlossen; die aktuelle Go-Live-Rückwärtsplanung und Toolbox-Foundation bleiben auf `main`.
-- **Als Nächstes:** T2-Slices Decision Process, danach Paper Process. Die umfassenden Decision-Criteria-Tools (Value Triangle, Criteria Workshop, Decision Matrix) bleiben in T6.
+- [x] **PR #48 · Decision Process Knowledge + Themen-Checklist** ist nach technischer und visueller Freigabe am 08.10.2026 in `main` gemergt.
+- **Aktueller Draft-Slice:** Paper Process Knowledge + Themen-Checklist; Merge erst nach technischer QS und ausdrücklicher visueller Abnahme. Die umfassenden Decision-Criteria-Tools (Value Triangle, Criteria Workshop, Decision Matrix) bleiben in T6.
 
 ### Themen-Checklists
 
 - [x] Metrics
 - [x] Economic Buyer
 - [x] Decision Criteria (in `main`)
-- [ ] Decision Process
-- [ ] Paper Process
+- [x] Decision Process (PR #48, in `main`)
+- [ ] Paper Process (Feature-Branch; Draft/visuelle Abnahme offen)
 - [ ] Pain / Implication
 - [ ] Champion
 - [ ] Competition
@@ -184,6 +185,8 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Metrics Knowledge als zweiter quellengeprüfter Themen-Slice
 - [x] Discovery Call als ergänzender SPICED-Wissensbereich
 - [x] Decision Criteria Knowledge als dritter quellengeprüfter Themen-Slice (in `main`)
+- [x] Decision Process Knowledge (PR #48, in `main`)
+- [ ] Paper Process Knowledge (Feature-Branch, Merge/Freigabe offen)
 - [ ] weitere Knowledge-Bereiche ausrollen
 
 ## Phase T3 – Value & Metrics Tools
