@@ -6,8 +6,7 @@ export type TimelineExportOptions = {
   customerName: string
 }
 
-const EXPORT_FONT_STACK =
-  "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif"
+const EXPORT_FONT_STACK = "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif"
 
 const ownerLabels: Record<TimelineOwner, string> = {
   customer: 'Kunde',
