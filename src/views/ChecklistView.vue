@@ -3,6 +3,7 @@ import { ArrowLeft, BookOpen, CheckSquare2, CircleAlert, Lightbulb, MessageCircl
 import { computed, ref, watch } from 'vue'
 
 import { economicBuyerChecklists } from '../content/meddpicc/economicBuyer'
+import { metricsChecklists } from '../content/meddpicc/metrics'
 import type { ChecklistId } from '../content/meddpicc/types'
 
 const props = defineProps<{
@@ -11,7 +12,10 @@ const props = defineProps<{
 
 const checked = ref<Record<string, boolean>>({})
 
-const checklist = computed(() => economicBuyerChecklists[props.checklistId])
+const checklist = computed(() => {
+  if (props.checklistId === 'metrics') return metricsChecklists.metrics
+  return economicBuyerChecklists[props.checklistId]
+})
 
 watch(
   () => props.checklistId,
@@ -50,7 +54,7 @@ function checkboxId(itemId: string): string {
         <div>
           <div class="tool-intro-meta">
             <span class="tool-kind">Checklist</span>
-            <span>Economic Buyer</span>
+            <span>{{ props.checklistId === 'metrics' ? 'Metrics' : 'Economic Buyer' }}</span>
           </div>
           <p class="eyebrow">{{ checklist.eyebrow }}</p>
           <h1 id="checklist-title">{{ checklist.title }}</h1>
@@ -138,12 +142,12 @@ function checkboxId(itemId: string): string {
 
               <div class="checklist-item-footer">
                 <RouterLink
-                  v-if="item.relatedKnowledge === 'economic-buyer'"
+                  v-if="item.relatedKnowledge"
                   class="inline-link"
-                  to="/knowledge/economic-buyer"
+                  :to="'/knowledge/' + item.relatedKnowledge"
                 >
                   <BookOpen :size="15" aria-hidden="true" />
-                  Economic Buyer nachschlagen
+                  {{ item.relatedKnowledge === 'metrics' ? 'Metrics' : 'Economic Buyer' }} nachschlagen
                 </RouterLink>
                 <small v-if="item.sourceNote">{{ item.sourceNote }}</small>
               </div>

@@ -114,18 +114,32 @@ Bestanden:
 - UI-QS-Screenshots
 - Pages-Sync und Pages-Integrität
 
+## Metrics – Checklists & Knowledge v0.1 (PR #45)
+
+Branch: `feat/metrics-knowledge-checklist`
+
+**Fachlicher Quellenabgleich mit Whyte und Lahoutifard am 08.10.2026 bestätigt; CI #412 vollständig grün, Screenshots Desktop/Mobile visuell geprüft.** Umsetzung:
+
+- Wissen → Metrics (Definition, Business Impact, Before-/After, M1 vs. M2, ROI-Abgrenzung)
+- Checklist → Metrics (7 Punkte mit progressiven Erklärungen, lokalen Checkboxen)
+- gemeinsamer Content-Baustein für Knowledge und Checklist
+- fachlicher Vergleich Andy Whyte / Darius Lahoutifard in `docs/METRICS_SOURCE_QA.md`
+- Unit- und Playwright-Tests für Content, Navigation, Desktop und Mobile
+- keine Scoring-Logik und keine persistente Opportunity-Datenpflege
+
 ## Aktueller T2-Stand
 
 ### Umgesetzt
 
 - Knowledge Foundation / Content-Schema
+- Metrics Knowledge
+- Metrics Themen-Checklist
 - Economic Buyer Knowledge
 - Economic Buyer Themen-Checklist
 - Economic-Buyer-Termin Checklist
 
 ### Noch offen
 
-- Metrics
 - Decision Criteria
 - Decision Process
 - Paper Process

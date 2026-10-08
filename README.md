@@ -6,6 +6,16 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 
 > **Was hilft mir bei meiner aktuellen Aufgabe – und wie komme ich schnell zu einem brauchbaren Ergebnis?**
 
+
+### Metrics – Knowledge und Checklist
+
+**Umgesetzt mit PR #45: fachlich mit Whyte und Lahoutifard abgeglichen, technische CI #412 grün und Desktop-/Mobile-Screenshots geprüft.**
+
+- **Wissen → Metrics:** Definition, Before-/After-State, Economic Impact, M1-Proof-Points vs. kundenspezifische M2-Metrics, Validierung sowie Sichtweisen von Whyte und Lahoutifard.
+- **Checklist → Metrics:** sieben kompakte Prüfpunkte mit Erklärung, Erkennungsmerkmalen, typischen Fehlinterpretationen und konkreten Discovery-Fragen.
+- Die Content-Basis wird zwischen Knowledge und Checklist wiederverwendet. Checkboxen sind nur temporäre Denkhilfen, kein Deal-Score.
+- Die fachliche Quellenprüfung steht unter [Metrics Source QA](docs/METRICS_SOURCE_QA.md).
+
 ## Status
 
 | Status | Bedeutung |
@@ -115,7 +125,7 @@ Jeder Checklist-Punkt soll bei Bedarf erklären:
 
 | Checklist | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
-| **Metrics** | 🟡 Als Nächstes | Erklärt und prüft die wichtigsten Merkmale einer belastbaren Metric. | Du kannst schnell gegenprüfen, ob eine Kennzahl wirklich aussagekräftig ist oder nur eine unvalidierte Annahme darstellt. |
+| **Metrics** | ✅ Umgesetzt | Erklärt und prüft die wichtigsten Merkmale einer belastbaren Metric. | Du kannst schnell gegenprüfen, ob eine Kennzahl wirklich aussagekräftig ist oder nur eine unvalidierte Annahme darstellt. |
 | **Economic Buyer** | ✅ Umgesetzt | Erklärt die zentralen Merkmale des Economic Buyers und typische Verwechslungen. | Du kannst Kontakte sicherer einordnen und vermeidest, Titel oder Seniorität mit echter wirtschaftlicher Entscheidungsautorität gleichzusetzen. |
 | **Decision Criteria** | 🟡 Als Nächstes | Hilft, relevante Kriterien zu erkennen, einzuordnen und auf Vollständigkeit zu prüfen. | Du erkennst leichter, welche Kriterien die Auswahl wirklich beeinflussen und wo dir noch Wissen fehlt. |
 | **Decision Process** | 🟡 Als Nächstes | Erklärt Validation, Approval, beteiligte Rollen und typische Prozesslücken. | Du kannst schneller prüfen, ob du den tatsächlichen Weg zur Entscheidung verstanden hast. |
@@ -134,7 +144,7 @@ Die Wissenshilfe ist für Situationen gedacht, in denen du einen MEDDPICC-Begrif
 
 | Wissensbereich | Status | Welche Frage beantwortet er? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
-| **Metrics** | 🟡 Als Nächstes | Wann ist eine Metric belastbar und wie wird daraus wirtschaftlicher Impact? | Du kannst Metrics schneller korrekt anwenden und vermeidest unklare oder nicht validierte Nutzenbehauptungen. |
+| **Metrics** | ✅ Umgesetzt | Wann ist eine Metric belastbar und wie wird daraus wirtschaftlicher Impact? | Du kannst Metrics schneller korrekt anwenden und vermeidest unklare oder nicht validierte Nutzenbehauptungen. |
 | **Economic Buyer** | ✅ Umgesetzt | Woran erkennst du den Economic Buyer und wie unterscheidet er sich von Champion oder fachlichem Entscheider? | Du kannst Rollen sicherer einordnen und weißt, worauf es bei EB-Zugang und EB-Gesprächen wirklich ankommt. |
 | **Decision Criteria** | 🟡 Als Nächstes | Welche Kriterien beeinflussen die Auswahl und wie lassen sie sich strukturieren? | Du kannst Entscheidungskriterien schneller verstehen, hinterfragen und in Kundengesprächen gezielter bearbeiten. |
 | **Decision Process** | 🟡 Als Nächstes | Wie unterscheiden sich Validation und Approval und wer entscheidet wann? | Du verstehst den tatsächlichen Entscheidungsweg besser und kannst gezielter nach offenen Schritten fragen. |
