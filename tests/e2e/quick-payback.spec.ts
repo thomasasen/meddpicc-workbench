@@ -20,6 +20,7 @@ test('Quick Payback: Startseite, leerer Zustand und Original-Screenshot', async 
   ).toBeVisible()
   await expect(page.getByLabel('Jährliche zusätzliche laufende Kosten (EUR/Jahr)')).toHaveValue('0')
   await expect(page.getByLabel('Einmalige Anfangsinvestition (EUR)')).toHaveValue('')
+  await page.evaluate(() => window.scrollTo(0, 0))
   await page.screenshot({
     path: testInfo.outputPath('quick-payback-empty-' + testInfo.project.name + '.png'),
     fullPage: true,
@@ -36,6 +37,7 @@ test('Quick Payback: Berechnung, Copy, Live-Aktualisierung und Original-Screensh
   await expect(page.getByText('180.000,00', { exact: false }).first()).toBeVisible()
   await expect(page.getByText('15.000,00', { exact: false }).first()).toBeVisible()
   await expect(page.getByText('linear und undiskontiert', { exact: false })).toBeVisible()
+  await page.evaluate(() => window.scrollTo(0, 0))
   await page.screenshot({
     path: testInfo.outputPath('quick-payback-result-' + testInfo.project.name + '.png'),
     fullPage: true,
