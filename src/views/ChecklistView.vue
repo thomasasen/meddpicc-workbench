@@ -2,6 +2,7 @@
 import { ArrowLeft, BookOpen, CheckSquare2, CircleAlert, Lightbulb, MessageCircleQuestion } from '@lucide/vue'
 import { computed, ref, watch } from 'vue'
 
+import { championChecklist } from '../content/meddpicc/champion'
 import { decisionCriteriaChecklist } from '../content/meddpicc/decisionCriteria'
 import { decisionProcessChecklist } from '../content/meddpicc/decisionProcess'
 import { discoveryCallChecklist } from '../content/meddpicc/discoveryCall'
@@ -24,6 +25,7 @@ const checklistLabels: Record<ChecklistId, string> = {
   'decision-process': 'Decision Process',
   'paper-process': 'Paper Process',
   'pain-implication': 'Pain / Implication',
+  champion: 'Champion',
 }
 
 const knowledgeLabels: Record<KnowledgeTopicId, string> = {
@@ -49,6 +51,7 @@ const checklist = computed(() => {
   if (props.checklistId === 'decision-process') return decisionProcessChecklist
   if (props.checklistId === 'paper-process') return paperProcessChecklist
   if (props.checklistId === 'pain-implication') return painImplicationChecklist
+  if (props.checklistId === 'champion') return championChecklist
   if (props.checklistId === 'discovery-call') return discoveryCallChecklist
   if (props.checklistId === 'metrics') return metricsChecklists.metrics
   return economicBuyerChecklists[props.checklistId]
