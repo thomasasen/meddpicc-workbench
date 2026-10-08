@@ -47,17 +47,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Einmalige Formatkorrektur der Knowledge-Seiten
-        run: |
-          npx prettier --write src/views/DiscoveryCallKnowledgeView.vue src/views/MetricsKnowledgeView.vue src/views/EconomicBuyerKnowledgeView.vue
-          if ! git diff --quiet -- src/views/DiscoveryCallKnowledgeView.vue src/views/MetricsKnowledgeView.vue src/views/EconomicBuyerKnowledgeView.vue; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src/views/DiscoveryCallKnowledgeView.vue src/views/MetricsKnowledgeView.vue src/views/EconomicBuyerKnowledgeView.vue
-            git commit -m "style: format collapsible knowledge source sections"
-            git push origin HEAD:${{ github.event.pull_request.head.ref }}
-          fi
-
       - name: Formatierung prüfen
         run: npm run format:check
 
