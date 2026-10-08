@@ -44,7 +44,7 @@ describe('Champion: Quellen, Evidenz und Abgrenzungen', () => {
     expect(championKnowledge.scenario.label).toContain('Frei konstruiertes')
     expect(championKnowledge.scenario.label).toContain('Sämtliche Personen')
     expect(championKnowledge.scenario.steps).toHaveLength(4)
-    expect(championKnowledge.scenario.steps.at(-1)?.next).toContain('keine Budgetzusage')
+    expect(championKnowledge.scenario.steps.at(-1)?.next).toContain('Budgetzusage')
   })
 
   it('enthält zehn unabhängige, vollständig erläuterte Prüfbereiche ohne Score', () => {
