@@ -34,9 +34,12 @@ Stand: 08.10.2026. Quellen wurden aus den im Chat bereitgestellten Original-EPUB
 ## QA-Check
 
 - [x] Kriterienmodelle und sieben Zonen fachlich mit EPUB-Text abgeglichen
+- [x] Erneuter Originalquellen-Gegencheck mit simulierten Autorenperspektiven: `docs/DECISION_CRITERIA_RED_TEAM.md`
+- [x] Korrekturen zu `Taking Score`, fehlenden Kriterien und Value-Triangle-Aktionen implementiert
 - [x] Beispielsprache auf hypothetische Aussagen und Nachfragen begrenzt
 - [x] Reproduzierbare Unit- und Playwright-Tests implementiert
-- [x] CI-Gates vollständig grün: #456 – https://github.com/thomasasen/meddpicc-workbench/actions/runs/37773584286
+- [x] Vorheriger CI-Lauf #456 grün – https://github.com/thomasasen/meddpicc-workbench/actions/runs/37773584286
+- [ ] Erneute CI nach Red-Team-Korrekturen vollständig grün
 - [x] Desktop-/Mobile-Screenshots aus Lauf #453 für Knowledge und Checklist visuell geprüft; kein auffälliges Overflow oder Quellen-Label in der Standardansicht
 - [ ] Sichtfreigabe erteilt
 - [ ] PR nach Sichtfreigabe gemergt
