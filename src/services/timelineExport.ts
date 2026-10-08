@@ -64,7 +64,7 @@ function bufferLabel(plan: ReverseTimelinePlan): string {
 }
 
 function bufferColor(plan: ReverseTimelinePlan): string {
-  return plan.status === 'ready' ? '#64748b' : '#9a3412'
+  return plan.status === 'lead-time-available' ? '#64748b' : '#9a3412'
 }
 
 export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: TimelineExportOptions): string {
