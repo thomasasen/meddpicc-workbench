@@ -102,7 +102,6 @@ function evidenceLabel(value: CustomerMetric['evidence']): string {
   }[value]
 }
 
-const chartHeight = 280
 const chartLeft = 90
 const chartWidth = 766
 const yBounds = computed(() => {
