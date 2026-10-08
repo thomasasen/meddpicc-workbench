@@ -180,9 +180,11 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 - Umsetzungs-Prompt für Codex: `docs/prompts/DECISION_CRITERIA_IMPLEMENTATION.md`
 - Fachliches, aus den bereitgestellten EPUB-Kapiteln geprüftes Briefing: `docs/DECISION_CRITERIA_SOURCE_BRIEF.md`
 - Implementiert auf `feat/decision-criteria-knowledge-checklist`: `/knowledge/decision-criteria` und `/checklists/decision-criteria`, inkl. Navigation von der Startseite.
-- Neun vollständige Checklist-Punkte und temporäre Checkboxen; fachliche Differenzierung und sieben Value-Triangle-Zonen als Knowledge.
+- Zehn vollständige Checklist-Punkte und temporäre Checkboxen; fachliche Differenzierung und sieben Value-Triangle-Zonen als Knowledge.
 - Unit Tests sowie Playwright Desktop/Mobile inkl. Overflow- und Quellen-Disclosure-Tests hinzugefügt.
 - Fachlicher QA-Nachweis: `docs/DECISION_CRITERIA_SOURCE_QA.md`.
+- **Red-Team-Gegencheck 08.10.2026:** beide Original-EPUBs erneut geprüft, simulierte Autorenperspektiven in `docs/DECISION_CRITERIA_RED_TEAM.md` dokumentiert. Korrekturen zu Whytes *Taking Score*, fehlenden Kriterien als Kaufreife-Risiko und aktiver Nutzung des Value Triangle eingebaut.
+- **Red-Team-QA nach Änderung:** zusätzliche Unit-/Browser-Assertions ergänzt; vorangegangener CI #456 bezieht sich noch auf den Stand **vor** diesen Korrekturen. Neue CI ausstehend.
 - **Technische QS abgeschlossen:** Standard-CI #456 vollständig grün (Format, Lint, Unit, Build, Playwright Desktop/Mobile, Pages-Check): https://github.com/thomasasen/meddpicc-workbench/actions/runs/37773584286.
 - **Visuelle QS:** Desktop-/Mobile-Fullpage-Screenshots aus CI #453 kontrolliert, keine Auffälligkeiten; Quellen sind standardmäßig eingeklappt.
 - **PR #47:** https://github.com/thomasasen/meddpicc-workbench/pull/47, gestapelt auf PR #46. **Ausdrückliche Nutzer-Sichtfreigabe ausstehend; kein Merge**.
