@@ -32,7 +32,9 @@ test('Discovery-Call-Checklist erklärt Quellen und setzt temporäre Checks zur�
 
   await page.goto('/meddpicc-workbench/')
   await page.locator('a[href$="#/checklists/discovery-call"]').click()
-  await expect(page.getByRole('heading', { name: 'Discovery Call: vorbereitet, neugierig und kundenzentriert' })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Discovery Call: vorbereitet, neugierig und kundenzentriert' }),
+  ).toBeVisible()
   const checkboxes = page.getByRole('checkbox')
   await expect(checkboxes).toHaveCount(9)
   await checkboxes.first().check()

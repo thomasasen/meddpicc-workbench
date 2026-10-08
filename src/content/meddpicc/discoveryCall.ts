@@ -16,9 +16,9 @@ export const spicedElements: SpicedElement[] = [
     id: 'situation',
     code: 'S',
     name: 'Situation',
-    meaning: 'Geschäftlicher Kontext, heutiger Ablauf, relevante Prioritäten, Rahmenbedingungen und Auslöser für Veränderung.',
-    openingQuestion:
-      'Wie läuft das heute bei Ihnen ab, und was hat Sie veranlasst, das Thema jetzt aufzugreifen?',
+    meaning:
+      'Geschäftlicher Kontext, heutiger Ablauf, relevante Prioritäten, Rahmenbedingungen und Auslöser für Veränderung.',
+    openingQuestion: 'Wie läuft das heute bei Ihnen ab, und was hat Sie veranlasst, das Thema jetzt aufzugreifen?',
     followUpQuestion: 'Was funktioniert daran bereits gut – und wo wird es im Alltag schwierig?',
     evidenceGap:
       'Bekannte Branchen- oder Firmeninformationen ersetzen keine bestätigte Beschreibung der konkreten Kundensituation.',
@@ -41,8 +41,7 @@ export const spicedElements: SpicedElement[] = [
     name: 'Impact',
     meaning:
       'Wirtschaftliche Folgen des Problems und Wert eines besseren Zustands; daneben persönliche oder organisatorische Auswirkungen auf die Beteiligten.',
-    openingQuestion:
-      'Welche Konsequenzen hat das heute für Ihre Ziele, Ihre Mitarbeitenden oder Ihre Kunden?',
+    openingQuestion: 'Welche Konsequenzen hat das heute für Ihre Ziele, Ihre Mitarbeitenden oder Ihre Kunden?',
     followUpQuestion:
       'Können wir die Größenordnung gemeinsam eingrenzen – etwa Vorgänge, Zeit, Kosten oder entgangenen Umsatz?',
     evidenceGap:
@@ -54,11 +53,9 @@ export const spicedElements: SpicedElement[] = [
     id: 'critical-event',
     code: 'CE',
     name: 'Critical Event',
-    meaning:
-      'Kundenseitiger Termin, Meilenstein oder äußerer Zwang mit realer Konsequenz, falls er verfehlt wird.',
+    meaning: 'Kundenseitiger Termin, Meilenstein oder äußerer Zwang mit realer Konsequenz, falls er verfehlt wird.',
     openingQuestion: 'Bis wann müsste sich die Situation ändern, damit das Vorhaben seinen Zweck erfüllt?',
-    followUpQuestion:
-      'Was würde konkret passieren, wenn der Zeitpunkt nicht eingehalten wird – und warum gerade dann?',
+    followUpQuestion: 'Was würde konkret passieren, wenn der Zeitpunkt nicht eingehalten wird – und warum gerade dann?',
     evidenceGap:
       'Ein gewünschtes Go-Live-Datum, Budgetjahr oder Verkäufer-Quartalsende belegt noch kein Critical Event.',
     meddpiccBridge:
@@ -72,8 +69,7 @@ export const spicedElements: SpicedElement[] = [
       'Wie eine Entscheidung tatsächlich zustande kommt: Beteiligte, Bewertungskriterien, Alternativen, Abwägungen und erforderliche Schritte.',
     openingQuestion:
       'Woran werden Sie intern festmachen, welche Lösung die richtige ist – und wer muss diese Sicht mittragen?',
-    followUpQuestion:
-      'Welche Schritte stehen nach der fachlichen Bewertung bis zur Freigabe und Beauftragung noch an?',
+    followUpQuestion: 'Welche Schritte stehen nach der fachlichen Bewertung bis zur Freigabe und Beauftragung noch an?',
     evidenceGap:
       'Der freundliche Gesprächspartner ist nicht automatisch Champion oder Economic Buyer; ein Auswahltermin ist kein vollständiger Decision Process.',
     meddpiccBridge:
@@ -93,8 +89,7 @@ export const discoveryCallConcepts = {
       'Du kannst relevante Fakten, Vermutungen und offene Fragen auseinanderhalten.',
       'Du hast ein klares Lernziel für das Gespräch statt einer Produktpräsentation.',
     ],
-    commonMisinterpretation:
-      '„Ich habe die Website gelesen – deshalb kenne ich die Probleme des Unternehmens schon.“',
+    commonMisinterpretation: '„Ich habe die Website gelesen – deshalb kenne ich die Probleme des Unternehmens schon.“',
     possibleQuestionsOrActions: [
       'Vorab Geschäftsbericht, aktuelle Initiativen und öffentliche Informationen zur Rolle prüfen.',
       'Eigene Hypothese für den Einstieg markieren: „Ich habe gelesen ..., trifft das auf Ihren Bereich zu?“',
@@ -137,8 +132,7 @@ export const discoveryCallConcepts = {
       '„Nehmen Sie mich durch einen typischen Vorgang: Was passiert von Anfang bis Ende?“',
       '„Welche Teams und Systeme sind daran beteiligt?“',
     ],
-    sourceNote:
-      'Whyte → Discovery: The Big Questions, Research First; Winning by Design → SPICED: Situation.',
+    sourceNote: 'Whyte → Discovery: The Big Questions, Research First; Winning by Design → SPICED: Situation.',
   },
   pain: {
     id: 'discovery-pain',
@@ -151,8 +145,7 @@ export const discoveryCallConcepts = {
       'Du kennst mindestens eine Ursache oder ein wiederkehrendes Beispiel.',
       'Du weißt, wer darunter leidet oder welches Ziel gefährdet ist.',
     ],
-    commonMisinterpretation:
-      '„Der Kunde möchte ein neues CRM – also haben wir den Pain gefunden.“',
+    commonMisinterpretation: '„Der Kunde möchte ein neues CRM – also haben wir den Pain gefunden.“',
     possibleQuestionsOrActions: [
       '„Was läuft in diesem Schritt heute nicht so, wie Sie es brauchen?“',
       '„Können Sie mir einen konkreten Fall aus den letzten Wochen beschreiben?“',
@@ -171,8 +164,7 @@ export const discoveryCallConcepts = {
       'Kundenseitige Größen, Annahmen oder ein klarer Plan zur Validierung sind benannt.',
       'Du unterscheidest wirtschaftliche Evidenz von noch ungemessenen persönlichen Auswirkungen.',
     ],
-    commonMisinterpretation:
-      '„Jeder genannte Zeitverlust ist bereits eine valide ROI-Zahl.“',
+    commonMisinterpretation: '„Jeder genannte Zeitverlust ist bereits eine valide ROI-Zahl.“',
     possibleQuestionsOrActions: [
       '„Was passiert, wenn Sie das noch zwölf Monate so weiterführen?“',
       '„Wie häufig kommt das vor, und welche Kosten oder Verzögerungen entstehen daraus?“',
@@ -197,8 +189,7 @@ export const discoveryCallConcepts = {
       '„Warum ist dieser Termin wichtig und was ändert sich, wenn er nicht gehalten wird?“',
       '„Was müsste intern bis dahin passiert sein, damit der Nutzen tatsächlich eintritt?“',
     ],
-    sourceNote:
-      'Lahoutifard → Chapter Seven: Urgency: Compelling Event; Winning by Design → SPICED: Critical Event.',
+    sourceNote: 'Lahoutifard → Chapter Seven: Urgency: Compelling Event; Winning by Design → SPICED: Critical Event.',
   },
   decision: {
     id: 'discovery-decision',
@@ -217,8 +208,7 @@ export const discoveryCallConcepts = {
       '„Wer bewertet die Lösung aus fachlicher und wirtschaftlicher Sicht?“',
       '„Welche Schritte folgen intern von einer Empfehlung bis zu einer unterschriebenen Bestellung?“',
     ],
-    sourceNote:
-      'Whyte → Discovery, Economic Buyer, Decision Process; Winning by Design → SPICED: Decision.',
+    sourceNote: 'Whyte → Discovery, Economic Buyer, Decision Process; Winning by Design → SPICED: Decision.',
   },
   listen: {
     id: 'discovery-listen',
@@ -231,8 +221,7 @@ export const discoveryCallConcepts = {
       'Du prüfst deine Interpretation mit einer Rückfrage.',
       'Du nutzt Nachfragen statt vorschnell zum nächsten Framework-Buchstaben zu springen.',
     ],
-    commonMisinterpretation:
-      '„Gute Discovery bedeutet, die SPICED-Felder in fünf Minuten vollständig abzuhaken.“',
+    commonMisinterpretation: '„Gute Discovery bedeutet, die SPICED-Felder in fünf Minuten vollständig abzuhaken.“',
     possibleQuestionsOrActions: [
       '„Wenn ich Sie richtig verstanden habe: ... Stimmt das so?“',
       '„Sie haben gerade ... erwähnt. Was steckt konkret dahinter?“',
@@ -264,8 +253,7 @@ export const discoveryCallConcepts = {
 
 export const discoveryCallKnowledge = {
   title: 'Discovery Call: erst verstehen, dann empfehlen',
-  lead:
-    'Andy Whytes und Darius Lahoutifards Discovery-Prinzipien führen das Gespräch. SPICED ergänzt eine nachvollziehbare Struktur für Situation, Pain, Impact, Critical Event und Decision.',
+  lead: 'Andy Whytes und Darius Lahoutifards Discovery-Prinzipien führen das Gespräch. SPICED ergänzt eine nachvollziehbare Struktur für Situation, Pain, Impact, Critical Event und Decision.',
   principle:
     'Discovery ist weder Produktpitch noch einmalige Qualifizierungsprüfung. Ein guter Call erzeugt ein genaueres, vom Kunden überprüftes Verständnis – und zeigt offen, was noch unbekannt ist.',
   differences: [
@@ -273,7 +261,8 @@ export const discoveryCallKnowledge = {
       author: 'Andy Whyte',
       summary:
         'Discovery ist keine Sales-Stage, sondern eine dauerhaft neugierige Haltung. Vorbereitung, aktives Zuhören, die sieben Arten großer Fragen, offene Fragen und Two-Sided Discovery helfen, Pain zu vertiefen und Value zu quantifizieren.',
-      source: 'MEDDICC → Discovery: Discovery is not a Stage; Always Be Curious; The Big Questions; Two-Sided Discovery.',
+      source:
+        'MEDDICC → Discovery: Discovery is not a Stage; Always Be Curious; The Big Questions; Two-Sided Discovery.',
     },
     {
       author: 'Darius Lahoutifard',
@@ -298,7 +287,8 @@ export const discoveryCallKnowledge = {
     },
     {
       title: 'Einstieg',
-      detail: 'Mit ACE öffnen: für Zeit danken, Zeitrahmen prüfen, Endziel abgleichen. Dann Agenda und gewünschtes Ergebnis des Kunden erfragen.',
+      detail:
+        'Mit ACE öffnen: für Zeit danken, Zeitrahmen prüfen, Endziel abgleichen. Dann Agenda und gewünschtes Ergebnis des Kunden erfragen.',
       question: 'Was funktioniert heute gut, und was möchten Sie verbessern?',
     },
     {
@@ -308,12 +298,14 @@ export const discoveryCallKnowledge = {
     },
     {
       title: 'Bedeutung & Entscheidung',
-      detail: 'Folgen und gewünschte Wirkung prüfen. Dringlichkeit nicht erfinden. Entscheidungsweg und Alternativen ansprechen, wenn das Gespräch dafür reif ist.',
+      detail:
+        'Folgen und gewünschte Wirkung prüfen. Dringlichkeit nicht erfinden. Entscheidungsweg und Alternativen ansprechen, wenn das Gespräch dafür reif ist.',
       question: 'Welche Konsequenz hätte es, wenn sich daran nichts ändert?',
     },
     {
       title: 'Abschluss & Fortsetzung',
-      detail: 'Zusammenfassen, vom Kunden bestätigen lassen, Unsicherheiten benennen und gemeinsam den nächsten Erkenntnisschritt vereinbaren.',
+      detail:
+        'Zusammenfassen, vom Kunden bestätigen lassen, Unsicherheiten benennen und gemeinsam den nächsten Erkenntnisschritt vereinbaren.',
       question: 'Wen sollten wir hinzunehmen, um die offenen Annahmen zu validieren?',
     },
   ],
@@ -335,11 +327,7 @@ export const discoveryCallKnowledge = {
   ],
 }
 
-function checklistItem(
-  id: string,
-  question: string,
-  concept: MeddpiccConcept,
-): ChecklistItem {
+function checklistItem(id: string, question: string, concept: MeddpiccConcept): ChecklistItem {
   return {
     id,
     question,
@@ -348,7 +336,8 @@ function checklistItem(
     signals: concept.signals,
     commonMisinterpretation: concept.commonMisinterpretation,
     possibleQuestionsOrActions: concept.possibleQuestionsOrActions,
-    learnMore: 'Discovery ist kein einmaliger Termin und SPICED keine starre Abfolge. Ungeklärte Aspekte sind Themen für Folgegespräche, keine fiktiv abgeschlossenen Checks.',
+    learnMore:
+      'Discovery ist kein einmaliger Termin und SPICED keine starre Abfolge. Ungeklärte Aspekte sind Themen für Folgegespräche, keine fiktiv abgeschlossenen Checks.',
     relatedKnowledge: 'discovery-call',
     sourceNote: concept.sourceNote,
   }
@@ -358,22 +347,57 @@ export const discoveryCallChecklist: ChecklistDefinition = {
   id: 'discovery-call',
   eyebrow: 'Checklist · Discovery Call',
   title: 'Discovery Call: vorbereitet, neugierig und kundenzentriert',
-  lead:
-    'Neun Orientierungspunkte vor, während und nach dem Kundengespräch. MEDDPICC gibt die Qualifizierungslogik, SPICED unterstützt die natürliche Gesprächsführung.',
+  lead: 'Neun Orientierungspunkte vor, während und nach dem Kundengespräch. MEDDPICC gibt die Qualifizierungslogik, SPICED unterstützt die natürliche Gesprächsführung.',
   whenToUse:
     'Vor dem ersten Discovery Call sowie zur Vorbereitung neuer Gespräche, wenn weitere Stakeholder, neue Probleme oder offene Annahmen auftauchen.',
   benefit:
     'Du findest gezielter gute Nachfragen, erkennst frühe Pitch-Fallen und gehst mit bestätigten Erkenntnissen statt Happy Ears aus dem Call.',
   items: [
-    checklistItem('research', 'Habe ich recherchiert und meine Hypothesen von Fakten getrennt?', discoveryCallConcepts.research),
-    checklistItem('opening', 'Ist ein offener, kundenorientierter Gesprächseinstieg vorbereitet?', discoveryCallConcepts.opening),
-    checklistItem('situation', 'Kann ich den konkreten Arbeitskontext des Kunden verstehen, statt nur Firmenfakten zu sammeln?', discoveryCallConcepts.situation),
-    checklistItem('pain', 'Vertiefe ich ein echtes Problem hinter dem ersten Wunsch oder Symptom?', discoveryCallConcepts.pain),
-    checklistItem('impact', 'Ermittle ich Folgen, gewünschten Outcome und mögliche Quantifizierung – ohne ROI zu erfinden?', discoveryCallConcepts.impact),
-    checklistItem('event', 'Prüfe ich, ob ein genannter Termin wirklich ein Critical Event mit Konsequenz ist?', discoveryCallConcepts.event),
-    checklistItem('decision', 'Frage ich nach Kriterien, Beteiligten und Prozess, ohne Rollen aus Titeln abzuleiten?', discoveryCallConcepts.decision),
-    checklistItem('listen', 'Höre ich zu, spiegele Verständnis und stelle passende Vertiefungsfragen?', discoveryCallConcepts.listen),
-    checklistItem('close', 'Plane ich Bestätigung, offene Evidenzlücken und einen sinnvollen nächsten Schritt?', discoveryCallConcepts.close),
+    checklistItem(
+      'research',
+      'Habe ich recherchiert und meine Hypothesen von Fakten getrennt?',
+      discoveryCallConcepts.research,
+    ),
+    checklistItem(
+      'opening',
+      'Ist ein offener, kundenorientierter Gesprächseinstieg vorbereitet?',
+      discoveryCallConcepts.opening,
+    ),
+    checklistItem(
+      'situation',
+      'Kann ich den konkreten Arbeitskontext des Kunden verstehen, statt nur Firmenfakten zu sammeln?',
+      discoveryCallConcepts.situation,
+    ),
+    checklistItem(
+      'pain',
+      'Vertiefe ich ein echtes Problem hinter dem ersten Wunsch oder Symptom?',
+      discoveryCallConcepts.pain,
+    ),
+    checklistItem(
+      'impact',
+      'Ermittle ich Folgen, gewünschten Outcome und mögliche Quantifizierung – ohne ROI zu erfinden?',
+      discoveryCallConcepts.impact,
+    ),
+    checklistItem(
+      'event',
+      'Prüfe ich, ob ein genannter Termin wirklich ein Critical Event mit Konsequenz ist?',
+      discoveryCallConcepts.event,
+    ),
+    checklistItem(
+      'decision',
+      'Frage ich nach Kriterien, Beteiligten und Prozess, ohne Rollen aus Titeln abzuleiten?',
+      discoveryCallConcepts.decision,
+    ),
+    checklistItem(
+      'listen',
+      'Höre ich zu, spiegele Verständnis und stelle passende Vertiefungsfragen?',
+      discoveryCallConcepts.listen,
+    ),
+    checklistItem(
+      'close',
+      'Plane ich Bestätigung, offene Evidenzlücken und einen sinnvollen nächsten Schritt?',
+      discoveryCallConcepts.close,
+    ),
   ],
   sourceNotes: discoveryCallKnowledge.sourceNotes,
 }

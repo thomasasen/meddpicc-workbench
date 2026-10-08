@@ -56,7 +56,13 @@ function checkboxId(itemId: string): string {
         <div>
           <div class="tool-intro-meta">
             <span class="tool-kind">Checklist</span>
-            <span>{{ props.checklistId === 'metrics' ? 'Metrics' : props.checklistId === 'discovery-call' ? 'Discovery Call' : 'Economic Buyer' }}</span>
+            <span>{{
+              props.checklistId === 'metrics'
+                ? 'Metrics'
+                : props.checklistId === 'discovery-call'
+                  ? 'Discovery Call'
+                  : 'Economic Buyer'
+            }}</span>
           </div>
           <p class="eyebrow">{{ checklist.eyebrow }}</p>
           <h1 id="checklist-title">{{ checklist.title }}</h1>
@@ -149,7 +155,14 @@ function checkboxId(itemId: string): string {
                   :to="'/knowledge/' + item.relatedKnowledge"
                 >
                   <BookOpen :size="15" aria-hidden="true" />
-                  {{ item.relatedKnowledge === 'metrics' ? 'Metrics' : item.relatedKnowledge === 'discovery-call' ? 'Discovery Call' : 'Economic Buyer' }} nachschlagen
+                  {{
+                    item.relatedKnowledge === 'metrics'
+                      ? 'Metrics'
+                      : item.relatedKnowledge === 'discovery-call'
+                        ? 'Discovery Call'
+                        : 'Economic Buyer'
+                  }}
+                  nachschlagen
                 </RouterLink>
                 <small v-if="item.sourceNote">{{ item.sourceNote }}</small>
               </div>

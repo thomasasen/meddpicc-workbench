@@ -64,8 +64,8 @@ import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/disc
             <p class="eyebrow">SPICED nach Winning by Design</p>
             <h2 id="spiced-title">Fünf Perspektiven für die Discovery</h2>
             <p class="section-note">
-              Kein Fragebogen zum Abarbeiten. Folge der Antwort des Kunden, fasse zusammen und prüfe Aussagen.
-              Nicht alles muss im ersten Call vollständig geklärt werden.
+              Kein Fragebogen zum Abarbeiten. Folge der Antwort des Kunden, fasse zusammen und prüfe Aussagen. Nicht
+              alles muss im ersten Call vollständig geklärt werden.
             </p>
           </div>
         </div>
@@ -93,8 +93,8 @@ import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/disc
             <p class="eyebrow">Anwendung</p>
             <h2 id="flow-title">Ein natürlicher Gesprächsverlauf</h2>
             <p class="section-note">
-              Die Reihenfolge dient nur zur Vorbereitung. In einem echten Gespräch darf ein neues Signal jederzeit
-              zur Vertiefung eines früheren Themas führen.
+              Die Reihenfolge dient nur zur Vorbereitung. In einem echten Gespräch darf ein neues Signal jederzeit zur
+              Vertiefung eines früheren Themas führen.
             </p>
           </div>
         </div>
@@ -142,8 +142,8 @@ import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/disc
             </div>
             <p class="knowledge-practical-takeaway">
               <CheckCircle2 :size="17" aria-hidden="true" />
-              Die konkreten deutschsprachigen Fragen sind Praxisformulierungen, keine wörtlichen Buchzitate und
-              keine offiziellen SPICED-Pflichtfragen.
+              Die konkreten deutschsprachigen Fragen sind Praxisformulierungen, keine wörtlichen Buchzitate und keine
+              offiziellen SPICED-Pflichtfragen.
             </p>
             <details class="knowledge-source-details">
               <summary>Primär- und Originalquellen anzeigen</summary>
@@ -153,11 +153,12 @@ import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/disc
                 </li>
                 <li>
                   <a
-                  class="inline-link"
-                  href="https://winningbydesign.com/spiced-framework/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >Originaldefinition von SPICED bei Winning by Design</a>
+                    class="inline-link"
+                    href="https://winningbydesign.com/spiced-framework/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Originaldefinition von SPICED bei Winning by Design</a
+                  >
                 </li>
               </ul>
             </details>

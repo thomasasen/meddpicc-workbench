@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  discoveryCallChecklist,
-  discoveryCallConcepts,
-  discoveryCallKnowledge,
-  spicedElements,
-} from './discoveryCall'
+import { discoveryCallChecklist, discoveryCallConcepts, discoveryCallKnowledge, spicedElements } from './discoveryCall'
 
 function keysDeep(value: unknown, keys = new Set<string>()): Set<string> {
   if (!value || typeof value !== 'object') return keys
