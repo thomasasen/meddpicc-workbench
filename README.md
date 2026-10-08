@@ -187,6 +187,7 @@ Pfad: **Tools → Go-Live & Buying Process → Go-Live-Rückwärtsplanung**
 - Mobile-Führung mit Scroll-Hinweis und sticky Schrittnamen
 - Live-Aktualisierung bei Dauer, Reihenfolge oder Go-Live-Änderungen
 - SVG- und PNG-Export im gleichen kundenfähigen Visualstil
+- exportoptimiertes Layout mit separater Legende/Achse, rechter Safe Area und konsistenter UI-Sans-Typografie
 
 Die Funktion bleibt bewusst eine **Go-Live-Rückwärtsplanung / Go-Live-Timeline**. Der umfassendere **Go-Live Plan Builder** bleibt als separates späteres Tool vorgesehen. Parallelisierung und Critical-Path-Logik werden nicht implizit behauptet.
 
