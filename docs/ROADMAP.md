@@ -152,7 +152,8 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] **Quellen-UX verbindlich:** Autoren und Quellen bei Discovery Call, Economic Buyer, Metrics, Decision Criteria und sämtlichen aktuellen Checklists **nur ganz unten, standardmäßig eingeklappt**; Produktregel in `AGENTS.md`.
 - [x] Veralteten PR #38 zur Foundation als überholt geschlossen; die aktuelle Go-Live-Rückwärtsplanung und Toolbox-Foundation bleiben auf `main`.
 - [x] **PR #48 · Decision Process Knowledge + Themen-Checklist** ist nach technischer und visueller Freigabe am 08.10.2026 in `main` gemergt.
-- **Aktueller Draft-Slice:** Paper Process Knowledge + Themen-Checklist; Merge erst nach technischer QS und ausdrücklicher visueller Abnahme. Die umfassenden Decision-Criteria-Tools (Value Triangle, Criteria Workshop, Decision Matrix) bleiben in T6.
+- [x] **PR #49 · Paper Process Knowledge + Themen-Checklist** am 08.10.2026 mit Squash-Commit `2504170512cd9d5475e50b6dbea9be97064825a6` in `main` gemergt; CI/Pages waren erfolgreich.
+- **Aktueller Draft-Slice:** Pain / Implication Knowledge + Themen-Checklist; Merge nur nach technischer QS und ausdrücklicher visueller Freigabe. Decision-Criteria-Tools bleiben in T6.
 
 ### Themen-Checklists
 
@@ -160,8 +161,8 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Economic Buyer
 - [x] Decision Criteria (in `main`)
 - [x] Decision Process (PR #48, in `main`)
-- [ ] Paper Process (Feature-Branch; Draft/visuelle Abnahme offen)
-- [ ] Pain / Implication
+- [x] Paper Process (PR #49, in `main`)
+- [ ] Pain / Implication (Feature-Branch; visuelle Abnahme und Merge offen)
 - [ ] Champion
 - [ ] Competition
 
@@ -186,7 +187,8 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 - [x] Discovery Call als ergänzender SPICED-Wissensbereich
 - [x] Decision Criteria Knowledge als dritter quellengeprüfter Themen-Slice (in `main`)
 - [x] Decision Process Knowledge (PR #48, in `main`)
-- [ ] Paper Process Knowledge (Feature-Branch, Merge/Freigabe offen)
+- [x] Paper Process Knowledge (PR #49, in `main`)
+- [ ] Pain / Implication Knowledge (Feature-Branch, Merge/Freigabe offen)
 - [ ] weitere Knowledge-Bereiche ausrollen
 
 ## Phase T3 – Value & Metrics Tools
