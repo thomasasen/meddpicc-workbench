@@ -66,6 +66,8 @@ Bei UI-Arbeiten docs/DESIGN_SYSTEM.md und docs/ICON_SYSTEM.md beachten.
 Grundrichtung:
 
 - professionelle B2B-Anwendung
+- In sichtbaren Knowledge- und Checklist-Inhalten den praktischen Nutzen und die Methode erklären, nicht ihre Herkunft aus Büchern oder einzelne Autoren betonen.
+- Quellenangaben und Autorenperspektiven nur am **Ende** der Seite in einem standardmäßig **eingeklappten** Bereich „Quellen und fachliche Einordnung“ aufführen; keine verstreuten Quellenlabels unter einzelnen Fragen oder Karten.
 - klare Navigation über Tools, Checklists und Knowledge; MEDDPICC bleibt fachliche Orientierung
 - wenig dekorativer Ballast
 - konkrete Tool-Aktion sofort erkennbar
