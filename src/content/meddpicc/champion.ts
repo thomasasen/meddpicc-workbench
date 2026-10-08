@@ -129,6 +129,7 @@ export const championChecklist: ChecklistDefinition = {
   ],
 }
 
+// prettier-ignore
 export const championKnowledge = {
   title: 'Champion: Nicht Sympathie, sondern Wirkung zählt',
   lead: 'Erkenne echte interne Fürsprache, entwickle einen Coach respektvoll weiter und prüfe, welche Beobachtung deinen nächsten Schritt trägt.',
