@@ -177,8 +177,8 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 
 ### Noch offen
 
-- Champion (Feature-Branch zur Draft-Abnahme, nicht gemergt)
-- Competition
+- Champion (PR #51, nach Freigabe in `main`)
+- Competition (neuer Draft-Slice; Merge und visuelle Freigabe offen)
 - weitere situative Checklists wie POC, Pricing und Closing
 
 ## Decision Criteria – Knowledge & Themen-Checklist (PR #47, in main)
@@ -195,8 +195,8 @@ Umgesetzt und am **08.10.2026 nach Nutzerfreigabe per General-Merge** gemergt: h
 - **Decision Process:** PR #48 am 08.10.2026 nach Nutzerfreigabe in `main` gemergt (Commit `af750f861a596001b3af1f299faa8bc729cf80c2`).
 - **Paper Process:** PR #49 nach CI und visueller Freigabe am 08.10.2026 in `main` gemergt; Quellenmatrix in `docs/PAPER_PROCESS_SOURCE_QA.md`.
 - **Pain / Implication:** PR #50 am 08.10.2026 per Squash-Merge nach `main` übernommen (`a84d1b0d8be23db9d9ca8eec0a3531a96840a4f5`), vollständiger PR-Qualitätslauf CI #529 erfolgreich (https://github.com/thomasasen/meddpicc-workbench/actions/runs/37838466957). Der separate Push-`main-pages-integrity`-Lauf ist unabhängig zu prüfen und hier nicht pauschal als grün behauptet.
-- **Champion:** Quellenmatrix, zehn Prüfthemen und Knowledge-Seite auf eigenem Feature-Branch in Arbeit; `docs/CHAMPION_SOURCE_QA.md` enthält simulierte Red-Teams und Abnahmegrenzen. **Noch kein Merge und keine visuelle Nutzerfreigabe.**
-- Danach bleibt Competition als offener T2-Slice.
+- **Champion:** PR #51 am 08.10.2026 per Squash-Merge `5391d84e96bdff4e2490caa022de61ef8f84ba3b` nach `main` übernommen; PR-CI #536 erfolgreich. Separater `main-pages-integrity`-Lauf https://github.com/thomasasen/meddpicc-workbench/actions/runs/37844111688 erfolgreich.
+- **Competition:** eigenständiger T2-Feature-Branch mit Knowledge, zehnteiliger nicht persistenter Checklist und Quellenmatrix `docs/COMPETITION_SOURCE_QA.md`. Simulierte Red-Teams, technische/visuelle Gates und vier Screenshots werden separat nachgewiesen. **Bis zur ausdrücklichen Freigabe kein Merge.**
 
 ## Nächste Roadmap-Blöcke
 
