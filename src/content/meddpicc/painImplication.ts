@@ -1,5 +1,6 @@
 import type { ChecklistDefinition, ChecklistItem } from './types'
 
+// prettier-ignore
 export const painImplicationKnowledge = {
   title: 'Pain / Implication: Vom Symptom zur echten Priorität',
   lead: 'Du hast ein Problem gehört. Aber weißt du, warum es geschäftlich relevant ist, was Nichtstun bedeutet und ob der Kunde diese Konsequenz selbst trägt?',
@@ -87,6 +88,7 @@ export const painImplicationKnowledge = {
   ],
 } as const
 
+// prettier-ignore
 function point(
   id: string,
   question: string,
@@ -100,6 +102,7 @@ function point(
   return { id, question, meaning, whyItMatters, signals, commonMisinterpretation, possibleQuestionsOrActions, relatedKnowledge: 'pain-implication', sourceNote }
 }
 
+// prettier-ignore
 export const painImplicationChecklist: ChecklistDefinition = {
   id: 'pain-implication',
   eyebrow: 'Identify · Indicate · Implicate',
