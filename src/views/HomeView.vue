@@ -159,6 +159,11 @@ const checklists = [
     route: '/checklists/decision-process',
   },
   {
+    label: 'Paper Process',
+    note: 'Nach der fachlichen Auswahl Einkauf, Legal, Nachweise, PO, Zeichnung und echte Fristen klären.',
+    route: '/checklists/paper-process',
+  },
+  {
     label: 'POC / Pilot',
     note: 'Vor dem Start klären, was Erfolg bedeutet, wer committed ist und was nach einem erfolgreichen POC passiert.',
   },
@@ -217,6 +222,7 @@ const knowledgeTopics = [
     label: 'Paper Process',
     note: 'Welche administrativen Schritte liegen zwischen Entscheidung und Unterschrift?',
     icon: FileText,
+    route: '/knowledge/paper-process',
   },
   {
     code: 'I',

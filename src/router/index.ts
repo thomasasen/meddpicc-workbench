@@ -6,6 +6,7 @@ import DecisionProcessKnowledgeView from '../views/DecisionProcessKnowledgeView.
 import DiscoveryCallKnowledgeView from '../views/DiscoveryCallKnowledgeView.vue'
 import EconomicBuyerKnowledgeView from '../views/EconomicBuyerKnowledgeView.vue'
 import MetricsKnowledgeView from '../views/MetricsKnowledgeView.vue'
+import PaperProcessKnowledgeView from '../views/PaperProcessKnowledgeView.vue'
 import EvidenceView from '../views/EvidenceView.vue'
 import HomeView from '../views/HomeView.vue'
 import ReverseTimelineView from '../views/ReverseTimelineView.vue'
@@ -57,6 +58,17 @@ const router = createRouter({
       name: 'checklist-decision-process',
       component: ChecklistView,
       props: { checklistId: 'decision-process' },
+    },
+    {
+      path: '/knowledge/paper-process',
+      name: 'knowledge-paper-process',
+      component: PaperProcessKnowledgeView,
+    },
+    {
+      path: '/checklists/paper-process',
+      name: 'checklist-paper-process',
+      component: ChecklistView,
+      props: { checklistId: 'paper-process' },
     },
     {
       path: '/knowledge/metrics',

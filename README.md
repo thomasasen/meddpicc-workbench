@@ -18,7 +18,7 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 
 ### Discovery Call – MEDDPICC und SPICED
 
-**Feature-PR (noch nicht auf `main`, finale QS/UI-Freigabe offen):**
+**Seit PR #46 in `main` (08.10.2026):**
 
 - **Checklist → Discovery Call:** neun persönliche Prüfpunkte vor, während und nach dem Gespräch; offene Lücken statt künstlicher Score.
 - **Wissen → Discovery Call:** Whytes kontinuierliche Discovery und Two-Sided Discovery, Lahoutifards positive T.H.E.D.-Fragen, zusätzlich das SPICED-Modell von Winning by Design.
@@ -28,17 +28,26 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 
 ### Decision Process – Knowledge und Checklist
 
-**Implementiert auf einem Feature-Branch, visuelle Abnahme vor Merge erforderlich.**
+**Seit PR #48 in `main` (08.10.2026), mit Nutzerfreigabe gemergt.**
 
 - **Wissen → Decision Process:** Technical Validation, Business Approval, Entscheidungsrechte, Gremien, Zeitpunkte, Abhängigkeiten und klare Abgrenzung zu Decision Criteria und Paper Process.
 - **Checklist → Decision Process:** zehn nachvollziehbare Prüfungen mit konkreten Fragen und typischen Fehlinterpretationen; keine gespeicherten Scores oder Deal-Daten.
 - Der fachliche Quellenabgleich und das simulierte Autoren-Red-Team stehen in [Decision Process Source QA](docs/DECISION_PROCESS_SOURCE_QA.md).
+
+### Paper Process – Knowledge und Themen-Checklist
+
+**Im Feature-Branch zur technischen und visuellen Abnahme; noch nicht in `main`.**
+
+- **Wissen → Paper Process:** Abgrenzung zu Decision Process und Approval, Prozess/Personen/Timing, situative Einkaufs- und Vertragsstationen, Go-Live-Rückwärtsplanung, SaaS-Beispiel und Warnsignale.
+- **Checklist → Paper Process:** zehn fachliche Prüfpunkte mit Evidenz und Next Steps; temporäre Checkboxen ohne Score oder Persistenz.
+- [Primärquellenmatrix und simuliertes Autoren-Red-Team](docs/PAPER_PROCESS_SOURCE_QA.md).
 
 ## Status
 
 | Status | Bedeutung |
 | --- | --- |
 | ✅ **Umgesetzt** | Funktion ist implementiert und nutzbar. |
+| 🟡 **In Draft-Abnahme** | Funktion liegt im Feature-PR, ist aber noch nicht gemergt und benötigt Freigabe. |
 | 🟡 **Als Nächstes** | Inhalt und Nutzen sind festgelegt; Umsetzung ist in einer der nächsten Phasen vorgesehen. |
 | ⚪ **Geplant** | Funktion gehört zur Roadmap, wird aber später umgesetzt. |
 
@@ -133,7 +142,7 @@ Jeder Checklist-Punkt soll bei Bedarf erklären:
 | Checklist | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
 | **Economic-Buyer-Termin** | ✅ Umgesetzt | Prüft vor dem Termin, ob Value, Metrics, Kernfragen und gewünschtes Ergebnis ausreichend vorbereitet sind. | Du kannst dich in wenigen Minuten auf einen wichtigen Executive-Termin vorbereiten und übersiehst weniger kritische Punkte. |
-| **Discovery Call** | 🟡 Als Nächstes | Prüft vor einem Discovery-Gespräch Pain, Impact, Stakeholder, Hypothesen und gewünschte Erkenntnisse. | Du gehst strukturierter ins Gespräch und kannst vorhandene Gesprächszeit gezielter nutzen. |
+| **Discovery Call** | ✅ Umgesetzt | Prüft vor einem Discovery-Gespräch Pain, Impact, Stakeholder, Hypothesen und gewünschte Erkenntnisse. | Du gehst strukturierter ins Gespräch und kannst vorhandene Gesprächszeit gezielter nutzen. |
 | **POC / Pilot** | 🟡 Als Nächstes | Prüft Success Criteria, Verantwortliche, Commitment, Entscheidungsweg und den Prozess nach erfolgreichem POC. | Du reduzierst das Risiko eines aufwendigen POCs, der technisch funktioniert, aber anschließend keine Entscheidung auslöst. |
 | **Pricing / Angebot** | 🟡 Als Nächstes | Prüft vor dem kommerziellen Angebot, ob Value, Entscheidungsweg und kommerzieller Kontext ausreichend verstanden sind. | Du verschickst Pricing seltener zu früh und kannst Preis stärker im Kontext des geschaffenen Value positionieren. |
 | **Go-Live / Decision Process** | 🟡 Als Nächstes | Prüft Zeitplan, Verantwortlichkeiten, Abhängigkeiten und relevante Entscheidungs-/Freigabeschritte. | Du kannst einen Go-Live-Plan vor dem Kundengespräch schnell plausibilisieren und vermeidest leicht übersehene Prozesslücken. |
@@ -145,9 +154,9 @@ Jeder Checklist-Punkt soll bei Bedarf erklären:
 | --- | --- | --- | --- |
 | **Metrics** | ✅ Umgesetzt | Erklärt und prüft die wichtigsten Merkmale einer belastbaren Metric. | Du kannst schnell gegenprüfen, ob eine Kennzahl wirklich aussagekräftig ist oder nur eine unvalidierte Annahme darstellt. |
 | **Economic Buyer** | ✅ Umgesetzt | Erklärt die zentralen Merkmale des Economic Buyers und typische Verwechslungen. | Du kannst Kontakte sicherer einordnen und vermeidest, Titel oder Seniorität mit echter wirtschaftlicher Entscheidungsautorität gleichzusetzen. |
-| **Decision Criteria** | 🟡 Als Nächstes | Hilft, relevante Kriterien zu erkennen, einzuordnen und auf Vollständigkeit zu prüfen. | Du erkennst leichter, welche Kriterien die Auswahl wirklich beeinflussen und wo dir noch Wissen fehlt. |
-| **Decision Process** | 🟡 Als Nächstes | Erklärt Validation, Approval, beteiligte Rollen und typische Prozesslücken. | Du kannst schneller prüfen, ob du den tatsächlichen Weg zur Entscheidung verstanden hast. |
-| **Paper Process** | 🟡 Als Nächstes | Erklärt die administrativen Schritte zwischen Entscheidung und Unterschrift. | Du weißt, welche Fragen du zu Einkauf, Legal oder Signatur stellen solltest und verwechselst Paper Process nicht mit dem fachlichen Decision Process. |
+| **Decision Criteria** | ✅ Umgesetzt | Hilft, relevante Kriterien zu erkennen, einzuordnen und auf Vollständigkeit zu prüfen. | Du erkennst leichter, welche Kriterien die Auswahl wirklich beeinflussen und wo dir noch Wissen fehlt. |
+| **Decision Process** | ✅ Umgesetzt | Erklärt Validation, Approval, beteiligte Rollen und typische Prozesslücken. | Du kannst schneller prüfen, ob du den tatsächlichen Weg zur Entscheidung verstanden hast. |
+| **Paper Process** | 🟡 In Draft-Abnahme | Erklärt die administrativen Schritte zwischen Entscheidung und Unterschrift. | Du weißt, welche Fragen du zu Einkauf, Legal oder Signatur stellen solltest und verwechselst Paper Process nicht mit dem fachlichen Decision Process. |
 | **Pain / Implication** | 🟡 Als Nächstes | Hilft zu prüfen, ob ein Pain nur beschrieben oder tatsächlich hinsichtlich seiner Konsequenzen verstanden wurde. | Du kannst schneller erkennen, ob genügend Business Relevanz vorhanden ist oder Discovery noch tiefer gehen muss. |
 | **Champion** | 🟡 Als Nächstes | Erklärt die Merkmale eines Champions und typische Fehlinterpretationen wie Sympathie oder hohe Aktivität. | Du kannst Champion-Qualität besser beurteilen und weißt, welche Verhaltenssignale wirklich relevant sind. |
 | **Competition** | 🟡 Als Nächstes | Erweitert den Wettbewerbsbegriff über direkte Anbieter hinaus. | Du vergisst Status quo, Eigenbau oder andere interne Prioritäten nicht als reale Alternativen. |
@@ -164,9 +173,9 @@ Die Wissenshilfe ist für Situationen gedacht, in denen du einen MEDDPICC-Begrif
 | --- | --- | --- | --- |
 | **Metrics** | ✅ Umgesetzt | Wann ist eine Metric belastbar und wie wird daraus wirtschaftlicher Impact? | Du kannst Metrics schneller korrekt anwenden und vermeidest unklare oder nicht validierte Nutzenbehauptungen. |
 | **Economic Buyer** | ✅ Umgesetzt | Woran erkennst du den Economic Buyer und wie unterscheidet er sich von Champion oder fachlichem Entscheider? | Du kannst Rollen sicherer einordnen und weißt, worauf es bei EB-Zugang und EB-Gesprächen wirklich ankommt. |
-| **Decision Criteria** | 🟡 Als Nächstes | Welche Kriterien beeinflussen die Auswahl und wie lassen sie sich strukturieren? | Du kannst Entscheidungskriterien schneller verstehen, hinterfragen und in Kundengesprächen gezielter bearbeiten. |
-| **Decision Process** | 🟡 Als Nächstes | Wie unterscheiden sich Validation und Approval und wer entscheidet wann? | Du verstehst den tatsächlichen Entscheidungsweg besser und kannst gezielter nach offenen Schritten fragen. |
-| **Paper Process** | 🟡 Als Nächstes | Welche administrativen Schritte liegen zwischen Entscheidung und Unterschrift? | Du kannst Einkauf, Legal, Security und Signaturweg früher berücksichtigen und besser vom Decision Process unterscheiden. |
+| **Decision Criteria** | ✅ Umgesetzt | Welche Kriterien beeinflussen die Auswahl und wie lassen sie sich strukturieren? | Du kannst Entscheidungskriterien schneller verstehen, hinterfragen und in Kundengesprächen gezielter bearbeiten. |
+| **Decision Process** | ✅ Umgesetzt | Wie unterscheiden sich Validation und Approval und wer entscheidet wann? | Du verstehst den tatsächlichen Entscheidungsweg besser und kannst gezielter nach offenen Schritten fragen. |
+| **Paper Process** | 🟡 In Draft-Abnahme | Welche administrativen Schritte liegen zwischen Entscheidung und Unterschrift? | Du kannst Einkauf, Legal, Security und Signaturweg früher berücksichtigen und besser vom Decision Process unterscheiden. |
 | **Pain & Implication** | 🟡 Als Nächstes | Wie wird aus einem Problem eine relevante geschäftliche Konsequenz? | Du bekommst eine schnelle Gedankenstütze, um Discovery tiefer zu führen und Pain nicht nur oberflächlich zu dokumentieren. |
 | **Champion** | 🟡 Als Nächstes | Was macht einen echten Champion aus und welche Signale werden häufig überschätzt? | Du kannst Champion und engagierten Ansprechpartner klarer voneinander unterscheiden. |
 | **Competition** | 🟡 Als Nächstes | Warum gehören Status quo, Eigenbau und andere Initiativen genauso zum Wettbewerb? | Du entwickelst ein vollständigeres Bild der tatsächlichen Alternativen und kannst deine Verkaufsstrategie besser darauf ausrichten. |
