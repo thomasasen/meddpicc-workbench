@@ -142,7 +142,7 @@ Jeder Checklist-Punkt soll bei Bedarf erklären:
 | Checklist | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
 | **Economic-Buyer-Termin** | ✅ Umgesetzt | Prüft vor dem Termin, ob Value, Metrics, Kernfragen und gewünschtes Ergebnis ausreichend vorbereitet sind. | Du kannst dich in wenigen Minuten auf einen wichtigen Executive-Termin vorbereiten und übersiehst weniger kritische Punkte. |
-| **Discovery Call** | 🟡 Als Nächstes | Prüft vor einem Discovery-Gespräch Pain, Impact, Stakeholder, Hypothesen und gewünschte Erkenntnisse. | Du gehst strukturierter ins Gespräch und kannst vorhandene Gesprächszeit gezielter nutzen. |
+| **Discovery Call** | ✅ Umgesetzt | Prüft vor einem Discovery-Gespräch Pain, Impact, Stakeholder, Hypothesen und gewünschte Erkenntnisse. | Du gehst strukturierter ins Gespräch und kannst vorhandene Gesprächszeit gezielter nutzen. |
 | **POC / Pilot** | 🟡 Als Nächstes | Prüft Success Criteria, Verantwortliche, Commitment, Entscheidungsweg und den Prozess nach erfolgreichem POC. | Du reduzierst das Risiko eines aufwendigen POCs, der technisch funktioniert, aber anschließend keine Entscheidung auslöst. |
 | **Pricing / Angebot** | 🟡 Als Nächstes | Prüft vor dem kommerziellen Angebot, ob Value, Entscheidungsweg und kommerzieller Kontext ausreichend verstanden sind. | Du verschickst Pricing seltener zu früh und kannst Preis stärker im Kontext des geschaffenen Value positionieren. |
 | **Go-Live / Decision Process** | 🟡 Als Nächstes | Prüft Zeitplan, Verantwortlichkeiten, Abhängigkeiten und relevante Entscheidungs-/Freigabeschritte. | Du kannst einen Go-Live-Plan vor dem Kundengespräch schnell plausibilisieren und vermeidest leicht übersehene Prozesslücken. |
