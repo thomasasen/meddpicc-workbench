@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import ChecklistView from '../views/ChecklistView.vue'
+import ChampionKnowledgeView from '../views/ChampionKnowledgeView.vue'
 import DecisionCriteriaKnowledgeView from '../views/DecisionCriteriaKnowledgeView.vue'
 import DecisionProcessKnowledgeView from '../views/DecisionProcessKnowledgeView.vue'
 import DiscoveryCallKnowledgeView from '../views/DiscoveryCallKnowledgeView.vue'
@@ -70,6 +71,17 @@ const router = createRouter({
       name: 'checklist-pain-implication',
       component: ChecklistView,
       props: { checklistId: 'pain-implication' },
+    },
+    {
+      path: '/knowledge/champion',
+      name: 'knowledge-champion',
+      component: ChampionKnowledgeView,
+    },
+    {
+      path: '/checklists/champion',
+      name: 'checklist-champion',
+      component: ChecklistView,
+      props: { checklistId: 'champion' },
     },
     {
       path: '/knowledge/paper-process',
