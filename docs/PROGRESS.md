@@ -118,7 +118,7 @@ Bestanden:
 
 Branch: `feat/metrics-knowledge-checklist`
 
-Implementiert, **vor CI-/UI-Abnahme noch nicht gemergt**:
+**CI #412 vollständig grün, Screenshots Desktop/Mobile visuell geprüft.** PR #45 bleibt dennoch als Draft ungemergt, bis die Nutzerfreigabe vorliegt:
 
 - Wissen → Metrics (Definition, Business Impact, Before-/After, M1 vs. M2, ROI-Abgrenzung)
 - Checklist → Metrics (7 Punkte mit progressiven Erklärungen, lokalen Checkboxen)
