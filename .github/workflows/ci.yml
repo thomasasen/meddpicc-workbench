@@ -47,19 +47,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Feature-Änderungen mit Prettier normalisieren
-        run: |
-          npm run format
-          if git diff --quiet -- src tests; then
-            echo "Prettier: keine Anpassungen nötig."
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src tests
-            git commit -m "style: apply Prettier to Decision Process implementation"
-            git push origin HEAD:${{ github.event.pull_request.head.ref }}
-          fi
-
       - name: Formatierung prüfen
         run: npm run format:check
 
