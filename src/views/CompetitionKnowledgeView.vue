@@ -164,13 +164,13 @@ import { competitionKnowledge as competition } from '../content/meddpicc/competi
             <p><strong>Offene Frage:</strong> {{ item.question }}</p>
           </details>
         </div>
-        <p class="section-note">
-          Weitere Einordnung:
-          <RouterLink class="inline-link" to="/knowledge/champion">Champion</RouterLink> ·
-          <RouterLink class="inline-link" to="/knowledge/economic-buyer">Economic Buyer</RouterLink> ·
-          <RouterLink class="inline-link" to="/knowledge/decision-process">Decision Process</RouterLink> ·
-          <RouterLink class="inline-link" to="/knowledge/paper-process">Paper Process</RouterLink>
-        </p>
+        <div class="section-note">
+          <p>Weitere Einordnung:</p>
+          <p><RouterLink class="inline-link" to="/knowledge/champion">Champion</RouterLink></p>
+          <p><RouterLink class="inline-link" to="/knowledge/economic-buyer">Economic Buyer</RouterLink></p>
+          <p><RouterLink class="inline-link" to="/knowledge/decision-process">Decision Process</RouterLink></p>
+          <p><RouterLink class="inline-link" to="/knowledge/paper-process">Paper Process</RouterLink></p>
+        </div>
       </section>
 
       <section class="container knowledge-section" aria-labelledby="redflags-title">
