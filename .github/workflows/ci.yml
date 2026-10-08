@@ -47,6 +47,19 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
+      - name: Neue Software-Payback-Dateien formatieren
+        if: startsWith(github.head_ref, 'feature/quick-payback-')
+        run: |
+          npm run format
+          if git diff --quiet -- src tests; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src tests
+          git commit -m "style: normalize advanced payback sources"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+
       - name: Formatierung prüfen
         run: npm run format:check
 
@@ -114,6 +127,10 @@ jobs:
               quick-payback-empty-mobile-chromium.png
               quick-payback-result-desktop-chromium.png
               quick-payback-result-mobile-chromium.png
+              software-payback-empty-desktop-chromium.png
+              software-payback-empty-mobile-chromium.png
+              software-payback-result-desktop-chromium.png
+              software-payback-result-mobile-chromium.png
             )
           else
             if [[ "${{ github.head_ref }}" == feature/competition-* ]]; then
