@@ -165,7 +165,7 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 
 ### Noch offen
 
-- Decision Criteria: CI- und Sichtfreigabe vor Merge
+- Decision Criteria: technische CI abgeschlossen, Nutzer-Sichtfreigabe vor Merge noch offen
 - Decision Process
 - Paper Process
 - Pain / Implication
@@ -183,7 +183,9 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 - Neun vollständige Checklist-Punkte und temporäre Checkboxen; fachliche Differenzierung und sieben Value-Triangle-Zonen als Knowledge.
 - Unit Tests sowie Playwright Desktop/Mobile inkl. Overflow- und Quellen-Disclosure-Tests hinzugefügt.
 - Fachlicher QA-Nachweis: `docs/DECISION_CRITERIA_SOURCE_QA.md`.
-- **Noch offen:** CI-Gates, Screenshotkontrolle, visuelle Nutzerfreigabe; kein Merge.
+- **Technische QS abgeschlossen:** Standard-CI #456 vollständig grün (Format, Lint, Unit, Build, Playwright Desktop/Mobile, Pages-Check): https://github.com/thomasasen/meddpicc-workbench/actions/runs/37773584286.
+- **Visuelle QS:** Desktop-/Mobile-Fullpage-Screenshots aus CI #453 kontrolliert, keine Auffälligkeiten; Quellen sind standardmäßig eingeklappt.
+- **PR #47:** https://github.com/thomasasen/meddpicc-workbench/pull/47, gestapelt auf PR #46. **Ausdrückliche Nutzer-Sichtfreigabe ausstehend; kein Merge**.
 - Methodisch explizit: Whytes Technical/Economic/Relationship und Lahoutifards Vendor/Partner/Financial Justification/Capability Validation sowie Value Triangle (Value, Danger, Parity usw.); Gemeinsamkeiten ohne falsche Gleichsetzung zeigen.
 - Keine Decision Matrix, kein Criteria-Workshop-Tool, kein automatisches Deal-Scoring: diese Instrumente gehören später zur Phase T6.
 - Abhängigkeit: PR #46 vor einem normalen `main`-basierten Decision-Criteria-PR erst freigeben und mergen; alternativ sauberer **stacked Draft-PR** auf #46, niemals unbeabsichtigt PR #46 mitmergen.
