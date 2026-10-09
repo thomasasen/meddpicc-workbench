@@ -62,7 +62,7 @@ jobs:
       - name: Business-Case-Dateien normalisieren
         if: startsWith(github.head_ref, 'feature/business-case-')
         run: |
-          npx prettier --write src/domain/businessCase.ts src/domain/businessCase.test.ts src/report/softwareBusinessCasePdf.ts src/components/SoftwareBalanceChart.vue src/components/SoftwarePaybackPanel.vue tests/e2e/software-payback.spec.ts
+          npx prettier --write src/domain/businessCase.ts src/domain/businessCase.test.ts src/report/softwareBusinessCasePdf.ts src/report/softwareBusinessCasePdf.test.ts src/components/SoftwareBalanceChart.vue src/components/SoftwarePaybackPanel.vue tests/e2e/software-payback.spec.ts
           if ! git diff --quiet -- src tests; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
