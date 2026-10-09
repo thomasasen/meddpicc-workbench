@@ -1,0 +1,335 @@
+import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
+import { summarizeBusinessCase, type CaseSummary } from '../domain/businessCase'
+import type { ReportData } from './softwareBusinessCasePdf'
+
+const W = 595.28
+const H = 841.89
+const X = 48
+const RIGHT = W - X
+const navy = rgb(0.075, 0.13, 0.23)
+const ink = rgb(0.12, 0.18, 0.27)
+const muted = rgb(0.36, 0.43, 0.52)
+const teal = rgb(0.03, 0.41, 0.37)
+const amber = rgb(0.57, 0.31, 0.07)
+const red = rgb(0.68, 0.23, 0.23)
+const pale = rgb(0.948, 0.967, 0.974)
+const line = rgb(0.85, 0.89, 0.92)
+const white = rgb(1, 1, 1)
+type FontSet = { regular: PDFFont; bold: PDFFont }
+type Paint = { pdf: PDFDocument; p: PDFPage; fonts: FontSet }
+
+const euro = (n: number) =>
+  new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n)
+const percent = (n: number | null) =>
+  n === null ? 'nicht definiert' : new Intl.NumberFormat('de-DE', { maximumFractionDigits: 1 }).format(n) + ' %'
+
+function readable(value: string): string {
+  return value
+    .replace(/[\u2010-\u2015]/g, '-')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201c\u201d]/g, '"')
+    .replace(/\u2026/g, '...')
+    .replace(/\u00a0/g, ' ')
+    .replace(/[\u2022\u2023]/g, '-')
+    .replace(/[^\u0020-\u00ff\u20ac\n]/g, '?')
+}
+
+function write(
+  p: PDFPage,
+  value: string,
+  x: number,
+  y: number,
+  size: number,
+  font: PDFFont,
+  color = ink,
+  maxWidth = RIGHT - x,
+): void {
+  let content = readable(value).replace(/\s+/g, ' ').trim()
+  if (!content) return
+  if (font.widthOfTextAtSize(content, size) > maxWidth) {
+    const suffix = '...'
+    while (content && font.widthOfTextAtSize(content + suffix, size) > maxWidth) content = content.slice(0, -1)
+    content += suffix
+  }
+  p.drawText(content, { x, y, size, font, color })
+}
+
+function wrap(value: string, font: PDFFont, size: number, width: number): string[] {
+  const lines: string[] = []
+  for (const paragraph of readable(value).split(/\n/)) {
+    let row = ''
+    for (const word of paragraph.split(/\s+/)) {
+      if (!word) continue
+      const candidate = row ? row + ' ' + word : word
+      if (font.widthOfTextAtSize(candidate, size) <= width) {
+        row = candidate
+        continue
+      }
+      if (row) lines.push(row)
+      row = ''
+      for (const char of word) {
+        if (row && font.widthOfTextAtSize(row + char, size) > width) {
+          lines.push(row)
+          row = ''
+        }
+        row += char
+      }
+    }
+    if (row) lines.push(row)
+  }
+  return lines.length ? lines : ['']
+}
+
+function paragraph(
+  p: PDFPage,
+  value: string,
+  x: number,
+  top: number,
+  width: number,
+  fonts: FontSet,
+  opts: { maxLines?: number; size?: number; leading?: number; color?: ReturnType<typeof rgb>; bold?: boolean } = {},
+): number {
+  const size = opts.size ?? 10
+  const leading = opts.leading ?? 15
+  const font = opts.bold ? fonts.bold : fonts.regular
+  const lines = wrap(value, font, size, width)
+  const max = opts.maxLines ?? 99999
+  for (const [i, row] of lines.slice(0, max).entries()) {
+    const clipped = i === max - 1 && lines.length > max ? row + ' ... (siehe Finance-Anhang)' : row
+    write(p, clipped, x, top - i * leading, size, font, opts.color ?? muted, width)
+  }
+  return top - Math.min(lines.length, max) * leading
+}
+
+function section(p: PDFPage, title: string, y: number, f: FontSet): void {
+  write(p, title, X, y, 15, f.bold, navy)
+  p.drawLine({ start: { x: X, y: y - 12 }, end: { x: RIGHT, y: y - 12 }, thickness: 0.8, color: line })
+}
+
+function page(doc: PDFDocument, fonts: FontSet, chapter: string, number: number): Paint {
+  const p = doc.addPage([W, H])
+  p.drawRectangle({ x: 0, y: H - 77, width: W, height: 77, color: navy })
+  p.drawRectangle({ x: X, y: H - 82, width: 34, height: 4, color: teal })
+  write(p, 'BUSINESS CASE | SOFTWARE-INVESTITION', X, H - 35, 11, fonts.bold, white)
+  write(p, chapter.toUpperCase(), X, H - 55, 8.5, fonts.regular, rgb(0.72, 0.81, 0.88))
+  p.drawLine({ start: { x: X, y: 46 }, end: { x: RIGHT, y: 46 }, thickness: 0.65, color: line })
+  write(p, 'VERTRAULICH | MODELLRECHNUNG | KEINE FREIGABE', X, 30, 7.3, fonts.regular, muted)
+  write(p, 'SEITE ' + number, RIGHT - 52, 30, 7.3, fonts.bold, muted, 52)
+  return { pdf: doc, p, fonts }
+}
+
+function meta(p: PDFPage, label: string, value: string, y: number, f: FontSet): void {
+  write(p, label.toUpperCase(), X, y, 8, f.regular, muted, 120)
+  write(p, value, X + 127, y - 1, 10.5, f.bold, ink, RIGHT - X - 127)
+}
+
+function metricCard(
+  p: PDFPage,
+  x: number,
+  top: number,
+  width: number,
+  label: string,
+  value: string,
+  f: FontSet,
+  color = navy,
+): void {
+  p.drawRectangle({ x, y: top - 73, width, height: 73, color: pale })
+  p.drawRectangle({ x, y: top - 73, width: 3, height: 73, color })
+  write(p, label.toUpperCase(), x + 13, top - 22, 8, f.regular, muted, width - 26)
+  write(p, value, x + 13, top - 51, 17, f.bold, color, width - 26)
+}
+
+function notice(p: PDFPage, top: number, text: string, fonts: FontSet): void {
+  const height = 65
+  p.drawRectangle({ x: X, y: top - height, width: RIGHT - X, height, color: rgb(0.994, 0.971, 0.926) })
+  p.drawRectangle({ x: X, y: top - height, width: 3, height, color: amber })
+  write(p, 'VALIDIERUNGSSTATUS', X + 13, top - 19, 8, fonts.bold, amber)
+  paragraph(p, text, X + 13, top - 36, RIGHT - X - 26, fonts, { size: 9, leading: 13, maxLines: 2, color: ink })
+}
+
+function chart(p: PDFPage, c: CaseSummary, fonts: FontSet): void {
+  const left = X + 56
+  const right = RIGHT - 9
+  const bottom = 185
+  const top = 354
+  const values = c.periodMetrics.map((m) => m.balanceEur)
+  let low = Math.min(0, ...values)
+  let high = Math.max(0, ...values)
+  if (high - low < 1) {
+    low -= 1
+    high += 1
+  }
+  const pad = (high - low) * 0.12
+  low -= pad
+  high += pad
+  const px = (month: number) => left + ((right - left) * month) / c.horizon
+  const py = (eur: number) => bottom + ((eur - low) / (high - low)) * (top - bottom)
+  const zeroY = py(0)
+  p.drawLine({ start: { x: left, y: zeroY }, end: { x: right, y: zeroY }, color: muted, thickness: 1, dashArray: [4, 4] })
+  for (const tick of [low, 0, high]) {
+    const y = py(tick)
+    if (tick !== 0) p.drawLine({ start: { x: left, y }, end: { x: right, y }, color: line, thickness: 0.5 })
+    write(p, tick === 0 ? '0' : Math.round(tick / 1000) + ' Tsd.', X, y - 3, 7.5, fonts.regular, muted, 50)
+  }
+  for (let i = 1; i < c.periodMetrics.length; i++) {
+    const prev = c.periodMetrics[i - 1]!
+    const curr = c.periodMetrics[i]!
+    p.drawLine({
+      start: { x: px(prev.month), y: py(prev.balanceEur) },
+      end: { x: px(curr.month), y: py(curr.balanceEur) },
+      thickness: 2.4,
+      color: curr.balanceEur >= 0 && c.unverified === 0 ? teal : rgb(0.17, 0.39, 0.68),
+    })
+  }
+  for (const month of [0, 12, 24, 36, 48, 60].filter((m) => m <= c.horizon)) {
+    write(p, String(month), px(month) - 6, bottom - 16, 8, fonts.regular, muted, 19)
+  }
+  const min = c.periodMetrics.find((m) => m.month === c.lowestMonth)!
+  p.drawCircle({ x: px(min.month), y: py(min.balanceEur), size: 4, color: red })
+  write(p, 'Tiefpunkt M' + min.month, Math.max(left, Math.min(right - 95, px(min.month) + 5)), py(min.balanceEur) - 16, 8, fonts.bold, red, 97)
+  if (c.sustainedBreakEvenMonth !== null) {
+    const point = c.periodMetrics[c.sustainedBreakEvenMonth]!
+    p.drawCircle({ x: px(point.month), y: py(point.balanceEur), size: 4.5, color: teal })
+    write(p, 'Amortisation M' + point.month, Math.max(left, Math.min(right - 113, px(point.month) - 40)), py(point.balanceEur) + 13, 8, fonts.bold, teal, 113)
+  }
+  write(p, 'PROJEKTMONAT', right - 83, bottom - 33, 7, fonts.bold, muted, 83)
+}
+
+function twoColumnRow(p: PDFPage, y: number, label: string, number: string, f: FontSet, total = false): void {
+  if (total) p.drawRectangle({ x: X, y: y - 7, width: RIGHT - X, height: 29, color: pale })
+  write(p, label, X + 8, y + 4, 9.5, total ? f.bold : f.regular, total ? ink : muted, 330)
+  const numWidth = f.bold.widthOfTextAtSize(readable(number), 10)
+  write(p, number, RIGHT - 8 - numWidth, y + 4, 10, f.bold, total ? navy : ink, 150)
+  if (!total) p.drawLine({ start: { x: X, y: y - 11 }, end: { x: RIGHT, y: y - 11 }, thickness: 0.45, color: line })
+}
+
+function statusLabel(evidence: string): string {
+  if (evidence === 'customer-reviewed') return 'Laut Eingabe mit Kunden besprochen'
+  if (evidence === 'customer-stated') return 'Kundenaussage / nicht geprüft'
+  if (evidence === 'reference') return 'Referenzwert / für diesen Kunden unbestätigt'
+  return 'Verkäuferannahme / nicht bestätigt'
+}
+
+function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSummary): void {
+  const { p } = page(pdf, f, '01 | Managemententscheidung', 1)
+  write(p, 'Wirtschaftlichkeit auf einen Blick', X, 729, 20, f.bold, navy)
+  meta(p, 'Unternehmen', data.customer.trim(), 695, f)
+  meta(p, 'Projekt', data.project.trim(), 674, f)
+  meta(p, 'Erstellt von', data.preparedBy.trim() + '  |  ' + data.date, 653, f)
+
+  const hasPayback = c.sustainedBreakEvenMonth !== null
+  const claim = hasPayback
+    ? 'Amortisation im Modell nach ' + c.sustainedBreakEvenMonth + ' Monaten'
+    : 'Im Betrachtungszeitraum keine Amortisation'
+  write(p, claim, X, 613, 15.5, f.bold, hasPayback ? navy : red)
+  const message = hasPayback
+    ? 'Die angerechneten Vorteile übersteigen die Projekt- und Softwarekosten im gewählten Modellzeitraum.'
+    : 'Auf Basis der eingegebenen Annahmen deckt der wirtschaftliche Nutzen die vollständigen Kosten nicht.'
+  paragraph(p, message, X, 591, RIGHT - X, f, { size: 9.5, leading: 14, maxLines: 2 })
+
+  const gap = 10
+  const cardW = (RIGHT - X - 2 * gap) / 3
+  metricCard(p, X, 546, cardW, 'Amortisation', hasPayback ? 'Monat ' + c.sustainedBreakEvenMonth : 'Nicht erreicht', f)
+  metricCard(p, X + cardW + gap, 546, cardW, 'Kosten / ' + c.horizon + ' M.', euro(c.totalCostEur), f)
+  metricCard(p, X + (cardW + gap) * 2, 546, cardW, 'Modell-Nettowert', euro(c.netValueEur), f, c.netValueEur < 0 ? red : navy)
+
+  write(p, 'Wie entwickelt sich die Investition?', X, 427, 13, f.bold, navy)
+  write(p, 'Kumulierter wirtschaftlicher Saldo; kein tatsächlicher Zahlungsstrom', X, 408, 8.6, f.regular, muted)
+  chart(p, c, f)
+  const uncertainty = c.unverified > 0
+    ? c.unverified + ' monetär angerechnete ' + (c.unverified === 1 ? 'Metric ist' : 'Metrics sind') + ' nicht kundenseitig geprüft. Die gezeigte Wirtschaftlichkeit ist eine Hypothese.'
+    : 'Alle angerechneten Metrics sind laut Eingabe kundenbesprochen. Eine unabhängige Finance-Freigabe liegt dadurch nicht vor.'
+  notice(p, 142, uncertainty, f)
+}
+
+function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
+  const { p } = page(pdf, f, '02 | Kosten und Nutzen', 2)
+  write(p, 'Was trägt den Business Case?', X, 729, 20, f.bold, navy)
+  paragraph(
+    p,
+    'Der Rechenweg unterscheidet neue Projektkosten, vermiedene Altsystemkosten und separat monetarisierte Nutzeneffekte.',
+    X, 697, RIGHT - X, f, { size: 9.5, maxLines: 2 },
+  )
+  section(p, 'Wirtschaftliche Herleitung', 649, f)
+  const rows: Array<[string, number, boolean]> = [
+    ['Einmaliger Projektaufwand', c.investmentEur, false],
+    ['Neue laufende Software- und Betriebskosten', c.operatingCostsEur, false],
+    ['Gesamte neue Kosten', c.totalCostEur, true],
+    ['Vermiedene Altsystemkosten', c.avoidedLegacyEur, false],
+    ['Angerechnete Nutzen-Metrics', c.creditedMetricsEur, false],
+    ['Gesamter wirtschaftlicher Nutzen', c.benefitEur, true],
+    ['Kumulierter Nettowert', c.netValueEur, true],
+  ]
+  rows.forEach(([label, amount, total], i) => twoColumnRow(p, 610 - i * 31, label, euro(amount), f, total))
+
+  section(p, 'Welche Vorteile wurden monetarisiert?', 365, f)
+  const included = c.metricDetails.filter((m) => m.included)
+  const visible = included.slice(0, 3)
+  if (!visible.length) paragraph(p, 'Es wurden keine Kunden-Metrics als wirtschaftlicher Nutzen angerechnet.', X, 336, RIGHT - X, f)
+  visible.forEach((m, i) => {
+    const top = 335 - i * 72
+    write(p, m.name, X, top, 10.5, f.bold, ink, 355)
+    const money = m.annualEur === null ? 'nicht monetarisiert' : euro(m.annualEur) + ' / Jahr'
+    const tw = f.bold.widthOfTextAtSize(readable(money), 9)
+    write(p, money, RIGHT - tw, top, 9, f.bold, navy, tw + 2)
+    write(p, statusLabel(m.evidence), X, top - 18, 8.5, f.regular, m.evidence === 'customer-reviewed' ? teal : amber)
+    write(p, 'Wirksam ab Monat ' + m.startMonth + ' | Hochlauf ' + m.rampMonths + ' ' + (m.rampMonths === 1 ? 'Monat' : 'Monate'), X, top - 33, 8.2, f.regular, muted)
+    p.drawLine({ start: { x: X, y: top - 44 }, end: { x: RIGHT, y: top - 44 }, thickness: 0.5, color: line })
+  })
+  if (included.length > visible.length) {
+    write(p, String(included.length - visible.length) + ' weitere angerechnete Metrics stehen im Finance-Anhang.', X, 110, 8.5, f.regular, muted)
+  }
+  const excluded = c.metricDetails.filter((m) => !m.included)
+  if (excluded.length) write(p, String(excluded.length) + ' weitere Metrics (z. B. Kapazität/Risiko) werden nicht als sicherer Geldnutzen gerechnet.', X, 80, 8.3, f.regular, muted)
+}
+
+function decisionPage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSummary): void {
+  const { p } = page(pdf, f, '03 | Validierung und Entscheidung', 3)
+  write(p, 'Was ist vor der Entscheidung zu klären?', X, 729, 19, f.bold, navy)
+  section(p, 'Ausgangslage und Zielbild', 687, f)
+  write(p, 'HEUTIGE AUSGANGSLAGE', X, 657, 8, f.bold, muted)
+  paragraph(p, data.businessPain?.trim() || 'Noch nicht gemeinsam mit dem Kunden dokumentiert.', X, 636, RIGHT - X, f, { size: 9.4, leading: 15, maxLines: 4 })
+  write(p, 'ERWARTETES GESCHÄFTSERGEBNIS', X, 552, 8, f.bold, muted)
+  paragraph(p, data.targetOutcome?.trim() || 'Noch nicht gemeinsam mit dem Kunden dokumentiert.', X, 531, RIGHT - X, f, { size: 9.4, leading: 15, maxLines: 4 })
+
+  section(p, 'Offene Validierungen und Verantwortlichkeiten', 447, f)
+  const questions = [
+    ['01', 'Fachbereich / Champion', 'Mengen, Ausgangswerte und Wirkung je Metric mit dem Kunden prüfen.'],
+    ['02', 'Finance / Controlling', 'Tatsächlich realisierbare Einsparungen und Deckungsbeiträge bestätigen.'],
+    ['03', 'Projektverantwortliche', 'Einführung, SaaS-Beginn, Altvertrag und Hochlauf terminlich validieren.'],
+    ['04', 'Economic Buyer', 'Wirtschaftliche Entscheidungskriterien und Freigabeweg klären.'],
+  ] as const
+  questions.forEach(([number, owner, note], i) => {
+    const y = 412 - i * 62
+    p.drawRectangle({ x: X, y: y - 32, width: 31, height: 31, color: pale })
+    write(p, number, X + 8, y - 20, 9, f.bold, teal, 20)
+    write(p, owner, X + 44, y - 5, 9.5, f.bold, navy)
+    paragraph(p, note, X + 44, y - 21, RIGHT - X - 44, f, { size: 8.7, leading: 12, maxLines: 2 })
+  })
+  notice(
+    p,
+    145,
+    'Diese Unterlage ist eine undiskontierte Modellrechnung über ' + c.horizon + ' Monate, kein Investitionsbeschluss. ROI, Liquidität und Steuern werden nicht als vollständige Finanzplanung dargestellt.',
+    f,
+  )
+}
+
+export async function buildCustomerBusinessCasePdf(data: ReportData): Promise<Uint8Array> {
+  if (!data.customer.trim() || !data.project.trim() || !data.preparedBy.trim()) {
+    throw new Error('Kunde, Projekt und Verfasser sind für den Kundenbericht erforderlich.')
+  }
+  const c = summarizeBusinessCase(data.input)
+  if (!c) throw new Error('Bitte ungültige Angaben oder Doppelzählungen korrigieren.')
+  const pdf = await PDFDocument.create()
+  const fonts: FontSet = {
+    regular: await pdf.embedFont(StandardFonts.Helvetica),
+    bold: await pdf.embedFont(StandardFonts.HelveticaBold),
+  }
+  pdf.setTitle(readable('Business Case - ' + data.project))
+  pdf.setSubject('Kundenbericht | undiskontierte Wirtschaftlichkeitsmodellrechnung')
+  pdf.setCreator('MEDDPICC Workbench - lokaler Browserexport')
+  executivePage(pdf, fonts, data, c)
+  economicsPage(pdf, fonts, c)
+  decisionPage(pdf, fonts, data, c)
+  return pdf.save({ useObjectStreams: false })
+}
