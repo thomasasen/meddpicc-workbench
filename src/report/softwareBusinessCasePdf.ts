@@ -278,19 +278,19 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
   )
 
   s = page(pdf, f, '02  Wirtschaftliche Herleitung')
-  if(data.businessPain?.trim() || data.targetOutcome?.trim()){
-    heading(s,'Kundensituation und Zielbild',f,16)
-    if(data.businessPain?.trim()){
-      draw(s.p,'AUSGANGSLAGE / BUSINESS PAIN',L,s.y,9,f.bold,blue)
-      s.y-=16
-      para(s,data.businessPain,f,9.3)
+  if (data.businessPain?.trim() || data.targetOutcome?.trim()) {
+    heading(s, 'Kundensituation und Zielbild', f, 16)
+    if (data.businessPain?.trim()) {
+      draw(s.p, 'AUSGANGSLAGE / BUSINESS PAIN', L, s.y, 9, f.bold, blue)
+      s.y -= 16
+      para(s, data.businessPain, f, 9.3)
     }
-    if(data.targetOutcome?.trim()){
-      draw(s.p,'ZIELBILD',L,s.y,9,f.bold,blue)
-      s.y-=16
-      para(s,data.targetOutcome,f,9.3)
+    if (data.targetOutcome?.trim()) {
+      draw(s.p, 'ZIELBILD', L, s.y, 9, f.bold, blue)
+      s.y -= 16
+      para(s, data.targetOutcome, f, 9.3)
     }
-    s.y-=8
+    s.y -= 8
   }
   heading(s, 'Kosten, Nutzen und ROI', f)
   tableHead(s, f)
