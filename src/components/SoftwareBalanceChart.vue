@@ -15,15 +15,17 @@ const x0 = 94,
   y0 = 286,
   y1 = 76
 const values = computed(() => props.months.map((m) => m.cumulativeEur))
+function niceStep(raw: number): number {
+  const magnitude = 10 ** Math.floor(Math.log10(Math.max(1, raw)))
+  return ([1, 2, 2.5, 5, 10].find(k => k * magnitude >= raw) ?? 10) * magnitude
+}
 const bounds = computed(() => {
-  let min = Math.min(0, ...values.value),
-    max = Math.max(0, ...values.value)
-  if (max - min < 1) {
-    min -= 1
-    max += 1
-  }
-  const pad = (max - min) * 0.08
-  return { min: min - pad, max: max + pad }
+  const values = props.months.map(m => m.cumulativeEur)
+  let low = Math.min(0,...values), high = Math.max(0,...values)
+  if (high-low<1) {low-=1;high+=1}
+  const pad=(high-low)*0.08
+  const step=niceStep((high-low+2*pad)/4)
+  return { min: Math.floor((low-pad)/step)*step, max: Math.ceil((high+pad)/step)*step, step }
 })
 const x = (month: number) => x0 + (month / props.horizon) * (x1 - x0)
 const y = (eur: number) => y0 - ((eur - bounds.value.min) / (bounds.value.max - bounds.value.min)) * (y0 - y1)
@@ -50,11 +52,18 @@ const payback = computed(() => (props.breakEven === null ? null : (props.months[
 const hovered = ref<MonthFlow | null>(null)
 const fmt = (v: number) =>
   new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v)
-const compact = (v: number) =>
-  new Intl.NumberFormat('de-DE', { notation: 'compact', maximumFractionDigits: 0 }).format(v) + ' €'
-const ticks = computed(() =>
-  Array.from({ length: 5 }, (_, i) => bounds.value.min + ((bounds.value.max - bounds.value.min) * i) / 4),
-)
+const compact = (value: number) => {
+  const sign=value<0?'-':'',v=Math.abs(value)
+  return sign+(v>=1000000?new Intl.NumberFormat('de-DE',{maximumFractionDigits:1}).format(v/1000000)+' Mio.'
+    :v>=1000?new Intl.NumberFormat('de-DE',{maximumFractionDigits:0}).format(v/1000)+' Tsd.'
+    :new Intl.NumberFormat('de-DE',{maximumFractionDigits:0}).format(v))+' €'
+}
+const ticks = computed(() => {
+  const { min,max,step }=bounds.value
+  const values:number[]=[]
+  for (let v=min;v<=max+step/10 && values.length<9;v+=step) values.push(Math.abs(v)<step/100?0:v)
+  return values
+})
 </script>
 
 <template>
