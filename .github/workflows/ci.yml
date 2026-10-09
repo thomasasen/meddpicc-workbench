@@ -45,7 +45,7 @@ jobs:
           cache: npm
 
       - name: PDF-Abhängigkeit im Feature-Branch locken
-        if: startsWith(github.head_ref, 'feature/business-case-')
+        if: startsWith(github.head_ref, 'feature/business-case-') || startsWith(github.head_ref, 'feature/customer-business-case-')
         run: |
           npm install --package-lock-only --ignore-scripts --no-audit --no-fund
           if ! git diff --quiet -- package-lock.json; then
@@ -60,9 +60,9 @@ jobs:
         run: npm ci --no-audit --no-fund
 
       - name: Business-Case-Dateien normalisieren
-        if: startsWith(github.head_ref, 'feature/business-case-')
+        if: startsWith(github.head_ref, 'feature/business-case-') || startsWith(github.head_ref, 'feature/customer-business-case-')
         run: |
-          npx prettier --write src/domain/businessCase.ts src/domain/businessCase.test.ts src/report/softwareBusinessCasePdf.ts src/report/softwareBusinessCasePdf.test.ts src/components/SoftwareBalanceChart.vue src/components/SoftwarePaybackPanel.vue tests/e2e/software-payback.spec.ts
+          npx prettier --write src/domain/businessCase.ts src/domain/businessCase.test.ts src/report/softwareBusinessCasePdf.ts src/report/softwareBusinessCasePdf.test.ts src/report/customerBusinessCasePdf.ts src/report/customerBusinessCasePdf.test.ts src/components/SoftwareBalanceChart.vue src/components/SoftwarePaybackPanel.vue tests/e2e/software-payback.spec.ts
           if ! git diff --quiet -- src tests; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -99,7 +99,7 @@ jobs:
         run: npm run test:e2e
 
       - name: PDF-Drucklayout als echte Bildseiten prüfen
-        if: startsWith(github.head_ref, 'feature/business-case-')
+        if: startsWith(github.head_ref, 'feature/business-case-') || startsWith(github.head_ref, 'feature/customer-business-case-')
         run: |
           report="$(find test-results -type f -name 'business-case-qa-desktop-chromium.pdf' -print -quit)"
           if [ -z "$report" ]; then
@@ -117,12 +117,26 @@ jobs:
           pdftoppm -f 3 -l 3 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-metrics
           total="$(pdfinfo "$report" | awk '/^Pages:/{print $2}')"
           pdftoppm -f "$total" -l "$total" -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-method
+          customer="$(find test-results -type f -name 'business-case-customer-desktop-chromium.pdf' -print -quit)"
+          if [ -z "$customer" ]; then
+            echo "::error::Kein heruntergeladener Kundenbericht gefunden."
+            exit 1
+          fi
+          customer_pages="$(pdfinfo "$customer" | awk '/^Pages:/{print $2}')"
+          test "$customer_pages" = 3 || { echo "::error::Kundenbericht muss genau 3 Seiten enthalten"; exit 1; }
+          pdftoppm -f 1 -l 1 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-cover
+          pdftoppm -f 2 -l 2 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-economics
+          pdftoppm -f 3 -l 3 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-decision
+          pdftotext -layout "$customer" test-results/rendered/business-case-customer.txt
+          grep -q 'Wirtschaftlichkeit auf einen Blick' test-results/rendered/business-case-customer.txt
+          grep -q 'Was trägt den Business Case' test-results/rendered/business-case-customer.txt
+          grep -q 'Was ist vor der Entscheidung zu klären' test-results/rendered/business-case-customer.txt
           pdftotext -layout "$report" test-results/rendered/business-case-report.txt
           grep -q 'Wirtschaftlicher Business Case' test-results/rendered/business-case-report.txt
           grep -q 'Kundensituation und Zielbild' test-results/rendered/business-case-report.txt
           grep -q 'Verkäuferannahme' test-results/rendered/business-case-report.txt
           grep -q 'NICHT ANGERECHNET' test-results/rendered/business-case-report.txt
-          for name in business-case-report-cover.png business-case-report-finance.png business-case-report-metrics.png business-case-report-method.png; do
+          for name in business-case-report-cover.png business-case-report-finance.png business-case-report-metrics.png business-case-report-method.png business-case-customer-cover.png business-case-customer-economics.png business-case-customer-decision.png; do
             test -s "test-results/rendered/$name" || exit 1
           done
 
@@ -157,10 +171,10 @@ jobs:
 
 
       - name: Abnahmebilder als überprüfbare Einzeldateien bereitstellen
-        if: github.event.pull_request.head.repo.full_name == github.repository && (startsWith(github.head_ref, 'feature/champion-') || startsWith(github.head_ref, 'feature/competition-') || startsWith(github.head_ref, 'feature/quick-payback-') || startsWith(github.head_ref, 'feature/business-case-'))
+        if: github.event.pull_request.head.repo.full_name == github.repository && (startsWith(github.head_ref, 'feature/champion-') || startsWith(github.head_ref, 'feature/competition-') || startsWith(github.head_ref, 'feature/quick-payback-') || startsWith(github.head_ref, 'feature/business-case-') || startsWith(github.head_ref, 'feature/customer-business-case-'))
         run: |
           mkdir -p docs/review-screenshots
-          if [[ "${{ github.head_ref }}" == feature/quick-payback-* || "${{ github.head_ref }}" == feature/business-case-* ]]; then
+          if [[ "${{ github.head_ref }}" == feature/quick-payback-* || "${{ github.head_ref }}" == feature/business-case-* || "${{ github.head_ref }}" == feature/customer-business-case-* ]]; then
             names=(
               quick-payback-empty-desktop-chromium.png
               quick-payback-empty-mobile-chromium.png
@@ -178,6 +192,9 @@ jobs:
               business-case-report-finance.png
               business-case-report-metrics.png
               business-case-report-method.png
+              business-case-customer-cover.png
+              business-case-customer-economics.png
+              business-case-customer-decision.png
             )
           else
             if [[ "${{ github.head_ref }}" == feature/competition-* ]]; then
