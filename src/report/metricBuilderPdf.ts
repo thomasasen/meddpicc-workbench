@@ -1,7 +1,6 @@
 import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf-lib'
 import {
   buildMetric,
-  decimal,
   euro,
   evidenceLabels,
   mechanismLabels,
