@@ -20,8 +20,6 @@ type Paint = { pdf: PDFDocument; p: PDFPage; fonts: FontSet }
 
 const euro = (n: number) =>
   new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n)
-const percent = (n: number | null) =>
-  n === null ? 'nicht definiert' : new Intl.NumberFormat('de-DE', { maximumFractionDigits: 1 }).format(n) + ' %'
 
 function readable(value: string): string {
   return value
