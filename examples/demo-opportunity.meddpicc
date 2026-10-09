@@ -24,10 +24,7 @@
       "name": "Dr. Julia Berger",
       "role": "CFO",
       "organization": "Beispielwerke Industrie GmbH",
-      "relationships": [
-        "economic_buyer_candidate",
-        "business_stakeholder"
-      ],
+      "relationships": ["economic_buyer_candidate", "business_stakeholder"],
       "influence": "high",
       "dealPosition": "unknown",
       "personalWin": null,
@@ -39,10 +36,7 @@
       "name": "Markus Stein",
       "role": "Leiter Vertrieb",
       "organization": "Beispielwerke Industrie GmbH",
-      "relationships": [
-        "champion_candidate",
-        "business_stakeholder"
-      ],
+      "relationships": ["champion_candidate", "business_stakeholder"],
       "influence": "high",
       "dealPosition": "supporter",
       "personalWin": "Schnellere Vertriebssteuerung und weniger manuelle Forecast-Nacharbeit",
@@ -54,9 +48,7 @@
       "name": "Aylin Demir",
       "role": "CIO",
       "organization": "Beispielwerke Industrie GmbH",
-      "relationships": [
-        "technical_stakeholder"
-      ],
+      "relationships": ["technical_stakeholder"],
       "influence": "high",
       "dealPosition": "neutral",
       "personalWin": null,
@@ -68,9 +60,7 @@
       "name": "Martin Vogel",
       "role": "Strategischer Einkauf",
       "organization": "Beispielwerke Industrie GmbH",
-      "relationships": [
-        "procurement"
-      ],
+      "relationships": ["procurement"],
       "influence": "medium",
       "dealPosition": "neutral",
       "personalWin": null,
@@ -83,13 +73,7 @@
       "status": "partial",
       "confidence": 5,
       "summary": "Operative Ausgangswerte sind als fiktive Kundenaussage und KPI-Bericht dokumentiert. Zusätzliche wirtschaftliche Projektvorteile sind Verkäuferhypothesen und noch nicht kundenseitig oder kaufmännisch geprüft.",
-      "evidenceIds": [
-        "ev_metric_01",
-        "ev_metric_02",
-        "ev_metric_03",
-        "ev_metric_04",
-        "ev_metric_05"
-      ],
+      "evidenceIds": ["ev_metric_01", "ev_metric_02", "ev_metric_03", "ev_metric_04", "ev_metric_05"],
       "gaps": [
         "Zeitersparnis und tatsächlich reduzierbare Ausgaben strikt unterscheiden.",
         "Wegfall externer Vertriebsunterstützung (110.000 EUR/Jahr) samt Kündigung und Zeitpunkt belegen.",
@@ -122,9 +106,7 @@
               "Nicht als weitere Einsparung neben Prozess- und Vertriebsnutzen addieren."
             ]
           },
-          "evidenceIds": [
-            "ev_metric_01"
-          ],
+          "evidenceIds": ["ev_metric_01"],
           "customerConfirmed": false,
           "notes": "Fiktiv: Der bisherige Ist-Wert war eine berichtete Kundenaussage; Zielwert und monetäre Realisierbarkeit sind nicht bestätigt. Kein automatischer Payback-Beitrag."
         },
@@ -148,9 +130,7 @@
             "derivation": null,
             "assumptions": []
           },
-          "evidenceIds": [
-            "ev_metric_02"
-          ],
+          "evidenceIds": ["ev_metric_02"],
           "customerConfirmed": false,
           "notes": "Operative Service-Metric aus einem fiktiven KPI-Report."
         },
@@ -177,9 +157,7 @@
               "Fiktive Hypothese, unabhängig von anderen angerechneten Nutzenarten zu validieren."
             ]
           },
-          "evidenceIds": [
-            "ev_metric_03"
-          ],
+          "evidenceIds": ["ev_metric_03"],
           "customerConfirmed": false,
           "notes": "Modellannahme, Wirkungsgruppe externe-vertriebskosten."
         },
@@ -206,9 +184,7 @@
               "Nicht dieselben Zeitgewinne zusätzlich als Personalkostenersparnis zählen."
             ]
           },
-          "evidenceIds": [
-            "ev_metric_04"
-          ],
+          "evidenceIds": ["ev_metric_04"],
           "customerConfirmed": false,
           "notes": "Fiktive Prozesskostenhypothese, Wirkungsgruppe service-vorgangskosten."
         },
@@ -235,9 +211,7 @@
               "1.200 EUR ist Deckungsbeitrag je zusätzlichem Abschluss, nicht Umsatz; Kapazität und Kannibalisierung sind ungeprüft."
             ]
           },
-          "evidenceIds": [
-            "ev_metric_05"
-          ],
+          "evidenceIds": ["ev_metric_05"],
           "customerConfirmed": false,
           "notes": "Fiktive Wirtschaftshypothese, Wirkungsgruppe angebotsconversion-deckungsbeitrag."
         }
@@ -247,9 +221,7 @@
       "status": "partial",
       "confidence": 5,
       "summary": "Die CFO ist als wahrscheinlicher Economic Buyer identifiziert, eine direkte Bestätigung der finalen wirtschaftlichen Entscheidungsbefugnis fehlt noch.",
-      "evidenceIds": [
-        "ev_eb_01"
-      ],
+      "evidenceIds": ["ev_eb_01"],
       "gaps": [
         "Finale wirtschaftliche Entscheidungsbefugnis direkt bestätigen.",
         "Investitionspriorität und Erfolgskriterien mit der CFO validieren."
@@ -263,9 +235,7 @@
           "engagementStatus": "indirect",
           "priorityStatus": "unknown",
           "decisionCriteria": [],
-          "evidenceIds": [
-            "ev_eb_01"
-          ],
+          "evidenceIds": ["ev_eb_01"],
           "notes": "Die Rolle wurde bisher nur durch den Leiter Vertrieb beschrieben; keine direkte CFO-Bestätigung."
         }
       ]
@@ -274,10 +244,7 @@
       "status": "confirmed",
       "confidence": 8,
       "summary": "Die wichtigsten fachlichen, technischen und wirtschaftlichen Kriterien sind dokumentiert und mit mehreren Stakeholdern abgestimmt.",
-      "evidenceIds": [
-        "ev_dc_01",
-        "ev_dc_02"
-      ],
+      "evidenceIds": ["ev_dc_01", "ev_dc_02"],
       "gaps": [],
       "criteria": [
         {
@@ -286,9 +253,7 @@
           "importance": "high",
           "category": "capability",
           "ourPosition": "strong",
-          "evidenceIds": [
-            "ev_dc_01"
-          ],
+          "evidenceIds": ["ev_dc_01"],
           "notes": ""
         },
         {
@@ -297,9 +262,7 @@
           "importance": "high",
           "category": "risk",
           "ourPosition": "strong",
-          "evidenceIds": [
-            "ev_dc_02"
-          ],
+          "evidenceIds": ["ev_dc_02"],
           "notes": ""
         },
         {
@@ -308,9 +271,7 @@
           "importance": "high",
           "category": "value",
           "ourPosition": "medium",
-          "evidenceIds": [
-            "ev_dc_02"
-          ],
+          "evidenceIds": ["ev_dc_02"],
           "notes": ""
         }
       ]
@@ -319,12 +280,8 @@
       "status": "partial",
       "confidence": 6,
       "summary": "Fachliche Auswahl und Management-Freigabe sind bekannt; der finale Ablauf zwischen CFO und Geschäftsführung ist noch nicht vollständig getestet.",
-      "evidenceIds": [
-        "ev_dp_01"
-      ],
-      "gaps": [
-        "Finale Reihenfolge von CFO-Freigabe und Geschäftsführungsbeschluss bestätigen."
-      ],
+      "evidenceIds": ["ev_dp_01"],
+      "gaps": ["Finale Reihenfolge von CFO-Freigabe und Geschäftsführungsbeschluss bestätigen."],
       "steps": [
         {
           "id": "dp_01",
@@ -337,9 +294,7 @@
           "durationBusinessDays": 1,
           "predecessorIds": [],
           "required": true,
-          "evidenceIds": [
-            "ev_dp_01"
-          ],
+          "evidenceIds": ["ev_dp_01"],
           "parallelGroup": null,
           "notes": ""
         },
@@ -352,13 +307,9 @@
           "plannedDate": "2027-02-19",
           "confirmedDate": null,
           "durationBusinessDays": 15,
-          "predecessorIds": [
-            "dp_01"
-          ],
+          "predecessorIds": ["dp_01"],
           "required": true,
-          "evidenceIds": [
-            "ev_dp_01"
-          ],
+          "evidenceIds": ["ev_dp_01"],
           "parallelGroup": null,
           "notes": "Noch nicht vollständig kundenseitig bestätigt."
         },
@@ -371,13 +322,9 @@
           "plannedDate": "2027-03-05",
           "confirmedDate": null,
           "durationBusinessDays": 5,
-          "predecessorIds": [
-            "dp_02"
-          ],
+          "predecessorIds": ["dp_02"],
           "required": true,
-          "evidenceIds": [
-            "ev_dp_01"
-          ],
+          "evidenceIds": ["ev_dp_01"],
           "parallelGroup": null,
           "notes": "Noch nicht vollständig kundenseitig bestätigt."
         }
@@ -387,9 +334,7 @@
       "status": "risk",
       "confidence": 3,
       "summary": "Procurement, Legal und PO-Prozess sind nur teilweise bekannt. Der aktuelle Target Close ist deshalb noch nicht belastbar.",
-      "evidenceIds": [
-        "ev_pp_01"
-      ],
+      "evidenceIds": ["ev_pp_01"],
       "gaps": [
         "Procurement-Schritte und Lead Times mit dem Einkauf bestätigen.",
         "Legal-Review und DPA-Verantwortliche identifizieren.",
@@ -407,9 +352,7 @@
           "durationBusinessDays": 5,
           "predecessorIds": [],
           "required": true,
-          "evidenceIds": [
-            "ev_pp_01"
-          ],
+          "evidenceIds": ["ev_pp_01"],
           "parallelGroup": null,
           "notes": ""
         },
@@ -422,13 +365,9 @@
           "plannedDate": null,
           "confirmedDate": null,
           "durationBusinessDays": null,
-          "predecessorIds": [
-            "pp_01"
-          ],
+          "predecessorIds": ["pp_01"],
           "required": true,
-          "evidenceIds": [
-            "ev_pp_01"
-          ],
+          "evidenceIds": ["ev_pp_01"],
           "parallelGroup": null,
           "notes": "Noch nicht vollständig kundenseitig bestätigt."
         },
@@ -441,13 +380,9 @@
           "plannedDate": null,
           "confirmedDate": null,
           "durationBusinessDays": null,
-          "predecessorIds": [
-            "pp_02"
-          ],
+          "predecessorIds": ["pp_02"],
           "required": true,
-          "evidenceIds": [
-            "ev_pp_01"
-          ],
+          "evidenceIds": ["ev_pp_01"],
           "parallelGroup": null,
           "notes": "Noch nicht vollständig kundenseitig bestätigt."
         }
@@ -457,14 +392,8 @@
       "status": "confirmed",
       "confidence": 7,
       "summary": "Fragmentierte Vertriebs- und Serviceprozesse erzeugen manuellen Aufwand, langsame Reaktionszeiten und unzuverlässige Forecast-Daten.",
-      "evidenceIds": [
-        "ev_pain_01",
-        "ev_metric_01",
-        "ev_metric_02"
-      ],
-      "gaps": [
-        "Konsequenz für Umsatzrisiko und Kundenbindung noch finanziell quantifizieren."
-      ],
+      "evidenceIds": ["ev_pain_01", "ev_metric_01", "ev_metric_02"],
+      "gaps": ["Konsequenz für Umsatzrisiko und Kundenbindung noch finanziell quantifizieren."],
       "items": [
         {
           "id": "pain_01",
@@ -472,10 +401,7 @@
           "businessImpact": "Zeitverlust im Vertrieb und geringere Verlässlichkeit der Management-Steuerung.",
           "consequenceOfInaction": "Manuelle Aufwände und schwache Forecast-Daten bleiben bestehen; finanzielle Konsequenz ist noch nicht vollständig quantifiziert.",
           "priority": "high",
-          "evidenceIds": [
-            "ev_pain_01",
-            "ev_metric_01"
-          ],
+          "evidenceIds": ["ev_pain_01", "ev_metric_01"],
           "notes": "Business Impact ist teilweise quantifiziert; Umsatz-/Kundenbindungswirkung bleibt offen."
         }
       ]
@@ -484,9 +410,7 @@
       "status": "partial",
       "confidence": 6,
       "summary": "Der Leiter Vertrieb unterstützt das Vorhaben aktiv und liefert interne Informationen, hat aber den Zugang zum Economic Buyer noch nicht hergestellt.",
-      "evidenceIds": [
-        "ev_champion_01"
-      ],
+      "evidenceIds": ["ev_champion_01"],
       "gaps": [
         "Economic-Buyer-Meeting durch den Champion herstellen lassen.",
         "Champion anhand einer anspruchsvolleren internen Aktion weiter testen."
@@ -500,16 +424,12 @@
           "behaviors": [
             {
               "type": "provided_internal_information",
-              "evidenceIds": [
-                "ev_champion_01"
-              ],
+              "evidenceIds": ["ev_champion_01"],
               "notes": "Interne Zahlen und Kriterienkatalog wurden proaktiv bereitgestellt."
             },
             {
               "type": "created_access",
-              "evidenceIds": [
-                "ev_champion_01"
-              ],
+              "evidenceIds": ["ev_champion_01"],
               "notes": "Mehrere interne Termine wurden koordiniert; Zugang zum Economic Buyer fehlt noch."
             }
           ],
@@ -521,9 +441,7 @@
       "status": "unknown",
       "confidence": 2,
       "summary": "Ein bestehender CRM-Anbieter und eine mögliche interne Weiterentwicklung werden vermutet, sind aber nicht belastbar qualifiziert.",
-      "evidenceIds": [
-        "ev_comp_01"
-      ],
+      "evidenceIds": ["ev_comp_01"],
       "gaps": [
         "Alternativen, Status quo und interne Build-Option mit dem Champion konkretisieren.",
         "Entscheidungskriterien gegen relevante Alternativen testen."
@@ -534,9 +452,7 @@
           "name": "Status quo / interne Erweiterung",
           "type": "internal_build",
           "status": "assumption",
-          "evidenceIds": [
-            "ev_comp_01"
-          ],
+          "evidenceIds": ["ev_comp_01"],
           "notes": "Interne Erweiterung wurde nur als mögliche Alternative genannt."
         },
         {
@@ -561,9 +477,7 @@
       "verification": "corroborated",
       "quality": "medium",
       "context": "Fiktiver Kundenkontext aus der referenzierten Quelle.",
-      "relatedAreas": [
-        "metrics"
-      ],
+      "relatedAreas": ["metrics"],
       "createdAt": "2026-09-18T12:00:00.000Z"
     },
     {
@@ -576,9 +490,7 @@
       "verification": "confirmed",
       "quality": "high",
       "context": "Fiktiver Kundenkontext aus der referenzierten Quelle.",
-      "relatedAreas": [
-        "metrics"
-      ],
+      "relatedAreas": ["metrics"],
       "createdAt": "2026-09-24T12:00:00.000Z"
     },
     {
@@ -591,9 +503,7 @@
       "verification": "single_source",
       "quality": "low",
       "context": "Fiktiver Kundenkontext aus der referenzierten Quelle.",
-      "relatedAreas": [
-        "economicBuyer"
-      ],
+      "relatedAreas": ["economicBuyer"],
       "createdAt": "2026-09-18T12:00:00.000Z"
     },
     {
@@ -606,9 +516,7 @@
       "verification": "corroborated",
       "quality": "medium",
       "context": "Fiktiver Kundenkontext aus der referenzierten Quelle.",
-      "relatedAreas": [
-        "decisionCriteria"
-      ],
+      "relatedAreas": ["decisionCriteria"],
       "createdAt": "2026-09-24T12:00:00.000Z"
     },
     {
@@ -621,9 +529,7 @@
       "verification": "confirmed",
       "quality": "high",
       "context": "Fiktiver Kundenkontext aus der referenzierten Quelle.",
-      "relatedAreas": [
-        "decisionCriteria"
-      ],
+      "relatedAreas": ["decisionCriteria"],
       "createdAt": "2026-09-30T12:00:00.000Z"
     },
     {
@@ -636,9 +542,7 @@
       "verification": "single_source",
       "quality": "low",
       "context": "Fiktiver Kundenkontext aus der referenzierten Quelle.",
-      "relatedAreas": [
-        "decisionProcess"
-      ],
+      "relatedAreas": ["decisionProcess"],
       "createdAt": "2026-09-30T12:00:00.000Z"
     },
     {
@@ -651,9 +555,7 @@
       "verification": "single_source",
       "quality": "low",
       "context": "Fiktiver Kundenkontext aus der referenzierten Quelle.",
-      "relatedAreas": [
-        "paperProcess"
-      ],
+      "relatedAreas": ["paperProcess"],
       "createdAt": "2026-10-02T12:00:00.000Z"
     },
     {
@@ -666,9 +568,7 @@
       "verification": "corroborated",
       "quality": "medium",
       "context": "Fiktiver Kundenkontext aus der referenzierten Quelle.",
-      "relatedAreas": [
-        "pain"
-      ],
+      "relatedAreas": ["pain"],
       "createdAt": "2026-09-18T12:00:00.000Z"
     },
     {
@@ -681,9 +581,7 @@
       "verification": "observed",
       "quality": "medium",
       "context": "Fiktiver Kundenkontext aus der referenzierten Quelle.",
-      "relatedAreas": [
-        "champions"
-      ],
+      "relatedAreas": ["champions"],
       "createdAt": "2026-10-02T12:00:00.000Z"
     },
     {
@@ -696,9 +594,7 @@
       "verification": "unconfirmed",
       "quality": "low",
       "context": "Fiktiver Kundenkontext aus der referenzierten Quelle.",
-      "relatedAreas": [
-        "competition"
-      ],
+      "relatedAreas": ["competition"],
       "createdAt": "2026-09-30T12:00:00.000Z"
     },
     {
@@ -711,9 +607,7 @@
       "verification": "unconfirmed",
       "quality": "low",
       "context": "Reine fiktive Modellannahme zum unabhängigen Software-Payback-Beispiel; noch nicht von Kunde oder Finance bestätigt.",
-      "relatedAreas": [
-        "metrics"
-      ],
+      "relatedAreas": ["metrics"],
       "createdAt": "2026-10-09T09:23:52.000Z"
     },
     {
@@ -726,9 +620,7 @@
       "verification": "unconfirmed",
       "quality": "low",
       "context": "Reine fiktive Modellannahme zum unabhängigen Software-Payback-Beispiel; noch nicht von Kunde oder Finance bestätigt.",
-      "relatedAreas": [
-        "metrics"
-      ],
+      "relatedAreas": ["metrics"],
       "createdAt": "2026-10-09T09:23:52.000Z"
     },
     {
@@ -741,9 +633,7 @@
       "verification": "unconfirmed",
       "quality": "low",
       "context": "Reine fiktive Modellannahme zum unabhängigen Software-Payback-Beispiel; noch nicht von Kunde oder Finance bestätigt.",
-      "relatedAreas": [
-        "metrics"
-      ],
+      "relatedAreas": ["metrics"],
       "createdAt": "2026-10-09T09:23:52.000Z"
     }
   ],
@@ -754,11 +644,7 @@
       "severity": "high",
       "status": "open",
       "relatedArea": "paperProcess",
-      "relatedEntityIds": [
-        "pp_01",
-        "pp_02",
-        "pp_03"
-      ],
+      "relatedEntityIds": ["pp_01", "pp_02", "pp_03"],
       "impact": "Der Target Close 31.03.2027 kann durch unbekannte Procurement- und Legal-Lead-Times reißen.",
       "openedAt": "2026-10-02T14:00:00.000Z",
       "mitigation": "Procurement-, Legal-, Datenschutz- und Signaturschritte mit Ownern und Lead Times explizit bestätigen.",
@@ -771,9 +657,7 @@
       "severity": "medium",
       "status": "open",
       "relatedArea": "economicBuyer",
-      "relatedEntityIds": [
-        "st_eb"
-      ],
+      "relatedEntityIds": ["st_eb"],
       "impact": "Business Case und Dringlichkeit könnten auf Management-Ebene anders bewertet werden.",
       "openedAt": "2026-10-03T09:00:00.000Z",
       "mitigation": "Direktes Gespräch mit der CFO über Authority, Priorität, Business Case und Erfolgskriterien vorbereiten.",
@@ -786,9 +670,7 @@
       "severity": "medium",
       "status": "open",
       "relatedArea": "competition",
-      "relatedEntityIds": [
-        "comp_01"
-      ],
+      "relatedEntityIds": ["comp_01"],
       "impact": "Decision Criteria können noch unbemerkt zugunsten einer Alternative verändert werden.",
       "openedAt": "2026-10-03T10:00:00.000Z",
       "mitigation": "Aktive Alternativen, Status quo und No-Decision-Risiko mit dem Champion qualifizieren.",
@@ -858,9 +740,7 @@
         "oneTimeInvestment": 480000,
         "annualRecurringCost": 96000
       },
-      "evidenceIds": [
-        "ev_metric_01"
-      ],
+      "evidenceIds": ["ev_metric_01"],
       "notes": "Historisches Business-Case-Inputfeld mit 480.000 EUR Gesamtinvestition und 96.000 EUR SaaS jährlich. Zeitersparnis ist nur ein potenzieller Kapazitätswert und kein nachgewiesener ROI. Das eigenständige Software-Payback-Tool kann diese Legacy-Daten nicht direkt importieren.",
       "assumptions": [
         "9 auf 3 Stunden pro Woche entsprechen 66,67 % operativer Zeitreduktion, nicht 66,67 % finanzieller Einsparung.",
