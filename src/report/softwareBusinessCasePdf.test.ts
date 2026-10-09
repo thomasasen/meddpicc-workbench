@@ -77,14 +77,14 @@ describe('kundenfähiger Business-Case-PDF-Download', () => {
   })
   it('verteilt lange Kunden- und Validierungstexte auf zusätzliche A4-Seiten', async () => {
     const input = createCrmSaasDemo()
-    input.metrics[0]!.evidenceNote = 'Die erwartete Einsparung muss anhand tatsächlicher Verträge und Rechnungen geprüft werden. '.repeat(280)
+    input.metrics[0]!.evidenceNote = 'Verträge und Rechnungen prüfen. '.repeat(900)
     const pdf = await buildSoftwareBusinessCasePdf({
       customer: 'Beispielwerke Industrie GmbH',
       project: 'Lange Kundenargumentation',
       preparedBy: 'Demo Vertrieb',
       date: '09.10.2026',
-      businessPain: 'Die Ausgangslage umfasst mehrere Teilprozesse mit noch unbestätigtem wirtschaftlichem Effekt. '.repeat(450),
-      targetOutcome: 'Das Zielbild verlangt nachweisbare, zeitlich erreichbare Änderungen der Prozesskosten. '.repeat(450),
+      businessPain: 'Ausgangslage und Geschäftsauswirkung sind noch zu prüfen. '.repeat(700),
+      targetOutcome: 'Zielbild und finanzielle Wirkung sind zu validieren. '.repeat(700),
       input,
     })
     const pages = (await PDFDocument.load(pdf)).getPages()
