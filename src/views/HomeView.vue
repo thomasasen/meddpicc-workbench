@@ -67,7 +67,7 @@ const toolClusters = [
     tools: [
       {
         label: 'Quick Payback',
-        note: 'Einmalige Investition, realisierbaren Jahresnutzen und Zusatzkosten eingeben – einfache Amortisation in Monaten sehen.',
+        note: 'Einfacher Payback oder Softwareprojekt mit SaaS, Kosten und Kunden-Metrics – Amortisation nachvollziehbar berechnen.',
         route: '/tools/quick-payback',
         customerReady: true,
       },
