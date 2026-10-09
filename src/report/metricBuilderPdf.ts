@@ -2,7 +2,7 @@ import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf
 import {
   buildMetric,
   euro,
-  evidenceLabels,
+  customerEvidenceLabels,
   mechanismLabels,
   metricSummary,
   metricTypeLabels,
@@ -140,7 +140,7 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
   if (draft.realizationNote.trim()) paragraph('Begruendung: ' + draft.realizationNote.trim())
 
   heading('4. Datenbasis und offene Punkte')
-  pair('Herkunft', evidenceLabels[draft.evidence])
+  pair('Herkunft', customerEvidenceLabels[draft.evidence])
   if (draft.assumptionNote.trim()) paragraph('Grundlage: ' + draft.assumptionNote)
   if (result.questions.length) paragraph('Noch zu klaeren: ' + result.questions.join(' '))
   if (result.issues.length) paragraph('Fehlende / ungueltige Angaben: ' + result.issues.join(' '))
