@@ -394,6 +394,9 @@ export async function buildCustomerBusinessCasePdf(data: ReportData): Promise<Ui
   if (!data.customer.trim() || !data.project.trim() || !data.preparedBy.trim()) {
     throw new Error('Kunde, Projekt und Verfasser sind für den Kundenbericht erforderlich.')
   }
+  if (!data.businessPain?.trim() || !data.targetOutcome?.trim()) {
+    throw new Error('Ausgangssituation und Ziel sind für einen Kundenbericht erforderlich.')
+  }
   const c = summarizeBusinessCase(data.input)
   if (!c) throw new Error('Bitte ungültige Angaben oder Doppelzählungen korrigieren.')
   const pdf = await PDFDocument.create()
