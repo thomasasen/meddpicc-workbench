@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import type { MonthFlow } from '../domain/softwarePayback'
+import { paybackAxisBounds } from '../domain/paybackChart'
 
 const props = defineProps<{
   months: MonthFlow[]
@@ -34,13 +35,7 @@ const ending = computed(() => props.months[props.months.length - 1]!)
 const payback = computed(() =>
   props.breakEven === null ? null : (props.months.find((m) => m.month === props.breakEven) ?? null),
 )
-const bounds = computed(() => {
-  const vals = props.months.map((m) => m.cumulativeEur)
-  const lowest = Math.min(0, ...vals)
-  const highest = Math.max(0, ...vals)
-  const padding = Math.max(1, (highest - lowest) * 0.12)
-  return { min: lowest - padding, max: highest + padding }
-})
+const bounds = computed(() => paybackAxisBounds(props.months.map((m) => m.cumulativeEur)))
 const x = (month: number) => x0 + (month / props.horizon) * (x1 - x0)
 const y = (amount: number) =>
   yBottom - ((amount - bounds.value.min) / (bounds.value.max - bounds.value.min)) * (yBottom - yTop)
@@ -81,7 +76,7 @@ const accessibleDescription = computed(() => {
       <rect x="0" y="0" width="960" height="368" fill="#ffffff" />
 
       <text x="110" y="31" class="chart-head">Wann rechnet sich das Vorhaben?</text>
-      <text x="110" y="53" class="chart-sub">Die Linie zeigt die erwarteten Vorteile abzüglich der neuen Kosten.</text>
+      <text x="110" y="53" class="chart-sub">Kumulierte Vorteile abzüglich neuer Kosten, Monat für Monat.</text>
 
       <line :x1="x0" :x2="x1" :y1="zero" :y2="zero" stroke="#5e6c80" stroke-width="1.5" stroke-dasharray="6 6" />
       <text :x="x0 - 13" :y="zero + 4" class="chart-tick" text-anchor="end">0 €</text>
@@ -158,7 +153,7 @@ const accessibleDescription = computed(() => {
           {{ minimum.cumulativeEur < 0 ? abbreviated(minimum.cumulativeEur) + ' · M' + minimum.month : 'Kein Minus' }}
         </text>
 
-        <circle cx="372" cy="330" r="4" fill="#08775e" />
+        <circle cx="372" cy="330" r="4" :fill="payback ? '#08775e' : '#64748b'" />
         <text x="383" y="326" class="summary-name">Wirtschaftlicher Ausgleich</text>
         <text x="383" y="343" class="summary-value" data-testid="chart-payback">
           {{ payback ? 'Ab Monat ' + payback.month : 'Nicht erreicht' }}
