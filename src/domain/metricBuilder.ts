@@ -77,6 +77,13 @@ export const evidenceLabels: Record<MetricEvidence, string> = {
   'customer-reviewed': 'Mit dem Kunden geprüft (manuell bestätigt)',
 }
 
+export const customerEvidenceLabels: Record<MetricEvidence, string> = {
+  hypothesis: 'Ungeprüfte Annahme',
+  reference: 'Referenzwert eines anderen Unternehmens, nicht kundenseitig überprüft',
+  'customer-stated': 'Kundenaussage, nicht unabhängig geprüft',
+  'customer-reviewed': 'Nach eigener Dokumentation mit dem Kunden geprüft',
+}
+
 export const mechanismLabels: Record<RealizationMechanism, string> = {
   unresolved: 'Noch nicht geklärt',
   'avoidable-cost': 'Konkreter laufender Kostenblock sinkt',
@@ -357,7 +364,7 @@ export function metricSummary(draft: MetricBuilderDraft, result: MetricBuilderRe
     'Rechenweg: ' + (result.calculation || 'noch nicht vollständig'),
     'Rechnerisches Potenzial: ' + (result.potentialEur === null ? 'nicht bezifferbar' : euro(result.potentialEur) + '/Jahr'),
     'Wirtschaftlich realisierbar: ' + (result.realizedEur === null ? 'nicht nachgewiesen / nicht angesetzt' : euro(result.realizedEur) + '/Jahr'),
-    'Annahmenstand: ' + evidenceLabels[draft.evidence],
+    'Annahmenstand: ' + customerEvidenceLabels[draft.evidence],
   ]
   if (draft.assumptionNote.trim()) lines.push('Datenbasis: ' + draft.assumptionNote.trim())
   if (draft.realizationNote.trim()) lines.push('Realisierung: ' + draft.realizationNote.trim())
