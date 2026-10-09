@@ -204,18 +204,14 @@ function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
       x: X,
       color: red,
       label: 'Tiefster rechnerischer Saldo',
-      value: c.lowestBalanceEur < 0
-        ? euro(c.lowestBalanceEur) + ' (M' + c.lowestMonth + ')'
-        : 'Kein Fehlbetrag',
+      value: c.lowestBalanceEur < 0 ? euro(c.lowestBalanceEur) + ' (M' + c.lowestMonth + ')' : 'Kein Fehlbetrag',
       max: 162,
     },
     {
       x: X + 178,
       color: teal,
       label: 'Wirtschaftlicher Ausgleich',
-      value: c.sustainedBreakEvenMonth === null
-        ? 'Nicht erreicht'
-        : 'Ab Monat ' + c.sustainedBreakEvenMonth,
+      value: c.sustainedBreakEvenMonth === null ? 'Nicht erreicht' : 'Ab Monat ' + c.sustainedBreakEvenMonth,
       max: 170,
     },
     {

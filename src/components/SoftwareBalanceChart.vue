@@ -31,7 +31,9 @@ const minimum = computed(() =>
   props.months.reduce((a, b) => (b.cumulativeEur < a.cumulativeEur ? b : a), props.months[0]!),
 )
 const ending = computed(() => props.months[props.months.length - 1]!)
-const payback = computed(() => props.breakEven === null ? null : props.months.find((m) => m.month === props.breakEven) ?? null)
+const payback = computed(() =>
+  props.breakEven === null ? null : (props.months.find((m) => m.month === props.breakEven) ?? null),
+)
 const bounds = computed(() => {
   const vals = props.months.map((m) => m.cumulativeEur)
   const lowest = Math.min(0, ...vals)
@@ -40,7 +42,8 @@ const bounds = computed(() => {
   return { min: lowest - padding, max: highest + padding }
 })
 const x = (month: number) => x0 + (month / props.horizon) * (x1 - x0)
-const y = (amount: number) => yBottom - ((amount - bounds.value.min) / (bounds.value.max - bounds.value.min)) * (yBottom - yTop)
+const y = (amount: number) =>
+  yBottom - ((amount - bounds.value.min) / (bounds.value.max - bounds.value.min)) * (yBottom - yTop)
 const zero = computed(() => y(0))
 const linePoints = computed(() =>
   props.months.map((m) => x(m.month).toFixed(1) + ',' + y(m.cumulativeEur).toFixed(1)).join(' '),
@@ -51,14 +54,22 @@ const monthsToShow = computed(() => {
 })
 const hovering = ref<MonthFlow | null>(null)
 const accessibleDescription = computed(() => {
-  const valley = minimum.value.cumulativeEur < 0
-    ? 'Tiefster Wert ' + money(minimum.value.cumulativeEur) + ' in Monat ' + minimum.value.month + '. '
-    : 'Kein negativer kumulierter Saldo. '
+  const valley =
+    minimum.value.cumulativeEur < 0
+      ? 'Tiefster Wert ' + money(minimum.value.cumulativeEur) + ' in Monat ' + minimum.value.month + '. '
+      : 'Kein negativer kumulierter Saldo. '
   const when = payback.value
     ? 'Wirtschaftlicher Ausgleich ab Monat ' + payback.value.month + ' bis zum Betrachtungsende. '
     : 'Kein anhaltender wirtschaftlicher Ausgleich im Betrachtungszeitraum. '
-  return valley + when + 'Rechnerischer Saldo nach ' + props.horizon + ' Monaten: ' + money(ending.value.cumulativeEur) +
+  return (
+    valley +
+    when +
+    'Rechnerischer Saldo nach ' +
+    props.horizon +
+    ' Monaten: ' +
+    money(ending.value.cumulativeEur) +
     '. Der Saldo ist keine Liquiditäts- oder Zahlungsstromrechnung.'
+  )
 })
 </script>
 
@@ -90,7 +101,10 @@ const accessibleDescription = computed(() => {
         stroke-linejoin="round"
         data-testid="cumulative-line"
       />
-      <g v-if="minimum.cumulativeEur < 0" :transform="'translate(' + x(minimum.month) + ',' + y(minimum.cumulativeEur) + ')'">
+      <g
+        v-if="minimum.cumulativeEur < 0"
+        :transform="'translate(' + x(minimum.month) + ',' + y(minimum.cumulativeEur) + ')'"
+      >
         <circle r="6.5" fill="#b42318" stroke="#ffffff" stroke-width="2.5" data-testid="chart-lowest" />
         <title>Tiefster rechnerischer Saldo: {{ money(minimum.cumulativeEur) }} in Monat {{ minimum.month }}</title>
       </g>
@@ -99,17 +113,27 @@ const accessibleDescription = computed(() => {
         <title>Ab Monat {{ payback.month }} gleichen die kumulierten Vorteile die Kosten aus.</title>
       </g>
       <g :transform="'translate(' + x(ending.month) + ',' + y(ending.cumulativeEur) + ')'">
-        <circle r="6.5" :fill="ending.cumulativeEur < 0 ? '#b42318' : '#2563eb'" stroke="#ffffff" stroke-width="2.5"
-          data-testid="chart-endpoint" />
+        <circle
+          r="6.5"
+          :fill="ending.cumulativeEur < 0 ? '#b42318' : '#2563eb'"
+          stroke="#ffffff"
+          stroke-width="2.5"
+          data-testid="chart-endpoint"
+        />
         <title>Rechnerischer Saldo nach {{ horizon }} Monaten: {{ money(ending.cumulativeEur) }}</title>
       </g>
 
       <g v-for="point in months" :key="point.month">
         <circle
-          :cx="x(point.month)" :cy="y(point.cumulativeEur)" r="9" fill="transparent"
+          :cx="x(point.month)"
+          :cy="y(point.cumulativeEur)"
+          r="9"
+          fill="transparent"
           class="chart-hit"
-          @mouseenter="hovering = point" @mouseleave="hovering = null"
-          @focus="hovering = point" @blur="hovering = null"
+          @mouseenter="hovering = point"
+          @mouseleave="hovering = null"
+          @focus="hovering = point"
+          @blur="hovering = null"
           :tabindex="point.month % 6 === 0 ? 0 : -1"
         >
           <title>Monat {{ point.month }}: {{ money(point.cumulativeEur) }}</title>
@@ -117,7 +141,9 @@ const accessibleDescription = computed(() => {
       </g>
       <g v-if="hovering" :transform="'translate(' + Math.max(x0, Math.min(688, x(hovering.month) - 94)) + ',66)'">
         <rect width="192" height="28" rx="5" fill="#172b46" />
-        <text x="10" y="19" class="chart-tooltip">Monat {{ hovering.month }}: {{ abbreviated(hovering.cumulativeEur) }}</text>
+        <text x="10" y="19" class="chart-tooltip">
+          Monat {{ hovering.month }}: {{ abbreviated(hovering.cumulativeEur) }}
+        </text>
       </g>
 
       <g v-for="month in monthsToShow" :key="month">
@@ -162,14 +188,48 @@ const accessibleDescription = computed(() => {
   height: auto;
   display: block;
 }
-.chart-head { font: 700 18px system-ui, sans-serif; fill: #172033; }
-.chart-sub { font: 12px system-ui, sans-serif; fill: #5f6b7a; }
-.chart-tick { font: 11px system-ui, sans-serif; fill: #53677d; }
-.chart-tooltip { font: 700 12px system-ui, sans-serif; fill: white; }
-.chart-hit { cursor: crosshair; }
-.summary-name { font: 11px system-ui, sans-serif; fill: #5f6b7a; }
-.summary-value { font: 700 13px system-ui, sans-serif; fill: #172033; }
+.chart-head {
+  font:
+    700 18px system-ui,
+    sans-serif;
+  fill: #172033;
+}
+.chart-sub {
+  font:
+    12px system-ui,
+    sans-serif;
+  fill: #5f6b7a;
+}
+.chart-tick {
+  font:
+    11px system-ui,
+    sans-serif;
+  fill: #53677d;
+}
+.chart-tooltip {
+  font:
+    700 12px system-ui,
+    sans-serif;
+  fill: white;
+}
+.chart-hit {
+  cursor: crosshair;
+}
+.summary-name {
+  font:
+    11px system-ui,
+    sans-serif;
+  fill: #5f6b7a;
+}
+.summary-value {
+  font:
+    700 13px system-ui,
+    sans-serif;
+  fill: #172033;
+}
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; }
+  * {
+    transition: none !important;
+  }
 }
 </style>
