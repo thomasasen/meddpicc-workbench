@@ -3,6 +3,7 @@ import { summarizeBusinessCase, type CaseSummary } from '../domain/businessCase'
 import { paybackAxisBounds } from '../domain/paybackChart'
 import { balanceChartAreas, chartDisplayEnd, chartMoneyTicks } from '../domain/paybackChartAreas'
 import { illustrativeBalanceContinuation } from '../domain/paybackContinuation'
+import { compareBusinessScenarios, describeScenarioAssumptions, type ComparedBusinessScenario } from '../domain/businessCaseScenarios'
 import type { ReportData } from './softwareBusinessCasePdf'
 
 const W = 595.28
@@ -319,12 +320,13 @@ function statusLabel(evidence: string): string {
   return 'Planungsannahme, noch zu bestätigen'
 }
 
-function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSummary): void {
+function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSummary, chosen: string): void {
   const { p } = page(pdf, f, '01 | Investition auf einen Blick', 1)
   write(p, 'Ihre Investition im Überblick', X, 729, 20, f.bold, navy)
   meta(p, 'Unternehmen', data.customer.trim(), 695, f)
   meta(p, 'Vorhaben', data.project.trim(), 674, f)
   meta(p, 'Kontakt', data.preparedBy.trim() + '  |  ' + data.date, 653, f)
+  write(p, 'BERECHNETER VERLAUF: ' + chosen.toUpperCase(), X, 634, 8, f.bold, muted)
 
   const month = c.sustainedBreakEvenMonth
   const claim =
@@ -511,6 +513,42 @@ function decisionPage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSum
   )
 }
 
+function scenarioPage(pdf: PDFDocument, f: FontSet, scenarios: ComparedBusinessScenario[]): void {
+  const { p } = page(pdf, f, '04 | Wie belastbar ist die Wirtschaftlichkeit?', 4)
+  write(p, 'Wie belastbar ist die Wirtschaftlichkeit?', X, 729, 18, f.bold, navy)
+  paragraph(p,
+    'Wir zeigen, wie sich die Investition bei geringeren oder höheren Vorteilen, anderen Einführungskosten und einem späteren Nutzenbeginn verändert.',
+    X, 700, RIGHT - X, f, { size: 9.6, leading: 15, maxLines: 3 })
+  const column = [X + 12, X + 196, X + 355]
+  write(p, 'ANNAHMEN', column[0], 639, 8, f.bold, muted, 170)
+  write(p, 'AMORTISATION', column[1], 639, 8, f.bold, muted, 140)
+  write(p, 'ENDSALDO', column[2], 639, 8, f.bold, muted, 124)
+  scenarios.forEach((scenario, index) => {
+    const top = 626 - index * 115
+    const c = scenario.summary
+    p.drawRectangle({ x: X, y: top - 102, width: RIGHT - X, height: 104, color: pale })
+    p.drawRectangle({ x: X, y: top - 102, width: 3, height: 104, color: c.netValueEur < 0 ? red : navy })
+    write(p, scenario.label, column[0], top - 19, 12, f.bold, navy, 174)
+    write(p, c.sustainedBreakEvenMonth === null ? 'Nicht erreicht' : 'Ab Monat ' + c.sustainedBreakEvenMonth,
+      column[1], top - 19, 11, f.bold, c.sustainedBreakEvenMonth === null ? red : navy, 149)
+    write(p, euro(c.netValueEur), column[2], top - 19, 11, f.bold, c.netValueEur < 0 ? red : navy, 126)
+    write(p, 'Abweichung zur Basis: ' + euro(scenario.deltaBalanceEur),
+      column[0], top - 42, 8.5, f.regular, muted, 265)
+    write(p, 'Kosten: ' + euro(c.totalCostEur) + ' | Nutzen: ' + euro(c.benefitEur),
+      column[0], top - 62, 8.8, f.regular, ink, RIGHT - X - 24)
+    write(p, describeScenarioAssumptions(scenario.assumptions),
+      column[0], top - 82, 8, f.regular, muted, RIGHT - X - 24)
+  })
+  section(p, 'Was wurde im Vergleich verändert?', 259, f)
+  paragraph(p,
+    'Die Szenarien verändern nur ausdrücklich angerechnete Kundennutzen und einmalige Projektkosten. Termine und Beträge für laufende Lizenzen sowie den Wegfall bisheriger Systeme bleiben wie eingegeben. Der Nutzenaufbau kann sich verzögern, ohne dass sich die Vertragslaufzeit verkürzt.',
+    X, 233, RIGHT - X, f, { size: 9, leading: 14, maxLines: 5 })
+  paragraph(p,
+    'Die Ergebnisse gelten nur für die ' + scenarios[0]!.summary.horizon +
+    ' betrachteten Monate. Alle Ergebnisse sind undiskontierte wirtschaftliche Modellwerte, keine Liquiditätsplanung. Kundenseitig noch offene Annahmen sollten vor der Investitionsentscheidung geprüft werden.',
+    X, 138, RIGHT - X, f, { size: 8.7, leading: 13, maxLines: 5 })
+}
+
 export async function buildCustomerBusinessCasePdf(data: ReportData): Promise<Uint8Array> {
   if (!data.customer.trim() || !data.project.trim() || !data.preparedBy.trim()) {
     throw new Error('Kunde, Projekt und Verfasser sind für den Kundenbericht erforderlich.')
@@ -518,8 +556,10 @@ export async function buildCustomerBusinessCasePdf(data: ReportData): Promise<Ui
   if (!data.businessPain?.trim() || !data.targetOutcome?.trim()) {
     throw new Error('Ausgangssituation und Ziel sind für einen Kundenbericht erforderlich.')
   }
-  const c = summarizeBusinessCase(data.input)
-  if (!c) throw new Error('Bitte ungültige Angaben oder Doppelzählungen korrigieren.')
+  const scenarios = compareBusinessScenarios(data.input, data.scenarioSettings)
+  if (!scenarios) throw new Error('Bitte ungültige Angaben, Szenariowerte oder Doppelzählungen korrigieren.')
+  const chosen = scenarios.find((s) => s.id === (data.selectedScenario ?? 'base')) ?? scenarios[0]!
+  const c = chosen.summary
   const pdf = await PDFDocument.create()
   const fonts: FontSet = {
     regular: await pdf.embedFont(StandardFonts.Helvetica),
@@ -528,8 +568,9 @@ export async function buildCustomerBusinessCasePdf(data: ReportData): Promise<Ui
   pdf.setTitle(readable('Business Case - ' + data.project))
   pdf.setSubject('Kundenbericht | undiskontierte Wirtschaftlichkeitsmodellrechnung')
   pdf.setCreator('MEDDPICC Workbench - lokaler Browserexport')
-  executivePage(pdf, fonts, data, c)
+  executivePage(pdf, fonts, data, c, chosen.label)
   economicsPage(pdf, fonts, c)
   decisionPage(pdf, fonts, data, c)
+  scenarioPage(pdf, fonts, scenarios)
   return pdf.save({ useObjectStreams: false })
 }
