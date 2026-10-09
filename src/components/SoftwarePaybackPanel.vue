@@ -264,7 +264,7 @@ function downloadReport() {
     })
     const copy = new Uint8Array(pdf.byteLength)
     copy.set(pdf)
-    saveBlob(new Blob([copy.buffer], {type:'application/pdf'}), 'business-case-softwareprojekt.pdf')
+    saveBlob(new Blob([copy], {type:'application/pdf'}), 'business-case-softwareprojekt.pdf')
     reportStatus.value = 'PDF-Bericht mit Finanzmodell und Annahmen erstellt.'
   } catch {
     reportStatus.value = 'PDF konnte nicht erstellt werden.'
