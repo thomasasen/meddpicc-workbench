@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { PDFDocument } from 'pdf-lib'
 import { expect, test } from '@playwright/test'
 
 const route = '/meddpicc-workbench/#/tools/quick-payback'
@@ -174,4 +176,55 @@ test('Software Payback: responsive, direkte Navigation und Tastatur', async ({ p
   await expect(page.getByTestId('project-empty')).toContainText('keine wirtschaftliche Aussage')
   await page.getByRole('link', { name: 'Alle Microtools' }).click()
   await expect(page).toHaveURL(/meddpicc-workbench\/#\//)
+})
+
+
+test('Business Case: farbcodierte Chart-Markierungen und echtes mehrseitiges PDF', async ({ page }, testInfo) => {
+  const errors: string[] = []
+  page.on('pageerror', e => errors.push(e.message))
+  await projectMode(page)
+  await page.getByRole('button', { name: 'CRM-/SaaS-Beispiel mit Kunden-Metrics' }).click()
+  await expect(page.getByTestId('sustained-payback')).toHaveText('Monat 35')
+  await expect(page.getByTestId('roi-percent')).toContainText('%')
+  const chart = page.locator('.value-chart')
+  await expect(chart.getByText('Break-even · M35')).toBeVisible()
+  await expect(chart.getByText('Tiefpunkt', {exact:false})).toBeVisible()
+  await chart.screenshot({ path: testInfo.outputPath('business-case-chart-' + testInfo.project.name + '.png') })
+
+  const customer = page.getByLabel('Kunde / Unternehmen')
+  await expect(customer).toHaveValue('Beispielwerke Industrie GmbH')
+  await customer.fill('Beispielwerke Industrie GmbH')
+  await page.getByLabel('Erstellt von (optional)').fill('Demo Vertrieb')
+  const download = page.waitForEvent('download')
+  await page.getByRole('button', { name: /Business-Case-Bericht \(PDF\) herunterladen/ }).click()
+  const pdfFile = await download
+  expect(pdfFile.suggestedFilename()).toContain('.pdf')
+  const path = testInfo.outputPath('business-case-qa-' + testInfo.project.name + '.pdf')
+  await pdfFile.saveAs(path)
+  const bytes = readFileSync(path)
+  expect(bytes.subarray(0,5).toString()).toBe('%PDF-')
+  expect(bytes.byteLength).toBeGreaterThan(13000)
+  const parsed = await PDFDocument.load(bytes)
+  expect(parsed.getPageCount()).toBeGreaterThanOrEqual(5)
+  expect(parsed.getTitle()).toContain('CRM & Service Transformation')
+  for (const pdfPage of parsed.getPages()) {
+    expect(pdfPage.getWidth()).toBeCloseTo(595.28,1)
+    expect(pdfPage.getHeight()).toBeCloseTo(841.89,1)
+  }
+  await expect(page.getByRole('status').filter({hasText:'PDF-Bericht erstellt.'})).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+test('Business Case: ROI und Report blockiert bei Doppelzählung', async ({page}) => {
+  await projectMode(page)
+  await page.getByRole('button', { name: 'Einfaches Beispiel laden' }).click()
+  await expect(page.getByTestId('roi-percent')).toBeVisible()
+  await page.getByRole('button', {name:'Metric hinzufügen'}).click()
+  const second=page.locator('.software-entry').filter({has:page.getByText('Metric 2 · Neue Kunden-Metric')})
+  await second.locator('details.software-more > summary').click()
+  await second.getByLabel('Wirkungsgruppe').fill('crm-gesamtwert')
+  await second.getByLabel('In den Payback einrechnen').check()
+  await second.getByLabel('Wie wird der EUR-Nutzen tatsächlich realisiert?').fill('Hypothetischer Doppelwert')
+  await expect(page.getByText('Mögliche Doppelzählung',{exact:false})).toBeVisible()
+  await expect(page.getByRole('button',{name:/Business-Case-Bericht \(PDF\)/})).toHaveCount(0)
 })
