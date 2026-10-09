@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import type { MonthFlow } from '../domain/softwarePayback'
 import { paybackAxisBounds } from '../domain/paybackChart'
+import { balanceChartAreas, chartDisplayEnd, chartMoneyTicks } from '../domain/paybackChartAreas'
 
 const props = defineProps<{
   months: MonthFlow[]
@@ -36,16 +37,19 @@ const payback = computed(() =>
   props.breakEven === null ? null : (props.months.find((m) => m.month === props.breakEven) ?? null),
 )
 const bounds = computed(() => paybackAxisBounds(props.months.map((m) => m.cumulativeEur)))
-const x = (month: number) => x0 + (month / props.horizon) * (x1 - x0)
+const x = (month: number) => x0 + (month / chartDisplayEnd(props.horizon)) * (x1 - x0)
+const moneyTicks = computed(() => chartMoneyTicks(bounds.value))
+const filledAreas = computed(() =>
+  balanceChartAreas(props.months.map((point) => ({ month: point.month, balanceEur: point.cumulativeEur }))),
+)
 const y = (amount: number) =>
   yBottom - ((amount - bounds.value.min) / (bounds.value.max - bounds.value.min)) * (yBottom - yTop)
-const zero = computed(() => y(0))
 const linePoints = computed(() =>
   props.months.map((m) => x(m.month).toFixed(1) + ',' + y(m.cumulativeEur).toFixed(1)).join(' '),
 )
 const monthsToShow = computed(() => {
   const possible = [0, 12, 24, 36, 48, 60]
-  return possible.filter((month) => month <= props.horizon)
+  return [...possible.filter((month) => month <= props.horizon), chartDisplayEnd(props.horizon)]
 })
 const hovering = ref<MonthFlow | null>(null)
 const accessibleDescription = computed(() => {
@@ -78,14 +82,45 @@ const accessibleDescription = computed(() => {
       <text x="110" y="31" class="chart-head">Wann rechnet sich das Vorhaben?</text>
       <text x="110" y="53" class="chart-sub">Kumulierte Vorteile abzüglich neuer Kosten, Monat für Monat.</text>
 
-      <line :x1="x0" :x2="x1" :y1="zero" :y2="zero" stroke="#5e6c80" stroke-width="1.5" stroke-dasharray="6 6" />
-      <text :x="x0 - 13" :y="zero + 4" class="chart-tick" text-anchor="end">0 €</text>
-      <text :x="x0 - 13" :y="y(bounds.max) + 4" class="chart-tick" text-anchor="end">
-        {{ abbreviated(bounds.max) }}
+      <!-- Der Bereich rechts des letzten Datenpunkts ist bewusst keine Prognose. -->
+      <rect
+        :x="x(horizon) + 7"
+        :y="yTop"
+        :width="x1 - x(horizon) - 7"
+        :height="yBottom - yTop"
+        fill="#f8fafc"
+        data-testid="chart-unmodelled-space"
+      />
+      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop + 17" text-anchor="middle" class="chart-future">
+        Danach keine
       </text>
-      <text :x="x0 - 13" :y="y(bounds.min) + 4" class="chart-tick" text-anchor="end">
-        {{ abbreviated(bounds.min) }}
+      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop + 30" text-anchor="middle" class="chart-future">
+        Berechnung
       </text>
+
+      <g v-for="tick in moneyTicks" :key="'eur-' + tick">
+        <line
+          :x1="x0" :x2="x1" :y1="y(tick)" :y2="y(tick)"
+          :stroke="tick === 0 ? '#64748b' : '#dce5ed'"
+          :stroke-width="tick === 0 ? 1.6 : 0.85"
+          :stroke-dasharray="tick === 0 ? '5 5' : undefined"
+          data-testid="money-gridline"
+        />
+        <line :x1="x0 - 5" :x2="x0" :y1="y(tick)" :y2="y(tick)" stroke="#8495a8" stroke-width="1" />
+        <text :x="x0 - 10" :y="y(tick) + 4" class="chart-tick" text-anchor="end">
+          {{ tick === 0 ? '0 €' : abbreviated(tick) }}
+        </text>
+      </g>
+      <line :x1="x0" :x2="x0" :y1="yTop" :y2="yBottom" stroke="#92a1b3" stroke-width="1" />
+      <line :x1="x0" :x2="x1" :y1="yBottom" :y2="yBottom" stroke="#92a1b3" stroke-width="1" />
+
+      <polygon
+        v-for="(area, i) in filledAreas" :key="'area-' + i"
+        :points="area.corners.map((p) => x(p.month).toFixed(2) + ',' + y(p.balanceEur).toFixed(2)).join(' ')"
+        :fill="area.kind === 'negative' ? '#f5b8b5' : '#a7dfcb'"
+        :fill-opacity="0.42"
+        :data-testid="'chart-area-' + area.kind"
+      />
 
       <polyline
         :points="linePoints"
@@ -142,6 +177,7 @@ const accessibleDescription = computed(() => {
       </g>
 
       <g v-for="month in monthsToShow" :key="month">
+        <line :x1="x(month)" :x2="x(month)" :y1="yBottom" :y2="yBottom + 5" stroke="#92a1b3" stroke-width="1" />
         <text :x="x(month)" y="284" text-anchor="middle" class="chart-tick">{{ month }}</text>
       </g>
       <text x="480" y="305" text-anchor="middle" class="chart-sub">Projektmonat</text>
@@ -201,6 +237,7 @@ const accessibleDescription = computed(() => {
     sans-serif;
   fill: #53677d;
 }
+.chart-future { font: 10px system-ui, sans-serif; fill: #64748b; }
 .chart-tooltip {
   font:
     700 12px system-ui,
