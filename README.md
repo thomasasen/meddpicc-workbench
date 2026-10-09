@@ -58,6 +58,13 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 - **Checklist → Champion:** zehn fachliche Prüffragen mit Evidenz, Fehlinterpretationen und Next Steps. Häkchen flüchtig, kein Deal-Score und keine Kontakt-/Opportunity-Pflege.
 - [Primärquellenmatrix und simulierte fachliche Red-Teams](docs/CHAMPION_SOURCE_QA.md). Champion Tester, Development Helper und Internal Selling Pack bleiben für T8 geplant.
 
+### Quick-Payback-GUI: Feinschliff und Browser-QS (09.10.2026)
+
+- Der Einstieg erfolgt über zwei beschriftete Auswahlflächen: **Schnellberechnung** (drei Werte) oder **Softwareprojekt & Kunden-Metrics** (zeitlicher Verlauf). Der Nutzer wird in der Projektansicht durch **Kosten → Kundennutzen → Ergebnis** geführt.
+- Kurztexte statt Bedienungsanleitung; passende Aktionen und ein ausdrücklich fiktives Beispiel direkt im ersten Abschnitt. Seltene Nachweis-/Zeitangaben sind in „Zeitplan & Herkunft“ aufklappbar.
+- Einheitliche Feldhöhen, konsistente Spaltenausrichtung, mobile Kartenköpfe und Tastaturfokus; die Monatstabelle scrollt auf schmalen Displays **innerhalb ihres Rahmens**.
+- [Dokumentierte UX-Abnahme, echte Chromium-Bilder und Tests](docs/QUICK_PAYBACK_UX_QA.md) – [CI #37904430171](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37904430171): **230 Unit-Tests, 93 Playwright-Tests bestanden, 1 übersprungen**; Code ist im Feature-Branch, **kein Merge auf `main`**.
+
 ### Softwareprojekt & Customer Metrics · Quick-Payback-Erweiterung (PR #53)
 
 **Technisch und visuell geprüft im Feature-Branch, noch nicht in `main`.** [CI #37862223720](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37862223720): 230 Unit-Tests, 91 Playwright-Tests bestanden (1 übersprungen), Format/Lint/Build/Pages-Prüfung erfolgreich.

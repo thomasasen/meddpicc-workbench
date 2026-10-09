@@ -47,19 +47,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Quick Payback UI einmalig formatieren
-        if: startsWith(github.head_ref, 'feature/quick-payback-')
-        run: |
-          npx prettier --write src/views/QuickPaybackView.vue src/components/SoftwarePaybackPanel.vue tests/e2e/software-payback.spec.ts
-          if git diff --quiet -- src/views/QuickPaybackView.vue src/components/SoftwarePaybackPanel.vue tests/e2e/software-payback.spec.ts; then
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/views/QuickPaybackView.vue src/components/SoftwarePaybackPanel.vue tests/e2e/software-payback.spec.ts
-          git commit -m "style: format payback interface and UX tests"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
-
       - name: Formatierung prüfen
         run: npm run format:check
 
