@@ -112,9 +112,9 @@ jobs:
           fi
           mkdir -p test-results/rendered
           pdfinfo "$report" | head -18
-          pdftoppm -f 1 -l 1 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-cover.png
-          pdftoppm -f 2 -l 2 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-finance.png
-          pdftoppm -f 3 -l 3 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-metrics.png
+          pdftoppm -f 1 -l 1 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-cover
+          pdftoppm -f 2 -l 2 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-finance
+          pdftoppm -f 3 -l 3 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-metrics
           for name in business-case-report-cover.png business-case-report-finance.png business-case-report-metrics.png; do
             test -s "test-results/rendered/$name" || exit 1
           done
