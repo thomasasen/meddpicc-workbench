@@ -17,7 +17,9 @@ test('Business Case: CRM Demo, redesigned chart, valid PDF report download', asy
   expect(path).toBeTruthy()
   const fs = await import('node:fs/promises')
   const bytes = await fs.readFile(path!)
-  if(testInfo.project.name === 'desktop-chromium') await fs.copyFile(path!, testInfo.outputPath('business-case-demo.pdf'))
+  if (testInfo.project.name === 'desktop-chromium') {
+    await fs.copyFile(path!, testInfo.outputPath('business-case-demo.pdf'))
+  }
   expect(bytes.toString('latin1', 0, 8)).toBe('%PDF-1.4')
   expect(bytes.length).toBeGreaterThan(7000)
   await expect(page.getByText('PDF-Bericht mit Finanzmodell und Annahmen erstellt.')).toBeVisible()
