@@ -39,12 +39,6 @@ const businessCase = computed(() =>
     metrics: metrics.value,
   }),
 )
-const firstBenefitMonth = computed(() => {
-  const active = metrics.value.filter((m) => m.included && m.treatment === 'realized').map((m) => m.startMonth)
-  const legacy = costs.value.filter((c) => c.kind === 'avoided-legacy' && c.amountEur > 0).map((c) => c.startMonth)
-  const all = active.concat(legacy)
-  return all.length ? Math.min(...all) : null
-})
 let idCounter = 0
 
 const result = computed(() =>
@@ -608,10 +602,8 @@ async function downloadReport(kind: 'customer' | 'finance') {
             }}</strong>
           </div>
           <div>
-            <span>Erste Nullpunktüberschreitung</span>
-            <strong>{{
-              plan?.firstBreakEvenMonth === null ? 'Nicht erreicht' : 'Monat ' + plan?.firstBreakEvenMonth
-            }}</strong>
+            <span>Gesamte neue Kosten im Betrachtungszeitraum</span>
+            <strong>{{ formatEuro(businessCase?.totalCostEur ?? 0) }}</strong>
           </div>
           <div>
             <span>Kumulierter wirtschaftlicher Saldo</span>
@@ -642,10 +634,11 @@ async function downloadReport(kind: 'customer' | 'finance') {
             :months="plan!.months"
             :horizon="horizon"
             :break-even="plan!.sustainedBreakEvenMonth"
-            :first-benefit-month="firstBenefitMonth"
           />
           <figcaption>
-            Der Verlauf basiert ausschließlich auf den sichtbaren Kosten und angerechneten Kunden-Metrics.
+            Unterhalb der Nulllinie übersteigen die neuen Kosten noch die angesetzten Vorteile. Oberhalb ist der
+            kumulierte Saldo positiv. Es handelt sich um eine Modellrechnung, nicht um eine Liquiditätsplanung.
+            {{ businessCase?.unverified ? businessCase.unverified + ' Nutzenposition(en) sind noch unbestätigt.' : '' }}
           </figcaption>
         </figure>
         <div class="software-actions">
