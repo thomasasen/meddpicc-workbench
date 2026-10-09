@@ -2,6 +2,7 @@
 import { ArrowLeft, Calculator, ClipboardCopy, RotateCcw } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import SoftwarePaybackPanel from '../components/SoftwarePaybackPanel.vue'
+import { useRoute } from 'vue-router'
 
 import {
   buildQuickPaybackSummary,
@@ -11,7 +12,8 @@ import {
   type QuickPaybackInput,
 } from '../domain/quickPayback'
 
-const calculationMode = ref<'quick' | 'project'>('quick')
+const route = useRoute()
+const calculationMode = ref<'quick' | 'project'>(route.query.importMetric === '1' ? 'project' : 'quick')
 const upfrontInvestmentEur = ref('')
 const annualRealizableBenefitEur = ref('')
 const annualIncrementalOperatingCostEur = ref('0')
