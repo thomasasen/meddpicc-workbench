@@ -131,7 +131,7 @@ Tools erledigen eine konkrete Aufgabe: berechnen, vorbereiten, strukturieren ode
 
 | Funktion | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
-| **Quick Payback** | 🟡 In Draft-Abnahme | Berechnet aus einmaliger Anfangsinvestition, realisierbarem Bruttonutzen pro Jahr und jährlichen Zusatzkosten den einfachen Payback ab Nutzenbeginn. | Du kannst dem Kunden schnell und verständlich zeigen, **wann der Break-even erreicht wird**, ohne selbst Formeln oder Excel aufzubauen. |
+| **Quick Payback** | ✅ In main | Schneller Payback und optionaler Softwareprojekt-Modus mit zeitlichem SaaS-/Nutzenverlauf und Kunden-Metrics. | Du kannst dem Kunden schnell und verständlich zeigen, **wann der Break-even erreicht wird**, ohne selbst Formeln oder Excel aufzubauen. |
 | **Metric Builder** | 🟡 Als Nächstes | Hilft, aus einem Pain oder gewünschten Outcome eine belastbare, nachvollziehbare Kennzahl abzuleiten. | Du kommst schneller von Aussagen wie „das kostet uns viel Zeit“ zu einer Metric, mit der sich ein Business Case wirklich begründen lässt. |
 | **Cost of Delay** | 🟡 Als Nächstes | Berechnet, welchen wirtschaftlichen Wert der Kunde pro Woche oder Monat verliert, wenn sich die Veränderung verzögert. | Du kannst **Why now?** quantifizieren und Dringlichkeit mit wirtschaftlichen Auswirkungen statt nur mit Bauchgefühl begründen. |
 | **Business Case / Value Bridge** | 🟡 Als Nächstes | Führt Nutzen, Kosten, Annahmen und relevante Metrics zu einem nachvollziehbaren Business Case zusammen. | Du erhältst schneller eine belastbare Grundlage für die Kundendiskussion und kannst Value konsistent gegenüber Management und Economic Buyer darstellen. |
