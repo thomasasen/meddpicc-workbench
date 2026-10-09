@@ -128,9 +128,15 @@ jobs:
           pdftoppm -f 2 -l 2 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-economics
           pdftoppm -f 3 -l 3 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-decision
           pdftotext -layout "$customer" test-results/rendered/business-case-customer.txt
-          grep -q 'Wirtschaftlichkeit auf einen Blick' test-results/rendered/business-case-customer.txt
-          grep -q 'Was trägt den Business Case' test-results/rendered/business-case-customer.txt
-          grep -q 'Was ist vor der Entscheidung zu klären' test-results/rendered/business-case-customer.txt
+          grep -q 'Ihre Investition im Überblick' test-results/rendered/business-case-customer.txt
+          grep -q 'Kosten und Nutzen im direkten Vergleich' test-results/rendered/business-case-customer.txt
+          grep -q 'Wann erreicht der Nutzen die Kosten' test-results/rendered/business-case-customer.txt
+          grep -q 'So entsteht der wirtschaftliche Nutzen' test-results/rendered/business-case-customer.txt
+          grep -q 'Die nächsten Schritte für Ihr Vorhaben' test-results/rendered/business-case-customer.txt
+          if grep -Eiq 'Economic Buyer|Champion|Verkäuferannahme|MEDDPICC|keine Freigabe|Kunden-Metric' test-results/rendered/business-case-customer.txt; then
+            echo "::error::Internes Vertriebs- oder Freigabevokabular im Kunden-PDF."
+            exit 1
+          fi
           pdftotext -layout "$report" test-results/rendered/business-case-report.txt
           grep -q 'Wirtschaftlicher Business Case' test-results/rendered/business-case-report.txt
           grep -q 'Kundensituation und Zielbild' test-results/rendered/business-case-report.txt
