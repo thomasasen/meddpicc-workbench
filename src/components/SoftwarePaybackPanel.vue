@@ -139,8 +139,6 @@ function evidenceLabel(value: CustomerMetric['evidence']): string {
   }[value]
 }
 
-const chartLeft = 90
-const chartWidth = 766
 const yBounds = computed(() => {
   if (!plan.value) return { low: -1, high: 1 }
   const values = plan.value.months.map((m) => m.cumulativeEur)
