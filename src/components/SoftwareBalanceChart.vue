@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import type { MonthFlow } from '../domain/softwarePayback'
 import { paybackAxisBounds } from '../domain/paybackChart'
 import { balanceChartAreas, chartDisplayEnd, chartMoneyTicks } from '../domain/paybackChartAreas'
+import { illustrativeBalanceContinuation } from '../domain/paybackContinuation'
 
 const props = defineProps<{
   months: MonthFlow[]
@@ -36,11 +37,28 @@ const ending = computed(() => props.months[props.months.length - 1]!)
 const payback = computed(() =>
   props.breakEven === null ? null : (props.months.find((m) => m.month === props.breakEven) ?? null),
 )
-const bounds = computed(() => paybackAxisBounds(props.months.map((m) => m.cumulativeEur)))
+const continuation = computed(() =>
+  illustrativeBalanceContinuation(
+    props.months.map((point) => ({ month: point.month, balanceEur: point.cumulativeEur })),
+    chartDisplayEnd(props.horizon) - props.horizon,
+  ),
+)
+const bounds = computed(() =>
+  paybackAxisBounds([
+    ...props.months.map((m) => m.cumulativeEur),
+    ...(continuation.value ? [continuation.value.points.at(-1)!.balanceEur] : []),
+  ]),
+)
 const x = (month: number) => x0 + (month / chartDisplayEnd(props.horizon)) * (x1 - x0)
 const moneyTicks = computed(() => chartMoneyTicks(bounds.value))
 const filledAreas = computed(() =>
   balanceChartAreas(props.months.map((point) => ({ month: point.month, balanceEur: point.cumulativeEur }))),
+)
+const scenarioAreas = computed(() => balanceChartAreas(continuation.value?.points ?? []))
+const scenarioLine = computed(() =>
+  (continuation.value?.points ?? [])
+    .map((p) => x(p.month).toFixed(1) + ',' + y(p.balanceEur).toFixed(1))
+    .join(' '),
 )
 const y = (amount: number) =>
   yBottom - ((amount - bounds.value.min) / (bounds.value.max - bounds.value.min)) * (yBottom - yTop)
@@ -67,7 +85,10 @@ const accessibleDescription = computed(() => {
     props.horizon +
     ' Monaten: ' +
     money(ending.value.cumulativeEur) +
-    '. Der Saldo ist keine Liquiditäts- oder Zahlungsstromrechnung.'
+    '. Der Saldo ist keine Liquiditäts- oder Zahlungsstromrechnung.' +
+    (continuation.value
+      ? ' Gestrichelte Linie danach ist eine illustrative Fortführung: der mittlere monatliche Nettobeitrag der letzten drei berechneten Monate bleibt unverändert. Keine eigenständige Prognose.'
+      : ' Eine positive Fortführung außerhalb der Modellmonate lässt sich aus den letzten Monaten nicht belastbar ableiten.')
   )
 })
 </script>
@@ -81,18 +102,22 @@ const accessibleDescription = computed(() => {
 
       <text x="110" y="31" class="chart-head">Wann rechnet sich das Vorhaben?</text>
       <text x="110" y="53" class="chart-sub">Kumulierte Vorteile abzüglich neuer Kosten, Monat für Monat.</text>
+      <text v-if="continuation" x="110" y="72" class="chart-disclaimer">
+        Gestrichelt ab M{{ horizon }}: Beispiel bei unverändertem monatlichem Nettobeitrag.
+      </text>
 
-      <!-- Der Bereich rechts des letzten Datenpunkts ist bewusst keine Prognose. -->
+      <!-- Rechts folgt nur eine deutlich gekennzeichnete bedingte Fortschreibung. -->
       <rect
-        :x="x(horizon) + 7"
+        :x="x(horizon) + 5"
         :y="yTop"
-        :width="x1 - x(horizon) - 7"
+        :width="x1 - x(horizon) - 5"
         :height="yBottom - yTop"
-        fill="#f8fafc"
+        :fill="continuation ? '#f4faf6' : '#f8fafc'"
         data-testid="chart-unmodelled-space"
       />
-      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop - 14" text-anchor="middle" class="chart-future">Danach keine</text>
-      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop - 2" text-anchor="middle" class="chart-future">Berechnung</text>
+      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop - 2" text-anchor="middle" class="chart-future">
+        {{ continuation ? 'Beispiel' : 'Keine Prognose' }}
+      </text>
 
       <g v-for="tick in moneyTicks" :key="'eur-' + tick">
         <line
@@ -122,6 +147,34 @@ const accessibleDescription = computed(() => {
         :data-testid="'chart-area-' + area.kind"
       />
 
+      <polygon
+        v-for="(area, i) in scenarioAreas" :key="'scenario-' + i"
+        :points="area.corners.map((p) => x(p.month).toFixed(2) + ',' + y(p.balanceEur).toFixed(2)).join(' ')"
+        fill="#83d0b2"
+        fill-opacity="0.38"
+        data-testid="chart-scenario-fill"
+      />
+      <polyline
+        v-if="continuation"
+        :points="scenarioLine"
+        fill="none"
+        stroke="#078168"
+        stroke-width="3.4"
+        stroke-dasharray="8 6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        data-testid="chart-conditional-continuation"
+      />
+      <circle
+        v-if="continuation"
+        :cx="x(chartDisplayEnd(horizon))"
+        :cy="y(continuation.points.at(-1)!.balanceEur)"
+        r="5"
+        fill="#078168"
+        stroke="#fff"
+        stroke-width="2.5"
+        data-testid="chart-conditional-endpoint"
+      />
       <polyline
         :points="linePoints"
         fill="none"
@@ -237,6 +290,7 @@ const accessibleDescription = computed(() => {
     sans-serif;
   fill: #53677d;
 }
+.chart-disclaimer { font: 11px system-ui, sans-serif; fill: #586c7a; }
 .chart-future {
   font:
     10px system-ui,
