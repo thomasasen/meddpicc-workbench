@@ -115,7 +115,14 @@ jobs:
           pdftoppm -f 1 -l 1 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-cover
           pdftoppm -f 2 -l 2 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-finance
           pdftoppm -f 3 -l 3 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-metrics
-          for name in business-case-report-cover.png business-case-report-finance.png business-case-report-metrics.png; do
+          total="$(pdfinfo "$report" | awk '/^Pages:/{print $2}')"
+          pdftoppm -f "$total" -l "$total" -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-method
+          pdftotext -layout "$report" test-results/rendered/business-case-report.txt
+          grep -q 'Wirtschaftlicher Business Case' test-results/rendered/business-case-report.txt
+          grep -q 'Kundensituation und Zielbild' test-results/rendered/business-case-report.txt
+          grep -q 'Verkäuferannahme' test-results/rendered/business-case-report.txt
+          grep -q 'NICHT ANGERECHNET' test-results/rendered/business-case-report.txt
+          for name in business-case-report-cover.png business-case-report-finance.png business-case-report-metrics.png business-case-report-method.png; do
             test -s "test-results/rendered/$name" || exit 1
           done
 
@@ -170,6 +177,7 @@ jobs:
               business-case-report-cover.png
               business-case-report-finance.png
               business-case-report-metrics.png
+              business-case-report-method.png
             )
           else
             if [[ "${{ github.head_ref }}" == feature/competition-* ]]; then
