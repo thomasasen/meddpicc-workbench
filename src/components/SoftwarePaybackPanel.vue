@@ -13,6 +13,9 @@ import {
 } from '../domain/softwarePayback'
 import { formatEuro } from '../domain/quickPayback'
 import { createCrmSaasDemo } from '../data/softwarePaybackDemo'
+import SoftwareBalanceChart from './SoftwareBalanceChart.vue'
+import { summarizeBusinessCase } from '../domain/businessCase'
+import { buildSoftwareBusinessCasePdf } from '../report/softwareBusinessCasePdf'
 
 const costs = ref<SoftwareCost[]>([])
 const metrics = ref<CustomerMetric[]>([])
@@ -20,7 +23,27 @@ const horizon = ref<36 | 60>(36)
 const copyStatus = ref('')
 const exportStatus = ref('')
 const demoMessage = ref('')
-const svgRef = ref<SVGSVGElement | null>(null)
+const chartRef = ref<InstanceType<typeof SoftwareBalanceChart> | null>(null)
+const reportCustomer = ref('')
+const reportProject = ref('Softwareprojekt')
+const reportAuthor = ref('')
+const reportPain = ref('')
+const reportGoal = ref('')
+const reportStatus = ref('')
+const reportDate = ref(new Date().toLocaleDateString('de-DE'))
+const businessCase = computed(() =>
+  summarizeBusinessCase({
+    horizonMonths: horizon.value,
+    costs: costs.value,
+    metrics: metrics.value,
+  }),
+)
+const firstBenefitMonth = computed(() => {
+  const active = metrics.value.filter((m) => m.included && m.treatment === 'realized').map((m) => m.startMonth)
+  const legacy = costs.value.filter((c) => c.kind === 'avoided-legacy' && c.amountEur > 0).map((c) => c.startMonth)
+  const all = active.concat(legacy)
+  return all.length ? Math.min(...all) : null
+})
 let idCounter = 0
 
 const result = computed(() =>
@@ -75,6 +98,10 @@ function removeMetric(id: string) {
   metrics.value = metrics.value.filter((m) => m.id !== id)
 }
 function loadExample() {
+  reportCustomer.value = ''
+  reportProject.value = 'Softwareeinführung'
+  reportPain.value = ''
+  reportGoal.value = ''
   const example = exampleSoftwareProject()
   costs.value = example.costs
   metrics.value = example.metrics
@@ -85,6 +112,12 @@ function loadExample() {
   exportStatus.value = ''
 }
 function loadCrmSaasDemo() {
+  reportCustomer.value = 'Beispielwerke Industrie GmbH'
+  reportProject.value = 'CRM & Service Transformation 2027'
+  reportPain.value =
+    'Hoher Aufwand bei CRM-Nacharbeit, Servicevorgängen und mangelnde Nachvollziehbarkeit der Vertriebsprozesse. (Fiktive Ausgangslage.)'
+  reportGoal.value =
+    'Manuelle Leistungen reduzieren, wirtschaftlich realisierte Kostensenkungen belegen und Conversion verbessern. (Fiktives Zielbild.)'
   const example = createCrmSaasDemo()
   costs.value = example.costs
   metrics.value = example.metrics
@@ -95,6 +128,12 @@ function loadCrmSaasDemo() {
   exportStatus.value = ''
 }
 function clear() {
+  reportCustomer.value = ''
+  reportProject.value = 'Softwareprojekt'
+  reportPain.value = ''
+  reportGoal.value = ''
+  reportAuthor.value = ''
+  reportStatus.value = ''
   demoMessage.value = ''
   costs.value = []
   metrics.value = []
@@ -122,25 +161,6 @@ function evidenceLabel(value: CustomerMetric['evidence']): string {
   }[value]
 }
 
-const chartLeft = 90
-const chartWidth = 766
-const yBounds = computed(() => {
-  if (!plan.value) return { low: -1, high: 1 }
-  const values = plan.value.months.map((m) => m.cumulativeEur)
-  const low = Math.min(0, ...values)
-  const high = Math.max(0, ...values)
-  if (high - low < 1) return { low: low - 1, high: high + 1 }
-  const padding = (high - low) * 0.09
-  return { low: low - padding, high: high + padding }
-})
-const xFor = (month: number) => chartLeft + (month / horizon.value) * chartWidth
-const yFor = (value: number) => 220 - ((value - yBounds.value.low) / (yBounds.value.high - yBounds.value.low)) * 180
-const points = computed(() =>
-  plan.value
-    ? plan.value.months.map((m) => xFor(m.month).toFixed(2) + ',' + yFor(m.cumulativeEur).toFixed(2)).join(' ')
-    : '',
-)
-const zeroY = computed(() => yFor(0))
 const checkpoints = computed(() =>
   plan.value
     ? [0, 6, 12, 18, 24, 36, 60].filter((m) => m <= horizon.value).map((month) => plan.value!.months[month]!)
@@ -183,12 +203,12 @@ async function copySummary() {
   }
 }
 function graphMarkup(): string {
-  const svg = svgRef.value
+  const svg = chartRef.value?.getSvgElement()
   if (!svg) throw new Error('Grafik nicht vorhanden')
   const clone = svg.cloneNode(true) as SVGSVGElement
   clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
   clone.setAttribute('width', '1200')
-  clone.setAttribute('height', '440')
+  clone.setAttribute('height', '475')
   clone.setAttribute('style', 'background:#ffffff;font-family:system-ui,sans-serif')
   return new XMLSerializer().serializeToString(clone)
 }
@@ -224,7 +244,7 @@ async function exportPng() {
       })
       const canvas = document.createElement('canvas')
       canvas.width = 1200
-      canvas.height = 440
+      canvas.height = 475
       const ctx = canvas.getContext('2d')
       if (!ctx) throw new Error('Canvas nicht verfügbar')
       ctx.fillStyle = '#ffffff'
@@ -239,6 +259,29 @@ async function exportPng() {
     }
   } catch {
     exportStatus.value = 'PNG-Export nicht möglich. Alternativ SVG exportieren.'
+  }
+}
+async function downloadReport() {
+  if (!businessCase.value) {
+    reportStatus.value = 'Bitte erst die Kosten- und Nutzenangaben korrigieren.'
+    return
+  }
+  reportStatus.value = 'PDF wird erstellt ...'
+  try {
+    const bytes = await buildSoftwareBusinessCasePdf({
+      customer: reportCustomer.value,
+      project: reportProject.value,
+      preparedBy: reportAuthor.value,
+      businessPain: reportPain.value,
+      targetOutcome: reportGoal.value,
+      date: reportDate.value,
+      input: { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
+    })
+    const safeName = reportProject.value.replace(/[^a-z0-9_-]+/gi, '-').slice(0, 55) || 'softwareprojekt'
+    saveBlob(new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }), 'business-case-' + safeName + '.pdf')
+    reportStatus.value = 'PDF-Bericht erstellt.'
+  } catch {
+    reportStatus.value = 'PDF-Erstellung fehlgeschlagen. Bitte Eingaben prüfen und erneut versuchen.'
   }
 }
 </script>
@@ -563,6 +606,17 @@ async function exportPng() {
             <strong data-testid="cumulative-balance">{{ formatEuro(plan?.cumulativeEur ?? 0) }}</strong>
           </div>
           <div>
+            <span>ROI über {{ horizon }} Monate (undiskontiert)</span>
+            <strong data-testid="roi-percent">{{
+              businessCase?.roiPercent === null
+                ? 'Nicht definiert'
+                : (businessCase?.roiPercent ?? 0).toLocaleString('de-DE', {
+                    minimumFractionDigits: 1,
+                    maximumFractionDigits: 1,
+                  }) + ' %'
+            }}</strong>
+          </div>
+          <div>
             <span>Einbezogene Kunden-Metrics</span><strong>{{ plan?.countedMetrics.length ?? 0 }}</strong>
           </div>
         </div>
@@ -571,58 +625,13 @@ async function exportPng() {
           Jahreskosten werden auf zwölf Monate verteilt, nicht als tatsächliche Zahlung abgebildet.
         </p>
         <figure class="software-figure">
-          <svg ref="svgRef" viewBox="0 0 900 340" role="img" aria-labelledby="software-chart-title software-chart-desc">
-            <title id="software-chart-title">Kumulierter wirtschaftlicher Saldo je Projektmonat</title>
-            <desc id="software-chart-desc">
-              Linie des kumulierten EUR-Saldos von Projektmonat 0 bis {{ horizon }}. Die nachfolgende Tabelle enthält
-              die zugänglichen Zahlenwerte.
-            </desc>
-            <rect x="0" y="0" width="900" height="340" fill="#ffffff" />
-            <text x="90" y="25" font-size="15" font-weight="700" fill="#172033">
-              Softwareprojekt · Kumulierter Saldo (EUR)
-            </text>
-            <line
-              :x1="chartLeft"
-              :x2="chartLeft + chartWidth"
-              :y1="zeroY"
-              :y2="zeroY"
-              stroke="#9aa8b8"
-              stroke-width="1.5"
-              stroke-dasharray="6 5"
-            />
-            <line :x1="chartLeft" :x2="chartLeft" y1="40" y2="220" stroke="#9aa8b8" />
-            <polyline
-              v-if="points"
-              :points="points"
-              fill="none"
-              stroke="#2563eb"
-              stroke-width="3"
-              stroke-linejoin="round"
-            />
-            <text x="86" :y="Math.max(49, zeroY - 7)" text-anchor="end" font-size="13" fill="#4b5563">0 €</text>
-            <text
-              v-for="month in [0, 12, 24, 36, 48, 60].filter((m) => m <= horizon)"
-              :key="month"
-              :x="xFor(month)"
-              y="249"
-              text-anchor="middle"
-              font-size="13"
-              fill="#374151"
-            >
-              {{ month }}
-            </text>
-            <text x="450" y="274" text-anchor="middle" font-size="13" fill="#374151">Projektmonat</text>
-            <text x="90" y="302" font-size="14" font-weight="700" fill="#172033">
-              {{
-                plan?.sustainedBreakEvenMonth === null
-                  ? 'Amortisation bis Monat ' + horizon + ' nicht erreicht'
-                  : 'Amortisation bis Betrachtungsende: Projektmonat ' + plan?.sustainedBreakEvenMonth
-              }}
-            </text>
-            <text x="90" y="326" font-size="13" fill="#374151">
-              {{ 'Kumulierter wirtschaftlicher Saldo: ' + formatEuro(plan?.cumulativeEur ?? 0) + ' · Schätzung' }}
-            </text>
-          </svg>
+          <SoftwareBalanceChart
+            ref="chartRef"
+            :months="plan!.months"
+            :horizon="horizon"
+            :break-even="plan!.sustainedBreakEvenMonth"
+            :first-benefit-month="firstBenefitMonth"
+          />
           <figcaption>
             Der Verlauf basiert ausschließlich auf den sichtbaren Kosten und angerechneten Kunden-Metrics.
           </figcaption>
@@ -671,6 +680,63 @@ async function exportPng() {
             <li v-for="metric in plan.nonMonetized" :key="metric.id">{{ metric.name }}: {{ metric.reason }}</li>
           </ul>
         </div>
+        <section aria-labelledby="business-case-report-heading" class="software-report">
+          <div class="software-report-head">
+            <div>
+              <p class="eyebrow">4 · Kundenbericht</p>
+              <h3 id="business-case-report-heading">Business Case als PDF herunterladen</h3>
+              <p class="software-muted">
+                Mit echten Eingaben, Kennzahlen, Rechenweg und transparenten Annahmen. Alles bleibt im Browser.
+              </p>
+            </div>
+          </div>
+          <div class="software-fields software-report-fields">
+            <label class="field"
+              ><span>Kunde / Unternehmen</span>
+              <input v-model="reportCustomer" type="text" maxlength="120" placeholder="z. B. Muster GmbH" />
+            </label>
+            <label class="field"
+              ><span>Projektbezeichnung</span>
+              <input v-model="reportProject" type="text" maxlength="120" />
+            </label>
+            <label class="field"
+              ><span>Erstellt von (optional)</span>
+              <input v-model="reportAuthor" type="text" maxlength="120" />
+            </label>
+          </div>
+          <details class="software-more software-report-context">
+            <summary>Ausgangslage und Zielbild für den Bericht (optional)</summary>
+            <div class="software-report-story">
+              <label class="field"
+                ><span>Ausgangslage / Business Pain</span>
+                <textarea
+                  v-model="reportPain"
+                  rows="3"
+                  maxlength="240"
+                  placeholder="Was kostet oder blockiert den Kunden heute?"
+                />
+              </label>
+              <label class="field"
+                ><span>Erwartetes Zielbild</span>
+                <textarea
+                  v-model="reportGoal"
+                  rows="3"
+                  maxlength="240"
+                  placeholder="Welche Veränderung wird mit der Software verfolgt?"
+                />
+              </label>
+            </div>
+          </details>
+          <div class="software-report-actions">
+            <button type="button" class="button button-primary button-with-icon" @click="downloadReport">
+              <ArrowDownToLine :size="16" aria-hidden="true" /> Business-Case-Bericht (PDF) herunterladen
+            </button>
+            <span class="software-muted"
+              >Management Summary · ROI · Kosten und Metrics · Monatswerte · Quellenstatus</span
+            >
+          </div>
+          <p role="status">{{ reportStatus }}</p>
+        </section>
         <section aria-label="Kundenfähige Zusammenfassung" class="software-summary">
           <div class="software-heading">
             <h3>Management Summary · zum Weitergeben</h3>
@@ -1185,6 +1251,64 @@ async function exportPng() {
 @media (prefers-reduced-motion: reduce) {
   .software-panel * {
     transition-duration: 0.01ms !important;
+  }
+}
+
+.software-report {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+}
+.software-report-head h3 {
+  margin: var(--space-1) 0 var(--space-2);
+}
+.software-report-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+.software-report-actions .button {
+  gap: var(--space-2);
+  min-height: 44px;
+}
+@media (max-width: 560px) {
+  .software-report {
+    padding: var(--space-4);
+  }
+  .software-report-actions .button {
+    width: 100%;
+  }
+}
+
+.software-report-story {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+}
+.software-report-story .field {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: 0.87rem;
+  font-weight: 650;
+}
+.software-report-story textarea {
+  width: 100%;
+  min-height: 88px;
+  resize: vertical;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  padding: var(--space-3);
+}
+@media (max-width: 650px) {
+  .software-report-story {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 </style>
