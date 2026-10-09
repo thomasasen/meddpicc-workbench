@@ -47,21 +47,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Demo-Dateien formatieren
-        if: startsWith(github.head_ref, 'feature/quick-payback-')
-        run: |
-          npx prettier --write src/data/softwarePaybackDemo.ts src/data/softwarePaybackDemo.test.ts src/data/defaultProject.test.ts src/components/SoftwarePaybackPanel.vue src/views/HomeView.vue tests/e2e/software-payback.spec.ts
-          npx prettier --write src/domain/dealInspector.test.ts src/domain/nextBestAction.test.ts src/domain/qualificationGate.test.ts src/domain/qualificationEvidence.test.ts
-          npx prettier --write --parser json examples/demo-opportunity.meddpicc
-          if git diff --quiet -- src/data src/domain src/components/SoftwarePaybackPanel.vue src/views/HomeView.vue tests/e2e/software-payback.spec.ts examples/demo-opportunity.meddpicc; then
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/data src/domain src/components/SoftwarePaybackPanel.vue src/views/HomeView.vue tests/e2e/software-payback.spec.ts examples/demo-opportunity.meddpicc
-          git commit -m "style: format demo examples and tests"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
-
       - name: Formatierung prüfen
         run: npm run format:check
 
