@@ -44,8 +44,32 @@ jobs:
           node-version: 24
           cache: npm
 
+      - name: PDF-Abhängigkeit im Feature-Branch locken
+        if: startsWith(github.head_ref, 'feature/business-case-')
+        run: |
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          if ! git diff --quiet -- package-lock.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add package-lock.json
+            git commit -m "build: lock PDF report dependency"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
+
+      - name: Business-Case-Dateien normalisieren
+        if: startsWith(github.head_ref, 'feature/business-case-')
+        run: |
+          npx prettier --write src/domain/businessCase.ts src/domain/businessCase.test.ts src/report/softwareBusinessCasePdf.ts src/components/SoftwareBalanceChart.vue src/components/SoftwarePaybackPanel.vue tests/e2e/software-payback.spec.ts
+          if ! git diff --quiet -- src tests; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src tests
+            git commit -m "style: format business case PDF and upgraded value chart"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
 
       - name: Formatierung prüfen
         run: npm run format:check
@@ -105,10 +129,10 @@ jobs:
 
 
       - name: Abnahmebilder als überprüfbare Einzeldateien bereitstellen
-        if: github.event.pull_request.head.repo.full_name == github.repository && (startsWith(github.head_ref, 'feature/champion-') || startsWith(github.head_ref, 'feature/competition-') || startsWith(github.head_ref, 'feature/quick-payback-'))
+        if: github.event.pull_request.head.repo.full_name == github.repository && (startsWith(github.head_ref, 'feature/champion-') || startsWith(github.head_ref, 'feature/competition-') || startsWith(github.head_ref, 'feature/quick-payback-') || startsWith(github.head_ref, 'feature/business-case-'))
         run: |
           mkdir -p docs/review-screenshots
-          if [[ "${{ github.head_ref }}" == feature/quick-payback-* ]]; then
+          if [[ "${{ github.head_ref }}" == feature/quick-payback-* || "${{ github.head_ref }}" == feature/business-case-* ]]; then
             names=(
               quick-payback-empty-desktop-chromium.png
               quick-payback-empty-mobile-chromium.png
@@ -120,6 +144,8 @@ jobs:
               software-payback-result-mobile-chromium.png
               software-payback-crm-demo-desktop-chromium.png
               software-payback-crm-demo-mobile-chromium.png
+              business-case-chart-desktop-chromium.png
+              business-case-chart-mobile-chromium.png
             )
           else
             if [[ "${{ github.head_ref }}" == feature/competition-* ]]; then
