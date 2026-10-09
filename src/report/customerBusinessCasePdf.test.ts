@@ -18,7 +18,11 @@ describe('Kundenbericht - kompakte Executive-Ausgabe', () => {
   it('erstellt genau drei A4-Seiten für das fiktive CRM-Beispiel', async () => {
     const bytes = await buildCustomerBusinessCasePdf(input())
     const pdf = await PDFDocument.load(bytes)
-    expect(Array.from(bytes.slice(0, 5)).map((n) => String.fromCharCode(n)).join('')).toBe('%PDF-')
+    expect(
+      Array.from(bytes.slice(0, 5))
+        .map((n) => String.fromCharCode(n))
+        .join(''),
+    ).toBe('%PDF-')
     expect(pdf.getPageCount()).toBe(3)
     expect(pdf.getTitle()).toContain('CRM-Modernisierung')
     expect(pdf.getSubject()).toContain('Kundenbericht')
@@ -37,7 +41,9 @@ describe('Kundenbericht - kompakte Executive-Ausgabe', () => {
   it('trennt die PDF-Darstellung von Finanzrechnung und verhindert Doppelzählung', async () => {
     const corrupted = exampleSoftwareProject()
     corrupted.metrics[0]!.evidenceNote = ''
-    await expect(buildCustomerBusinessCasePdf({ ...input(), input: corrupted })).rejects.toThrow(/ungültige|Doppelzählungen/)
+    await expect(buildCustomerBusinessCasePdf({ ...input(), input: corrupted })).rejects.toThrow(
+      /ungültige|Doppelzählungen/,
+    )
   })
 
   it('unterstützt negative Werte, nicht erreichte Amortisation und Nullkosten', async () => {

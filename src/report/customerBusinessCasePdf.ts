@@ -165,7 +165,13 @@ function chart(p: PDFPage, c: CaseSummary, fonts: FontSet): void {
   const px = (month: number) => left + ((right - left) * month) / c.horizon
   const py = (eur: number) => bottom + ((eur - low) / (high - low)) * (top - bottom)
   const zeroY = py(0)
-  p.drawLine({ start: { x: left, y: zeroY }, end: { x: right, y: zeroY }, color: muted, thickness: 1, dashArray: [4, 4] })
+  p.drawLine({
+    start: { x: left, y: zeroY },
+    end: { x: right, y: zeroY },
+    color: muted,
+    thickness: 1,
+    dashArray: [4, 4],
+  })
   for (const tick of [low, 0, high]) {
     const y = py(tick)
     if (tick !== 0) p.drawLine({ start: { x: left, y }, end: { x: right, y }, color: line, thickness: 0.5 })
@@ -186,11 +192,29 @@ function chart(p: PDFPage, c: CaseSummary, fonts: FontSet): void {
   }
   const min = c.periodMetrics.find((m) => m.month === c.lowestMonth)!
   p.drawCircle({ x: px(min.month), y: py(min.balanceEur), size: 4, color: red })
-  write(p, 'Tiefpunkt M' + min.month, Math.max(left, Math.min(right - 95, px(min.month) + 5)), py(min.balanceEur) - 16, 8, fonts.bold, red, 97)
+  write(
+    p,
+    'Tiefpunkt M' + min.month,
+    Math.max(left, Math.min(right - 95, px(min.month) + 5)),
+    py(min.balanceEur) - 16,
+    8,
+    fonts.bold,
+    red,
+    97,
+  )
   if (c.sustainedBreakEvenMonth !== null) {
     const point = c.periodMetrics[c.sustainedBreakEvenMonth]!
     p.drawCircle({ x: px(point.month), y: py(point.balanceEur), size: 4.5, color: teal })
-    write(p, 'Amortisation M' + point.month, Math.max(left, Math.min(right - 113, px(point.month) - 40)), py(point.balanceEur) + 13, 8, fonts.bold, teal, 113)
+    write(
+      p,
+      'Amortisation M' + point.month,
+      Math.max(left, Math.min(right - 113, px(point.month) - 40)),
+      py(point.balanceEur) + 13,
+      8,
+      fonts.bold,
+      teal,
+      113,
+    )
   }
   write(p, 'PROJEKTMONAT', right - 83, bottom - 33, 7, fonts.bold, muted, 83)
 }
@@ -231,14 +255,27 @@ function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSu
   const cardW = (RIGHT - X - 2 * gap) / 3
   metricCard(p, X, 546, cardW, 'Amortisation', hasPayback ? 'Monat ' + c.sustainedBreakEvenMonth : 'Nicht erreicht', f)
   metricCard(p, X + cardW + gap, 546, cardW, 'Kosten / ' + c.horizon + ' M.', euro(c.totalCostEur), f)
-  metricCard(p, X + (cardW + gap) * 2, 546, cardW, 'Modell-Nettowert', euro(c.netValueEur), f, c.netValueEur < 0 ? red : navy)
+  metricCard(
+    p,
+    X + (cardW + gap) * 2,
+    546,
+    cardW,
+    'Modell-Nettowert',
+    euro(c.netValueEur),
+    f,
+    c.netValueEur < 0 ? red : navy,
+  )
 
   write(p, 'Wie entwickelt sich die Investition?', X, 427, 13, f.bold, navy)
   write(p, 'Kumulierter wirtschaftlicher Saldo; kein tatsächlicher Zahlungsstrom', X, 408, 8.6, f.regular, muted)
   chart(p, c, f)
-  const uncertainty = c.unverified > 0
-    ? c.unverified + ' monetär angerechnete ' + (c.unverified === 1 ? 'Metric ist' : 'Metrics sind') + ' nicht kundenseitig geprüft. Die gezeigte Wirtschaftlichkeit ist eine Hypothese.'
-    : 'Alle angerechneten Metrics sind laut Eingabe kundenbesprochen. Eine unabhängige Finance-Freigabe liegt dadurch nicht vor.'
+  const uncertainty =
+    c.unverified > 0
+      ? c.unverified +
+        ' monetär angerechnete ' +
+        (c.unverified === 1 ? 'Metric ist' : 'Metrics sind') +
+        ' nicht kundenseitig geprüft. Die gezeigte Wirtschaftlichkeit ist eine Hypothese.'
+      : 'Alle angerechneten Metrics sind laut Eingabe kundenbesprochen. Eine unabhängige Finance-Freigabe liegt dadurch nicht vor.'
   notice(p, 142, uncertainty, f)
 }
 
@@ -248,7 +285,11 @@ function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
   paragraph(
     p,
     'Der Rechenweg unterscheidet neue Projektkosten, vermiedene Altsystemkosten und separat monetarisierte Nutzeneffekte.',
-    X, 697, RIGHT - X, f, { size: 9.5, maxLines: 2 },
+    X,
+    697,
+    RIGHT - X,
+    f,
+    { size: 9.5, maxLines: 2 },
   )
   section(p, 'Wirtschaftliche Herleitung', 649, f)
   const rows: Array<[string, number, boolean]> = [
@@ -265,7 +306,8 @@ function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
   section(p, 'Welche Vorteile wurden monetarisiert?', 365, f)
   const included = c.metricDetails.filter((m) => m.included)
   const visible = included.slice(0, 3)
-  if (!visible.length) paragraph(p, 'Es wurden keine Kunden-Metrics als wirtschaftlicher Nutzen angerechnet.', X, 336, RIGHT - X, f)
+  if (!visible.length)
+    paragraph(p, 'Es wurden keine Kunden-Metrics als wirtschaftlicher Nutzen angerechnet.', X, 336, RIGHT - X, f)
   visible.forEach((m, i) => {
     const top = 335 - i * 72
     write(p, m.name, X, top, 10.5, f.bold, ink, 355)
@@ -273,14 +315,45 @@ function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
     const tw = f.bold.widthOfTextAtSize(readable(money), 9)
     write(p, money, RIGHT - tw, top, 9, f.bold, navy, tw + 2)
     write(p, statusLabel(m.evidence), X, top - 18, 8.5, f.regular, m.evidence === 'customer-reviewed' ? teal : amber)
-    write(p, 'Wirksam ab Monat ' + m.startMonth + ' | Hochlauf ' + m.rampMonths + ' ' + (m.rampMonths === 1 ? 'Monat' : 'Monate'), X, top - 33, 8.2, f.regular, muted)
+    write(
+      p,
+      'Wirksam ab Monat ' +
+        m.startMonth +
+        ' | Hochlauf ' +
+        m.rampMonths +
+        ' ' +
+        (m.rampMonths === 1 ? 'Monat' : 'Monate'),
+      X,
+      top - 33,
+      8.2,
+      f.regular,
+      muted,
+    )
     p.drawLine({ start: { x: X, y: top - 44 }, end: { x: RIGHT, y: top - 44 }, thickness: 0.5, color: line })
   })
   if (included.length > visible.length) {
-    write(p, String(included.length - visible.length) + ' weitere angerechnete Metrics stehen im Finance-Anhang.', X, 110, 8.5, f.regular, muted)
+    write(
+      p,
+      String(included.length - visible.length) + ' weitere angerechnete Metrics stehen im Finance-Anhang.',
+      X,
+      110,
+      8.5,
+      f.regular,
+      muted,
+    )
   }
   const excluded = c.metricDetails.filter((m) => !m.included)
-  if (excluded.length) write(p, String(excluded.length) + ' weitere Metrics (z. B. Kapazität/Risiko) werden nicht als sicherer Geldnutzen gerechnet.', X, 80, 8.3, f.regular, muted)
+  if (excluded.length)
+    write(
+      p,
+      String(excluded.length) +
+        ' weitere Metrics (z. B. Kapazität/Risiko) werden nicht als sicherer Geldnutzen gerechnet.',
+      X,
+      80,
+      8.3,
+      f.regular,
+      muted,
+    )
 }
 
 function decisionPage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSummary): void {
@@ -288,9 +361,21 @@ function decisionPage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSum
   write(p, 'Was ist vor der Entscheidung zu klären?', X, 729, 19, f.bold, navy)
   section(p, 'Ausgangslage und Zielbild', 687, f)
   write(p, 'HEUTIGE AUSGANGSLAGE', X, 657, 8, f.bold, muted)
-  paragraph(p, data.businessPain?.trim() || 'Noch nicht gemeinsam mit dem Kunden dokumentiert.', X, 636, RIGHT - X, f, { size: 9.4, leading: 15, maxLines: 4 })
+  paragraph(p, data.businessPain?.trim() || 'Noch nicht gemeinsam mit dem Kunden dokumentiert.', X, 636, RIGHT - X, f, {
+    size: 9.4,
+    leading: 15,
+    maxLines: 4,
+  })
   write(p, 'ERWARTETES GESCHÄFTSERGEBNIS', X, 552, 8, f.bold, muted)
-  paragraph(p, data.targetOutcome?.trim() || 'Noch nicht gemeinsam mit dem Kunden dokumentiert.', X, 531, RIGHT - X, f, { size: 9.4, leading: 15, maxLines: 4 })
+  paragraph(
+    p,
+    data.targetOutcome?.trim() || 'Noch nicht gemeinsam mit dem Kunden dokumentiert.',
+    X,
+    531,
+    RIGHT - X,
+    f,
+    { size: 9.4, leading: 15, maxLines: 4 },
+  )
 
   section(p, 'Offene Validierungen und Verantwortlichkeiten', 447, f)
   const questions = [
@@ -309,7 +394,9 @@ function decisionPage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSum
   notice(
     p,
     145,
-    'Diese Unterlage ist eine undiskontierte Modellrechnung über ' + c.horizon + ' Monate, kein Investitionsbeschluss. ROI, Liquidität und Steuern werden nicht als vollständige Finanzplanung dargestellt.',
+    'Diese Unterlage ist eine undiskontierte Modellrechnung über ' +
+      c.horizon +
+      ' Monate, kein Investitionsbeschluss. ROI, Liquidität und Steuern werden nicht als vollständige Finanzplanung dargestellt.',
     f,
   )
 }

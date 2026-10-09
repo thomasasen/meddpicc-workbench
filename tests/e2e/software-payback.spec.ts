@@ -246,7 +246,9 @@ test('Kundenbericht: Pflichtangaben schützen vor Platzhalter-PDF', async ({ pag
   await projectMode(page)
   await page.getByRole('button', { name: 'Einfaches Beispiel laden' }).click()
   await page.getByRole('button', { name: 'Kundenbericht (PDF) herunterladen' }).click()
-  await expect(page.getByRole('status').filter({ hasText: 'bitte Kunde, Projekt und Verfasser angeben.' })).toBeVisible()
+  await expect(
+    page.getByRole('status').filter({ hasText: 'bitte Kunde, Projekt und Verfasser angeben.' }),
+  ).toBeVisible()
   await page.getByLabel('Kunde / Unternehmen').fill('Musterunternehmen GmbH')
   await page.getByLabel('Erstellt von').fill('Vertrieb')
   const download = page.waitForEvent('download')
