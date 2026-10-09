@@ -1,5 +1,5 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
-import { summarizeBusinessCase, type CaseSummary } from '../domain/businessCase'
+import type { CaseSummary } from '../domain/businessCase'
 import { paybackAxisBounds } from '../domain/paybackChart'
 import { balanceChartAreas, chartDisplayEnd, chartMoneyTicks } from '../domain/paybackChartAreas'
 import { illustrativeBalanceContinuation } from '../domain/paybackContinuation'
