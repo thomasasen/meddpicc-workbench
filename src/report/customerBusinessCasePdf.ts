@@ -304,7 +304,7 @@ function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
   visible.forEach((m, i) => {
     const top = 335 - i * 72
     write(p, m.name, X, top, 10.5, f.bold, ink, 355)
-    const money = m.annualEur === null ? 'noch ohne Geldwert' : euro(m.annualEur) + ' / Jahr*'
+    const money = m.annualEur === null ? 'noch ohne Geldwert' : euro(m.annualEur) + ' / Jahr'
     const tw = f.bold.widthOfTextAtSize(readable(money), 9)
     write(p, money, RIGHT - tw, top, 9, f.bold, navy, tw + 2)
     write(p, statusLabel(m.evidence), X, top - 18, 8.5, f.regular, m.evidence === 'customer-reviewed' ? teal : amber)
@@ -324,12 +324,13 @@ function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
     )
     p.drawLine({ start: { x: X, y: top - 44 }, end: { x: RIGHT, y: top - 44 }, thickness: 0.5, color: line })
   })
+  write(p, 'Jahreswerte gelten bei voller Wirkung. Der Hochlauf ist in der Rechnung berücksichtigt.', X, 119, 8, f.regular, muted)
   if (included.length > visible.length) {
     write(
       p,
       String(included.length - visible.length) + ' weitere Nutzenpositionen mit Detailannahmen im Finance-Anhang.',
       X,
-      110,
+      99,
       8.5,
       f.regular,
       muted,
