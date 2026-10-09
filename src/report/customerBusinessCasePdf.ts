@@ -2,6 +2,7 @@ import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf
 import { summarizeBusinessCase, type CaseSummary } from '../domain/businessCase'
 import { paybackAxisBounds } from '../domain/paybackChart'
 import { balanceChartAreas, chartDisplayEnd, chartMoneyTicks } from '../domain/paybackChartAreas'
+import { illustrativeBalanceContinuation } from '../domain/paybackContinuation'
 import type { ReportData } from './softwareBusinessCasePdf'
 
 const W = 595.28
@@ -156,20 +157,25 @@ function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
   const right = RIGHT - 4
   const bottom = 240
   const top = 379
-  const { min, max } = paybackAxisBounds(c.periodMetrics.map((m) => m.balanceEur))
+  const extension = chartDisplayEnd(c.horizon) - c.horizon
+  const continuation = illustrativeBalanceContinuation(c.periodMetrics, extension)
+  const { min, max } = paybackAxisBounds([
+    ...c.periodMetrics.map((m) => m.balanceEur),
+    ...(continuation ? [continuation.points.at(-1)!.balanceEur] : []),
+  ])
   const px = (month: number) => left + ((right - left) * month) / chartDisplayEnd(c.horizon)
   const py = (amount: number) => bottom + ((amount - min) / (max - min)) * (top - bottom)
 
-  // Die Zeitachse läuft optisch etwas weiter, enthält aber keine erfundenen Monatswerte.
+  // Der modellierte Zeitraum endet; rechts folgt gegebenenfalls eine bedingte Illustration.
   p.drawRectangle({
     x: px(c.horizon) + 4,
     y: bottom,
     width: right - px(c.horizon) - 4,
     height: top - bottom,
-    color: rgb(0.972, 0.98, 0.988),
+    color: continuation ? rgb(0.954, 0.982, 0.964) : rgb(0.972, 0.98, 0.988),
   })
-  write(p, 'KEINE', px(c.horizon) + 11, top + 12, 6.3, f.regular, muted, 55)
-  write(p, 'PROGNOSE', px(c.horizon) + 11, top + 2, 6.3, f.regular, muted, 55)
+  write(p, continuation ? 'BEISPIEL' : 'KEINE', px(c.horizon) + 11, top + 12, 6.3, f.regular, muted, 55)
+  if (!continuation) write(p, 'PROGNOSE', px(c.horizon) + 11, top + 2, 6.3, f.regular, muted, 55)
 
   const axisEuro = (value: number): string => {
     if (value === 0) return '0 EUR'
@@ -207,6 +213,27 @@ function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
     })
   }
 
+
+  if (continuation) {
+    for (const area of balanceChartAreas(continuation.points)) {
+      const path = 'M ' + area.corners.map((point) => px(point.month) + ' ' + (H - py(point.balanceEur))).join(' L ') + ' Z'
+      p.drawSvgPath(path, { x: 0, y: H, color: rgb(0.33, 0.74, 0.56), opacity: 0.29 })
+    }
+    for (let i = 1; i < continuation.points.length; i++) {
+      const prev = continuation.points[i - 1]!
+      const next = continuation.points[i]!
+      p.drawLine({
+        start: { x: px(prev.month), y: py(prev.balanceEur) },
+        end: { x: px(next.month), y: py(next.balanceEur) },
+        color: teal,
+        thickness: 2.4,
+        dashArray: [4, 3],
+      })
+    }
+    const forecastEnd = continuation.points.at(-1)!
+    p.drawCircle({ x: px(forecastEnd.month), y: py(forecastEnd.balanceEur), size: 3.7, color: teal })
+  }
+
   for (let i = 1; i < c.periodMetrics.length; i++) {
     const previous = c.periodMetrics[i - 1]!
     const current = c.periodMetrics[i]!
@@ -234,7 +261,18 @@ function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
     p.drawLine({ start: { x, y: bottom }, end: { x, y: bottom - 3 }, color: muted, thickness: 0.7 })
     write(p, label, x - f.regular.widthOfTextAtSize(label, 8) / 2, 225, 8, f.regular, muted, 20)
   }
-  write(p, 'Projektmonat (danach keine Berechnung)', 214, 207, 8, f.regular, muted, 180)
+  write(
+    p,
+    continuation
+      ? 'Projektmonat | Gestrichelt: Beispiel bei gleichbleibendem monatlichen Nettobeitrag'
+      : 'Projektmonat | Danach keine belastbare Fortführung',
+    175,
+    207,
+    7.2,
+    f.regular,
+    muted,
+    354,
+  )
 
   const summary = [
     {
