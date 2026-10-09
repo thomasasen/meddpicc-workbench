@@ -310,7 +310,7 @@ export function calculateSoftwarePayback(
   }
 
   // Ohne jemals erlittene negative Nettoposition wird kein "zurückverdienter" Aufwand behauptet.
-  const hadCost = months.some((m) => m.newCostEur > EPS)
+  const hadCost = months.some((m) => m.newCostEur > 0)
   let firstBreakEvenMonth: number | null = null
   if (hadCost && benefitTotalEur > 0) {
     const wasNegative = months.some((m) => m.cumulativeEur < -EPS)
