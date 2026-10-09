@@ -273,46 +273,46 @@ function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSu
 }
 
 function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
-  const { p } = page(pdf, f, '02 | Kosten und Nutzen', 2)
-  write(p, 'Was trägt den Business Case?', X, 729, 20, f.bold, navy)
+  const { p } = page(pdf, f, '02 | Herkunft des Nutzens', 2)
+  write(p, 'So entsteht der wirtschaftliche Nutzen', X, 729, 20, f.bold, navy)
   paragraph(
     p,
-    'Der Rechenweg unterscheidet neue Projektkosten, vermiedene Altsystemkosten und separat monetarisierte Nutzeneffekte.',
+    'Für die Bewertung vergleichen wir die geplanten Ausgaben mit erwarteten Verbesserungen und den wegfallenden Kosten bisheriger Systeme.',
     X,
     697,
     RIGHT - X,
     f,
     { size: 9.5, maxLines: 2 },
   )
-  section(p, 'Wirtschaftliche Herleitung', 649, f)
+  section(p, 'Die Rechnung im Überblick', 649, f)
   const rows: Array<[string, number, boolean]> = [
-    ['Einmaliger Projektaufwand', c.investmentEur, false],
+    ['Einführung und einmalige Aufwände', c.investmentEur, false],
     ['Neue laufende Software- und Betriebskosten', c.operatingCostsEur, false],
     ['Gesamte neue Kosten', c.totalCostEur, true],
     ['Vermiedene Altsystemkosten', c.avoidedLegacyEur, false],
-    ['Angerechnete Nutzen-Metrics', c.creditedMetricsEur, false],
-    ['Gesamter wirtschaftlicher Nutzen', c.benefitEur, true],
-    ['Kumulierter Nettowert', c.netValueEur, true],
+    ['Erwarteter Nutzen aus Verbesserungen', c.creditedMetricsEur, false],
+    ['Erwarteter wirtschaftlicher Gesamtnutzen', c.benefitEur, true],
+    ['Rechnerischer Saldo am Periodenende', c.netValueEur, true],
   ]
   rows.forEach(([label, amount, total], i) => twoColumnRow(p, 610 - i * 31, label, euro(amount), f, total))
 
-  section(p, 'Welche Vorteile wurden monetarisiert?', 365, f)
+  section(p, 'Welche Veränderungen sollen Nutzen bringen?', 365, f)
   const included = c.metricDetails.filter((m) => m.included)
   const visible = included.slice(0, 3)
   if (!visible.length)
-    paragraph(p, 'Es wurden keine Kunden-Metrics als wirtschaftlicher Nutzen angerechnet.', X, 336, RIGHT - X, f)
+    paragraph(p, 'Bisher sind keine Veränderungen mit einem gesicherten Geldwert hinterlegt.', X, 336, RIGHT - X, f)
   visible.forEach((m, i) => {
     const top = 335 - i * 72
     write(p, m.name, X, top, 10.5, f.bold, ink, 355)
-    const money = m.annualEur === null ? 'nicht monetarisiert' : euro(m.annualEur) + ' / Jahr'
+    const money = m.annualEur === null ? 'noch ohne Geldwert' : euro(m.annualEur) + ' / Jahr*'
     const tw = f.bold.widthOfTextAtSize(readable(money), 9)
     write(p, money, RIGHT - tw, top, 9, f.bold, navy, tw + 2)
     write(p, statusLabel(m.evidence), X, top - 18, 8.5, f.regular, m.evidence === 'customer-reviewed' ? teal : amber)
     write(
       p,
-      'Wirksam ab Monat ' +
+      'Geplanter Nutzenbeginn: Monat ' +
         m.startMonth +
-        ' | Hochlauf ' +
+        ' | Einführung über ' +
         m.rampMonths +
         ' ' +
         (m.rampMonths === 1 ? 'Monat' : 'Monate'),
@@ -327,7 +327,7 @@ function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
   if (included.length > visible.length) {
     write(
       p,
-      String(included.length - visible.length) + ' weitere angerechnete Metrics stehen im Finance-Anhang.',
+      String(included.length - visible.length) + ' weitere Nutzenpositionen mit Detailannahmen im Finance-Anhang.',
       X,
       110,
       8.5,
@@ -340,7 +340,7 @@ function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
     write(
       p,
       String(excluded.length) +
-        ' weitere Metrics (z. B. Kapazität/Risiko) werden nicht als sicherer Geldnutzen gerechnet.',
+        ' weitere Effekte sind nicht als finanzieller Nutzen eingerechnet.',
       X,
       80,
       8.3,
@@ -350,32 +350,28 @@ function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
 }
 
 function decisionPage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSummary): void {
-  const { p } = page(pdf, f, '03 | Validierung und Entscheidung', 3)
-  write(p, 'Was ist vor der Entscheidung zu klären?', X, 729, 19, f.bold, navy)
-  section(p, 'Ausgangslage und Zielbild', 687, f)
-  write(p, 'HEUTIGE AUSGANGSLAGE', X, 657, 8, f.bold, muted)
-  paragraph(p, data.businessPain?.trim() || 'Noch nicht gemeinsam mit dem Kunden dokumentiert.', X, 636, RIGHT - X, f, {
-    size: 9.4,
-    leading: 15,
-    maxLines: 4,
-  })
-  write(p, 'ERWARTETES GESCHÄFTSERGEBNIS', X, 552, 8, f.bold, muted)
+  const { p } = page(pdf, f, '03 | Nächste Schritte', 3)
+  write(p, 'Die nächsten Schritte für Ihr Vorhaben', X, 729, 19, f.bold, navy)
+  section(p, 'Ausgangssituation und gewünschtes Ergebnis', 687, f)
+  write(p, 'IHRE AKTUELLE SITUATION', X, 657, 8, f.bold, muted)
   paragraph(
     p,
-    data.targetOutcome?.trim() || 'Noch nicht gemeinsam mit dem Kunden dokumentiert.',
-    X,
-    531,
-    RIGHT - X,
-    f,
-    { size: 9.4, leading: 15, maxLines: 4 },
+    data.businessPain?.trim() || 'Die Ausgangssituation halten wir gemeinsam im nächsten Gespräch fest.',
+    X, 636, RIGHT - X, f, { size: 9.4, leading: 15, maxLines: 4 },
+  )
+  write(p, 'WAS SICH DURCH DAS VORHABEN VERBESSERN SOLL', X, 552, 8, f.bold, muted)
+  paragraph(
+    p,
+    data.targetOutcome?.trim() || 'Das gewünschte Geschäftsergebnis stimmen wir gemeinsam ab.',
+    X, 531, RIGHT - X, f, { size: 9.4, leading: 15, maxLines: 4 },
   )
 
-  section(p, 'Offene Validierungen und Verantwortlichkeiten', 447, f)
+  section(p, 'Was wir gemeinsam überprüfen und abstimmen', 447, f)
   const questions = [
-    ['01', 'Fachbereich / Champion', 'Mengen, Ausgangswerte und Wirkung je Metric mit dem Kunden prüfen.'],
-    ['02', 'Finance / Controlling', 'Tatsächlich realisierbare Einsparungen und Deckungsbeiträge bestätigen.'],
-    ['03', 'Projektverantwortliche', 'Einführung, SaaS-Beginn, Altvertrag und Hochlauf terminlich validieren.'],
-    ['04', 'Economic Buyer', 'Wirtschaftliche Entscheidungskriterien und Freigabeweg klären.'],
+    ['01', 'Ausgangswerte und Wirkung', 'Mengen, heutige Aufwände und erreichbare Verbesserungen gemeinsam prüfen.'],
+    ['02', 'Finanzielle Auswirkungen', 'Einsparungen, zusätzliche Erträge und Gesamtkosten mit Ihrem Controlling bewerten.'],
+    ['03', 'Umstellung und Zeitplan', 'Start, Lizenzkosten, Ablösung bisheriger Systeme und schrittweisen Nutzenbeginn abstimmen.'],
+    ['04', 'Entscheidungsgrundlage', 'Annahmen, offene Punkte, Entscheidungskriterien und das weitere Vorgehen festhalten.'],
   ] as const
   questions.forEach(([number, owner, note], i) => {
     const y = 412 - i * 62
@@ -387,9 +383,8 @@ function decisionPage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSum
   notice(
     p,
     145,
-    'Diese Unterlage ist eine undiskontierte Modellrechnung über ' +
-      c.horizon +
-      ' Monate, kein Investitionsbeschluss. ROI, Liquidität und Steuern werden nicht als vollständige Finanzplanung dargestellt.',
+    'Die vorliegende Einschätzung betrachtet ' + c.horizon +
+      ' Monate. Sie zeigt die wirtschaftlichen Auswirkungen der eingetragenen Annahmen, nicht die tatsächlichen Zahlungszeitpunkte. Einzelheiten und Datenstand enthält der Finance-Anhang.',
     f,
   )
 }
