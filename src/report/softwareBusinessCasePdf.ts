@@ -123,7 +123,7 @@ function axis(n: number): string {
 }
 function chart(s: State, f: Fonts, c: CaseSummary) {
   const top = s.y - 10,
-    h = 216
+    h = 188
   const x0 = L + 53,
     x1 = R - 12,
     y0 = top - h + 33,
@@ -135,14 +135,15 @@ function chart(s: State, f: Fonts, c: CaseSummary) {
     low -= 1
     high += 1
   }
-  const pad = (high - low) * 0.09
-  low -= pad
-  high += pad
+  const pad=(high-low)*.08
+  const magnitude=10**Math.floor(Math.log10(Math.max(1,(high-low+2*pad)/4)))
+  const step=([1,2,2.5,5,10].find(k=>k*magnitude>=(high-low+2*pad)/4)??10)*magnitude
+  low=Math.floor((low-pad)/step)*step
+  high=Math.ceil((high+pad)/step)*step
   const px = (m: number) => x0 + ((x1 - x0) * m) / c.horizon
   const py = (n: number) => y0 + ((y1 - y0) * (n - low)) / (high - low)
-  for (let i = 0; i <= 4; i++) {
-    const v = low + ((high - low) * i) / 4,
-      y = py(v)
+  for (let i=0; i<10 && low+i*step<=high+step/10; i++) {
+    const v = low + i*step, y = py(v)
     s.p.drawLine({ start: { x: x0, y }, end: { x: x1, y }, thickness: 0.55, color: border })
     draw(s.p, axis(v), L, y - 3, 8, f.normal, muted, 47)
   }
@@ -190,8 +191,8 @@ function chart(s: State, f: Fonts, c: CaseSummary) {
       green,
     )
   }
-  draw(s.p, 'PROJEKTMONAT', x1 - 85, y0 - 29, 7.6, f.bold, muted)
-  s.y -= h + 9
+  draw(s.p, 'PROJEKTMONAT', x1 - 85, y0 - 25, 7.6, f.bold, muted)
+  s.y -= h + 34
 }
 function line(s: State, label: string, value: string, f: Fonts) {
   const rows = wrap(label, f.normal, 9, 295),
@@ -352,6 +353,18 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
   }
   s.y -= 9
   if (s.y < 149) s = page(pdf, f, 'Customer Metrics')
+  const formulaNames:Record<string,string>={
+    direct:'Direkter Geldwert', process:'Vorgangsmenge x Kostendifferenz',
+    time:'Zeitersparnis (Kapazität)',conversion:'Conversion x Deckungsbeitrag',
+    quality:'Fehlerquote x vermeidbare Kosten',risk:'Risikoannahme',
+    qualitative:'Operative Kennzahl',
+  }
+  const evidenceNames:Record<string,string>={
+    hypothesis:'Verkäuferannahme / unbestätigt',
+    reference:'Referenzwert (M1) / Hypothese',
+    'customer-stated':'Kundenaussage / nicht geprüft',
+    'customer-reviewed':'Laut Nutzereingabe mit Kunden geprüft',
+  }
   heading(s, 'Customer Metrics', f, 14)
   for (const m of c.metricDetails) {
     if (s.y < 181) {
@@ -374,7 +387,7 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
     para(
       s,
       'Berechnung: ' +
-        m.formula +
+        (formulaNames[m.formula] ?? m.formula) +
         ' | ' +
         (m.annualEur === null ? 'nicht monetär' : euro(m.annualEur) + '/Jahr (voller Nutzen)'),
       f,
@@ -389,7 +402,7 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
         ' | Ramp-up ' +
         m.rampMonths +
         ' Monate | Quelle: ' +
-        m.evidence +
+        (evidenceNames[m.evidence] ?? m.evidence) +
         ' | Gruppe: ' +
         m.group,
       f,
