@@ -221,7 +221,7 @@ export function buildMetric(draft: MetricBuilderDraft): MetricBuilderResult {
           ' × (' + decimal(before ?? 0) + ' − ' + decimal(after ?? 0) + ') = ' +
           decimal((volume ?? 0) * operatingChange * factor) + ' vermiedene Risikoereignisse/Jahr (keine EUR-Bewertung).'
       } else if (draft.formula === 'direct') {
-        calculation = '(' + euro(before ?? 0) + ' − ' + euro(after ?? 0) + ') × ' + factor + ' = ' + euro(potentialEur ?? 0) + '/Jahr.'
+        calculation = '(' + euro(before ?? 0) + ' − ' + euro(after ?? 0) + ') × ' + factor + ' = ' + (potentialEur === null ? 'noch offen' : euro(potentialEur) + '/Jahr') + '.'
       } else {
         const parts = draft.formula === 'time'
           ? decimal(metric.annualVolume) + ' Vorgänge/Jahr × ' + decimal(operatingChange) + ' Min. ÷ 60 × ' + euro(hourly ?? 0) + '/h'
@@ -291,6 +291,7 @@ export function buildMetric(draft: MetricBuilderDraft): MetricBuilderResult {
   if (!validTiming) issues.push('Nutzenbeginn und Ramp-up müssen innerhalb von 60 Monaten liegen.')
 
   const complete = validFormula && validPeriod && validEvidence && validMechanism &&
+    Boolean(draft.problem.trim() && draft.process.trim() && draft.outcome.trim()) &&
     (draft.formula === 'qualitative' ? Boolean(beforeText && afterText) :
       operatingChange !== null && (draft.formula === 'risk' || potentialEur !== null)) &&
     issues.length === 0
