@@ -24,7 +24,7 @@ const muted = rgb(0.38, 0.44, 0.52),
 const danger = rgb(0.7, 0.28, 0.19),
   white = rgb(1, 1, 1)
 type Fonts = { normal: PDFFont; bold: PDFFont }
-type State = { p: PDFPage; y: number }
+type State = { p: PDFPage; y: number; pdf: PDFDocument; f: Fonts; chapter: string }
 const euro = (n: number) =>
   new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n)
 const percent = (n: number | null) =>
@@ -42,7 +42,7 @@ function safe(s: string): string {
     .replace(/[^\u0020-\u00ff\u20ac\n]/g, '?')
 }
 function draw(p: PDFPage, v: string, x: number, y: number, size: number, font: PDFFont, color = navy, width?: number) {
-  let t = safe(v)
+  let t = safe(v).replace(/\s+/g, ' ')
   if (width !== undefined) while (t.length && font.widthOfTextAtSize(t, size) > width) t = t.slice(0, -1)
   p.drawText(t, { x, y, size, font, color })
 }
@@ -73,6 +73,7 @@ function wrap(s: string, font: PDFFont, size: number, width: number): string[] {
 }
 function para(s: State, v: string, f: Fonts, size = 9, width = R - L, spacing = 13) {
   for (const line of wrap(v, f.normal, size, width)) {
+    reserve(s, spacing + 7)
     draw(s.p, line, L, s.y, size, f.normal, muted)
     s.y -= spacing
   }
@@ -83,13 +84,22 @@ function page(pdf: PDFDocument, f: Fonts, chapter: string): State {
   p.drawRectangle({ x: 0, y: PH - 89, width: PW, height: 89, color: navy })
   draw(p, 'SOFTWARE INVESTMENT / BUSINESS CASE', L, PH - 35, 10, f.bold, white)
   draw(p, chapter.toUpperCase(), L, PH - 57, 9, f.normal, rgb(0.68, 0.82, 1))
-  return { p, y: PH - 117 }
+  return { p, y: PH - 117, pdf, f, chapter }
+}
+/** Keep variable customer text and its following elements above the footer. */
+function reserve(s: State, height: number) {
+  if (s.y - height >= 56) return
+  const continuation = page(s.pdf, s.f, s.chapter + ' / Fortsetzung')
+  s.p = continuation.p
+  s.y = continuation.y
 }
 function heading(s: State, v: string, f: Fonts, size = 17) {
+  reserve(s, size + 32)
   draw(s.p, v, L, s.y, size, f.bold)
   s.y -= size + 19
 }
 function field(s: State, label: string, value: string, f: Fonts) {
+  reserve(s, 23)
   draw(s.p, label, L, s.y, 9, f.normal, muted, 275)
   draw(s.p, value, 333, s.y, 9, f.bold, navy, R - 333)
   s.y -= 23
@@ -97,6 +107,7 @@ function field(s: State, label: string, value: string, f: Fonts) {
 function box(s: State, v: string, f: Fonts) {
   const ls = wrap(v, f.normal, 9, R - L - 27)
   const height = ls.length * 13 + 22
+  reserve(s, height + 7)
   s.p.drawRectangle({ x: L, y: s.y - height + 8, width: R - L, height, color: light })
   s.p.drawRectangle({ x: L, y: s.y - height + 8, width: 3, height, color: blue })
   for (const row of ls) {
@@ -124,6 +135,7 @@ function axis(n: number): string {
   )
 }
 function chart(s: State, f: Fonts, c: CaseSummary) {
+  reserve(s, 188 + 34)
   const top = s.y - 10,
     h = 188
   const x0 = L + 53,
@@ -200,6 +212,7 @@ function chart(s: State, f: Fonts, c: CaseSummary) {
 function line(s: State, label: string, value: string, f: Fonts) {
   const rows = wrap(label, f.normal, 9, 295),
     height = Math.max(20, rows.length * 12 + 5)
+  reserve(s, height)
   for (let i = 0; i < rows.length; i++) draw(s.p, rows[i]!, L + 8, s.y - i * 12, 9, f.normal)
   draw(s.p, value, R - 176, s.y, 9, f.bold, navy, 174)
   s.p.drawLine({
@@ -211,6 +224,7 @@ function line(s: State, label: string, value: string, f: Fonts) {
   s.y -= height
 }
 function tableHead(s: State, f: Fonts, one = 'Kosten- oder Nutzenblock', two = 'EUR, Betrachtungszeitraum') {
+  reserve(s, 31 + 22)
   s.p.drawRectangle({ x: L, y: s.y - 7, width: R - L, height: 24, color: light })
   draw(s.p, one, L + 7, s.y + 1, 9, f.bold)
   draw(s.p, two, R - 176, s.y + 1, 9, f.bold)
@@ -471,9 +485,9 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
   heading(s, 'Transparenz und nächste Schritte', f, 18)
   para(
     s,
-    'Das Modell verwendet ' +
+    'Das Modell betrachtet Monat 0 (ggf. Anfangsinvestitionen) sowie die Projektmonate 1 bis ' +
       c.horizon +
-      ' wirtschaftliche Projektmonate einschließlich Monat 0. Es berücksichtigt nur ausdrücklich angerechnete Effekte; Kapazitätsgewinne und Risikoschätzungen bleiben außerhalb der konservativen Basis.',
+      '. Es berücksichtigt nur ausdrücklich angerechnete Effekte; Kapazitätsgewinne und Risikoschätzungen bleiben außerhalb der konservativen Basis.',
     f,
     10,
   )
