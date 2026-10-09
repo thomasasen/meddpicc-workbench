@@ -174,14 +174,18 @@ function investmentComparison(p: PDFPage, c: CaseSummary, f: FontSet): void {
   write(p, 'Gesamte Kosten über ' + c.horizon + ' Monate', barX, 383, 9.3, f.bold, navy, 310)
   amount(c.totalCostEur, 383)
   bar(361, costWidth, upFrontWidth, navy, rgb(0.48, 0.57, 0.70))
-  write(p, 'Einmalige Einführung', barX, 343, 8, f.regular, muted)
-  write(p, 'Laufender Betrieb', barX + 215, 343, 8, f.regular, muted)
+  p.drawRectangle({ x: barX, y: 340, width: 8, height: 8, color: navy })
+  p.drawRectangle({ x: barX + 215, y: 340, width: 8, height: 8, color: rgb(0.48, 0.57, 0.70) })
+  write(p, 'Einmalige Einführung', barX + 14, 343, 8, f.regular, muted)
+  write(p, 'Laufender Betrieb', barX + 229, 343, 8, f.regular, muted)
 
   write(p, 'Erwarteter wirtschaftlicher Nutzen', barX, 317, 9.3, f.bold, navy, 316)
   amount(c.benefitEur, 317)
   bar(295, benefitWidth, improvementWidth, teal, rgb(0.57, 0.77, 0.71))
-  write(p, 'Verbesserungen und Mehrertrag', barX, 277, 8, f.regular, muted)
-  write(p, 'Entfall bisheriger Kosten', barX + 215, 277, 8, f.regular, muted)
+  p.drawRectangle({ x: barX, y: 274, width: 8, height: 8, color: teal })
+  p.drawRectangle({ x: barX + 215, y: 274, width: 8, height: 8, color: rgb(0.57, 0.77, 0.71) })
+  write(p, 'Verbesserungen und Mehrertrag', barX + 14, 277, 8, f.regular, muted)
+  write(p, 'Entfall bisheriger Kosten', barX + 229, 277, 8, f.regular, muted)
 
   p.drawRectangle({ x: X, y: 237, width: RIGHT - X, height: 29, color: pale })
   const netLabel = c.netValueEur < 0 ? 'Rechnerische Lücke' : 'Rechnerischer Überschuss'
