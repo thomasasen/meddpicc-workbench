@@ -90,7 +90,6 @@ const result = computed(() =>
     metrics: metrics.value,
   }),
 )
-const plan = computed(() => (result.value.success ? result.value : null))
 
 function id(prefix: string): string {
   idCounter += 1
@@ -643,7 +642,7 @@ async function downloadReport(kind: 'customer' | 'finance') {
         Aussage erzeugt.
       </p>
       <template v-else>
-        <div class="software-kpis" data-testid="scenario-active-kpis">
+        <div v-if="activePlan" class="software-kpis" data-testid="scenario-active-kpis">
           <div>
             <span>Break-even (bis zum Ende anhaltend)</span>
             <strong data-testid="sustained-payback">{{
@@ -805,7 +804,7 @@ async function downloadReport(kind: 'customer' | 'finance') {
             }}
           </figcaption>
         </figure>
-        <div class="software-actions">
+        <div v-if="activePlan" class="software-actions">
           <button class="button button-secondary button-with-icon" type="button" @click="exportSvg">
             <ArrowDownToLine :size="16" aria-hidden="true" /> SVG exportieren
           </button>
