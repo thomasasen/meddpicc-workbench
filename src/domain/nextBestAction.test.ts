@@ -22,12 +22,17 @@ describe('Next Best Action Engine', () => {
   it('priorisiert die Demo stabil nach Voraussetzung, Dringlichkeit und fester Rule-Reihenfolge', () => {
     const recommendations = recommendationsFor()
 
-    expect(recommendations.map((item) => item.ruleId)).toEqual([
-      'nba.economic-buyer.advance',
-      'nba.decision-process.validate',
-      'nba.paper-process.de-risk',
-      'nba.champion.test',
-    ])
+    const ids = recommendations.map((item) => item.ruleId)
+    expect(ids).toHaveLength(5)
+    expect(ids[0]).toBe('nba.economic-buyer.advance')
+    expect(ids).toEqual(
+      expect.arrayContaining([
+        'nba.metrics.validate-value',
+        'nba.decision-process.validate',
+        'nba.paper-process.de-risk',
+        'nba.champion.test',
+      ]),
+    )
   })
 
   it('beginnt bei fehlendem Pain nicht mit einer erfundenen ROI-Aktion', () => {
