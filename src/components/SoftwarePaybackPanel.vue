@@ -234,17 +234,14 @@ async function exportPng() {
       <div class="software-heading">
         <div>
           <p class="eyebrow">1 · Vergleichsbasis</p>
-          <h2 id="software-cost-heading">Projektkosten und bestehende IT-Kosten</h2>
+          <h2 id="software-cost-heading">Kosten erfassen</h2>
         </div>
         <button type="button" class="button button-quiet button-with-icon" @click="clear">
           <RotateCcw :size="16" aria-hidden="true" /> Zurücksetzen
         </button>
       </div>
-      <p class="software-muted">
-        Einmalige Projektkosten, SaaS und später wegfallende Kosten der bisherigen Lösung separat erfassen. Laufende
-        Jahresbeträge werden wirtschaftlich gleichmäßig auf Monate verteilt, nicht als Zahlung modelliert.
-      </p>
-      <div class="software-actions">
+      <p class="software-muted">Was kostet die Einführung, was läuft monatlich weiter und welche bisherigen Kosten entfallen?</p>
+      <div class="software-actions software-cost-actions">
         <button type="button" class="button button-secondary" @click="addCost('one-time')">
           <Plus :size="16" aria-hidden="true" /> Einmalkosten
         </button>
@@ -255,7 +252,11 @@ async function exportPng() {
           <Plus :size="16" aria-hidden="true" /> Altsystem entfällt
         </button>
       </div>
-      <p v-if="costs.length === 0" class="software-empty">Noch keine Kostenpositionen erfasst.</p>
+      <div class="software-start-example">
+        <span>Oder zuerst ansehen:</span>
+        <button type="button" class="software-example-link" @click="loadExample">Fiktives Softwareprojekt einsetzen</button>
+      </div>
+      <p v-if="costs.length === 0" class="software-empty">Mit <strong>Einmalkosten</strong> oder <strong>SaaS / Betrieb</strong> starten.</p>
       <article v-for="cost in costs" :key="cost.id" class="software-entry">
         <div class="software-entry-heading">
           <strong>{{
@@ -312,18 +313,15 @@ async function exportPng() {
       <div class="software-heading">
         <div>
           <p class="eyebrow">2 · Customer Metrics</p>
-          <h2 id="software-metrics-heading">Kundenspezifische wirtschaftliche Effekte</h2>
+          <h2 id="software-metrics-heading">Kundennutzen erfassen</h2>
         </div>
         <button type="button" class="button button-primary button-with-icon" @click="addMetric()">
           <Plus :size="16" aria-hidden="true" /> Metric hinzufügen
         </button>
       </div>
-      <p class="software-muted">
-        Operative Kennzahl und finanzielle Wirkung unterscheiden. Nur ausdrücklich angerechnete, begründete EUR-Effekte
-        gehen in die Basisrechnung ein. Zeitgewinn und Risikowerte zunächst separat führen.
-      </p>
+      <p class="software-muted">Eine Kennzahl pro Wirkung. Nur wirtschaftlich belegbare EUR-Effekte anrechnen.</p>
       <p v-if="metrics.length === 0" class="software-empty">
-        Noch keine Kunden-Metric. Eine direkte EUR-Metric ist der schnellste Einstieg.
+        <strong>Metric hinzufügen</strong> wählen. Als Einstieg reicht eine jährliche Einsparung in EUR.
       </p>
       <article v-for="(metric, index) in metrics" :key="metric.id" class="software-entry">
         <div class="software-entry-heading">
@@ -339,7 +337,7 @@ async function exportPng() {
         </div>
         <div class="software-fields">
           <label class="field"
-            ><span>Name / Kundenproblem</span><input v-model="metric.name" type="text" maxlength="140"
+            ><span>Bezeichnung / Kundenproblem</span><input v-model="metric.name" type="text" maxlength="140"
           /></label>
           <label class="field"
             ><span>Berechnungsbaustein</span>
@@ -350,7 +348,7 @@ async function exportPng() {
             </select>
           </label>
           <label v-if="metric.formula === 'direct' || metric.formula === 'risk'" class="field">
-            <span>Wirtschaftlicher Modellwert (EUR/Jahr)</span>
+            <span>Jährlicher Nutzen (EUR)</span>
             <input v-model.number="metric.annualAmountEur" type="number" min="0" step="0.01" />
           </label>
           <template v-if="['process', 'time', 'conversion', 'quality'].includes(metric.formula)">
@@ -397,6 +395,48 @@ async function exportPng() {
               <input v-model.number="metric.valuePerEventEur" type="number" min="0" step="any" />
             </label>
           </template>
+        </div>
+        <div class="software-metric-footer">
+          <label class="software-check"
+            ><input
+              v-model="metric.included"
+              type="checkbox"
+              :disabled="
+                metric.treatment !== 'realized' || metric.formula === 'risk' || metric.formula === 'qualitative'
+              "
+            />
+            In den Payback einrechnen
+          </label>
+          <div class="software-metric-value">
+            <strong>{{
+              annualMetricPotential(metric) === null
+                ? 'Nicht monetarisiert'
+                : formatEuro(annualMetricPotential(metric) ?? 0) + ' / Jahr'
+            }}</strong>
+            <span>{{
+              metric.included && metric.treatment === 'realized' ? 'Zur Rechnung vorgesehen' : 'Nicht angerechnet'
+            }}</span>
+          </div>
+        </div>
+
+        <div v-if="metric.included && metric.treatment === 'realized'" class="software-evidence">
+          <label class="field software-full"
+            ><span>Wie wird die wirtschaftliche Wirkung realisiert? / Datenquelle</span>
+            <textarea
+              v-model="metric.evidenceNote"
+              rows="2"
+              maxlength="600"
+              placeholder="z. B. nachweislich entfallende Fremdleistung, künftig vermiedene Einstellung oder kundenseitig geprüfter Deckungsbeitrag"
+            />
+          </label>
+
+        </div>
+        <details class="software-more">
+          <summary>
+            <span class="software-more-label">Zeitraum &amp; Daten prüfen</span>
+            <span class="software-more-hint">Start Monat {{ metric.startMonth }} · {{ evidenceLabel(metric.evidence) }}</span>
+          </summary>
+          <div class="software-fields software-detail-fields">
           <label class="field"
             ><span>Wirtschaftliche Einordnung</span>
             <select
@@ -444,38 +484,8 @@ async function exportPng() {
               :max="horizon"
               placeholder="Bis zum Ende"
           /></label>
-          <label class="field software-full"
-            ><span>Wie wird die wirtschaftliche Wirkung realisiert? / Datenquelle</span>
-            <textarea
-              v-model="metric.evidenceNote"
-              rows="2"
-              maxlength="600"
-              placeholder="z. B. nachweislich entfallende Fremdleistung, künftig vermiedene Einstellung oder kundenseitig geprüfter Deckungsbeitrag"
-            />
-          </label>
-        </div>
-        <div class="software-metric-footer">
-          <label class="software-check"
-            ><input
-              v-model="metric.included"
-              type="checkbox"
-              :disabled="
-                metric.treatment !== 'realized' || metric.formula === 'risk' || metric.formula === 'qualitative'
-              "
-            />
-            Finanzielle Wirkung in Basisrechnung berücksichtigen
-          </label>
-          <div class="software-metric-value">
-            <strong>{{
-              annualMetricPotential(metric) === null
-                ? 'Nicht monetarisiert'
-                : formatEuro(annualMetricPotential(metric) ?? 0) + ' / Jahr'
-            }}</strong>
-            <span>{{
-              metric.included && metric.treatment === 'realized' ? 'Zur Rechnung vorgesehen' : 'Nicht angerechnet'
-            }}</span>
           </div>
-        </div>
+        </details>
         <p class="software-muted">
           Datenstatus: {{ evidenceLabel(metric.evidence) }}.
           {{ metric.treatment === 'capacity' ? 'Zeitgewinn ist nicht automatisch Geldersparnis.' : '' }}
@@ -488,7 +498,7 @@ async function exportPng() {
       <div class="software-heading">
         <div>
           <p class="eyebrow">3 · Berechnung und Ergebnis</p>
-          <h2 id="software-result-heading">Monatlicher Wirtschaftlichkeitsverlauf</h2>
+          <h2 id="software-result-heading">Wann rechnet sich das Projekt?</h2>
         </div>
         <label class="field"
           ><span>Betrachtungshorizont</span>
@@ -498,11 +508,7 @@ async function exportPng() {
           </select>
         </label>
       </div>
-      <div class="software-actions">
-        <button type="button" class="button button-secondary" @click="loadExample">
-          Fiktives Softwareprojekt einsetzen
-        </button>
-      </div>
+
       <div v-if="!result.success" role="alert" class="software-problems">
         <strong>Modell noch nicht rechenfähig. Bitte korrigieren:</strong>
         <ul>
@@ -510,13 +516,12 @@ async function exportPng() {
         </ul>
       </div>
       <p v-else-if="costs.length === 0 && metrics.length === 0" class="software-empty" data-testid="project-empty">
-        Lege zuerst eine Kostenposition und eine Kunden-Metric an oder öffne das ausdrücklich fiktive Beispiel. Bis
-        dahin wird keine wirtschaftliche Aussage erzeugt.
+        Sobald Kosten und Nutzen vorliegen, erscheint hier der zeitliche Verlauf. Bis dahin wird keine wirtschaftliche Aussage erzeugt.
       </p>
       <template v-else>
         <div class="software-kpis">
           <div>
-            <span>Bis zum Betrachtungsende anhaltender Break-even</span>
+            <span>Break-even (bis zum Ende anhaltend)</span>
             <strong data-testid="sustained-payback">{{
               plan?.sustainedBreakEvenMonth === null ? 'Nicht erreicht' : 'Monat ' + plan?.sustainedBreakEvenMonth
             }}</strong>
@@ -536,9 +541,8 @@ async function exportPng() {
           </div>
         </div>
         <p class="software-muted">
-          Vergleich gegenüber dem Status quo. Gleiche jährliche Beträge werden monatlich wirtschaftlich verteilt.
-          „Anhaltend“ bedeutet ausschließlich: Bis zum Ende des gewählten Betrachtungszeitraums kein erneuter negativer
-          kumulierter Saldo. Kein Garantie-, Cashflow- oder ROI-Versprechen.
+          Wirtschaftliche Modellrechnung zum bisherigen Zustand. „Anhaltend“ gilt bis zum Ende des gewählten Zeitraums.
+          Jahreskosten werden auf zwölf Monate verteilt, nicht als tatsächliche Zahlung abgebildet.
         </p>
         <figure class="software-figure">
           <svg ref="svgRef" viewBox="0 0 900 340" role="img" aria-labelledby="software-chart-title software-chart-desc">
@@ -607,7 +611,7 @@ async function exportPng() {
         </div>
         <p role="status">{{ exportStatus }}</p>
         <p class="software-table-hint">
-          Tabelle auf kleineren Bildschirmen horizontal scrollen. Per Tastatur zuerst die Tabelle fokussieren.
+          Monatswerte · auf schmalen Bildschirmen seitlich scrollen.
         </p>
         <div class="software-table-wrap" tabindex="0" role="region" aria-label="Monatswerte, horizontal scrollbar">
           <table class="software-table">
