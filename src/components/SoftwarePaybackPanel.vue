@@ -207,14 +207,14 @@ const checkpoints = computed(() =>
     : [],
 )
 const summary = computed(() => {
-  if (!plan.value) return ''
-  const current = plan.value
+  if (!activePlan.value || !activeScenario.value) return ''
+  const current = activePlan.value
   const payback =
     current.sustainedBreakEvenMonth === null
       ? 'Keine bis zum Projektmonat ' + horizon.value + ' anhaltende Amortisation nachweisbar.'
       : 'Bis zum Betrachtungsende anhaltender Break-even im Projektmonat ' + current.sustainedBreakEvenMonth + '.'
   return (
-    'Softwareprojekt – Modellrechnung / Schätzung. ' +
+    'Softwareprojekt – ' + activeScenario.value.label + ' – Modellrechnung / Schätzung. ' +
     payback +
     ' Kumulierter wirtschaftlicher Saldo bis Monat ' +
     horizon.value +
@@ -234,7 +234,7 @@ const summary = computed(() => {
 })
 
 async function copySummary() {
-  if (!plan.value) return
+  if (!activePlan.value) return
   try {
     await navigator.clipboard.writeText(summary.value)
     copyStatus.value = 'Kundenbotschaft kopiert.'
@@ -641,38 +641,33 @@ async function downloadReport(kind: 'customer' | 'finance') {
         Aussage erzeugt.
       </p>
       <template v-else>
-        <div class="software-kpis">
+        <div class="software-kpis" data-testid="scenario-active-kpis">
           <div>
             <span>Break-even (bis zum Ende anhaltend)</span>
             <strong data-testid="sustained-payback">{{
-              plan?.sustainedBreakEvenMonth === null ? 'Nicht erreicht' : 'Monat ' + plan?.sustainedBreakEvenMonth
+              activePlan?.sustainedBreakEvenMonth === null ? 'Nicht erreicht' : 'Monat ' + activePlan?.sustainedBreakEvenMonth
             }}</strong>
           </div>
           <div>
             <span>Gesamte neue Kosten im Betrachtungszeitraum</span>
-            <strong>{{ formatEuro(businessCase?.totalCostEur ?? 0) }}</strong>
+            <strong>{{ formatEuro(activeScenario?.summary.totalCostEur ?? 0) }}</strong>
           </div>
           <div>
             <span>Kumulierter wirtschaftlicher Saldo</span>
-            <strong data-testid="cumulative-balance">{{ formatEuro(plan?.cumulativeEur ?? 0) }}</strong>
+            <strong data-testid="cumulative-balance">{{ formatEuro(activePlan?.cumulativeEur ?? 0) }}</strong>
           </div>
           <div>
             <span>ROI über {{ horizon }} Monate (undiskontiert)</span>
             <strong data-testid="roi-percent">{{
-              businessCase?.roiPercent === null
-                ? 'Nicht definiert'
-                : (businessCase?.roiPercent ?? 0).toLocaleString('de-DE', {
-                    minimumFractionDigits: 1,
-                    maximumFractionDigits: 1,
-                  }) + ' %'
+              roiLabel(activeScenario?.summary.roiPercent ?? null)
             }}</strong>
           </div>
           <div>
-            <span>Einbezogene Kunden-Metrics</span><strong>{{ plan?.countedMetrics.length ?? 0 }}</strong>
+            <span>Einbezogene Kunden-Metrics</span><strong>{{ activePlan?.countedMetrics.length ?? 0 }}</strong>
           </div>
         </div>
         <p class="software-muted">
-          Wirtschaftliche Modellrechnung zum bisherigen Zustand. „Anhaltend“ gilt bis zum Ende des gewählten Zeitraums.
+          Wirtschaftliche Modellrechnung für das ausgewählte Szenario {{ activeScenario?.label ?? '' }} gegenüber dem bisherigen Zustand. „Anhaltend“ gilt nur bis zum Ende des gewählten Zeitraums.
           Jahreskosten werden auf zwölf Monate verteilt, nicht als tatsächliche Zahlung abgebildet.
         </p>
 
@@ -846,12 +841,12 @@ async function downloadReport(kind: 'customer' | 'finance') {
         <div class="software-insight">
           <strong>Transparenz der Annahmen</strong>
           <p>
-            {{ plan?.unresolvedAssumptions ?? 0 }} angerechnete Metrics sind nicht als kundenseitig geprüft
-            gekennzeichnet. {{ plan?.nonMonetized.length ?? 0 }} weitere Metrics stehen außerhalb der monetären
+            {{ activePlan?.unresolvedAssumptions ?? 0 }} angerechnete Metrics sind nicht als kundenseitig geprüft
+            gekennzeichnet. {{ activePlan?.nonMonetized.length ?? 0 }} weitere Metrics stehen außerhalb der monetären
             Basisrechnung.
           </p>
-          <ul v-if="plan?.nonMonetized.length">
-            <li v-for="metric in plan.nonMonetized" :key="metric.id">{{ metric.name }}: {{ metric.reason }}</li>
+          <ul v-if="activePlan?.nonMonetized.length">
+            <li v-for="metric in activePlan.nonMonetized" :key="metric.id">{{ metric.name }}: {{ metric.reason }}</li>
           </ul>
         </div>
         <section aria-labelledby="business-case-report-heading" class="software-report">
