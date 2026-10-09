@@ -1,3 +1,14 @@
+# Quick Payback · aktueller T3-Draft-Slice (09.10.2026)
+
+- Feature-Branch: `feature/quick-payback-tool` vom bestätigten Main-Commit `c4e99ec682452c29998f33a128deadd8225c90d3`.
+- Route `/#/tools/quick-payback`: reines lokales Modell mit drei EUR-Werten; 0-/Negativ-Nutzen und null Investition sind gesonderte Zustände, Demo ausdrücklich fiktiv, Kopiertext als Schätzung.
+- [Original-EPUB-Quellenmatrix und zwei simulierte Autoren-Red-Teams](QUICK_PAYBACK_SOURCE_QA.md).
+- **Erweiterung:** `SoftwarePaybackPanel.vue` und `softwarePayback.ts` mit frei ergänzbaren Kosten/Customer Metrics, konservativer Anrechnung, Doppelzählungsgate, zeitlichem SaaS-/Nutzenverlauf, kumuliertem Break-even, zugänglicher Tabelle und SVG/PNG.
+- **Finale Browser-CI:** [#37862223720](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37862223720) erfolgreich: Format, Lint, 230/230 Vitest, TypeScript/Vite, 91/91 Playwright und 1 bestehender Skip, Pages-Sync und pages:check. Vier zusätzliche Desktop-/Mobile-Originalbilder erzeugt und im Review geprüft. Historische Zwischenfehler und Fixes stehen im Red-Team-Protokoll.
+- **Freigabe:** simulierte Fachrollen-Voten sind keine persönlich erteilten Freigaben echter Autoren; Nutzer hat neue sichtbare UI noch nicht ausdrücklich freigegeben. Daher **Draft-PR #53 offen, kein Merge auf `main`**.
+
+---
+
 # Projektfortschritt / Handoff
 
 ## General-Merge am 08.10.2026
@@ -178,7 +189,7 @@ Branch: `feat/discovery-call-spiced` · PR: https://github.com/thomasasen/meddpi
 ### Noch offen
 
 - Champion (PR #51, nach Freigabe in `main`)
-- Competition (neuer Draft-Slice; Merge und visuelle Freigabe offen)
+- Competition (PR #52 am 09.10.2026 in `main` gemergt)
 - weitere situative Checklists wie POC, Pricing und Closing
 
 ## Decision Criteria – Knowledge & Themen-Checklist (PR #47, in main)
@@ -196,7 +207,7 @@ Umgesetzt und am **08.10.2026 nach Nutzerfreigabe per General-Merge** gemergt: h
 - **Paper Process:** PR #49 nach CI und visueller Freigabe am 08.10.2026 in `main` gemergt; Quellenmatrix in `docs/PAPER_PROCESS_SOURCE_QA.md`.
 - **Pain / Implication:** PR #50 am 08.10.2026 per Squash-Merge nach `main` übernommen (`a84d1b0d8be23db9d9ca8eec0a3531a96840a4f5`), vollständiger PR-Qualitätslauf CI #529 erfolgreich (https://github.com/thomasasen/meddpicc-workbench/actions/runs/37838466957). Der separate Push-`main-pages-integrity`-Lauf ist unabhängig zu prüfen und hier nicht pauschal als grün behauptet.
 - **Champion:** PR #51 am 08.10.2026 per Squash-Merge `5391d84e96bdff4e2490caa022de61ef8f84ba3b` nach `main` übernommen; PR-CI #536 erfolgreich. Separater `main-pages-integrity`-Lauf https://github.com/thomasasen/meddpicc-workbench/actions/runs/37844111688 erfolgreich.
-- **Competition:** eigenständiger T2-Feature-Branch mit Knowledge, zehnteiliger nicht persistenter Checklist und Quellenmatrix `docs/COMPETITION_SOURCE_QA.md`. Simulierte Red-Teams, technische/visuelle Gates und vier Screenshots werden separat nachgewiesen. **Bis zur ausdrücklichen Freigabe kein Merge.**
+- **Competition:** PR #52 am 09.10.2026 nach Nutzerfreigabe gemergt (`c4e99ec682452c29998f33a128deadd8225c90d3`); Post-Merge-CI [#37848576751](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37848576751) erfolgreich. Pages-Veröffentlichung war erst nach einem GitHub-HTTP-500 im Wiederholungsversuch erfolgreich.
 
 ## Nächste Roadmap-Blöcke
 

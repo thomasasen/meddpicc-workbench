@@ -13,6 +13,7 @@ import PaperProcessKnowledgeView from '../views/PaperProcessKnowledgeView.vue'
 import EvidenceView from '../views/EvidenceView.vue'
 import HomeView from '../views/HomeView.vue'
 import ReverseTimelineView from '../views/ReverseTimelineView.vue'
+import QuickPaybackView from '../views/QuickPaybackView.vue'
 import RisksActionsView from '../views/RisksActionsView.vue'
 import ReferencesView from '../views/ReferencesView.vue'
 
@@ -23,6 +24,11 @@ const router = createRouter({
       path: '/',
       name: 'start',
       component: HomeView,
+    },
+    {
+      path: '/tools/quick-payback',
+      name: 'quick-payback',
+      component: QuickPaybackView,
     },
     {
       path: '/tools/reverse-timeline',
