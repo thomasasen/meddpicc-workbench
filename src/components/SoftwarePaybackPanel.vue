@@ -16,6 +16,7 @@ import { createCrmSaasDemo } from '../data/softwarePaybackDemo'
 import SoftwareBalanceChart from './SoftwareBalanceChart.vue'
 import { summarizeBusinessCase } from '../domain/businessCase'
 import { buildSoftwareBusinessCasePdf } from '../report/softwareBusinessCasePdf'
+import { buildCustomerBusinessCasePdf } from '../report/customerBusinessCasePdf'
 
 const costs = ref<SoftwareCost[]>([])
 const metrics = ref<CustomerMetric[]>([])
@@ -261,14 +262,18 @@ async function exportPng() {
     exportStatus.value = 'PNG-Export nicht möglich. Alternativ SVG exportieren.'
   }
 }
-async function downloadReport() {
+async function downloadReport(kind: 'customer' | 'finance') {
   if (!businessCase.value) {
-    reportStatus.value = 'Bitte erst die Kosten- und Nutzenangaben korrigieren.'
+    reportStatus.value = 'Bitte zuerst die Kosten- und Nutzenangaben korrigieren.'
+    return
+  }
+  if (!reportCustomer.value.trim() || !reportProject.value.trim() || !reportAuthor.value.trim()) {
+    reportStatus.value = 'Für den PDF-Export bitte Kunde, Projekt und Verfasser angeben.'
     return
   }
   reportStatus.value = 'PDF wird erstellt ...'
   try {
-    const bytes = await buildSoftwareBusinessCasePdf({
+    const data = {
       customer: reportCustomer.value,
       project: reportProject.value,
       preparedBy: reportAuthor.value,
@@ -276,10 +281,15 @@ async function downloadReport() {
       targetOutcome: reportGoal.value,
       date: reportDate.value,
       input: { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
-    })
+    }
+    const bytes =
+      kind === 'customer'
+        ? await buildCustomerBusinessCasePdf(data)
+        : await buildSoftwareBusinessCasePdf(data)
     const safeName = reportProject.value.replace(/[^a-z0-9_-]+/gi, '-').slice(0, 55) || 'softwareprojekt'
-    saveBlob(new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }), 'business-case-' + safeName + '.pdf')
-    reportStatus.value = 'PDF-Bericht erstellt.'
+    const prefix = kind === 'customer' ? 'kundenbericht-' : 'finance-anhang-'
+    saveBlob(new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }), prefix + safeName + '.pdf')
+    reportStatus.value = kind === 'customer' ? 'Kundenbericht erstellt.' : 'Finance-Anhang erstellt.'
   } catch {
     reportStatus.value = 'PDF-Erstellung fehlgeschlagen. Bitte Eingaben prüfen und erneut versuchen.'
   }
@@ -683,10 +693,11 @@ async function downloadReport() {
         <section aria-labelledby="business-case-report-heading" class="software-report">
           <div class="software-report-head">
             <div>
-              <p class="eyebrow">4 · Kundenbericht</p>
-              <h3 id="business-case-report-heading">Business Case als PDF herunterladen</h3>
+              <p class="eyebrow">4 · Kunden- und Finance-Bericht</p>
+              <h3 id="business-case-report-heading">Zwei Berichte, eine Berechnungsgrundlage</h3>
               <p class="software-muted">
-                Mit echten Eingaben, Kennzahlen, Rechenweg und transparenten Annahmen. Alles bleibt im Browser.
+                Kompakter Kundenbericht mit Entscheidungsbotschaft oder vollständiger Finance-Anhang mit Monatswerten.
+                Beide entstehen lokal im Browser. Kunde, Projekt und Verfasser sind Pflichtangaben.
               </p>
             </div>
           </div>
@@ -700,7 +711,7 @@ async function downloadReport() {
               <input v-model="reportProject" type="text" maxlength="120" />
             </label>
             <label class="field"
-              ><span>Erstellt von (optional)</span>
+              ><span>Erstellt von</span>
               <input v-model="reportAuthor" type="text" maxlength="120" />
             </label>
           </div>
@@ -728,11 +739,14 @@ async function downloadReport() {
             </div>
           </details>
           <div class="software-report-actions">
-            <button type="button" class="button button-primary button-with-icon" @click="downloadReport">
-              <ArrowDownToLine :size="16" aria-hidden="true" /> Business-Case-Bericht (PDF) herunterladen
+            <button type="button" class="button button-primary button-with-icon" @click="downloadReport('customer')">
+              <ArrowDownToLine :size="16" aria-hidden="true" /> Kundenbericht (PDF) herunterladen
+            </button>
+            <button type="button" class="button button-with-icon" @click="downloadReport('finance')">
+              <ArrowDownToLine :size="16" aria-hidden="true" /> Finance-Anhang (PDF) herunterladen
             </button>
             <span class="software-muted"
-              >Management Summary · ROI · Kosten und Metrics · Monatswerte · Quellenstatus</span
+              >Kundenbericht: 3 Seiten mit Ergebnissen und Freigabefragen · Finance: Nachweise und Monatswerte</span
             >
           </div>
           <p role="status">{{ reportStatus }}</p>
