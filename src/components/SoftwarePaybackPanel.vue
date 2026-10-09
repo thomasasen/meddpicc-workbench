@@ -271,6 +271,10 @@ async function downloadReport(kind: 'customer' | 'finance') {
     reportStatus.value = 'Für den PDF-Export bitte Kunde, Projekt und Verfasser angeben.'
     return
   }
+  if (kind === 'customer' && (!reportPain.value.trim() || !reportGoal.value.trim())) {
+    reportStatus.value = 'Für den Kundenbericht bitte Ausgangssituation und angestrebtes Ergebnis ergänzen.'
+    return
+  }
   reportStatus.value = 'PDF wird erstellt ...'
   try {
     const data = {
@@ -695,7 +699,7 @@ async function downloadReport(kind: 'customer' | 'finance') {
               <h3 id="business-case-report-heading">Zwei Berichte, eine Berechnungsgrundlage</h3>
               <p class="software-muted">
                 Kompakter Kundenbericht mit Entscheidungsbotschaft oder vollständiger Finance-Anhang mit Monatswerten.
-                Beide entstehen lokal im Browser. Kunde, Projekt und Verfasser sind Pflichtangaben.
+                Beide entstehen lokal im Browser. Kunde, Projekt und Verfasser sind Pflichtangaben; der Kundenbericht benötigt zusätzlich Ausgangssituation und Ziel.
               </p>
             </div>
           </div>
@@ -714,7 +718,7 @@ async function downloadReport(kind: 'customer' | 'finance') {
             </label>
           </div>
           <details class="software-more software-report-context">
-            <summary>Ausgangslage und Zielbild für den Bericht (optional)</summary>
+            <summary>Ausgangslage und Zielbild (Pflicht für den Kundenbericht)</summary>
             <div class="software-report-story">
               <label class="field"
                 ><span>Ausgangslage / Business Pain</span>
