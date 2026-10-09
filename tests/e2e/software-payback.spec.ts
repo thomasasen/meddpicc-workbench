@@ -5,15 +5,15 @@ const route = '/meddpicc-workbench/#/tools/quick-payback'
 async function projectMode(page: import('@playwright/test').Page) {
   await page.goto(route)
   await page.getByRole('button', { name: 'Softwareprojekt & Kunden-Metrics' }).click()
-  await expect(page.getByRole('heading', { name: 'Projektkosten und bestehende IT-Kosten' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Kosten erfassen' })).toBeVisible()
 }
 
 test('Software Payback: freie Projektmodellierung, Leermodus und Originalbild', async ({ page }, testInfo) => {
   const errors: string[] = []
   page.on('pageerror', (err) => errors.push(err.message))
   await projectMode(page)
-  await expect(page.getByText('Noch keine Kostenpositionen erfasst.')).toBeVisible()
-  await expect(page.getByText('Noch keine Kunden-Metric.', { exact: false })).toBeVisible()
+  await expect(page.getByText('Mit Einmalkosten oder SaaS / Betrieb starten.')).toBeVisible()
+  await expect(page.getByText('Als Einstieg reicht eine jährliche Einsparung in EUR.', { exact: false })).toBeVisible()
   await expect(page.getByTestId('project-empty')).toContainText('keine wirtschaftliche Aussage')
   await page.evaluate(() => window.scrollTo(0, 0))
   await page.screenshot({
@@ -66,14 +66,14 @@ test('Software Payback: dieselbe Wirkungsgruppe blockiert Doppelzählung', async
   await page.getByRole('button', { name: 'Fiktives Softwareprojekt einsetzen' }).click()
   await page.getByRole('button', { name: 'Metric hinzufügen' }).click()
   const second = page.locator('.software-entry').filter({ has: page.getByText('Metric 2 · Neue Kunden-Metric') })
+  await second.locator('details.software-more > summary').click()
   await second.getByLabel('Wirkungsgruppe').fill('crm-gesamtwert')
-  await second
-    .getByLabel('Wie wird die wirtschaftliche Wirkung realisiert? / Datenquelle')
+  await second.getByLabel('In den Payback einrechnen').check()
+  await second.getByLabel('Wie wird die wirtschaftliche Wirkung realisiert? / Datenquelle')
     .fill('Fiktive zusätzliche Kennzahl, möglicherweise identisch.')
-  await second.getByLabel('Finanzielle Wirkung in Basisrechnung berücksichtigen').check()
   await expect(page.getByText('Mögliche Doppelzählung', { exact: false })).toBeVisible()
   await expect(page.getByTestId('sustained-payback')).toHaveCount(0)
-  await second.getByLabel('Finanzielle Wirkung in Basisrechnung berücksichtigen').uncheck()
+  await second.getByLabel('In den Payback einrechnen').uncheck()
   await expect(page.getByTestId('sustained-payback')).toHaveText('Monat 18')
 })
 
@@ -83,10 +83,40 @@ test('Software Payback: Zeitgewinn und Risk zählen nicht als sichere EUR-Wirkun
   const metric = page.locator('.software-entry').filter({ has: page.getByText('Metric 1 · Neue Kunden-Metric') })
   await metric.getByLabel('Berechnungsbaustein').selectOption('time')
   await expect(metric.getByLabel('Wirtschaftliche Einordnung')).toHaveValue('capacity')
-  await expect(metric.getByLabel('Finanzielle Wirkung in Basisrechnung berücksichtigen')).toBeDisabled()
+  await expect(metric.getByLabel('In den Payback einrechnen')).toBeDisabled()
   await metric.getByLabel('Berechnungsbaustein').selectOption('risk')
   await expect(metric.getByLabel('Wirtschaftliche Einordnung')).toHaveValue('risk')
-  await expect(metric.getByLabel('Finanzielle Wirkung in Basisrechnung berücksichtigen')).toBeDisabled()
+  await expect(metric.getByLabel('In den Payback einrechnen')).toBeDisabled()
+})
+
+test('Software Payback: sichtbare Einstiege, progressive Eingaben und saubere Ausrichtung', async ({ page }) => {
+  await projectMode(page)
+  await expect(page.getByRole('button', { name: /Softwareprojekt & Kunden-Metrics/ })).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByText('SaaS, Kosten und Nutzen im Zeitverlauf')).toBeVisible()
+  await page.getByRole('button', { name: 'Metric hinzufügen' }).click()
+  const card = page.locator('.software-entry').filter({ has: page.getByText('Metric 1 · Neue Kunden-Metric') })
+  await expect(card.locator('details.software-more')).not.toHaveAttribute('open')
+  await expect(card.getByText('Start Monat 1', { exact: false })).toBeVisible()
+  await card.locator('details.software-more > summary').focus()
+  await page.keyboard.press('Enter')
+  await expect(card.locator('details.software-more')).toHaveAttribute('open')
+  await expect(card.getByLabel('Erster Nutzenmonat')).toBeVisible()
+  await expect(card.getByLabel('Herkunft / Datenqualität')).toBeVisible()
+
+  for (const width of [375, 768, 1280]) {
+    await page.setViewportSize({ width, height: 850 })
+    const inputs = await card.locator('.software-fields:not(.software-detail-fields) input, .software-fields:not(.software-detail-fields) select')
+      .evaluateAll(els => els.map(el => ({height: Math.round(el.getBoundingClientRect().height),
+        left: Math.round(el.getBoundingClientRect().left),right:Math.round(el.getBoundingClientRect().right)})))
+    expect(inputs.length).toBeGreaterThanOrEqual(2)
+    for (const input of inputs) {
+      expect(input.height, 'control height at '+width).toBeGreaterThanOrEqual(40)
+      expect(input.left).toBeGreaterThanOrEqual(0)
+      expect(input.right).toBeLessThanOrEqual(width)
+    }
+    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)
+    expect(overflow, 'document overflow '+width).toBeLessThanOrEqual(0)
+  }
 })
 
 test('Software Payback: responsive, direkte Navigation und Tastatur', async ({ page }) => {
