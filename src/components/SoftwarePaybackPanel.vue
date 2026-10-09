@@ -17,10 +17,52 @@ import SoftwareBalanceChart from './SoftwareBalanceChart.vue'
 import { summarizeBusinessCase } from '../domain/businessCase'
 import { buildSoftwareBusinessCasePdf } from '../report/softwareBusinessCasePdf'
 import { buildCustomerBusinessCasePdf } from '../report/customerBusinessCasePdf'
+import {
+  compareBusinessScenarios,
+  DEFAULT_SCENARIO_SETTINGS,
+  describeScenarioAssumptions,
+  type BusinessScenarioId,
+  type ScenarioSettings,
+} from '../domain/businessCaseScenarios'
 
 const costs = ref<SoftwareCost[]>([])
 const metrics = ref<CustomerMetric[]>([])
 const horizon = ref<36 | 60>(36)
+const selectedScenario = ref<BusinessScenarioId>('base')
+const configurableScenarioIds: Array<'conservative' | 'optimistic'> = ['conservative', 'optimistic']
+const scenarioSettings = ref<ScenarioSettings>({
+  conservative: { ...DEFAULT_SCENARIO_SETTINGS.conservative },
+  optimistic: { ...DEFAULT_SCENARIO_SETTINGS.optimistic },
+})
+function resetScenarios() {
+  selectedScenario.value = 'base'
+  scenarioSettings.value = {
+    conservative: { ...DEFAULT_SCENARIO_SETTINGS.conservative },
+    optimistic: { ...DEFAULT_SCENARIO_SETTINGS.optimistic },
+  }
+}
+const scenarioRows = computed(() =>
+  compareBusinessScenarios(
+    {
+      horizonMonths: horizon.value,
+      costs: costs.value,
+      metrics: metrics.value,
+    },
+    scenarioSettings.value,
+  ),
+)
+const activeScenario = computed(() => scenarioRows.value?.find((s) => s.id === selectedScenario.value) ?? null)
+const activePlan = computed(() => {
+  if (!activeScenario.value) return null
+  const input = { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value }
+  const r = calculateSoftwarePayback(input, activeScenario.value.assumptions)
+  return r.success ? r : null
+})
+const signedEuro = (n: number) => (n > 0 ? '+' : '') + formatEuro(n)
+const roiLabel = (n: number | null) =>
+  n === null
+    ? 'Nicht definiert'
+    : n.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %'
 const copyStatus = ref('')
 const exportStatus = ref('')
 const demoMessage = ref('')
@@ -48,7 +90,6 @@ const result = computed(() =>
     metrics: metrics.value,
   }),
 )
-const plan = computed(() => (result.value.success ? result.value : null))
 
 function id(prefix: string): string {
   idCounter += 1
@@ -93,6 +134,7 @@ function removeMetric(id: string) {
   metrics.value = metrics.value.filter((m) => m.id !== id)
 }
 function loadExample() {
+  resetScenarios()
   reportCustomer.value = ''
   reportProject.value = 'Softwareeinführung'
   reportPain.value = ''
@@ -107,6 +149,7 @@ function loadExample() {
   exportStatus.value = ''
 }
 function loadCrmSaasDemo() {
+  resetScenarios()
   reportCustomer.value = 'Beispielwerke Industrie GmbH'
   reportProject.value = 'CRM & Service Transformation 2027'
   reportPain.value =
@@ -123,6 +166,7 @@ function loadCrmSaasDemo() {
   exportStatus.value = ''
 }
 function clear() {
+  resetScenarios()
   reportCustomer.value = ''
   reportProject.value = 'Softwareprojekt'
   reportPain.value = ''
@@ -157,19 +201,21 @@ function evidenceLabel(value: CustomerMetric['evidence']): string {
 }
 
 const checkpoints = computed(() =>
-  plan.value
-    ? [0, 6, 12, 18, 24, 36, 60].filter((m) => m <= horizon.value).map((month) => plan.value!.months[month]!)
+  activePlan.value
+    ? [0, 6, 12, 18, 24, 36, 60].filter((m) => m <= horizon.value).map((month) => activePlan.value!.months[month]!)
     : [],
 )
 const summary = computed(() => {
-  if (!plan.value) return ''
-  const current = plan.value
+  if (!activePlan.value || !activeScenario.value) return ''
+  const current = activePlan.value
   const payback =
     current.sustainedBreakEvenMonth === null
       ? 'Keine bis zum Projektmonat ' + horizon.value + ' anhaltende Amortisation nachweisbar.'
       : 'Bis zum Betrachtungsende anhaltender Break-even im Projektmonat ' + current.sustainedBreakEvenMonth + '.'
   return (
-    'Softwareprojekt – Modellrechnung / Schätzung. ' +
+    'Softwareprojekt – ' +
+    activeScenario.value.label +
+    ' – Modellrechnung / Schätzung. ' +
     payback +
     ' Kumulierter wirtschaftlicher Saldo bis Monat ' +
     horizon.value +
@@ -189,7 +235,7 @@ const summary = computed(() => {
 })
 
 async function copySummary() {
-  if (!plan.value) return
+  if (!activePlan.value) return
   try {
     await navigator.clipboard.writeText(summary.value)
     copyStatus.value = 'Kundenbotschaft kopiert.'
@@ -257,7 +303,7 @@ async function exportPng() {
   }
 }
 async function downloadReport(kind: 'customer' | 'finance') {
-  if (!businessCase.value) {
+  if (!businessCase.value || !scenarioRows.value) {
     reportStatus.value = 'Bitte zuerst die Kosten- und Nutzenangaben korrigieren.'
     return
   }
@@ -279,6 +325,8 @@ async function downloadReport(kind: 'customer' | 'finance') {
       targetOutcome: reportGoal.value,
       date: reportDate.value,
       input: { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
+      scenarioSettings: scenarioSettings.value,
+      selectedScenario: selectedScenario.value,
     }
     const bytes =
       kind === 'customer' ? await buildCustomerBusinessCasePdf(data) : await buildSoftwareBusinessCasePdf(data)
@@ -594,54 +642,169 @@ async function downloadReport(kind: 'customer' | 'finance') {
         Aussage erzeugt.
       </p>
       <template v-else>
-        <div class="software-kpis">
+        <div v-if="activePlan" class="software-kpis" data-testid="scenario-active-kpis">
           <div>
             <span>Break-even (bis zum Ende anhaltend)</span>
             <strong data-testid="sustained-payback">{{
-              plan?.sustainedBreakEvenMonth === null ? 'Nicht erreicht' : 'Monat ' + plan?.sustainedBreakEvenMonth
+              activePlan?.sustainedBreakEvenMonth === null
+                ? 'Nicht erreicht'
+                : 'Monat ' + activePlan?.sustainedBreakEvenMonth
             }}</strong>
           </div>
           <div>
             <span>Gesamte neue Kosten im Betrachtungszeitraum</span>
-            <strong>{{ formatEuro(businessCase?.totalCostEur ?? 0) }}</strong>
+            <strong>{{ formatEuro(activeScenario?.summary.totalCostEur ?? 0) }}</strong>
           </div>
           <div>
             <span>Kumulierter wirtschaftlicher Saldo</span>
-            <strong data-testid="cumulative-balance">{{ formatEuro(plan?.cumulativeEur ?? 0) }}</strong>
+            <strong data-testid="cumulative-balance">{{ formatEuro(activePlan?.cumulativeEur ?? 0) }}</strong>
           </div>
           <div>
             <span>ROI über {{ horizon }} Monate (undiskontiert)</span>
-            <strong data-testid="roi-percent">{{
-              businessCase?.roiPercent === null
-                ? 'Nicht definiert'
-                : (businessCase?.roiPercent ?? 0).toLocaleString('de-DE', {
-                    minimumFractionDigits: 1,
-                    maximumFractionDigits: 1,
-                  }) + ' %'
-            }}</strong>
+            <strong data-testid="roi-percent">{{ roiLabel(activeScenario?.summary.roiPercent ?? null) }}</strong>
           </div>
           <div>
-            <span>Einbezogene Kunden-Metrics</span><strong>{{ plan?.countedMetrics.length ?? 0 }}</strong>
+            <span>Einbezogene Kunden-Metrics</span><strong>{{ activePlan?.countedMetrics.length ?? 0 }}</strong>
           </div>
         </div>
         <p class="software-muted">
-          Wirtschaftliche Modellrechnung zum bisherigen Zustand. „Anhaltend“ gilt bis zum Ende des gewählten Zeitraums.
-          Jahreskosten werden auf zwölf Monate verteilt, nicht als tatsächliche Zahlung abgebildet.
+          Wirtschaftliche Modellrechnung für das ausgewählte Szenario {{ activeScenario?.label ?? '' }} gegenüber dem
+          bisherigen Zustand. „Anhaltend“ gilt nur bis zum Ende des gewählten Zeitraums. Jahreskosten werden auf zwölf
+          Monate verteilt, nicht als tatsächliche Zahlung abgebildet.
         </p>
-        <figure class="software-figure">
+
+        <section class="scenario-section" aria-labelledby="scenario-title" data-testid="scenario-section">
+          <div class="scenario-section-heading">
+            <div>
+              <h3 id="scenario-title">Wie belastbar ist die Wirtschaftlichkeit?</h3>
+              <p class="software-muted">
+                Drei Annahmen-Varianten auf derselben Rechnung. Wählen Sie einen Fall, um seinen Verlauf in der Grafik
+                zu sehen.
+              </p>
+            </div>
+          </div>
+          <div v-if="!scenarioRows" role="alert" class="software-problems" data-testid="scenario-invalid">
+            Szenariowerte prüfen: Nutzen und Einmalkosten zwischen −100 % und +200 %, Verzögerung zwischen 0 und
+            {{ horizon }} Monaten.
+          </div>
+          <template v-else>
+            <div class="scenario-compare" role="group" aria-label="Szenario in der Verlaufsgrafik auswählen">
+              <button
+                v-for="row in scenarioRows"
+                :key="row.id"
+                type="button"
+                class="scenario-choice"
+                :class="{
+                  'scenario-choice-active': selectedScenario === row.id,
+                  'scenario-choice-loss': row.summary.netValueEur < 0,
+                }"
+                :aria-pressed="selectedScenario === row.id"
+                :data-testid="'scenario-option-' + row.id"
+                @click="selectedScenario = row.id"
+              >
+                <span class="scenario-name">{{ row.label }}</span>
+                <span class="scenario-main">{{
+                  row.summary.sustainedBreakEvenMonth === null
+                    ? 'Keine Amortisation'
+                    : 'Amortisation: Monat ' + row.summary.sustainedBreakEvenMonth
+                }}</span>
+                <span class="scenario-end"
+                  >Endsaldo: <strong>{{ formatEuro(row.summary.netValueEur) }}</strong></span
+                >
+                <span class="scenario-delta">Zum Basis-Endsaldo: {{ signedEuro(row.deltaBalanceEur) }}</span>
+              </button>
+            </div>
+            <p class="software-muted scenario-selected" data-testid="scenario-selected">
+              Verlauf: <strong>{{ activeScenario?.label }}</strong
+              >. {{ activeScenario ? describeScenarioAssumptions(activeScenario.assumptions) : '' }}. Vergleich nach
+              {{ horizon }} Monaten. Unbestätigte Kundennutzen bleiben Annahmen.
+            </p>
+            <details class="software-more scenario-parameters">
+              <summary>Szenarioannahmen einzeln ändern</summary>
+              <div class="scenario-parameter-grid">
+                <fieldset v-for="kind in configurableScenarioIds" :key="kind" class="scenario-fieldset">
+                  <legend>{{ kind === 'conservative' ? 'Konservativ' : 'Optimistisch' }}</legend>
+                  <label class="field">
+                    <span>Änderung des angerechneten Kundennutzens (%)</span>
+                    <input
+                      v-model.number="scenarioSettings[kind].benefitPercent"
+                      :data-testid="'scenario-benefit-' + kind"
+                      type="number"
+                      step="1"
+                      min="-100"
+                      max="200"
+                    />
+                  </label>
+                  <label class="field">
+                    <span>Änderung einmaliger Projektkosten (%)</span>
+                    <input
+                      v-model.number="scenarioSettings[kind].oneTimeCostPercent"
+                      :data-testid="'scenario-cost-' + kind"
+                      type="number"
+                      step="1"
+                      min="-100"
+                      max="200"
+                    />
+                  </label>
+                  <label class="field">
+                    <span>Verzögerung des Kundennutzens (Monate)</span>
+                    <input
+                      v-model.number="scenarioSettings[kind].benefitDelayMonths"
+                      :data-testid="'scenario-delay-' + kind"
+                      type="number"
+                      step="1"
+                      min="0"
+                      :max="horizon"
+                    />
+                  </label>
+                </fieldset>
+              </div>
+            </details>
+            <div class="scenario-detail" data-testid="scenario-details" v-if="activeScenario">
+              <span
+                >Neue Gesamtkosten: <strong>{{ formatEuro(activeScenario.summary.totalCostEur) }}</strong></span
+              >
+              <span
+                >Angerechneter Nutzen: <strong>{{ formatEuro(activeScenario.summary.benefitEur) }}</strong></span
+              >
+              <span
+                >Tiefster Saldo:
+                <strong
+                  >{{ formatEuro(activeScenario.summary.lowestBalanceEur) }} (M{{
+                    activeScenario.summary.lowestMonth
+                  }})</strong
+                ></span
+              >
+              <span
+                >ROI im Zeitraum: <strong>{{ roiLabel(activeScenario.summary.roiPercent) }}</strong></span
+              >
+            </div>
+          </template>
+          <p class="software-muted">
+            Die Prozentänderung betrifft nur ausdrücklich monetarisierte Kundenwirkungen; wegfallende Altsystemkosten
+            bleiben beim hinterlegten Termin und Betrag. Einmalige Kosten ändern sich, laufende Lizenz- und
+            Betriebskosten nicht. Eine Verzögerung verschiebt Nutzenbeginn, Ramp-up und ggf. Nutzenende, nicht Verträge
+            oder Projektlaufzeit. Kein Cashflow und keine Liquiditätsprognose.
+          </p>
+        </section>
+        <figure v-if="activePlan" class="software-figure">
           <SoftwareBalanceChart
             ref="chartRef"
-            :months="plan!.months"
+            :months="activePlan!.months"
             :horizon="horizon"
-            :break-even="plan!.sustainedBreakEvenMonth"
+            :break-even="activePlan!.sustainedBreakEvenMonth"
           />
           <figcaption>
             Unterhalb der Nulllinie übersteigen die neuen Kosten noch die angesetzten Vorteile. Oberhalb ist der
             kumulierte Saldo positiv. Es handelt sich um eine Modellrechnung, nicht um eine Liquiditätsplanung.
-            {{ businessCase?.unverified ? businessCase.unverified + ' Nutzenposition(en) sind noch unbestätigt.' : '' }}
+            {{
+              activeScenario?.summary.unverified
+                ? activeScenario.summary.unverified + ' Nutzenposition(en) sind noch unbestätigt.'
+                : ''
+            }}
           </figcaption>
         </figure>
-        <div class="software-actions">
+        <div v-if="activePlan" class="software-actions">
           <button class="button button-secondary button-with-icon" type="button" @click="exportSvg">
             <ArrowDownToLine :size="16" aria-hidden="true" /> SVG exportieren
           </button>
@@ -654,7 +817,10 @@ async function downloadReport(kind: 'customer' | 'finance') {
         <div class="software-table-wrap" tabindex="0" role="region" aria-label="Monatswerte, horizontal scrollbar">
           <table class="software-table">
             <caption>
-              Barrierefreie Monatsübersicht, Werte gerundet auf EUR
+              Barrierefreie Monatsübersicht für
+              {{
+                activeScenario?.label ?? 'Basis'
+              }}, Werte gerundet auf EUR
             </caption>
             <thead>
               <tr>
@@ -677,12 +843,12 @@ async function downloadReport(kind: 'customer' | 'finance') {
         <div class="software-insight">
           <strong>Transparenz der Annahmen</strong>
           <p>
-            {{ plan?.unresolvedAssumptions ?? 0 }} angerechnete Metrics sind nicht als kundenseitig geprüft
-            gekennzeichnet. {{ plan?.nonMonetized.length ?? 0 }} weitere Metrics stehen außerhalb der monetären
+            {{ activePlan?.unresolvedAssumptions ?? 0 }} angerechnete Metrics sind nicht als kundenseitig geprüft
+            gekennzeichnet. {{ activePlan?.nonMonetized.length ?? 0 }} weitere Metrics stehen außerhalb der monetären
             Basisrechnung.
           </p>
-          <ul v-if="plan?.nonMonetized.length">
-            <li v-for="metric in plan.nonMonetized" :key="metric.id">{{ metric.name }}: {{ metric.reason }}</li>
+          <ul v-if="activePlan?.nonMonetized.length">
+            <li v-for="metric in activePlan.nonMonetized" :key="metric.id">{{ metric.name }}: {{ metric.reason }}</li>
           </ul>
         </div>
         <section aria-labelledby="business-case-report-heading" class="software-report">
@@ -763,6 +929,114 @@ async function downloadReport(kind: 'customer' | 'finance') {
 </template>
 
 <style scoped>
+.scenario-section {
+  margin-top: 1.35rem;
+  padding: 1.1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+.scenario-section h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+}
+.scenario-compare {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0.9rem 0;
+}
+.scenario-choice {
+  min-width: 0;
+  text-align: left;
+  border: 1.5px solid #cbd5e1;
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.85rem;
+  color: #17253d;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  cursor: pointer;
+  font: inherit;
+}
+.scenario-choice:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+.scenario-choice-active {
+  border-color: #1d4ed8;
+  box-shadow: inset 0 0 0 1px #1d4ed8;
+}
+.scenario-choice-loss .scenario-end strong {
+  color: #9f2424;
+}
+.scenario-name {
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+.scenario-main {
+  font-size: 1rem;
+  font-weight: 750;
+}
+.scenario-end {
+  font-size: 0.94rem;
+  overflow-wrap: anywhere;
+}
+.scenario-delta {
+  font-size: 0.78rem;
+  color: #475569;
+  overflow-wrap: anywhere;
+}
+.scenario-selected {
+  margin-top: 0.65rem;
+}
+.scenario-parameters {
+  margin: 0.85rem 0;
+}
+.scenario-parameter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin: 0.8rem 0;
+}
+.scenario-fieldset {
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  display: grid;
+  gap: 0.6rem;
+}
+.scenario-fieldset legend {
+  padding: 0 0.35rem;
+  font-weight: 700;
+}
+.scenario-fieldset input {
+  width: 100%;
+  min-width: 0;
+}
+.scenario-detail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem 1rem;
+  margin: 0.8rem 0;
+  font-size: 0.87rem;
+}
+.scenario-detail span {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .scenario-compare,
+  .scenario-parameter-grid,
+  .scenario-detail {
+    grid-template-columns: 1fr;
+  }
+  .scenario-section {
+    padding: 0.85rem;
+  }
+}
+
 .software-panel {
   display: grid;
   gap: var(--space-6);

@@ -62,7 +62,7 @@ jobs:
       - name: Business-Case-Dateien normalisieren
         if: startsWith(github.head_ref, 'feature/business-case-') || startsWith(github.head_ref, 'feature/customer-business-case-')
         run: |
-          npx prettier --write src/domain/businessCase.ts src/domain/businessCase.test.ts src/domain/paybackChart.ts src/domain/paybackChart.test.ts src/domain/paybackChartAreas.ts src/domain/paybackChartAreas.test.ts src/domain/paybackContinuation.ts src/domain/paybackContinuation.test.ts src/report/softwareBusinessCasePdf.ts src/report/softwareBusinessCasePdf.test.ts src/report/customerBusinessCasePdf.ts src/report/customerBusinessCasePdf.test.ts src/components/SoftwareBalanceChart.vue src/components/SoftwarePaybackPanel.vue tests/e2e/software-payback.spec.ts
+          npx prettier --write src/domain/softwarePayback.ts src/domain/businessCaseScenarios.ts src/domain/businessCaseScenarios.test.ts src/domain/businessCase.ts src/domain/businessCase.test.ts src/domain/paybackChart.ts src/domain/paybackChart.test.ts src/domain/paybackChartAreas.ts src/domain/paybackChartAreas.test.ts src/domain/paybackContinuation.ts src/domain/paybackContinuation.test.ts src/report/softwareBusinessCasePdf.ts src/report/softwareBusinessCasePdf.test.ts src/report/customerBusinessCasePdf.ts src/report/customerBusinessCasePdf.test.ts src/components/SoftwareBalanceChart.vue src/components/SoftwarePaybackPanel.vue tests/e2e/software-payback.spec.ts
           if ! git diff --quiet -- src tests; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -116,17 +116,20 @@ jobs:
           pdftoppm -f 2 -l 2 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-finance
           pdftoppm -f 3 -l 3 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-metrics
           total="$(pdfinfo "$report" | awk '/^Pages:/{print $2}')"
-          pdftoppm -f "$total" -l "$total" -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-method
+          method_page="$((total - 1))"
+          pdftoppm -f "$method_page" -l "$method_page" -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-method
+          pdftoppm -f "$total" -l "$total" -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-scenarios
           customer="$(find test-results -type f -name 'business-case-customer-desktop-chromium.pdf' -print -quit)"
           if [ -z "$customer" ]; then
             echo "::error::Kein heruntergeladener Kundenbericht gefunden."
             exit 1
           fi
           customer_pages="$(pdfinfo "$customer" | awk '/^Pages:/{print $2}')"
-          test "$customer_pages" = 3 || { echo "::error::Kundenbericht muss genau 3 Seiten enthalten"; exit 1; }
+          test "$customer_pages" = 4 || { echo "::error::Kundenbericht muss genau 4 Seiten enthalten"; exit 1; }
           pdftoppm -f 1 -l 1 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-cover
           pdftoppm -f 2 -l 2 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-economics
           pdftoppm -f 3 -l 3 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-decision
+          pdftoppm -f 4 -l 4 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-scenarios
           pdftotext -layout "$customer" test-results/rendered/business-case-customer.txt
           grep -q 'Ihre Investition im Überblick' test-results/rendered/business-case-customer.txt
           grep -q 'Wann rechnet sich Ihr Vorhaben' test-results/rendered/business-case-customer.txt
@@ -139,6 +142,9 @@ jobs:
           fi
           grep -q 'So entsteht der wirtschaftliche Nutzen' test-results/rendered/business-case-customer.txt
           grep -q 'Die nächsten Schritte für Ihr Vorhaben' test-results/rendered/business-case-customer.txt
+          grep -q 'Wie belastbar ist die Wirtschaftlichkeit' test-results/rendered/business-case-customer.txt
+          grep -q 'Konservativ' test-results/rendered/business-case-customer.txt
+          grep -q 'Optimistisch' test-results/rendered/business-case-customer.txt
           if grep -Eiq 'Economic Buyer|Champion|Verkäuferannahme|MEDDPICC|keine Freigabe|Kunden-Metric' test-results/rendered/business-case-customer.txt; then
             echo "::error::Internes Vertriebs- oder Freigabevokabular im Kunden-PDF."
             exit 1
@@ -148,9 +154,30 @@ jobs:
           grep -q 'Kundensituation und Zielbild' test-results/rendered/business-case-report.txt
           grep -q 'Verkäuferannahme' test-results/rendered/business-case-report.txt
           grep -q 'NICHT ANGERECHNET' test-results/rendered/business-case-report.txt
-          for name in business-case-report-cover.png business-case-report-finance.png business-case-report-metrics.png business-case-report-method.png business-case-customer-cover.png business-case-customer-economics.png business-case-customer-decision.png; do
+          # Jede Original-PDF-Seite rendern; nicht nur ausgewählte Titelseiten.
+          pdftoppm -scale-to 1150 -png "$report" test-results/rendered/finance-all
+          pdftoppm -scale-to 1150 -png "$customer" test-results/rendered/customer-all
+          selected="$(find test-results -type f -name 'scenario-selected-customer-desktop-chromium.pdf' -print -quit)"
+          test -s "$selected" || { echo "::error::PDF des ausgewählten konservativen Falls fehlt"; exit 1; }
+          pdftoppm -scale-to 1150 -png "$selected" test-results/rendered/selected-all
+          pdftotext -layout "$selected" test-results/rendered/selected-conservative.txt
+          grep -q 'BERECHNETER VERLAUF: KONSERVATIV' test-results/rendered/selected-conservative.txt
+          grep -q 'Nicht erreicht' test-results/rendered/selected-conservative.txt
+          grep -q 'Wie belastbar ist die Wirtschaftlichkeit' test-results/rendered/selected-conservative.txt
+          for name in business-case-report-cover.png business-case-report-finance.png business-case-report-metrics.png business-case-report-method.png business-case-report-scenarios.png business-case-customer-cover.png business-case-customer-economics.png business-case-customer-decision.png business-case-customer-scenarios.png; do
             test -s "test-results/rendered/$name" || exit 1
           done
+
+      - name: Original-PDFs als prüfbare Artefakte sichern
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: business-case-example-pdfs
+          path: |
+            test-results/**/business-case-customer-desktop-chromium.pdf
+            test-results/**/business-case-qa-desktop-chromium.pdf
+            test-results/**/scenario-selected-customer-desktop-chromium.pdf
+          if-no-files-found: ignore
 
       - name: UI-QS-Screenshots bereitstellen
         if: always()
@@ -200,13 +227,17 @@ jobs:
               software-payback-crm-demo-mobile-chromium.png
               business-case-chart-desktop-chromium.png
               business-case-chart-mobile-chromium.png
+              business-case-scenarios-desktop-chromium.png
+              business-case-scenarios-mobile-chromium.png
               business-case-report-cover.png
               business-case-report-finance.png
               business-case-report-metrics.png
               business-case-report-method.png
+              business-case-report-scenarios.png
               business-case-customer-cover.png
               business-case-customer-economics.png
               business-case-customer-decision.png
+              business-case-customer-scenarios.png
             )
           else
             if [[ "${{ github.head_ref }}" == feature/competition-* ]]; then

@@ -221,7 +221,7 @@ test('Business Case: eigenständiger Kundengrafik-PDF und Finance-Anhang', async
   expect(bytes.subarray(0, 5).toString()).toBe('%PDF-')
   expect(bytes.byteLength).toBeGreaterThan(7000)
   const parsed = await PDFDocument.load(bytes)
-  expect(parsed.getPageCount()).toBe(3)
+  expect(parsed.getPageCount()).toBe(4)
   expect(parsed.getTitle()).toContain('CRM & Service Transformation')
   for (const pdfPage of parsed.getPages()) {
     expect(pdfPage.getWidth()).toBeCloseTo(595.28, 1)
@@ -274,4 +274,62 @@ test('Kundenbericht: Pflichtangaben schützen vor Platzhalter-PDF', async ({ pag
   const download = page.waitForEvent('download')
   await page.getByRole('button', { name: 'Kundenbericht (PDF) herunterladen' }).click()
   expect((await download).suggestedFilename()).toContain('kundenbericht-')
+})
+
+test('Szenario-Stresstest: unveränderte Basis, negativer Fall, eigene V4-Fortführung und mobile Abnahme', async ({
+  page,
+}, testInfo) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  await projectMode(page)
+  await page.getByRole('button', { name: 'CRM-/SaaS-Beispiel mit Kunden-Metrics' }).click()
+  const baseline = await page.getByTestId('cumulative-balance').innerText()
+  const compare = page.getByTestId('scenario-section')
+  await expect(compare.getByRole('heading', { name: 'Wie belastbar ist die Wirtschaftlichkeit?' })).toBeVisible()
+  await expect(page.getByTestId('scenario-option-base')).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByTestId('scenario-option-conservative')).toContainText('Keine Amortisation')
+  await expect(page.getByTestId('scenario-option-optimistic')).toContainText('Amortisation')
+  await expect(page.getByTestId('chart-conditional-continuation')).toBeVisible()
+  await page.getByTestId('scenario-option-conservative').click()
+  await expect(page.getByTestId('scenario-selected')).toContainText('Konservativ')
+  await expect(page.getByTestId('chart-payback')).toHaveText('Nicht erreicht')
+  await expect(page.getByTestId('chart-conditional-continuation')).toHaveCount(0)
+  await expect(page.getByTestId('cumulative-balance')).not.toHaveText(baseline)
+  await expect(page.getByTestId('sustained-payback')).toHaveText('Nicht erreicht')
+  await compare.screenshot({ path: testInfo.outputPath('business-case-scenarios-' + testInfo.project.name + '.png') })
+
+  await compare.getByText('Szenarioannahmen einzeln ändern').click()
+  await page.getByTestId('scenario-benefit-conservative').fill('-100')
+  await page.getByTestId('scenario-cost-conservative').fill('100')
+  await page.getByTestId('scenario-delay-conservative').fill('12')
+  await expect(page.getByTestId('scenario-option-conservative')).toContainText('Keine Amortisation')
+  await expect(page.getByTestId('scenario-details')).toContainText('ROI im Zeitraum')
+  await page.getByTestId('scenario-option-optimistic').click()
+  await expect(page.getByTestId('scenario-selected')).toContainText('Optimistisch')
+  await expect(page.getByTestId('cumulative-balance')).not.toHaveText(baseline)
+  await expect(page.getByTestId('chart-conditional-continuation')).toBeVisible()
+  await page.getByTestId('scenario-option-base').click()
+  await expect(page.getByTestId('chart-payback')).toHaveText('Ab Monat 35')
+  await expect(page.getByTestId('sustained-payback')).toHaveText('Monat 35')
+  await expect(page.getByTestId('cumulative-balance')).toHaveText(baseline)
+  expect(errors).toEqual([])
+})
+
+test('Szenario-Stresstest: ausgewählter Fall wird konsistent im echten Kunden-PDF exportiert', async ({
+  page,
+}, testInfo) => {
+  await projectMode(page)
+  await page.getByRole('button', { name: 'CRM-/SaaS-Beispiel mit Kunden-Metrics' }).click()
+  await page.getByTestId('scenario-option-conservative').click()
+  await expect(page.getByTestId('chart-payback')).toHaveText('Nicht erreicht')
+  await page.getByText('Ausgangslage und Zielbild (Pflicht für den Kundenbericht)').click()
+  await page.getByLabel('Erstellt von').fill('Demo Vertrieb')
+  const download = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Kundenbericht (PDF) herunterladen' }).click()
+  const file = await download
+  const path = testInfo.outputPath('scenario-selected-customer-' + testInfo.project.name + '.pdf')
+  await file.saveAs(path)
+  const pdf = await PDFDocument.load(readFileSync(path))
+  expect(pdf.getPageCount()).toBe(4)
+  await expect(page.getByRole('status').filter({ hasText: 'Kundenbericht erstellt.' })).toBeVisible()
 })

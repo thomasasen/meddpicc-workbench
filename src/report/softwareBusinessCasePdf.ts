@@ -1,6 +1,12 @@
 import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf-lib'
 import { summarizeBusinessCase, economicInterpretation, type CaseSummary } from '../domain/businessCase'
 import type { SoftwarePaybackInput } from '../domain/softwarePayback'
+import {
+  compareBusinessScenarios,
+  describeScenarioAssumptions,
+  type BusinessScenarioId,
+  type ScenarioSettings,
+} from '../domain/businessCaseScenarios'
 
 export interface ReportData {
   customer: string
@@ -10,6 +16,8 @@ export interface ReportData {
   targetOutcome?: string
   date: string
   input: SoftwarePaybackInput
+  scenarioSettings?: ScenarioSettings
+  selectedScenario?: BusinessScenarioId
 }
 const PW = 595.28,
   PH = 841.89,
@@ -245,7 +253,8 @@ function footer(pdf: PDFDocument, f: Fonts, customer: string) {
 }
 export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Uint8Array> {
   const c = summarizeBusinessCase(data.input)
-  if (!c) throw new Error('Bitte ungültige Angaben oder Doppelzählungen korrigieren.')
+  const scenarios = compareBusinessScenarios(data.input, data.scenarioSettings)
+  if (!c || !scenarios) throw new Error('Bitte ungültige Angaben, Szenariowerte oder Doppelzählungen korrigieren.')
   const pdf = await PDFDocument.create()
   const f: Fonts = {
     normal: await pdf.embedFont(StandardFonts.Helvetica),
@@ -514,6 +523,44 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
       (c.unverified === 1 ? 'Eine angerechnete Metric ist' : c.unverified + ' angerechnete Metrics sind') +
       ' nicht als kundenseitig geprüft markiert. Der Bericht ist keine unabhängige Prüfung, keine Garantie und kein Freigabesignal.',
     f,
+  )
+  s = page(pdf, f, '06  Szenario- und Sensitivitaetsvergleich')
+  heading(s, 'Wie belastbar ist die Wirtschaftlichkeit?', f, 18)
+  para(s, 'Drei Szenarien auf Basis derselben Monatsrechnung. Die Basiswerte und Eingaben bleiben unveraendert.', f)
+  s.y -= 6
+  for (const scenario of scenarios) {
+    reserve(s, 104)
+    heading(
+      s,
+      scenario.label +
+        ' | ' +
+        (scenario.summary.sustainedBreakEvenMonth === null
+          ? 'Keine Amortisation'
+          : 'Amortisation ab Monat ' + scenario.summary.sustainedBreakEvenMonth),
+      f,
+      12,
+    )
+    field(s, 'Gesamte neue Kosten', euro(scenario.summary.totalCostEur), f)
+    field(s, 'Angerechneter Nutzen', euro(scenario.summary.benefitEur), f)
+    field(s, 'Tiefster Saldo (M' + scenario.summary.lowestMonth + ')', euro(scenario.summary.lowestBalanceEur), f)
+    field(
+      s,
+      'Endsaldo / Delta zur Basis',
+      euro(scenario.summary.netValueEur) + ' / ' + euro(scenario.deltaBalanceEur),
+      f,
+    )
+    field(s, 'ROI (' + scenario.summary.horizon + ' Monate)', percent(scenario.summary.roiPercent), f)
+    para(s, describeScenarioAssumptions(scenario.assumptions), f, 8.5)
+    s.y -= 2
+  }
+  para(
+    s,
+    'Geaendert werden ausschliesslich angerechnete Kunden-Metrics und einmalige Projektkosten. ' +
+      'Lizenz- und Altsystemtermine bleiben unveraendert; verzoegerte Nutzenwirkung verkuerzt keine Vertragslaufzeit. ' +
+      'Die Salden sind keine Zahlungsstrom- oder Liquiditaetsprognose. Unbestaetigte Annahmen bleiben offen. ' +
+      'Illustrative Monate nach dem Modellende zaehlen nicht zu den KPIs.',
+    f,
+    8.7,
   )
   footer(pdf, f, client)
   return pdf.save({ useObjectStreams: false })

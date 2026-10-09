@@ -64,6 +64,14 @@ Im Projektmodus stehen zwei ausdrücklich fiktive Szenarien bereit: die bewährt
 
 Die zugehörige [Demo-Opportunity](examples/demo-opportunity.meddpicc) verwendet dieselbe fiktive Story. Die Legacy-Projektdatei befüllt den eigenständigen Rechner jedoch **nicht automatisch**; ROI in Prozent wird ebenfalls nicht berechnet.
 
+### Business-Case-Stresstest – Economic-Buyer-Szenarien (PR #59, 10.10.2026)
+
+**Im Feature-Branch, nicht in `main`:** [PR #59](https://github.com/thomasasen/meddpicc-workbench/pull/59). Die Software-Payback-Engine nutzt weiterhin die V4-Basisrechnung. Neu sind ein konservativer und ein optimistischer Fall mit einzeln editierbaren Änderungen bei Kundennutzen, Einmalkosten und Nutzenverzögerung. Ausgewählte Variante, KPI-Zusammenfassung, V4-Wertverlauf und Kunden-PDF basieren auf derselben Monatsrechnung; die Basis-Eingaben bleiben unverändert. Kündigungs- und Lizenztermine ändern sich nicht automatisch.
+
+- Im Abschnitt **„Wie belastbar ist die Wirtschaftlichkeit?“** werden Amortisation, Endsaldo und Abweichung für alle drei Fälle ausgewiesen. Die V4-Fortführung wird für den aktiven Fall separat und nur unter erfüllten Bedingungen dargestellt.
+- **Kundenbericht 4 Seiten** einschließlich übersichtlichem Szenariovergleich; **Finance-Anhang** mit vollständiger Basis-Herleitung und eigenem Sensitivitätskapitel. Alle gerenderten Beispielseiten, Original-PDFs und Desktop-/Mobilbilder sind in der [CI-Abnahme](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38003943054) dokumentiert.
+- [Fachliche Herleitung, fünf simulierte EB-Reviews in drei Phasen, gefundene Fehler und visuelle Abnahme](docs/BUSINESS_CASE_SCENARIO_RED_TEAM.md). Szenarien sind keine Prognosewahrscheinlichkeiten; Ergebnisse sind keine Cashflow- oder Liquiditätsrechnung.
+
 ### Quick-Payback-GUI: Feinschliff und Browser-QS (09.10.2026)
 
 - Der Einstieg erfolgt über zwei beschriftete Auswahlflächen: **Schnellberechnung** (drei Werte) oder **Softwareprojekt & Kunden-Metrics** (zeitlicher Verlauf). Der Nutzer wird in der Projektansicht durch **Kosten → Kundennutzen → Ergebnis** geführt.

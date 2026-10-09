@@ -3,6 +3,30 @@ export type MetricTreatment = 'realized' | 'capacity' | 'risk' | 'nonfinancial'
 export type MetricEvidence = 'hypothesis' | 'reference' | 'customer-stated' | 'customer-reviewed'
 export type CostKind = 'one-time' | 'saas' | 'avoided-legacy'
 export type Period = 'monthly' | 'annual'
+/** Szenariorechnung verändert keine Originaleingaben. */
+export interface ScenarioAdjustments {
+  benefitPercent: number
+  oneTimeCostPercent: number
+  benefitDelayMonths: number
+}
+export const BASE_ADJUSTMENTS: Readonly<ScenarioAdjustments> = Object.freeze({
+  benefitPercent: 0,
+  oneTimeCostPercent: 0,
+  benefitDelayMonths: 0,
+})
+export function validScenarioAdjustments(a: ScenarioAdjustments, horizon: number): boolean {
+  return (
+    Number.isFinite(a.benefitPercent) &&
+    a.benefitPercent >= -100 &&
+    a.benefitPercent <= 200 &&
+    Number.isFinite(a.oneTimeCostPercent) &&
+    a.oneTimeCostPercent >= -100 &&
+    a.oneTimeCostPercent <= 200 &&
+    Number.isInteger(a.benefitDelayMonths) &&
+    a.benefitDelayMonths >= 0 &&
+    a.benefitDelayMonths <= horizon
+  )
+}
 
 export interface SoftwareCost {
   id: string
@@ -179,8 +203,13 @@ function active(cost: SoftwareCost, month: number): boolean {
   return month >= cost.startMonth && (cost.endMonth === undefined || month <= cost.endMonth)
 }
 
-export function calculateSoftwarePayback(input: SoftwarePaybackInput): SoftwarePaybackResult {
+export function calculateSoftwarePayback(
+  input: SoftwarePaybackInput,
+  adjustments: ScenarioAdjustments = BASE_ADJUSTMENTS,
+): SoftwarePaybackResult {
   const issues: string[] = []
+  if (!validScenarioAdjustments(adjustments, input.horizonMonths))
+    issues.push('Ungültige Szenarioparameter: Prozentwerte -100 bis +200, Nutzenverzögerung innerhalb des Horizonts.')
   if (input.horizonMonths !== 36 && input.horizonMonths !== 60)
     issues.push('Betrachtungshorizont muss 36 oder 60 Monate sein.')
   if (input.costs.length > 100 || input.metrics.length > 100)
@@ -218,7 +247,12 @@ export function calculateSoftwarePayback(input: SoftwarePaybackInput): SoftwareP
 
   const countedMetrics = input.metrics
     .filter((m) => m.included && m.treatment === 'realized' && m.formula !== 'risk' && m.formula !== 'qualitative')
-    .map((m) => ({ id: m.id, name: m.name, annualEur: annualMetricPotential(m) ?? 0, evidence: m.evidence }))
+    .map((m) => ({
+      id: m.id,
+      name: m.name,
+      annualEur: (annualMetricPotential(m) ?? 0) * (1 + adjustments.benefitPercent / 100),
+      evidence: m.evidence,
+    }))
   const includedIds = new Set(countedMetrics.map((m) => m.id))
   const nonMonetized = input.metrics
     .filter((m) => !includedIds.has(m.id))
@@ -246,19 +280,26 @@ export function calculateSoftwarePayback(input: SoftwarePaybackInput): SoftwareP
     let metricBenefitEur = 0
     for (const cost of input.costs) {
       if (!active(cost, month)) continue
-      const value = cost.kind === 'one-time' ? (month === cost.startMonth ? cost.amountEur : 0) : euroPerMonth(cost)
+      const value =
+        cost.kind === 'one-time'
+          ? month === cost.startMonth
+            ? cost.amountEur * (1 + adjustments.oneTimeCostPercent / 100)
+            : 0
+          : euroPerMonth(cost)
       if (cost.kind === 'avoided-legacy') avoidedLegacyEur += value
       else newCostEur += value
     }
     for (const metric of input.metrics) {
+      // Kundennutzen verzögert sich; Lizenzkosten und Altsystemabschaltungen nicht.
+      const effectiveMonth = month - adjustments.benefitDelayMonths
       if (
         !includedIds.has(metric.id) ||
-        month < metric.startMonth ||
-        (metric.endMonth !== undefined && month > metric.endMonth)
+        effectiveMonth < metric.startMonth ||
+        (metric.endMonth !== undefined && effectiveMonth > metric.endMonth)
       )
         continue
-      const share = Math.min(1, (month - metric.startMonth + 1) / metric.rampMonths)
-      metricBenefitEur += ((annualMetricPotential(metric) ?? 0) / 12) * share
+      const share = Math.min(1, (effectiveMonth - metric.startMonth + 1) / metric.rampMonths)
+      metricBenefitEur += ((annualMetricPotential(metric) ?? 0) / 12) * share * (1 + adjustments.benefitPercent / 100)
     }
     const totalBenefitEur = avoidedLegacyEur + metricBenefitEur
     const netEur = totalBenefitEur - newCostEur
@@ -269,7 +310,7 @@ export function calculateSoftwarePayback(input: SoftwarePaybackInput): SoftwareP
   }
 
   // Ohne jemals erlittene negative Nettoposition wird kein "zurückverdienter" Aufwand behauptet.
-  const hadCost = input.costs.some((c) => c.kind !== 'avoided-legacy' && c.amountEur > 0)
+  const hadCost = months.some((m) => m.newCostEur > 0)
   let firstBreakEvenMonth: number | null = null
   if (hadCost && benefitTotalEur > 0) {
     const wasNegative = months.some((m) => m.cumulativeEur < -EPS)

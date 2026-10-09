@@ -15,7 +15,7 @@ const input = () => ({
 })
 
 describe('Kundenbericht - kompakte Executive-Ausgabe', () => {
-  it('erstellt genau drei A4-Seiten für das fiktive CRM-Beispiel', async () => {
+  it('erstellt genau vier A4-Seiten für das fiktive CRM-Beispiel', async () => {
     const bytes = await buildCustomerBusinessCasePdf(input())
     const pdf = await PDFDocument.load(bytes)
     expect(
@@ -23,7 +23,7 @@ describe('Kundenbericht - kompakte Executive-Ausgabe', () => {
         .map((n) => String.fromCharCode(n))
         .join(''),
     ).toBe('%PDF-')
-    expect(pdf.getPageCount()).toBe(3)
+    expect(pdf.getPageCount()).toBe(4)
     expect(pdf.getTitle()).toContain('CRM-Modernisierung')
     expect(pdf.getSubject()).toContain('Kundenbericht')
     for (const page of pdf.getPages()) {
@@ -52,14 +52,14 @@ describe('Kundenbericht - kompakte Executive-Ausgabe', () => {
     const negative = exampleSoftwareProject()
     negative.metrics[0]!.annualAmountEur = 0
     const bad = await PDFDocument.load(await buildCustomerBusinessCasePdf({ ...input(), input: negative }))
-    expect(bad.getPageCount()).toBe(3)
+    expect(bad.getPageCount()).toBe(4)
 
     negative.costs = []
     const free = await PDFDocument.load(await buildCustomerBusinessCasePdf({ ...input(), input: negative }))
-    expect(free.getPageCount()).toBe(3)
+    expect(free.getPageCount()).toBe(4)
   })
 
-  it('hält den Kundenbericht auch bei 60 Monaten und vielen Metrics auf drei Seiten', async () => {
+  it('hält den Kundenbericht auch bei 60 Monaten und vielen Metrics auf vier Seiten', async () => {
     const demo = createCrmSaasDemo()
     demo.horizonMonths = 60
     const extra = Array.from({ length: 12 }, (_, i) => ({
@@ -77,6 +77,6 @@ describe('Kundenbericht - kompakte Executive-Ausgabe', () => {
         input: demo,
       }),
     )
-    expect(report.getPageCount()).toBe(3)
+    expect(report.getPageCount()).toBe(4)
   })
 })
