@@ -46,6 +46,10 @@ function draw(p: PDFPage, v: string, x: number, y: number, size: number, font: P
   if (width !== undefined) while (t.length && font.widthOfTextAtSize(t, size) > width) t = t.slice(0, -1)
   p.drawText(t, { x, y, size, font, color })
 }
+function drawRight(p: PDFPage, v: string, right: number, y: number, size: number, font: PDFFont, color = navy) {
+  const txt = safe(v).replace(/\s+/g, ' ')
+  draw(p, txt, right - font.widthOfTextAtSize(txt, size), y, size, font, color)
+}
 function wrap(s: string, font: PDFFont, size: number, width: number): string[] {
   const output: string[] = []
   for (const para of safe(s).split('\n')) {
@@ -214,7 +218,7 @@ function line(s: State, label: string, value: string, f: Fonts) {
     height = Math.max(20, rows.length * 12 + 5)
   reserve(s, height)
   for (let i = 0; i < rows.length; i++) draw(s.p, rows[i]!, L + 8, s.y - i * 12, 9, f.normal)
-  draw(s.p, value, R - 176, s.y, 9, f.bold, navy, 174)
+  drawRight(s.p, value, R - 8, s.y, 9, f.bold)
   s.p.drawLine({
     start: { x: L, y: s.y - height + 7 },
     end: { x: R, y: s.y - height + 7 },
@@ -227,7 +231,7 @@ function tableHead(s: State, f: Fonts, one = 'Kosten- oder Nutzenblock', two = '
   reserve(s, 31 + 22)
   s.p.drawRectangle({ x: L, y: s.y - 7, width: R - L, height: 24, color: light })
   draw(s.p, one, L + 7, s.y + 1, 9, f.bold)
-  draw(s.p, two, R - 176, s.y + 1, 9, f.bold)
+  drawRight(s.p, two, R - 8, s.y + 1, 9, f.bold)
   s.y -= 31
 }
 function footer(pdf: PDFDocument, f: Fonts, customer: string) {
@@ -436,7 +440,8 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
         m.startMonth +
         ' | Ramp-up ' +
         m.rampMonths +
-        ' Monate | Quelle: ' +
+        (m.rampMonths === 1 ? ' Monat' : ' Monate') +
+        ' | Quelle: ' +
         (evidenceNames[m.evidence] ?? m.evidence) +
         ' | Gruppe: ' +
         m.group,
@@ -476,9 +481,9 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
       cols()
     }
     draw(s.p, String(m.month), L + 7, s.y, 8.4, f.normal)
-    draw(s.p, euro(m.costEur), L + 99, s.y, 8.4, f.normal, navy, 127)
-    draw(s.p, euro(m.benefitEur), L + 231, s.y, 8.4, f.normal, navy, 120)
-    draw(s.p, euro(m.balanceEur), L + 358, s.y, 8.4, f.bold, m.balanceEur >= 0 ? green : navy, 138)
+    drawRight(s.p, euro(m.costEur), L + 214, s.y, 8.4, f.normal)
+    drawRight(s.p, euro(m.benefitEur), L + 349, s.y, 8.4, f.normal)
+    drawRight(s.p, euro(m.balanceEur), R - 8, s.y, 8.4, f.bold, m.balanceEur >= 0 ? green : navy)
     s.p.drawLine({ start: { x: L, y: s.y - 6 }, end: { x: R, y: s.y - 6 }, thickness: 0.5, color: border })
     s.y -= 22
   }
