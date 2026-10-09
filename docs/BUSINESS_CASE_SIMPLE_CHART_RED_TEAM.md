@@ -80,3 +80,31 @@ Der Nutzer möchte die rot/grünen Flächen zurück und eine visuell hochwertige
 - Lesbarkeit und Farben in Desktop/Mobile sowie A4-Originalseiten manuell kontrollieren, fehlende Amortisation und wechselnde Vorzeichen durch Unit-Tests abdecken.
 
 Die Review-Rollen sind weiterhin **simuliert**; es gab weder Autoreninterviews noch Gespräche mit fünf realen Economic Buyern.
+
+
+## V4: Bedingte Fortführung nach Modellende, 10.10.2026
+
+**Anlass:** Das offene Diagrammende lenkt den Blick stärker auf die lange negative Investitionsphase als auf den möglichen wirtschaftlichen Nutzen nach der Amortisation. Die rote Fläche bleibt korrekt, aber der grüne Verlauf soll nach Erreichen des Break-even sichtbar und als *Illustration* weitergeführt werden.
+
+**Evidenzbasis, keine Interviews:** Andy Whytes M1/M2- und Economic-Buyer-Grundsätze sowie Lahoutifards Payback-Argumentation sind die fachliche Leitplanke. Ergänzend empfehlen die [IBCS-Standards](https://www.ibcs.com/standards/page/4/) eine klar unterscheidbare Kennzeichnung von Plan- und Forecastdaten. Eine [experimentelle Bank-of-England-Studie von 2026](https://www.bankofengland.co.uk/working-paper/2026/anchors-aweigh-the-effect-of-communicating-forecast-uncertainty) zeigt für Prognosekommunikation in anderen Kontexten, dass visuelle Unsicherheitskennzeichnung verständlich sein und Reputation vor irreführenden Ankern schützen kann. **Diese Studie untersucht keine B2B-Softwarekäufer und belegt keine höhere Abschlussquote.** Es wurden keine fünf realen Economic Buyer befragt.
+
+### Fünf weitere simulierte Perspektiven
+
+| Rolle | Einwand | Gestalterische/technische Antwort |
+| --- | --- | --- |
+| CFO | „Woher kommt diese Entwicklung nach Monat 36? Sind die Monatskosten darin enthalten?“ | Reine mathematische Fortführung des **monatlichen Nettobeitrags** (Vorteile abzüglich Kosten) der letzten drei Modellmonate. Nur bei positivem Endsaldo und positiven, weitgehend stabilen letzten drei Beiträgen. Kein zusätzlicher Nutzen und keine Liquiditäts- oder Budgetaussage. |
+| CEO | „Was bringt der erreichte Ausgleich danach?“ | Deutlich grün gestrichelte steigende Linie mit leichter grüner Fläche; keine neue Kennzahl, die mit dem berechneten Endsaldo verwechselt werden könnte. |
+| CIO | „Steigen SaaS-Gebühren oder Vertragskosten nach dem Modellende?“ | Genau deshalb ist die Fortschreibung **bedingt**. Sie findet nicht statt, wenn sich der Schluss-Nettobeitrag im Modell bereits unstet entwickelt. Die echte Vertragsfortschreibung muss vor einer Kundenentscheidung separat geprüft werden. |
+| COO | „Sind Prozesseinsparungen dauerhaft realisierbar?“ | Unbestätigte Metrics bleiben im PDF explizit ausgewiesen. Die Fortführung basiert ausschließlich auf dem bereits kalkulierten Nettobeitrag und darf nicht als validierter operativer Effekt bezeichnet werden. |
+| Geschäftsbereichsleiter mit Budgethoheit | „Wie unterscheide ich sicher die Rechnung und die Geschichte darüber?“ | Blau durchgezogene Linie bis zum Modellhorizont, **grün gestrichelte** anschließende Illustration; direkte Formulierung „Beispiel bei unverändertem monatlichem Nettobeitrag“. Kein zweiter Break-even und keine unbestätigten kumulierten Ist-Ergebnisse. |
+
+### Rechenregel und Negativfälle
+
+- Beim 36-Monats-Modell maximal 6 illustrative Folgemonate, beim 60-Monats-Modell maximal 12.
+- Monatlicher Beitrag = arithmetischer Mittelwert der drei letzten **inkrementellen** Monatssalden, jeweils aus der vorhandenen Monatsengine. Die Werte müssen positiv sein und höchstens 15 % vom Mittel abweichen.
+- Wenn der wirtschaftliche Saldo am Modellende ≤ 0 ist, die letzten Beiträge sinken/wechseln, die Monatsfolge Lücken enthält oder die Daten nicht endlich sind: **keine Fortführung**.
+- Die Illustration nutzt denselben Maßstab wie der berechnete Verlauf, wird **nicht** den echten 36-/60-Monats-KPIs oder dem Finance-Ergebnis hinzugerechnet und wird nicht als statistische Prognose oder garantierter Gewinn bezeichnet.
+- Web und PDF nutzen dieselbe Datenfunktion `illustrativeBalanceContinuation`. Die visuellen Flächen werden an der Nulllinie getrennt, der anschließende Bereich ist nur bei gültiger Bedingung grün eingefärbt.
+- Tests für konstanten Endbeitrag, schwankende/negative Werte, Lücken, fehlenden positiven Endsaldo, 36/60 Monate, tatsächlichen Browser-Screenshot und das A4-PDF-Rendering.
+
+**Freigabekriterium:** Die Linienfortsetzung muss auf den tatsächlichen Desktop-, Mobil- und PDF-Originalen klar als bedingtes Beispiel erkennbar sein. Keine persönliche Freigabe durch Whyte, Lahoutifard oder Economic Buyer wird behauptet. Kundengespräche können erst mit echten, vom Nutzer benannten Teilnehmern organisiert werden.
