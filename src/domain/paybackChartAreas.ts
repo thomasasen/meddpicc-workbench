@@ -13,12 +13,7 @@ export function balanceChartAreas(points: readonly BalancePoint[]): BalanceArea[
     if (a.balanceEur === 0 && b.balanceEur === 0) return
     areas.push({
       kind: a.balanceEur > 0 || b.balanceEur > 0 ? 'positive' : 'negative',
-      corners: [
-        { month: a.month, balanceEur: 0 },
-        a,
-        b,
-        { month: b.month, balanceEur: 0 },
-      ],
+      corners: [{ month: a.month, balanceEur: 0 }, a, b, { month: b.month, balanceEur: 0 }],
     })
   }
   for (let i = 1; i < points.length; i++) {

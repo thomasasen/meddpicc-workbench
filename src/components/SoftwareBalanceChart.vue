@@ -91,16 +91,15 @@ const accessibleDescription = computed(() => {
         fill="#f8fafc"
         data-testid="chart-unmodelled-space"
       />
-      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop + 17" text-anchor="middle" class="chart-future">
-        Danach keine
-      </text>
-      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop + 30" text-anchor="middle" class="chart-future">
-        Berechnung
-      </text>
+      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop + 17" text-anchor="middle" class="chart-future">Danach keine</text>
+      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop + 30" text-anchor="middle" class="chart-future">Berechnung</text>
 
       <g v-for="tick in moneyTicks" :key="'eur-' + tick">
         <line
-          :x1="x0" :x2="x1" :y1="y(tick)" :y2="y(tick)"
+          :x1="x0"
+          :x2="x1"
+          :y1="y(tick)"
+          :y2="y(tick)"
           :stroke="tick === 0 ? '#64748b' : '#dce5ed'"
           :stroke-width="tick === 0 ? 1.6 : 0.85"
           :stroke-dasharray="tick === 0 ? '5 5' : undefined"
@@ -115,7 +114,8 @@ const accessibleDescription = computed(() => {
       <line :x1="x0" :x2="x1" :y1="yBottom" :y2="yBottom" stroke="#92a1b3" stroke-width="1" />
 
       <polygon
-        v-for="(area, i) in filledAreas" :key="'area-' + i"
+        v-for="(area, i) in filledAreas"
+        :key="'area-' + i"
         :points="area.corners.map((p) => x(p.month).toFixed(2) + ',' + y(p.balanceEur).toFixed(2)).join(' ')"
         :fill="area.kind === 'negative' ? '#f5b8b5' : '#a7dfcb'"
         :fill-opacity="0.42"
@@ -237,7 +237,12 @@ const accessibleDescription = computed(() => {
     sans-serif;
   fill: #53677d;
 }
-.chart-future { font: 10px system-ui, sans-serif; fill: #64748b; }
+.chart-future {
+  font:
+    10px system-ui,
+    sans-serif;
+  fill: #64748b;
+}
 .chart-tooltip {
   font:
     700 12px system-ui,

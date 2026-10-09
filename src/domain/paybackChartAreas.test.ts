@@ -22,13 +22,38 @@ describe('Balance-Flächen und Achsen', () => {
     }
   })
   it('unterstützt reine Vorzeichenbereiche und Nullwerte', () => {
-    expect(balanceChartAreas([{ month: 0, balanceEur: 0 }, { month: 1, balanceEur: 0 }])).toEqual([])
-    expect(balanceChartAreas([{ month: 0, balanceEur: 0 }, { month: 1, balanceEur: 10 }])[0]!.kind).toBe('positive')
-    expect(balanceChartAreas([{ month: 0, balanceEur: -10 }, { month: 1, balanceEur: 0 }])[0]!.kind).toBe('negative')
+    expect(
+      balanceChartAreas([
+        { month: 0, balanceEur: 0 },
+        { month: 1, balanceEur: 0 },
+      ]),
+    ).toEqual([])
+    expect(
+      balanceChartAreas([
+        { month: 0, balanceEur: 0 },
+        { month: 1, balanceEur: 10 },
+      ])[0]!.kind,
+    ).toBe('positive')
+    expect(
+      balanceChartAreas([
+        { month: 0, balanceEur: -10 },
+        { month: 1, balanceEur: 0 },
+      ])[0]!.kind,
+    ).toBe('negative')
   })
   it('weist ungültige oder unsortierte Daten zurück', () => {
-    expect(() => balanceChartAreas([{ month: 2, balanceEur: 1 }, { month: 1, balanceEur: -1 }])).toThrow('chronologisch')
-    expect(() => balanceChartAreas([{ month: 0, balanceEur: 1 }, { month: 1, balanceEur: Infinity }])).toThrow('endlich')
+    expect(() =>
+      balanceChartAreas([
+        { month: 2, balanceEur: 1 },
+        { month: 1, balanceEur: -1 },
+      ]),
+    ).toThrow('chronologisch')
+    expect(() =>
+      balanceChartAreas([
+        { month: 0, balanceEur: 1 },
+        { month: 1, balanceEur: Infinity },
+      ]),
+    ).toThrow('endlich')
   })
   it('zeigt rechts nur Achsenraum, keine zusätzlichen berechneten Monate', () => {
     expect(chartDisplayEnd(36)).toBe(42)

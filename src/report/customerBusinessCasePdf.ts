@@ -166,7 +166,7 @@ function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
     y: bottom,
     width: right - px(c.horizon) - 4,
     height: top - bottom,
-    color: rgb(0.972, 0.980, 0.988),
+    color: rgb(0.972, 0.98, 0.988),
   })
   write(p, 'KEINE', px(c.horizon) + 11, top - 14, 6.3, f.regular, muted, 55)
   write(p, 'PROGNOSE', px(c.horizon) + 11, top - 24, 6.3, f.regular, muted, 55)
