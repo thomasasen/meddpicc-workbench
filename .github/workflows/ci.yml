@@ -129,8 +129,13 @@ jobs:
           pdftoppm -f 3 -l 3 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-decision
           pdftotext -layout "$customer" test-results/rendered/business-case-customer.txt
           grep -q 'Ihre Investition im Überblick' test-results/rendered/business-case-customer.txt
-          grep -q 'Kosten und Nutzen im direkten Vergleich' test-results/rendered/business-case-customer.txt
-          grep -q 'Wann erreicht der Nutzen die Kosten' test-results/rendered/business-case-customer.txt
+          grep -q 'Wann rechnet sich Ihr Vorhaben' test-results/rendered/business-case-customer.txt
+          grep -q 'Tiefster rechnerischer Saldo' test-results/rendered/business-case-customer.txt
+          grep -q 'Wirtschaftlicher Ausgleich' test-results/rendered/business-case-customer.txt
+          if grep -q 'Kosten und Nutzen im direkten Vergleich' test-results/rendered/business-case-customer.txt; then
+            echo "::error::Alte Balkengrafik im Kunden-Summary gefunden."
+            exit 1
+          fi
           grep -q 'So entsteht der wirtschaftliche Nutzen' test-results/rendered/business-case-customer.txt
           grep -q 'Die nächsten Schritte für Ihr Vorhaben' test-results/rendered/business-case-customer.txt
           if grep -Eiq 'Economic Buyer|Champion|Verkäuferannahme|MEDDPICC|keine Freigabe|Kunden-Metric' test-results/rendered/business-case-customer.txt; then
