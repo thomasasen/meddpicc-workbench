@@ -25,3 +25,16 @@ Stand: 09.10.2026. **Noch kein Merge auf main.**
 
 ## Grenzen
 Der Kundenbericht ist eine undiskontierte wirtschaftliche Modellrechnung und kein DCF, NPV, IRR, Steuer- oder Zahlungsstrommodell. Eine Entscheidungsvorlage aus Verkäuferannahmen ist ausdrücklich als unbestätigt bezeichnet. Der Finance-Anhang dokumentiert mehr Detail als der Kundenbericht, ersetzt aber keine individuelle Prüfung durch den Kunden.
+
+
+## Tatsächliche technische und visuelle Abnahme (09.10.2026)
+
+- [CI #37932947525](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37932947525): **SUCCESS**, 250 Vitest-Tests in 34 Dateien, 101 Playwright-Tests bestanden, 1 übersprungen. Prettier, ESLint, TypeScript-/Vite-Build sowie Pages-Build-Integrität erfolgreich.
+- Browserprüfung: Beide echten PDF-Downloads auf Desktop/Mobile erfolgreich. Kundenbericht genau **3 A4-Seiten**, Finance-Bericht beim fiktiven CRM-/SaaS-Beispiel **7 A4-Seiten**; PDF-Signatur und A4-Maße geprüft.
+- Der PDF-Rendering-Schritt (pdftoppm) hat alle drei Kundenberichtseiten erzeugt und per pdftotext relevante Kapiteltexte nachgewiesen.
+- **Originale manuell betrachtet:** [Management-Seite](review-screenshots/business-case-customer-cover.png), [Kosten/Nutzen-Seite](review-screenshots/business-case-customer-economics.png), [Validierungsseite](review-screenshots/business-case-customer-decision.png), zusätzlich [Finance-Übersicht](review-screenshots/business-case-report-finance.png) und [Finance-Metrics](review-screenshots/business-case-report-metrics.png). Keine offensichtlichen Textüberlagerungen, Randüberschreitungen oder fehlerhaften Zahlenausrichtungen im fiktiven CRM-Referenzszenario.
+- Das im Browser vorangegangene Szenario mit fehlendem Kunden- und Verfassernamen blockiert jetzt den Export. Es wird nicht mehr als scheinbar fertiger Kundenbericht mit „Nicht angegeben“ ausgegeben.
+- Negativer Business Case, Nullkosten, 60 Monate, lange Ausgangssituationen und viele zusätzliche Metrics sind als Struktur-/Unit-Regression abgedeckt. Eine eigene visuelle Bildabnahme jeder dieser Extremkombinationen steht außerhalb dieses Testlaufs.
+- Nicht umgesetzt: echte persönliche Review-/Autorenfreigabe, DCF-Kapitalwert, versteckte Anrechnung von Kapazität und Risiko, Backend oder Cloud-Persistenz.
+
+**Freigabestatus:** Technisch und visuell im fiktiven Standardfall abgenommen, aber **nicht nach main gemergt**. Benutzerabnahme bleibt erforderlich.
