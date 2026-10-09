@@ -178,7 +178,7 @@ test('Software Payback: responsive, direkte Navigation und Tastatur', async ({ p
   await expect(page).toHaveURL(/meddpicc-workbench\/#\//)
 })
 
-test('Business Case: farbcodierte Chart-Markierungen und echtes mehrseitiges PDF', async ({ page }, testInfo) => {
+test('Business Case: eigenständiger Kundengrafik-PDF und Finance-Anhang', async ({ page }, testInfo) => {
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
   await projectMode(page)
@@ -190,31 +190,40 @@ test('Business Case: farbcodierte Chart-Markierungen und echtes mehrseitiges PDF
   await expect(chart.locator('text.chart-min')).toBeVisible()
   await chart.screenshot({ path: testInfo.outputPath('business-case-chart-' + testInfo.project.name + '.png') })
 
-  await page.getByText('Ausgangslage und Zielbild für den Bericht (optional)').click()
+  await page.getByText('Ausgangslage und Zielbild (Pflicht für den Kundenbericht)').click()
   await expect(page.getByLabel('Ausgangslage / Business Pain')).toHaveValue(/Fiktive Ausgangslage/)
   await expect(page.getByLabel('Erwartetes Zielbild')).toHaveValue(/Fiktives Zielbild/)
   const customer = page.getByLabel('Kunde / Unternehmen')
   await expect(customer).toHaveValue('Beispielwerke Industrie GmbH')
   await customer.fill('Beispielwerke Industrie GmbH')
-  await page.getByLabel('Erstellt von (optional)').fill('Demo Vertrieb')
+  await page.getByLabel('Erstellt von').fill('Demo Vertrieb')
   const download = page.waitForEvent('download')
-  await page.getByRole('button', { name: /Business-Case-Bericht \(PDF\) herunterladen/ }).click()
+  await page.getByRole('button', { name: 'Kundenbericht (PDF) herunterladen' }).click()
   const pdfFile = await download
   expect(pdfFile.suggestedFilename()).toContain('.pdf')
-  const path = testInfo.outputPath('business-case-qa-' + testInfo.project.name + '.pdf')
+  expect(pdfFile.suggestedFilename()).toContain('kundenbericht-')
+  const path = testInfo.outputPath('business-case-customer-' + testInfo.project.name + '.pdf')
   await pdfFile.saveAs(path)
   const bytes = readFileSync(path)
   expect(bytes.subarray(0, 5).toString()).toBe('%PDF-')
-  expect(bytes.byteLength).toBeGreaterThan(13000)
+  expect(bytes.byteLength).toBeGreaterThan(7000)
   const parsed = await PDFDocument.load(bytes)
-  // Im Referenzszenario darf die Management-Warnung keine verwaiste Extraseite erzeugen.
-  expect(parsed.getPageCount()).toBe(7)
+  expect(parsed.getPageCount()).toBe(3)
   expect(parsed.getTitle()).toContain('CRM & Service Transformation')
   for (const pdfPage of parsed.getPages()) {
     expect(pdfPage.getWidth()).toBeCloseTo(595.28, 1)
     expect(pdfPage.getHeight()).toBeCloseTo(841.89, 1)
   }
-  await expect(page.getByRole('status').filter({ hasText: 'PDF-Bericht erstellt.' })).toBeVisible()
+  await expect(page.getByRole('status').filter({ hasText: 'Kundenbericht erstellt.' })).toBeVisible()
+  const finance = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Finance-Anhang (PDF) herunterladen' }).click()
+  const financeFile = await finance
+  expect(financeFile.suggestedFilename()).toContain('finance-anhang-')
+  const financePath = testInfo.outputPath('business-case-qa-' + testInfo.project.name + '.pdf')
+  await financeFile.saveAs(financePath)
+  const financePdf = await PDFDocument.load(readFileSync(financePath))
+  expect(financePdf.getPageCount()).toBeGreaterThanOrEqual(5)
+  await expect(page.getByRole('status').filter({ hasText: 'Finance-Anhang erstellt.' })).toBeVisible()
   expect(errors).toEqual([])
 })
 
@@ -229,5 +238,27 @@ test('Business Case: ROI und Report blockiert bei Doppelzählung', async ({ page
   await second.getByLabel('In den Payback einrechnen').check()
   await second.getByLabel('Wie wird der EUR-Nutzen tatsächlich realisiert?').fill('Hypothetischer Doppelwert')
   await expect(page.getByText('Mögliche Doppelzählung', { exact: false })).toBeVisible()
-  await expect(page.getByRole('button', { name: /Business-Case-Bericht \(PDF\)/ })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Kundenbericht (PDF) herunterladen' })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Finance-Anhang (PDF) herunterladen' })).toHaveCount(0)
+})
+
+test('Kundenbericht: Pflichtangaben schützen vor Platzhalter-PDF', async ({ page }) => {
+  await projectMode(page)
+  await page.getByRole('button', { name: 'Einfaches Beispiel laden' }).click()
+  await page.getByRole('button', { name: 'Kundenbericht (PDF) herunterladen' }).click()
+  await expect(
+    page.getByRole('status').filter({ hasText: 'bitte Kunde, Projekt und Verfasser angeben.' }),
+  ).toBeVisible()
+  await page.getByLabel('Kunde / Unternehmen').fill('Musterunternehmen GmbH')
+  await page.getByLabel('Erstellt von').fill('Vertrieb')
+  await page.getByRole('button', { name: 'Kundenbericht (PDF) herunterladen' }).click()
+  await expect(
+    page.getByRole('status').filter({ hasText: 'bitte Ausgangssituation und angestrebtes Ergebnis ergänzen.' }),
+  ).toBeVisible()
+  await page.getByText('Ausgangslage und Zielbild (Pflicht für den Kundenbericht)').click()
+  await page.getByLabel('Ausgangslage / Business Pain').fill('Aufwändige händische Datennachpflege.')
+  await page.getByLabel('Erwartetes Zielbild').fill('Schnellere Abläufe, weniger manuelle Kosten.')
+  const download = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Kundenbericht (PDF) herunterladen' }).click()
+  expect((await download).suggestedFilename()).toContain('kundenbericht-')
 })
