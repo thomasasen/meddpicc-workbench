@@ -207,7 +207,8 @@ test('Business Case: farbcodierte Chart-Markierungen und echtes mehrseitiges PDF
   expect(bytes.subarray(0, 5).toString()).toBe('%PDF-')
   expect(bytes.byteLength).toBeGreaterThan(13000)
   const parsed = await PDFDocument.load(bytes)
-  expect(parsed.getPageCount()).toBeGreaterThanOrEqual(5)
+  // Im Referenzszenario darf die Management-Warnung keine verwaiste Extraseite erzeugen.
+  expect(parsed.getPageCount()).toBe(7)
   expect(parsed.getTitle()).toContain('CRM & Service Transformation')
   for (const pdfPage of parsed.getPages()) {
     expect(pdfPage.getWidth()).toBeCloseTo(595.28, 1)
