@@ -164,10 +164,6 @@ jobs:
           grep -q 'BERECHNETER VERLAUF: KONSERVATIV' test-results/rendered/selected-conservative.txt
           grep -q 'Nicht erreicht' test-results/rendered/selected-conservative.txt
           grep -q 'Wie belastbar ist die Wirtschaftlichkeit' test-results/rendered/selected-conservative.txt
-          # Kompakte Zweitrenderings sind nur für die zusätzliche visuelle QA vorgesehen.
-          pdftoppm -scale-to 760 -png "$report" test-results/rendered/qa-finance
-          pdftoppm -scale-to 760 -png "$customer" test-results/rendered/qa-customer
-          pdftoppm -scale-to 760 -png "$selected" test-results/rendered/qa-selected
           for name in business-case-report-cover.png business-case-report-finance.png business-case-report-metrics.png business-case-report-method.png business-case-report-scenarios.png business-case-customer-cover.png business-case-customer-economics.png business-case-customer-decision.png business-case-customer-scenarios.png; do
             test -s "test-results/rendered/$name" || exit 1
           done
@@ -263,15 +259,6 @@ jobs:
               exit 1
             fi
             cp "$source" "docs/review-screenshots/$name"
-          done
-          # Temporäre Base64-Previews erlauben die Sichtprüfung über die Text-GitHub-Verbindung.
-          base64 -w0 docs/review-screenshots/business-case-scenarios-desktop-chromium.png > docs/review-screenshots/_qa-scenarios-desktop.b64
-          base64 -w0 docs/review-screenshots/business-case-scenarios-mobile-chromium.png > docs/review-screenshots/_qa-scenarios-mobile.b64
-          base64 -w0 docs/review-screenshots/business-case-customer-scenarios.png > docs/review-screenshots/_qa-pdf-scenarios.b64
-          for png in test-results/rendered/qa-finance-*.png test-results/rendered/qa-customer-*.png test-results/rendered/qa-selected-*.png; do
-            test -s "$png" || { echo "::error::Visueller PDF-Vorschaurender fehlt: $png"; exit 1; }
-            name="$(basename "$png" .png)"
-            base64 -w0 "$png" > "docs/review-screenshots/_qa-$name.b64"
           done
           git add docs/review-screenshots
           if git diff --cached --quiet; then

@@ -39,11 +39,27 @@ Stand: 10.10.2026. **Alle fünf Rollenreviews sind simulierte Prüfperspektiven,
 - Kundenbericht zeigt den ausgewählten wirtschaftlichen Verlauf und einen Vergleich aller drei Varianten; Finance-Anhang erhält vollständig die Basisrechnung **plus** ein Szenariokapitel.
 - Sämtliche Szenariowerte und Delta-Beträge stammen vom gleichen `CaseSummary`-Ergebnis.
 
-## Phase 3 – nach visueller Abnahme
+## Phase 3 – simulierte Economic-Buyer-Prüfung nach tatsächlicher Sichtabnahme
 
-**Offen bis echte Desktop-/Mobil-Screenshots und alle gerenderten PDF-Seiten vorliegen und betrachtet wurden.** Ein grüner Build oder automatisierte PDF-Textprüfung ersetzt diese Sichtprüfung nicht. Dokumentationsstatus nicht vorwegnehmen.
+**Auch diese fünf Rollen sind Simulationen, keine Kundeninterviews.** Anders als in Phase 1/2 wurden hierbei die durch Playwright tatsächlich aufgenommenen [Desktop](review-screenshots/business-case-scenarios-desktop-chromium.png)- und [Mobilansichten](review-screenshots/business-case-scenarios-mobile-chromium.png) sowie **alle gerenderten PDF-Seiten** betrachtet.
 
-Visuell zu kontrollieren: 375/768/1024/1440 Pixel, Zahlenumbrüche bei negativem Saldo, aktive Karte, Tastaturfokus, Beschriftung „keine Amortisation“, Warnhinweise, ausgewählter Chart einschließlich bedingter Fortführung, Chart-Achsen, PDF-Spalten, Seitenzählung und keine Überschneidung mit Footer.
+| Perspektive (simuliert) | Prüfung anhand der gerenderten Ergebnisse | Entscheidung |
+| --- | --- | --- |
+| CFO | Finance-Anhang: Kosten, Nutzen, ROI-Formel und vollständiger Monatsverlauf. In der ersten visuellen Runde entstand eine nahezu leere Seite 9, die nur einen Disclaimer enthielt. | **Fehler behoben:** geringere Abstände und zusammengeführter Methodiktext, Finance-Demo jetzt genau 8 Seiten. Expliziter Regressionstest statt bloßem Mindestseiten-Test. |
+| CEO | Positiver Verlauf nur im Basisfall/optimistischen Fall, negatives Ergebnis konservativ klar als Verlust gekennzeichnet. Keine drei unlesbaren Linien. | Vergleich bleibt neutral; keine Garantien und kein grüner Positivdruck für den optimistischen Fall. |
+| CIO | Eigenständiger Export des konservativen Falls: Zahlen ändern sich auf den ersten beiden Seiten, die Kurve endet negativ und hat **keine** positive Fortführung. Lizenzkosten wurden nicht verschoben. | Sichtprüfung und Browser-Test bestätigt; die gewählte Variante muss im Deckblatt ausgewiesen bleiben. |
+| COO | Die gesonderte Finance-Seite zu Zeitgewinnen und Risikowerten trägt den Status `NICHT ANGERECHNET`, unabhängig von Szenarioaufschlägen. | Keine nachträgliche Monetarisierung; bewusst offene Wirkungsnachweise. |
+| Geschäftsbereichsleitung | Desktop-Dreiervergleich und mobil gestapelte Karten, Amortisation vorn, Endsaldo darunter; ausgewählte Variante erkennbar, kein horizontales Abschneiden. | Keine drei parallelen Verlaufslinien, zugängliche beschriftete Auswahl statt Dashboard. |
+
+### Tatsächliche Test- und Sichtbefunde
+
+- [GitHub Actions CI #38003943054](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38003943054): **270 Unit-Tests bestanden (38 Dateien), 105 Chromium-Browsertests bestanden, 1 Test übersprungen**. Formatprüfung, Lint (ohne Fehler; weiterhin vorhandene Warnungen), TypeScript/Build und PDF-Render-Gate erfolgreich.
+- Erzeugte und **einzeln betrachtete** Beispiel-PDFs: Kundenbericht Basis **4 A4-Seiten**, Kundenbericht mit ausgewähltem konservativem Verlauf **4 A4-Seiten**, vollständiger Finance-Anhang **8 A4-Seiten**. PDF-Originaldateien sind im GitHub-Actions-Artefakt `business-case-example-pdfs` verfügbar; alle großformatig gerenderten Seiten im Artefakt `ui-qs-screenshots`.
+- [Kundenbericht Vergleichsseite](review-screenshots/business-case-customer-scenarios.png) und [Finance-Szenarioseite](review-screenshots/business-case-report-scenarios.png) wurden zusätzlich in voller Rendergröße überprüft. In der endgültigen Fassung keine erkennbaren Text-Überlagerungen, abgeschnittenen Zahlen, Achsenprobleme oder unnötigen Folgeseiten.
+- Reale Modellwerte der fiktiven CRM-Demo nach 36 Monaten: Basis **42.583,33 €** Endsaldo, Amortisation Monat **35**; konservativ **−271.812,50 €**, **keine Amortisation**; optimistisch **115.541,67 €**, Amortisation Monat **32**. PDFs runden auf volle EUR, berechnet wird weiterhin ohne Rundung.
+- **Bekannte Grenzen der Sichtprüfung:** Erfasste Desktop- und Mobil-Konfigurationen der Playwright-Regression sowie alle PDF-Seiten wurden betrachtet; eine separate manuelle Geräteabnahme für jede Zwischenbreite 768/1024 px ist nicht als eigenständiges Prüfergebnis dokumentiert. Keine externen Economic Buyer haben die Dokumente begutachtet.
+
+**Fazit der Simulation:** Mit denselben Zahlen und ausdrücklich deklarierten Annahmen lässt sich der Negativfall schneller erkennen und zur Investitionsprüfung heranziehen. Eine messbare Verbesserung echter Kaufentscheidungen ist nicht belegt.
 
 ## Bekannte Grenzen und weitere fachliche Fragen
 
