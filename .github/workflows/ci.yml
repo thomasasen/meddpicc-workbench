@@ -47,6 +47,19 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
+      - name: Demo-Dateien formatieren
+        if: startsWith(github.head_ref, 'feature/quick-payback-')
+        run: |
+          npx prettier --write src/data/softwarePaybackDemo.ts src/data/softwarePaybackDemo.test.ts src/data/defaultProject.test.ts src/components/SoftwarePaybackPanel.vue src/views/HomeView.vue tests/e2e/software-payback.spec.ts
+          if git diff --quiet -- src/data src/components/SoftwarePaybackPanel.vue src/views/HomeView.vue tests/e2e/software-payback.spec.ts; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data src/components/SoftwarePaybackPanel.vue src/views/HomeView.vue tests/e2e/software-payback.spec.ts
+          git commit -m "style: format demo examples and tests"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+
       - name: Formatierung prüfen
         run: npm run format:check
 
@@ -118,6 +131,8 @@ jobs:
               software-payback-empty-mobile-chromium.png
               software-payback-result-desktop-chromium.png
               software-payback-result-mobile-chromium.png
+              software-payback-crm-demo-desktop-chromium.png
+              software-payback-crm-demo-mobile-chromium.png
             )
           else
             if [[ "${{ github.head_ref }}" == feature/competition-* ]]; then
