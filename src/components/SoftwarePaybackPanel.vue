@@ -29,13 +29,16 @@ const reportProject = ref('Softwareprojekt')
 const reportAuthor = ref('')
 const reportStatus = ref('')
 const reportDate = ref(new Date().toLocaleDateString('de-DE'))
-const businessCase = computed(() => summarizeBusinessCase({
-  horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value,
-}))
+const businessCase = computed(() =>
+  summarizeBusinessCase({
+    horizonMonths: horizon.value,
+    costs: costs.value,
+    metrics: metrics.value,
+  }),
+)
 const firstBenefitMonth = computed(() => {
-  const active = metrics.value.filter(m => m.included && m.treatment === 'realized')
-    .map(m => m.startMonth)
-  const legacy = costs.value.filter(c => c.kind === 'avoided-legacy' && c.amountEur>0).map(c => c.startMonth)
+  const active = metrics.value.filter((m) => m.included && m.treatment === 'realized').map((m) => m.startMonth)
+  const legacy = costs.value.filter((c) => c.kind === 'avoided-legacy' && c.amountEur > 0).map((c) => c.startMonth)
   const all = active.concat(legacy)
   return all.length ? Math.min(...all) : null
 })
@@ -256,11 +259,13 @@ async function downloadReport() {
   reportStatus.value = 'PDF wird erstellt ...'
   try {
     const bytes = await buildSoftwareBusinessCasePdf({
-      customer: reportCustomer.value, project: reportProject.value,
-      preparedBy: reportAuthor.value, date: reportDate.value,
+      customer: reportCustomer.value,
+      project: reportProject.value,
+      preparedBy: reportAuthor.value,
+      date: reportDate.value,
       input: { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
     })
-    const safeName = reportProject.value.replace(/[^a-z0-9_-]+/gi, '-').slice(0,55) || 'softwareprojekt'
+    const safeName = reportProject.value.replace(/[^a-z0-9_-]+/gi, '-').slice(0, 55) || 'softwareprojekt'
     saveBlob(new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }), 'business-case-' + safeName + '.pdf')
     reportStatus.value = 'PDF-Bericht erstellt.'
   } catch {
@@ -590,7 +595,14 @@ async function downloadReport() {
           </div>
           <div>
             <span>ROI über {{ horizon }} Monate (undiskontiert)</span>
-            <strong data-testid="roi-percent">{{ businessCase?.roiPercent === null ? 'Nicht definiert' : (businessCase?.roiPercent ?? 0).toLocaleString('de-DE', {minimumFractionDigits:1,maximumFractionDigits:1}) + ' %' }}</strong>
+            <strong data-testid="roi-percent">{{
+              businessCase?.roiPercent === null
+                ? 'Nicht definiert'
+                : (businessCase?.roiPercent ?? 0).toLocaleString('de-DE', {
+                    minimumFractionDigits: 1,
+                    maximumFractionDigits: 1,
+                  }) + ' %'
+            }}</strong>
           </div>
           <div>
             <span>Einbezogene Kunden-Metrics</span><strong>{{ plan?.countedMetrics.length ?? 0 }}</strong>
@@ -661,25 +673,32 @@ async function downloadReport() {
             <div>
               <p class="eyebrow">4 · Kundenbericht</p>
               <h3 id="business-case-report-heading">Business Case als PDF herunterladen</h3>
-              <p class="software-muted">Mit echten Eingaben, Kennzahlen, Rechenweg und transparenten Annahmen. Alles bleibt im Browser.</p>
+              <p class="software-muted">
+                Mit echten Eingaben, Kennzahlen, Rechenweg und transparenten Annahmen. Alles bleibt im Browser.
+              </p>
             </div>
           </div>
           <div class="software-fields software-report-fields">
-            <label class="field"><span>Kunde / Unternehmen</span>
-              <input v-model="reportCustomer" type="text" maxlength="120" placeholder="z. B. Muster GmbH"/>
+            <label class="field"
+              ><span>Kunde / Unternehmen</span>
+              <input v-model="reportCustomer" type="text" maxlength="120" placeholder="z. B. Muster GmbH" />
             </label>
-            <label class="field"><span>Projektbezeichnung</span>
-              <input v-model="reportProject" type="text" maxlength="120"/>
+            <label class="field"
+              ><span>Projektbezeichnung</span>
+              <input v-model="reportProject" type="text" maxlength="120" />
             </label>
-            <label class="field"><span>Erstellt von (optional)</span>
-              <input v-model="reportAuthor" type="text" maxlength="120"/>
+            <label class="field"
+              ><span>Erstellt von (optional)</span>
+              <input v-model="reportAuthor" type="text" maxlength="120" />
             </label>
           </div>
           <div class="software-report-actions">
             <button type="button" class="button button-primary button-with-icon" @click="downloadReport">
-              <ArrowDownToLine :size="16" aria-hidden="true"/> Business-Case-Bericht (PDF) herunterladen
+              <ArrowDownToLine :size="16" aria-hidden="true" /> Business-Case-Bericht (PDF) herunterladen
             </button>
-            <span class="software-muted">Management Summary · ROI · Kosten und Metrics · Monatswerte · Quellenstatus</span>
+            <span class="software-muted"
+              >Management Summary · ROI · Kosten und Metrics · Monatswerte · Quellenstatus</span
+            >
           </div>
           <p role="status">{{ reportStatus }}</p>
         </section>
@@ -1208,11 +1227,25 @@ async function downloadReport() {
   border-radius: var(--radius-panel);
   background: var(--color-surface);
 }
-.software-report-head h3 { margin: var(--space-1) 0 var(--space-2); }
-.software-report-actions { display:flex; align-items:center; gap:var(--space-4); flex-wrap:wrap; }
-.software-report-actions .button { gap:var(--space-2); min-height:44px; }
-@media (max-width:560px) {
- .software-report {padding:var(--space-4);}
- .software-report-actions .button {width:100%;}
+.software-report-head h3 {
+  margin: var(--space-1) 0 var(--space-2);
+}
+.software-report-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+.software-report-actions .button {
+  gap: var(--space-2);
+  min-height: 44px;
+}
+@media (max-width: 560px) {
+  .software-report {
+    padding: var(--space-4);
+  }
+  .software-report-actions .button {
+    width: 100%;
+  }
 }
 </style>
