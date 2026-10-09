@@ -56,9 +56,7 @@ const filledAreas = computed(() =>
 )
 const scenarioAreas = computed(() => balanceChartAreas(continuation.value?.points ?? []))
 const scenarioLine = computed(() =>
-  (continuation.value?.points ?? [])
-    .map((p) => x(p.month).toFixed(1) + ',' + y(p.balanceEur).toFixed(1))
-    .join(' '),
+  (continuation.value?.points ?? []).map((p) => x(p.month).toFixed(1) + ',' + y(p.balanceEur).toFixed(1)).join(' '),
 )
 const y = (amount: number) =>
   yBottom - ((amount - bounds.value.min) / (bounds.value.max - bounds.value.min)) * (yBottom - yTop)
@@ -148,7 +146,8 @@ const accessibleDescription = computed(() => {
       />
 
       <polygon
-        v-for="(area, i) in scenarioAreas" :key="'scenario-' + i"
+        v-for="(area, i) in scenarioAreas"
+        :key="'scenario-' + i"
         :points="area.corners.map((p) => x(p.month).toFixed(2) + ',' + y(p.balanceEur).toFixed(2)).join(' ')"
         fill="#83d0b2"
         fill-opacity="0.38"
@@ -290,7 +289,12 @@ const accessibleDescription = computed(() => {
     sans-serif;
   fill: #53677d;
 }
-.chart-disclaimer { font: 11px system-ui, sans-serif; fill: #586c7a; }
+.chart-disclaimer {
+  font:
+    11px system-ui,
+    sans-serif;
+  fill: #586c7a;
+}
 .chart-future {
   font:
     10px system-ui,

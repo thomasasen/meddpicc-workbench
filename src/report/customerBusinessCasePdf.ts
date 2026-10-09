@@ -213,10 +213,10 @@ function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
     })
   }
 
-
   if (continuation) {
     for (const area of balanceChartAreas(continuation.points)) {
-      const path = 'M ' + area.corners.map((point) => px(point.month) + ' ' + (H - py(point.balanceEur))).join(' L ') + ' Z'
+      const path =
+        'M ' + area.corners.map((point) => px(point.month) + ' ' + (H - py(point.balanceEur))).join(' L ') + ' Z'
       p.drawSvgPath(path, { x: 0, y: H, color: rgb(0.33, 0.74, 0.56), opacity: 0.29 })
     }
     for (let i = 1; i < continuation.points.length; i++) {
