@@ -168,8 +168,8 @@ function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
     height: top - bottom,
     color: rgb(0.972, 0.98, 0.988),
   })
-  write(p, 'KEINE', px(c.horizon) + 11, top - 14, 6.3, f.regular, muted, 55)
-  write(p, 'PROGNOSE', px(c.horizon) + 11, top - 24, 6.3, f.regular, muted, 55)
+  write(p, 'KEINE', px(c.horizon) + 11, top + 12, 6.3, f.regular, muted, 55)
+  write(p, 'PROGNOSE', px(c.horizon) + 11, top + 2, 6.3, f.regular, muted, 55)
 
   const axisEuro = (value: number): string => {
     if (value === 0) return '0 EUR'
@@ -198,8 +198,10 @@ function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
 
   for (const area of balanceChartAreas(c.periodMetrics)) {
     const corners = area.corners
-    const path = 'M ' + corners.map((point) => px(point.month) + ' ' + py(point.balanceEur)).join(' L ') + ' Z'
+    const path = 'M ' + corners.map((point) => px(point.month) + ' ' + (H - py(point.balanceEur))).join(' L ') + ' Z'
     p.drawSvgPath(path, {
+      x: 0,
+      y: H,
       color: area.kind === 'negative' ? rgb(0.93, 0.55, 0.52) : rgb(0.43, 0.77, 0.64),
       opacity: 0.29,
     })
