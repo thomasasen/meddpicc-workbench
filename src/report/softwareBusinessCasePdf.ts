@@ -286,7 +286,9 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
   box(
     s,
     'Schätzung, keine Budgetfreigabe: ' +
-      (c.unverified === 1 ? 'Eine angerechnete Kunden-Metric ist' : c.unverified + ' angerechnete Kunden-Metrics sind') +
+      (c.unverified === 1
+        ? 'Eine angerechnete Kunden-Metric ist'
+        : c.unverified + ' angerechnete Kunden-Metrics sind') +
       ' noch nicht als kundenseitig geprüft dokumentiert.',
     f,
   )
