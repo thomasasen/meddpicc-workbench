@@ -65,4 +65,23 @@ Ziel ist ein local-first Software-Investitionsrechner mit Quick-Modus, optionale
 
 ## 6. Prüfprotokoll
 
-Vor endgültiger Bewertung mit echter finaler GitHub-CI, beiden Chromium-Geräteklassen, konkreten Testzahlen, vier neuen Original-Screenshots und verbliebenen Einschränkungen aktualisieren. Keine Testfreigabe ohne erfolgreiche Ausführung behaupten.
+### Nachgewiesene Läufe und Korrekturen
+
+- **Fehlschlag [#37861173184](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37861173184):** Prettier erfolgreich, ESLint fand eine unbenutzte Chart-Konstante; entfernt. Hunderte Vue-HTML-Stilwarnungen waren nicht fatal; `npm run lint` ist nach Korrektur erfolgreich.
+- **Fehlschlag [#37861239043](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37861239043):** 229/230 Unit-Tests bestanden. Ein Test verlangte nach einer 250.000-EUR-Zusatzinvestition eine zweite Amortisation innerhalb von 36 Monaten, obwohl der Saldo in diesem Zeitraum tatsächlich negativ blieb. Testdaten mit 150.000 EUR korrigiert. Die Engine verhielt sich korrekt, die Testannahme war fehlerhaft.
+- **Erster vollständiger Erfolg [#37861337604](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37861337604):** 230 Unit, 91 Browser bestanden, 1 übersprungen. Projektmodus und SVG-/PNG-Downloads per Playwright erfolgreich, Pages-Root synchron und `pages:check` erfolgreich.
+- **Visueller Review:** Nach Öffnen der ersten Originale den zu umfangreichen Leerzustand (leere Grafik und Management-Summary), fehlende visuelle Gruppierung der Projektabschnitte und fehlenden Mobile-Tabellenhinweis korrigiert. SVG/PNG enthalten jetzt zusätzlich Amortisationsmonat und kumulierten Saldo. Optional leere Endmonate lassen sich wieder leeren, ohne einen ungültigen String zu speichern. Die mobile Playwright-Vollseitenaufnahme wurde als CSS-Pixel-Original aufgenommen, weil das erheblich größere Gerätepixel-PNG über den GitHub-Inhalts-Endpunkt nicht vollständig gelesen werden konnte.
+- **Finaler Erfolg [#37862223720](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37862223720)** am 09.10.2026: `npm ci --no-audit --no-fund`, `npm run format:check`, `npm run lint`, `npm test` (**30 Dateien, 230 bestanden**), `npm run build`, `npm run test:e2e` (**91 bestanden, 1 übersprungen**, Desktop- und Mobile-Chromium), Pages-Sync, `npm run pages:check`, Screenshot-Veröffentlichung erfolgreich. Original-PNGs nach dem Review direkt aus dem Feature-Branch geprüft.
+
+### Finale Originalbilder des Projektmodus
+
+| Bild | Pixel | Bildprüfung |
+| --- | --- | --- |
+| [Leerer Desktop-Zustand](review-screenshots/software-payback-empty-desktop-chromium.png) | Chromium Desktop, 1280 px breit | Drei getrennte Abschnitte, keine leere Finanzgrafik mehr, zugängliche Aktionen. |
+| [Ergebnis Desktop](review-screenshots/software-payback-result-desktop-chromium.png) | Chromium Desktop, 1280 px breit | Zwei Kostenpositionen, direkte Kunden-Metric, Payback Monat 18, Formel-/Datenherkunftshinweis und Grafikexport. |
+| [Leerer Mobile-Zustand](review-screenshots/software-payback-empty-mobile-chromium.png) | **393 × 2332** | Einspaltige Darstellung, drei Abschnitte, Aktionen bedienbar, kein Horizontal-Overflow. |
+| [Ergebnis Mobile](review-screenshots/software-payback-result-mobile-chromium.png) | **393 × 6001** | Gut lesbare Eingaben, Monatswert 18, 222.000 EUR kumulierter Saldo bei 36 Monaten, Grafikergebnis, Scrollhinweis für Tabelle und Kunden-Zusammenfassung. |
+
+**Verbleibende fachliche Grenzen:** Jahresgebühren als wirtschaftlicher Monatsaufwand, keine Jahresvorauszahlung-/Cashflow-Terminierung, keine NPV/IRR/Steuerrechnung, keine echte Kundenvalidierung, keine echte Autorenfreigabe. Der Copy-Fehlerzweig ist implementiert; der erfolgreiche Clipboard-Pfad wurde im Chromium Browser verifiziert.
+
+**Merge bleibt gesperrt** bis zur ausdrücklichen visuellen UI-Freigabe und eindeutig erfüllter Nutzerbedingung. Red-Team-Simulation ersetzt keine persönliche Autorenunterschrift.

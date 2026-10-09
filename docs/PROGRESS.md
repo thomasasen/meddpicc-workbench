@@ -3,7 +3,9 @@
 - Feature-Branch: `feature/quick-payback-tool` vom bestätigten Main-Commit `c4e99ec682452c29998f33a128deadd8225c90d3`.
 - Route `/#/tools/quick-payback`: reines lokales Modell mit drei EUR-Werten; 0-/Negativ-Nutzen und null Investition sind gesonderte Zustände, Demo ausdrücklich fiktiv, Kopiertext als Schätzung.
 - [Original-EPUB-Quellenmatrix und zwei simulierte Autoren-Red-Teams](QUICK_PAYBACK_SOURCE_QA.md).
-- Stand: Implementierung im Feature-Branch, technische/visuelle Prüfung und Nutzerfreigabe ausstehend; **kein Merge auf `main`**.
+- **Erweiterung:** `SoftwarePaybackPanel.vue` und `softwarePayback.ts` mit frei ergänzbaren Kosten/Customer Metrics, konservativer Anrechnung, Doppelzählungsgate, zeitlichem SaaS-/Nutzenverlauf, kumuliertem Break-even, zugänglicher Tabelle und SVG/PNG.
+- **Finale Browser-CI:** [#37862223720](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37862223720) erfolgreich: Format, Lint, 230/230 Vitest, TypeScript/Vite, 91/91 Playwright und 1 bestehender Skip, Pages-Sync und pages:check. Vier zusätzliche Desktop-/Mobile-Originalbilder erzeugt und im Review geprüft. Historische Zwischenfehler und Fixes stehen im Red-Team-Protokoll.
+- **Freigabe:** simulierte Fachrollen-Voten sind keine persönlich erteilten Freigaben echter Autoren; Nutzer hat neue sichtbare UI noch nicht ausdrücklich freigegeben. Daher **Draft-PR #53 offen, kein Merge auf `main`**.
 
 ---
 

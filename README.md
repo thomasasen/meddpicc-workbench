@@ -58,6 +58,18 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 - **Checklist → Champion:** zehn fachliche Prüffragen mit Evidenz, Fehlinterpretationen und Next Steps. Häkchen flüchtig, kein Deal-Score und keine Kontakt-/Opportunity-Pflege.
 - [Primärquellenmatrix und simulierte fachliche Red-Teams](docs/CHAMPION_SOURCE_QA.md). Champion Tester, Development Helper und Internal Selling Pack bleiben für T8 geplant.
 
+### Softwareprojekt & Customer Metrics · Quick-Payback-Erweiterung (PR #53)
+
+**Technisch und visuell geprüft im Feature-Branch, noch nicht in `main`.** [CI #37862223720](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37862223720): 230 Unit-Tests, 91 Playwright-Tests bestanden (1 übersprungen), Format/Lint/Build/Pages-Prüfung erfolgreich.
+
+- **Schnellberechnung** bleibt der Standard mit drei EUR-Eingaben. Der zusätzliche Modus **„Softwareprojekt & Kunden-Metrics“** ist nur bei Auswahl sichtbar.
+- Mehrere einmalige Implementierungs-/Migrationskosten, laufende SaaS-Kosten und tatsächlich wegfallende Altsystemkosten; monatlich/jährlich als wirtschaftliche Beträge, nicht als exakte Zahlungsströme.
+- Unbegrenzt im normalen Umfang erweiterbare Metrics (technische Obergrenze 100): direkte EUR-Effekte, Vorgangskosten, Zeit, Conversion/Deckungsbeitrag, Qualität/Fehler und separat ausgewiesene Risiko-/qualitative Metrics.
+- Monatlicher Nutzenstart, Ramp-up, optionaler Endmonat und Datenherkunft. Realisierungsbegründung für angerechnete Metrics; Risiko/Kapazität zählen nicht automatisch als sichere Ersparnis. Wirkungsgruppen blockieren unklare Doppelzählung.
+- Monatliche Simulation über 36 oder 60 Monate, zwei Payback-Zeitpunkte (erste / innerhalb des Horizonts anhaltende Nullpunktüberschreitung), kumulierter EUR-Saldo, zugängliche Monats-Tabelle sowie SVG-/PNG-Grafik und kopierbare Management-Zusammenfassung.
+- [Originalquellen und simuliertes fachübergreifendes Red Team](docs/SOFTWARE_PAYBACK_RED_TEAM.md). Die modellierten Perspektiven sind keine authentischen Empfehlungen oder Freigaben der Buchautoren.
+- [Vier neue Original-Screenshots](docs/review-screenshots/software-payback-result-mobile-chromium.png) in `docs/review-screenshots/`: Projektmodus leer/Ergebnis jeweils Desktop und Mobile. Zusammen mit vier ursprünglichen Quick-Payback-Bildern acht überprüfbare Aufnahmen.
+
 ### Quick Payback – Value & Metrics Tool (T3)
 
 **Implementierung auf `feature/quick-payback-tool`, visuelle/technische Draft-Abnahme offen; kein Merge auf `main`.**

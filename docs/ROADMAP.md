@@ -197,7 +197,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 
 ## Phase T3 – Value & Metrics Tools
 
-**Aktueller Draft-Slice:** Quick Payback auf `feature/quick-payback-tool` (lokales Tool und Quellenprüfung, Merge nur nach ausdrücklicher visueller Nutzerfreigabe). Metric Builder, Cost of Delay und Business Case / Value Bridge bleiben geplant.
+**Aktueller Draft-Slice:** Quick Payback + optionaler Softwareprojekt-/Kunden-Metrics-Modus auf `feature/quick-payback-tool`. Technische CI [#37862223720](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37862223720) erfolgreich, vier zusätzliche Chromium-Abnahmebilder visuell überprüft. Merge erst nach erfüllter Freigabebedingung und ausdrücklicher visueller Nutzerfreigabe; bislang **nicht gemergt**. Metric Builder, Cost of Delay und Business Case / Value Bridge bleiben separate geplante Microtools. Die Quick-Payback-Formelbausteine sind kein eigenständiger vollständiger Metric Builder.
 
 
 Priorität:
