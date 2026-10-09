@@ -52,5 +52,4 @@ describe('defaultProject', () => {
     expect(defaultProject.calculators.businessCase.inputs.annualRecurringCost).toBe(96000)
     expect(defaultProject.calculators.businessCase.customerConfirmed).toBe(false)
   })
-
 })

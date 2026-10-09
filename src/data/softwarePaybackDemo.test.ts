@@ -7,7 +7,9 @@ describe('CRM-/SaaS-Demobeispiel mit Kunden-Metrics', () => {
   it('enthält Einmalinvestitionen, SaaS, wegfallende Bestandskosten und fünf verschiedene Metrics', () => {
     const scenario = createCrmSaasDemo()
     expect(scenario.horizonMonths).toBe(36)
-    expect(scenario.costs.filter((cost) => cost.kind === 'one-time').reduce((sum, c) => sum + c.amountEur, 0)).toBe(480000)
+    expect(scenario.costs.filter((cost) => cost.kind === 'one-time').reduce((sum, c) => sum + c.amountEur, 0)).toBe(
+      480000,
+    )
     expect(scenario.costs.find((cost) => cost.kind === 'saas')?.amountEur).toBe(8000)
     expect(scenario.costs.find((cost) => cost.kind === 'avoided-legacy')?.startMonth).toBe(10)
     expect(scenario.metrics.map((metric) => metric.formula)).toEqual([
@@ -26,7 +28,9 @@ describe('CRM-/SaaS-Demobeispiel mit Kunden-Metrics', () => {
     expect(result.countedMetrics).toHaveLength(3)
     expect(result.countedMetrics.reduce((total, metric) => total + metric.annualEur, 0)).toBe(320000)
     expect(result.nonMonetized).toHaveLength(2)
-    expect(result.nonMonetized.find((metric) => metric.name.includes('CRM-Nacharbeit'))?.annualPotentialEur).toBe(1360680)
+    expect(result.nonMonetized.find((metric) => metric.name.includes('CRM-Nacharbeit'))?.annualPotentialEur).toBe(
+      1360680,
+    )
     expect(result.nonMonetized.find((metric) => metric.name.includes('Compliance'))?.annualPotentialEur).toBe(40000)
     expect(result.unresolvedAssumptions).toBe(3)
   })

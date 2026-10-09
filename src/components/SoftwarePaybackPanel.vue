@@ -79,7 +79,8 @@ function loadExample() {
   costs.value = example.costs
   metrics.value = example.metrics
   horizon.value = example.horizonMonths
-  demoMessage.value = 'Fiktives Kurzbeispiel: 120.000 EUR einmalig, 3.000 EUR SaaS/Monat, Nutzen ab Monat 7. Keine kundenseitige Validierung.'
+  demoMessage.value =
+    'Fiktives Kurzbeispiel: 120.000 EUR einmalig, 3.000 EUR SaaS/Monat, Nutzen ab Monat 7. Keine kundenseitige Validierung.'
   copyStatus.value = ''
   exportStatus.value = ''
 }
@@ -88,7 +89,8 @@ function loadCrmSaasDemo() {
   costs.value = example.costs
   metrics.value = example.metrics
   horizon.value = example.horizonMonths
-  demoMessage.value = 'Fiktives CRM-/SaaS-Beispiel: drei hypothetische EUR-Metrics gehen in die Rechnung ein. Zeitersparnis und Risiko sind nicht angerechnet. Keine bestätigten Kundenzahlen.'
+  demoMessage.value =
+    'Fiktives CRM-/SaaS-Beispiel: drei hypothetische EUR-Metrics gehen in die Rechnung ein. Zeitersparnis und Risiko sind nicht angerechnet. Keine bestätigten Kundenzahlen.'
   copyStatus.value = ''
   exportStatus.value = ''
 }
@@ -269,9 +271,7 @@ async function exportPng() {
       </div>
       <div class="software-start-example">
         <span>Oder zuerst ansehen:</span>
-        <button type="button" class="software-example-link" @click="loadExample">
-          Einfaches Beispiel laden
-        </button>
+        <button type="button" class="software-example-link" @click="loadExample">Einfaches Beispiel laden</button>
         <span aria-hidden="true">·</span>
         <button type="button" class="software-example-link" @click="loadCrmSaasDemo">
           CRM-/SaaS-Beispiel mit Kunden-Metrics
