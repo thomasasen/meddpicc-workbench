@@ -14,6 +14,7 @@ import EvidenceView from '../views/EvidenceView.vue'
 import HomeView from '../views/HomeView.vue'
 import ReverseTimelineView from '../views/ReverseTimelineView.vue'
 import QuickPaybackView from '../views/QuickPaybackView.vue'
+import MetricBuilderView from '../views/MetricBuilderView.vue'
 import RisksActionsView from '../views/RisksActionsView.vue'
 import ReferencesView from '../views/ReferencesView.vue'
 
@@ -24,6 +25,11 @@ const router = createRouter({
       path: '/',
       name: 'start',
       component: HomeView,
+    },
+    {
+      path: '/tools/metric-builder',
+      name: 'metric-builder',
+      component: MetricBuilderView,
     },
     {
       path: '/tools/quick-payback',
