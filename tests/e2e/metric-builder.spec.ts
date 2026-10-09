@@ -73,7 +73,7 @@ test('Metric Builder: Payback-Kosten bleiben beim Hin- und Rückweg erhalten', a
   await page.getByRole('button', { name: 'Conversion' }).click()
   await page.getByRole('button', { name: 'Weiter', exact: false }).click()
   await page.getByRole('button', { name: 'Metric in Software-Payback übernehmen' }).click()
-  await expect(page.getByText('Projektaufwand')).toBeVisible()
+  await expect(page.locator('.software-entry input').first()).toHaveValue('Projektaufwand')
   await expect(page.getByText('Angebotsprozess', { exact: false }).first()).toBeVisible()
 })
 
