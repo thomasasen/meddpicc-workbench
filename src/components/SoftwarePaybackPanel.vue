@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { consumeMetricHandoff } from '../domain/metricBuilderHandoff'
 import { ArrowDownToLine, ClipboardCopy, Plus, RotateCcw, Trash2 } from '@lucide/vue'
 import {
   annualMetricPotential,
@@ -27,7 +28,17 @@ import {
 
 const costs = ref<SoftwareCost[]>([])
 const metrics = ref<CustomerMetric[]>([])
+const transferMessage = ref('')
 const horizon = ref<36 | 60>(36)
+onMounted(() => {
+  try {
+    const transfer = consumeMetricHandoff(window.sessionStorage, metrics.value, costs.value, horizon.value)
+    metrics.value.push(...transfer.imported)
+    transferMessage.value = transfer.message
+  } catch {
+    transferMessage.value = 'Die lokale Metric-Übergabe ist nicht verfügbar.'
+  }
+})
 const selectedScenario = ref<BusinessScenarioId>('base')
 const configurableScenarioIds: Array<'conservative' | 'optimistic'> = ['conservative', 'optimistic']
 const scenarioSettings = ref<ScenarioSettings>({
@@ -441,6 +452,7 @@ async function downloadReport(kind: 'customer' | 'finance') {
         </button>
       </div>
       <p class="software-muted">Eine Kennzahl pro Wirkung. Nur wirtschaftlich belegbare EUR-Effekte anrechnen.</p>
+      <p v-if="transferMessage" class="software-muted" role="status">{{ transferMessage }}</p>
       <p v-if="metrics.length === 0" class="software-empty">
         <strong>Metric hinzufügen</strong> wählen. Als Einstieg reicht eine jährliche Einsparung in EUR.
       </p>
