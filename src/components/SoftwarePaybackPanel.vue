@@ -27,6 +27,8 @@ const chartRef = ref<InstanceType<typeof SoftwareBalanceChart> | null>(null)
 const reportCustomer = ref('')
 const reportProject = ref('Softwareprojekt')
 const reportAuthor = ref('')
+const reportPain = ref('')
+const reportGoal = ref('')
 const reportStatus = ref('')
 const reportDate = ref(new Date().toLocaleDateString('de-DE'))
 const businessCase = computed(() =>
@@ -98,6 +100,8 @@ function removeMetric(id: string) {
 function loadExample() {
   reportCustomer.value = ''
   reportProject.value = 'Softwareeinführung'
+  reportPain.value = ''
+  reportGoal.value = ''
   const example = exampleSoftwareProject()
   costs.value = example.costs
   metrics.value = example.metrics
@@ -110,6 +114,8 @@ function loadExample() {
 function loadCrmSaasDemo() {
   reportCustomer.value = 'Beispielwerke Industrie GmbH'
   reportProject.value = 'CRM & Service Transformation 2027'
+  reportPain.value = 'Hoher Aufwand bei CRM-Nacharbeit, Servicevorgängen und mangelnde Nachvollziehbarkeit der Vertriebsprozesse. (Fiktive Ausgangslage.)'
+  reportGoal.value = 'Manuelle Leistungen reduzieren, wirtschaftlich realisierte Kostensenkungen belegen und Conversion verbessern. (Fiktives Zielbild.)'
   const example = createCrmSaasDemo()
   costs.value = example.costs
   metrics.value = example.metrics
@@ -122,6 +128,8 @@ function loadCrmSaasDemo() {
 function clear() {
   reportCustomer.value = ''
   reportProject.value = 'Softwareprojekt'
+  reportPain.value = ''
+  reportGoal.value = ''
   reportAuthor.value = ''
   reportStatus.value = ''
   demoMessage.value = ''
@@ -262,6 +270,7 @@ async function downloadReport() {
       customer: reportCustomer.value,
       project: reportProject.value,
       preparedBy: reportAuthor.value,
+      businessPain: reportPain.value, targetOutcome: reportGoal.value,
       date: reportDate.value,
       input: { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
     })
@@ -692,6 +701,17 @@ async function downloadReport() {
               <input v-model="reportAuthor" type="text" maxlength="120" />
             </label>
           </div>
+          <details class="software-more software-report-context">
+            <summary>Ausgangslage und Zielbild für den Bericht (optional)</summary>
+            <div class="software-report-story">
+              <label class="field"><span>Ausgangslage / Business Pain</span>
+                <textarea v-model="reportPain" rows="3" maxlength="240" placeholder="Was kostet oder blockiert den Kunden heute?"/>
+              </label>
+              <label class="field"><span>Erwartetes Zielbild</span>
+                <textarea v-model="reportGoal" rows="3" maxlength="240" placeholder="Welche Veränderung wird mit der Software verfolgt?"/>
+              </label>
+            </div>
+          </details>
           <div class="software-report-actions">
             <button type="button" class="button button-primary button-with-icon" @click="downloadReport">
               <ArrowDownToLine :size="16" aria-hidden="true" /> Business-Case-Bericht (PDF) herunterladen
@@ -1248,4 +1268,9 @@ async function downloadReport() {
     width: 100%;
   }
 }
+
+.software-report-story { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-4); margin-top:var(--space-3); }
+.software-report-story .field { display:grid; gap:var(--space-2); min-width:0; font-size:.87rem; font-weight:650; }
+.software-report-story textarea { width:100%; min-height:88px; resize:vertical; background:var(--color-surface); border:1px solid var(--color-border-strong); border-radius:var(--radius-control); padding:var(--space-3); }
+@media(max-width:650px){ .software-report-story {grid-template-columns:minmax(0,1fr);} }
 </style>
