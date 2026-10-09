@@ -94,5 +94,4 @@ describe('kundenfähiger Business-Case-PDF-Download', () => {
       expect(page.getHeight()).toBeCloseTo(841.89, 1)
     }
   })
-
 })
