@@ -108,10 +108,10 @@ function page(doc: PDFDocument, fonts: FontSet, chapter: string, number: number)
   const p = doc.addPage([W, H])
   p.drawRectangle({ x: 0, y: H - 77, width: W, height: 77, color: navy })
   p.drawRectangle({ x: X, y: H - 82, width: 34, height: 4, color: teal })
-  write(p, 'BUSINESS CASE | SOFTWARE-INVESTITION', X, H - 35, 11, fonts.bold, white)
+  write(p, 'IHRE WIRTSCHAFTLICHKEITSBETRACHTUNG', X, H - 35, 11, fonts.bold, white)
   write(p, chapter.toUpperCase(), X, H - 55, 8.5, fonts.regular, rgb(0.72, 0.81, 0.88))
   p.drawLine({ start: { x: X, y: 46 }, end: { x: RIGHT, y: 46 }, thickness: 0.65, color: line })
-  write(p, 'VERTRAULICH | MODELLRECHNUNG | KEINE FREIGABE', X, 30, 7.3, fonts.regular, muted)
+  write(p, 'GESPRÄCHSGRUNDLAGE | ANNAHMEN UND QUELLEN OFFENGELEGT', X, 30, 7.3, fonts.regular, muted)
   write(p, 'SEITE ' + number, RIGHT - 52, 30, 7.3, fonts.bold, muted, 52)
   return { pdf: doc, p, fonts }
 }
@@ -141,80 +141,81 @@ function notice(p: PDFPage, top: number, text: string, fonts: FontSet): void {
   const height = 65
   p.drawRectangle({ x: X, y: top - height, width: RIGHT - X, height, color: rgb(0.994, 0.971, 0.926) })
   p.drawRectangle({ x: X, y: top - height, width: 3, height, color: amber })
-  write(p, 'VALIDIERUNGSSTATUS', X + 13, top - 19, 8, fonts.bold, amber)
+  write(p, 'STAND DER ANNAHMEN', X + 13, top - 19, 8, fonts.bold, amber)
   paragraph(p, text, X + 13, top - 36, RIGHT - X - 26, fonts, { size: 9, leading: 13, maxLines: 2, color: ink })
 }
 
-function chart(p: PDFPage, c: CaseSummary, fonts: FontSet): void {
-  const left = X + 56
-  const right = RIGHT - 9
-  const bottom = 185
-  const top = 354
-  const values = c.periodMetrics.map((m) => m.balanceEur)
-  let low = Math.min(0, ...values)
-  let high = Math.max(0, ...values)
-  if (high - low < 1) {
-    low -= 1
-    high += 1
+/**
+ * Kundenorientierte Wirtschaftlichkeitsgrafik. Bewusst KEINE kumulierte
+ * Saldenkurve: zwei proportionale, vergleichbar skalierte Kosten-/Nutzenbalken
+ * und eine eigenständige Zeitachse für den Payback.
+ * Die Beträge stammen unverändert aus der gemeinsamen Monats-Engine.
+ */
+function investmentComparison(p: PDFPage, c: CaseSummary, f: FontSet): void {
+  const barX = X + 3
+  const barWidth = RIGHT - barX - 3
+  const maxValue = Math.max(1, c.totalCostEur, c.benefitEur)
+  const scaled = (value: number): number => barWidth * Math.max(0, value) / maxValue
+  const costWidth = scaled(c.totalCostEur)
+  const benefitWidth = scaled(c.benefitEur)
+  const upFrontWidth = scaled(c.investmentEur)
+  const improvementWidth = scaled(c.creditedMetricsEur)
+
+  const bar = (y: number, width: number, first: number, col1: ReturnType<typeof rgb>, col2: ReturnType<typeof rgb>) => {
+    p.drawRectangle({ x: barX, y, width: barWidth, height: 16, color: pale })
+    if (width > 0) p.drawRectangle({ x: barX, y, width, height: 16, color: col2 })
+    if (first > 0) p.drawRectangle({ x: barX, y, width: Math.min(first, width), height: 16, color: col1 })
   }
-  const pad = (high - low) * 0.12
-  low -= pad
-  high += pad
-  const px = (month: number) => left + ((right - left) * month) / c.horizon
-  const py = (eur: number) => bottom + ((eur - low) / (high - low)) * (top - bottom)
-  const zeroY = py(0)
-  p.drawLine({
-    start: { x: left, y: zeroY },
-    end: { x: right, y: zeroY },
-    color: muted,
-    thickness: 1,
-    dashArray: [4, 4],
-  })
-  for (const tick of [low, 0, high]) {
-    const y = py(tick)
-    if (tick !== 0) p.drawLine({ start: { x: left, y }, end: { x: right, y }, color: line, thickness: 0.5 })
-    write(p, tick === 0 ? '0' : Math.round(tick / 1000) + ' Tsd.', X, y - 3, 7.5, fonts.regular, muted, 50)
+  const amount = (value: number, y: number): void => {
+    const txt = euro(value)
+    write(p, txt, RIGHT - f.bold.widthOfTextAtSize(readable(txt), 10), y, 10, f.bold, ink, 125)
   }
-  for (let i = 1; i < c.periodMetrics.length; i++) {
-    const prev = c.periodMetrics[i - 1]!
-    const curr = c.periodMetrics[i]!
-    p.drawLine({
-      start: { x: px(prev.month), y: py(prev.balanceEur) },
-      end: { x: px(curr.month), y: py(curr.balanceEur) },
-      thickness: 2.4,
-      color: curr.balanceEur >= 0 && c.unverified === 0 ? teal : rgb(0.17, 0.39, 0.68),
-    })
-  }
-  for (const month of [0, 12, 24, 36, 48, 60].filter((m) => m <= c.horizon)) {
-    write(p, String(month), px(month) - 6, bottom - 16, 8, fonts.regular, muted, 19)
-  }
-  const min = c.periodMetrics.find((m) => m.month === c.lowestMonth)!
-  p.drawCircle({ x: px(min.month), y: py(min.balanceEur), size: 4, color: red })
+
+  write(p, 'Gesamte Kosten über ' + c.horizon + ' Monate', barX, 383, 9.3, f.bold, navy, 310)
+  amount(c.totalCostEur, 383)
+  bar(361, costWidth, upFrontWidth, navy, rgb(0.48, 0.57, 0.70))
+  write(p, 'Einmalige Einführung', barX, 343, 8, f.regular, muted)
+  write(p, 'Laufender Betrieb', barX + 215, 343, 8, f.regular, muted)
+
+  write(p, 'Erwarteter wirtschaftlicher Nutzen', barX, 317, 9.3, f.bold, navy, 316)
+  amount(c.benefitEur, 317)
+  bar(295, benefitWidth, improvementWidth, teal, rgb(0.57, 0.77, 0.71))
+  write(p, 'Verbesserungen und Mehrertrag', barX, 277, 8, f.regular, muted)
+  write(p, 'Entfall bisheriger Kosten', barX + 215, 277, 8, f.regular, muted)
+
+  p.drawRectangle({ x: X, y: 237, width: RIGHT - X, height: 29, color: pale })
+  const netLabel = c.netValueEur < 0 ? 'Rechnerische Lücke' : 'Rechnerischer Überschuss'
+  write(p, netLabel + ' nach ' + c.horizon + ' Monaten', X + 11, 247, 9.2, f.bold, ink)
+  const netText = euro(Math.abs(c.netValueEur))
   write(
     p,
-    'Tiefpunkt M' + min.month,
-    Math.max(left, Math.min(right - 95, px(min.month) + 5)),
-    py(min.balanceEur) - 16,
-    8,
-    fonts.bold,
-    red,
-    97,
+    netText,
+    RIGHT - 10 - f.bold.widthOfTextAtSize(readable(netText), 11),
+    246,
+    11,
+    f.bold,
+    c.netValueEur < 0 ? red : teal,
+    125,
   )
+
+  const axisX = barX
+  const axisW = barWidth
+  const axisY = 195
+  write(p, 'Wann erreicht der Nutzen die Kosten?', axisX, 219, 9.5, f.bold, navy)
+  p.drawRectangle({ x: axisX, y: axisY, width: axisW, height: 9, color: rgb(0.81, 0.86, 0.9) })
   if (c.sustainedBreakEvenMonth !== null) {
-    const point = c.periodMetrics[c.sustainedBreakEvenMonth]!
-    p.drawCircle({ x: px(point.month), y: py(point.balanceEur), size: 4.5, color: teal })
-    write(
-      p,
-      'Amortisation M' + point.month,
-      Math.max(left, Math.min(right - 113, px(point.month) - 40)),
-      py(point.balanceEur) + 13,
-      8,
-      fonts.bold,
-      teal,
-      113,
-    )
+    const marker = axisX + (c.sustainedBreakEvenMonth / c.horizon) * axisW
+    p.drawRectangle({ x: marker, y: axisY, width: Math.max(0, axisX + axisW - marker), height: 9, color: teal })
+    p.drawLine({ start: { x: marker, y: axisY - 6 }, end: { x: marker, y: axisY + 14 }, color: teal, thickness: 1.6 })
+    const label = 'Monat ' + c.sustainedBreakEvenMonth + ': wirtschaftlicher Ausgleich'
+    const labelWidth = f.bold.widthOfTextAtSize(readable(label), 8)
+    write(p, label, Math.max(axisX, Math.min(RIGHT - labelWidth, marker - labelWidth / 2)), 171, 8, f.bold, teal, labelWidth + 1)
+  } else {
+    write(p, 'Kein wirtschaftlicher Ausgleich im Betrachtungszeitraum', axisX, 171, 8, f.bold, red)
   }
-  write(p, 'PROJEKTMONAT', right - 83, bottom - 33, 7, fonts.bold, muted, 83)
+  write(p, 'Beginn', axisX, 181, 7.8, f.regular, muted)
+  const endLabel = 'Monat ' + c.horizon
+  write(p, endLabel, RIGHT - f.regular.widthOfTextAtSize(endLabel, 7.8), 181, 7.8, f.regular, muted)
 }
 
 function twoColumnRow(p: PDFPage, y: number, label: string, number: string, f: FontSet, total = false): void {
@@ -226,55 +227,49 @@ function twoColumnRow(p: PDFPage, y: number, label: string, number: string, f: F
 }
 
 function statusLabel(evidence: string): string {
-  if (evidence === 'customer-reviewed') return 'Laut Eingabe mit Kunden besprochen'
-  if (evidence === 'customer-stated') return 'Kundenaussage / nicht geprüft'
-  if (evidence === 'reference') return 'Referenzwert / für diesen Kunden unbestätigt'
-  return 'Verkäuferannahme / nicht bestätigt'
+  if (evidence === 'customer-reviewed') return 'Laut Angaben gemeinsam geprüft'
+  if (evidence === 'customer-stated') return 'Genannter Wert, noch zu bestätigen'
+  if (evidence === 'reference') return 'Orientierungswert, noch abzustimmen'
+  return 'Planungsannahme, noch zu bestätigen'
 }
 
 function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSummary): void {
-  const { p } = page(pdf, f, '01 | Managemententscheidung', 1)
-  write(p, 'Wirtschaftlichkeit auf einen Blick', X, 729, 20, f.bold, navy)
+  const { p } = page(pdf, f, '01 | Investition auf einen Blick', 1)
+  write(p, 'Ihre Investition im Überblick', X, 729, 20, f.bold, navy)
   meta(p, 'Unternehmen', data.customer.trim(), 695, f)
-  meta(p, 'Projekt', data.project.trim(), 674, f)
-  meta(p, 'Erstellt von', data.preparedBy.trim() + '  |  ' + data.date, 653, f)
+  meta(p, 'Vorhaben', data.project.trim(), 674, f)
+  meta(p, 'Kontakt', data.preparedBy.trim() + '  |  ' + data.date, 653, f)
 
-  const hasPayback = c.sustainedBreakEvenMonth !== null
-  const claim = hasPayback
-    ? 'Amortisation im Modell nach ' + c.sustainedBreakEvenMonth + ' Monaten'
-    : 'Im Betrachtungszeitraum keine Amortisation'
-  write(p, claim, X, 613, 15.5, f.bold, hasPayback ? navy : red)
-  const message = hasPayback
-    ? 'Die angerechneten Vorteile übersteigen die Projekt- und Softwarekosten im gewählten Modellzeitraum.'
-    : 'Auf Basis der eingegebenen Annahmen deckt der wirtschaftliche Nutzen die vollständigen Kosten nicht.'
-  paragraph(p, message, X, 591, RIGHT - X, f, { size: 9.5, leading: 14, maxLines: 2 })
+  const month = c.sustainedBreakEvenMonth
+  const claim = month === null
+    ? 'Der wirtschaftliche Ausgleich wird nicht erreicht'
+    : 'Der wirtschaftliche Ausgleich ist ab Monat ' + month + ' möglich'
+  write(p, claim, X, 613, 14.5, f.bold, month === null ? red : navy)
+  const outcome = data.targetOutcome?.trim()
+    ? 'Ihr angestrebtes Ergebnis: ' + data.targetOutcome.trim()
+    : 'Das angestrebte Geschäftsergebnis wird im gemeinsamen Gespräch ergänzt.'
+  paragraph(p, outcome, X, 590, RIGHT - X, f, { size: 9.4, leading: 14, maxLines: 2 })
 
   const gap = 10
-  const cardW = (RIGHT - X - 2 * gap) / 3
-  metricCard(p, X, 546, cardW, 'Amortisation', hasPayback ? 'Monat ' + c.sustainedBreakEvenMonth : 'Nicht erreicht', f)
-  metricCard(p, X + cardW + gap, 546, cardW, 'Kosten / ' + c.horizon + ' M.', euro(c.totalCostEur), f)
+  const cardWidth = (RIGHT - X - 2 * gap) / 3
+  metricCard(p, X, 541, cardWidth, 'Amortisation', month === null ? 'Nicht erreicht' : 'Monat ' + month, f)
+  metricCard(p, X + cardWidth + gap, 541, cardWidth, 'Gesamtkosten / ' + c.horizon + ' M.', euro(c.totalCostEur), f)
   metricCard(
-    p,
-    X + (cardW + gap) * 2,
-    546,
-    cardW,
-    'Modell-Nettowert',
-    euro(c.netValueEur),
-    f,
+    p, X + 2 * (cardWidth + gap), 541, cardWidth,
+    'Saldo nach ' + c.horizon + ' Monaten', euro(c.netValueEur), f,
     c.netValueEur < 0 ? red : navy,
   )
 
-  write(p, 'Wie entwickelt sich die Investition?', X, 427, 13, f.bold, navy)
-  write(p, 'Kumulierter wirtschaftlicher Saldo; kein tatsächlicher Zahlungsstrom', X, 408, 8.6, f.regular, muted)
-  chart(p, c, f)
-  const uncertainty =
-    c.unverified > 0
-      ? c.unverified +
-        ' monetär angerechnete ' +
-        (c.unverified === 1 ? 'Metric ist' : 'Metrics sind') +
-        ' nicht kundenseitig geprüft. Die gezeigte Wirtschaftlichkeit ist eine Hypothese.'
-      : 'Alle angerechneten Metrics sind laut Eingabe kundenbesprochen. Eine unabhängige Finance-Freigabe liegt dadurch nicht vor.'
-  notice(p, 142, uncertainty, f)
+  write(p, 'Kosten und Nutzen im direkten Vergleich', X, 431, 13.5, f.bold, navy)
+  write(p, 'Modellierte Gesamtwerte, nicht mit tatsächlichen Zahlungen gleichzusetzen', X, 411, 8.4, f.regular, muted)
+  investmentComparison(p, c, f)
+
+  const uncertainty = c.unverified > 0
+    ? c.unverified +
+      (c.unverified === 1 ? ' Nutzenposition beruht' : ' Nutzenpositionen beruhen') +
+      ' auf noch nicht gemeinsam bestätigten Angaben. Bitte die wirtschaftlichen Annahmen vor einer Entscheidung abstimmen.'
+    : 'Die Nutzenwerte sind laut Eingabe bereits gemeinsam geprüft. Kosten, Zeitplan und Auswirkungen sollten vor der Entscheidung nochmals abgestimmt werden.'
+  notice(p, 143, uncertainty, f)
 }
 
 function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
