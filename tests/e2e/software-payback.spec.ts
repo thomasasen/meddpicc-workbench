@@ -34,7 +34,7 @@ test('Software Payback: SaaS-Vorlauf, Metriken, Berechnung, Export und Originalb
   const errors: string[] = []
   page.on('pageerror', (err) => errors.push(err.message))
   await projectMode(page)
-  await page.getByRole('button', { name: 'Fiktives Softwareprojekt einsetzen' }).click()
+  await page.getByRole('button', { name: 'Einfaches Beispiel laden' }).click()
   await expect(page.getByTestId('sustained-payback')).toHaveText('Monat 18')
   await expect(page.getByText('Datenstatus: Verkäuferannahme.', { exact: false })).toBeVisible()
   await expect(page.getByRole('figure')).toBeVisible()
@@ -61,9 +61,24 @@ test('Software Payback: SaaS-Vorlauf, Metriken, Berechnung, Export und Originalb
   expect(errors).toEqual([])
 })
 
+test('Software Payback: CRM-/SaaS-Beispiel zeigt mehrere finanzielle und nicht monetarisierte Metrics', async ({ page }) => {
+  await projectMode(page)
+  await page.getByRole('button', { name: 'CRM-/SaaS-Beispiel mit Kunden-Metrics' }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'Fiktives CRM-/SaaS-Beispiel' })).toBeVisible()
+  await expect(page.getByTestId('sustained-payback')).toHaveText('Monat 35')
+  await expect(page.getByText('Wegfall externer Vertriebsunterstützung', { exact: false }).first()).toBeVisible()
+  await expect(page.getByText('Mehr Abschlüsse durch bessere Conversion', { exact: false }).first()).toBeVisible()
+  await expect(page.locator('.software-entry').filter({ has: page.getByText(/Metric [1-5] · /) })).toHaveCount(5)
+  await expect(page.getByText('2 weitere Metrics stehen außerhalb', { exact: false })).toBeVisible()
+  await page.getByRole('button', { name: 'Einfaches Beispiel laden' }).click()
+  await expect(page.getByTestId('sustained-payback')).toHaveText('Monat 18')
+  await page.getByRole('button', { name: 'Zurücksetzen' }).click()
+  await expect(page.getByTestId('project-empty')).toContainText('keine wirtschaftliche Aussage')
+})
+
 test('Software Payback: dieselbe Wirkungsgruppe blockiert Doppelzählung', async ({ page }) => {
   await projectMode(page)
-  await page.getByRole('button', { name: 'Fiktives Softwareprojekt einsetzen' }).click()
+  await page.getByRole('button', { name: 'Einfaches Beispiel laden' }).click()
   await page.getByRole('button', { name: 'Metric hinzufügen' }).click()
   const second = page.locator('.software-entry').filter({ has: page.getByText('Metric 2 · Neue Kunden-Metric') })
   await second.locator('details.software-more > summary').click()
@@ -137,7 +152,7 @@ test('Software Payback: responsive, direkte Navigation und Tastatur', async ({ p
   for (const width of [375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 812 })
     await projectMode(page)
-    await page.getByRole('button', { name: 'Fiktives Softwareprojekt einsetzen' }).click()
+    await page.getByRole('button', { name: 'Einfaches Beispiel laden' }).click()
     await expect(page.getByTestId('sustained-payback')).toHaveText('Monat 18')
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
