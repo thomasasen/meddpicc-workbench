@@ -74,6 +74,8 @@ const toolClusters = [
       {
         label: 'Metric Builder',
         note: 'Aus Pain oder gewünschtem Outcome eine belastbare Kennzahl mit nachvollziehbarer Logik ableiten.',
+        route: '/tools/metric-builder',
+        customerReady: true,
       },
       {
         label: 'Cost of Delay',
