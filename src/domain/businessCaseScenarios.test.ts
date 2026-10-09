@@ -53,7 +53,9 @@ describe('Szenario-Stresstest mit vorhandener Monatsengine', () => {
 
   it('rechnet Zeitgewinne und Risikowerte nicht automatisch an', () => {
     const stress = calculateSoftwarePayback(createCrmSaasDemo(), {
-      benefitPercent: 150, oneTimeCostPercent: 0, benefitDelayMonths: 0,
+      benefitPercent: 150,
+      oneTimeCostPercent: 0,
+      benefitDelayMonths: 0,
     })
     expect(stress.success).toBe(true)
     if (stress.success) {
@@ -78,7 +80,9 @@ describe('Szenario-Stresstest mit vorhandener Monatsengine', () => {
     input.metrics[0]!.rampMonths = 3
     input.metrics[0]!.endMonth = 9
     const shifted = calculateSoftwarePayback(input, {
-      benefitPercent: 0, oneTimeCostPercent: 0, benefitDelayMonths: 3,
+      benefitPercent: 0,
+      oneTimeCostPercent: 0,
+      benefitDelayMonths: 3,
     })
     expect(shifted.success).toBe(true)
     if (shifted.success) {
@@ -92,7 +96,9 @@ describe('Szenario-Stresstest mit vorhandener Monatsengine', () => {
     const input = exampleSoftwareProject()
     input.metrics[0]!.startMonth = 35
     const summary = summarizeBusinessCase(input, {
-      benefitPercent: 0, oneTimeCostPercent: 0, benefitDelayMonths: 12,
+      benefitPercent: 0,
+      oneTimeCostPercent: 0,
+      benefitDelayMonths: 12,
     })!
     expect(summary.creditedMetricsEur).toBe(0)
     expect(summary.periodMetrics).toHaveLength(37)
@@ -106,9 +112,11 @@ describe('Szenario-Stresstest mit vorhandener Monatsengine', () => {
       if (continuation) expect(continuation.points.at(-1)!.month).toBe(42)
     }
     input.metrics[0]!.annualAmountEur = 10000
-    expect(compareBusinessScenarios(input)!.every(
-      (s) => illustrativeBalanceContinuation(s.summary.periodMetrics, 6) === null
-    )).toBe(true)
+    expect(
+      compareBusinessScenarios(input)!.every(
+        (s) => illustrativeBalanceContinuation(s.summary.periodMetrics, 6) === null,
+      ),
+    ).toBe(true)
   })
 
   it('weist ungültige Parameter zurück und verändert die Originaldaten nicht', () => {
@@ -116,9 +124,12 @@ describe('Szenario-Stresstest mit vorhandener Monatsengine', () => {
     const before = JSON.stringify(input)
     const invalid = { benefitPercent: Number.NaN, oneTimeCostPercent: 0, benefitDelayMonths: 0 }
     expect(calculateSoftwarePayback(input, invalid).success).toBe(false)
-    expect(compareBusinessScenarios(input, {
-      conservative: invalid, optimistic: DEFAULT_SCENARIO_SETTINGS.optimistic,
-    })).toBeNull()
+    expect(
+      compareBusinessScenarios(input, {
+        conservative: invalid,
+        optimistic: DEFAULT_SCENARIO_SETTINGS.optimistic,
+      }),
+    ).toBeNull()
     expect(JSON.stringify(input)).toBe(before)
   })
 })

@@ -50,13 +50,18 @@ export function horizonRoiPercent(costEur: number, benefitEur: number): number |
   return ((benefitEur - costEur) / costEur) * 100
 }
 
-export function summarizeBusinessCase(input: SoftwarePaybackInput, adjustments: ScenarioAdjustments = BASE_ADJUSTMENTS): CaseSummary | null {
+export function summarizeBusinessCase(
+  input: SoftwarePaybackInput,
+  adjustments: ScenarioAdjustments = BASE_ADJUSTMENTS,
+): CaseSummary | null {
   const result = calculateSoftwarePayback(input, adjustments)
   if (!result.success) return null
   const last = result.months.at(-1)!
   const lowest = result.months.reduce((a, b) => (b.cumulativeEur < a.cumulativeEur ? b : a))
   const covered = new Set(result.countedMetrics.map((m) => m.id))
-  const investment = input.costs.filter((c) => c.kind === 'one-time').reduce((sum, c) => sum + c.amountEur, 0) * (1 + adjustments.oneTimeCostPercent / 100)
+  const investment =
+    input.costs.filter((c) => c.kind === 'one-time').reduce((sum, c) => sum + c.amountEur, 0) *
+    (1 + adjustments.oneTimeCostPercent / 100)
   const benefit = result.benefitTotalEur
   const op = result.costTotalEur - investment
   return {
@@ -83,18 +88,22 @@ export function summarizeBusinessCase(input: SoftwarePaybackInput, adjustments: 
       id: m.id,
       name: m.name,
       formula: m.formula,
-      annualEur: annualMetricPotential(m) === null ? null :
-        annualMetricPotential(m)! * (covered.has(m.id) ? 1 + adjustments.benefitPercent / 100 : 1),
+      annualEur:
+        annualMetricPotential(m) === null
+          ? null
+          : annualMetricPotential(m)! * (covered.has(m.id) ? 1 + adjustments.benefitPercent / 100 : 1),
       included: covered.has(m.id),
       evidence: m.evidence,
       evidenceNote: m.evidenceNote,
       startMonth: m.startMonth + (covered.has(m.id) ? adjustments.benefitDelayMonths : 0),
       rampMonths: m.rampMonths,
-      endMonth: m.endMonth === undefined ? undefined : m.endMonth + (covered.has(m.id) ? adjustments.benefitDelayMonths : 0),
+      endMonth:
+        m.endMonth === undefined ? undefined : m.endMonth + (covered.has(m.id) ? adjustments.benefitDelayMonths : 0),
       group: m.effectGroup,
     })),
     costDetails: input.costs.map((c) => ({
-      ...c, amountEur: c.kind === 'one-time' ? c.amountEur * (1 + adjustments.oneTimeCostPercent / 100) : c.amountEur,
+      ...c,
+      amountEur: c.kind === 'one-time' ? c.amountEur * (1 + adjustments.oneTimeCostPercent / 100) : c.amountEur,
     })),
     unverified: result.unresolvedAssumptions,
     issues: [

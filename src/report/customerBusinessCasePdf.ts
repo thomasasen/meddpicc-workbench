@@ -3,7 +3,11 @@ import type { CaseSummary } from '../domain/businessCase'
 import { paybackAxisBounds } from '../domain/paybackChart'
 import { balanceChartAreas, chartDisplayEnd, chartMoneyTicks } from '../domain/paybackChartAreas'
 import { illustrativeBalanceContinuation } from '../domain/paybackContinuation'
-import { compareBusinessScenarios, describeScenarioAssumptions, type ComparedBusinessScenario } from '../domain/businessCaseScenarios'
+import {
+  compareBusinessScenarios,
+  describeScenarioAssumptions,
+  type ComparedBusinessScenario,
+} from '../domain/businessCaseScenarios'
 import type { ReportData } from './softwareBusinessCasePdf'
 
 const W = 595.28
@@ -516,9 +520,15 @@ function decisionPage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSum
 function scenarioPage(pdf: PDFDocument, f: FontSet, scenarios: ComparedBusinessScenario[]): void {
   const { p } = page(pdf, f, '04 | Wie belastbar ist die Wirtschaftlichkeit?', 4)
   write(p, 'Wie belastbar ist die Wirtschaftlichkeit?', X, 729, 18, f.bold, navy)
-  paragraph(p,
+  paragraph(
+    p,
     'Wir zeigen, wie sich die Investition bei geringeren oder höheren Vorteilen, anderen Einführungskosten und einem späteren Nutzenbeginn verändert.',
-    X, 700, RIGHT - X, f, { size: 9.6, leading: 15, maxLines: 3 })
+    X,
+    700,
+    RIGHT - X,
+    f,
+    { size: 9.6, leading: 15, maxLines: 3 },
+  )
   const column = [X + 12, X + 196, X + 355]
   write(p, 'ANNAHMEN', column[0], 639, 8, f.bold, muted, 170)
   write(p, 'AMORTISATION', column[1], 639, 8, f.bold, muted, 140)
@@ -529,24 +539,60 @@ function scenarioPage(pdf: PDFDocument, f: FontSet, scenarios: ComparedBusinessS
     p.drawRectangle({ x: X, y: top - 102, width: RIGHT - X, height: 104, color: pale })
     p.drawRectangle({ x: X, y: top - 102, width: 3, height: 104, color: c.netValueEur < 0 ? red : navy })
     write(p, scenario.label, column[0], top - 19, 12, f.bold, navy, 174)
-    write(p, c.sustainedBreakEvenMonth === null ? 'Nicht erreicht' : 'Ab Monat ' + c.sustainedBreakEvenMonth,
-      column[1], top - 19, 11, f.bold, c.sustainedBreakEvenMonth === null ? red : navy, 149)
+    write(
+      p,
+      c.sustainedBreakEvenMonth === null ? 'Nicht erreicht' : 'Ab Monat ' + c.sustainedBreakEvenMonth,
+      column[1],
+      top - 19,
+      11,
+      f.bold,
+      c.sustainedBreakEvenMonth === null ? red : navy,
+      149,
+    )
     write(p, euro(c.netValueEur), column[2], top - 19, 11, f.bold, c.netValueEur < 0 ? red : navy, 126)
-    write(p, 'Abweichung zur Basis: ' + euro(scenario.deltaBalanceEur),
-      column[0], top - 42, 8.5, f.regular, muted, 265)
-    write(p, 'Kosten: ' + euro(c.totalCostEur) + ' | Nutzen: ' + euro(c.benefitEur),
-      column[0], top - 62, 8.8, f.regular, ink, RIGHT - X - 24)
-    write(p, describeScenarioAssumptions(scenario.assumptions),
-      column[0], top - 82, 8, f.regular, muted, RIGHT - X - 24)
+    write(p, 'Abweichung zur Basis: ' + euro(scenario.deltaBalanceEur), column[0], top - 42, 8.5, f.regular, muted, 265)
+    write(
+      p,
+      'Kosten: ' + euro(c.totalCostEur) + ' | Nutzen: ' + euro(c.benefitEur),
+      column[0],
+      top - 62,
+      8.8,
+      f.regular,
+      ink,
+      RIGHT - X - 24,
+    )
+    write(
+      p,
+      describeScenarioAssumptions(scenario.assumptions),
+      column[0],
+      top - 82,
+      8,
+      f.regular,
+      muted,
+      RIGHT - X - 24,
+    )
   })
   section(p, 'Was wurde im Vergleich verändert?', 259, f)
-  paragraph(p,
+  paragraph(
+    p,
     'Die Szenarien verändern nur ausdrücklich angerechnete Kundennutzen und einmalige Projektkosten. Termine und Beträge für laufende Lizenzen sowie den Wegfall bisheriger Systeme bleiben wie eingegeben. Der Nutzenaufbau kann sich verzögern, ohne dass sich die Vertragslaufzeit verkürzt.',
-    X, 233, RIGHT - X, f, { size: 9, leading: 14, maxLines: 5 })
-  paragraph(p,
-    'Die Ergebnisse gelten nur für die ' + scenarios[0]!.summary.horizon +
-    ' betrachteten Monate. Alle Ergebnisse sind undiskontierte wirtschaftliche Modellwerte, keine Liquiditätsplanung. Kundenseitig noch offene Annahmen sollten vor der Investitionsentscheidung geprüft werden.',
-    X, 138, RIGHT - X, f, { size: 8.7, leading: 13, maxLines: 5 })
+    X,
+    233,
+    RIGHT - X,
+    f,
+    { size: 9, leading: 14, maxLines: 5 },
+  )
+  paragraph(
+    p,
+    'Die Ergebnisse gelten nur für die ' +
+      scenarios[0]!.summary.horizon +
+      ' betrachteten Monate. Alle Ergebnisse sind undiskontierte wirtschaftliche Modellwerte, keine Liquiditätsplanung. Kundenseitig noch offene Annahmen sollten vor der Investitionsentscheidung geprüft werden.',
+    X,
+    138,
+    RIGHT - X,
+    f,
+    { size: 8.7, leading: 13, maxLines: 5 },
+  )
 }
 
 export async function buildCustomerBusinessCasePdf(data: ReportData): Promise<Uint8Array> {

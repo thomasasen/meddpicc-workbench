@@ -9,11 +9,23 @@ export interface ScenarioAdjustments {
   oneTimeCostPercent: number
   benefitDelayMonths: number
 }
-export const BASE_ADJUSTMENTS: Readonly<ScenarioAdjustments> = Object.freeze({ benefitPercent: 0, oneTimeCostPercent: 0, benefitDelayMonths: 0 })
+export const BASE_ADJUSTMENTS: Readonly<ScenarioAdjustments> = Object.freeze({
+  benefitPercent: 0,
+  oneTimeCostPercent: 0,
+  benefitDelayMonths: 0,
+})
 export function validScenarioAdjustments(a: ScenarioAdjustments, horizon: number): boolean {
-  return Number.isFinite(a.benefitPercent) && a.benefitPercent >= -100 && a.benefitPercent <= 200 &&
-    Number.isFinite(a.oneTimeCostPercent) && a.oneTimeCostPercent >= -100 && a.oneTimeCostPercent <= 200 &&
-    Number.isInteger(a.benefitDelayMonths) && a.benefitDelayMonths >= 0 && a.benefitDelayMonths <= horizon
+  return (
+    Number.isFinite(a.benefitPercent) &&
+    a.benefitPercent >= -100 &&
+    a.benefitPercent <= 200 &&
+    Number.isFinite(a.oneTimeCostPercent) &&
+    a.oneTimeCostPercent >= -100 &&
+    a.oneTimeCostPercent <= 200 &&
+    Number.isInteger(a.benefitDelayMonths) &&
+    a.benefitDelayMonths >= 0 &&
+    a.benefitDelayMonths <= horizon
+  )
 }
 
 export interface SoftwareCost {
@@ -191,7 +203,10 @@ function active(cost: SoftwareCost, month: number): boolean {
   return month >= cost.startMonth && (cost.endMonth === undefined || month <= cost.endMonth)
 }
 
-export function calculateSoftwarePayback(input: SoftwarePaybackInput, adjustments: ScenarioAdjustments = BASE_ADJUSTMENTS): SoftwarePaybackResult {
+export function calculateSoftwarePayback(
+  input: SoftwarePaybackInput,
+  adjustments: ScenarioAdjustments = BASE_ADJUSTMENTS,
+): SoftwarePaybackResult {
   const issues: string[] = []
   if (!validScenarioAdjustments(adjustments, input.horizonMonths))
     issues.push('Ungültige Szenarioparameter: Prozentwerte -100 bis +200, Nutzenverzögerung innerhalb des Horizonts.')
@@ -233,7 +248,8 @@ export function calculateSoftwarePayback(input: SoftwarePaybackInput, adjustment
   const countedMetrics = input.metrics
     .filter((m) => m.included && m.treatment === 'realized' && m.formula !== 'risk' && m.formula !== 'qualitative')
     .map((m) => ({
-      id: m.id, name: m.name,
+      id: m.id,
+      name: m.name,
       annualEur: (annualMetricPotential(m) ?? 0) * (1 + adjustments.benefitPercent / 100),
       evidence: m.evidence,
     }))
@@ -264,17 +280,24 @@ export function calculateSoftwarePayback(input: SoftwarePaybackInput, adjustment
     let metricBenefitEur = 0
     for (const cost of input.costs) {
       if (!active(cost, month)) continue
-      const value = cost.kind === 'one-time'
-        ? (month === cost.startMonth ? cost.amountEur * (1 + adjustments.oneTimeCostPercent / 100) : 0)
-        : euroPerMonth(cost)
+      const value =
+        cost.kind === 'one-time'
+          ? month === cost.startMonth
+            ? cost.amountEur * (1 + adjustments.oneTimeCostPercent / 100)
+            : 0
+          : euroPerMonth(cost)
       if (cost.kind === 'avoided-legacy') avoidedLegacyEur += value
       else newCostEur += value
     }
     for (const metric of input.metrics) {
       // Kundennutzen verzögert sich; Lizenzkosten und Altsystemabschaltungen nicht.
       const effectiveMonth = month - adjustments.benefitDelayMonths
-      if (!includedIds.has(metric.id) || effectiveMonth < metric.startMonth ||
-        (metric.endMonth !== undefined && effectiveMonth > metric.endMonth)) continue
+      if (
+        !includedIds.has(metric.id) ||
+        effectiveMonth < metric.startMonth ||
+        (metric.endMonth !== undefined && effectiveMonth > metric.endMonth)
+      )
+        continue
       const share = Math.min(1, (effectiveMonth - metric.startMonth + 1) / metric.rampMonths)
       metricBenefitEur += ((annualMetricPotential(metric) ?? 0) / 12) * share * (1 + adjustments.benefitPercent / 100)
     }

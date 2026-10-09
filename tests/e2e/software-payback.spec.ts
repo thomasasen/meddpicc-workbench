@@ -276,7 +276,9 @@ test('Kundenbericht: Pflichtangaben sch체tzen vor Platzhalter-PDF', async ({ pag
   expect((await download).suggestedFilename()).toContain('kundenbericht-')
 })
 
-test('Szenario-Stresstest: unver채nderte Basis, negativer Fall, eigene V4-Fortf체hrung und mobile Abnahme', async ({ page }, testInfo) => {
+test('Szenario-Stresstest: unver채nderte Basis, negativer Fall, eigene V4-Fortf체hrung und mobile Abnahme', async ({
+  page,
+}, testInfo) => {
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
   await projectMode(page)
@@ -310,7 +312,9 @@ test('Szenario-Stresstest: unver채nderte Basis, negativer Fall, eigene V4-Fortf�
   expect(errors).toEqual([])
 })
 
-test('Szenario-Stresstest: ausgew채hlter Fall wird konsistent im echten Kunden-PDF exportiert', async ({ page }, testInfo) => {
+test('Szenario-Stresstest: ausgew채hlter Fall wird konsistent im echten Kunden-PDF exportiert', async ({
+  page,
+}, testInfo) => {
   await projectMode(page)
   await page.getByRole('button', { name: 'CRM-/SaaS-Beispiel mit Kunden-Metrics' }).click()
   await page.getByTestId('scenario-option-conservative').click()

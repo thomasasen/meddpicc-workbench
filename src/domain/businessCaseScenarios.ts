@@ -39,7 +39,8 @@ export function compareBusinessScenarios(
   if (
     !validScenarioAdjustments(settings.conservative, input.horizonMonths) ||
     !validScenarioAdjustments(settings.optimistic, input.horizonMonths)
-  ) return null
+  )
+    return null
   const base = summarizeBusinessCase(input)
   const conservative = summarizeBusinessCase(input, settings.conservative)
   const optimistic = summarizeBusinessCase(input, settings.optimistic)
@@ -66,7 +67,13 @@ export function compareBusinessScenarios(
 
 export function describeScenarioAssumptions(a: ScenarioAdjustments): string {
   const percent = (n: number) => (n > 0 ? '+' : '') + n.toLocaleString('de-DE', { maximumFractionDigits: 1 }) + ' %'
-  return 'Kundennutzen ' + percent(a.benefitPercent) +
-    ', einmalige Projektkosten ' + percent(a.oneTimeCostPercent) +
-    ', Nutzenbeginn +' + a.benefitDelayMonths + ' Monate'
+  return (
+    'Kundennutzen ' +
+    percent(a.benefitPercent) +
+    ', einmalige Projektkosten ' +
+    percent(a.oneTimeCostPercent) +
+    ', Nutzenbeginn +' +
+    a.benefitDelayMonths +
+    ' Monate'
+  )
 }

@@ -1,7 +1,12 @@
 import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf-lib'
 import { summarizeBusinessCase, economicInterpretation, type CaseSummary } from '../domain/businessCase'
 import type { SoftwarePaybackInput } from '../domain/softwarePayback'
-import { compareBusinessScenarios, describeScenarioAssumptions, type BusinessScenarioId, type ScenarioSettings } from '../domain/businessCaseScenarios'
+import {
+  compareBusinessScenarios,
+  describeScenarioAssumptions,
+  type BusinessScenarioId,
+  type ScenarioSettings,
+} from '../domain/businessCaseScenarios'
 
 export interface ReportData {
   customer: string
@@ -525,24 +530,43 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
   s.y -= 12
   for (const scenario of scenarios) {
     reserve(s, 104)
-    heading(s, scenario.label + ' | ' +
-      (scenario.summary.sustainedBreakEvenMonth === null
-        ? 'Keine Amortisation'
-        : 'Amortisation ab Monat ' + scenario.summary.sustainedBreakEvenMonth), f, 12)
+    heading(
+      s,
+      scenario.label +
+        ' | ' +
+        (scenario.summary.sustainedBreakEvenMonth === null
+          ? 'Keine Amortisation'
+          : 'Amortisation ab Monat ' + scenario.summary.sustainedBreakEvenMonth),
+      f,
+      12,
+    )
     field(s, 'Gesamte neue Kosten', euro(scenario.summary.totalCostEur), f)
     field(s, 'Angerechneter Nutzen', euro(scenario.summary.benefitEur), f)
     field(s, 'Tiefster Saldo (M' + scenario.summary.lowestMonth + ')', euro(scenario.summary.lowestBalanceEur), f)
-    field(s, 'Endsaldo / Delta zur Basis', euro(scenario.summary.netValueEur) + ' / ' + euro(scenario.deltaBalanceEur), f)
+    field(
+      s,
+      'Endsaldo / Delta zur Basis',
+      euro(scenario.summary.netValueEur) + ' / ' + euro(scenario.deltaBalanceEur),
+      f,
+    )
     field(s, 'ROI (' + scenario.summary.horizon + ' Monate)', percent(scenario.summary.roiPercent), f)
     para(s, describeScenarioAssumptions(scenario.assumptions), f, 8.5)
     s.y -= 12
   }
-  para(s,
-    'Die Prozentwerte beziehen sich nur auf angerechnete Kundennutzen-Metrics bzw. einmalige Projektkosten. Lizenz- und Altsystem-Vertragstermine bleiben unveraendert. Der Nutzen-Ramp-up verschiebt sich, ohne den Projektzeitraum zu verlaengern.', f, 9)
-  para(s,
+  para(
+    s,
+    'Die Prozentwerte beziehen sich nur auf angerechnete Kundennutzen-Metrics bzw. einmalige Projektkosten. Lizenz- und Altsystem-Vertragstermine bleiben unveraendert. Der Nutzen-Ramp-up verschiebt sich, ohne den Projektzeitraum zu verlaengern.',
+    f,
+    9,
+  )
+  para(
+    s,
     'Modellierte wirtschaftliche Salden sind keine Zahlungsstroeme oder Liquiditaetsprognosen. ' +
       'Noch unbestaetigte Nutzenannahmen bleiben in allen Szenarien unbestaetigt. ' +
-      'Die optionale illustrative Fortfuehrung nach dem Horizont zaehlt nicht zu den KPIs.', f, 9)
+      'Die optionale illustrative Fortfuehrung nach dem Horizont zaehlt nicht zu den KPIs.',
+    f,
+    9,
+  )
   footer(pdf, f, client)
   return pdf.save({ useObjectStreams: false })
 }
