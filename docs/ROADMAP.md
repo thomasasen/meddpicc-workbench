@@ -197,7 +197,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 
 ## Phase T3 – Value & Metrics Tools
 
-**Aktueller Draft-Slice:** Quick Payback + optionaler Softwareprojekt-/Kunden-Metrics-Modus auf `feature/quick-payback-tool`. Technische CI [#37862223720](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37862223720) erfolgreich, vier zusätzliche Chromium-Abnahmebilder visuell überprüft. Merge erst nach erfüllter Freigabebedingung und ausdrücklicher visueller Nutzerfreigabe; bislang **nicht gemergt**. Metric Builder, Cost of Delay und Business Case / Value Bridge bleiben separate geplante Microtools. Die Quick-Payback-Formelbausteine sind kein eigenständiger vollständiger Metric Builder.
+**Stand 10.10.2026:** Quick Payback mit Softwareprojekt-Modus und Business-Case-Stresstest aus PR #59 sind in `main`. Der Metric Builder wird auf `feature/metric-builder` separat implementiert und geprüft; vor Merge bleiben technische Abnahme und ausdrücklich visuelle Nutzerfreigabe erforderlich. Cost of Delay und Business Case / Value Bridge bleiben weitere separate Microtools.
 
 
 Priorität:
@@ -214,6 +214,19 @@ Leitprinzip:
 **Pain / Outcome → Metric → wirtschaftlicher Wert → Payback / Cost of Delay**
 
 Keine dauerhafte Opportunity-Pflege.
+
+### Metric Builder (Feature-PR, noch nicht freigegeben)
+
+- [x] Pain → Metric mit 7 typabhängigen Kategorien und kontextbezogenen Fragen
+- [x] Bestehende Payback-Formeln, konservative Trennung von Potenzial und realisierter Wirkung
+- [x] Evidenzstatus und explizite Doppelzählungsgruppen
+- [x] Metric Card, Copy, lokales Kunden-PDF, ausdrücklicher Payback-Transfer
+- [x] Simulation des fachlichen Red Teams vor Design und nach Domainimplementierung
+- [ ] CI komplett grün, Screenshots und tatsächliche PDF-Bildseiten geprüft
+- [ ] Dritte Red-Team-Runde nach visueller Sichtprüfung und Nutzerfreigabe
+- [ ] Merge nach main
+
+Siehe [Metric Builder Red Team](METRIC_BUILDER_RED_TEAM.md).
 
 ## Phase T4 – Buying Process Tools
 
