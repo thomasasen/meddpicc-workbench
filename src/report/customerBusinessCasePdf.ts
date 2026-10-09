@@ -228,7 +228,7 @@ function investmentComparison(p: PDFPage, c: CaseSummary, f: FontSet): void {
   }
   write(p, 'Beginn', axisX, 181, 7.8, f.regular, muted)
   const endLabel = 'Monat ' + c.horizon
-  write(p, endLabel, RIGHT - f.regular.widthOfTextAtSize(endLabel, 7.8), 181, 7.8, f.regular, muted)
+  write(p, endLabel, RIGHT - 3 - f.regular.widthOfTextAtSize(endLabel, 7.8), 181, 7.8, f.regular, muted, 80)
 }
 
 function twoColumnRow(p: PDFPage, y: number, label: string, number: string, f: FontSet, total = false): void {
@@ -332,7 +332,7 @@ function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
       p,
       'Geplanter Nutzenbeginn: Monat ' +
         m.startMonth +
-        ' | Einführung über ' +
+        ' | Nutzenaufbau über ' +
         m.rampMonths +
         ' ' +
         (m.rampMonths === 1 ? 'Monat' : 'Monate'),
