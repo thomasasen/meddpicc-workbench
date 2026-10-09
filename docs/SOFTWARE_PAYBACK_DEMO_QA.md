@@ -61,6 +61,10 @@ Die Projektdatei enthält weiterhin einen alten aggregierten `businessCase`-Inpu
 
 ## Qualitätssicherung
 
-- Vitest: vollständige Referenzvalidierung, fünf Formeln/Status, Herkunft, Null-/Negativfälle, Payback m35, kumulierter Saldo und Unveränderlichkeit der Fixture nach UI-Bearbeitung.
+- Vitest: vollständige Referenzvalidierung, fünf Formeln/Status, Herkunft, Null-/Negativfälle, Payback m35, kumulierter Saldo und Unveränderlichkeit der Fixture nach UI-Bearbeitung. **Die ältere Qualification-Testbasis wurde ebenfalls angepasst:** Unbestätigte Demowerte führen fachlich korrekt zu einem Metric-Gap; im separaten positiven Gate-Test wird eine hypothetische Metric ausdrücklich mit bestätigter Evidenz versehen.
 - Playwright: beide Beispiele laden, m18/m35, ausgeschlossene Wirkungstypen sichtbar, Rücksetzen, bestehende Export- und Navigationsprüfung.
 - Prettier, ESLint, TypeScript/Vite und bestehende Chromium-Regression müssen vor Merge erfolgreich sein.
+
+### Fehlerbehebung während der Umsetzung
+
+Die erste Pipeline schlug wegen der JSON-Prettier-Regeln für `.meddpicc` fehl. Nach deren Korrektur deckten ältere Qualification-Tests sechs bisher fest erwartete Demo-Zustände auf, die mit den jetzt unbestätigten Metrics nicht mehr zutrafen. Die Tests wurden fachlich entsprechend aktualisiert; die Produktregeln wurden **nicht** abgeschwächt. Anschließend waren 235 Vitest-Tests grün. Ein zusätzlicher TypeScript-Check erzwang die korrekte Behandlung des optionalen alten `businessCase`-Felds. Nach automatischer Normalisierung der geänderten Dateien wurde der temporäre Formatierungsschritt wieder entfernt. Die abschließende CI läuft auf genau diesem Stand.
