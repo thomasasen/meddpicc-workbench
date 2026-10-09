@@ -187,7 +187,7 @@ test('Business Case: farbcodierte Chart-Markierungen und echtes mehrseitiges PDF
   await expect(page.getByTestId('roi-percent')).toContainText('%')
   const chart = page.locator('.value-chart')
   await expect(chart.getByText('Break-even · M35')).toBeVisible()
-  await expect(chart.getByText('Tiefpunkt', { exact: false })).toBeVisible()
+  await expect(chart.locator('text.chart-min')).toBeVisible()
   await chart.screenshot({ path: testInfo.outputPath('business-case-chart-' + testInfo.project.name + '.png') })
 
   const customer = page.getByLabel('Kunde / Unternehmen')
