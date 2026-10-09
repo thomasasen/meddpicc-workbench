@@ -92,33 +92,22 @@ async function copySummary() {
         </div>
         <h1 id="quick-title">In wie vielen Monaten rechnet sich die Investition?</h1>
         <p class="intro-text">
-          {{
-            calculationMode === 'quick'
-              ? 'Drei EUR-Werte genügen für eine einfache Payback-Schätzung ab regelmäßigem Nutzenbeginn.'
-              : 'Modelliere Softwareprojekt, SaaS-Kosten, Status quo und beliebig viele kundenspezifische Metrics im monatlichen Verlauf.'
-          }}
-          Die Rechnung ersetzt keinen vom Kunden validierten Business Case.
+          {{ calculationMode === 'quick'
+            ? 'Investition und jährlichen Nutzen eingeben. Die Amortisation erscheint sofort.'
+            : 'Projektkosten, SaaS und Kunden-Metrics erfassen. Der Verlauf zeigt, wann sich das Projekt rechnet.' }}
         </p>
       </section>
 
       <nav class="container quick-mode-choice" aria-label="Berechnungsmodus">
-        <button
-          type="button"
-          class="button"
-          :class="calculationMode === 'quick' ? 'button-primary' : 'button-secondary'"
-          :aria-pressed="calculationMode === 'quick'"
-          @click="calculationMode = 'quick'"
-        >
-          Schnellberechnung
+        <button type="button" class="quick-mode-option" :class="{ 'quick-mode-option--active': calculationMode === 'quick' }"
+          :aria-pressed="calculationMode === 'quick'" @click="calculationMode = 'quick'">
+          <span class="quick-mode-option__title">Schnellberechnung</span>
+          <span class="quick-mode-option__hint">3 Werte · sofort ein Ergebnis</span>
         </button>
-        <button
-          type="button"
-          class="button"
-          :class="calculationMode === 'project' ? 'button-primary' : 'button-secondary'"
-          :aria-pressed="calculationMode === 'project'"
-          @click="calculationMode = 'project'"
-        >
-          Softwareprojekt &amp; Kunden-Metrics
+        <button type="button" class="quick-mode-option" :class="{ 'quick-mode-option--active': calculationMode === 'project' }"
+          :aria-pressed="calculationMode === 'project'" @click="calculationMode = 'project'">
+          <span class="quick-mode-option__title">Softwareprojekt &amp; Kunden-Metrics</span>
+          <span class="quick-mode-option__hint">SaaS, Kosten und Nutzen im Zeitverlauf</span>
         </button>
       </nav>
       <template v-if="calculationMode === 'quick'">
@@ -133,7 +122,7 @@ async function copySummary() {
             </div>
 
             <p class="quick-format-help" id="quick-format-help">
-              Beträge in EUR, ohne Währungssymbol. Deutsche Schreibweise: 12345,67 oder 12.345,67.
+              EUR-Beträge eingeben, z. B. 12.345,67.
             </p>
 
             <label class="field quick-field" for="quick-upfront">
@@ -150,8 +139,7 @@ async function copySummary() {
                 @input="copyMessage = ''"
               />
               <small id="quick-upfront-help">
-                Einmalige Lösungskosten, Einrichtung, Implementierung und indirekte Einmalkosten. Nicht erneut jährlich
-                zählen.
+                Einmalige Lizenz-, Implementierungs- und Migrationskosten.
               </small>
               <small v-if="errorFor('upfrontInvestmentEur')" id="quick-upfront-error" class="quick-error" role="alert">
                 {{ errorFor('upfrontInvestmentEur') }}
@@ -172,8 +160,7 @@ async function copySummary() {
                 @input="copyMessage = ''"
               />
               <small id="quick-benefit-help">
-                Nur begründete Kostenersparnis, vermiedene Kosten oder zusätzlicher Deckungsbeitrag. Zeitgewinn ist
-                nicht automatisch Geldersparnis; Mehrumsatz ist nicht Gewinn. Keine Effekte doppelt zählen.
+                Echte Einsparungen oder zusätzlicher Deckungsbeitrag. Nicht einfach Umsatz oder freie Zeit ansetzen.
               </small>
               <small
                 v-if="errorFor('annualRealizableBenefitEur')"
@@ -198,8 +185,7 @@ async function copySummary() {
                 @input="copyMessage = ''"
               />
               <small id="quick-operating-help">
-                Zum Beispiel zusätzliche Lizenz-, Betriebs- oder Supportkosten. 0 bedeutet ausdrücklich keine
-                angesetzten Mehrkosten. Bereits netto erfassten Nutzen nicht nochmals um dieselben Kosten kürzen.
+                SaaS, Wartung und Betrieb pro Jahr. 0 bedeutet: keine weiteren Kosten angesetzt.
               </small>
               <small
                 v-if="errorFor('annualIncrementalOperatingCostEur')"
@@ -365,18 +351,40 @@ async function copySummary() {
 }
 
 .quick-mode-choice {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
   margin-bottom: var(--space-6);
 }
-.quick-mode-choice .button[aria-pressed='true'] {
-  font-weight: 780;
+.quick-mode-option {
+  min-width: 0;
+  min-height: 88px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+  text-align: left;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color .15s ease, box-shadow .15s ease;
 }
+.quick-mode-option:hover { border-color: var(--color-accent); }
+.quick-mode-option:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+.quick-mode-option--active {
+  border: 2px solid var(--color-accent);
+  background: var(--color-surface-muted);
+  padding: calc(var(--space-4) - 1px);
+}
+.quick-mode-option__title { font-size: 1rem; font-weight: 750; line-height: 1.25; }
+.quick-mode-option__hint { color: var(--color-text-muted); font-size: .87rem; line-height: 1.4; }
 @media (max-width: 560px) {
-  .quick-mode-choice .button {
-    width: 100%;
-  }
+  .quick-mode-choice { grid-template-columns: minmax(0, 1fr); }
+  .quick-mode-option { min-height: 72px; }
 }
 .quick-main {
   padding: var(--space-8) 0 var(--space-12);
