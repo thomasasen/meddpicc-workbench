@@ -699,7 +699,8 @@ async function downloadReport(kind: 'customer' | 'finance') {
               <h3 id="business-case-report-heading">Zwei Berichte, eine Berechnungsgrundlage</h3>
               <p class="software-muted">
                 Kompakter Kundenbericht mit Entscheidungsbotschaft oder vollständiger Finance-Anhang mit Monatswerten.
-                Beide entstehen lokal im Browser. Kunde, Projekt und Verfasser sind Pflichtangaben; der Kundenbericht benötigt zusätzlich Ausgangssituation und Ziel.
+                Beide entstehen lokal im Browser. Kunde, Projekt und Verfasser sind Pflichtangaben; der Kundenbericht
+                benötigt zusätzlich Ausgangssituation und Ziel.
               </p>
             </div>
           </div>

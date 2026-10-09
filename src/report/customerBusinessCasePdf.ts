@@ -155,7 +155,7 @@ function investmentComparison(p: PDFPage, c: CaseSummary, f: FontSet): void {
   const barX = X + 3
   const barWidth = RIGHT - barX - 3
   const maxValue = Math.max(1, c.totalCostEur, c.benefitEur)
-  const scaled = (value: number): number => barWidth * Math.max(0, value) / maxValue
+  const scaled = (value: number): number => (barWidth * Math.max(0, value)) / maxValue
   const costWidth = scaled(c.totalCostEur)
   const benefitWidth = scaled(c.benefitEur)
   const upFrontWidth = scaled(c.investmentEur)
@@ -173,9 +173,9 @@ function investmentComparison(p: PDFPage, c: CaseSummary, f: FontSet): void {
 
   write(p, 'Gesamte Kosten über ' + c.horizon + ' Monate', barX, 383, 9.3, f.bold, navy, 310)
   amount(c.totalCostEur, 383)
-  bar(361, costWidth, upFrontWidth, navy, rgb(0.48, 0.57, 0.70))
+  bar(361, costWidth, upFrontWidth, navy, rgb(0.48, 0.57, 0.7))
   p.drawRectangle({ x: barX, y: 340, width: 8, height: 8, color: navy })
-  p.drawRectangle({ x: barX + 215, y: 340, width: 8, height: 8, color: rgb(0.48, 0.57, 0.70) })
+  p.drawRectangle({ x: barX + 215, y: 340, width: 8, height: 8, color: rgb(0.48, 0.57, 0.7) })
   write(p, 'Einmalige Einführung', barX + 14, 343, 8, f.regular, muted)
   write(p, 'Laufender Betrieb', barX + 229, 343, 8, f.regular, muted)
 
@@ -213,7 +213,16 @@ function investmentComparison(p: PDFPage, c: CaseSummary, f: FontSet): void {
     p.drawLine({ start: { x: marker, y: axisY - 6 }, end: { x: marker, y: axisY + 14 }, color: teal, thickness: 1.6 })
     const label = 'Monat ' + c.sustainedBreakEvenMonth + ': wirtschaftlicher Ausgleich'
     const labelWidth = f.bold.widthOfTextAtSize(readable(label), 8)
-    write(p, label, Math.max(axisX, Math.min(RIGHT - labelWidth, marker - labelWidth / 2)), 171, 8, f.bold, teal, labelWidth + 1)
+    write(
+      p,
+      label,
+      Math.max(axisX, Math.min(RIGHT - labelWidth, marker - labelWidth / 2)),
+      171,
+      8,
+      f.bold,
+      teal,
+      labelWidth + 1,
+    )
   } else {
     write(p, 'Kein wirtschaftlicher Ausgleich im Betrachtungszeitraum', axisX, 171, 8, f.bold, red)
   }
@@ -245,9 +254,10 @@ function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSu
   meta(p, 'Kontakt', data.preparedBy.trim() + '  |  ' + data.date, 653, f)
 
   const month = c.sustainedBreakEvenMonth
-  const claim = month === null
-    ? 'Der wirtschaftliche Ausgleich wird nicht erreicht'
-    : 'Der wirtschaftliche Ausgleich ist ab Monat ' + month + ' möglich'
+  const claim =
+    month === null
+      ? 'Der wirtschaftliche Ausgleich wird nicht erreicht'
+      : 'Der wirtschaftliche Ausgleich ist ab Monat ' + month + ' möglich'
   write(p, claim, X, 613, 14.5, f.bold, month === null ? red : navy)
   const outcome = data.targetOutcome?.trim()
     ? 'Ihr angestrebtes Ergebnis: ' + data.targetOutcome.trim()
@@ -259,8 +269,13 @@ function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSu
   metricCard(p, X, 541, cardWidth, 'Amortisation', month === null ? 'Nicht erreicht' : 'Monat ' + month, f)
   metricCard(p, X + cardWidth + gap, 541, cardWidth, 'Gesamtkosten / ' + c.horizon + ' M.', euro(c.totalCostEur), f)
   metricCard(
-    p, X + 2 * (cardWidth + gap), 541, cardWidth,
-    'Saldo nach ' + c.horizon + ' Monaten', euro(c.netValueEur), f,
+    p,
+    X + 2 * (cardWidth + gap),
+    541,
+    cardWidth,
+    'Saldo nach ' + c.horizon + ' Monaten',
+    euro(c.netValueEur),
+    f,
     c.netValueEur < 0 ? red : navy,
   )
 
@@ -268,11 +283,12 @@ function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSu
   write(p, 'Modellierte Gesamtwerte, nicht mit tatsächlichen Zahlungen gleichzusetzen', X, 411, 8.4, f.regular, muted)
   investmentComparison(p, c, f)
 
-  const uncertainty = c.unverified > 0
-    ? c.unverified +
-      (c.unverified === 1 ? ' Nutzenposition beruht' : ' Nutzenpositionen beruhen') +
-      ' auf noch nicht gemeinsam bestätigten Angaben. Bitte die wirtschaftlichen Annahmen vor einer Entscheidung abstimmen.'
-    : 'Die Nutzenwerte sind laut Eingabe bereits gemeinsam geprüft. Kosten, Zeitplan und Auswirkungen sollten vor der Entscheidung nochmals abgestimmt werden.'
+  const uncertainty =
+    c.unverified > 0
+      ? c.unverified +
+        (c.unverified === 1 ? ' Nutzenposition beruht' : ' Nutzenpositionen beruhen') +
+        ' auf noch nicht gemeinsam bestätigten Angaben. Bitte die wirtschaftlichen Annahmen vor einer Entscheidung abstimmen.'
+      : 'Die Nutzenwerte sind laut Eingabe bereits gemeinsam geprüft. Kosten, Zeitplan und Auswirkungen sollten vor der Entscheidung nochmals abgestimmt werden.'
   notice(p, 143, uncertainty, f)
 }
 
@@ -328,7 +344,15 @@ function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
     )
     p.drawLine({ start: { x: X, y: top - 44 }, end: { x: RIGHT, y: top - 44 }, thickness: 0.5, color: line })
   })
-  write(p, 'Jahreswerte gelten bei voller Wirkung. Der Hochlauf ist in der Rechnung berücksichtigt.', X, 119, 8, f.regular, muted)
+  write(
+    p,
+    'Jahreswerte gelten bei voller Wirkung. Der Hochlauf ist in der Rechnung berücksichtigt.',
+    X,
+    119,
+    8,
+    f.regular,
+    muted,
+  )
   if (included.length > visible.length) {
     write(
       p,
@@ -344,8 +368,7 @@ function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
   if (excluded.length)
     write(
       p,
-      String(excluded.length) +
-        ' weitere Effekte sind nicht als finanzieller Nutzen eingerechnet.',
+      String(excluded.length) + ' weitere Effekte sind nicht als finanzieller Nutzen eingerechnet.',
       X,
       80,
       8.3,
@@ -362,21 +385,41 @@ function decisionPage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSum
   paragraph(
     p,
     data.businessPain?.trim() || 'Die Ausgangssituation halten wir gemeinsam im nächsten Gespräch fest.',
-    X, 636, RIGHT - X, f, { size: 9.4, leading: 15, maxLines: 4 },
+    X,
+    636,
+    RIGHT - X,
+    f,
+    { size: 9.4, leading: 15, maxLines: 4 },
   )
   write(p, 'WAS SICH DURCH DAS VORHABEN VERBESSERN SOLL', X, 552, 8, f.bold, muted)
   paragraph(
     p,
     data.targetOutcome?.trim() || 'Das gewünschte Geschäftsergebnis stimmen wir gemeinsam ab.',
-    X, 531, RIGHT - X, f, { size: 9.4, leading: 15, maxLines: 4 },
+    X,
+    531,
+    RIGHT - X,
+    f,
+    { size: 9.4, leading: 15, maxLines: 4 },
   )
 
   section(p, 'Was wir gemeinsam überprüfen und abstimmen', 447, f)
   const questions = [
     ['01', 'Ausgangswerte und Wirkung', 'Mengen, heutige Aufwände und erreichbare Verbesserungen gemeinsam prüfen.'],
-    ['02', 'Finanzielle Auswirkungen', 'Einsparungen, zusätzliche Erträge und Gesamtkosten mit Ihrem Controlling bewerten.'],
-    ['03', 'Umstellung und Zeitplan', 'Start, Lizenzkosten, Ablösung bisheriger Systeme und schrittweisen Nutzenbeginn abstimmen.'],
-    ['04', 'Entscheidungsgrundlage', 'Annahmen, offene Punkte, Entscheidungskriterien und das weitere Vorgehen festhalten.'],
+    [
+      '02',
+      'Finanzielle Auswirkungen',
+      'Einsparungen, zusätzliche Erträge und Gesamtkosten mit Ihrem Controlling bewerten.',
+    ],
+    [
+      '03',
+      'Umstellung und Zeitplan',
+      'Start, Lizenzkosten, Ablösung bisheriger Systeme und schrittweisen Nutzenbeginn abstimmen.',
+    ],
+    [
+      '04',
+      'Entscheidungsgrundlage',
+      'Annahmen, offene Punkte, Entscheidungskriterien und das weitere Vorgehen festhalten.',
+    ],
   ] as const
   questions.forEach(([number, owner, note], i) => {
     const y = 412 - i * 62
@@ -388,7 +431,8 @@ function decisionPage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSum
   notice(
     p,
     145,
-    'Die vorliegende Einschätzung betrachtet ' + c.horizon +
+    'Die vorliegende Einschätzung betrachtet ' +
+      c.horizon +
       ' Monate. Sie zeigt die wirtschaftlichen Auswirkungen der eingetragenen Annahmen, nicht die tatsächlichen Zahlungszeitpunkte. Einzelheiten und Datenstand enthält der Finance-Anhang.',
     f,
   )
