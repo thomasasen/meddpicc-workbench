@@ -30,7 +30,7 @@ export function consumeMetricHandoff(
       const id = 'builder-' + Date.now().toString(36) + '-' + index +
         '-' + Math.random().toString(36).slice(2, 8)
       if (existingIds.has(id)) throw new Error('ID-Kollision.')
-      return { ...metric, id, included: false, startMonth: Math.min(metric.startMonth, horizon) }
+      return { ...metric, id, included: false }
     })
     const result = calculateSoftwarePayback({
       horizonMonths: horizon, costs: existingCosts, metrics: [...existingMetrics, ...imported],
