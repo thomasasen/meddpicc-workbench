@@ -25,7 +25,18 @@ const reportCustomer = ref('')
 const reportProject = ref('Softwareeinführung / CRM')
 const reportPreparedBy = ref('')
 const reportStatus = ref('')
-const reportKpis = computed(() => plan.value ? investmentKpis({customer:'',project:'',preparedBy:'',date:'',input:{horizonMonths:horizon.value,costs:costs.value,metrics:metrics.value},result:plan.value}) : null)
+const reportKpis = computed(() =>
+  plan.value
+    ? investmentKpis({
+        customer: '',
+        project: '',
+        preparedBy: '',
+        date: '',
+        input: { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
+        result: plan.value,
+      })
+    : null,
+)
 const svgRef = ref<SVGSVGElement | null>(null)
 let idCounter = 0
 
@@ -131,27 +142,37 @@ function evidenceLabel(value: CustomerMetric['evidence']): string {
 const chartLeft = 90
 const chartWidth = 766
 const yBounds = computed(() => {
-  if (!plan.value) return {low:-1,high:1}
-  const values=plan.value.months.map(m=>m.cumulativeEur)
-  const min=Math.min(0,...values),max=Math.max(0,...values)
-  const pad=Math.max(1,(max-min)*0.10)
-  return {low:min-pad,high:max+pad}
+  if (!plan.value) return { low: -1, high: 1 }
+  const values = plan.value.months.map((m) => m.cumulativeEur)
+  const min = Math.min(0, ...values),
+    max = Math.max(0, ...values)
+  const pad = Math.max(1, (max - min) * 0.1)
+  return { low: min - pad, high: max + pad }
 })
-const xFor=(month:number)=>90+month/horizon.value*766
-const yFor=(value:number)=>226-(value-yBounds.value.low)/(yBounds.value.high-yBounds.value.low)*174
-const zeroY=computed(()=>yFor(0))
-const points=computed(()=>plan.value?.months.map(m=>xFor(m.month).toFixed(2)+','+yFor(m.cumulativeEur).toFixed(2)).join(' ')??'')
-const areaBelow=computed(()=>{
-  if(!plan.value)return ''
-  const coords=plan.value.months.map(m=>xFor(m.month).toFixed(2)+','+Math.max(zeroY.value,yFor(m.cumulativeEur)).toFixed(2))
-  return xFor(0)+','+zeroY.value+' '+coords.join(' ')+' '+xFor(horizon.value)+','+zeroY.value
+const xFor = (month: number) => 90 + (month / horizon.value) * 766
+const yFor = (value: number) => 226 - ((value - yBounds.value.low) / (yBounds.value.high - yBounds.value.low)) * 174
+const zeroY = computed(() => yFor(0))
+const points = computed(
+  () =>
+    plan.value?.months.map((m) => xFor(m.month).toFixed(2) + ',' + yFor(m.cumulativeEur).toFixed(2)).join(' ') ?? '',
+)
+const areaBelow = computed(() => {
+  if (!plan.value) return ''
+  const coords = plan.value.months.map(
+    (m) => xFor(m.month).toFixed(2) + ',' + Math.max(zeroY.value, yFor(m.cumulativeEur)).toFixed(2),
+  )
+  return xFor(0) + ',' + zeroY.value + ' ' + coords.join(' ') + ' ' + xFor(horizon.value) + ',' + zeroY.value
 })
-const areaAbove=computed(()=>{
-  if(!plan.value)return ''
-  const coords=plan.value.months.map(m=>xFor(m.month).toFixed(2)+','+Math.min(zeroY.value,yFor(m.cumulativeEur)).toFixed(2))
-  return xFor(0)+','+zeroY.value+' '+coords.join(' ')+' '+xFor(horizon.value)+','+zeroY.value
+const areaAbove = computed(() => {
+  if (!plan.value) return ''
+  const coords = plan.value.months.map(
+    (m) => xFor(m.month).toFixed(2) + ',' + Math.min(zeroY.value, yFor(m.cumulativeEur)).toFixed(2),
+  )
+  return xFor(0) + ',' + zeroY.value + ' ' + coords.join(' ') + ' ' + xFor(horizon.value) + ',' + zeroY.value
 })
-const minimum=computed(()=>plan.value?.months.reduce((a,b)=>b.cumulativeEur<a.cumulativeEur?b:a,plan.value.months[0]!)??null)
+const minimum = computed(
+  () => plan.value?.months.reduce((a, b) => (b.cumulativeEur < a.cumulativeEur ? b : a), plan.value.months[0]!) ?? null,
+)
 const checkpoints = computed(() =>
   plan.value
     ? [0, 6, 12, 18, 24, 36, 60].filter((m) => m <= horizon.value).map((month) => plan.value!.months[month]!)
@@ -256,7 +277,8 @@ function downloadReport() {
   if (!plan.value) return
   try {
     const pdf = createBusinessCasePdf({
-      customer: reportCustomer.value, project: reportProject.value,
+      customer: reportCustomer.value,
+      project: reportProject.value,
       preparedBy: reportPreparedBy.value,
       date: new Date().toLocaleDateString('de-DE'),
       input: { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
@@ -264,7 +286,7 @@ function downloadReport() {
     })
     const copy = new Uint8Array(pdf.byteLength)
     copy.set(pdf)
-    saveBlob(new Blob([copy], {type:'application/pdf'}), 'business-case-softwareprojekt.pdf')
+    saveBlob(new Blob([copy], { type: 'application/pdf' }), 'business-case-softwareprojekt.pdf')
     reportStatus.value = 'PDF-Bericht mit Finanzmodell und Annahmen erstellt.'
   } catch {
     reportStatus.value = 'PDF konnte nicht erstellt werden.'
@@ -602,34 +624,114 @@ function downloadReport() {
         <figure class="software-figure">
           <svg ref="svgRef" viewBox="0 0 900 360" role="img" aria-labelledby="software-chart-title software-chart-desc">
             <title id="software-chart-title">Kumulierter Nutzen im Projektverlauf</title>
-            <desc id="software-chart-desc">Saldo ab Projektmonat null; Anlaufphase, tiefste Investitionsposition und Break-even deutlich markiert. Die Monatswerte stehen in der zugänglichen Tabelle.</desc>
+            <desc id="software-chart-desc">
+              Saldo ab Projektmonat null; Anlaufphase, tiefste Investitionsposition und Break-even deutlich markiert.
+              Die Monatswerte stehen in der zugänglichen Tabelle.
+            </desc>
             <rect x="0" y="0" width="900" height="360" fill="#ffffff" />
-            <text x="90" y="26" font-size="17" font-weight="700" fill="#172033">Wann rechnet sich die Softwareinvestition?</text>
-            <text x="90" y="48" font-size="11" fill="#5f6b7a">Kumulierter wirtschaftlicher Saldo · {{ horizon }} Projektmonate</text>
+            <text x="90" y="26" font-size="17" font-weight="700" fill="#172033">
+              Wann rechnet sich die Softwareinvestition?
+            </text>
+            <text x="90" y="48" font-size="11" fill="#5f6b7a">
+              Kumulierter wirtschaftlicher Saldo · {{ horizon }} Projektmonate
+            </text>
             <polygon :points="areaBelow" fill="#fff0ed" />
             <polygon :points="areaAbove" fill="#e9f8f1" />
-            <line :x1="90" :x2="856" :y1="zeroY" :y2="zeroY" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5 5" />
+            <line
+              :x1="90"
+              :x2="856"
+              :y1="zeroY"
+              :y2="zeroY"
+              stroke="#64748b"
+              stroke-width="1.5"
+              stroke-dasharray="5 5"
+            />
             <line x1="90" y1="52" x2="90" y2="226" stroke="#c8d2df" stroke-width="1" />
-            <text x="83" :y="Math.max(62,zeroY-7)" font-size="11" text-anchor="end" fill="#475569">0 €</text>
-            <polyline :points="points" fill="none" stroke="#2563eb" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+            <text x="83" :y="Math.max(62, zeroY - 7)" font-size="11" text-anchor="end" fill="#475569">0 €</text>
+            <polyline
+              :points="points"
+              fill="none"
+              stroke="#2563eb"
+              stroke-width="3"
+              stroke-linejoin="round"
+              stroke-linecap="round"
+            />
             <template v-if="minimum">
-              <circle :cx="xFor(minimum.month)" :cy="yFor(minimum.cumulativeEur)" r="5" fill="#b45309" stroke="white" stroke-width="2" />
-              <text :x="Math.min(705,xFor(minimum.month)+9)" :y="Math.min(237,yFor(minimum.cumulativeEur)+18)" font-size="11" font-weight="700" fill="#92400e">Investitionstief M{{ minimum.month }}</text>
+              <circle
+                :cx="xFor(minimum.month)"
+                :cy="yFor(minimum.cumulativeEur)"
+                r="5"
+                fill="#b45309"
+                stroke="white"
+                stroke-width="2"
+              />
+              <text
+                :x="Math.min(705, xFor(minimum.month) + 9)"
+                :y="Math.min(237, yFor(minimum.cumulativeEur) + 18)"
+                font-size="11"
+                font-weight="700"
+                fill="#92400e"
+              >
+                Investitionstief M{{ minimum.month }}
+              </text>
             </template>
             <template v-if="plan?.sustainedBreakEvenMonth !== null">
-              <line :x1="xFor(plan!.sustainedBreakEvenMonth!)" :x2="xFor(plan!.sustainedBreakEvenMonth!)" :y1="yFor(plan!.months[plan!.sustainedBreakEvenMonth!]!.cumulativeEur)" y2="228" stroke="#15803d" stroke-dasharray="3 4" />
-              <circle :cx="xFor(plan!.sustainedBreakEvenMonth!)" :cy="yFor(plan!.months[plan!.sustainedBreakEvenMonth!]!.cumulativeEur)" r="6" fill="#15803d" stroke="#ffffff" stroke-width="2" />
-              <text :x="Math.min(705,xFor(plan!.sustainedBreakEvenMonth!)-50)" y="245" font-weight="700" font-size="11" fill="#15803d">Break-even M{{ plan!.sustainedBreakEvenMonth }}</text>
+              <line
+                :x1="xFor(plan!.sustainedBreakEvenMonth!)"
+                :x2="xFor(plan!.sustainedBreakEvenMonth!)"
+                :y1="yFor(plan!.months[plan!.sustainedBreakEvenMonth!]!.cumulativeEur)"
+                y2="228"
+                stroke="#15803d"
+                stroke-dasharray="3 4"
+              />
+              <circle
+                :cx="xFor(plan!.sustainedBreakEvenMonth!)"
+                :cy="yFor(plan!.months[plan!.sustainedBreakEvenMonth!]!.cumulativeEur)"
+                r="6"
+                fill="#15803d"
+                stroke="#ffffff"
+                stroke-width="2"
+              />
+              <text
+                :x="Math.min(705, xFor(plan!.sustainedBreakEvenMonth!) - 50)"
+                y="245"
+                font-weight="700"
+                font-size="11"
+                fill="#15803d"
+              >
+                Break-even M{{ plan!.sustainedBreakEvenMonth }}
+              </text>
             </template>
-            <text v-for="month in [0,12,24,36,48,60].filter(m=>m<=horizon)" :key="month" :x="xFor(month)" y="268" text-anchor="middle" font-size="12" fill="#475569">{{ month }}</text>
+            <text
+              v-for="month in [0, 12, 24, 36, 48, 60].filter((m) => m <= horizon)"
+              :key="month"
+              :x="xFor(month)"
+              y="268"
+              text-anchor="middle"
+              font-size="12"
+              fill="#475569"
+            >
+              {{ month }}
+            </text>
             <text x="470" y="287" text-anchor="middle" font-size="11" fill="#475569">Projektmonat</text>
             <rect x="89" y="301" width="767" height="46" rx="6" fill="#f1f5f9" />
             <text x="104" y="319" font-size="11" fill="#475569">Amortisation</text>
-            <text x="104" y="337" font-size="14" font-weight="700" fill="#172033">{{ plan?.sustainedBreakEvenMonth===null ? 'Nicht im Zeitraum erreicht' : 'Projektmonat '+plan?.sustainedBreakEvenMonth }}</text>
+            <text x="104" y="337" font-size="14" font-weight="700" fill="#172033">
+              {{
+                plan?.sustainedBreakEvenMonth === null
+                  ? 'Nicht im Zeitraum erreicht'
+                  : 'Projektmonat ' + plan?.sustainedBreakEvenMonth
+              }}
+            </text>
             <text x="550" y="319" font-size="11" fill="#475569">Saldo nach {{ horizon }} Monaten</text>
-            <text x="550" y="337" font-size="14" font-weight="700" fill="#172033">{{ formatEuro(plan?.cumulativeEur ?? 0) }}</text>
+            <text x="550" y="337" font-size="14" font-weight="700" fill="#172033">
+              {{ formatEuro(plan?.cumulativeEur ?? 0) }}
+            </text>
           </svg>
-          <figcaption>Undiskontierte Modellrechnung, basierend auf den angesetzten Kosten und realisierbaren Kunden-Metrics. Positive Werte sind kein garantierter Cashflow.</figcaption>
+          <figcaption>
+            Undiskontierte Modellrechnung, basierend auf den angesetzten Kosten und realisierbaren Kunden-Metrics.
+            Positive Werte sind kein garantierter Cashflow.
+          </figcaption>
         </figure>
         <div class="software-actions">
           <button class="button button-secondary button-with-icon" type="button" @click="exportSvg">
@@ -671,15 +773,29 @@ function downloadReport() {
               <h3 id="software-report-title">Business Case als PDF herunterladen</h3>
             </div>
           </div>
-          <p class="software-muted">Mit Executive Summary, Payback, ausgewiesenem Modell-ROI, Kosten, Nutzen-Metrics, Annahmen und monatlicher Prüfspur. Ohne Backend.</p>
+          <p class="software-muted">
+            Mit Executive Summary, Payback, ausgewiesenem Modell-ROI, Kosten, Nutzen-Metrics, Annahmen und monatlicher
+            Prüfspur. Ohne Backend.
+          </p>
           <div class="software-fields">
-            <label class="field"><span>Kunde (optional)</span><input v-model="reportCustomer" maxlength="120" placeholder="Unternehmen" /></label>
-            <label class="field"><span>Projektbezeichnung</span><input v-model="reportProject" maxlength="120" /></label>
-            <label class="field"><span>Erstellt von (optional)</span><input v-model="reportPreparedBy" maxlength="100" placeholder="Ansprechpartner" /></label>
+            <label class="field"
+              ><span>Kunde (optional)</span><input v-model="reportCustomer" maxlength="120" placeholder="Unternehmen"
+            /></label>
+            <label class="field"
+              ><span>Projektbezeichnung</span><input v-model="reportProject" maxlength="120"
+            /></label>
+            <label class="field"
+              ><span>Erstellt von (optional)</span
+              ><input v-model="reportPreparedBy" maxlength="100" placeholder="Ansprechpartner"
+            /></label>
           </div>
           <div class="software-report-kpis">
             <span>Modell-ROI über {{ horizon }} Monate:</span>
-            <strong data-testid="model-roi">{{ reportKpis?.roiPercent == null ? 'nicht definiert' : new Intl.NumberFormat('de-DE',{maximumFractionDigits:1}).format(reportKpis.roiPercent)+' %' }}</strong>
+            <strong data-testid="model-roi">{{
+              reportKpis?.roiPercent == null
+                ? 'nicht definiert'
+                : new Intl.NumberFormat('de-DE', { maximumFractionDigits: 1 }).format(reportKpis.roiPercent) + ' %'
+            }}</strong>
             <small>ROI = kumulierter Nettovorteil / kumulierte neue Kosten; nicht diskontiert.</small>
           </div>
           <button type="button" class="button button-primary button-with-icon" @click="downloadReport">
@@ -1215,10 +1331,38 @@ function downloadReport() {
   }
 }
 
-.software-report { display:grid; gap:var(--space-3); padding:var(--space-5); border:1px solid var(--color-border); border-radius:var(--radius-panel); background:var(--color-surface-muted); }
-.software-report-kpis { display:flex; gap:var(--space-2); flex-wrap:wrap; align-items:baseline; }
-.software-report-kpis strong {font-size:1.2rem;font-variant-numeric:tabular-nums;}
-.software-report-kpis small {width:100%;color:var(--color-text-muted);}
-.software-figure svg {height:auto;max-height:none;}
-@media(max-width:560px){.software-report{padding:var(--space-3);} .software-report > .button {width:100%;}}
+.software-report {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface-muted);
+}
+.software-report-kpis {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+.software-report-kpis strong {
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+}
+.software-report-kpis small {
+  width: 100%;
+  color: var(--color-text-muted);
+}
+.software-figure svg {
+  height: auto;
+  max-height: none;
+}
+@media (max-width: 560px) {
+  .software-report {
+    padding: var(--space-3);
+  }
+  .software-report > .button {
+    width: 100%;
+  }
+}
 </style>
