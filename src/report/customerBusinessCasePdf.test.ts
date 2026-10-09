@@ -36,6 +36,8 @@ describe('Kundenbericht - kompakte Executive-Ausgabe', () => {
     await expect(buildCustomerBusinessCasePdf({ ...input(), customer: '' })).rejects.toThrow('Kunde')
     await expect(buildCustomerBusinessCasePdf({ ...input(), project: '' })).rejects.toThrow('Kunde')
     await expect(buildCustomerBusinessCasePdf({ ...input(), preparedBy: '' })).rejects.toThrow('Kunde')
+    await expect(buildCustomerBusinessCasePdf({ ...input(), businessPain: '' })).rejects.toThrow('Ausgangssituation')
+    await expect(buildCustomerBusinessCasePdf({ ...input(), targetOutcome: '' })).rejects.toThrow('Ausgangssituation')
   })
 
   it('trennt die PDF-Darstellung von Finanzrechnung und verhindert Doppelzählung', async () => {
