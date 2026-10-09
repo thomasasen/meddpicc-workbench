@@ -1,4 +1,4 @@
-import { calculateSoftwarePayback, type CustomerMetric, type SoftwareCost } from './softwarePayback'
+import { calculateSoftwarePayback, type CustomerMetric, type SoftwareCost, type SoftwarePaybackInput } from './softwarePayback'
 
 const KEY = 'meddpicc-metric-builder-handoff-v1'
 
@@ -51,5 +51,29 @@ export function consumeMetricHandoff(
       imported: [],
       message: 'Übergabe verworfen: ' + (error instanceof Error ? error.message : 'ungültige Daten'),
     }
+  }
+}
+
+const PAYBACK_KEY = 'meddpicc-payback-return-v1'
+
+/** Nur die ausdrücklich vom Payback aus gestartete Rückkehr erhält den bisherigen Entwurf. */
+export function queuePaybackReturn(input: SoftwarePaybackInput, storage: Pick<Storage, 'setItem'>): void {
+  storage.setItem(PAYBACK_KEY, JSON.stringify(input))
+}
+
+export function consumePaybackReturn(storage: Pick<Storage, 'getItem' | 'removeItem'>): SoftwarePaybackInput | null {
+  const raw = storage.getItem(PAYBACK_KEY)
+  if (!raw) return null
+  storage.removeItem(PAYBACK_KEY)
+  try {
+    const draft: unknown = JSON.parse(raw)
+    if (!draft || typeof draft !== 'object') return null
+    const input = draft as SoftwarePaybackInput
+    if ((input.horizonMonths !== 36 && input.horizonMonths !== 60) ||
+      !Array.isArray(input.costs) || !Array.isArray(input.metrics) ||
+      input.costs.length > 100 || input.metrics.length > 100) return null
+    return input
+  } catch {
+    return null
   }
 }
