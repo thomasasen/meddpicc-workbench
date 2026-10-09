@@ -34,12 +34,6 @@ test('Software Payback: SaaS-Vorlauf, Metriken, Berechnung, Export und Originalb
   const errors: string[] = []
   page.on('pageerror', (err) => errors.push(err.message))
   await projectMode(page)
-  await page.evaluate(() => window.scrollTo(0, 0))
-  await page.screenshot({
-    path: testInfo.outputPath('software-payback-crm-demo-' + testInfo.project.name + '.png'),
-    fullPage: true,
-    scale: 'css',
-  })
   await page.getByRole('button', { name: 'Einfaches Beispiel laden' }).click()
   await expect(page.getByTestId('sustained-payback')).toHaveText('Monat 18')
   await expect(page.getByText('Datenstatus: Verkäuferannahme.', { exact: false })).toBeVisible()
@@ -78,6 +72,12 @@ test('Software Payback: CRM-/SaaS-Beispiel zeigt mehrere finanzielle und nicht m
   await expect(page.getByText('Mehr Abschlüsse durch bessere Conversion', { exact: false }).first()).toBeVisible()
   await expect(page.locator('.software-entry').filter({ has: page.getByText(/Metric [1-5] · /) })).toHaveCount(5)
   await expect(page.getByText('2 weitere Metrics stehen außerhalb', { exact: false })).toBeVisible()
+  await page.evaluate(() => window.scrollTo(0, 0))
+  await page.screenshot({
+    path: testInfo.outputPath('software-payback-crm-demo-' + testInfo.project.name + '.png'),
+    fullPage: true,
+    scale: 'css',
+  })
   await page.getByRole('button', { name: 'Einfaches Beispiel laden' }).click()
   await expect(page.getByTestId('sustained-payback')).toHaveText('Monat 18')
   await page.getByRole('button', { name: 'Zurücksetzen' }).click()
