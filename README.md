@@ -58,6 +58,12 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 - **Checklist → Champion:** zehn fachliche Prüffragen mit Evidenz, Fehlinterpretationen und Next Steps. Häkchen flüchtig, kein Deal-Score und keine Kontakt-/Opportunity-Pflege.
 - [Primärquellenmatrix und simulierte fachliche Red-Teams](docs/CHAMPION_SOURCE_QA.md). Champion Tester, Development Helper und Internal Selling Pack bleiben für T8 geplant.
 
+### Aktualisierte Beispielwerte für den Software-Payback (09.10.2026)
+
+Im Projektmodus stehen zwei ausdrücklich fiktive Szenarien bereit: die bewährte Kurzrechnung (120.000 EUR einmalig, 3.000 EUR/Monat SaaS, Payback Monat 18) und ein detailliertes **CRM-/SaaS-Beispiel mit Kunden-Metrics**. Es enthält 480.000 EUR gestaffelte Einmalkosten, SaaS für 8.000 EUR monatlich, ab Monat 10 entfallende Altsystemkosten von 3.000 EUR monatlich und drei wirtschaftliche, ausdrücklich unbestätigte Metrics mit zusammen 320.000 EUR/Jahr Vollnutzen. Ein rechnerischer Kapazitätswert von 1.360.680 EUR/Jahr sowie eine fiktive 40.000-EUR-Risikoschätzung bleiben außerhalb des Payback; Break-even **Projektmonat 35**.
+
+Die zugehörige [Demo-Opportunity](examples/demo-opportunity.meddpicc) verwendet dieselbe fiktive Story. Die Legacy-Projektdatei befüllt den eigenständigen Rechner jedoch **nicht automatisch**; ROI in Prozent wird ebenfalls nicht berechnet.
+
 ### Quick-Payback-GUI: Feinschliff und Browser-QS (09.10.2026)
 
 - Der Einstieg erfolgt über zwei beschriftete Auswahlflächen: **Schnellberechnung** (drei Werte) oder **Softwareprojekt & Kunden-Metrics** (zeitlicher Verlauf). Der Nutzer wird in der Projektansicht durch **Kosten → Kundennutzen → Ergebnis** geführt.
