@@ -14,7 +14,6 @@ const x0 = 94,
   x1 = 878,
   y0 = 286,
   y1 = 76
-const values = computed(() => props.months.map((m) => m.cumulativeEur))
 function niceStep(raw: number): number {
   const magnitude = 10 ** Math.floor(Math.log10(Math.max(1, raw)))
   return ([1, 2, 2.5, 5, 10].find((k) => k * magnitude >= raw) ?? 10) * magnitude
