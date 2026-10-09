@@ -47,6 +47,19 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
+      - name: Einmalige Business Case Formatierung
+        if: startsWith(github.head_ref, 'feature/business-case-report-')
+        run: |
+          npx prettier --write src/domain/businessCaseReport.ts src/domain/businessCaseReport.test.ts src/components/SoftwarePaybackPanel.vue tests/e2e/business-case-report.spec.ts
+          if git diff --quiet -- src tests; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/domain/businessCaseReport.ts src/domain/businessCaseReport.test.ts src/components/SoftwarePaybackPanel.vue tests/e2e/business-case-report.spec.ts
+          git commit -m "style: normalize business case sources"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+
       - name: Formatierung prüfen
         run: npm run format:check
 
