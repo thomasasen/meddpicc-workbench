@@ -62,7 +62,7 @@ jobs:
       - name: Business-Case-Dateien normalisieren
         if: startsWith(github.head_ref, 'feature/business-case-') || startsWith(github.head_ref, 'feature/customer-business-case-')
         run: |
-          npx prettier --write src/domain/businessCase.ts src/domain/businessCase.test.ts src/domain/paybackChart.ts src/domain/paybackChart.test.ts src/domain/paybackChartAreas.ts src/domain/paybackChartAreas.test.ts src/domain/paybackContinuation.ts src/domain/paybackContinuation.test.ts src/report/softwareBusinessCasePdf.ts src/report/softwareBusinessCasePdf.test.ts src/report/customerBusinessCasePdf.ts src/report/customerBusinessCasePdf.test.ts src/components/SoftwareBalanceChart.vue src/components/SoftwarePaybackPanel.vue tests/e2e/software-payback.spec.ts
+          npx prettier --write src/domain/softwarePayback.ts src/domain/businessCaseScenarios.ts src/domain/businessCaseScenarios.test.ts src/domain/businessCase.ts src/domain/businessCase.test.ts src/domain/paybackChart.ts src/domain/paybackChart.test.ts src/domain/paybackChartAreas.ts src/domain/paybackChartAreas.test.ts src/domain/paybackContinuation.ts src/domain/paybackContinuation.test.ts src/report/softwareBusinessCasePdf.ts src/report/softwareBusinessCasePdf.test.ts src/report/customerBusinessCasePdf.ts src/report/customerBusinessCasePdf.test.ts src/components/SoftwareBalanceChart.vue src/components/SoftwarePaybackPanel.vue tests/e2e/software-payback.spec.ts
           if ! git diff --quiet -- src tests; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
