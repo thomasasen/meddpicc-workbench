@@ -48,8 +48,11 @@ describe('defaultProject', () => {
       expect(evidence?.verification).toBe('unconfirmed')
       expect(evidence?.quality).toBe('low')
     }
-    expect(defaultProject.calculators.businessCase.inputs.oneTimeInvestment).toBe(480000)
-    expect(defaultProject.calculators.businessCase.inputs.annualRecurringCost).toBe(96000)
-    expect(defaultProject.calculators.businessCase.customerConfirmed).toBe(false)
+    const legacyBusinessCase = defaultProject.calculators.businessCase
+    expect(legacyBusinessCase).toBeDefined()
+    if (!legacyBusinessCase) return
+    expect(legacyBusinessCase.inputs.oneTimeInvestment).toBe(480000)
+    expect(legacyBusinessCase.inputs.annualRecurringCost).toBe(96000)
+    expect(legacyBusinessCase.customerConfirmed).toBe(false)
   })
 })
