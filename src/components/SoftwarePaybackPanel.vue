@@ -214,7 +214,9 @@ const summary = computed(() => {
       ? 'Keine bis zum Projektmonat ' + horizon.value + ' anhaltende Amortisation nachweisbar.'
       : 'Bis zum Betrachtungsende anhaltender Break-even im Projektmonat ' + current.sustainedBreakEvenMonth + '.'
   return (
-    'Softwareprojekt – ' + activeScenario.value.label + ' – Modellrechnung / Schätzung. ' +
+    'Softwareprojekt – ' +
+    activeScenario.value.label +
+    ' – Modellrechnung / Schätzung. ' +
     payback +
     ' Kumulierter wirtschaftlicher Saldo bis Monat ' +
     horizon.value +
@@ -645,7 +647,9 @@ async function downloadReport(kind: 'customer' | 'finance') {
           <div>
             <span>Break-even (bis zum Ende anhaltend)</span>
             <strong data-testid="sustained-payback">{{
-              activePlan?.sustainedBreakEvenMonth === null ? 'Nicht erreicht' : 'Monat ' + activePlan?.sustainedBreakEvenMonth
+              activePlan?.sustainedBreakEvenMonth === null
+                ? 'Nicht erreicht'
+                : 'Monat ' + activePlan?.sustainedBreakEvenMonth
             }}</strong>
           </div>
           <div>
@@ -658,17 +662,16 @@ async function downloadReport(kind: 'customer' | 'finance') {
           </div>
           <div>
             <span>ROI über {{ horizon }} Monate (undiskontiert)</span>
-            <strong data-testid="roi-percent">{{
-              roiLabel(activeScenario?.summary.roiPercent ?? null)
-            }}</strong>
+            <strong data-testid="roi-percent">{{ roiLabel(activeScenario?.summary.roiPercent ?? null) }}</strong>
           </div>
           <div>
             <span>Einbezogene Kunden-Metrics</span><strong>{{ activePlan?.countedMetrics.length ?? 0 }}</strong>
           </div>
         </div>
         <p class="software-muted">
-          Wirtschaftliche Modellrechnung für das ausgewählte Szenario {{ activeScenario?.label ?? '' }} gegenüber dem bisherigen Zustand. „Anhaltend“ gilt nur bis zum Ende des gewählten Zeitraums.
-          Jahreskosten werden auf zwölf Monate verteilt, nicht als tatsächliche Zahlung abgebildet.
+          Wirtschaftliche Modellrechnung für das ausgewählte Szenario {{ activeScenario?.label ?? '' }} gegenüber dem
+          bisherigen Zustand. „Anhaltend“ gilt nur bis zum Ende des gewählten Zeitraums. Jahreskosten werden auf zwölf
+          Monate verteilt, nicht als tatsächliche Zahlung abgebildet.
         </p>
 
         <section class="scenario-section" aria-labelledby="scenario-title" data-testid="scenario-section">
