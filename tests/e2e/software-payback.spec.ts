@@ -34,6 +34,12 @@ test('Software Payback: SaaS-Vorlauf, Metriken, Berechnung, Export und Originalb
   const errors: string[] = []
   page.on('pageerror', (err) => errors.push(err.message))
   await projectMode(page)
+  await page.evaluate(() => window.scrollTo(0, 0))
+  await page.screenshot({
+    path: testInfo.outputPath('software-payback-crm-demo-' + testInfo.project.name + '.png'),
+    fullPage: true,
+    scale: 'css',
+  })
   await page.getByRole('button', { name: 'Einfaches Beispiel laden' }).click()
   await expect(page.getByTestId('sustained-payback')).toHaveText('Monat 18')
   await expect(page.getByText('Datenstatus: Verkäuferannahme.', { exact: false })).toBeVisible()
@@ -61,7 +67,7 @@ test('Software Payback: SaaS-Vorlauf, Metriken, Berechnung, Export und Originalb
   expect(errors).toEqual([])
 })
 
-test('Software Payback: CRM-/SaaS-Beispiel zeigt mehrere finanzielle und nicht monetarisierte Metrics', async ({ page }) => {
+test('Software Payback: CRM-/SaaS-Beispiel zeigt mehrere finanzielle und nicht monetarisierte Metrics', async ({ page }, testInfo) => {
   await projectMode(page)
   await page.getByRole('button', { name: 'CRM-/SaaS-Beispiel mit Kunden-Metrics' }).click()
   await expect(page.getByRole('status').filter({ hasText: 'Fiktives CRM-/SaaS-Beispiel' })).toBeVisible()
