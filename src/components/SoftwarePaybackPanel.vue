@@ -346,7 +346,7 @@ async function exportPng() {
             ><span>Bezeichnung / Kundenproblem</span><input v-model="metric.name" type="text" maxlength="140"
           /></label>
           <label class="field"
-            ><span>Berechnungsbaustein</span>
+            ><span>Wie wird der Nutzen berechnet?</span>
             <select :value="metric.formula" @change="setFormula(metric, $event)">
               <option v-for="option in metricTypes" :key="option.value" :value="option.value">
                 {{ option.label }}
@@ -427,7 +427,7 @@ async function exportPng() {
 
         <div v-if="metric.included && metric.treatment === 'realized'" class="software-evidence">
           <label class="field software-full"
-            ><span>Wie wird die wirtschaftliche Wirkung realisiert? / Datenquelle</span>
+            ><span>Wie wird der EUR-Nutzen tatsächlich realisiert?</span>
             <textarea
               v-model="metric.evidenceNote"
               rows="2"
@@ -438,7 +438,7 @@ async function exportPng() {
         </div>
         <details class="software-more">
           <summary>
-            <span class="software-more-label">Zeitraum &amp; Daten prüfen</span>
+            <span class="software-more-label">Zeitplan &amp; Herkunft</span>
             <span class="software-more-hint"
               >Start Monat {{ metric.startMonth }} · {{ evidenceLabel(metric.evidence) }}</span
             >
@@ -852,9 +852,14 @@ async function exportPng() {
   font-variant-numeric: tabular-nums;
 }
 .software-table caption {
-  text-align: left;
-  padding-bottom: var(--space-3);
-  color: var(--color-text-muted);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 .software-table th,
 .software-table td {
@@ -1035,21 +1040,23 @@ async function exportPng() {
   padding-top: var(--space-3);
 }
 .software-more summary {
-  list-style-position: inside;
+  list-style: none;
   cursor: pointer;
   font-size: 0.87rem;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
   gap: var(--space-2);
-  flex-wrap: wrap;
   font-weight: 650;
   border-radius: var(--radius-control);
   padding: var(--space-2);
 }
+.software-more summary::-webkit-details-marker { display: none; }
+.software-more-label { text-align: left; }
+.software-more-hint { text-align: right; }
 .software-more summary::before {
   content: '▸';
-  margin-right: var(--space-2);
+  margin: 0;
 }
 .software-more[open] summary::before {
   content: '▾';
@@ -1130,9 +1137,18 @@ async function exportPng() {
   .software-metric-value {
     text-align: left;
   }
+  .software-entry-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+  .software-entry-heading .software-remove { white-space: nowrap; }
+  .software-more summary { grid-template-columns: auto minmax(0, 1fr); }
   .software-more-hint {
-    width: 100%;
-    margin-left: 20px;
+    grid-column: 2;
+    width: auto;
+    margin: 0;
+    text-align: left;
   }
   .software-table-hint {
     line-height: 1.4;
