@@ -38,3 +38,15 @@ Der Kundenbericht ist eine undiskontierte wirtschaftliche Modellrechnung und kei
 - Nicht umgesetzt: echte persönliche Review-/Autorenfreigabe, DCF-Kapitalwert, versteckte Anrechnung von Kapazität und Risiko, Backend oder Cloud-Persistenz.
 
 **Freigabestatus:** Technisch und visuell im fiktiven Standardfall abgenommen, aber **nicht nach main gemergt**. Benutzerabnahme bleibt erforderlich.
+
+
+## Korrekturrunde: konsequent kundenorientiertes Wording und neue Visualisierung
+
+Der vorherige Entwurf war aus Vertriebssicht formuliert und verwendete nur eine optisch überarbeitete kumulierte Saldenkurve. Die Rückmeldung vom 09.10.2026 fordert deshalb zwei **inhaltliche Änderungen**:
+
+- **Nur Kundenansprache:** Der Kundenbericht spricht Unternehmen und Projektziel direkt an und verwendet keine internen Rollen oder Qualifizierungsbegriffe wie Champion, Economic Buyer, Verkäuferannahme oder MEDDPICC. Die gesonderte Finance-Unterlage darf den vollständigen Prüfpfad enthalten. Pflichtangaben des Kundenberichts sind Unternehmen, Vorhaben, Verfasser, reale Ausgangssituation und angestrebtes Ergebnis.
+- **Wirklich neue Grafik:** Keine kumulierte Saldenkurve mehr. Stattdessen zwei im selben Maßstab gezeichnete, gestapelte horizontale Vergleichsbalken: gesamte neue Kosten (Einführung + Betrieb) und erwarteter wirtschaftlicher Nutzen (direkte Verbesserungen + entfallende Altaufwände). Dazu ein transparent ausgewiesener rechnerischer Überschuss/Fehlbetrag und eine gesonderte Zeitachse für den Monat der Amortisation. Vollständige Monatswerte verbleiben im Finance-Anhang.
+- **Evidenzlage:** Unbestätigte Werte werden als noch abzustimmende Planungsannahmen ausgewiesen. Die Darstellung enthält keine Verkaufsfreigabe-Aussage und behandelt angenommene Wirkungen nicht als gesicherte Ersparnis.
+- **Neuer CI-Textgate:** Der PDF-Text muss die neue Kundenvergleichsgrafik und neue kundenorientierte Kapitelüberschriften enthalten; interne Verkaufsbegriffe führen zum Testfehler. Zusätzlich sind alle drei Seiten nach jeder Codeänderung erneut als Original-PDF-Bilder zu prüfen.
+
+Die vorherige grüne CI- und Bildabnahme bezog sich auf den **abgelösten Stand**. Für diese Korrekturrunde ist eine **neue erfolgreiche CI samt neuer visueller Kontrolle erforderlich**.
