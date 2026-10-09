@@ -91,8 +91,8 @@ const accessibleDescription = computed(() => {
         fill="#f8fafc"
         data-testid="chart-unmodelled-space"
       />
-      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop + 17" text-anchor="middle" class="chart-future">Danach keine</text>
-      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop + 30" text-anchor="middle" class="chart-future">Berechnung</text>
+      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop - 14" text-anchor="middle" class="chart-future">Danach keine</text>
+      <text :x="(x(horizon) + x1) / 2 + 3" :y="yTop - 2" text-anchor="middle" class="chart-future">Berechnung</text>
 
       <g v-for="tick in moneyTicks" :key="'eur-' + tick">
         <line
