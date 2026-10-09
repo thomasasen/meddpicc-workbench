@@ -9,6 +9,7 @@ describe('Deal Inspector', () => {
     const findings = inspectDeal(structuredClone(defaultProject))
 
     expect(findings.map((finding) => finding.ruleId)).toEqual([
+      'metrics.customer-confirmed',
       'economic-buyer.validated',
       'decision-process.ready',
       'paper-process.ready',
@@ -16,13 +17,18 @@ describe('Deal Inspector', () => {
     ])
 
     expect(findings[0]).toMatchObject({
+      area: 'metrics',
+      severity: 'high',
+      title: 'Es gibt noch keine kundenseitig bestätigte Metric.',
+    })
+    expect(findings[1]).toMatchObject({
       area: 'economicBuyer',
       severity: 'high',
       title: 'Economic Buyer ist noch nicht belastbar validiert.',
       entityIds: ['st_eb'],
     })
-    expect(findings[0]?.evidenceIds).toContain('ev_eb_01')
-    expect(findings[0]?.missingEvidence).toEqual(
+    expect(findings[1]?.evidenceIds).toContain('ev_eb_01')
+    expect(findings[1]?.missingEvidence).toEqual(
       expect.arrayContaining([
         'Identität des Economic Buyers direkt bestätigen',
         'Finale wirtschaftliche Entscheidungsautorität bestätigen',
@@ -118,6 +124,8 @@ describe('Deal Inspector', () => {
 
     expect(inspectDeal(project).some((finding) => finding.ruleId === 'metrics.economic-impact-quantified')).toBe(false)
 
+    // Ein bestätigter operativer Ist-Wert ohne monetäre Ableitung bleibt kritisch.
+    project.meddpicc.metrics.metrics[0]!.customerConfirmed = true
     project.meddpicc.metrics.metrics.forEach((metric) => {
       metric.economicImpact.value = null
       metric.economicImpact.derivation = null

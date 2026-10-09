@@ -118,6 +118,8 @@ jobs:
               software-payback-empty-mobile-chromium.png
               software-payback-result-desktop-chromium.png
               software-payback-result-mobile-chromium.png
+              software-payback-crm-demo-desktop-chromium.png
+              software-payback-crm-demo-mobile-chromium.png
             )
           else
             if [[ "${{ github.head_ref }}" == feature/competition-* ]]; then

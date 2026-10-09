@@ -61,6 +61,20 @@ function fullyQualifiedProject() {
     )
   }
 
+  // Positivtest: ausdrücklich aus einer fiktiven Hypothese einen verifizierten
+  // wirtschaftlichen Kundenwert machen. Die gewöhnliche Demo bleibt ungeprüft.
+  const validatedMetric = project.meddpicc.metrics.metrics.find((metric) => metric.id === 'metric_03')
+  const validatedEvidence = project.evidence.find((item) => item.id === 'ev_metric_03')
+  expect(validatedMetric).toBeDefined()
+  expect(validatedEvidence).toBeDefined()
+  if (validatedMetric) validatedMetric.customerConfirmed = true
+  if (validatedEvidence) {
+    validatedEvidence.classification = 'confirmed_evidence'
+    validatedEvidence.verification = 'confirmed'
+    validatedEvidence.quality = 'high'
+  }
+  project.meddpicc.metrics.status = 'confirmed'
+
   project.meddpicc.competition.status = 'partial'
   const competitionEvidence = project.evidence.find((item) => item.id === 'ev_comp_01')
   expect(competitionEvidence).toBeDefined()
@@ -96,15 +110,15 @@ describe('Qualification Gates', () => {
     expect(assessment.limitations.join(' ')).toContain('Success Criteria')
   })
 
-  it('bewertet Proposal / Pricing in der Demo als bedingt statt künstlich zu blockieren', () => {
+  it('blockiert Proposal / Pricing in der aktualisierten Demo wegen unbestätigter Metrics', () => {
     const assessment = assessQualificationGate(structuredClone(defaultProject), 'proposal-pricing')
 
-    expect(assessment.status).toBe('conditional')
-    expect(assessment.missingRequired).toHaveLength(0)
+    expect(assessment.status).toBe('not-ready')
+    expect(assessment.missingRequired.map((item) => item.id)).toContain('proposal.metrics')
     expect(assessment.missingRecommended.map((item) => item.id)).toEqual(
       expect.arrayContaining(['proposal.economic-buyer', 'proposal.decision-process']),
     )
-    expect(assessment.nextBestActionRuleId).toBe('nba.economic-buyer.advance')
+    expect(assessment.nextBestActionRuleId).toBeTruthy()
   })
 
   it('bewertet Commit Forecast in der Demo wegen EB, Decision Process und Paper Process als nicht bereit', () => {

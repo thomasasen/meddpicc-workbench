@@ -3,9 +3,9 @@
   "schemaVersion": "0.2.0",
   "appVersion": "0.1.0",
   "projectId": "demo-beispielwerke-crm-2027",
-  "revision": 2,
+  "revision": 3,
   "createdAt": "2026-10-05T12:00:00.000Z",
-  "updatedAt": "2026-10-05T16:00:00.000Z",
+  "updatedAt": "2026-10-09T09:23:52.000Z",
   "project": {
     "name": "CRM & Service Transformation 2027",
     "accountName": "Beispielwerke Industrie GmbH",
@@ -16,7 +16,7 @@
     "targetCloseDate": "2027-03-31",
     "targetGoLiveDate": "2027-07-01",
     "forecastCategory": "best-case",
-    "notes": "Vollständig fiktive Demo-Opportunity für MEDDPICC Workbench."
+    "notes": "Vollständig fiktive Demo-Opportunity. Ein eigenständiges CRM-/SaaS-Beispiel im Quick-Payback-Tool greift dieselbe Story auf, aber es findet keine automatische Synchronisierung dieser Projektdatei statt. Keine bestätigte ROI-Aussage."
   },
   "stakeholders": [
     {
@@ -70,11 +70,17 @@
   ],
   "meddpicc": {
     "metrics": {
-      "status": "confirmed",
-      "confidence": 7,
-      "summary": "Vertriebs- und Serviceprozesse verursachen messbare manuelle Aufwände und verlängern Reaktionszeiten.",
-      "evidenceIds": ["ev_metric_01", "ev_metric_02"],
-      "gaps": ["Finanzielle Wirkung der geringeren Service-Reaktionszeit noch mit Finance bestätigen."],
+      "status": "partial",
+      "confidence": 5,
+      "summary": "Operative Ausgangswerte sind als fiktive Kundenaussage und KPI-Bericht dokumentiert. Zusätzliche wirtschaftliche Projektvorteile sind Verkäuferhypothesen und noch nicht kundenseitig oder kaufmännisch geprüft.",
+      "evidenceIds": ["ev_metric_01", "ev_metric_02", "ev_metric_03", "ev_metric_04", "ev_metric_05"],
+      "gaps": [
+        "Zeitersparnis und tatsächlich reduzierbare Ausgaben strikt unterscheiden.",
+        "Wegfall externer Vertriebsunterstützung (110.000 EUR/Jahr) samt Kündigung und Zeitpunkt belegen.",
+        "Servicevorgänge und realisierbare Kostenreduktion um 2 EUR pro Vorgang prüfen.",
+        "Angebotszahl, Conversion und zusätzlichen Deckungsbeitrag mit Finance validieren.",
+        "SaaS-Beginn, Altsoftware-Ende, Implementierungskosten und Nutzen-Ramp-up bestätigen."
+      ],
       "metrics": [
         {
           "id": "metric_01",
@@ -90,17 +96,19 @@
             "period": "pro Vertriebsmitarbeiter und Woche"
           },
           "economicImpact": {
-            "value": 1064250,
-            "currency": "EUR",
-            "period": "pro Jahr",
-            "derivation": "85 Mitarbeitende × 6 Stunden Einsparung/Woche × 46 Wochen × 58 EUR kalkulatorischer Stundensatz.",
+            "value": null,
+            "currency": null,
+            "period": null,
+            "derivation": "85 Mitarbeitende × (9−3) Stunden/Woche × 46 Wochen = 23.460 potenziell freiwerdende Stunden. Multipliziert mit 58 EUR/Stunde ergibt dies 1.360.680 EUR kalkulatorischen Kapazitätswert. Dies ist KEINE belegte Cash-Einsparung.",
             "assumptions": [
-              "Der kalkulatorische Stundensatz und die Realisierung der Zeitersparnis sind noch nicht Finance-bestätigt."
+              "Nur freiwerdende Zeit, keine direkte Kostensenkung oder automatisch erzielbarer Gewinn.",
+              "Stundensatz und Zielerreichung sind unbestätigte Demoannahmen.",
+              "Nicht als weitere Einsparung neben Prozess- und Vertriebsnutzen addieren."
             ]
           },
           "evidenceIds": ["ev_metric_01"],
-          "customerConfirmed": true,
-          "notes": "Aus Kundenaussage abgeleitete operative Metric; wirtschaftliche Ableitung enthält Annahmen."
+          "customerConfirmed": false,
+          "notes": "Fiktiv: Der bisherige Ist-Wert war eine berichtete Kundenaussage; Zielwert und monetäre Realisierbarkeit sind nicht bestätigt. Kein automatischer Payback-Beitrag."
         },
         {
           "id": "metric_02",
@@ -125,6 +133,87 @@
           "evidenceIds": ["ev_metric_02"],
           "customerConfirmed": false,
           "notes": "Operative Service-Metric aus einem fiktiven KPI-Report."
+        },
+        {
+          "id": "metric_03",
+          "name": "Entfall externer Vertriebsunterstützung",
+          "current": {
+            "value": 110000,
+            "unit": "EUR pro Jahr",
+            "period": "pro Jahr"
+          },
+          "target": {
+            "value": 0,
+            "unit": "EUR pro Jahr",
+            "period": "pro Jahr"
+          },
+          "economicImpact": {
+            "value": 110000,
+            "currency": "EUR",
+            "period": "pro Jahr nach Ramp-up",
+            "derivation": "110.000 EUR/Jahr bisheriger Aufwand minus 0 EUR/Jahr nach Ablösung. In der separaten Simulation frühestens ab Monat 7 mit drei Monaten Hochlauf.",
+            "assumptions": [
+              "Vertraglicher Wegfall und Realisierungszeitpunkt unbestätigt.",
+              "Fiktive Hypothese, unabhängig von anderen angerechneten Nutzenarten zu validieren."
+            ]
+          },
+          "evidenceIds": ["ev_metric_03"],
+          "customerConfirmed": false,
+          "notes": "Modellannahme, Wirkungsgruppe externe-vertriebskosten."
+        },
+        {
+          "id": "metric_04",
+          "name": "Geringere Kosten je Servicevorgang",
+          "current": {
+            "value": 6,
+            "unit": "EUR pro Vorgang",
+            "period": "pro Servicevorgang"
+          },
+          "target": {
+            "value": 4,
+            "unit": "EUR pro Vorgang",
+            "period": "pro Servicevorgang"
+          },
+          "economicImpact": {
+            "value": 60000,
+            "currency": "EUR",
+            "period": "pro Jahr nach Ramp-up",
+            "derivation": "30.000 Servicevorgänge/Jahr × (6 EUR − 4 EUR) realisierbare Kostendifferenz = 60.000 EUR/Jahr. Beginn Monat 7, drei Monate Hochlauf.",
+            "assumptions": [
+              "Mengen und tatsächliche Kostenvermeidung noch nicht durch Finance bestätigt.",
+              "Nicht dieselben Zeitgewinne zusätzlich als Personalkostenersparnis zählen."
+            ]
+          },
+          "evidenceIds": ["ev_metric_04"],
+          "customerConfirmed": false,
+          "notes": "Fiktive Prozesskostenhypothese, Wirkungsgruppe service-vorgangskosten."
+        },
+        {
+          "id": "metric_05",
+          "name": "Höhere Angebots-Conversion mit Deckungsbeitrag",
+          "current": {
+            "value": 20,
+            "unit": "Prozent",
+            "period": "bei 2.500 Angeboten/Jahr"
+          },
+          "target": {
+            "value": 25,
+            "unit": "Prozent",
+            "period": "bei 2.500 Angeboten/Jahr"
+          },
+          "economicImpact": {
+            "value": 150000,
+            "currency": "EUR",
+            "period": "pro Jahr nach Ramp-up",
+            "derivation": "2.500 Angebote × (25 % − 20 %) = 125 zusätzliche Abschlüsse; × 1.200 EUR zusätzlicher Deckungsbeitrag ergibt 150.000 EUR pro Jahr. Beginn Monat 9 mit sechs Monaten Hochlauf.",
+            "assumptions": [
+              "Fiktive Conversion-Prognose, keine Kundenbestätigung.",
+              "1.200 EUR ist Deckungsbeitrag je zusätzlichem Abschluss, nicht Umsatz; Kapazität und Kannibalisierung sind ungeprüft."
+            ]
+          },
+          "evidenceIds": ["ev_metric_05"],
+          "customerConfirmed": false,
+          "notes": "Fiktive Wirtschaftshypothese, Wirkungsgruppe angebotsconversion-deckungsbeitrag."
         }
       ]
     },
@@ -507,6 +596,45 @@
       "context": "Fiktiver Kundenkontext aus der referenzierten Quelle.",
       "relatedAreas": ["competition"],
       "createdAt": "2026-09-30T12:00:00.000Z"
+    },
+    {
+      "id": "ev_metric_03",
+      "classification": "assumption",
+      "statement": "110.000 EUR jährliche Fremdleistung könnten durch die neue CRM-Prozessautomatisierung schrittweise entfallen.",
+      "sourceStakeholderId": null,
+      "sourceDate": "2026-10-09",
+      "referenceId": null,
+      "verification": "unconfirmed",
+      "quality": "low",
+      "context": "Reine fiktive Modellannahme zum unabhängigen Software-Payback-Beispiel; noch nicht von Kunde oder Finance bestätigt.",
+      "relatedAreas": ["metrics"],
+      "createdAt": "2026-10-09T09:23:52.000Z"
+    },
+    {
+      "id": "ev_metric_04",
+      "classification": "assumption",
+      "statement": "30.000 Servicevorgänge jährlich könnten um jeweils 2 EUR realisierbare Kosten günstiger werden.",
+      "sourceStakeholderId": null,
+      "sourceDate": "2026-10-09",
+      "referenceId": null,
+      "verification": "unconfirmed",
+      "quality": "low",
+      "context": "Reine fiktive Modellannahme zum unabhängigen Software-Payback-Beispiel; noch nicht von Kunde oder Finance bestätigt.",
+      "relatedAreas": ["metrics"],
+      "createdAt": "2026-10-09T09:23:52.000Z"
+    },
+    {
+      "id": "ev_metric_05",
+      "classification": "assumption",
+      "statement": "Eine Erhöhung der Angebots-Conversion von 20 % auf 25 % bei 2.500 Angeboten/Jahr könnte 150.000 EUR zusätzlichen jährlichen Deckungsbeitrag liefern.",
+      "sourceStakeholderId": null,
+      "sourceDate": "2026-10-09",
+      "referenceId": null,
+      "verification": "unconfirmed",
+      "quality": "low",
+      "context": "Reine fiktive Modellannahme zum unabhängigen Software-Payback-Beispiel; noch nicht von Kunde oder Finance bestätigt.",
+      "relatedAreas": ["metrics"],
+      "createdAt": "2026-10-09T09:23:52.000Z"
     }
   ],
   "risks": [
@@ -608,15 +736,18 @@
         "hoursLostPerEmployeePerWeek": 9,
         "workingWeeksPerYear": 46,
         "loadedHourlyCost": 58,
-        "expectedEfficiencyImprovementPercent": 55,
+        "expectedEfficiencyImprovementPercent": 66.6666666667,
         "oneTimeInvestment": 480000,
         "annualRecurringCost": 96000
       },
       "evidenceIds": ["ev_metric_01"],
-      "notes": "Demo-Werte. Finanzielle Wirkung muss vor echter Verwendung kundenseitig bestätigt werden.",
+      "notes": "Historisches Business-Case-Inputfeld mit 480.000 EUR Gesamtinvestition und 96.000 EUR SaaS jährlich. Zeitersparnis ist nur ein potenzieller Kapazitätswert und kein nachgewiesener ROI. Das eigenständige Software-Payback-Tool kann diese Legacy-Daten nicht direkt importieren.",
       "assumptions": [
-        "Loaded Hourly Cost ist eine Arbeitsannahme und noch nicht durch Finance bestätigt.",
-        "55 Prozent Effizienzverbesserung ist eine Planungsannahme."
+        "9 auf 3 Stunden pro Woche entsprechen 66,67 % operativer Zeitreduktion, nicht 66,67 % finanzieller Einsparung.",
+        "85 Personen × 6 Stunden × 46 Wochen × 58 EUR/Stunde = 1.360.680 EUR rein kalkulatorischer Kapazitätswert, nicht anrechenbar ohne Kostenrealisierung.",
+        "Gesamtinvestition 480.000 EUR und 96.000 EUR jährliche neue SaaS-Gebühren sind fiktiv.",
+        "Separates Payback-Szenario berücksichtigt 3.000 EUR Altsoftwarekostensenkung/Monat erst ab Projektmonat 10.",
+        "Die drei zusätzlichen finanziellen Metrics sind ausdrücklich ungeprüfte Annahmen. Keine doppelte Monetarisierung."
       ],
       "customerConfirmed": false
     }
@@ -628,7 +759,7 @@
       "assumption": true,
       "evidenceIds": []
     },
-    "notes": "Critical Path wird in einer späteren Roadmap-Phase deterministisch berechnet."
+    "notes": "Die Demo-Opportunity hat ein kalendarisches Go-Live-Ziel 01.07.2027. Das unabhängige Software-Payback-Beispiel rechnet mit Projektmonaten und ist nicht automatisch mit diesem Kalendertag oder einer Projektdatei synchronisiert."
   },
   "references": [
     {

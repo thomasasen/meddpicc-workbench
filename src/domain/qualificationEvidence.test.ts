@@ -17,6 +17,9 @@ describe('qualification evidence', () => {
     expect(groups.find((group) => group.area === 'metrics')?.targets.map((item) => item.entityId)).toEqual([
       'metric_01',
       'metric_02',
+      'metric_03',
+      'metric_04',
+      'metric_05',
     ])
     expect(groups.find((group) => group.area === 'economicBuyer')?.targets.map((item) => item.entityId)).toEqual([
       'st_eb',
