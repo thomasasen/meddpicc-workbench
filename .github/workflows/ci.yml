@@ -98,6 +98,27 @@ jobs:
           PLAYWRIGHT_PREBUILT: '1'
         run: npm run test:e2e
 
+      - name: PDF-Drucklayout als echte Bildseiten prüfen
+        if: startsWith(github.head_ref, 'feature/business-case-')
+        run: |
+          report="$(find test-results -type f -name 'business-case-qa-desktop-chromium.pdf' -print -quit)"
+          if [ -z "$report" ]; then
+            echo "::error::Kein heruntergeladener PDF-Originalbericht gefunden."
+            exit 1
+          fi
+          if ! command -v pdftoppm >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y poppler-utils
+          fi
+          mkdir -p test-results/rendered
+          pdfinfo "$report" | head -18
+          pdftoppm -f 1 -l 1 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-cover.png
+          pdftoppm -f 2 -l 2 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-finance.png
+          pdftoppm -f 3 -l 3 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-metrics.png
+          for name in business-case-report-cover.png business-case-report-finance.png business-case-report-metrics.png; do
+            test -s "test-results/rendered/$name" || exit 1
+          done
+
       - name: UI-QS-Screenshots bereitstellen
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -146,6 +167,9 @@ jobs:
               software-payback-crm-demo-mobile-chromium.png
               business-case-chart-desktop-chromium.png
               business-case-chart-mobile-chromium.png
+              business-case-report-cover.png
+              business-case-report-finance.png
+              business-case-report-metrics.png
             )
           else
             if [[ "${{ github.head_ref }}" == feature/competition-* ]]; then
