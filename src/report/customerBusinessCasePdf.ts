@@ -1,6 +1,7 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
 import { summarizeBusinessCase, type CaseSummary } from '../domain/businessCase'
 import { paybackAxisBounds } from '../domain/paybackChart'
+import { balanceChartAreas, chartDisplayEnd, chartMoneyTicks } from '../domain/paybackChartAreas'
 import type { ReportData } from './softwareBusinessCasePdf'
 
 const W = 595.28
@@ -156,18 +157,53 @@ function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
   const bottom = 240
   const top = 379
   const { min, max } = paybackAxisBounds(c.periodMetrics.map((m) => m.balanceEur))
-  const px = (month: number) => left + ((right - left) * month) / c.horizon
+  const px = (month: number) => left + ((right - left) * month) / chartDisplayEnd(c.horizon)
   const py = (amount: number) => bottom + ((amount - min) / (max - min)) * (top - bottom)
 
-  const zeroY = py(0)
-  p.drawLine({
-    start: { x: left, y: zeroY },
-    end: { x: right, y: zeroY },
-    color: muted,
-    thickness: 1,
-    dashArray: [4, 5],
+  // Die Zeitachse läuft optisch etwas weiter, enthält aber keine erfundenen Monatswerte.
+  p.drawRectangle({
+    x: px(c.horizon) + 4,
+    y: bottom,
+    width: right - px(c.horizon) - 4,
+    height: top - bottom,
+    color: rgb(0.972, 0.980, 0.988),
   })
-  write(p, '0 EUR', X - 1, zeroY - 3, 7.5, f.regular, muted, 34)
+  write(p, 'KEINE', px(c.horizon) + 11, top - 14, 6.3, f.regular, muted, 55)
+  write(p, 'PROGNOSE', px(c.horizon) + 11, top - 24, 6.3, f.regular, muted, 55)
+
+  const axisEuro = (value: number): string => {
+    if (value === 0) return '0 EUR'
+    if (Math.abs(value) >= 1000000)
+      return new Intl.NumberFormat('de-DE', { maximumFractionDigits: 1 }).format(value / 1000000) + ' Mio.'
+    if (Math.abs(value) >= 1000)
+      return new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 }).format(value / 1000) + ' Tsd.'
+    return new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 }).format(value) + ' EUR'
+  }
+  for (const tick of chartMoneyTicks({ min, max })) {
+    const y = py(tick)
+    p.drawLine({
+      start: { x: left, y },
+      end: { x: right, y },
+      color: tick === 0 ? muted : line,
+      thickness: tick === 0 ? 1.15 : 0.55,
+      ...(tick === 0 ? { dashArray: [4, 4] } : {}),
+    })
+    const label = axisEuro(tick)
+    const textSize = 7
+    write(p, label, left - 7 - f.regular.widthOfTextAtSize(label, textSize), y - 2, textSize, f.regular, muted, 58)
+    p.drawLine({ start: { x: left - 4, y }, end: { x: left, y }, color: muted, thickness: 0.75 })
+  }
+  p.drawLine({ start: { x: left, y: top }, end: { x: left, y: bottom }, color: muted, thickness: 0.7 })
+  p.drawLine({ start: { x: left, y: bottom }, end: { x: right, y: bottom }, color: muted, thickness: 0.7 })
+
+  for (const area of balanceChartAreas(c.periodMetrics)) {
+    const corners = area.corners
+    const path = 'M ' + corners.map((point) => px(point.month) + ' ' + py(point.balanceEur)).join(' L ') + ' Z'
+    p.drawSvgPath(path, {
+      color: area.kind === 'negative' ? rgb(0.93, 0.55, 0.52) : rgb(0.43, 0.77, 0.64),
+      opacity: 0.29,
+    })
+  }
 
   for (let i = 1; i < c.periodMetrics.length; i++) {
     const previous = c.periodMetrics[i - 1]!
@@ -189,11 +225,14 @@ function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
   }
   dot(c.horizon, c.netValueEur, c.netValueEur < 0 ? red : navy)
 
-  for (const month of [0, 12, 24, 36, 48, 60].filter((m) => m <= c.horizon)) {
+  const months = [...[0, 12, 24, 36, 48, 60].filter((m) => m <= c.horizon), chartDisplayEnd(c.horizon)]
+  for (const month of months) {
     const label = String(month)
-    write(p, label, px(month) - f.regular.widthOfTextAtSize(label, 8) / 2, 225, 8, f.regular, muted, 20)
+    const x = px(month)
+    p.drawLine({ start: { x, y: bottom }, end: { x, y: bottom - 3 }, color: muted, thickness: 0.7 })
+    write(p, label, x - f.regular.widthOfTextAtSize(label, 8) / 2, 225, 8, f.regular, muted, 20)
   }
-  write(p, 'Projektmonat', 265, 207, 8, f.regular, muted, 80)
+  write(p, 'Projektmonat (danach keine Berechnung)', 214, 207, 8, f.regular, muted, 180)
 
   const summary = [
     {
