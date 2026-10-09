@@ -527,7 +527,7 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
   s = page(pdf, f, '06  Szenario- und Sensitivitaetsvergleich')
   heading(s, 'Wie belastbar ist die Wirtschaftlichkeit?', f, 18)
   para(s, 'Drei Szenarien auf Basis derselben Monatsrechnung. Die Basiswerte und Eingaben bleiben unveraendert.', f)
-  s.y -= 12
+  s.y -= 6
   for (const scenario of scenarios) {
     reserve(s, 104)
     heading(
@@ -551,21 +551,16 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
     )
     field(s, 'ROI (' + scenario.summary.horizon + ' Monate)', percent(scenario.summary.roiPercent), f)
     para(s, describeScenarioAssumptions(scenario.assumptions), f, 8.5)
-    s.y -= 12
+    s.y -= 2
   }
   para(
     s,
-    'Die Prozentwerte beziehen sich nur auf angerechnete Kundennutzen-Metrics bzw. einmalige Projektkosten. Lizenz- und Altsystem-Vertragstermine bleiben unveraendert. Der Nutzen-Ramp-up verschiebt sich, ohne den Projektzeitraum zu verlaengern.',
+    'Geaendert werden ausschliesslich angerechnete Kunden-Metrics und einmalige Projektkosten. ' +
+      'Lizenz- und Altsystemtermine bleiben unveraendert; verzoegerte Nutzenwirkung verkuerzt keine Vertragslaufzeit. ' +
+      'Die Salden sind keine Zahlungsstrom- oder Liquiditaetsprognose. Unbestaetigte Annahmen bleiben offen. ' +
+      'Illustrative Monate nach dem Modellende zaehlen nicht zu den KPIs.',
     f,
-    9,
-  )
-  para(
-    s,
-    'Modellierte wirtschaftliche Salden sind keine Zahlungsstroeme oder Liquiditaetsprognosen. ' +
-      'Noch unbestaetigte Nutzenannahmen bleiben in allen Szenarien unbestaetigt. ' +
-      'Die optionale illustrative Fortfuehrung nach dem Horizont zaehlt nicht zu den KPIs.',
-    f,
-    9,
+    8.7,
   )
   footer(pdf, f, client)
   return pdf.save({ useObjectStreams: false })
