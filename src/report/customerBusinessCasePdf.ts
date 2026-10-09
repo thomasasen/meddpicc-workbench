@@ -1,5 +1,8 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
 import { summarizeBusinessCase, type CaseSummary } from '../domain/businessCase'
+import { paybackAxisBounds } from '../domain/paybackChart'
+import { balanceChartAreas, chartDisplayEnd, chartMoneyTicks } from '../domain/paybackChartAreas'
+import { illustrativeBalanceContinuation } from '../domain/paybackContinuation'
 import type { ReportData } from './softwareBusinessCasePdf'
 
 const W = 595.28
@@ -146,89 +149,159 @@ function notice(p: PDFPage, top: number, text: string, fonts: FontSet): void {
 }
 
 /**
- * Kundenorientierte Wirtschaftlichkeitsgrafik. Bewusst KEINE kumulierte
- * Saldenkurve: zwei proportionale, vergleichbar skalierte Kosten-/Nutzenbalken
- * und eine eigenständige Zeitachse für den Payback.
- * Die Beträge stammen unverändert aus der gemeinsamen Monats-Engine.
+ * Gleiche vereinfachte Sicht wie im Formular: ein zeitlicher Saldoverlauf,
+ * nur drei betonte Punkte. Wirtschaftlicher Saldo ist KEIN Zahlungsstrom.
  */
-function investmentComparison(p: PDFPage, c: CaseSummary, f: FontSet): void {
-  const barX = X + 3
-  const barWidth = RIGHT - barX - 3
-  const maxValue = Math.max(1, c.totalCostEur, c.benefitEur)
-  const scaled = (value: number): number => (barWidth * Math.max(0, value)) / maxValue
-  const costWidth = scaled(c.totalCostEur)
-  const benefitWidth = scaled(c.benefitEur)
-  const upFrontWidth = scaled(c.investmentEur)
-  const improvementWidth = scaled(c.creditedMetricsEur)
+function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
+  const left = X + 34
+  const right = RIGHT - 4
+  const bottom = 240
+  const top = 379
+  const extension = chartDisplayEnd(c.horizon) - c.horizon
+  const continuation = illustrativeBalanceContinuation(c.periodMetrics, extension)
+  const { min, max } = paybackAxisBounds([
+    ...c.periodMetrics.map((m) => m.balanceEur),
+    ...(continuation ? [continuation.points.at(-1)!.balanceEur] : []),
+  ])
+  const px = (month: number) => left + ((right - left) * month) / chartDisplayEnd(c.horizon)
+  const py = (amount: number) => bottom + ((amount - min) / (max - min)) * (top - bottom)
 
-  const bar = (y: number, width: number, first: number, col1: ReturnType<typeof rgb>, col2: ReturnType<typeof rgb>) => {
-    p.drawRectangle({ x: barX, y, width: barWidth, height: 16, color: pale })
-    if (width > 0) p.drawRectangle({ x: barX, y, width, height: 16, color: col2 })
-    if (first > 0) p.drawRectangle({ x: barX, y, width: Math.min(first, width), height: 16, color: col1 })
+  // Der modellierte Zeitraum endet; rechts folgt gegebenenfalls eine bedingte Illustration.
+  p.drawRectangle({
+    x: px(c.horizon) + 4,
+    y: bottom,
+    width: right - px(c.horizon) - 4,
+    height: top - bottom,
+    color: continuation ? rgb(0.954, 0.982, 0.964) : rgb(0.972, 0.98, 0.988),
+  })
+  write(p, continuation ? 'BEISPIEL' : 'KEINE', px(c.horizon) + 11, top + 12, 6.3, f.regular, muted, 55)
+  if (!continuation) write(p, 'PROGNOSE', px(c.horizon) + 11, top + 2, 6.3, f.regular, muted, 55)
+
+  const axisEuro = (value: number): string => {
+    if (value === 0) return '0 EUR'
+    if (Math.abs(value) >= 1000000)
+      return new Intl.NumberFormat('de-DE', { maximumFractionDigits: 1 }).format(value / 1000000) + ' Mio.'
+    if (Math.abs(value) >= 1000)
+      return new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 }).format(value / 1000) + ' Tsd.'
+    return new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 }).format(value) + ' EUR'
   }
-  const amount = (value: number, y: number): void => {
-    const txt = euro(value)
-    write(p, txt, RIGHT - f.bold.widthOfTextAtSize(readable(txt), 10), y, 10, f.bold, ink, 125)
+  for (const tick of chartMoneyTicks({ min, max })) {
+    const y = py(tick)
+    p.drawLine({
+      start: { x: left, y },
+      end: { x: right, y },
+      color: tick === 0 ? muted : line,
+      thickness: tick === 0 ? 1.15 : 0.55,
+      ...(tick === 0 ? { dashArray: [4, 4] } : {}),
+    })
+    const label = axisEuro(tick)
+    const textSize = 7
+    write(p, label, left - 7 - f.regular.widthOfTextAtSize(label, textSize), y - 2, textSize, f.regular, muted, 58)
+    p.drawLine({ start: { x: left - 4, y }, end: { x: left, y }, color: muted, thickness: 0.75 })
+  }
+  p.drawLine({ start: { x: left, y: top }, end: { x: left, y: bottom }, color: muted, thickness: 0.7 })
+  p.drawLine({ start: { x: left, y: bottom }, end: { x: right, y: bottom }, color: muted, thickness: 0.7 })
+
+  for (const area of balanceChartAreas(c.periodMetrics)) {
+    const corners = area.corners
+    const path = 'M ' + corners.map((point) => px(point.month) + ' ' + (H - py(point.balanceEur))).join(' L ') + ' Z'
+    p.drawSvgPath(path, {
+      x: 0,
+      y: H,
+      color: area.kind === 'negative' ? rgb(0.93, 0.55, 0.52) : rgb(0.43, 0.77, 0.64),
+      opacity: 0.29,
+    })
   }
 
-  write(p, 'Gesamte Kosten über ' + c.horizon + ' Monate', barX, 383, 9.3, f.bold, navy, 310)
-  amount(c.totalCostEur, 383)
-  bar(361, costWidth, upFrontWidth, navy, rgb(0.48, 0.57, 0.7))
-  p.drawRectangle({ x: barX, y: 340, width: 8, height: 8, color: navy })
-  p.drawRectangle({ x: barX + 215, y: 340, width: 8, height: 8, color: rgb(0.48, 0.57, 0.7) })
-  write(p, 'Einmalige Einführung', barX + 14, 343, 8, f.regular, muted)
-  write(p, 'Laufender Betrieb', barX + 229, 343, 8, f.regular, muted)
+  if (continuation) {
+    for (const area of balanceChartAreas(continuation.points)) {
+      const path =
+        'M ' + area.corners.map((point) => px(point.month) + ' ' + (H - py(point.balanceEur))).join(' L ') + ' Z'
+      p.drawSvgPath(path, { x: 0, y: H, color: rgb(0.33, 0.74, 0.56), opacity: 0.29 })
+    }
+    for (let i = 1; i < continuation.points.length; i++) {
+      const prev = continuation.points[i - 1]!
+      const next = continuation.points[i]!
+      p.drawLine({
+        start: { x: px(prev.month), y: py(prev.balanceEur) },
+        end: { x: px(next.month), y: py(next.balanceEur) },
+        color: teal,
+        thickness: 2.4,
+        dashArray: [4, 3],
+      })
+    }
+    const forecastEnd = continuation.points.at(-1)!
+    p.drawCircle({ x: px(forecastEnd.month), y: py(forecastEnd.balanceEur), size: 3.7, color: teal })
+  }
 
-  write(p, 'Erwarteter wirtschaftlicher Nutzen', barX, 317, 9.3, f.bold, navy, 316)
-  amount(c.benefitEur, 317)
-  bar(295, benefitWidth, improvementWidth, teal, rgb(0.57, 0.77, 0.71))
-  p.drawRectangle({ x: barX, y: 274, width: 8, height: 8, color: teal })
-  p.drawRectangle({ x: barX + 215, y: 274, width: 8, height: 8, color: rgb(0.57, 0.77, 0.71) })
-  write(p, 'Verbesserungen und Mehrertrag', barX + 14, 277, 8, f.regular, muted)
-  write(p, 'Entfall bisheriger Kosten', barX + 229, 277, 8, f.regular, muted)
+  for (let i = 1; i < c.periodMetrics.length; i++) {
+    const previous = c.periodMetrics[i - 1]!
+    const current = c.periodMetrics[i]!
+    p.drawLine({
+      start: { x: px(previous.month), y: py(previous.balanceEur) },
+      end: { x: px(current.month), y: py(current.balanceEur) },
+      color: rgb(0.14, 0.39, 0.83),
+      thickness: 2.5,
+    })
+  }
+  const dot = (month: number, amount: number, color: ReturnType<typeof rgb>): void => {
+    p.drawCircle({ x: px(month), y: py(amount), size: 3.8, color })
+  }
+  if (c.lowestBalanceEur < 0) dot(c.lowestMonth, c.lowestBalanceEur, red)
+  if (c.sustainedBreakEvenMonth !== null) {
+    const point = c.periodMetrics.find((m) => m.month === c.sustainedBreakEvenMonth)!
+    dot(point.month, point.balanceEur, teal)
+  }
+  dot(c.horizon, c.netValueEur, c.netValueEur < 0 ? red : navy)
 
-  p.drawRectangle({ x: X, y: 237, width: RIGHT - X, height: 29, color: pale })
-  const netLabel = c.netValueEur < 0 ? 'Rechnerische Lücke' : 'Rechnerischer Überschuss'
-  write(p, netLabel + ' nach ' + c.horizon + ' Monaten', X + 11, 247, 9.2, f.bold, ink)
-  const netText = euro(Math.abs(c.netValueEur))
+  const months = [...[0, 12, 24, 36, 48, 60].filter((m) => m <= c.horizon), chartDisplayEnd(c.horizon)]
+  for (const month of months) {
+    const label = String(month)
+    const x = px(month)
+    p.drawLine({ start: { x, y: bottom }, end: { x, y: bottom - 3 }, color: muted, thickness: 0.7 })
+    write(p, label, x - f.regular.widthOfTextAtSize(label, 8) / 2, 225, 8, f.regular, muted, 20)
+  }
   write(
     p,
-    netText,
-    RIGHT - 10 - f.bold.widthOfTextAtSize(readable(netText), 11),
-    246,
-    11,
-    f.bold,
-    c.netValueEur < 0 ? red : teal,
-    125,
+    continuation
+      ? 'Projektmonat | Gestrichelt: Beispiel bei gleichbleibendem monatlichen Nettobeitrag'
+      : 'Projektmonat | Danach keine belastbare Fortführung',
+    175,
+    207,
+    7.2,
+    f.regular,
+    muted,
+    354,
   )
 
-  const axisX = barX
-  const axisW = barWidth
-  const axisY = 195
-  write(p, 'Wann erreicht der Nutzen die Kosten?', axisX, 219, 9.5, f.bold, navy)
-  p.drawRectangle({ x: axisX, y: axisY, width: axisW, height: 9, color: rgb(0.81, 0.86, 0.9) })
-  if (c.sustainedBreakEvenMonth !== null) {
-    const marker = axisX + (c.sustainedBreakEvenMonth / c.horizon) * axisW
-    p.drawRectangle({ x: marker, y: axisY, width: Math.max(0, axisX + axisW - marker), height: 9, color: teal })
-    p.drawLine({ start: { x: marker, y: axisY - 6 }, end: { x: marker, y: axisY + 14 }, color: teal, thickness: 1.6 })
-    const label = 'Monat ' + c.sustainedBreakEvenMonth + ': wirtschaftlicher Ausgleich'
-    const labelWidth = f.bold.widthOfTextAtSize(readable(label), 8)
-    write(
-      p,
-      label,
-      Math.max(axisX, Math.min(RIGHT - labelWidth, marker - labelWidth / 2)),
-      171,
-      8,
-      f.bold,
-      teal,
-      labelWidth + 1,
-    )
-  } else {
-    write(p, 'Kein wirtschaftlicher Ausgleich im Betrachtungszeitraum', axisX, 171, 8, f.bold, red)
+  const summary = [
+    {
+      x: X,
+      color: red,
+      label: 'Tiefster rechnerischer Saldo',
+      value: c.lowestBalanceEur < 0 ? euro(c.lowestBalanceEur) + ' (M' + c.lowestMonth + ')' : 'Kein Fehlbetrag',
+      max: 162,
+    },
+    {
+      x: X + 178,
+      color: c.sustainedBreakEvenMonth === null ? muted : teal,
+      label: 'Wirtschaftlicher Ausgleich',
+      value: c.sustainedBreakEvenMonth === null ? 'Nicht erreicht' : 'Ab Monat ' + c.sustainedBreakEvenMonth,
+      max: 170,
+    },
+    {
+      x: X + 363,
+      color: c.netValueEur < 0 ? red : navy,
+      label: 'Saldo nach ' + c.horizon + ' Monaten',
+      value: euro(c.netValueEur),
+      max: 130,
+    },
+  ]
+  for (const item of summary) {
+    p.drawCircle({ x: item.x + 4, y: 185, size: 2.8, color: item.color })
+    write(p, item.label, item.x + 12, 182, 7.8, f.regular, muted, item.max - 12)
+    write(p, item.value, item.x + 12, 165, 9.6, f.bold, item.color, item.max - 12)
   }
-  write(p, 'Beginn', axisX, 181, 7.8, f.regular, muted)
-  const endLabel = 'Monat ' + c.horizon
-  write(p, endLabel, RIGHT - 3 - f.regular.widthOfTextAtSize(endLabel, 7.8), 181, 7.8, f.regular, muted, 80)
 }
 
 function twoColumnRow(p: PDFPage, y: number, label: string, number: string, f: FontSet, total = false): void {
@@ -256,8 +329,8 @@ function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSu
   const month = c.sustainedBreakEvenMonth
   const claim =
     month === null
-      ? 'Der wirtschaftliche Ausgleich wird nicht erreicht'
-      : 'Der wirtschaftliche Ausgleich ist ab Monat ' + month + ' möglich'
+      ? 'Im gewählten Zeitraum kein wirtschaftlicher Ausgleich'
+      : 'Laut Modell wird der Ausgleich ab Monat ' + month + ' erreicht'
   write(p, claim, X, 613, 14.5, f.bold, month === null ? red : navy)
   const outcome = data.targetOutcome?.trim()
     ? 'Ihr angestrebtes Ergebnis: ' + data.targetOutcome.trim()
@@ -279,9 +352,9 @@ function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSu
     c.netValueEur < 0 ? red : navy,
   )
 
-  write(p, 'Kosten und Nutzen im direkten Vergleich', X, 431, 13.5, f.bold, navy)
-  write(p, 'Modellierte Gesamtwerte, nicht mit tatsächlichen Zahlungen gleichzusetzen', X, 411, 8.4, f.regular, muted)
-  investmentComparison(p, c, f)
+  write(p, 'Wann rechnet sich Ihr Vorhaben?', X, 431, 13.5, f.bold, navy)
+  write(p, 'Kumulierte Vorteile abzüglich neuer Kosten, Monat für Monat.', X, 411, 8.4, f.regular, muted)
+  economicBalanceLine(p, c, f)
 
   const uncertainty =
     c.unverified > 0
