@@ -1,5 +1,6 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
 import { summarizeBusinessCase, type CaseSummary } from '../domain/businessCase'
+import { paybackAxisBounds } from '../domain/paybackChart'
 import type { ReportData } from './softwareBusinessCasePdf'
 
 const W = 595.28
@@ -154,12 +155,7 @@ function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
   const right = RIGHT - 4
   const bottom = 240
   const top = 379
-  const values = c.periodMetrics.map((m) => m.balanceEur)
-  const lowest = Math.min(0, ...values)
-  const highest = Math.max(0, ...values)
-  const padding = Math.max(1, (highest - lowest) * 0.12)
-  const min = lowest - padding
-  const max = highest + padding
+  const { min, max } = paybackAxisBounds(c.periodMetrics.map((m) => m.balanceEur))
   const px = (month: number) => left + ((right - left) * month) / c.horizon
   const py = (amount: number) => bottom + ((amount - min) / (max - min)) * (top - bottom)
 
@@ -209,7 +205,7 @@ function economicBalanceLine(p: PDFPage, c: CaseSummary, f: FontSet): void {
     },
     {
       x: X + 178,
-      color: teal,
+      color: c.sustainedBreakEvenMonth === null ? muted : teal,
       label: 'Wirtschaftlicher Ausgleich',
       value: c.sustainedBreakEvenMonth === null ? 'Nicht erreicht' : 'Ab Monat ' + c.sustainedBreakEvenMonth,
       max: 170,
@@ -278,7 +274,7 @@ function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSu
   )
 
   write(p, 'Wann rechnet sich Ihr Vorhaben?', X, 431, 13.5, f.bold, navy)
-  write(p, 'Die Linie zeigt die angesetzten Vorteile abzüglich der neuen Kosten.', X, 411, 8.4, f.regular, muted)
+  write(p, 'Kumulierte Vorteile abzüglich neuer Kosten, Monat für Monat.', X, 411, 8.4, f.regular, muted)
   economicBalanceLine(p, c, f)
 
   const uncertainty =
