@@ -286,8 +286,8 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
   box(
     s,
     'Schätzung, keine Budgetfreigabe: ' +
-      c.unverified +
-      ' angerechnete Kunden-Metrics sind noch nicht als kundenseitig geprüft dokumentiert.',
+      (c.unverified === 1 ? 'Eine angerechnete Kunden-Metric ist' : c.unverified + ' angerechnete Kunden-Metrics sind') +
+      ' noch nicht als kundenseitig geprüft dokumentiert.',
     f,
   )
 
@@ -505,8 +505,8 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
   box(
     s,
     'Hinweis: ' +
-      c.unverified +
-      ' angerechnete Metrics sind nicht als kundenseitig geprüft markiert. Der Bericht ist keine unabhängige Prüfung, keine Garantie und kein Freigabesignal.',
+      (c.unverified === 1 ? 'Eine angerechnete Metric ist' : c.unverified + ' angerechnete Metrics sind') +
+      ' nicht als kundenseitig geprüft markiert. Der Bericht ist keine unabhängige Prüfung, keine Garantie und kein Freigabesignal.',
     f,
   )
   footer(pdf, f, client)
