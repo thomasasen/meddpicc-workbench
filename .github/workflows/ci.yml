@@ -116,17 +116,20 @@ jobs:
           pdftoppm -f 2 -l 2 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-finance
           pdftoppm -f 3 -l 3 -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-metrics
           total="$(pdfinfo "$report" | awk '/^Pages:/{print $2}')"
-          pdftoppm -f "$total" -l "$total" -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-method
+          method_page="$((total - 1))"
+          pdftoppm -f "$method_page" -l "$method_page" -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-method
+          pdftoppm -f "$total" -l "$total" -scale-to 1300 -png -singlefile "$report" test-results/rendered/business-case-report-scenarios
           customer="$(find test-results -type f -name 'business-case-customer-desktop-chromium.pdf' -print -quit)"
           if [ -z "$customer" ]; then
             echo "::error::Kein heruntergeladener Kundenbericht gefunden."
             exit 1
           fi
           customer_pages="$(pdfinfo "$customer" | awk '/^Pages:/{print $2}')"
-          test "$customer_pages" = 3 || { echo "::error::Kundenbericht muss genau 3 Seiten enthalten"; exit 1; }
+          test "$customer_pages" = 4 || { echo "::error::Kundenbericht muss genau 4 Seiten enthalten"; exit 1; }
           pdftoppm -f 1 -l 1 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-cover
           pdftoppm -f 2 -l 2 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-economics
           pdftoppm -f 3 -l 3 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-decision
+          pdftoppm -f 4 -l 4 -scale-to 1300 -png -singlefile "$customer" test-results/rendered/business-case-customer-scenarios
           pdftotext -layout "$customer" test-results/rendered/business-case-customer.txt
           grep -q 'Ihre Investition im Überblick' test-results/rendered/business-case-customer.txt
           grep -q 'Wann rechnet sich Ihr Vorhaben' test-results/rendered/business-case-customer.txt
@@ -139,6 +142,9 @@ jobs:
           fi
           grep -q 'So entsteht der wirtschaftliche Nutzen' test-results/rendered/business-case-customer.txt
           grep -q 'Die nächsten Schritte für Ihr Vorhaben' test-results/rendered/business-case-customer.txt
+          grep -q 'Wie belastbar ist die Wirtschaftlichkeit' test-results/rendered/business-case-customer.txt
+          grep -q 'Konservativ' test-results/rendered/business-case-customer.txt
+          grep -q 'Optimistisch' test-results/rendered/business-case-customer.txt
           if grep -Eiq 'Economic Buyer|Champion|Verkäuferannahme|MEDDPICC|keine Freigabe|Kunden-Metric' test-results/rendered/business-case-customer.txt; then
             echo "::error::Internes Vertriebs- oder Freigabevokabular im Kunden-PDF."
             exit 1
@@ -148,7 +154,7 @@ jobs:
           grep -q 'Kundensituation und Zielbild' test-results/rendered/business-case-report.txt
           grep -q 'Verkäuferannahme' test-results/rendered/business-case-report.txt
           grep -q 'NICHT ANGERECHNET' test-results/rendered/business-case-report.txt
-          for name in business-case-report-cover.png business-case-report-finance.png business-case-report-metrics.png business-case-report-method.png business-case-customer-cover.png business-case-customer-economics.png business-case-customer-decision.png; do
+          for name in business-case-report-cover.png business-case-report-finance.png business-case-report-metrics.png business-case-report-method.png business-case-report-scenarios.png business-case-customer-cover.png business-case-customer-economics.png business-case-customer-decision.png business-case-customer-scenarios.png; do
             test -s "test-results/rendered/$name" || exit 1
           done
 

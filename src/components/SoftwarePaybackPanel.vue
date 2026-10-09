@@ -23,6 +23,7 @@ const costs = ref<SoftwareCost[]>([])
 const metrics = ref<CustomerMetric[]>([])
 const horizon = ref<36 | 60>(36)
 const selectedScenario = ref<BusinessScenarioId>('base')
+const configurableScenarioIds: Array<'conservative' | 'optimistic'> = ['conservative', 'optimistic']
 const scenarioSettings = ref<ScenarioSettings>({
   conservative: { ...DEFAULT_SCENARIO_SETTINGS.conservative },
   optimistic: { ...DEFAULT_SCENARIO_SETTINGS.optimistic },
@@ -696,7 +697,7 @@ async function downloadReport(kind: 'customer' | 'finance') {
             <details class="software-more scenario-parameters">
               <summary>Szenarioannahmen einzeln ändern</summary>
               <div class="scenario-parameter-grid">
-                <fieldset v-for="kind in (['conservative', 'optimistic'] as const)" :key="kind" class="scenario-fieldset">
+                <fieldset v-for="kind in configurableScenarioIds" :key="kind" class="scenario-fieldset">
                   <legend>{{ kind === 'conservative' ? 'Konservativ' : 'Optimistisch' }}</legend>
                   <label class="field">
                     <span>Änderung des angerechneten Kundennutzens (%)</span>
@@ -726,7 +727,7 @@ async function downloadReport(kind: 'customer' | 'finance') {
             nicht Verträge oder Projektlaufzeit. Kein Cashflow und keine Liquiditätsprognose.
           </p>
         </section>
-        <figure class="software-figure">
+        <figure v-if="activePlan" class="software-figure">
           <SoftwareBalanceChart
             ref="chartRef"
             :months="activePlan!.months"
