@@ -207,7 +207,7 @@ function chart(s: State, f: Fonts, c: CaseSummary) {
     )
   }
   draw(s.p, 'PROJEKTMONAT', x1 - 85, y0 - 25, 7.6, f.bold, muted)
-  s.y -= h + 34
+  s.y -= h + 26
 }
 function line(s: State, label: string, value: string, f: Fonts) {
   const rows = wrap(label, f.normal, 9, 295),
@@ -257,7 +257,6 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
   field(s, 'Projekt', data.project.trim() || 'Nicht angegeben', f)
   field(s, 'Erstellt von', data.preparedBy.trim() || 'Nicht angegeben', f)
   field(s, 'Datum', data.date, f)
-  s.y -= 10
   const y = s.y
   kpi(
     s,
@@ -279,7 +278,7 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Ui
     c.roiPercent !== null && c.roiPercent >= 0 ? green : danger,
   )
   kpi(s, f, L + 257, y - 84, 'NEUE PROJEKTKOSTEN INSGESAMT', euro(c.totalCostEur))
-  s.y -= 191
+  s.y -= 180
   heading(s, 'Wertentwicklung', f, 14)
   chart(s, f, c)
   para(s, economicInterpretation(c), f, 9.4)
