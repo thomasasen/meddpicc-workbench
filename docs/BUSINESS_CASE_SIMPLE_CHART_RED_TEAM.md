@@ -57,3 +57,26 @@ Erneut als **simulierte Prüfung**, nicht als persönliche Autoren- oder Führun
 **Abnahme:** [CI #37994814476](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37994814476) erfolgreich mit 253 Unit-Tests, 101 Chromium-Browser-Tests bestanden (1 übersprungen), A4-PDF-Rendern, Produktionsbuild und Pages-Integrität. Originalbildkontrolle: [Desktopdiagramm](../docs/review-screenshots/business-case-chart-desktop-chromium.png), [Mobilansicht](../docs/review-screenshots/business-case-chart-mobile-chromium.png), [Kunden-PDF Seite 1](../docs/review-screenshots/business-case-customer-cover.png), Seiten 2 und 3 ebenfalls geprüft. Keine erkennbaren Überlagerungen im CRM-Referenzfall.
 
 **Grenzen:** Es gibt weder eine unabhängige empirische Überprüfung mit fünf tatsächlichen Economic Buyern noch die persönliche Freigabe der Autoren. Ein-Szenario-Rechnung; tatsächliche Nutzen-Metrics, Zahlungsströme und Sensitivität müssen kundenseitig validiert bzw. separat ergänzt werden.
+
+
+## V3-Designreview: Flächen, lesbare Achsen, rechter Horizont (09.10.2026)
+
+Der Nutzer möchte die rot/grünen Flächen zurück und eine visuell hochwertige Zeit- und Geldachse mit Luft rechts des letzten berechneten Monats. **Die V2-Reduktion bleibt für Ereignismarker bestehen:** drei Kernaussagen; kein Nutzenbeginn-Indikator.
+
+### Konsequenzen aus den sieben simulierten Rollen
+
+- **Whyte (M1/M2) / CFO:** Das Diagramm darf Planungsannahmen nicht als tatsächliche Rendite oder Zahlungsströme darstellen. Deshalb bleibt die Quelle der Kennzahlen sichtbar und der unberechnete Zeitraum rechts wird explizit als *keine Prognose* markiert.
+- **Lahoutifard / CEO:** Die Amortisation bleibt der zentrale Zeitpunkt. Die transparenten Bereiche unter und über der Nulllinie unterstützen die Aussage, ohne zusätzliche Ereignisboxen zu erzeugen.
+- **CIO:** Null-Linie, Euro-Skala und Zeitachse müssen direkt am Diagramm überprüfbar sein; die vollständige Kosten-/Monatsrechnung bleibt im Finance-Anhang.
+- **COO:** Die rote Fläche zeigt einen negativen kumulierten **wirtschaftlichen** Saldo, nicht den Finanzierungsbedarf; die grüne Fläche einen positiven Modellwert, keinen realisierten Cash-Zufluss.
+- **Budgetverantwortliche Geschäftsbereichsleitung:** Die drei Kernergebnisse sollen ohne Legendenstudium erkennbar sein. Der offengehaltene Raum nach dem Betrachtungszeitraum darf kein zusätzliches wirtschaftliches Ergebnis suggerieren.
+
+### Technische Abnahmekriterien
+
+- Rote und grüne Flächen jeweils geometrisch an der tatsächlichen Nullüberschreitung getrennt, selbst bei mehrmaligem Wechsel zwischen Plus und Minus; nur bis zum letzten vorhandenen Monatswert gefüllt.
+- Gleichartige **Berechnung der Polygone**, Euro-Achsenwerte und visuellen Zusatzmonate für Formular und Kunden-PDF. **Keine** extrapolierten Salden nach dem Modellhorizont.
+- Sichtbare horizontale Zeitachse mit Ticks, vertikale Geldachse mit gerundeten EUR-Referenzen, dominante Nullreferenz und dezente Hilfslinien.
+- Drei Marker: Tiefstsaldo (nur unter 0), anhaltender wirtschaftlicher Ausgleich (nur bei tatsächlichem Modell-Break-even) und Endsaldo.
+- Lesbarkeit und Farben in Desktop/Mobile sowie A4-Originalseiten manuell kontrollieren, fehlende Amortisation und wechselnde Vorzeichen durch Unit-Tests abdecken.
+
+Die Review-Rollen sind weiterhin **simuliert**; es gab weder Autoreninterviews noch Gespräche mit fünf realen Economic Buyern.
