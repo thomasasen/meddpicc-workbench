@@ -190,6 +190,9 @@ test('Business Case: farbcodierte Chart-Markierungen und echtes mehrseitiges PDF
   await expect(chart.locator('text.chart-min')).toBeVisible()
   await chart.screenshot({ path: testInfo.outputPath('business-case-chart-' + testInfo.project.name + '.png') })
 
+  await page.getByText('Ausgangslage und Zielbild für den Bericht (optional)').click()
+  await expect(page.getByLabel('Ausgangslage / Business Pain')).toHaveValue(/Fiktive Ausgangslage/)
+  await expect(page.getByLabel('Erwartetes Zielbild')).toHaveValue(/Fiktives Zielbild/)
   const customer = page.getByLabel('Kunde / Unternehmen')
   await expect(customer).toHaveValue('Beispielwerke Industrie GmbH')
   await customer.fill('Beispielwerke Industrie GmbH')
