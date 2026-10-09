@@ -71,6 +71,18 @@ jobs:
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
           fi
 
+      - name: Metric Builder Codeformat vor den Quality Gates normalisieren
+        if: startsWith(github.head_ref, 'feature/metric-builder')
+        run: |
+          npx prettier --write src/domain/metricBuilder.ts src/domain/metricBuilder.test.ts src/domain/metricBuilderHandoff.ts src/domain/metricBuilderHandoff.test.ts src/report/metricBuilderPdf.ts src/views/MetricBuilderView.vue src/router/index.ts src/views/HomeView.vue src/views/QuickPaybackView.vue src/components/SoftwarePaybackPanel.vue tests/e2e/metric-builder.spec.ts tests/e2e/quick-payback.spec.ts
+          if ! git diff --quiet -- src tests; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src tests
+            git commit -m "style: format Metric Builder implementation"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
       - name: Formatierung prüfen
         run: npm run format:check
 
@@ -168,6 +180,26 @@ jobs:
             test -s "test-results/rendered/$name" || exit 1
           done
 
+      - name: Metric Builder PDF tatsaechlich als Bildseiten rendern und pruefen
+        if: startsWith(github.head_ref, 'feature/metric-builder')
+        run: |
+          report="$(find test-results -type f -name 'metric-builder-brief-desktop-chromium.pdf' -print -quit)"
+          test -s "$report" || { echo "::error::Original-PDF des Metric Builders fehlt"; exit 1; }
+          if ! command -v pdftoppm >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y poppler-utils
+          fi
+          mkdir -p test-results/rendered
+          pdfinfo "$report" | head -18
+          pdftoppm -scale-to 1300 -png "$report" test-results/rendered/metric-builder-brief-all
+          pdftotext -layout "$report" test-results/rendered/metric-builder-brief.txt
+          grep -q 'METRIC-STECKBRIEF' test-results/rendered/metric-builder-brief.txt
+          grep -q 'Wirtschaftliche Wirkung' test-results/rendered/metric-builder-brief.txt
+          if grep -Eiq 'Economic Buyer|Champion|MEDDPICC|M1-Proof-Point|Verkäuferannahme|Coaching Score' test-results/rendered/metric-builder-brief.txt; then
+            echo "::error::Interne Fachbegriffe im Kunden-Steckbrief"; exit 1
+          fi
+          find test-results/rendered -name 'metric-builder-brief-all-*.png' -size +0c | grep -q .
+
       - name: Original-PDFs als prüfbare Artefakte sichern
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -175,6 +207,7 @@ jobs:
           name: business-case-example-pdfs
           path: |
             test-results/**/business-case-customer-desktop-chromium.pdf
+            test-results/**/metric-builder-brief-*.pdf
             test-results/**/business-case-qa-desktop-chromium.pdf
             test-results/**/scenario-selected-customer-desktop-chromium.pdf
           if-no-files-found: ignore
@@ -208,6 +241,27 @@ jobs:
       - name: veröffentlichten Pages-Root prüfen
         run: npm run pages:check
 
+
+      - name: Metric Builder Originalscreenshots und gerenderte PDF-Seiten publizieren
+        if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'feature/metric-builder')
+        run: |
+          mkdir -p docs/review-screenshots
+          for name in metric-builder-empty-desktop-chromium.png metric-builder-empty-mobile-chromium.png metric-builder-result-desktop-chromium.png metric-builder-result-mobile-chromium.png; do
+            source="$(find test-results -type f -name "$name" -print -quit)"
+            test -s "$source" || { echo "::error::Browser-Screenshot fehlt: $name"; exit 1; }
+            cp "$source" "docs/review-screenshots/$name"
+          done
+          for source in test-results/rendered/metric-builder-brief-all-*.png; do
+            test -s "$source" || exit 1
+            cp "$source" "docs/review-screenshots/$(basename "$source")"
+          done
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/review-screenshots
+          if ! git diff --cached --quiet; then
+            git commit -m "test: publish Metric Builder browser and PDF review images"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
 
       - name: Abnahmebilder als überprüfbare Einzeldateien bereitstellen
         if: github.event.pull_request.head.repo.full_name == github.repository && (startsWith(github.head_ref, 'feature/champion-') || startsWith(github.head_ref, 'feature/competition-') || startsWith(github.head_ref, 'feature/quick-payback-') || startsWith(github.head_ref, 'feature/business-case-') || startsWith(github.head_ref, 'feature/customer-business-case-'))
