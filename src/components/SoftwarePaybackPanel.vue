@@ -12,12 +12,14 @@ import {
   type SoftwareCost,
 } from '../domain/softwarePayback'
 import { formatEuro } from '../domain/quickPayback'
+import { createCrmSaasDemo } from '../data/softwarePaybackDemo'
 
 const costs = ref<SoftwareCost[]>([])
 const metrics = ref<CustomerMetric[]>([])
 const horizon = ref<36 | 60>(36)
 const copyStatus = ref('')
 const exportStatus = ref('')
+const demoMessage = ref('')
 const svgRef = ref<SVGSVGElement | null>(null)
 let idCounter = 0
 
@@ -77,10 +79,21 @@ function loadExample() {
   costs.value = example.costs
   metrics.value = example.metrics
   horizon.value = example.horizonMonths
+  demoMessage.value = 'Fiktives Kurzbeispiel: 120.000 EUR einmalig, 3.000 EUR SaaS/Monat, Nutzen ab Monat 7. Keine kundenseitige Validierung.'
+  copyStatus.value = ''
+  exportStatus.value = ''
+}
+function loadCrmSaasDemo() {
+  const example = createCrmSaasDemo()
+  costs.value = example.costs
+  metrics.value = example.metrics
+  horizon.value = example.horizonMonths
+  demoMessage.value = 'Fiktives CRM-/SaaS-Beispiel: drei hypothetische EUR-Metrics gehen in die Rechnung ein. Zeitersparnis und Risiko sind nicht angerechnet. Keine bestätigten Kundenzahlen.'
   copyStatus.value = ''
   exportStatus.value = ''
 }
 function clear() {
+  demoMessage.value = ''
   costs.value = []
   metrics.value = []
   horizon.value = 36
@@ -257,9 +270,14 @@ async function exportPng() {
       <div class="software-start-example">
         <span>Oder zuerst ansehen:</span>
         <button type="button" class="software-example-link" @click="loadExample">
-          Fiktives Softwareprojekt einsetzen
+          Einfaches Beispiel laden
+        </button>
+        <span aria-hidden="true">·</span>
+        <button type="button" class="software-example-link" @click="loadCrmSaasDemo">
+          CRM-/SaaS-Beispiel mit Kunden-Metrics
         </button>
       </div>
+      <p v-if="demoMessage" class="software-muted" role="status">{{ demoMessage }}</p>
       <p v-if="costs.length === 0" class="software-empty">
         Mit <strong>Einmalkosten</strong> oder <strong>SaaS / Betrieb</strong> starten.
       </p>
