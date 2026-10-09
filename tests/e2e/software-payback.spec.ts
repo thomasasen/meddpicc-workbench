@@ -69,7 +69,8 @@ test('Software Payback: dieselbe Wirkungsgruppe blockiert Doppelzählung', async
   await second.locator('details.software-more > summary').click()
   await second.getByLabel('Wirkungsgruppe').fill('crm-gesamtwert')
   await second.getByLabel('In den Payback einrechnen').check()
-  await second.getByLabel('Wie wird die wirtschaftliche Wirkung realisiert? / Datenquelle')
+  await second
+    .getByLabel('Wie wird die wirtschaftliche Wirkung realisiert? / Datenquelle')
     .fill('Fiktive zusätzliche Kennzahl, möglicherweise identisch.')
   await expect(page.getByText('Mögliche Doppelzählung', { exact: false })).toBeVisible()
   await expect(page.getByTestId('sustained-payback')).toHaveCount(0)
@@ -91,7 +92,10 @@ test('Software Payback: Zeitgewinn und Risk zählen nicht als sichere EUR-Wirkun
 
 test('Software Payback: sichtbare Einstiege, progressive Eingaben und saubere Ausrichtung', async ({ page }) => {
   await projectMode(page)
-  await expect(page.getByRole('button', { name: /Softwareprojekt & Kunden-Metrics/ })).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByRole('button', { name: /Softwareprojekt & Kunden-Metrics/ })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  )
   await expect(page.getByText('SaaS, Kosten und Nutzen im Zeitverlauf')).toBeVisible()
   await page.getByRole('button', { name: 'Metric hinzufügen' }).click()
   const card = page.locator('.software-entry').filter({ has: page.getByText('Metric 1 · Neue Kunden-Metric') })
@@ -105,17 +109,27 @@ test('Software Payback: sichtbare Einstiege, progressive Eingaben und saubere Au
 
   for (const width of [375, 768, 1280]) {
     await page.setViewportSize({ width, height: 850 })
-    const inputs = await card.locator('.software-fields:not(.software-detail-fields) input, .software-fields:not(.software-detail-fields) select')
-      .evaluateAll(els => els.map(el => ({height: Math.round(el.getBoundingClientRect().height),
-        left: Math.round(el.getBoundingClientRect().left),right:Math.round(el.getBoundingClientRect().right)})))
+    const inputs = await card
+      .locator(
+        '.software-fields:not(.software-detail-fields) input, .software-fields:not(.software-detail-fields) select',
+      )
+      .evaluateAll((els) =>
+        els.map((el) => ({
+          height: Math.round(el.getBoundingClientRect().height),
+          left: Math.round(el.getBoundingClientRect().left),
+          right: Math.round(el.getBoundingClientRect().right),
+        })),
+      )
     expect(inputs.length).toBeGreaterThanOrEqual(2)
     for (const input of inputs) {
-      expect(input.height, 'control height at '+width).toBeGreaterThanOrEqual(40)
+      expect(input.height, 'control height at ' + width).toBeGreaterThanOrEqual(40)
       expect(input.left).toBeGreaterThanOrEqual(0)
       expect(input.right).toBeLessThanOrEqual(width)
     }
-    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)
-    expect(overflow, 'document overflow '+width).toBeLessThanOrEqual(0)
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    )
+    expect(overflow, 'document overflow ' + width).toBeLessThanOrEqual(0)
   }
 })
 

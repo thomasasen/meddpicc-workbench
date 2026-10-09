@@ -240,7 +240,9 @@ async function exportPng() {
           <RotateCcw :size="16" aria-hidden="true" /> Zurücksetzen
         </button>
       </div>
-      <p class="software-muted">Was kostet die Einführung, was läuft monatlich weiter und welche bisherigen Kosten entfallen?</p>
+      <p class="software-muted">
+        Was kostet die Einführung, was läuft monatlich weiter und welche bisherigen Kosten entfallen?
+      </p>
       <div class="software-actions software-cost-actions">
         <button type="button" class="button button-secondary" @click="addCost('one-time')">
           <Plus :size="16" aria-hidden="true" /> Einmalkosten
@@ -254,9 +256,13 @@ async function exportPng() {
       </div>
       <div class="software-start-example">
         <span>Oder zuerst ansehen:</span>
-        <button type="button" class="software-example-link" @click="loadExample">Fiktives Softwareprojekt einsetzen</button>
+        <button type="button" class="software-example-link" @click="loadExample">
+          Fiktives Softwareprojekt einsetzen
+        </button>
       </div>
-      <p v-if="costs.length === 0" class="software-empty">Mit <strong>Einmalkosten</strong> oder <strong>SaaS / Betrieb</strong> starten.</p>
+      <p v-if="costs.length === 0" class="software-empty">
+        Mit <strong>Einmalkosten</strong> oder <strong>SaaS / Betrieb</strong> starten.
+      </p>
       <article v-for="cost in costs" :key="cost.id" class="software-entry">
         <div class="software-entry-heading">
           <strong>{{
@@ -429,61 +435,62 @@ async function exportPng() {
               placeholder="z. B. nachweislich entfallende Fremdleistung, künftig vermiedene Einstellung oder kundenseitig geprüfter Deckungsbeitrag"
             />
           </label>
-
         </div>
         <details class="software-more">
           <summary>
             <span class="software-more-label">Zeitraum &amp; Daten prüfen</span>
-            <span class="software-more-hint">Start Monat {{ metric.startMonth }} · {{ evidenceLabel(metric.evidence) }}</span>
+            <span class="software-more-hint"
+              >Start Monat {{ metric.startMonth }} · {{ evidenceLabel(metric.evidence) }}</span
+            >
           </summary>
           <div class="software-fields software-detail-fields">
-          <label class="field"
-            ><span>Wirtschaftliche Einordnung</span>
-            <select
-              v-model="metric.treatment"
-              :disabled="metric.formula === 'risk' || metric.formula === 'qualitative'"
-            >
-              <option value="realized">Tatsächlich realisierbare EUR-Wirkung</option>
-              <option value="capacity">Nur freigesetzte Kapazität</option>
-              <option value="risk">Risikoerwartungswert, keine sichere Einsparung</option>
-              <option value="nonfinancial">Nicht monetarisierte Kennzahl</option>
-            </select>
-          </label>
-          <label class="field"
-            ><span>Herkunft / Datenqualität</span>
-            <select v-model="metric.evidence">
-              <option value="hypothesis">Verkäuferannahme</option>
-              <option value="reference">Referenzwert (M1-Hypothese)</option>
-              <option value="customer-stated">Kundenaussage</option>
-              <option value="customer-reviewed">Laut eigener Dokumentation kundenseitig geprüft</option>
-            </select>
-          </label>
-          <label class="field"
-            ><span>Wirkungsgruppe</span>
-            <input v-model="metric.effectGroup" type="text" maxlength="80" />
-            <small
-              >Identische wirtschaftliche Ursachen in dieselbe Gruppe einordnen. Dann verhindert der Rechner
-              Mehrfachanrechnung.</small
-            >
-          </label>
-          <label class="field"
-            ><span>Erster Nutzenmonat</span>
-            <input v-model.number="metric.startMonth" type="number" min="1" :max="horizon" step="1"
-          /></label>
-          <label class="field"
-            ><span>Ramp-up bis 100 % (Monate)</span>
-            <input v-model.number="metric.rampMonths" type="number" min="1" :max="horizon" step="1"
-          /></label>
-          <label class="field"
-            ><span>Letzter Nutzenmonat (optional)</span>
-            <input
-              :value="metric.endMonth ?? ''"
-              @input="setOptionalEndMonth(metric, $event)"
-              type="number"
-              min="1"
-              :max="horizon"
-              placeholder="Bis zum Ende"
-          /></label>
+            <label class="field"
+              ><span>Wirtschaftliche Einordnung</span>
+              <select
+                v-model="metric.treatment"
+                :disabled="metric.formula === 'risk' || metric.formula === 'qualitative'"
+              >
+                <option value="realized">Tatsächlich realisierbare EUR-Wirkung</option>
+                <option value="capacity">Nur freigesetzte Kapazität</option>
+                <option value="risk">Risikoerwartungswert, keine sichere Einsparung</option>
+                <option value="nonfinancial">Nicht monetarisierte Kennzahl</option>
+              </select>
+            </label>
+            <label class="field"
+              ><span>Herkunft / Datenqualität</span>
+              <select v-model="metric.evidence">
+                <option value="hypothesis">Verkäuferannahme</option>
+                <option value="reference">Referenzwert (M1-Hypothese)</option>
+                <option value="customer-stated">Kundenaussage</option>
+                <option value="customer-reviewed">Laut eigener Dokumentation kundenseitig geprüft</option>
+              </select>
+            </label>
+            <label class="field"
+              ><span>Wirkungsgruppe</span>
+              <input v-model="metric.effectGroup" type="text" maxlength="80" />
+              <small
+                >Identische wirtschaftliche Ursachen in dieselbe Gruppe einordnen. Dann verhindert der Rechner
+                Mehrfachanrechnung.</small
+              >
+            </label>
+            <label class="field"
+              ><span>Erster Nutzenmonat</span>
+              <input v-model.number="metric.startMonth" type="number" min="1" :max="horizon" step="1"
+            /></label>
+            <label class="field"
+              ><span>Ramp-up bis 100 % (Monate)</span>
+              <input v-model.number="metric.rampMonths" type="number" min="1" :max="horizon" step="1"
+            /></label>
+            <label class="field"
+              ><span>Letzter Nutzenmonat (optional)</span>
+              <input
+                :value="metric.endMonth ?? ''"
+                @input="setOptionalEndMonth(metric, $event)"
+                type="number"
+                min="1"
+                :max="horizon"
+                placeholder="Bis zum Ende"
+            /></label>
           </div>
         </details>
         <p class="software-muted">
@@ -516,7 +523,8 @@ async function exportPng() {
         </ul>
       </div>
       <p v-else-if="costs.length === 0 && metrics.length === 0" class="software-empty" data-testid="project-empty">
-        Sobald Kosten und Nutzen vorliegen, erscheint hier der zeitliche Verlauf. Bis dahin wird keine wirtschaftliche Aussage erzeugt.
+        Sobald Kosten und Nutzen vorliegen, erscheint hier der zeitliche Verlauf. Bis dahin wird keine wirtschaftliche
+        Aussage erzeugt.
       </p>
       <template v-else>
         <div class="software-kpis">
@@ -610,9 +618,7 @@ async function exportPng() {
           </button>
         </div>
         <p role="status">{{ exportStatus }}</p>
-        <p class="software-table-hint">
-          Monatswerte · auf schmalen Bildschirmen seitlich scrollen.
-        </p>
+        <p class="software-table-hint">Monatswerte · auf schmalen Bildschirmen seitlich scrollen.</p>
         <div class="software-table-wrap" tabindex="0" role="region" aria-label="Monatswerte, horizontal scrollbar">
           <table class="software-table">
             <caption>
@@ -904,20 +910,36 @@ async function exportPng() {
 }
 
 /* Payback UX: gleiche Feldhöhen und vertikale Bezugslinien statt wild versetzter Eingaben. */
-.software-panel { gap: var(--space-5); }
-.software-block { gap: var(--space-4); }
-.software-heading { align-items: center; }
-.software-heading > div { min-width: 0; flex: 1 1 320px; }
-.software-heading .eyebrow { margin-bottom: var(--space-2); }
-.software-heading h2 { line-height: 1.3; }
-.software-cost-actions .button { flex: 1 1 auto; justify-content: center; }
+.software-panel {
+  gap: var(--space-5);
+}
+.software-block {
+  gap: var(--space-4);
+}
+.software-heading {
+  align-items: center;
+}
+.software-heading > div {
+  min-width: 0;
+  flex: 1 1 320px;
+}
+.software-heading .eyebrow {
+  margin-bottom: var(--space-2);
+}
+.software-heading h2 {
+  line-height: 1.3;
+}
+.software-cost-actions .button {
+  flex: 1 1 auto;
+  justify-content: center;
+}
 .software-start-example {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
   gap: var(--space-2);
   color: var(--color-text-muted);
-  font-size: .86rem;
+  font-size: 0.86rem;
 }
 .software-example-link {
   padding: 0;
@@ -930,29 +952,64 @@ async function exportPng() {
   font-weight: 650;
   cursor: pointer;
 }
-.software-entry { background: var(--color-surface); }
+.software-entry {
+  background: var(--color-surface);
+}
 .software-entry-heading {
   padding-bottom: var(--space-3);
   border-bottom: 1px solid var(--color-divider);
   align-items: center;
 }
-.software-entry-heading strong { min-width: 0; overflow-wrap: anywhere; line-height: 1.35; }
-.software-remove { cursor: pointer; min-height: 36px; border-radius: var(--radius-control); padding: 0 var(--space-2); }
-.software-remove:hover { background: var(--color-surface-muted); }
-.software-fields { align-items: start; column-gap: var(--space-4); row-gap: var(--space-4); }
-.software-fields .field, .software-evidence .field { display: flex; flex-direction: column; align-items: stretch; gap: 6px; min-width: 0; }
-.software-fields .field > span { display: block; min-height: 2.5em; line-height: 1.25; font-weight: 650; }
-.software-fields input, .software-fields select, .software-evidence textarea {
+.software-entry-heading strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+.software-remove {
+  cursor: pointer;
+  min-height: 36px;
+  border-radius: var(--radius-control);
+  padding: 0 var(--space-2);
+}
+.software-remove:hover {
+  background: var(--color-surface-muted);
+}
+.software-fields {
+  align-items: start;
+  column-gap: var(--space-4);
+  row-gap: var(--space-4);
+}
+.software-fields .field,
+.software-evidence .field {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  min-width: 0;
+}
+.software-fields .field > span {
+  display: block;
+  min-height: 2.5em;
+  line-height: 1.25;
+  font-weight: 650;
+}
+.software-fields input,
+.software-fields select,
+.software-evidence textarea {
   box-sizing: border-box;
   min-height: 44px;
   width: 100%;
-  font-size: .95rem;
+  font-size: 0.95rem;
   border-radius: var(--radius-control);
 }
-.software-fields input:focus-visible, .software-fields select:focus-visible,
-.software-evidence textarea:focus-visible, .software-remove:focus-visible,
-.software-example-link:focus-visible, .software-more summary:focus-visible,
-.software-check input:focus-visible, .software-table-wrap:focus-visible {
+.software-fields input:focus-visible,
+.software-fields select:focus-visible,
+.software-evidence textarea:focus-visible,
+.software-remove:focus-visible,
+.software-example-link:focus-visible,
+.software-more summary:focus-visible,
+.software-check input:focus-visible,
+.software-table-wrap:focus-visible {
   outline: 3px solid var(--color-accent);
   outline-offset: 2px;
 }
@@ -962,14 +1019,25 @@ async function exportPng() {
   padding: var(--space-3) var(--space-4);
   align-items: center;
 }
-.software-metric-value strong { font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.software-evidence { display: grid; gap: var(--space-2); }
-.software-evidence textarea { padding: var(--space-3); }
-.software-more { border-top: 1px solid var(--color-divider); padding-top: var(--space-3); }
+.software-metric-value strong {
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.software-evidence {
+  display: grid;
+  gap: var(--space-2);
+}
+.software-evidence textarea {
+  padding: var(--space-3);
+}
+.software-more {
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--space-3);
+}
 .software-more summary {
   list-style-position: inside;
   cursor: pointer;
-  font-size: .87rem;
+  font-size: 0.87rem;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -979,40 +1047,100 @@ async function exportPng() {
   border-radius: var(--radius-control);
   padding: var(--space-2);
 }
-.software-more summary::before { content: "▸"; margin-right: var(--space-2); }
-.software-more[open] summary::before { content: "▾"; }
-.software-more-hint { color: var(--color-text-muted); font-weight: 400; font-size: .8rem; }
-.software-detail-fields { margin-top: var(--space-3); padding: var(--space-4); background: var(--color-surface-muted); border-radius: var(--radius-control); }
-.software-detail-fields .field > span { min-height: 2.5em; }
-.software-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.software-more summary::before {
+  content: '▸';
+  margin-right: var(--space-2);
+}
+.software-more[open] summary::before {
+  content: '▾';
+}
+.software-more-hint {
+  color: var(--color-text-muted);
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+.software-detail-fields {
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-control);
+}
+.software-detail-fields .field > span {
+  min-height: 2.5em;
+}
+.software-kpis {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
 .software-kpis > div:first-child {
   grid-column: 1 / -1;
   border: 1px solid var(--color-border);
   padding: var(--space-4);
   background: var(--color-surface);
 }
-.software-kpis > div:first-child strong { font-size: clamp(1.7rem, 3.2vw, 2.3rem); line-height: 1.2; }
-.software-table-wrap { border: 1px solid var(--color-border); border-radius: var(--radius-control); }
-.software-table th, .software-table td { padding: var(--space-3); }
-.software-table thead { background: var(--color-surface-muted); }
-.software-table-hint { font-size: .83rem; }
-.software-summary .software-heading { align-items: center; }
+.software-kpis > div:first-child strong {
+  font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+  line-height: 1.2;
+}
+.software-table-wrap {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+}
+.software-table th,
+.software-table td {
+  padding: var(--space-3);
+}
+.software-table thead {
+  background: var(--color-surface-muted);
+}
+.software-table-hint {
+  font-size: 0.83rem;
+}
+.software-summary .software-heading {
+  align-items: center;
+}
 @media (max-width: 850px) {
-  .software-fields .field > span { min-height: 2.5em; }
+  .software-fields .field > span {
+    min-height: 2.5em;
+  }
 }
 @media (max-width: 560px) {
-  .software-heading { align-items: flex-start; }
-  .software-entry-heading { align-items: flex-start; }
-  .software-fields .field > span, .software-detail-fields .field > span { min-height: 0; }
-  .software-cost-actions .button { flex-basis: 100%; }
-  .software-kpis { grid-template-columns: minmax(0, 1fr); }
-  .software-kpis > div:first-child { grid-column: 1; }
-  .software-metric-footer { padding: var(--space-3); align-items: stretch; }
-  .software-metric-value { text-align: left; }
-  .software-more-hint { width: 100%; margin-left: 20px; }
-  .software-table-hint { line-height: 1.4; }
+  .software-heading {
+    align-items: flex-start;
+  }
+  .software-entry-heading {
+    align-items: flex-start;
+  }
+  .software-fields .field > span,
+  .software-detail-fields .field > span {
+    min-height: 0;
+  }
+  .software-cost-actions .button {
+    flex-basis: 100%;
+  }
+  .software-kpis {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .software-kpis > div:first-child {
+    grid-column: 1;
+  }
+  .software-metric-footer {
+    padding: var(--space-3);
+    align-items: stretch;
+  }
+  .software-metric-value {
+    text-align: left;
+  }
+  .software-more-hint {
+    width: 100%;
+    margin-left: 20px;
+  }
+  .software-table-hint {
+    line-height: 1.4;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .software-panel * { transition-duration: 0.01ms !important; }
+  .software-panel * {
+    transition-duration: 0.01ms !important;
+  }
 }
 </style>

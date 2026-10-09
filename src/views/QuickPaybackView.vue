@@ -92,20 +92,32 @@ async function copySummary() {
         </div>
         <h1 id="quick-title">In wie vielen Monaten rechnet sich die Investition?</h1>
         <p class="intro-text">
-          {{ calculationMode === 'quick'
-            ? 'Investition und jährlichen Nutzen eingeben. Die Amortisation erscheint sofort.'
-            : 'Projektkosten, SaaS und Kunden-Metrics erfassen. Der Verlauf zeigt, wann sich das Projekt rechnet.' }}
+          {{
+            calculationMode === 'quick'
+              ? 'Investition und jährlichen Nutzen eingeben. Die Amortisation erscheint sofort.'
+              : 'Projektkosten, SaaS und Kunden-Metrics erfassen. Der Verlauf zeigt, wann sich das Projekt rechnet.'
+          }}
         </p>
       </section>
 
       <nav class="container quick-mode-choice" aria-label="Berechnungsmodus">
-        <button type="button" class="quick-mode-option" :class="{ 'quick-mode-option--active': calculationMode === 'quick' }"
-          :aria-pressed="calculationMode === 'quick'" @click="calculationMode = 'quick'">
+        <button
+          type="button"
+          class="quick-mode-option"
+          :class="{ 'quick-mode-option--active': calculationMode === 'quick' }"
+          :aria-pressed="calculationMode === 'quick'"
+          @click="calculationMode = 'quick'"
+        >
           <span class="quick-mode-option__title">Schnellberechnung</span>
           <span class="quick-mode-option__hint">3 Werte · sofort ein Ergebnis</span>
         </button>
-        <button type="button" class="quick-mode-option" :class="{ 'quick-mode-option--active': calculationMode === 'project' }"
-          :aria-pressed="calculationMode === 'project'" @click="calculationMode = 'project'">
+        <button
+          type="button"
+          class="quick-mode-option"
+          :class="{ 'quick-mode-option--active': calculationMode === 'project' }"
+          :aria-pressed="calculationMode === 'project'"
+          @click="calculationMode = 'project'"
+        >
           <span class="quick-mode-option__title">Softwareprojekt &amp; Kunden-Metrics</span>
           <span class="quick-mode-option__hint">SaaS, Kosten und Nutzen im Zeitverlauf</span>
         </button>
@@ -121,9 +133,7 @@ async function copySummary() {
               <Calculator :size="22" aria-hidden="true" />
             </div>
 
-            <p class="quick-format-help" id="quick-format-help">
-              EUR-Beträge eingeben, z. B. 12.345,67.
-            </p>
+            <p class="quick-format-help" id="quick-format-help">EUR-Beträge eingeben, z. B. 12.345,67.</p>
 
             <label class="field quick-field" for="quick-upfront">
               <span>Einmalige Anfangsinvestition (EUR)</span>
@@ -138,9 +148,7 @@ async function copySummary() {
                 aria-describedby="quick-upfront-help quick-upfront-error quick-format-help"
                 @input="copyMessage = ''"
               />
-              <small id="quick-upfront-help">
-                Einmalige Lizenz-, Implementierungs- und Migrationskosten.
-              </small>
+              <small id="quick-upfront-help"> Einmalige Lizenz-, Implementierungs- und Migrationskosten. </small>
               <small v-if="errorFor('upfrontInvestmentEur')" id="quick-upfront-error" class="quick-error" role="alert">
                 {{ errorFor('upfrontInvestmentEur') }}
               </small>
@@ -371,20 +379,39 @@ async function copySummary() {
   background: var(--color-surface);
   color: var(--color-text);
   cursor: pointer;
-  transition: border-color .15s ease, box-shadow .15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
-.quick-mode-option:hover { border-color: var(--color-accent); }
-.quick-mode-option:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+.quick-mode-option:hover {
+  border-color: var(--color-accent);
+}
+.quick-mode-option:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
 .quick-mode-option--active {
   border: 2px solid var(--color-accent);
   background: var(--color-surface-muted);
   padding: calc(var(--space-4) - 1px);
 }
-.quick-mode-option__title { font-size: 1rem; font-weight: 750; line-height: 1.25; }
-.quick-mode-option__hint { color: var(--color-text-muted); font-size: .87rem; line-height: 1.4; }
+.quick-mode-option__title {
+  font-size: 1rem;
+  font-weight: 750;
+  line-height: 1.25;
+}
+.quick-mode-option__hint {
+  color: var(--color-text-muted);
+  font-size: 0.87rem;
+  line-height: 1.4;
+}
 @media (max-width: 560px) {
-  .quick-mode-choice { grid-template-columns: minmax(0, 1fr); }
-  .quick-mode-option { min-height: 72px; }
+  .quick-mode-choice {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .quick-mode-option {
+    min-height: 72px;
+  }
 }
 .quick-main {
   padding: var(--space-8) 0 var(--space-12);
