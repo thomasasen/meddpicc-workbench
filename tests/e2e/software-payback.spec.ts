@@ -178,7 +178,7 @@ test('Software Payback: responsive, direkte Navigation und Tastatur', async ({ p
   await expect(page).toHaveURL(/meddpicc-workbench\/#\//)
 })
 
-test('Business Case: farbcodierte Chart-Markierungen und echtes mehrseitiges PDF', async ({ page }, testInfo) => {
+test('Business Case: eigenständiger Kundengrafik-PDF und Finance-Anhang', async ({ page }, testInfo) => {
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
   await projectMode(page)
@@ -190,7 +190,7 @@ test('Business Case: farbcodierte Chart-Markierungen und echtes mehrseitiges PDF
   await expect(chart.locator('text.chart-min')).toBeVisible()
   await chart.screenshot({ path: testInfo.outputPath('business-case-chart-' + testInfo.project.name + '.png') })
 
-  await page.getByText('Ausgangslage und Zielbild für den Bericht (optional)').click()
+  await page.getByText('Ausgangslage und Zielbild (Pflicht für den Kundenbericht)').click()
   await expect(page.getByLabel('Ausgangslage / Business Pain')).toHaveValue(/Fiktive Ausgangslage/)
   await expect(page.getByLabel('Erwartetes Zielbild')).toHaveValue(/Fiktives Zielbild/)
   const customer = page.getByLabel('Kunde / Unternehmen')
@@ -251,6 +251,13 @@ test('Kundenbericht: Pflichtangaben schützen vor Platzhalter-PDF', async ({ pag
   ).toBeVisible()
   await page.getByLabel('Kunde / Unternehmen').fill('Musterunternehmen GmbH')
   await page.getByLabel('Erstellt von').fill('Vertrieb')
+  await page.getByRole('button', { name: 'Kundenbericht (PDF) herunterladen' }).click()
+  await expect(
+    page.getByRole('status').filter({ hasText: 'bitte Ausgangssituation und angestrebtes Ergebnis ergänzen.' }),
+  ).toBeVisible()
+  await page.getByText('Ausgangslage und Zielbild (Pflicht für den Kundenbericht)').click()
+  await page.getByLabel('Ausgangslage / Business Pain').fill('Aufwändige händische Datennachpflege.')
+  await page.getByLabel('Erwartetes Zielbild').fill('Schnellere Abläufe, weniger manuelle Kosten.')
   const download = page.waitForEvent('download')
   await page.getByRole('button', { name: 'Kundenbericht (PDF) herunterladen' }).click()
   expect((await download).suggestedFilename()).toContain('kundenbericht-')
