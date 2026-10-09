@@ -34,3 +34,12 @@ Unit-Tests müssen ein lesbares PDF-Signatur- und Seitenobjekt, Grenzen des ROI-
 
 ## Freigabe
 PR zunächst DRAFT, kein Merge ohne weitere explizite Anweisung.
+
+## Tatsächliche technische und visuelle Abnahme (09.10.2026)
+
+- [CI #37923870625](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37923870625): **ERFOLGREICH**. 239 Unit-Tests in 32 Dateien, 99 Playwright-Tests bestanden, 1 übersprungen, Prettier, ESLint, TypeScript/Vite, Pages-Integrität und Chromium-Abnahme der Browser-UI erfolgreich. Der PDF-Download wurde im Browser durch Signatur `%PDF-1.4`, Größe und erwarteten Dateinamen verifiziert.
+- Zwei echte Chromium-Vollseitenbilder der aktualisierten CRM-Demo direkt geöffnet und betrachtet: [Desktop](review-screenshots/software-payback-crm-demo-desktop-chromium.png) und [Mobile](review-screenshots/software-payback-crm-demo-mobile-chromium.png). Die Darstellung zeigt den neuen Chart mit dezentem Negativbereich, Investitionstief M7, Break-even M35 und 42.583,33 EUR Saldo. Desktop-Layout und die einspaltige mobile Berichtseingabe haben keine offensichtlichen horizontalen Seitenüberläufe.
+- Die realen Modellwerte: 480.000 EUR initiale Projektkosten, 8.000 EUR neue Monatskosten, 3.000 EUR entfallende Bestandskosten ab M10 und drei angesetzte Metrics. Die bisherigen ausgeschlossenen Risiko- und Kapazitätskennzahlen bleiben ausgeschlossen. Bei einem 36-Monats-Nettosaldo von 42.583,33 EUR und neuen kumulierten Kosten von 768.000 EUR beträgt der definierte Modell-ROI rund 5,5 %.
+- [Zusätzliche PDF-Datei-Abnahme #37924483656](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37924483656): gestartet, bis zur Dokumentation jedoch in der Chromium-Installationsphase nicht abgeschlossen. Ein direktes visuelles Rendern der erzeugten PDF-Seiten ist deshalb **noch nicht nachgewiesen**, obwohl PDF-Signatur/Download in einem früheren Browserlauf bestanden sind. Keine visuelle PDF-Freigabe behaupten, solange dieser Nachweis fehlt.
+
+**Freigabegate:** Modellierte Autoren-Rollen und technische Tests sind keine persönlichen Freigaben. PR bleibt bis zur Nutzerabnahme offen und wird nicht automatisch nach `main` gemergt.
