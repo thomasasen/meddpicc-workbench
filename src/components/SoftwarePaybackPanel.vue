@@ -127,7 +127,10 @@ function addCost(kind: CostKind) {
 }
 async function openMetricBuilder() {
   try {
-    queuePaybackReturn({ horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value }, window.sessionStorage)
+    queuePaybackReturn(
+      { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
+      window.sessionStorage,
+    )
     await router.push('/tools/metric-builder')
   } catch {
     transferMessage.value = 'Der aktuelle Payback-Entwurf konnte nicht lokal zwischengespeichert werden.'

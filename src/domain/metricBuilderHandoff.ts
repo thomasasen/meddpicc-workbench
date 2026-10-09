@@ -1,4 +1,9 @@
-import { calculateSoftwarePayback, type CustomerMetric, type SoftwareCost, type SoftwarePaybackInput } from './softwarePayback'
+import {
+  calculateSoftwarePayback,
+  type CustomerMetric,
+  type SoftwareCost,
+  type SoftwarePaybackInput,
+} from './softwarePayback'
 
 const KEY = 'meddpicc-metric-builder-handoff-v1'
 
@@ -27,23 +32,28 @@ export function consumeMetricHandoff(
       const metric = value as CustomerMetric
       if (metric.included !== false || !metric.name || !metric.effectGroup)
         throw new Error('Nur ausgeschlossene, vollständige Metrics übernehmen.')
-      const id = 'builder-' + Date.now().toString(36) + '-' + index +
-        '-' + Math.random().toString(36).slice(2, 8)
+      const id = 'builder-' + Date.now().toString(36) + '-' + index + '-' + Math.random().toString(36).slice(2, 8)
       if (existingIds.has(id)) throw new Error('ID-Kollision.')
       return { ...metric, id, included: false }
     })
     const result = calculateSoftwarePayback({
-      horizonMonths: horizon, costs: existingCosts, metrics: [...existingMetrics, ...imported],
+      horizonMonths: horizon,
+      costs: existingCosts,
+      metrics: [...existingMetrics, ...imported],
     })
     if (!result.success) throw new Error(result.issues.join(' '))
     const existingGroups = new Set([
       ...existingMetrics.map((m) => m.effectGroup.trim().toLowerCase()),
-      ...existingCosts.filter((c) => c.kind === 'avoided-legacy').map((c) => (c.effectGroup ?? '').trim().toLowerCase()),
+      ...existingCosts
+        .filter((c) => c.kind === 'avoided-legacy')
+        .map((c) => (c.effectGroup ?? '').trim().toLowerCase()),
     ])
     const groupOverlap = imported.some((m) => existingGroups.has(m.effectGroup.trim().toLowerCase()))
     return {
       imported,
-      message: imported.length + ' Metric(s) übernommen, noch nicht in der Rechnung berücksichtigt.' +
+      message:
+        imported.length +
+        ' Metric(s) übernommen, noch nicht in der Rechnung berücksichtigt.' +
         (groupOverlap ? ' Achtung: Eine Wirkungsgruppe existiert bereits. Doppelzählung vor Aktivierung prüfen.' : ''),
     }
   } catch (error) {
@@ -69,9 +79,14 @@ export function consumePaybackReturn(storage: Pick<Storage, 'getItem' | 'removeI
     const draft: unknown = JSON.parse(raw)
     if (!draft || typeof draft !== 'object') return null
     const input = draft as SoftwarePaybackInput
-    if ((input.horizonMonths !== 36 && input.horizonMonths !== 60) ||
-      !Array.isArray(input.costs) || !Array.isArray(input.metrics) ||
-      input.costs.length > 100 || input.metrics.length > 100) return null
+    if (
+      (input.horizonMonths !== 36 && input.horizonMonths !== 60) ||
+      !Array.isArray(input.costs) ||
+      !Array.isArray(input.metrics) ||
+      input.costs.length > 100 ||
+      input.metrics.length > 100
+    )
+      return null
     return input
   } catch {
     return null

@@ -1,11 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {
-  buildMetric,
-  emptyMetricDraft,
-  metricDemos,
-  metricSummary,
-  type MetricBuilderDraft,
-} from './metricBuilder'
+import { buildMetric, emptyMetricDraft, metricDemos, metricSummary, type MetricBuilderDraft } from './metricBuilder'
 import { annualMetricPotential, calculateSoftwarePayback } from './softwarePayback'
 
 function example(key: string, overrides: Partial<MetricBuilderDraft> = {}): MetricBuilderDraft {
@@ -63,9 +57,13 @@ describe('Metric Builder: nachvollziehbare operative und wirtschaftliche Wirkung
   })
 
   it('kann qualitative Veränderungen ohne fiktive EUR-Beträge darstellen', () => {
-    const result = buildMetric(example('crm', {
-      formula: 'qualitative', beforeText: 'Informationen verstreut', afterText: 'Eine zentrale Sicht',
-    }))
+    const result = buildMetric(
+      example('crm', {
+        formula: 'qualitative',
+        beforeText: 'Informationen verstreut',
+        afterText: 'Eine zentrale Sicht',
+      }),
+    )
     expect(result.complete).toBe(true)
     expect(result.potentialEur).toBeNull()
     expect(result.transfer[0]?.included).toBe(false)
@@ -73,11 +71,18 @@ describe('Metric Builder: nachvollziehbare operative und wirtschaftliche Wirkung
   })
 
   it('normalisiert monatliche Mengen und direkte Monatskosten auf Jahreswerte', () => {
-    const monthly = buildMetric(example('crm', { period: 'monthly', volume: 100, before: 12, after: 8, hourlyCost: 60 }))
+    const monthly = buildMetric(
+      example('crm', { period: 'monthly', volume: 100, before: 12, after: 8, hourlyCost: 60 }),
+    )
     expect(monthly.potentialEur).toBe(4800)
-    const direct = buildMetric(example('crm', {
-      formula: 'direct', period: 'monthly', before: 5000, after: 4000,
-    }))
+    const direct = buildMetric(
+      example('crm', {
+        formula: 'direct',
+        period: 'monthly',
+        before: 5000,
+        after: 4000,
+      }),
+    )
     expect(direct.potentialEur).toBe(12000)
   })
 
@@ -112,10 +117,13 @@ describe('Metric Builder: nachvollziehbare operative und wirtschaftliche Wirkung
   })
 
   it('übernimmt bei Teilrealisierung nur den konkreten EUR-Anteil als getrennte, nicht aktivierte Position', () => {
-    const result = buildMetric(example('crm', {
-      mechanism: 'avoided-external', realizedAnnual: 15000,
-      realizationNote: 'Die externe Sachbearbeitung sinkt um 15.000 EUR jährlich.',
-    }))
+    const result = buildMetric(
+      example('crm', {
+        mechanism: 'avoided-external',
+        realizedAnnual: 15000,
+        realizationNote: 'Die externe Sachbearbeitung sinkt um 15.000 EUR jährlich.',
+      }),
+    )
     expect(result.complete).toBe(true)
     expect(result.transfer).toHaveLength(2)
     expect(result.transfer[0]?.formula).toBe('time')
@@ -136,16 +144,21 @@ describe('Metric Builder: nachvollziehbare operative und wirtschaftliche Wirkung
 
   it('verlangt bei explizit ausgewählter Kundenprüfung dokumentierte Annahmen', () => {
     expect(buildMetric(example('crm', { evidence: 'customer-reviewed', assumptionNote: '' })).complete).toBe(false)
-    const reviewed = buildMetric(example('crm', { evidence: 'customer-reviewed', assumptionNote: 'Mit Serviceleiter geprüft.' }))
+    const reviewed = buildMetric(
+      example('crm', { evidence: 'customer-reviewed', assumptionNote: 'Mit Serviceleiter geprüft.' }),
+    )
     expect(reviewed.complete).toBe(true)
     expect(reviewed.metric?.evidence).toBe('customer-reviewed')
   })
 
   it('verhindert nach manueller Aktivierung doppelte wirtschaftliche Wirkungen über die bestehende Engine', () => {
-    const r = buildMetric(example('crm', {
-      mechanism: 'avoided-external', realizedAnnual: 15000,
-      realizationNote: 'Eine konkrete externe Dienstleisterrechnung entfällt.',
-    }))
+    const r = buildMetric(
+      example('crm', {
+        mechanism: 'avoided-external',
+        realizedAnnual: 15000,
+        realizationNote: 'Eine konkrete externe Dienstleisterrechnung entfällt.',
+      }),
+    )
     const doubles = r.transfer.map((m) => ({ ...m, treatment: 'realized' as const, included: true }))
     const calc = calculateSoftwarePayback({ horizonMonths: 36, costs: [], metrics: doubles })
     expect(calc.success).toBe(false)

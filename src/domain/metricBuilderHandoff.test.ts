@@ -6,12 +6,18 @@ import type { SoftwareCost } from './softwarePayback'
 function storage(): Storage {
   const map = new Map<string, string>()
   return {
-    get length() { return map.size },
+    get length() {
+      return map.size
+    },
     clear: () => map.clear(),
     getItem: (key) => map.get(key) ?? null,
     key: (index) => Array.from(map.keys())[index] ?? null,
-    removeItem: (key) => { map.delete(key) },
-    setItem: (key, value) => { map.set(key, value) },
+    removeItem: (key) => {
+      map.delete(key)
+    },
+    setItem: (key, value) => {
+      map.set(key, value)
+    },
   }
 }
 
@@ -21,7 +27,9 @@ describe('Metric Builder: minimale lokale Übergabe', () => {
     const store = storage()
     queueMetricHandoff(source.transfer, store)
     const existing = buildMetric({ ...emptyMetricDraft(), ...metricDemos.crm }).transfer[0]!
-    const costs: SoftwareCost[] = [{ id: 'setup', name: 'Setup', kind: 'one-time', amountEur: 10000, period: 'monthly', startMonth: 0 }]
+    const costs: SoftwareCost[] = [
+      { id: 'setup', name: 'Setup', kind: 'one-time', amountEur: 10000, period: 'monthly', startMonth: 0 },
+    ]
     const result = consumeMetricHandoff(store, [existing], costs, 36)
     expect(result.imported).toHaveLength(1)
     expect(result.imported[0]?.included).toBe(false)

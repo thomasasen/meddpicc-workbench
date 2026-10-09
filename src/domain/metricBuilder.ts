@@ -9,12 +9,7 @@ import {
 export type InputNumber = number | ''
 export type MetricPeriod = 'monthly' | 'annual'
 export type RealizationMechanism =
-  | 'unresolved'
-  | 'avoidable-cost'
-  | 'avoided-hiring'
-  | 'avoided-external'
-  | 'incremental-margin'
-  | 'reduced-error-cost'
+  'unresolved' | 'avoidable-cost' | 'avoided-hiring' | 'avoided-external' | 'incremental-margin' | 'reduced-error-cost'
 
 export interface MetricBuilderDraft {
   problem: string
@@ -123,7 +118,13 @@ function numberValue(value: InputNumber): number | null {
   return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= MAX ? value : null
 }
 
-function questionFor(value: InputNumber, field: string, questions: string[], issues: string[], question: string): number | null {
+function questionFor(
+  value: InputNumber,
+  field: string,
+  questions: string[],
+  issues: string[],
+  question: string,
+): number | null {
   const parsed = numberValue(value)
   if (parsed === null) {
     issues.push(field + ': Bitte eine gültige Zahl von 0 bis 1 Billion eingeben.')
@@ -172,19 +173,29 @@ export function buildMetric(draft: MetricBuilderDraft): MetricBuilderResult {
 
   if (validFormula && validPeriod && draft.formula !== 'qualitative') {
     before = questionFor(
-      draft.before, 'Ausgangswert', questions, issues,
+      draft.before,
+      'Ausgangswert',
+      questions,
+      issues,
       draft.formula === 'risk'
         ? 'Wie häufig tritt das Risiko aktuell auf?'
         : 'Wie hoch ist der tatsächliche Ausgangswert des betroffenen Prozesses?',
     )
     after = questionFor(
-      draft.after, 'Zielwert', questions, issues,
+      draft.after,
+      'Zielwert',
+      questions,
+      issues,
       'Welcher Zielwert ist unter realistischen Bedingungen erreichbar?',
     )
     if (before !== null && after !== null) {
       const improvement = draft.formula === 'conversion' ? after - before : before - after
       if (improvement <= 0) {
-        issues.push(improvement === 0 ? 'Keine Verbesserung gegenüber dem Ausgangswert.' : 'Der Zielwert stellt eine Verschlechterung dar.')
+        issues.push(
+          improvement === 0
+            ? 'Keine Verbesserung gegenüber dem Ausgangswert.'
+            : 'Der Zielwert stellt eine Verschlechterung dar.',
+        )
         questions.push('Welche Verbesserung ist tatsächlich erreichbar?')
       } else operatingChange = improvement
       if ((draft.formula === 'conversion' || draft.formula === 'quality') && (before > 100 || after > 100)) {
@@ -193,16 +204,28 @@ export function buildMetric(draft: MetricBuilderDraft): MetricBuilderResult {
     }
     if (draft.formula !== 'direct') {
       volume = questionFor(
-        draft.volume, 'Menge', questions, issues,
+        draft.volume,
+        'Menge',
+        questions,
+        issues,
         'Wie viele Vorgänge, Kundenkontakte oder Risikoereignisse gibt es pro Monat oder Jahr?',
       )
     }
     if (draft.formula === 'time') {
-      hourly = questionFor(draft.hourlyCost, 'Vollkostensatz', questions, issues, 'Welcher belastbare Vollkostensatz je Stunde liegt zugrunde?')
+      hourly = questionFor(
+        draft.hourlyCost,
+        'Vollkostensatz',
+        questions,
+        issues,
+        'Welcher belastbare Vollkostensatz je Stunde liegt zugrunde?',
+      )
     }
     if (draft.formula === 'conversion' || draft.formula === 'quality') {
       perEvent = questionFor(
-        draft.valuePerEvent, 'Wert je Ereignis', questions, issues,
+        draft.valuePerEvent,
+        'Wert je Ereignis',
+        questions,
+        issues,
         draft.formula === 'conversion'
           ? 'Welcher zusätzliche Deckungsbeitrag entsteht pro gewonnenem Abschluss (nicht Umsatz)?'
           : 'Welche tatsächlich vermeidbaren Fehlerkosten fallen je Fehler an?',
@@ -217,32 +240,68 @@ export function buildMetric(draft: MetricBuilderDraft): MetricBuilderResult {
       metric.valuePerEventEur = perEvent ?? 0
       if (draft.formula === 'direct') metric.annualAmountEur = operatingChange * factor
       // Kein finanzieller Erwartungswert für Risiko ohne nachvollziehbare Risikomodellierung.
-      if (draft.formula !== 'risk' && (draft.formula !== 'time' || hourly !== null) &&
-        ((draft.formula !== 'conversion' && draft.formula !== 'quality') || perEvent !== null)) {
+      if (
+        draft.formula !== 'risk' &&
+        (draft.formula !== 'time' || hourly !== null) &&
+        ((draft.formula !== 'conversion' && draft.formula !== 'quality') || perEvent !== null)
+      ) {
         const value = annualMetricPotential(metric)
         if (value !== null && Number.isFinite(value) && value >= 0 && value <= MAX) potentialEur = value
         else issues.push('Das rechnerische Potenzial liegt außerhalb des zulässigen Bereichs.')
       }
       if (draft.formula === 'risk') {
-        calculation = decimal(volume ?? 0) + ' Ereignisse je ' + (draft.period === 'monthly' ? 'Monat' : 'Jahr') +
-          ' × (' + decimal(before ?? 0) + ' − ' + decimal(after ?? 0) + ') = ' +
-          decimal((volume ?? 0) * operatingChange * factor) + ' vermiedene Risikoereignisse/Jahr (keine EUR-Bewertung).'
+        calculation =
+          decimal(volume ?? 0) +
+          ' Ereignisse je ' +
+          (draft.period === 'monthly' ? 'Monat' : 'Jahr') +
+          ' × (' +
+          decimal(before ?? 0) +
+          ' − ' +
+          decimal(after ?? 0) +
+          ') = ' +
+          decimal((volume ?? 0) * operatingChange * factor) +
+          ' vermiedene Risikoereignisse/Jahr (keine EUR-Bewertung).'
       } else if (draft.formula === 'direct') {
-        calculation = '(' + euro(before ?? 0) + ' − ' + euro(after ?? 0) + ') × ' + factor + ' = ' + (potentialEur === null ? 'noch offen' : euro(potentialEur) + '/Jahr') + '.'
+        calculation =
+          '(' +
+          euro(before ?? 0) +
+          ' − ' +
+          euro(after ?? 0) +
+          ') × ' +
+          factor +
+          ' = ' +
+          (potentialEur === null ? 'noch offen' : euro(potentialEur) + '/Jahr') +
+          '.'
       } else {
-        const parts = draft.formula === 'time'
-          ? decimal(metric.annualVolume) + ' Vorgänge/Jahr × ' + decimal(operatingChange) + ' Min. ÷ 60 × ' + euro(hourly ?? 0) + '/h'
-          : draft.formula === 'process'
-            ? decimal(metric.annualVolume) + ' Vorgänge/Jahr × ' + euro(operatingChange) + '/Vorgang'
-            : decimal(metric.annualVolume) + ' Vorgänge/Jahr × ' + decimal(operatingChange) + ' Prozentpunkte ÷ 100 × ' + euro(perEvent ?? 0) + '/Ereignis'
+        const parts =
+          draft.formula === 'time'
+            ? decimal(metric.annualVolume) +
+              ' Vorgänge/Jahr × ' +
+              decimal(operatingChange) +
+              ' Min. ÷ 60 × ' +
+              euro(hourly ?? 0) +
+              '/h'
+            : draft.formula === 'process'
+              ? decimal(metric.annualVolume) + ' Vorgänge/Jahr × ' + euro(operatingChange) + '/Vorgang'
+              : decimal(metric.annualVolume) +
+                ' Vorgänge/Jahr × ' +
+                decimal(operatingChange) +
+                ' Prozentpunkte ÷ 100 × ' +
+                euro(perEvent ?? 0) +
+                '/Ereignis'
         calculation = parts + ' = ' + (potentialEur === null ? 'noch offen' : euro(potentialEur) + '/Jahr') + '.'
       }
     }
-    const unit = draft.formula === 'time' ? 'Minuten/Vorgang'
-      : draft.formula === 'quality' || draft.formula === 'conversion' ? '%'
-        : draft.formula === 'process' ? 'EUR/Vorgang'
-          : draft.formula === 'direct' ? 'EUR/' + (draft.period === 'monthly' ? 'Monat' : 'Jahr')
-            : 'Ereignisse/Vorgang'
+    const unit =
+      draft.formula === 'time'
+        ? 'Minuten/Vorgang'
+        : draft.formula === 'quality' || draft.formula === 'conversion'
+          ? '%'
+          : draft.formula === 'process'
+            ? 'EUR/Vorgang'
+            : draft.formula === 'direct'
+              ? 'EUR/' + (draft.period === 'monthly' ? 'Monat' : 'Jahr')
+              : 'Ereignisse/Vorgang'
     if (before !== null) beforeText = decimal(before) + ' ' + unit
     if (after !== null) afterText = decimal(after) + ' ' + unit
   }
@@ -252,8 +311,10 @@ export function buildMetric(draft: MetricBuilderDraft): MetricBuilderResult {
     if (!afterText) questions.push('Woran wird der bessere Zustand erkennbar sein?')
     calculation = 'Qualitativer Vorher-nachher-Vergleich. Kein EUR-Wert berechnet.'
   }
-  if (draft.evidence === 'reference') questions.push('Wie lässt sich überprüfen, ob der Referenzwert unter den Bedingungen dieses Kunden erreichbar ist?')
-  if (draft.evidence === 'customer-stated') questions.push('Mit welchen Daten kann die Kundenaussage unabhängig abgeglichen werden?')
+  if (draft.evidence === 'reference')
+    questions.push('Wie lässt sich überprüfen, ob der Referenzwert unter den Bedingungen dieses Kunden erreichbar ist?')
+  if (draft.evidence === 'customer-stated')
+    questions.push('Mit welchen Daten kann die Kundenaussage unabhängig abgeglichen werden?')
   if (draft.evidence === 'hypothesis') questions.push('Wer beim Kunden kann Ausgangswerte und Annahmen überprüfen?')
   if (draft.evidence === 'customer-reviewed' && !draft.assumptionNote.trim()) {
     issues.push('Für „mit dem Kunden geprüft“ bitte Quelle, Datum oder geprüfte Annahmen dokumentieren.')
@@ -262,8 +323,10 @@ export function buildMetric(draft: MetricBuilderDraft): MetricBuilderResult {
 
   const start = numberValue(draft.startMonth)
   const ramp = numberValue(draft.rampMonths)
-  if (start === null || !Number.isInteger(start) || start < 1 || start > 60) issues.push('Nutzenbeginn: Monat 1 bis 60 eingeben.')
-  if (ramp === null || !Number.isInteger(ramp) || ramp < 1 || ramp > 60) issues.push('Ramp-up: 1 bis 60 Monate eingeben.')
+  if (start === null || !Number.isInteger(start) || start < 1 || start > 60)
+    issues.push('Nutzenbeginn: Monat 1 bis 60 eingeben.')
+  if (ramp === null || !Number.isInteger(ramp) || ramp < 1 || ramp > 60)
+    issues.push('Ramp-up: 1 bis 60 Monate eingeben.')
   const validTiming = start !== null && ramp !== null && start + ramp <= 61
 
   let realizedEur: number | null = null
@@ -272,24 +335,30 @@ export function buildMetric(draft: MetricBuilderDraft): MetricBuilderResult {
     const claim = numberValue(draft.realizedAnnual)
     if (claim === null) issues.push('Realisierbarer Jahresbetrag fehlt oder ist ungültig.')
     else if (potentialEur === null) issues.push('Realisierung erst nach gültiger operativer Berechnung möglich.')
-    else if (claim > potentialEur + 0.005) issues.push('Der realisierbare Betrag darf das berechnete Potenzial nicht übersteigen.')
-    else if (claim === 0) questions.push('Welcher Kostenblock entfällt tatsächlich, oder bleibt der Nutzen ein Kapazitätsgewinn?')
-    else if (draft.realizationNote.trim().length < 12) issues.push('Konkreten Realisierungsmechanismus mit mindestens 12 Zeichen erläutern.')
+    else if (claim > potentialEur + 0.005)
+      issues.push('Der realisierbare Betrag darf das berechnete Potenzial nicht übersteigen.')
+    else if (claim === 0)
+      questions.push('Welcher Kostenblock entfällt tatsächlich, oder bleibt der Nutzen ein Kapazitätsgewinn?')
+    else if (draft.realizationNote.trim().length < 12)
+      issues.push('Konkreten Realisierungsmechanismus mit mindestens 12 Zeichen erläutern.')
     else if (
-      draft.formula === 'conversion' && draft.mechanism !== 'incremental-margin' ||
-      draft.formula === 'quality' && draft.mechanism !== 'reduced-error-cost' ||
-      (draft.formula === 'direct' || draft.formula === 'process' || draft.formula === 'time') &&
-      (draft.mechanism === 'incremental-margin' || draft.mechanism === 'reduced-error-cost')
-    ) issues.push('Der gewählte Realisierungsmechanismus passt nicht zum Metric-Typ.')
+      (draft.formula === 'conversion' && draft.mechanism !== 'incremental-margin') ||
+      (draft.formula === 'quality' && draft.mechanism !== 'reduced-error-cost') ||
+      ((draft.formula === 'direct' || draft.formula === 'process' || draft.formula === 'time') &&
+        (draft.mechanism === 'incremental-margin' || draft.mechanism === 'reduced-error-cost'))
+    )
+      issues.push('Der gewählte Realisierungsmechanismus passt nicht zum Metric-Typ.')
     else realizedEur = claim
   } else if (nonFinancial && draft.mechanism !== 'unresolved') {
     issues.push('Risiko- und qualitative Metrics werden hier nicht monetarisiert.')
   } else if (!nonFinancial) {
-    questions.push(draft.formula === 'time'
-      ? 'Entfallen durch den Kapazitätsgewinn echte Ausgaben oder entstehen zunächst nur freie Stunden?'
-      : draft.formula === 'conversion'
-        ? 'Wie entsteht aus zusätzlichen Abschlüssen ein tatsächlich zusätzlicher Deckungsbeitrag?'
-        : 'Welche konkrete Ausgabe entfällt oder wird nachweisbar vermieden?')
+    questions.push(
+      draft.formula === 'time'
+        ? 'Entfallen durch den Kapazitätsgewinn echte Ausgaben oder entstehen zunächst nur freie Stunden?'
+        : draft.formula === 'conversion'
+          ? 'Wie entsteht aus zusätzlichen Abschlüssen ein tatsächlich zusätzlicher Deckungsbeitrag?'
+          : 'Welche konkrete Ausgabe entfällt oder wird nachweisbar vermieden?',
+    )
   }
   if (mechanismSelected && !draft.effectGroup.trim()) {
     questions.push('Zu welcher wirtschaftlichen Wirkung gehört dieser Effekt, damit nichts doppelt gezählt wird?')
@@ -297,10 +366,15 @@ export function buildMetric(draft: MetricBuilderDraft): MetricBuilderResult {
   }
   if (!validTiming) issues.push('Nutzenbeginn und Ramp-up müssen innerhalb von 60 Monaten liegen.')
 
-  const complete = validFormula && validPeriod && validEvidence && validMechanism &&
+  const complete =
+    validFormula &&
+    validPeriod &&
+    validEvidence &&
+    validMechanism &&
     Boolean(draft.problem.trim() && draft.process.trim() && draft.outcome.trim()) &&
-    (draft.formula === 'qualitative' ? Boolean(beforeText && afterText) :
-      operatingChange !== null && (draft.formula === 'risk' || potentialEur !== null)) &&
+    (draft.formula === 'qualitative'
+      ? Boolean(beforeText && afterText)
+      : operatingChange !== null && (draft.formula === 'risk' || potentialEur !== null)) &&
     issues.length === 0
 
   let metric: CustomerMetric | null = null
@@ -312,35 +386,46 @@ export function buildMetric(draft: MetricBuilderDraft): MetricBuilderResult {
     metric.treatment = defaultTreatment(draft.formula)
     metric.evidence = draft.evidence
     metric.evidenceNote = [
-      draft.problem.trim(), draft.assumptionNote.trim(),
+      draft.problem.trim(),
+      draft.assumptionNote.trim(),
       'Realisierung: ' + mechanismLabels[draft.mechanism],
       draft.realizationNote.trim(),
-    ].filter(Boolean).join(' | ')
+    ]
+      .filter(Boolean)
+      .join(' | ')
     metric.effectGroup = draft.effectGroup.trim() || 'metric-builder'
     metric.annualVolume = (volume ?? 0) * factor
     metric.before = before ?? 0
     metric.after = after ?? 0
     metric.hourlyCostEur = hourly ?? 0
     metric.valuePerEventEur = perEvent ?? 0
-    metric.annualAmountEur = draft.formula === 'direct' ? potentialEur ?? 0 : 0
+    metric.annualAmountEur = draft.formula === 'direct' ? (potentialEur ?? 0) : 0
     metric.startMonth = start ?? 1
     metric.rampMonths = ramp ?? 1
     metric.included = false
     // Partial economic realization needs its own direct amount, otherwise the
     // existing Payback engine would count the *whole* operational potential.
-    if (realizedEur !== null && potentialEur !== null && realizedEur > 0 &&
-        Math.abs(realizedEur - potentialEur) < 0.005) {
+    if (
+      realizedEur !== null &&
+      potentialEur !== null &&
+      realizedEur > 0 &&
+      Math.abs(realizedEur - potentialEur) < 0.005
+    ) {
       metric.treatment = 'realized'
     }
     transfer.push(metric)
-    if (realizedEur !== null && potentialEur !== null && realizedEur > 0 &&
-        Math.abs(realizedEur - potentialEur) >= 0.005) {
+    if (
+      realizedEur !== null &&
+      potentialEur !== null &&
+      realizedEur > 0 &&
+      Math.abs(realizedEur - potentialEur) >= 0.005
+    ) {
       const financial = newMetric('metric-builder-realized', 'direct')
       financial.name = (metric.name + ' – realisierbarer Anteil').slice(0, 140)
       financial.treatment = 'realized'
       financial.evidence = draft.evidence
-      financial.evidenceNote = metric.evidenceNote +
-        ' | Nur nachweisbar realisierbarer Teil des Potenzials: ' + euro(realizedEur) + '/Jahr.'
+      financial.evidenceNote =
+        metric.evidenceNote + ' | Nur nachweisbar realisierbarer Teil des Potenzials: ' + euro(realizedEur) + '/Jahr.'
       financial.effectGroup = metric.effectGroup
       financial.annualAmountEur = realizedEur
       financial.startMonth = metric.startMonth
@@ -351,8 +436,17 @@ export function buildMetric(draft: MetricBuilderDraft): MetricBuilderResult {
   }
 
   return {
-    complete, issues, questions: Array.from(new Set(questions)), potentialEur,
-    realizedEur, operatingChange, beforeText, afterText, calculation, metric, transfer,
+    complete,
+    issues,
+    questions: Array.from(new Set(questions)),
+    potentialEur,
+    realizedEur,
+    operatingChange,
+    beforeText,
+    afterText,
+    calculation,
+    metric,
+    transfer,
   }
 }
 
@@ -362,8 +456,10 @@ export function metricSummary(draft: MetricBuilderDraft, result: MetricBuilderRe
     'Zielbild: ' + (draft.outcome.trim() || 'noch zu beschreiben'),
     'Vergleich: ' + (result.beforeText || 'offen') + ' → ' + (result.afterText || 'offen'),
     'Rechenweg: ' + (result.calculation || 'noch nicht vollständig'),
-    'Rechnerisches Potenzial: ' + (result.potentialEur === null ? 'nicht bezifferbar' : euro(result.potentialEur) + '/Jahr'),
-    'Wirtschaftlich realisierbar: ' + (result.realizedEur === null ? 'nicht nachgewiesen / nicht angesetzt' : euro(result.realizedEur) + '/Jahr'),
+    'Rechnerisches Potenzial: ' +
+      (result.potentialEur === null ? 'nicht bezifferbar' : euro(result.potentialEur) + '/Jahr'),
+    'Wirtschaftlich realisierbar: ' +
+      (result.realizedEur === null ? 'nicht nachgewiesen / nicht angesetzt' : euro(result.realizedEur) + '/Jahr'),
     'Annahmenstand: ' + customerEvidenceLabels[draft.evidence],
   ]
   if (draft.assumptionNote.trim()) lines.push('Datenbasis: ' + draft.assumptionNote.trim())
@@ -375,24 +471,76 @@ export function metricSummary(draft: MetricBuilderDraft, result: MetricBuilderRe
 
 /** Fiktive Lehrbeispiele; niemals als Referenzbelege verwenden. */
 export const metricDemos: Record<string, Partial<MetricBuilderDraft>> = {
-  crm: { problem: 'Manuelle Datenpflege bindet Servicezeit.', process: 'CRM-Datenpflege', consequence: 'Weniger Zeit für Kundenanliegen',
-    outcome: 'Erfassungszeit je Vorgang senken', formula: 'time', volume: 25000, before: 12, after: 8,
-    hourlyCost: 55, period: 'annual', evidence: 'hypothesis', mechanism: 'unresolved', effectGroup: 'crm-datenpflege' },
-  service: { problem: 'Externe Nachbearbeitung ist zu teuer.', process: 'Servicebearbeitung', outcome: 'Kosten pro Vorgang senken',
-    formula: 'process', volume: 15000, before: 12, after: 8, period: 'annual', evidence: 'hypothesis',
-    mechanism: 'avoided-external', realizedAnnual: 60000, realizationNote: 'Externer Dienstleister reduziert die jährliche Rechnung um 60.000 EUR.',
-    effectGroup: 'service-extern' },
-  sales: { problem: 'Zu wenige qualifizierte Angebote werden gewonnen.', process: 'Angebotsprozess',
-    outcome: 'Abschlussquote verbessern', formula: 'conversion', volume: 1200, before: 20, after: 24,
-    valuePerEvent: 4000, evidence: 'hypothesis', mechanism: 'incremental-margin', realizedAnnual: 192000,
+  crm: {
+    problem: 'Manuelle Datenpflege bindet Servicezeit.',
+    process: 'CRM-Datenpflege',
+    consequence: 'Weniger Zeit für Kundenanliegen',
+    outcome: 'Erfassungszeit je Vorgang senken',
+    formula: 'time',
+    volume: 25000,
+    before: 12,
+    after: 8,
+    hourlyCost: 55,
+    period: 'annual',
+    evidence: 'hypothesis',
+    mechanism: 'unresolved',
+    effectGroup: 'crm-datenpflege',
+  },
+  service: {
+    problem: 'Externe Nachbearbeitung ist zu teuer.',
+    process: 'Servicebearbeitung',
+    outcome: 'Kosten pro Vorgang senken',
+    formula: 'process',
+    volume: 15000,
+    before: 12,
+    after: 8,
+    period: 'annual',
+    evidence: 'hypothesis',
+    mechanism: 'avoided-external',
+    realizedAnnual: 60000,
+    realizationNote: 'Externer Dienstleister reduziert die jährliche Rechnung um 60.000 EUR.',
+    effectGroup: 'service-extern',
+  },
+  sales: {
+    problem: 'Zu wenige qualifizierte Angebote werden gewonnen.',
+    process: 'Angebotsprozess',
+    outcome: 'Abschlussquote verbessern',
+    formula: 'conversion',
+    volume: 1200,
+    before: 20,
+    after: 24,
+    valuePerEvent: 4000,
+    evidence: 'hypothesis',
+    mechanism: 'incremental-margin',
+    realizedAnnual: 192000,
     realizationNote: 'Zusätzlicher Deckungsbeitrag durch tatsächlich zusätzlich gewonnene Abschlüsse.',
-    effectGroup: 'vertrieb-conversion' },
-  quality: { problem: 'Fehler verursachen Nacharbeit und Nachbesserung.', process: 'Auftragsbearbeitung',
-    outcome: 'Fehlerquote senken', formula: 'quality', volume: 20000, before: 5, after: 3,
-    valuePerEvent: 80, evidence: 'hypothesis', mechanism: 'reduced-error-cost', realizedAnnual: 32000,
+    effectGroup: 'vertrieb-conversion',
+  },
+  quality: {
+    problem: 'Fehler verursachen Nacharbeit und Nachbesserung.',
+    process: 'Auftragsbearbeitung',
+    outcome: 'Fehlerquote senken',
+    formula: 'quality',
+    volume: 20000,
+    before: 5,
+    after: 3,
+    valuePerEvent: 80,
+    evidence: 'hypothesis',
+    mechanism: 'reduced-error-cost',
+    realizedAnnual: 32000,
     realizationNote: 'Vermiedene externe Nachbesserungskosten gemäß künftig zu prüfenden Rechnungen.',
-    effectGroup: 'qualitaetskosten' },
-  risk: { problem: 'Ausfälle gefährden kritische Serviceprozesse.', process: 'Serviceverfügbarkeit',
-    outcome: 'Weniger Betriebsstörungen', formula: 'risk', volume: 1, before: 10, after: 5,
-    evidence: 'hypothesis', mechanism: 'unresolved', effectGroup: 'service-risiko' },
+    effectGroup: 'qualitaetskosten',
+  },
+  risk: {
+    problem: 'Ausfälle gefährden kritische Serviceprozesse.',
+    process: 'Serviceverfügbarkeit',
+    outcome: 'Weniger Betriebsstörungen',
+    formula: 'risk',
+    volume: 1,
+    before: 10,
+    after: 5,
+    evidence: 'hypothesis',
+    mechanism: 'unresolved',
+    effectGroup: 'service-risiko',
+  },
 }
