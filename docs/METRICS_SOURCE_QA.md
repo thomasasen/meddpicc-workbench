@@ -46,7 +46,7 @@ Die folgenden Punkte sind eigene Produktentscheidungen:
 - Auswahl der Fragen und deutschsprachigen Paraphrasen (keine Originalzitate).
 - Checkboxen als temporäre Gedankenstütze, ohne Score und Persistenz.
 - Progressive Erklärungsfelder und gemeinsame Content-Struktur.
-- Keine automatische ROI-Formel in diesem T2-Slice: **Metric Builder / Quick Payback** bleiben eigene spätere Tools.
+- Keine automatische ROI-Formel in diesem T2-Knowledge-Slice. **Quick Payback** ist inzwischen in main umgesetzt; der separate **Metric Builder** wird im Feature-PR entwickelt. Siehe [Metric Builder Red Team](METRIC_BUILDER_RED_TEAM.md).
 
 ## QS-Gates
 
