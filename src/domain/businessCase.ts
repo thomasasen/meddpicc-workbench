@@ -110,11 +110,13 @@ export function economicInterpretation(c: CaseSummary): string {
         '.'
   const status =
     c.unverified > 0
-      ? c.unverified + ' eingerechnete Kunden-Metric(s) sind nicht als kundenseitig geprüft gekennzeichnet.'
+      ? c.unverified +
+        (c.unverified === 1 ? ' eingerechnete Kunden-Metric ist' : ' eingerechnete Kunden-Metrics sind') +
+        ' nicht als kundenseitig geprüft gekennzeichnet.'
       : 'Alle eingerechneten Metrics sind laut Nutzereingabe kundenseitig geprüft; keine externe Verifikation.'
   return (
     when +
-    ' Der kumulierte Nettoeffekt wird aus realisierten wirtschaftlichen Vorteilen und Projektkosten abgeleitet. ' +
+    ' Der kumulierte Nettoeffekt wird aus den modellierten wirtschaftlichen Vorteilen und Projektkosten abgeleitet. ' +
     status
   )
 }
