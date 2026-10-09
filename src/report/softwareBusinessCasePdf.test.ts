@@ -19,7 +19,7 @@ describe('kundenfähiger Business-Case-PDF-Download', () => {
         .join(''),
     ).toBe('%PDF-')
     const parsed = await PDFDocument.load(pdf)
-    expect(parsed.getPageCount()).toBeGreaterThanOrEqual(5)
+    expect(parsed.getPageCount()).toBe(8) // 7 Seiten V4 plus genau eine vollständige Szenarioseite
     expect(parsed.getTitle()).toContain('CRM & Service')
     for (const page of parsed.getPages()) {
       expect(page.getWidth()).toBeCloseTo(595.28, 1)
