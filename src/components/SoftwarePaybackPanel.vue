@@ -1051,9 +1051,15 @@ async function exportPng() {
   border-radius: var(--radius-control);
   padding: var(--space-2);
 }
-.software-more summary::-webkit-details-marker { display: none; }
-.software-more-label { text-align: left; }
-.software-more-hint { text-align: right; }
+.software-more summary::-webkit-details-marker {
+  display: none;
+}
+.software-more-label {
+  text-align: left;
+}
+.software-more-hint {
+  text-align: right;
+}
 .software-more summary::before {
   content: '▸';
   margin: 0;
@@ -1142,8 +1148,12 @@ async function exportPng() {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: start;
   }
-  .software-entry-heading .software-remove { white-space: nowrap; }
-  .software-more summary { grid-template-columns: auto minmax(0, 1fr); }
+  .software-entry-heading .software-remove {
+    white-space: nowrap;
+  }
+  .software-more summary {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
   .software-more-hint {
     grid-column: 2;
     width: auto;
