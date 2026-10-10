@@ -17,7 +17,10 @@ test('Cost of Delay: Einstieg, leere Eingaben und Kapazitätsgewinn ohne EUR-Sch
   await page.getByRole('button', { name: '3 · Konsequenz' }).click()
   await expect(page.getByText('Noch kein EUR-Verzögerungsschaden ableitbar.')).toBeVisible()
   await expect(page.locator('.cod-kpis')).toHaveCount(0)
-  await page.screenshot({ path: testInfo.outputPath('cost-of-delay-empty-' + testInfo.project.name + '.png'), fullPage: true })
+  await page.screenshot({
+    path: testInfo.outputPath('cost-of-delay-empty-' + testInfo.project.name + '.png'),
+    fullPage: true,
+  })
 })
 
 test('Cost of Delay: fiktives Servicebeispiel, Monatskurve, PDF und Responsive-QA', async ({ page }, testInfo) => {
@@ -33,8 +36,16 @@ test('Cost of Delay: fiktives Servicebeispiel, Monatskurve, PDF und Responsive-Q
   await expect(page.locator('.cod-chart polyline')).toHaveCount(2)
   await page.getByRole('button', { name: '+3 Monate' }).click()
   await expect(page.getByText('Nutzen bei +3 Monaten')).toBeVisible()
-  await page.locator('.cod-breakdown').getByText('Nicht berechenbar').count().then((n) => expect(n).toBe(0))
-  await page.locator('.cod-results details').filter({ hasText: 'Vollständigen Monatsvergleich anzeigen' }).locator('summary').click()
+  await page
+    .locator('.cod-breakdown')
+    .getByText('Nicht berechenbar')
+    .count()
+    .then((n) => expect(n).toBe(0))
+  await page
+    .locator('.cod-results details')
+    .filter({ hasText: 'Vollständigen Monatsvergleich anzeigen' })
+    .locator('summary')
+    .click()
   await expect(page.locator('.cod-table-scroll tbody tr')).toHaveCount(37)
   const waiting = page.waitForEvent('download')
   await page.getByRole('button', { name: 'Kunden-Steckbrief als PDF' }).click()
@@ -61,9 +72,13 @@ test('Cost of Delay: fiktives Servicebeispiel, Monatskurve, PDF und Responsive-Q
     expect(out.bad, 'Layout bei ' + width).toEqual([])
   }
   await page.setViewportSize({
-    width: testInfo.project.name === 'mobile-chromium' ? 393 : 1280, height: 900,
+    width: testInfo.project.name === 'mobile-chromium' ? 393 : 1280,
+    height: 900,
   })
-  await page.screenshot({ path: testInfo.outputPath('cost-of-delay-result-' + testInfo.project.name + '.png'), fullPage: true })
+  await page.screenshot({
+    path: testInfo.outputPath('cost-of-delay-result-' + testInfo.project.name + '.png'),
+    fullPage: true,
+  })
   expect(errors).toEqual([])
 })
 
@@ -86,9 +101,13 @@ test('Cost of Delay: finanzielle Metric nur nach bewusster Übergabe aus Metric 
   await page.getByRole('button', { name: 'Weiter', exact: false }).click()
   await page.getByRole('button', { name: 'Realisierbare Metric in Cost of Delay übernehmen' }).click()
   await expect(page).toHaveURL(/#\/tools\/cost-of-delay/)
-  await expect(page.getByText('Metric Builder: wirtschaftlicher Jahreswert übernommen.', { exact: false })).toBeVisible()
+  await expect(
+    page.getByText('Metric Builder: wirtschaftlicher Jahreswert übernommen.', { exact: false }),
+  ).toBeVisible()
   await expect(page.getByLabel('Realisierbarer Nutzen in EUR/Jahr')).toHaveValue('60000')
   await expect(page.getByLabel('Herkunft und Prüfstand der Annahmen')).toHaveValue('hypothesis')
   await page.reload()
-  await expect(page.getByText('Metric Builder: wirtschaftlicher Jahreswert übernommen.', { exact: false })).toHaveCount(0)
+  await expect(page.getByText('Metric Builder: wirtschaftlicher Jahreswert übernommen.', { exact: false })).toHaveCount(
+    0,
+  )
 })

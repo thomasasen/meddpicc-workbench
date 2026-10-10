@@ -27,9 +27,7 @@ export function queueCostOfDelayHandoff(
   storage.setItem(KEY, JSON.stringify(input))
 }
 
-export function consumeCostOfDelayHandoff(
-  storage: Pick<Storage, 'getItem' | 'removeItem'>,
-): CostOfDelayInput | null {
+export function consumeCostOfDelayHandoff(storage: Pick<Storage, 'getItem' | 'removeItem'>): CostOfDelayInput | null {
   const raw = storage.getItem(KEY)
   if (!raw) return null
   storage.removeItem(KEY)
@@ -37,10 +35,22 @@ export function consumeCostOfDelayHandoff(
     const parsed: unknown = JSON.parse(raw)
     if (!parsed || typeof parsed !== 'object') return null
     const input = parsed as CostOfDelayInput
-    if (!input.title || !input.effectGroup || !Number.isFinite(input.annualBenefitEur) ||
-      input.financialTreatment !== 'realized' || !Number.isInteger(input.benefitStartMonth) ||
-      !Number.isInteger(input.rampMonths)) return null
-    return { ...emptyCostOfDelayInput(), ...input, legacyMonthlyEur: null, projectOnceEur: null, extraCostPerMonthEur: null }
+    if (
+      !input.title ||
+      !input.effectGroup ||
+      !Number.isFinite(input.annualBenefitEur) ||
+      input.financialTreatment !== 'realized' ||
+      !Number.isInteger(input.benefitStartMonth) ||
+      !Number.isInteger(input.rampMonths)
+    )
+      return null
+    return {
+      ...emptyCostOfDelayInput(),
+      ...input,
+      legacyMonthlyEur: null,
+      projectOnceEur: null,
+      extraCostPerMonthEur: null,
+    }
   } catch {
     return null
   }

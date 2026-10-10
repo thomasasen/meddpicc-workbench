@@ -64,11 +64,13 @@ function chartPoints(field: 'baseCumulativeEur' | 'delayedCumulativeEur'): strin
   if (!selected.value) return ''
   const arr = selected.value.months
   const max = Math.max(1, ...arr.flatMap((row) => [row.baseCumulativeEur, row.delayedCumulativeEur]))
-  return arr.map((row) => {
-    const x = 36 + (row.month / draft.value.horizonMonths) * 626
-    const y = 196 - (row[field] / max) * 155
-    return x.toFixed(2) + ',' + y.toFixed(2)
-  }).join(' ')
+  return arr
+    .map((row) => {
+      const x = 36 + (row.month / draft.value.horizonMonths) * 626
+      const y = 196 - (row[field] / max) * 155
+      return x.toFixed(2) + ',' + y.toFixed(2)
+    })
+    .join(' ')
 }
 function download(bytes: Uint8Array, filename: string) {
   const blob = new Blob([new Uint8Array(bytes)], { type: 'application/pdf' })
@@ -95,7 +97,8 @@ onMounted(() => {
     const imported = consumeCostOfDelayHandoff(window.sessionStorage)
     if (imported) {
       draft.value = imported
-      notice.value = 'Metric Builder: wirtschaftlicher Jahreswert übernommen. Evidenzstatus unverändert; Kosten noch offen.'
+      notice.value =
+        'Metric Builder: wirtschaftlicher Jahreswert übernommen. Evidenzstatus unverändert; Kosten noch offen.'
     }
   } catch {
     notice.value = 'Die lokale Metric-Übergabe war nicht verfügbar.'
@@ -126,8 +129,8 @@ onMounted(() => {
         </div>
         <h1>Was kostet es wirtschaftlich, später zu starten?</h1>
         <p class="intro-text">
-          Vergleiche Nutzenverläufe über denselben Kalenderzeitraum. Die Differenz ist nicht automatisch ein
-          endgültiger Vermögensschaden. Zeitgewinn wird nur mit nachgewiesener finanzieller Wirkung bewertet.
+          Vergleiche Nutzenverläufe über denselben Kalenderzeitraum. Die Differenz ist nicht automatisch ein endgültiger
+          Vermögensschaden. Zeitgewinn wird nur mit nachgewiesener finanzieller Wirkung bewertet.
         </p>
         <div class="cod-examples" aria-label="Fiktive Beispiele">
           <span>Beispiele (fiktiv):</span>
@@ -139,9 +142,15 @@ onMounted(() => {
       </section>
 
       <nav class="cod-steps" aria-label="Cost of Delay berechnen">
-        <button v-for="(label, index) in ['1 · Ausgangspunkt', '2 · Verzögerung', '3 · Konsequenz']"
-          :key="label" type="button" class="cod-step" :class="{ 'cod-step--current': step === index + 1 }"
-          :aria-current="step === index + 1 ? 'step' : undefined" @click="step = (index + 1) as 1 | 2 | 3">
+        <button
+          v-for="(label, index) in ['1 · Ausgangspunkt', '2 · Verzögerung', '3 · Konsequenz']"
+          :key="label"
+          type="button"
+          class="cod-step"
+          :class="{ 'cod-step--current': step === index + 1 }"
+          :aria-current="step === index + 1 ? 'step' : undefined"
+          @click="step = (index + 1) as 1 | 2 | 3"
+        >
           {{ label }}
         </button>
       </nav>
@@ -151,16 +160,20 @@ onMounted(() => {
         <h2 id="cod-input-title">Welche Verbesserung wäre wann wirksam?</h2>
         <p class="cod-muted">Nur wirtschaftlich tatsächlich realisierbare Effekte ergeben einen EUR-Vergleich.</p>
         <div class="cod-fields">
-          <label class="cod-field"><span>Bezeichnung der Metric</span>
+          <label class="cod-field"
+            ><span>Bezeichnung der Metric</span>
             <input v-model="draft.title" maxlength="140" placeholder="z. B. Vermiedene externe Servicekosten" />
           </label>
-          <label class="cod-field"><span>Aktuelles Kundenproblem und Konsequenz</span>
+          <label class="cod-field"
+            ><span>Aktuelles Kundenproblem und Konsequenz</span>
             <textarea v-model="draft.problem" rows="2" maxlength="350" placeholder="Was besteht heute fort?" />
           </label>
-          <label class="cod-field"><span>Nachvollziehbare Verbesserung</span>
+          <label class="cod-field"
+            ><span>Nachvollziehbare Verbesserung</span>
             <textarea v-model="draft.outcome" rows="2" maxlength="350" placeholder="Was ändert sich konkret?" />
           </label>
-          <label class="cod-field"><span>Wirtschaftliche Einordnung</span>
+          <label class="cod-field"
+            ><span>Wirtschaftliche Einordnung</span>
             <select v-model="draft.financialTreatment">
               <option value="unconfirmed">Finanzielle Wirkung noch ungeklärt</option>
               <option value="capacity">Nur Kapazitätsgewinn, keine belegte EUR-Ersparnis</option>
@@ -168,30 +181,52 @@ onMounted(() => {
             </select>
           </label>
           <template v-if="draft.financialTreatment === 'realized'">
-            <label class="cod-field"><span>{{ draft.benefitKind === 'one-time' ? 'Einmaliger Betrag in EUR' : 'Realisierbarer Nutzen in EUR/Jahr' }}</span>
-              <input :value="draft.annualBenefitEur ?? ''" type="number" inputmode="decimal" min="0"
-                max="1000000000000" step="any" placeholder="Noch offen" @input="setAmount('annualBenefitEur', $event)" />
+            <label class="cod-field"
+              ><span>{{
+                draft.benefitKind === 'one-time' ? 'Einmaliger Betrag in EUR' : 'Realisierbarer Nutzen in EUR/Jahr'
+              }}</span>
+              <input
+                :value="draft.annualBenefitEur ?? ''"
+                type="number"
+                inputmode="decimal"
+                min="0"
+                max="1000000000000"
+                step="any"
+                placeholder="Noch offen"
+                @input="setAmount('annualBenefitEur', $event)"
+              />
             </label>
-            <label class="cod-field"><span>Art der wirtschaftlichen Wirkung</span>
+            <label class="cod-field"
+              ><span>Art der wirtschaftlichen Wirkung</span>
               <select v-model="draft.benefitKind">
                 <option value="recurring">Wiederkehrend (Jahreswirkung)</option>
                 <option value="one-time">Einmalig</option>
               </select>
             </label>
-            <label class="cod-field"><span>Wirkungsgruppe (Doppelzählungsschutz)</span>
+            <label class="cod-field"
+              ><span>Wirkungsgruppe (Doppelzählungsschutz)</span>
               <input v-model="draft.effectGroup" maxlength="90" placeholder="z. B. service-extern" />
             </label>
           </template>
           <div class="cod-field-row">
-            <label class="cod-field"><span>Nutzenbeginn (Monat)</span>
+            <label class="cod-field"
+              ><span>Nutzenbeginn (Monat)</span>
               <input v-model.number="draft.benefitStartMonth" type="number" min="1" max="120" step="1" />
             </label>
-            <label class="cod-field"><span>Ramp-up (Monate)</span>
-              <input v-model.number="draft.rampMonths" type="number" min="1" max="120" step="1"
-                :disabled="draft.benefitKind === 'one-time'" />
+            <label class="cod-field"
+              ><span>Ramp-up (Monate)</span>
+              <input
+                v-model.number="draft.rampMonths"
+                type="number"
+                min="1"
+                max="120"
+                step="1"
+                :disabled="draft.benefitKind === 'one-time'"
+              />
             </label>
           </div>
-          <label class="cod-field"><span>Herkunft und Prüfstand der Annahmen</span>
+          <label class="cod-field"
+            ><span>Herkunft und Prüfstand der Annahmen</span>
             <select v-model="draft.evidence">
               <option value="hypothesis">Hypothese / Annahme</option>
               <option value="reference">Externe Referenz (M1)</option>
@@ -199,9 +234,14 @@ onMounted(() => {
               <option value="customer-reviewed">Mit dem Kunden geprüft (Selbstangabe)</option>
             </select>
           </label>
-          <label class="cod-field"><span>Datenquelle und tatsächlicher Realisierungsmechanismus</span>
-            <textarea v-model="draft.source" rows="3" maxlength="600"
-              placeholder="Vertragsposition, Rechnung, Kundenaussage oder offene Annahme" />
+          <label class="cod-field"
+            ><span>Datenquelle und tatsächlicher Realisierungsmechanismus</span>
+            <textarea
+              v-model="draft.source"
+              rows="3"
+              maxlength="600"
+              placeholder="Vertragsposition, Rechnung, Kundenaussage oder offene Annahme"
+            />
           </label>
         </div>
       </section>
@@ -209,27 +249,47 @@ onMounted(() => {
       <section v-if="step === 2" class="cod-panel" aria-labelledby="cod-delay-title">
         <p class="eyebrow">Schritt 2 · Zeitliche Alternativen</p>
         <h2 id="cod-delay-title">Was verschiebt sich wirklich?</h2>
-        <p class="cod-muted">Basis und verzögertes Szenario betrachten dieselben Monate. Eine Projektverschiebung
-          verschiebt Verträge und Zahlungen nicht automatisch.</p>
+        <p class="cod-muted">
+          Basis und verzögertes Szenario betrachten dieselben Monate. Eine Projektverschiebung verschiebt Verträge und
+          Zahlungen nicht automatisch.
+        </p>
         <div class="cod-fields">
-          <label class="cod-field"><span>Gemeinsamer Betrachtungshorizont</span>
+          <label class="cod-field"
+            ><span>Gemeinsamer Betrachtungshorizont</span>
             <select v-model.number="draft.horizonMonths">
               <option :value="36">36 Monate ab Modellmonat 0</option>
               <option :value="60">60 Monate ab Modellmonat 0</option>
             </select>
           </label>
-          <label class="cod-field"><span>Eigene Verzögerung in Monaten (optional)</span>
-            <input :value="customDelay ?? ''" type="number" min="0" max="120" step="1"
-              placeholder="Standard: 0 / 3 / 6 / 12" @input="setCustomDelay" />
+          <label class="cod-field"
+            ><span>Eigene Verzögerung in Monaten (optional)</span>
+            <input
+              :value="customDelay ?? ''"
+              type="number"
+              min="0"
+              max="120"
+              step="1"
+              placeholder="Standard: 0 / 3 / 6 / 12"
+              @input="setCustomDelay"
+            />
           </label>
           <details class="cod-details">
             <summary>Hat die Wirkung ein festes Ende?</summary>
             <div class="cod-fields">
-              <label class="cod-field"><span>Letzter Monat mit Nutzen (optional)</span>
-                <input :value="draft.benefitEndMonth ?? ''" type="number" min="1" max="120" step="1"
-                  placeholder="Ohne festes Ende" @input="setEndMonth" />
+              <label class="cod-field"
+                ><span>Letzter Monat mit Nutzen (optional)</span>
+                <input
+                  :value="draft.benefitEndMonth ?? ''"
+                  type="number"
+                  min="1"
+                  max="120"
+                  step="1"
+                  placeholder="Ohne festes Ende"
+                  @input="setEndMonth"
+                />
               </label>
-              <label class="cod-field"><span>Wie verändert sich der Endtermin?</span>
+              <label class="cod-field"
+                ><span>Wie verändert sich der Endtermin?</span>
                 <select v-model="draft.expiry">
                   <option value="follows-start">Wirkungsdauer folgt dem verschobenen Start</option>
                   <option value="fixed">Fester Endtermin, nicht nachholbare Zeiträume (Annahme)</option>
@@ -239,37 +299,72 @@ onMounted(() => {
           </details>
           <details class="cod-details">
             <summary>Altsystem, Projektkosten und Zusatzkosten berücksichtigen</summary>
-            <p class="cod-muted">Für einen Nettovergleich müssen alle drei Kostenfelder explizit ausgefüllt sein.
-              Trage 0 ein, wenn die jeweilige Position geprüft und tatsächlich null ist.</p>
+            <p class="cod-muted">
+              Für einen Nettovergleich müssen alle drei Kostenfelder explizit ausgefüllt sein. Trage 0 ein, wenn die
+              jeweilige Position geprüft und tatsächlich null ist.
+            </p>
             <div class="cod-fields">
-              <label class="cod-field"><span>Entfallender Altvertrag in EUR/Monat</span>
-                <input :value="draft.legacyMonthlyEur ?? ''" type="number" min="0" step="any"
-                  placeholder="Offen" @input="setAmount('legacyMonthlyEur', $event)" />
+              <label class="cod-field"
+                ><span>Entfallender Altvertrag in EUR/Monat</span>
+                <input
+                  :value="draft.legacyMonthlyEur ?? ''"
+                  type="number"
+                  min="0"
+                  step="any"
+                  placeholder="Offen"
+                  @input="setAmount('legacyMonthlyEur', $event)"
+                />
               </label>
-              <label class="cod-field"><span>Abschaltung ohne Verzögerung (Monat)</span>
+              <label class="cod-field"
+                ><span>Abschaltung ohne Verzögerung (Monat)</span>
                 <input v-model.number="draft.legacyStartMonth" type="number" min="1" max="120" step="1" />
               </label>
-              <label class="cod-field"><span>Wirkungsgruppe des Altvertrags</span>
+              <label class="cod-field"
+                ><span>Wirkungsgruppe des Altvertrags</span>
                 <input v-model="draft.legacyEffectGroup" placeholder="z. B. altlizenz" maxlength="90" />
               </label>
-              <label class="cod-check"><input v-model="draft.legacyMovesWithProject" type="checkbox" />
-                <span>Die Abschaltung verschiebt sich mit dem Projekt.</span></label>
-              <label class="cod-field"><span>Einmalige Projektkosten (EUR)</span>
-                <input :value="draft.projectOnceEur ?? ''" type="number" min="0" step="any"
-                  placeholder="Offen" @input="setAmount('projectOnceEur', $event)" />
+              <label class="cod-check"
+                ><input v-model="draft.legacyMovesWithProject" type="checkbox" />
+                <span>Die Abschaltung verschiebt sich mit dem Projekt.</span></label
+              >
+              <label class="cod-field"
+                ><span>Einmalige Projektkosten (EUR)</span>
+                <input
+                  :value="draft.projectOnceEur ?? ''"
+                  type="number"
+                  min="0"
+                  step="any"
+                  placeholder="Offen"
+                  @input="setAmount('projectOnceEur', $event)"
+                />
               </label>
-              <label class="cod-field"><span>Projektkostentermin (Monat)</span>
+              <label class="cod-field"
+                ><span>Projektkostentermin (Monat)</span>
                 <input v-model.number="draft.projectCostMonth" type="number" min="0" max="120" step="1" />
               </label>
-              <label class="cod-check"><input v-model="draft.projectCostsMove" type="checkbox" />
-                <span>Diese Projektkosten verschieben sich ebenfalls.</span></label>
-              <label class="cod-field"><span>Belegte Zusatzkosten je Verzögerungsmonat (EUR)</span>
-                <input :value="draft.extraCostPerMonthEur ?? ''" type="number" min="0" step="any"
-                  placeholder="Offen" @input="setAmount('extraCostPerMonthEur', $event)" />
+              <label class="cod-check"
+                ><input v-model="draft.projectCostsMove" type="checkbox" />
+                <span>Diese Projektkosten verschieben sich ebenfalls.</span></label
+              >
+              <label class="cod-field"
+                ><span>Belegte Zusatzkosten je Verzögerungsmonat (EUR)</span>
+                <input
+                  :value="draft.extraCostPerMonthEur ?? ''"
+                  type="number"
+                  min="0"
+                  step="any"
+                  placeholder="Offen"
+                  @input="setAmount('extraCostPerMonthEur', $event)"
+                />
               </label>
-              <label class="cod-field"><span>Datenquelle der Zusatzkosten</span>
-                <textarea v-model="draft.extraCostSource" rows="2" maxlength="360"
-                  placeholder="z. B. befristeter Dienstleistervertrag" />
+              <label class="cod-field"
+                ><span>Datenquelle der Zusatzkosten</span>
+                <textarea
+                  v-model="draft.extraCostSource"
+                  rows="2"
+                  maxlength="360"
+                  placeholder="z. B. befristeter Dienstleistervertrag"
+                />
               </label>
             </div>
           </details>
@@ -279,83 +374,157 @@ onMounted(() => {
       <section v-if="step === 3" class="cod-panel cod-results" aria-labelledby="cod-results-title">
         <p class="eyebrow">Schritt 3 · Economic Buyer</p>
         <h2 id="cod-results-title">Wirtschaftliche Konsequenz verstehen</h2>
-        <p class="cod-muted">Die Differenz zeigt ausschließlich das jeweilige Modellfenster,
-          nicht automatisch einen endgültigen Schaden oder tatsächlichen Cashflow.</p>
+        <p class="cod-muted">
+          Die Differenz zeigt ausschließlich das jeweilige Modellfenster, nicht automatisch einen endgültigen Schaden
+          oder tatsächlichen Cashflow.
+        </p>
         <div v-if="issues.length" class="cod-warning" role="alert">
           <strong>Eine belastbare Berechnung ist noch nicht möglich.</strong>
-          <ul><li v-for="issue in issues" :key="issue">{{ issue }}</li></ul>
+          <ul>
+            <li v-for="issue in issues" :key="issue">{{ issue }}</li>
+          </ul>
         </div>
         <div v-else-if="!hasModel" class="cod-warning">
           <strong>Noch kein EUR-Verzögerungsschaden ableitbar.</strong>
-          <p>Kapazitätsgewinne oder ungeklärte finanzielle Effekte bleiben ohne Geldbetrag.
-            Prüfe zuerst den wirtschaftlichen Realisierungsmechanismus.</p>
+          <p>
+            Kapazitätsgewinne oder ungeklärte finanzielle Effekte bleiben ohne Geldbetrag. Prüfe zuerst den
+            wirtschaftlichen Realisierungsmechanismus.
+          </p>
         </div>
         <template v-else-if="selected">
           <p v-if="result.success && result.unverified" class="cod-warning">
             Unbestätigte Szenarioannahme. Die Zahlen sind keine mit dem Kunden validierten M2-Metrics.
           </p>
           <div class="cod-scenarios" aria-label="Verzögerungsszenario wählen">
-            <button v-for="scenario in scenarios" :key="scenario.delayMonths" type="button"
-              class="cod-scenario" :class="{ 'cod-scenario--active': selected.delayMonths === scenario.delayMonths }"
+            <button
+              v-for="scenario in scenarios"
+              :key="scenario.delayMonths"
+              type="button"
+              class="cod-scenario"
+              :class="{ 'cod-scenario--active': selected.delayMonths === scenario.delayMonths }"
               :aria-pressed="selected.delayMonths === scenario.delayMonths"
-              @click="chosenDelay = scenario.delayMonths">
-              <span>{{ scenario.delayMonths === 0 ? 'Ohne Verzögerung' : '+' + scenario.delayMonths + ' Monate' }}</span>
+              @click="chosenDelay = scenario.delayMonths"
+            >
+              <span>{{
+                scenario.delayMonths === 0 ? 'Ohne Verzögerung' : '+' + scenario.delayMonths + ' Monate'
+              }}</span>
               <strong>{{ money(scenario.benefitDifferenceEur) }}</strong>
               <small>Differenz Kundennutzen</small>
             </button>
           </div>
           <div class="cod-kpis">
-            <div><span>Nutzen ohne Verschiebung</span><strong>{{ money(selected.baseBenefitEur) }}</strong></div>
-            <div><span>Nutzen bei +{{ selected.delayMonths }} Monaten</span>
-              <strong>{{ money(selected.delayedBenefitEur) }}</strong></div>
-            <div class="cod-kpi-emphasis"><span>Differenz im Horizont</span>
-              <strong>{{ money(selected.benefitDifferenceEur) }}</strong></div>
+            <div>
+              <span>Nutzen ohne Verschiebung</span><strong>{{ money(selected.baseBenefitEur) }}</strong>
+            </div>
+            <div>
+              <span>Nutzen bei +{{ selected.delayMonths }} Monaten</span>
+              <strong>{{ money(selected.delayedBenefitEur) }}</strong>
+            </div>
+            <div class="cod-kpi-emphasis">
+              <span>Differenz im Horizont</span> <strong>{{ money(selected.benefitDifferenceEur) }}</strong>
+            </div>
           </div>
           <section class="cod-chart" aria-labelledby="cod-chart-title">
             <h3 id="cod-chart-title">Kumulierter Kundennutzen im gleichen Zeitraum</h3>
-            <div class="cod-legend"><span><i class="cod-legend-base"></i> Ohne Verschiebung</span>
-              <span><i class="cod-legend-delay"></i> Mit Verschiebung</span></div>
-            <svg viewBox="0 0 700 238" role="img" :aria-label="'Kumulierter Nutzen mit und ohne ' + selected.delayMonths + ' Monate Verschiebung'">
+            <div class="cod-legend">
+              <span><i class="cod-legend-base"></i> Ohne Verschiebung</span>
+              <span><i class="cod-legend-delay"></i> Mit Verschiebung</span>
+            </div>
+            <svg
+              viewBox="0 0 700 238"
+              role="img"
+              :aria-label="'Kumulierter Nutzen mit und ohne ' + selected.delayMonths + ' Monate Verschiebung'"
+            >
               <line x1="36" y1="196" x2="662" y2="196" stroke="#8d9bab" stroke-width="1" />
               <line x1="36" y1="28" x2="36" y2="196" stroke="#8d9bab" stroke-width="1" />
               <polyline :points="chartPoints('baseCumulativeEur')" fill="none" stroke="#2256a5" stroke-width="3" />
-              <polyline :points="chartPoints('delayedCumulativeEur')" fill="none" stroke="#c07932" stroke-width="3" stroke-dasharray="7 4" />
+              <polyline
+                :points="chartPoints('delayedCumulativeEur')"
+                fill="none"
+                stroke="#c07932"
+                stroke-width="3"
+                stroke-dasharray="7 4"
+              />
               <text x="36" y="222" font-size="12" fill="currentColor">Monat 0</text>
-              <text x="662" y="222" text-anchor="end" font-size="12" fill="currentColor">Monat {{ draft.horizonMonths }}</text>
+              <text x="662" y="222" text-anchor="end" font-size="12" fill="currentColor">
+                Monat {{ draft.horizonMonths }}
+              </text>
               <text x="44" y="19" font-size="12" fill="currentColor">Kumulierter Nutzen (EUR), Skala relativ</text>
             </svg>
-            <p class="cod-muted">Die Kurven verwenden tatsächliche Monatswerte einschließlich Nutzenstart und Ramp-up.
-              Exakte EUR-Werte stehen in der Tabelle.</p>
+            <p class="cod-muted">
+              Die Kurven verwenden tatsächliche Monatswerte einschließlich Nutzenstart und Ramp-up. Exakte EUR-Werte
+              stehen in der Tabelle.
+            </p>
           </section>
           <section class="cod-breakdown" aria-labelledby="cod-breakdown-title">
             <h3 id="cod-breakdown-title">Was steckt hinter der Differenz?</h3>
             <dl>
-              <div><dt>Differenz monetarisierter Kundennutzen</dt><dd>{{ money(selected.benefitDifferenceEur) }}</dd></div>
-              <div><dt>Später vermiedene Altsystemkosten</dt><dd>{{ money(selected.legacyDifferenceEur) }}</dd></div>
-              <div><dt>Zusätzliche Verzögerungskosten</dt>
-                <dd>{{ selected.additionalDelayCostEur === null ? 'Noch offen' : money(selected.additionalDelayCostEur) }}</dd></div>
-              <div><dt>Projektkosten im Horizont nur später fällig</dt>
-                <dd>{{ selected.deferredProjectCostEur === null ? 'Noch offen' : money(selected.deferredProjectCostEur) }}</dd></div>
-              <div class="cod-breakdown-total"><dt>Netto-Modellunterschied</dt>
-                <dd>{{ selected.netDifferenceEur === null ? 'Nicht berechenbar' : money(selected.netDifferenceEur) }}</dd></div>
+              <div>
+                <dt>Differenz monetarisierter Kundennutzen</dt>
+                <dd>{{ money(selected.benefitDifferenceEur) }}</dd>
+              </div>
+              <div>
+                <dt>Später vermiedene Altsystemkosten</dt>
+                <dd>{{ money(selected.legacyDifferenceEur) }}</dd>
+              </div>
+              <div>
+                <dt>Zusätzliche Verzögerungskosten</dt>
+                <dd>
+                  {{ selected.additionalDelayCostEur === null ? 'Noch offen' : money(selected.additionalDelayCostEur) }}
+                </dd>
+              </div>
+              <div>
+                <dt>Projektkosten im Horizont nur später fällig</dt>
+                <dd>
+                  {{ selected.deferredProjectCostEur === null ? 'Noch offen' : money(selected.deferredProjectCostEur) }}
+                </dd>
+              </div>
+              <div class="cod-breakdown-total">
+                <dt>Netto-Modellunterschied</dt>
+                <dd>
+                  {{ selected.netDifferenceEur === null ? 'Nicht berechenbar' : money(selected.netDifferenceEur) }}
+                </dd>
+              </div>
             </dl>
-            <p><strong>Nur zeitlich verschoben?</strong>
-              {{ selected.irreversibleBenefitEur === null
-                ? 'Ein endgültiger Verlust ist nicht nachgewiesen. Die Differenz entsteht im gewählten Kalenderhorizont.'
-                : 'Bei dem angenommenen festen Wirkungsende wären ' + money(selected.irreversibleBenefitEur) + ' nicht nachholbar. Dies muss der Kunde bestätigen.' }}
+            <p>
+              <strong>Nur zeitlich verschoben?</strong>
+              {{
+                selected.irreversibleBenefitEur === null
+                  ? 'Ein endgültiger Verlust ist nicht nachgewiesen. Die Differenz entsteht im gewählten Kalenderhorizont.'
+                  : 'Bei dem angenommenen festen Wirkungsende wären ' +
+                    money(selected.irreversibleBenefitEur) +
+                    ' nicht nachholbar. Dies muss der Kunde bestätigen.'
+              }}
             </p>
           </section>
           <details class="cod-details">
             <summary>Vollständigen Monatsvergleich anzeigen</summary>
-            <div class="cod-table-scroll" tabindex="0" role="region" aria-label="Monatlicher Nutzenvergleich, horizontal scrollbar">
-              <table><thead><tr><th scope="col">Monat</th><th scope="col">Basis / Monat</th>
-                <th scope="col">Verschoben / Monat</th><th scope="col">Kumuliert Basis</th>
-                <th scope="col">Kumuliert verschoben</th></tr></thead>
-                <tbody><tr v-for="month in selected.months" :key="month.month">
-                  <th scope="row">{{ month.month }}</th>
-                  <td>{{ money(month.baseBenefitEur) }}</td><td>{{ money(month.delayedBenefitEur) }}</td>
-                  <td>{{ money(month.baseCumulativeEur) }}</td><td>{{ money(month.delayedCumulativeEur) }}</td>
-                </tr></tbody></table>
+            <div
+              class="cod-table-scroll"
+              tabindex="0"
+              role="region"
+              aria-label="Monatlicher Nutzenvergleich, horizontal scrollbar"
+            >
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Monat</th>
+                    <th scope="col">Basis / Monat</th>
+                    <th scope="col">Verschoben / Monat</th>
+                    <th scope="col">Kumuliert Basis</th>
+                    <th scope="col">Kumuliert verschoben</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="month in selected.months" :key="month.month">
+                    <th scope="row">{{ month.month }}</th>
+                    <td>{{ money(month.baseBenefitEur) }}</td>
+                    <td>{{ money(month.delayedBenefitEur) }}</td>
+                    <td>{{ money(month.baseCumulativeEur) }}</td>
+                    <td>{{ money(month.delayedCumulativeEur) }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </details>
           <div class="cod-export">
@@ -368,7 +537,9 @@ onMounted(() => {
 
         <section class="cod-questions" aria-labelledby="cod-questions-title">
           <h3 id="cod-questions-title">Offene Fragen für das Kundengespräch</h3>
-          <ul><li v-for="question in questions" :key="question">{{ question }}</li></ul>
+          <ul>
+            <li v-for="question in questions" :key="question">{{ question }}</li>
+          </ul>
         </section>
       </section>
 
@@ -380,8 +551,12 @@ onMounted(() => {
           <button v-if="step > 1" type="button" class="button button-secondary" @click="step = (step - 1) as 1 | 2 | 3">
             Zurück
           </button>
-          <button v-if="step < 3" type="button" class="button button-primary button-with-icon"
-            @click="step = (step + 1) as 1 | 2 | 3">
+          <button
+            v-if="step < 3"
+            type="button"
+            class="button button-primary button-with-icon"
+            @click="step = (step + 1) as 1 | 2 | 3"
+          >
             Weiter <ArrowRight :size="16" aria-hidden="true" />
           </button>
         </div>
@@ -390,14 +565,19 @@ onMounted(() => {
       <section class="cod-sources">
         <details>
           <summary>Quellen und fachliche Einordnung</summary>
-          <p><strong>Andy Whyte, MEDDICC:</strong> Abschnitt „Metrics“ (M1 / M2) und
-            „Identify / Indicate / Implicate Pain“. Messbare Ergebnisse und kundenbezogene Validierung
-            sind relevant für wirtschaftliche Priorität.</p>
-          <p><strong>Darius Lahoutifard, Always Be Qualifying:</strong> Kapitel 3 „Metrics“,
-            Kapitel 4 „Economic Buyer“, Kapitel 7 „Identify Pain“ und Kapitel 9 „The ROI Pitch“.
-            Wirtschaftliche Wirkung und nachvollziehbare Entscheidungsdringlichkeit sind zentral.</p>
-          <p>Die Monatsengine, Verschiebungsregeln und Unterscheidung zwischen Horizontdifferenz
-            und unwiederbringlichem Verlust sind eigene Modellierungsentscheidungen, keine Formeln der Autoren.</p>
+          <p>
+            <strong>Andy Whyte, MEDDICC:</strong> Abschnitt „Metrics“ (M1 / M2) und „Identify / Indicate / Implicate
+            Pain“. Messbare Ergebnisse und kundenbezogene Validierung sind relevant für wirtschaftliche Priorität.
+          </p>
+          <p>
+            <strong>Darius Lahoutifard, Always Be Qualifying:</strong> Kapitel 3 „Metrics“, Kapitel 4 „Economic Buyer“,
+            Kapitel 7 „Identify Pain“ und Kapitel 9 „The ROI Pitch“. Wirtschaftliche Wirkung und nachvollziehbare
+            Entscheidungsdringlichkeit sind zentral.
+          </p>
+          <p>
+            Die Monatsengine, Verschiebungsregeln und Unterscheidung zwischen Horizontdifferenz und unwiederbringlichem
+            Verlust sind eigene Modellierungsentscheidungen, keine Formeln der Autoren.
+          </p>
         </details>
       </section>
     </main>

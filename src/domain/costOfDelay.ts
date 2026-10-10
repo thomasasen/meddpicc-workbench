@@ -163,10 +163,7 @@ export const costOfDelayDemos: Record<string, CostOfDelayInput> = {
  * Gleichbleibender Kalenderhorizont für beide Szenarien; eine Verschiebung
  * verändert ausschließlich explizit als verschiebbar markierte Positionen.
  */
-export function calculateCostOfDelay(
-  input: CostOfDelayInput,
-  delays: number[] = [0, 3, 6, 12],
-): CostOfDelayResult {
+export function calculateCostOfDelay(input: CostOfDelayInput, delays: number[] = [0, 3, 6, 12]): CostOfDelayResult {
   const issues: string[] = []
   const questions: string[] = []
   const horizon = input.horizonMonths
@@ -176,7 +173,8 @@ export function calculateCostOfDelay(
   if (
     input.benefitEndMonth !== null &&
     (!validMonth(input.benefitEndMonth, 1, 120) || input.benefitEndMonth < input.benefitStartMonth)
-  ) issues.push('Nutzenende muss frühestens im Nutzenstartmonat liegen.')
+  )
+    issues.push('Nutzenende muss frühestens im Nutzenstartmonat liegen.')
   if (!['recurring', 'one-time'].includes(input.benefitKind)) issues.push('Nutzenart ungültig.')
   if (!['fixed', 'follows-start'].includes(input.expiry)) issues.push('Ende der Wirkung ungültig.')
   if (!['realized', 'capacity', 'unconfirmed'].includes(input.financialTreatment))
@@ -205,7 +203,8 @@ export function calculateCostOfDelay(
     input.financialTreatment === 'realized' &&
     (input.legacyMonthlyEur ?? 0) > 0 &&
     input.effectGroup.trim().toLowerCase() === input.legacyEffectGroup.trim().toLowerCase()
-  ) issues.push('Doppelzählung: Kundennutzen und Altsystemabschaltung gehören zur gleichen Wirkungsgruppe.')
+  )
+    issues.push('Doppelzählung: Kundennutzen und Altsystemabschaltung gehören zur gleichen Wirkungsgruppe.')
   if (input.extraCostPerMonthEur !== null && input.extraCostPerMonthEur > 0 && !input.extraCostSource.trim())
     issues.push('Für zusätzliche Verzögerungskosten muss die Datenquelle angegeben werden.')
   if (input.evidence === 'customer-reviewed' && !input.source.trim())
@@ -260,8 +259,7 @@ export function calculateCostOfDelay(
     const legacyDifferenceEur = nearZero(baseLegacy - delayedLegacy)
     const additionalDelayCostEur =
       input.extraCostPerMonthEur === null ? null : input.extraCostPerMonthEur * Math.min(delay, horizon)
-    const deferredProjectCostEur =
-      input.projectOnceEur === null ? null : nearZero(baseProject - delayedProject)
+    const deferredProjectCostEur = input.projectOnceEur === null ? null : nearZero(baseProject - delayedProject)
     const netDifferenceEur =
       additionalDelayCostEur === null || deferredProjectCostEur === null || input.legacyMonthlyEur === null
         ? null
@@ -284,5 +282,11 @@ export function calculateCostOfDelay(
       months,
     }
   })
-  return { success: true, horizonMonths: horizon, scenarios, questions, unverified: input.evidence !== 'customer-reviewed' }
+  return {
+    success: true,
+    horizonMonths: horizon,
+    scenarios,
+    questions,
+    unverified: input.evidence !== 'customer-reviewed',
+  }
 }

@@ -63,10 +63,16 @@ describe('Cost of Delay: gleichbleibender Kalenderhorizont', () => {
     expect(r.scenarios[1]?.netDifferenceEur).toBe(36000)
   })
   it('Unabhängige Altsystemabschaltung bleibt im ursprünglichen Monat', () => {
-    const r = calc({
-      ...complete(), legacyMonthlyEur: 2000, legacyStartMonth: 4,
-      legacyMovesWithProject: false, legacyEffectGroup: 'alt',
-    }, [3])
+    const r = calc(
+      {
+        ...complete(),
+        legacyMonthlyEur: 2000,
+        legacyStartMonth: 4,
+        legacyMovesWithProject: false,
+        legacyEffectGroup: 'alt',
+      },
+      [3],
+    )
     expect(r.scenarios[1]?.legacyDifferenceEur).toBe(0)
   })
   it('Später anfallende Projektkosten senken nur die Horizontdifferenz und werden separat gezeigt', () => {
@@ -104,7 +110,9 @@ describe('Cost of Delay: gleichbleibender Kalenderhorizont', () => {
   })
   it('Doppelte Wirkungsgruppe blockiert eine Addition', () => {
     const r = calculateCostOfDelay({
-      ...complete(), legacyMonthlyEur: 500, legacyEffectGroup: 'test-metric',
+      ...complete(),
+      legacyMonthlyEur: 500,
+      legacyEffectGroup: 'test-metric',
     })
     expect(r.success).toBe(false)
   })
