@@ -6,7 +6,7 @@ import {
   type BridgeMetric,
   type ValueBridgeInput,
 } from '../domain/valueBridge'
-import { drawReportFooter } from './reportChrome'
+import { drawReportFooter, drawReportMasthead } from './reportChrome'
 
 const PAGE_W = 595.28
 const PAGE_H = 841.89
@@ -83,29 +83,19 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
 
   function pageStart(): void {
     page = pdf.addPage([PAGE_W, PAGE_H])
-    page.drawRectangle({ x: 0, y: PAGE_H - 99, width: PAGE_W, height: 99, color: navy })
-    page.drawRectangle({ x: PAD, y: PAGE_H - 54, width: 29, height: 29, color: blue })
-    page.drawText('M', { x: PAD + 8, y: PAGE_H - 45, font: bold, size: 16, color: white })
-    page.drawText('MEDDPICC TOOLBOX', {
-      x: PAD + 39,
-      y: PAGE_H - 35,
-      font: bold,
-      size: 9,
-      color: white,
-    })
-    page.drawText('VALUE BRIDGE / KUNDENGESPRÄCH', {
-      x: PAD + 39,
-      y: PAGE_H - 49,
-      font: regular,
-      size: 7.5,
-      color: rgb(0.8, 0.86, 0.94),
-    })
-    page.drawText('Vom Problem zum messbaren Geschäftswert', {
-      x: PAD,
-      y: PAGE_H - 82,
-      font: bold,
-      size: 14.7,
-      color: white,
+    drawReportMasthead({
+      page,
+      normal: regular,
+      bold,
+      width: PAGE_W,
+      height: PAGE_H,
+      left: PAD,
+      right: PAGE_W - PAD,
+      headerHeight: 99,
+      title: 'Vom Problem zum messbaren Geschäftswert',
+      subtitle: 'VALUE BRIDGE / KUNDENGESPRÄCH',
+      subtitleOffset: 49,
+      titleOffset: 82,
     })
     y = PAGE_H - 124
   }
