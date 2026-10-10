@@ -111,7 +111,7 @@ jobs:
       - name: Redesign-Dateien vor den Quality Gates formatieren
         if: startsWith(github.head_ref, 'feature/ux-report-redesign-')
         run: |
-          npx prettier --write src/App.vue src/main.ts src/views/ChecklistView.vue src/views/QuickPaybackView.vue src/components/AnnualBenefitComparison.vue src/report/reportChrome.ts src/report/reportChrome.test.ts src/report/valueBridgePdf.ts src/report/metricBuilderPdf.ts src/report/costOfDelayPdf.ts src/report/softwareBusinessCasePdf.ts src/report/customerBusinessCasePdf.ts tests/e2e/redesign-foundations.spec.ts src/views/MetricBuilderView.vue src/views/CostOfDelayView.vue src/components/ToolStepNavigation.vue src/report/reportText.ts src/report/reportText.test.ts tests/e2e/tool-step-navigation.spec.ts tests/e2e/redesign-viewport-matrix.spec.ts src/report/customerBusinessCasePdf.test.ts src/views/ValueBridgeView.vue src/styles/valueBridge.css src/views/ChampionKnowledgeView.vue src/views/CompetitionKnowledgeView.vue src/views/DecisionCriteriaKnowledgeView.vue src/views/DecisionProcessKnowledgeView.vue src/views/DiscoveryCallKnowledgeView.vue src/views/EconomicBuyerKnowledgeView.vue src/views/MetricsKnowledgeView.vue src/views/PainImplicationKnowledgeView.vue src/views/PaperProcessKnowledgeView.vue src/components/KnowledgeSectionNav.vue tests/e2e/knowledge-section-navigation.spec.ts src/report/report-pagination-stress.test.ts
+          npx prettier --write src/App.vue src/main.ts src/views/ChecklistView.vue src/views/QuickPaybackView.vue src/components/AnnualBenefitComparison.vue src/report/reportChrome.ts src/report/reportChrome.test.ts src/report/valueBridgePdf.ts src/report/metricBuilderPdf.ts src/report/costOfDelayPdf.ts src/report/softwareBusinessCasePdf.ts src/report/customerBusinessCasePdf.ts tests/e2e/redesign-foundations.spec.ts src/views/MetricBuilderView.vue src/views/CostOfDelayView.vue src/components/ToolStepNavigation.vue src/report/reportText.ts src/report/reportText.test.ts tests/e2e/tool-step-navigation.spec.ts tests/e2e/redesign-viewport-matrix.spec.ts src/report/customerBusinessCasePdf.test.ts tests/e2e/cost-of-delay.spec.ts src/views/ValueBridgeView.vue src/styles/valueBridge.css src/views/ChampionKnowledgeView.vue src/views/CompetitionKnowledgeView.vue src/views/DecisionCriteriaKnowledgeView.vue src/views/DecisionProcessKnowledgeView.vue src/views/DiscoveryCallKnowledgeView.vue src/views/EconomicBuyerKnowledgeView.vue src/views/MetricsKnowledgeView.vue src/views/PainImplicationKnowledgeView.vue src/views/PaperProcessKnowledgeView.vue src/components/KnowledgeSectionNav.vue tests/e2e/knowledge-section-navigation.spec.ts src/report/report-pagination-stress.test.ts
           if ! git diff --quiet -- src tests; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -304,6 +304,24 @@ jobs:
             echo "$name: $pages Originalseiten gerendert"
           done
 
+      - name: Lange PDF-Berichte rendern und Textextraktion prüfen
+        if: startsWith(github.head_ref, 'feature/ux-report-redesign-')
+        run: |
+          set -euo pipefail
+          for kind in metric-builder-long cost-of-delay-long; do
+            original="qa-report-artifacts/$kind.pdf"
+            test -s "$original" || { echo "::error::Stress-PDF fehlt: $original"; exit 1; }
+            pages="$(pdfinfo "$original" | awk '/^Pages:/ {print $2}')"
+            test "$pages" -ge 2 || { echo "::error::Stress-PDF nicht mehrseitig: $original"; exit 1; }
+            mkdir -p test-results/rendered
+            pdftoppm -scale-to 1100 -png "$original" "test-results/rendered/$kind"
+            count="$(find test-results/rendered -type f -name "$kind-*.png" -size +0c | wc -l)"
+            test "$count" -eq "$pages" || { echo "::error::Nicht alle Langtextseiten gerendert: $kind"; exit 1; }
+            pdftotext -layout "$original" "test-results/rendered/$kind.txt"
+            test -s "test-results/rendered/$kind.txt"
+            echo "$kind: $pages Originalseiten gerendert und Text extrahiert"
+          done
+
       - name: Original-PDFs als prüfbare Artefakte sichern
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -316,6 +334,7 @@ jobs:
             test-results/**/scenario-selected-customer-desktop-chromium.pdf
             test-results/**/cost-of-delay-*.pdf
             test-results/**/value-bridge-*.pdf
+            qa-report-artifacts/*.pdf
           if-no-files-found: ignore
 
       - name: UI-QS-Screenshots bereitstellen
