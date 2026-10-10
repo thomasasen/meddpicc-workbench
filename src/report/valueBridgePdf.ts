@@ -308,7 +308,8 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
   section('1', 'Warum sich etwas ändern muss')
   stage('01', 'Kundenproblem', input.pain, amberSoft, amber)
   stage('02', 'Geschäftliche Konsequenz', input.consequence, pale, navy)
-  stage('03', 'Ermöglichte Veränderung', input.change, tealSoft, teal)
+  stage('03', 'Angestrebtes Ergebnis', input.outcome, tealSoft, teal)
+  stage('04', 'Erforderliche Veränderung', input.change, tealSoft, teal)
   text('Wichtige Voraussetzung: ' + (input.prerequisites || 'Noch nicht benannt.'), {
     size: 8.8,
     color: muted,

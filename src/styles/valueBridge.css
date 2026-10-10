@@ -744,3 +744,24 @@
     transition: none;
   }
 }
+
+/* Fachlich vollständige sechsstufige Value Bridge: Pain, Consequence, Outcome,
+   Change, Metrics und Economic Value. Keine automatische Monetarisierung. */
+.vb-story-step--consequence .vb-story-icon {
+  background: var(--vb-pain-bg);
+  color: var(--vb-pain-ink);
+}
+
+.vb-story-step--change .vb-story-icon {
+  background: var(--vb-goal-bg);
+  color: var(--vb-goal-ink);
+}
+
+.vb-story-steps .vb-story-step {
+  break-inside: avoid;
+}
+
+.vb-story-step--consequence .vb-story-kicker,
+.vb-story-step--change .vb-story-kicker {
+  color: var(--color-text-muted);
+}
