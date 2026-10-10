@@ -461,6 +461,7 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
               <span><i class="cod-legend-base"></i> Ohne Verschiebung</span>
               <span><i class="cod-legend-delay"></i> Mit Verschiebung</span>
             </div>
+            <div class="cod-chart-viewport" tabindex="0" role="region" aria-label="Diagramm der kumulierten Nutzenverläufe, horizontal scrollbar">
             <svg
               viewBox="0 0 700 238"
               role="img"
@@ -484,6 +485,8 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
               <text x="44" y="39" font-size="12" fill="currentColor">{{ compactEuro(chartMaximum) }}</text>
               <text x="44" y="190" font-size="12" fill="currentColor">0 €</text>
             </svg>
+            </div>
+            <p class="cod-chart-scroll-hint">Auf kleinen Bildschirmen: Diagramm seitlich scrollen. Die genauen Werte stehen im Monatsvergleich.</p>
             <p class="cod-muted">
               Die Kurven verwenden tatsächliche Monatswerte einschließlich Nutzenstart und Ramp-up. Exakte EUR-Werte
               stehen in der Tabelle.

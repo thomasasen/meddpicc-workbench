@@ -121,3 +121,23 @@ test('Cost of Delay: finanzielle Metric nur nach bewusster Übergabe aus Metric 
     0,
   )
 })
+
+
+test('Kumulierter Nutzen bleibt auf schmalen Viewports als scrollbare Grafik lesbar', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto('/#/tools/cost-of-delay')
+  await page.getByRole('button', { name: 'CRM / Service' }).click()
+  await page.getByRole('button', { name: '3 · Konsequenz' }).click()
+  const chart = page.getByRole('region', { name: /Diagramm der kumulierten Nutzenverläufe/ })
+  await expect(chart).toBeVisible()
+  const width = await chart.evaluate((element) => ({
+    scroll: element.scrollWidth,
+    client: element.clientWidth,
+  }))
+  expect(width.scroll).toBeGreaterThan(width.client)
+  await chart.focus()
+  await expect(chart).toBeFocused()
+  await expect(page.locator('.cod-chart-scroll-hint')).toBeVisible()
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
+  expect(overflow).toBeLessThanOrEqual(1)
+})
