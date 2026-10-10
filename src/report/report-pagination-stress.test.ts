@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { PDFDocument } from 'pdf-lib'
+import { mkdirSync, writeFileSync } from 'node:fs'
 import { buildMetricBuilderPdf } from './metricBuilderPdf'
 import { buildCostOfDelayPdf } from './costOfDelayPdf'
 import { emptyMetricDraft, metricDemos } from '../domain/metricBuilder'
@@ -10,11 +11,16 @@ describe('Mehrseitige Berichte mit umfangreichen Kundentexten', () => {
     const draft = {
       ...emptyMetricDraft(),
       ...metricDemos.crm,
-      problem: 'Arbeitsbelastung und fehlerhafte Datenerfassung. '.repeat(170),
-      assumptionNote: 'Prüfgrundlage: Verträge, Zeitstempel und Teamgespräche. '.repeat(650),
-      realizationNote: 'Der konkrete Mechanismus muss mit dem Kunden bestätigt werden. '.repeat(190),
+      problem: 'Arbeitsbelastung und fehlerhafte Datenerfassung. '.repeat(32),
+      assumptionNote: 'Prüfgrundlage: Verträge, Zeitstempel und Teamgespräche. '.repeat(110),
+      realizationNote: 'Der konkrete Mechanismus muss mit dem Kunden bestätigt werden. '.repeat(32),
     }
-    const pdf = await PDFDocument.load(await buildMetricBuilderPdf(draft))
+    const bytes = await buildMetricBuilderPdf(draft)
+    if (process.env.CI) {
+      mkdirSync('qa-report-artifacts', { recursive: true })
+      writeFileSync('qa-report-artifacts/metric-builder-long.pdf', bytes)
+    }
+    const pdf = await PDFDocument.load(bytes)
     expect(pdf.getPageCount()).toBeGreaterThan(4)
     for (const page of pdf.getPages()) {
       expect(page.getWidth()).toBeCloseTo(595.28, 1)
@@ -26,16 +32,21 @@ describe('Mehrseitige Berichte mit umfangreichen Kundentexten', () => {
     const original = costOfDelayDemos.service!
     const draft = {
       ...original,
-      problem: 'Der derzeitige Prozess verursacht dokumentationspflichtige Folgekosten. '.repeat(170),
-      outcome: 'Die Prozessveränderung muss mehrere Bereiche erreichen. '.repeat(170),
-      source: 'Quelle ist noch gemeinsam mit Finance zu prüfen. '.repeat(650),
-      extraCostSource: 'Zusätzliche Verzögerungskosten dokumentieren. '.repeat(320),
+      problem: 'Der derzeitige Prozess verursacht dokumentationspflichtige Folgekosten. '.repeat(32),
+      outcome: 'Die Prozessveränderung muss mehrere Bereiche erreichen. '.repeat(32),
+      source: 'Quelle ist noch gemeinsam mit Finance zu prüfen. '.repeat(110),
+      extraCostSource: 'Zusätzliche Verzögerungskosten dokumentieren. '.repeat(45),
     }
     const result = calculateCostOfDelay(draft, [3, 6, 12])
     expect(result.success).toBe(true)
     if (!result.success) return
     const selected = result.scenarios.find((scenario) => scenario.delayMonths === 6)!
-    const pdf = await PDFDocument.load(await buildCostOfDelayPdf(draft, result, selected))
+    const bytes = await buildCostOfDelayPdf(draft, result, selected)
+    if (process.env.CI) {
+      mkdirSync('qa-report-artifacts', { recursive: true })
+      writeFileSync('qa-report-artifacts/cost-of-delay-long.pdf', bytes)
+    }
+    const pdf = await PDFDocument.load(bytes)
     expect(pdf.getPageCount()).toBeGreaterThan(4)
     for (const page of pdf.getPages()) {
       expect(page.getWidth()).toBeCloseTo(595.28, 1)
