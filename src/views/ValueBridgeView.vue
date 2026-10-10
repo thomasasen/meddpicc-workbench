@@ -399,8 +399,8 @@ onMounted(() => {
                   />
                 </label>
                 <p class="vb-hint">
-                  Der wirtschaftliche Saldo und der Payback nutzen die vorhandene Software-Business-Case-Engine. Zusätzliche Kosten-
-                  und Abschaltungsmodelle bitte dort prüfen.
+                  Der wirtschaftliche Saldo und der Payback nutzen die vorhandene Software-Business-Case-Engine.
+                  Zusätzliche Kosten- und Abschaltungsmodelle bitte dort prüfen.
                 </p>
               </div>
             </details>
