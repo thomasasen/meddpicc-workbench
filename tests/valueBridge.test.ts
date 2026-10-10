@@ -66,7 +66,7 @@ describe('Value Bridge: Wirkungs- und Evidenzlogik', () => {
   it('blockiert ungültige und leere Zahlen, aber erfindet keine Zahlen für fehlende Messwerte', () => {
     const input = structuredClone(valueBridgeDemos.service!)
     input.metrics[0]!.annualRealizedEur = Number.NaN
-    expect(evaluateValueBridge(input).issues.join(' ')).toContain('ungültig')
+    expect(evaluateValueBridge(input).issues.join(' ')).toContain('gültigen EUR-Bereichs')
     input.metrics[0]!.annualRealizedEur = null
     expect(evaluateValueBridge(input).issues.join(' ')).toContain('Jahresbetrag fehlt')
     input.metrics[0]!.annualRealizedEur = 36000
