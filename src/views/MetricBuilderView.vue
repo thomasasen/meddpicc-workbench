@@ -532,6 +532,12 @@ async function transfer(): Promise<void> {
 </template>
 
 <style scoped>
+.metric-shell .skip-link {
+  clip-path: inset(100%);
+}
+.metric-shell .skip-link:focus {
+  clip-path: none;
+}
 .metric-main {
   padding: var(--space-8) 0 var(--space-12);
   max-width: 1024px;
