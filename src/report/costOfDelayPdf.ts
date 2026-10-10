@@ -1,6 +1,7 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
 import { type CostOfDelayInput, type DelayScenario, type CostOfDelayResult } from '../domain/costOfDelay'
 import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import { wrapReportText } from './reportText'
 
 const euro = (n: number): string =>
   new Intl.NumberFormat('de-DE', {
@@ -22,28 +23,10 @@ function printable(s: string): string {
     .replace(/[\u2018\u2019]/g, "'")
     .replace(/[\u201c\u201d]/g, '"')
     .replace(/\u2192/g, '->')
-    .replace(/[^\u0020-\u00ff\u20ac]/g, '?')
+    .replace(/[^\u0020-\u00ff\u20ac\n]/g, '?')
 }
 function wrapped(s: string, font: PDFFont, size: number, width: number): string[] {
-  const lines: string[] = []
-  let current = ''
-  for (const word of printable(s).split(/\s+/)) {
-    if (font.widthOfTextAtSize((current ? current + ' ' : '') + word, size) <= width) {
-      current = current ? current + ' ' + word : word
-    } else {
-      if (current) lines.push(current)
-      current = ''
-      for (const c of word) {
-        if (font.widthOfTextAtSize(current + c, size) > width && current) {
-          lines.push(current)
-          current = ''
-        }
-        current += c
-      }
-    }
-  }
-  if (current) lines.push(current)
-  return lines.length ? lines : ['Noch offen']
+  return wrapReportText(printable(s), font, size, width, 'Noch offen')
 }
 
 /** Zahlen kommen aus derselben Domainfunktion wie in der UI. */

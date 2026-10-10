@@ -9,6 +9,7 @@ import {
   type MetricBuilderDraft,
 } from '../domain/metricBuilder'
 import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import { wrapReportText } from './reportText'
 
 /**
  * Visuelle Systematik: konstante linke Achse, Nähe innerhalb einer Information,
@@ -42,29 +43,7 @@ function printable(value: string): string {
 }
 
 function wrap(value: string, font: PDFFont, size: number, maxWidth: number): string[] {
-  const result: string[] = []
-  for (const sourceLine of printable(value).split('\n')) {
-    let current = ''
-    for (const word of sourceLine.split(/\s+/)) {
-      if (!word) continue
-      const candidate = current ? current + ' ' + word : word
-      if (font.widthOfTextAtSize(candidate, size) <= maxWidth) {
-        current = candidate
-        continue
-      }
-      if (current) result.push(current)
-      current = ''
-      for (const letter of word) {
-        if (current && font.widthOfTextAtSize(current + letter, size) > maxWidth) {
-          result.push(current)
-          current = ''
-        }
-        current += letter
-      }
-    }
-    if (current) result.push(current)
-  }
-  return result.length ? result : ['']
+  return wrapReportText(printable(value), font, size, maxWidth)
 }
 
 export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<Uint8Array> {

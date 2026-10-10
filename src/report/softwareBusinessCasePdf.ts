@@ -2,6 +2,7 @@ import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf
 import { summarizeBusinessCase, economicInterpretation, type CaseSummary } from '../domain/businessCase'
 import type { SoftwarePaybackInput } from '../domain/softwarePayback'
 import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import { wrapReportText } from './reportText'
 import {
   compareBusinessScenarios,
   describeScenarioAssumptions,
@@ -59,29 +60,7 @@ function drawRight(p: PDFPage, v: string, right: number, y: number, size: number
   draw(p, txt, right - font.widthOfTextAtSize(txt, size), y, size, font, color)
 }
 function wrap(s: string, font: PDFFont, size: number, width: number): string[] {
-  const output: string[] = []
-  for (const para of safe(s).split('\n')) {
-    let line = ''
-    for (const word of para.split(/\s+/)) {
-      if (!word) continue
-      const next = line ? line + ' ' + word : word
-      if (font.widthOfTextAtSize(next, size) <= width) {
-        line = next
-        continue
-      }
-      if (line) output.push(line)
-      line = ''
-      for (const char of word) {
-        if (line && font.widthOfTextAtSize(line + char, size) > width) {
-          output.push(line)
-          line = ''
-        }
-        line += char
-      }
-    }
-    output.push(line)
-  }
-  return output
+  return wrapReportText(safe(s), font, size, width)
 }
 function para(s: State, v: string, f: Fonts, size = 9, width = R - L, spacing = 13) {
   for (const line of wrap(v, f.normal, size, width)) {

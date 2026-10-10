@@ -10,6 +10,7 @@ import {
 } from '../domain/businessCaseScenarios'
 import type { ReportData } from './softwareBusinessCasePdf'
 import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import { wrapReportText } from './reportText'
 
 const W = 595.28
 const H = 841.89
@@ -61,29 +62,7 @@ function write(
 }
 
 function wrap(value: string, font: PDFFont, size: number, width: number): string[] {
-  const lines: string[] = []
-  for (const paragraph of readable(value).split(/\n/)) {
-    let row = ''
-    for (const word of paragraph.split(/\s+/)) {
-      if (!word) continue
-      const candidate = row ? row + ' ' + word : word
-      if (font.widthOfTextAtSize(candidate, size) <= width) {
-        row = candidate
-        continue
-      }
-      if (row) lines.push(row)
-      row = ''
-      for (const char of word) {
-        if (row && font.widthOfTextAtSize(row + char, size) > width) {
-          lines.push(row)
-          row = ''
-        }
-        row += char
-      }
-    }
-    if (row) lines.push(row)
-  }
-  return lines.length ? lines : ['']
+  return wrapReportText(readable(value), font, size, width)
 }
 
 function paragraph(
