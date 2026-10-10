@@ -1,6 +1,6 @@
 # MEDDPICC Toolbox
 
-> **Cost of Delay (in Vorbereitung):** Unter `/#/tools/cost-of-delay` bietet der Feature-Branch monatliche Verzögerungsszenarien, kumulierten Vergleich und PDF-Export. Ohne finanzielle Realisierung keine erfundene EUR-Wirkung. Noch nicht nach `main` gemergt.
+> **Cost of Delay:** Seit PR #61 (10.10.2026, Commit `7759a7e`) in `main`. Unter `/#/tools/cost-of-delay` werden zeitliche Verzögerungsszenarien ohne erfundene EUR-Wirkung verglichen.
 
 Praktische **Tools, Checklists und Wissenshilfen** für wiederkehrende Aufgaben im komplexen B2B-Vertrieb.
 
@@ -347,3 +347,10 @@ Vor Merge eines Feature-PRs werden mindestens Formatierung, Lint, Unit Tests, Pr
 ## Lizenz
 
 MIT. Siehe LICENSE.
+
+
+### Value Bridge – vom Pain zur nachvollziehbaren Wirkung (Feature-Branch)
+
+Route: `/#/tools/value-bridge`. Drei Schritte von Ausgangssituation, Pain und Konsequenz über das gewünschte Geschäftsergebnis zu messbaren Veränderungen und der begrenzten wirtschaftlichen Wirkung. Ohne bestätigte EUR-Realisierung zeigt das Tool qualitative und kapazitätsbezogene Ergebnisse statt fiktiver Amortisation. Bei konkret angenommenem finanziellen Nutzen nutzt es die vorhandene Business-Case-Monatsengine (36/60 Monate), ohne diese zu duplizieren. Kundenversion, kopierbare Zusammenfassung und PDF werden lokal im Browser erstellt.
+
+Einmalige ausdrückliche Übernahme aus Metric Builder, Software Business Case und Cost of Delay; alle übergebenen Metrics bleiben zunächst **nicht** finanziell aktiviert und behalten ihren Evidenzstatus. Drei ausdrücklich fiktive Beispiele: Servicekostensenkung, mögliche Doppelzählung im Vertrieb und Kapazität ohne EUR-Nachweis. [Fachliche Gap-Analyse, Primärquellenmatrix und simuliertes Red Team](docs/VALUE_BRIDGE_SOURCE_AND_RED_TEAM.md). **Stand 10.10.2026:** technische CI und visuelle Prüfung der Original-Screenshots sowie PDF-Bildseiten durchgeführt ([CI #38070981674](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38070981674), 326 Unit-/135 Playwright-Tests bestanden, 1 Skip). Die **ausdrückliche visuelle Nutzerfreigabe** steht noch aus; PR #62 bleibt Draft und wird nicht nach `main` gemergt.

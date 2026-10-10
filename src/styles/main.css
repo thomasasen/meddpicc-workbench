@@ -3152,8 +3152,27 @@ button.microtool-card:disabled {
 
 .tool-row > span:first-child {
   min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.tool-row-copy {
   display: grid;
+  min-width: 0;
   gap: 0.15rem;
+}
+
+.tool-row-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-panel);
+  color: var(--color-accent-strong);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
 }
 
 .tool-row strong {

@@ -3,6 +3,10 @@ import {
   ArrowRight,
   Award,
   Calculator,
+  ChartColumnIncreasing,
+  ChartNoAxesGantt,
+  Clock3,
+  FileChartColumn,
   FileText,
   Flame,
   ListChecks,
@@ -45,6 +49,7 @@ const toolClusters = [
     tools: [
       {
         label: 'Go-Live-Rückwärtsplanung',
+        icon: ChartNoAxesGantt,
         note: 'Zieltermin und Schritte eingeben – du erhältst späteste Starttermine und eine teilbare Timeline.',
         route: '/tools/reverse-timeline',
         customerReady: true,
@@ -67,25 +72,30 @@ const toolClusters = [
     tools: [
       {
         label: 'Quick Payback',
+        icon: Calculator,
         note: 'Einfacher Payback oder Softwareprojekt mit SaaS, Kosten und Kunden-Metrics – Amortisation nachvollziehbar berechnen.',
         route: '/tools/quick-payback',
         customerReady: true,
       },
       {
         label: 'Metric Builder',
+        icon: ChartColumnIncreasing,
         note: 'Aus Pain oder gewünschtem Outcome eine belastbare Kennzahl mit nachvollziehbarer Logik ableiten.',
         route: '/tools/metric-builder',
         customerReady: true,
       },
       {
         label: 'Cost of Delay',
+        icon: Clock3,
         note: 'Monatliche Nutzenverläufe bei 3, 6 oder 12 Monaten Verzögerung vergleichen, offene Kosten und Annahmen sichtbar machen.',
         route: '/tools/cost-of-delay',
         customerReady: true,
       },
       {
-        label: 'Business Case',
-        note: 'Nutzen, Kosten und Annahmen strukturiert zusammenführen – als Grundlage für die Kundendiskussion.',
+        label: 'Value Bridge',
+        icon: FileChartColumn,
+        note: 'Pain, gewünschte Veränderung und Metrics verbinden – mit überprüfbarer finanzieller Wirkung oder offen ausgewiesenen Annahmen.',
+        route: '/tools/value-bridge',
         customerReady: true,
       },
     ],
@@ -345,9 +355,14 @@ const knowledgeTopics = [
                 :class="{ 'tool-row--active': tool.route }"
                 :to="tool.route"
               >
-                <span>
-                  <strong>{{ tool.label }}</strong>
-                  <small>{{ tool.note }}</small>
+                <span class="tool-row-primary">
+                  <span v-if="tool.route && tool.icon" class="tool-row-icon">
+                    <component :is="tool.icon" :size="19" aria-hidden="true" />
+                  </span>
+                  <span class="tool-row-copy">
+                    <strong>{{ tool.label }}</strong>
+                    <small>{{ tool.note }}</small>
+                  </span>
                 </span>
                 <span class="tool-row-meta">
                   <span v-if="tool.customerReady" class="tool-kind tool-kind--customer">Kundenfähig</span>

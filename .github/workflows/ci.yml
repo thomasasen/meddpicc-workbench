@@ -96,6 +96,18 @@ jobs:
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
           fi
 
+      - name: Value Bridge Codeformat vor Quality Gates normalisieren
+        if: startsWith(github.head_ref, 'feature/value-bridge')
+        run: |
+          npx prettier --write src/domain/valueBridge.ts src/domain/valueBridgeHandoff.ts src/report/valueBridgePdf.ts src/views/ValueBridgeView.vue src/views/MetricBuilderView.vue src/views/CostOfDelayView.vue src/components/SoftwarePaybackPanel.vue src/views/HomeView.vue src/router/index.ts src/styles/valueBridge.css tests/valueBridge.test.ts tests/e2e/value-bridge.spec.ts
+          if ! git diff --quiet -- src tests; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src tests
+            git commit -m "style: format Value Bridge implementation"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
       - name: Formatierung prüfen
         run: npm run format:check
 
@@ -237,6 +249,24 @@ jobs:
           pdftoppm -scale-to 1300 -png "$report" test-results/rendered/cost-of-delay-pdf
           test "$(find test-results/rendered -name 'cost-of-delay-pdf-*.png' -size +0c | wc -l)" -ge 1
 
+      - name: Value Bridge Original PDF Bildseiten rendern
+        if: startsWith(github.head_ref, 'feature/value-bridge')
+        run: |
+          if ! command -v pdftoppm >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y poppler-utils
+          fi
+          mkdir -p test-results/rendered
+          count=0
+          while IFS= read -r -d '' report; do
+            name="$(basename "$report" .pdf)"
+            pdfinfo "$report" | grep '^Pages:'
+            pdftoppm -scale-to 1400 -png "$report" "test-results/rendered/$name"
+            count=$((count+1))
+          done < <(find test-results -type f -name 'value-bridge-*.pdf' -print0)
+          test "$count" -ge 2 || { echo "::error::Value-Bridge-Original-PDFs fehlen"; exit 1; }
+          test "$(find test-results/rendered -type f -name 'value-bridge-*.png' -size +0c | wc -l)" -ge 2
+
       - name: Original-PDFs als prüfbare Artefakte sichern
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -248,6 +278,7 @@ jobs:
             test-results/**/business-case-qa-desktop-chromium.pdf
             test-results/**/scenario-selected-customer-desktop-chromium.pdf
             test-results/**/cost-of-delay-*.pdf
+            test-results/**/value-bridge-*.pdf
           if-no-files-found: ignore
 
       - name: UI-QS-Screenshots bereitstellen
@@ -279,6 +310,27 @@ jobs:
       - name: veröffentlichten Pages-Root prüfen
         run: npm run pages:check
 
+
+      - name: Value Bridge Originalscreenshots und alle gerenderten PDF Seiten publizieren
+        if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'feature/value-bridge')
+        run: |
+          mkdir -p docs/review-screenshots
+          for name in value-bridge-money-desktop-chromium.png value-bridge-money-mobile-chromium.png value-bridge-open-desktop-chromium.png value-bridge-open-mobile-chromium.png; do
+            source="$(find test-results -type f -name "$name" -print -quit)"
+            test -s "$source" || { echo "::error::Value-Bridge-Screenshot fehlt: $name"; exit 1; }
+            cp "$source" "docs/review-screenshots/$name"
+          done
+          for source in test-results/rendered/value-bridge-*.png; do
+            test -s "$source" || exit 1
+            cp "$source" "docs/review-screenshots/$(basename "$source")"
+          done
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/review-screenshots
+          if ! git diff --cached --quiet; then
+            git commit -m "test: publish Value Bridge original screenshots and PDF pages"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
 
       - name: Metric Builder Originalscreenshots und gerenderte PDF-Seiten publizieren
         if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'feature/metric-builder')

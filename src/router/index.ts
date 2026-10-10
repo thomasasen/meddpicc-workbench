@@ -16,6 +16,7 @@ import ReverseTimelineView from '../views/ReverseTimelineView.vue'
 import QuickPaybackView from '../views/QuickPaybackView.vue'
 import MetricBuilderView from '../views/MetricBuilderView.vue'
 import CostOfDelayView from '../views/CostOfDelayView.vue'
+import ValueBridgeView from '../views/ValueBridgeView.vue'
 import RisksActionsView from '../views/RisksActionsView.vue'
 import ReferencesView from '../views/ReferencesView.vue'
 
@@ -26,6 +27,11 @@ const router = createRouter({
       path: '/',
       name: 'start',
       component: HomeView,
+    },
+    {
+      path: '/tools/value-bridge',
+      name: 'value-bridge',
+      component: ValueBridgeView,
     },
     {
       path: '/tools/cost-of-delay',

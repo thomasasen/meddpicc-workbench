@@ -107,11 +107,13 @@ test('Quick Payback: Back-Navigation und korrekte aktive sowie geplante Tools', 
   await expect(builder).toHaveAttribute('href', /metric-builder/)
   const delay = page.locator('.tool-row').filter({ has: page.getByText('Cost of Delay', { exact: true }) })
   await expect(delay).toHaveAttribute('href', /cost-of-delay/)
-  for (const name of ['Business Case', 'Competition / Alternatives Map']) {
-    const item = page.locator('.tool-row').filter({ has: page.getByText(name, { exact: true }) })
-    await expect(item.getByText('Geplant')).toBeVisible()
-    await expect(item).not.toHaveAttribute('href')
-  }
+  const bridge = page.locator('.tool-row').filter({ has: page.getByText('Value Bridge', { exact: true }) })
+  await expect(bridge).toHaveAttribute('href', /value-bridge/)
+  const planned = page.locator('.tool-row').filter({
+    has: page.getByText('Competition / Alternatives Map', { exact: true }),
+  })
+  await expect(planned.getByText('Geplant')).toBeVisible()
+  await expect(planned).not.toHaveAttribute('href')
   await page.goto(route)
   await page.getByRole('link', { name: 'Alle Microtools' }).click()
   await expect(page).toHaveURL(/meddpicc-workbench\/#\//)
