@@ -76,7 +76,9 @@ export function queueDelayToBridge(input: CostOfDelayInput, storage: Pick<Storag
     name: input.title,
     kind: amount !== null ? 'unclassified' : input.financialTreatment === 'capacity' ? 'capacity' : 'potential',
     evidence: input.evidence,
-    source: [input.source, isOneTime ? 'Einmaleffekt: kein übertragbarer wiederkehrender Jahreswert.' : ''].filter(Boolean).join(' | '),
+    source: [input.source, isOneTime ? 'Einmaleffekt: kein übertragbarer wiederkehrender Jahreswert.' : '']
+      .filter(Boolean)
+      .join(' | '),
     effectGroup: input.effectGroup,
     annualRealizedEur: amount,
     realization: input.source,

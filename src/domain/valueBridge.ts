@@ -1,7 +1,8 @@
 import { summarizeBusinessCase, type CaseSummary } from './businessCase'
 import { newMetric, type MetricEvidence, type SoftwarePaybackInput } from './softwarePayback'
 
-export type ValueKind = 'saving' | 'margin' | 'unclassified' | 'capacity' | 'potential' | 'revenue' | 'risk' | 'qualitative'
+export type ValueKind =
+  'saving' | 'margin' | 'unclassified' | 'capacity' | 'potential' | 'revenue' | 'risk' | 'qualitative'
 export type ValueOrigin = 'manual' | 'metric-builder' | 'software-business-case' | 'cost-of-delay'
 
 export interface BridgeMetric {
@@ -111,7 +112,16 @@ export function evaluateValueBridge(input: ValueBridgeInput): ValueBridgeResult 
   const overlap: string[] = []
   const seenIds = new Set<string>()
   const seenGroups = new Map<string, string>()
-  const validKinds: ValueKind[] = ['saving', 'margin', 'unclassified', 'capacity', 'potential', 'revenue', 'risk', 'qualitative']
+  const validKinds: ValueKind[] = [
+    'saving',
+    'margin',
+    'unclassified',
+    'capacity',
+    'potential',
+    'revenue',
+    'risk',
+    'qualitative',
+  ]
   const validEvidence: MetricEvidence[] = ['hypothesis', 'reference', 'customer-stated', 'customer-reviewed']
   if (!input.pain.trim()) questions.push('Welches konkrete Kundenproblem soll gelöst werden?')
   if (!input.consequence.trim()) questions.push('Welche Konsequenz hat das Problem für das Geschäft?')
