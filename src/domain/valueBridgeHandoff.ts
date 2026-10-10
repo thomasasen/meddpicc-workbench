@@ -72,7 +72,7 @@ export function queueDelayToBridge(input: CostOfDelayInput, storage: Pick<Storag
   const metric: BridgeMetric = {
     ...blankBridgeMetric('from-delay'),
     name: input.title,
-    kind: amount !== null ? 'saving' : input.financialTreatment === 'capacity' ? 'capacity' : 'potential',
+    kind: amount !== null ? 'unclassified' : input.financialTreatment === 'capacity' ? 'capacity' : 'potential',
     evidence: input.evidence,
     source: input.source,
     effectGroup: input.effectGroup,
