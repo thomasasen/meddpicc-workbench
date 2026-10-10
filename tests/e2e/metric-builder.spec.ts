@@ -41,6 +41,11 @@ test('Metric Builder: Kapazität ohne Geldersparnis, PDF und responsives Layout'
   const file = await download
   expect(file.suggestedFilename()).toBe('metric-steckbrief.pdf')
   await file.saveAs(testInfo.outputPath('metric-builder-brief-' + testInfo.project.name + '.pdf'))
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  await page.getByRole('button', { name: 'Zusammenfassung kopieren' }).click()
+  const copied = await page.evaluate(() => navigator.clipboard.readText())
+  expect(copied).toContain('91.666,67')
+  expect(copied).toContain('nicht nachgewiesen')
   await page.screenshot({
     path: testInfo.outputPath('metric-builder-result-' + testInfo.project.name + '.png'),
     fullPage: true,
