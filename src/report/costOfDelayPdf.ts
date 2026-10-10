@@ -68,9 +68,9 @@ export async function buildCostOfDelayPdf(
     const size = opts.size ?? 9.4
     const font = opts.strong ? bold : regular
     const rows = wrapped(text, font, size, R - L)
-    reserve(rows.length * 14.5 + (opts.after ?? 7))
     for (const textLine of rows) {
-      page.drawText(textLine, { x: L, y, font, size, color: opts.color ?? ink })
+      reserve(14.5 + 2)
+      if (textLine) page.drawText(textLine, { x: L, y, font, size, color: opts.color ?? ink })
       y -= 14.5
     }
     y -= opts.after ?? 7
@@ -87,6 +87,11 @@ export async function buildCostOfDelayPdf(
     const labels = wrapped(label.toUpperCase(), bold, 8.1, 145)
     const values = wrapped(value, regular, 9.2, R - col)
     const h = Math.max(labels.length * 14.5, values.length * 14.5) + 9
+    if (h > H - 210) {
+      row(label.toUpperCase(), { size: 8.1, strong: true, color: gray, after: 2 })
+      row(value || 'Noch offen', { size: 9.2, after: 12 })
+      return
+    }
     reserve(h)
     labels.forEach((part, i) =>
       page.drawText(part, {

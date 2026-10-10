@@ -107,6 +107,12 @@ function field(s: State, label: string, value: string, f: Fonts) {
 function box(s: State, v: string, f: Fonts) {
   const ls = wrap(v, f.normal, 9, R - L - 27)
   const height = ls.length * 13 + 22
+  if (height > PH - 195) {
+    // Bei sehr langen Validierungsnotizen statt einer übergroßen Box
+    // normale, pro Zeile paginierte Berichtstypografie verwenden.
+    para(s, v, f, 9, R - L - 20, 13)
+    return
+  }
   reserve(s, height + 7)
   s.p.drawRectangle({ x: L, y: s.y - height + 8, width: R - L, height, color: light })
   s.p.drawRectangle({ x: L, y: s.y - height + 8, width: 3, height, color: blue })

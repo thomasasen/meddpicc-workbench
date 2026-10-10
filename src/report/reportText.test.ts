@@ -16,6 +16,12 @@ describe('Report-Textumbruch', () => {
     expect(lines.every((line) => line.length <= 8)).toBe(true)
   })
 
+  it('erhält deutsche Umlaute und Geldbeträge ohne Transkription', () => {
+    const lines = wrapReportText('Käuferlösung: 125.000 € je Jahr, Prüfung und Änderung', font, 1, 22)
+    expect(lines.join(' ')).toContain('Käuferlösung')
+    expect(lines.join(' ')).toContain('125.000 €')
+  })
+
   it('erhält Absatzgrenzen und Leerzeilen', () => {
     expect(wrapReportText('Erster Absatz\n\nZweiter Absatz', font, 1, 30)).toEqual([
       'Erster Absatz',
