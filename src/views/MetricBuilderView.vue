@@ -167,7 +167,6 @@ async function transferToBridge(): Promise<void> {
   }
 }
 import ToolStepNavigation from '../components/ToolStepNavigation.vue'
-
 </script>
 
 <template>

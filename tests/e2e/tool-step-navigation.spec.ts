@@ -2,7 +2,9 @@ import { expect, test } from '@playwright/test'
 
 test('Gemeinsame Workflow-Navigation behält Eingaben und Fokus im Metric Builder', async ({ page }) => {
   await page.goto('/#/tools/metric-builder')
-  await page.getByRole('textbox', { name: 'Welches konkrete Problem besteht?' }).fill('Manuelle Doppelerfassung in fünf Teams')
+  await page
+    .getByRole('textbox', { name: 'Welches konkrete Problem besteht?' })
+    .fill('Manuelle Doppelerfassung in fünf Teams')
   const navigation = page.getByRole('navigation', { name: 'Metric entwickeln' })
   await expect(navigation.getByRole('button', { name: '1 · Problem' })).toHaveAttribute('aria-current', 'step')
   await navigation.getByRole('button', { name: '2 · Messung' }).click()
