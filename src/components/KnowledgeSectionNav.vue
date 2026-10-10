@@ -27,7 +27,12 @@ function navigate(id: string): void {
 </script>
 
 <template>
-  <nav ref="nav" class="container knowledge-section-nav" aria-label="Themen auf dieser Seite" v-show="sections.length > 0">
+  <nav
+    ref="nav"
+    class="container knowledge-section-nav"
+    aria-label="Themen auf dieser Seite"
+    v-show="sections.length > 0"
+  >
     <strong>Auf dieser Seite</strong>
     <ol>
       <li v-for="section in sections" :key="section.id">

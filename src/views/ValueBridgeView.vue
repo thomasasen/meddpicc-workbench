@@ -496,7 +496,9 @@ onMounted(() => {
                 <div class="vb-story-copy">
                   <span class="vb-story-kicker">02 · Geschäftliche Konsequenz</span>
                   <h3>Welche Auswirkung hat das Problem?</h3>
-                  <p class="vb-story-main">{{ draft.consequence || 'Die geschäftliche Folge ist noch nicht geklärt.' }}</p>
+                  <p class="vb-story-main">
+                    {{ draft.consequence || 'Die geschäftliche Folge ist noch nicht geklärt.' }}
+                  </p>
                 </div>
               </li>
               <li class="vb-story-step vb-story-step--goal">
