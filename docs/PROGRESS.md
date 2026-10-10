@@ -259,3 +259,5 @@ Siehe [Value Bridge Quellenmatrix und Gap-Analyse](VALUE_BRIDGE_SOURCE_AND_RED_T
 - Fachliche Berechnungen: unverändert. Local-first und kein CRM weiterhin verbindlich.
 - **Nicht als bestanden behauptet:** die sechs Quality Gates auf diesem neuen Branch, visuelle Kontrolle aller Views und PDFs sowie ausdrückliche Freigabe.
 - **Noch offen:** tieferes Einzeltool-Redesign, gemeinsame PDF-Body-/Header-Komponenten, reale PDF-Langtext-/Missing-Value-Stressbilder, vollständige responsive und A11y-Abnahme. Keine Merge-Freigabe erteilt.
+
+- Quick Payback (Einfachmodus): zugängliche, einheitlich skalierte jährliche Bruttonutzen-/Betriebskostenbalken mit expliziten EUR-Werten und Evidenzgrenzen in `AnnualBenefitComparison.vue` ergänzt; Wirtschaftlichkeitsmodell unverändert. Zusätzlicher E2E-Test angelegt. Der umfangreiche Projektmodus und die abschließende visuelle Abnahme bleiben offen.
