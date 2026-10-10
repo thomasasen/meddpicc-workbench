@@ -30,8 +30,7 @@ const navy = rgb(0.09, 0.14, 0.24),
 const muted = rgb(0.38, 0.44, 0.52),
   light = rgb(0.95, 0.97, 0.99),
   border = rgb(0.84, 0.88, 0.92)
-const danger = rgb(0.7, 0.28, 0.19),
-  white = rgb(1, 1, 1)
+const danger = rgb(0.7, 0.28, 0.19)
 type Fonts = { normal: PDFFont; bold: PDFFont }
 type State = { p: PDFPage; y: number; pdf: PDFDocument; f: Fonts; chapter: string }
 const euro = (n: number) =>
