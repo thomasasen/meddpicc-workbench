@@ -43,7 +43,7 @@ Aussagen wurden gegen die im Projekt bereitgestellten EPUB-Texte geprüft. Keine
 5. Identische Wirkungsgruppen zweier angerechneter Metrics blockieren die Wirtschaftlichkeitsrechnung. Semantisch ähnliche Wirkungen unterschiedlicher Gruppen müssen vom Nutzer weiterhin geprüft werden.
 6. Ohne positive anrechenbare Jahreswirkung **und** benannte einmalige sowie monatliche Kosten erfolgt kein vollständiger finanzieller Business Case.
 7. Die Domain nutzt `summarizeBusinessCase` → `calculateSoftwarePayback`. Der daraus abgeleitete ROI ist undiskontiert; kein NPV, keine Zahlungsstrom- oder Steuerrechnung.
-8. Der Cost-of-Delay-Handoff überträgt **niemals eine Verzögerungs-Horizontdifferenz** als realisierten Jahresbetrag.
+8. Der Cost-of-Delay-Handoff überträgt **niemals eine Verzögerungs-Horizontdifferenz** als realisierten Jahresbetrag. Da die Ursprungs-Engine nicht zwischen Kostensenkung und zusätzlichem Deckungsbeitrag typisiert, wird der Betrag zunächst als **finanzieller Wirkungstyp ungeklärt** eingeordnet und nicht angerechnet.
 
 ## 4. Simuliertes fachliches Red Team
 
