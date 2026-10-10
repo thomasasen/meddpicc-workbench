@@ -320,7 +320,8 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
         color: navy,
       })
     })
-    y -= heroH + 7
+    // Eigenständiger Abstand: Kontexttext darf die Summary-Fläche nicht berühren.
+    y -= heroH + 16
   } else {
     text('ANGESTREBTES GESCHÄFTSERGEBNIS', { font: bold, size: 8.8, color: blue })
     text(headline, { font: bold, size: 14 })
