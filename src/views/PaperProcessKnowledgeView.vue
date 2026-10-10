@@ -12,6 +12,7 @@ import {
 } from '@lucide/vue'
 
 import { paperProcessKnowledge } from '../content/meddpicc/paperProcess'
+import KnowledgeSectionNav from '../components/KnowledgeSectionNav.vue'
 </script>
 
 <template>
@@ -57,6 +58,8 @@ import { paperProcessKnowledge } from '../content/meddpicc/paperProcess'
           </div>
         </aside>
       </section>
+
+      <KnowledgeSectionNav />
 
       <section class="container knowledge-layout">
         <article class="knowledge-primary-card" aria-labelledby="definition-title">

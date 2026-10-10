@@ -9,6 +9,7 @@ import {
   type MetricBuilderDraft,
 } from '../domain/metricBuilder'
 import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import { wrapReportText } from './reportText'
 
 /**
  * Visuelle Systematik: konstante linke Achse, Nähe innerhalb einer Information,
@@ -42,29 +43,7 @@ function printable(value: string): string {
 }
 
 function wrap(value: string, font: PDFFont, size: number, maxWidth: number): string[] {
-  const result: string[] = []
-  for (const sourceLine of printable(value).split('\n')) {
-    let current = ''
-    for (const word of sourceLine.split(/\s+/)) {
-      if (!word) continue
-      const candidate = current ? current + ' ' + word : word
-      if (font.widthOfTextAtSize(candidate, size) <= maxWidth) {
-        current = candidate
-        continue
-      }
-      if (current) result.push(current)
-      current = ''
-      for (const letter of word) {
-        if (current && font.widthOfTextAtSize(current + letter, size) > maxWidth) {
-          result.push(current)
-          current = ''
-        }
-        current += letter
-      }
-    }
-    if (current) result.push(current)
-  }
-  return result.length ? result : ['']
+  return wrapReportText(printable(value), font, size, maxWidth)
 }
 
 export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<Uint8Array> {
@@ -114,9 +93,9 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
     const rows = wrap(value, font, size, options.width ?? RIGHT - x)
     const lineHeight = size < 9 ? 12.5 : LINE_HEIGHT
     const after = options.gap ?? 8
-    reserve(rows.length * lineHeight + after)
     for (const row of rows) {
-      page.drawText(row, { x, y: cursor, font, size, color: options.color ?? COLORS.ink })
+      reserve(lineHeight + 2)
+      if (row) page.drawText(row, { x, y: cursor, font, size, color: options.color ?? COLORS.ink })
       cursor -= lineHeight
     }
     cursor -= after
@@ -137,6 +116,11 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
     const labels = wrap(label.toUpperCase(), bold, 8.2, labelWidth)
     const values = wrap(value || 'Noch offen', normal, 9.8, valueWidth)
     const height = Math.max(labels.length * 12.5, values.length * LINE_HEIGHT) + 13
+    if (height > PAGE_HEIGHT - 208) {
+      text(label.toUpperCase(), { font: bold, size: 8.2, color: COLORS.muted, gap: 2 })
+      text(value || 'Noch offen', { size: 9.8, gap: 12 })
+      return
+    }
     reserve(height)
     for (const [index, row] of labels.entries()) {
       page.drawText(row, {
@@ -163,6 +147,11 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
     const body = wrap(value, normal, 9.8, CONTENT_WIDTH - 30)
     const title = wrap(label.toUpperCase(), bold, 8.4, CONTENT_WIDTH - 30)
     const height = 14 + title.length * 12.5 + 5 + body.length * LINE_HEIGHT + 12
+    if (height > PAGE_HEIGHT - 208) {
+      text(label.toUpperCase(), { font: bold, size: 8.4, color: COLORS.muted, gap: 4 })
+      text(value, { size: 9.8, gap: 12 })
+      return
+    }
     reserve(height + 12)
     const top = cursor + 9
     page.drawRectangle({
@@ -213,6 +202,13 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
     ]
     const wrapped = values.map((v) => wrap(v.value, bold, 10.1, width - 30))
     const height = Math.max(...wrapped.map((rows) => rows.length)) * 15 + 42
+    if (height > PAGE_HEIGHT - 208) {
+      for (const value of values) {
+        text(value.label, { font: bold, size: 8.3, color: COLORS.muted, gap: 3 })
+        text(value.value, { font: bold, size: 10.1, gap: 10 })
+      }
+      return
+    }
     reserve(height + 13)
     const top = cursor + 7
     for (const [index, value] of values.entries()) {

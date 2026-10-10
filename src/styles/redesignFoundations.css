@@ -192,3 +192,155 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Gemeinsame mobile Reflow- und Ergebnisregeln: keine Geschäftslogik. */
+:where(.site-shell) :is(input, select, textarea, button) {
+  min-width: 0;
+}
+
+:where(.site-shell) :is(button, .button, .quick-mode-option, .software-entry-heading) {
+  overflow-wrap: anywhere;
+}
+
+:where(.quick-grid, .vb-layout, .knowledge-hero, .checklist-hero, .knowledge-layout, .knowledge-two-column) > * {
+  min-width: 0;
+}
+
+:where(.quick-main, .metric-main, .cod-main, .vb-main, .reverse-tool-main, .knowledge-main, .checklist-main) :is(section, article, aside) {
+  scroll-margin-top: 1rem;
+}
+
+:where(.site-shell) :is(.quick-metrics, .metric-result-values, .cod-kpis, .executive-kpi-strip) {
+  font-variant-numeric: tabular-nums;
+}
+
+:where(.site-shell) :is(.quick-metrics, .metric-result-values, .cod-kpis, .executive-kpi-strip) :is(dd, strong) {
+  overflow-wrap: anywhere;
+}
+
+.tool-evidence-note {
+  max-width: 65ch;
+  margin: var(--space-3) 0 var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  border-inline-start: 3px solid var(--color-assumption);
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  :where(.site-shell) :is(.metric-actions, .cod-examples, .vb-actions, .reverse-export-actions, .reverse-step-actions) {
+    align-items: stretch;
+  }
+
+  :where(.site-shell) :is(.metric-actions, .cod-examples, .vb-actions, .reverse-export-actions, .reverse-step-actions) > button {
+    flex: 1 1 auto;
+    min-height: 44px;
+  }
+
+  .tool-evidence-note {
+    max-width: 100%;
+  }
+}
+
+/* Gemeinsame, tastaturbedienbare Schrittnavigation ohne Scroll-/Fokusneusetzen. */
+.tool-step-navigation {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: var(--space-6) 0;
+}
+
+.tool-step-navigation__item {
+  min-height: 52px;
+  min-width: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  text-align: left;
+  font-size: 0.94rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.tool-step-navigation__item[aria-current='step'] {
+  border-color: var(--color-accent);
+  box-shadow: inset 0 -3px 0 var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-text);
+}
+
+.tool-step-navigation__item:hover:not([aria-current='step']) {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-muted);
+}
+
+@media (max-width: 480px) {
+  .tool-step-navigation {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+
+  .tool-step-navigation__item {
+    min-height: 44px;
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.91rem;
+  }
+}
+
+/* Einheitliche lokale Gliederung aller neun längeren Wissensseiten. */
+.knowledge-section-nav {
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+}
+
+.knowledge-section-nav > strong {
+  display: block;
+  margin-bottom: var(--space-3);
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+.knowledge-section-nav ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.knowledge-section-nav button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-bg);
+  color: var(--color-text);
+  text-align: left;
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.knowledge-section-nav button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent-strong);
+}
+
+.knowledge-main h2[tabindex='-1']:focus {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+  .knowledge-section-nav { padding: var(--space-3); }
+  .knowledge-section-nav ol { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .knowledge-section-nav button { width: 100%; }
+}

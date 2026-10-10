@@ -12,6 +12,7 @@ import {
 } from '@lucide/vue'
 
 import { competitionKnowledge as competition } from '../content/meddpicc/competition'
+import KnowledgeSectionNav from '../components/KnowledgeSectionNav.vue'
 </script>
 
 <template>
@@ -48,6 +49,8 @@ import { competitionKnowledge as competition } from '../content/meddpicc/competi
           <div><strong>Dein Nutzen</strong><p>{{ competition.benefit }}</p></div>
         </aside>
       </section>
+
+      <KnowledgeSectionNav />
 
       <section class="container knowledge-layout" aria-label="Definition und Nutzen">
         <article class="knowledge-primary-card">

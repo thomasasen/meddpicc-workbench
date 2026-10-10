@@ -414,3 +414,33 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* Auf Mobile keine verkleinerten, unlesbaren Achsenbeschriftungen. */
+.cod-chart-viewport {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  border-radius: var(--radius-control);
+}
+
+.cod-chart-viewport:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.cod-chart-scroll-hint {
+  display: none;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 720px) {
+  .cod-chart-viewport svg {
+    width: 680px;
+    max-width: none;
+  }
+
+  .cod-chart-scroll-hint {
+    display: block;
+  }
+}

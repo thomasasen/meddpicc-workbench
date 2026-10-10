@@ -2,6 +2,7 @@
 import { ArrowLeft, BookOpen, CircleAlert, Compass, ListChecks, MessageCircleQuestion, Route } from '@lucide/vue'
 
 import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/discoveryCall'
+import KnowledgeSectionNav from '../components/KnowledgeSectionNav.vue'
 </script>
 
 <template>
@@ -48,6 +49,8 @@ import { discoveryCallKnowledge, spicedElements } from '../content/meddpicc/disc
           </div>
         </aside>
       </section>
+
+      <KnowledgeSectionNav />
 
       <section class="container knowledge-section" aria-labelledby="book-methods-title">
         <div class="section-heading-row">

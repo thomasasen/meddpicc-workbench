@@ -261,3 +261,28 @@ Siehe [Value Bridge Quellenmatrix und Gap-Analyse](VALUE_BRIDGE_SOURCE_AND_RED_T
 - **Noch offen:** tieferes Einzeltool-Redesign, gemeinsame PDF-Body-/Header-Komponenten, reale PDF-Langtext-/Missing-Value-Stressbilder, vollständige responsive und A11y-Abnahme. Keine Merge-Freigabe erteilt.
 
 - Quick Payback (Einfachmodus): zugängliche, einheitlich skalierte jährliche Bruttonutzen-/Betriebskostenbalken mit expliziten EUR-Werten und Evidenzgrenzen in `AnnualBenefitComparison.vue` ergänzt; Wirtschaftlichkeitsmodell unverändert. Zusätzlicher E2E-Test angelegt. Der umfangreiche Projektmodus und die abschließende visuelle Abnahme bleiben offen.
+
+## UX-/Report-Redesign – Fortsetzung 11.10.2026
+
+- Branch: `feature/ux-report-redesign-20261011`, Basis: bestätigter `main`-Commit `949166ea8d67e5d04e93d14a726360769de302aa`.
+- Implementiert: gemeinsame Breitenmessung/Textumbrüche in allen fünf PDF-Generatoren, dynamische vollständige Langtext-/Metric-Anhänge im Kunden-PDF, explizite Evidenzgrenze in Quick Payback, zentrale Reflow-Regeln und Unit-Tests für den Textumbruch.
+- Technische und visuelle Abnahme wird nicht behauptet, bevor der neue PR-CI-Lauf und die Originalscreenshots tatsächlich ausgewertet sind.
+- Noch offen: vollständiger Report-Body-Umbau, alle produktiven Screens im einheitlichen Design, alle 4 Viewports und barrierefreie Interaktionen, separate visuelle Abnahme.
+- Neue Änderungen bleiben bis zur ausdrücklichen Freigabe ungemergt.
+
+
+### Verifizierter Qualitätsstand PR #64 – 11.10.2026
+
+[CI #38093731202](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38093731202) erfolgreich: 331 Unit-Tests, 195 Playwright-Tests, 1 Skip; Format/Lint/Build/Pages bestanden. Alle **18 Seiten** der fünf echten PDF-Exporte gerendert und Originaldateien auf dem Draft-Branch abgelegt. Der Kundenbericht kann mit einem Langtext-/Metric-Anhang über vier Seiten hinauswachsen.
+
+**Offen:** keine vollständige manuelle Originalbildabnahme, keine abgeschlossene PDF-Unicode-/Accessibility-Prüfung, der umfassende Report-Body- und UI-Redesign-Gesamtauftrag bleibt nur teilweise erfüllt. Weitere Details in `docs/REDESIGN_ACCEPTANCE_MATRIX_2026-10-11.md`. Kein Merge nach `main`.
+
+
+
+## PR #64: finale technische Abnahme – 11.10.2026
+
+- Ausdrückliche Merge-Freigabe am 11.10.2026 bereits erteilt. Erfolgreiche [CI #38094931479](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38094931479): **334/334 Unit-Tests**, **205 Playwright-Tests**, ein Skip, Format/Lint/Typecheck/Build/Pages grün.
+- 28 Routen (25 produktive, drei interne) bei 375, 768, 1024, 1440 Pixeln geprüft; 106 Viewportbilder veröffentlicht. Repräsentative aktuelle Screenbilder visuell geprüft.
+- 27/27 PDF-Originalseiten der fünf Standard- und zwei Langtextberichte gerendert und jede Seite visuell gesichtet. Langtext-PDFs mit `pdftotext` geprüft; kein abgeschnittener Text oder überlagerter Footer im Testmaterial.
+- Sechs Value-Bridge-Stufen, mobil lesbarer Cost-of-Delay-Chart, gemeinsame Workflow-Navigation, Knowledge-Kapitelanker und seitenübergreifende Textfluss-Logik abgeschlossen.
+- Fachliche Berechnungen und Datenschutz-/Local-first-Grundsätze unverändert. Eine externe WCAG-2.2-AA-/PDF/UA-Zertifizierung und nicht-WinAnsi-Unicode-Font-Abdeckung werden nicht behauptet. Details: `docs/REDESIGN_ACCEPTANCE_MATRIX_2026-10-11.md`.

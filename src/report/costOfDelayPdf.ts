@@ -1,6 +1,7 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
 import { type CostOfDelayInput, type DelayScenario, type CostOfDelayResult } from '../domain/costOfDelay'
 import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import { wrapReportText } from './reportText'
 
 const euro = (n: number): string =>
   new Intl.NumberFormat('de-DE', {
@@ -22,28 +23,10 @@ function printable(s: string): string {
     .replace(/[\u2018\u2019]/g, "'")
     .replace(/[\u201c\u201d]/g, '"')
     .replace(/\u2192/g, '->')
-    .replace(/[^\u0020-\u00ff\u20ac]/g, '?')
+    .replace(/[^\u0020-\u00ff\u20ac\n]/g, '?')
 }
 function wrapped(s: string, font: PDFFont, size: number, width: number): string[] {
-  const lines: string[] = []
-  let current = ''
-  for (const word of printable(s).split(/\s+/)) {
-    if (font.widthOfTextAtSize((current ? current + ' ' : '') + word, size) <= width) {
-      current = current ? current + ' ' + word : word
-    } else {
-      if (current) lines.push(current)
-      current = ''
-      for (const c of word) {
-        if (font.widthOfTextAtSize(current + c, size) > width && current) {
-          lines.push(current)
-          current = ''
-        }
-        current += c
-      }
-    }
-  }
-  if (current) lines.push(current)
-  return lines.length ? lines : ['Noch offen']
+  return wrapReportText(printable(s), font, size, width, 'Noch offen')
 }
 
 /** Zahlen kommen aus derselben Domainfunktion wie in der UI. */
@@ -85,9 +68,9 @@ export async function buildCostOfDelayPdf(
     const size = opts.size ?? 9.4
     const font = opts.strong ? bold : regular
     const rows = wrapped(text, font, size, R - L)
-    reserve(rows.length * 14.5 + (opts.after ?? 7))
     for (const textLine of rows) {
-      page.drawText(textLine, { x: L, y, font, size, color: opts.color ?? ink })
+      reserve(14.5 + 2)
+      if (textLine) page.drawText(textLine, { x: L, y, font, size, color: opts.color ?? ink })
       y -= 14.5
     }
     y -= opts.after ?? 7
@@ -104,6 +87,11 @@ export async function buildCostOfDelayPdf(
     const labels = wrapped(label.toUpperCase(), bold, 8.1, 145)
     const values = wrapped(value, regular, 9.2, R - col)
     const h = Math.max(labels.length * 14.5, values.length * 14.5) + 9
+    if (h > H - 210) {
+      row(label.toUpperCase(), { size: 8.1, strong: true, color: gray, after: 2 })
+      row(value || 'Noch offen', { size: 9.2, after: 12 })
+      return
+    }
     reserve(h)
     labels.forEach((part, i) =>
       page.drawText(part, {

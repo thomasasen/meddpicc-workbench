@@ -487,28 +487,40 @@ onMounted(() => {
                 <span class="vb-story-icon"><CircleAlert :size="20" aria-hidden="true" /></span>
                 <div class="vb-story-copy">
                   <span class="vb-story-kicker">01 · Kundenproblem</span>
-                  <h3>Was steht auf dem Spiel?</h3>
+                  <h3>Was ist das Problem?</h3>
                   <p class="vb-story-main">{{ draft.pain || 'Das konkrete Problem ist noch offen.' }}</p>
-                  <p class="vb-story-support">
-                    <strong>Geschäftliche Folge:</strong> {{ draft.consequence || 'Noch nicht geklärt.' }}
+                </div>
+              </li>
+              <li class="vb-story-step vb-story-step--consequence">
+                <span class="vb-story-icon"><CircleAlert :size="20" aria-hidden="true" /></span>
+                <div class="vb-story-copy">
+                  <span class="vb-story-kicker">02 · Geschäftliche Konsequenz</span>
+                  <h3>Welche Auswirkung hat das Problem?</h3>
+                  <p class="vb-story-main">
+                    {{ draft.consequence || 'Die geschäftliche Folge ist noch nicht geklärt.' }}
                   </p>
                 </div>
               </li>
               <li class="vb-story-step vb-story-step--goal">
                 <span class="vb-story-icon"><Target :size="20" aria-hidden="true" /></span>
                 <div class="vb-story-copy">
-                  <span class="vb-story-kicker">02 · Zielbild</span>
+                  <span class="vb-story-kicker">03 · Gewünschtes Ergebnis</span>
                   <h3>Was soll sich verbessern?</h3>
                   <p class="vb-story-main">{{ draft.outcome || 'Das gewünschte Ergebnis ist noch offen.' }}</p>
-                  <p class="vb-story-support">
-                    <strong>Weg dorthin:</strong> {{ draft.change || 'Die notwendige Veränderung ist noch offen.' }}
-                  </p>
+                </div>
+              </li>
+              <li class="vb-story-step vb-story-step--change">
+                <span class="vb-story-icon"><Workflow :size="20" aria-hidden="true" /></span>
+                <div class="vb-story-copy">
+                  <span class="vb-story-kicker">04 · Erforderliche Veränderung</span>
+                  <h3>Was muss sich dafür ändern?</h3>
+                  <p class="vb-story-main">{{ draft.change || 'Die notwendige Veränderung ist noch offen.' }}</p>
                 </div>
               </li>
               <li class="vb-story-step vb-story-step--metric">
                 <span class="vb-story-icon"><ChartColumnIncreasing :size="20" aria-hidden="true" /></span>
                 <div class="vb-story-copy">
-                  <span class="vb-story-kicker">03 · Metrics</span>
+                  <span class="vb-story-kicker">05 · Metrics</span>
                   <h3>Woran erkennen wir den Unterschied?</h3>
                   <div class="vb-story-indicators">
                     <div v-for="metric in draft.metrics" :key="metric.id" class="vb-story-indicator">
@@ -527,7 +539,7 @@ onMounted(() => {
             <div class="vb-link vb-link--value">
               <span class="vb-value-symbol"><FileChartColumn :size="22" aria-hidden="true" /></span>
               <div class="vb-value-content">
-                <span class="vb-link-label">04 · Wirtschaftliche Wirkung</span>
+                <span class="vb-link-label">06 · Wirtschaftliche Wirkung</span>
                 <strong v-if="result.countedAnnualEur > 0">{{ money(result.countedAnnualEur) }} pro Jahr</strong>
                 <strong v-else>EUR-Realisierung noch offen</strong>
                 <p v-if="result.financial">

@@ -2,6 +2,7 @@ import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf
 import { summarizeBusinessCase, economicInterpretation, type CaseSummary } from '../domain/businessCase'
 import type { SoftwarePaybackInput } from '../domain/softwarePayback'
 import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import { wrapReportText } from './reportText'
 import {
   compareBusinessScenarios,
   describeScenarioAssumptions,
@@ -59,29 +60,7 @@ function drawRight(p: PDFPage, v: string, right: number, y: number, size: number
   draw(p, txt, right - font.widthOfTextAtSize(txt, size), y, size, font, color)
 }
 function wrap(s: string, font: PDFFont, size: number, width: number): string[] {
-  const output: string[] = []
-  for (const para of safe(s).split('\n')) {
-    let line = ''
-    for (const word of para.split(/\s+/)) {
-      if (!word) continue
-      const next = line ? line + ' ' + word : word
-      if (font.widthOfTextAtSize(next, size) <= width) {
-        line = next
-        continue
-      }
-      if (line) output.push(line)
-      line = ''
-      for (const char of word) {
-        if (line && font.widthOfTextAtSize(line + char, size) > width) {
-          output.push(line)
-          line = ''
-        }
-        line += char
-      }
-    }
-    output.push(line)
-  }
-  return output
+  return wrapReportText(safe(s), font, size, width)
 }
 function para(s: State, v: string, f: Fonts, size = 9, width = R - L, spacing = 13) {
   for (const line of wrap(v, f.normal, size, width)) {
@@ -128,6 +107,12 @@ function field(s: State, label: string, value: string, f: Fonts) {
 function box(s: State, v: string, f: Fonts) {
   const ls = wrap(v, f.normal, 9, R - L - 27)
   const height = ls.length * 13 + 22
+  if (height > PH - 195) {
+    // Bei sehr langen Validierungsnotizen statt einer übergroßen Box
+    // normale, pro Zeile paginierte Berichtstypografie verwenden.
+    para(s, v, f, 9, R - L - 20, 13)
+    return
+  }
   reserve(s, height + 7)
   s.p.drawRectangle({ x: L, y: s.y - height + 8, width: R - L, height, color: light })
   s.p.drawRectangle({ x: L, y: s.y - height + 8, width: 3, height, color: blue })

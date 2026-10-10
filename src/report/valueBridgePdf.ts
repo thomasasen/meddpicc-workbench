@@ -7,6 +7,7 @@ import {
   type ValueBridgeInput,
 } from '../domain/valueBridge'
 import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import { wrapReportText } from './reportText'
 
 const PAGE_W = 595.28
 const PAGE_H = 841.89
@@ -47,30 +48,7 @@ function printable(value: string): string {
 
 /** Width-aware wrapping, including unbroken words and line-separated user content. */
 function wrap(value: string, font: PDFFont, size: number, width: number): string[] {
-  const out: string[] = []
-  for (const paragraph of printable(value).split('\n')) {
-    let current = ''
-    for (const word of paragraph.split(/\s+/)) {
-      if (!word) continue
-      const joined = current ? current + ' ' + word : word
-      if (font.widthOfTextAtSize(joined, size) <= width) {
-        current = joined
-        continue
-      }
-      if (current) out.push(current)
-      current = ''
-      for (const char of word) {
-        if (current && font.widthOfTextAtSize(current + char, size) > width) {
-          out.push(current)
-          current = ''
-        }
-        current += char
-      }
-    }
-    if (current) out.push(current)
-    else if (!paragraph.trim()) out.push('')
-  }
-  return out.length ? out : ['']
+  return wrapReportText(printable(value), font, size, width)
 }
 
 export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint8Array> {
@@ -330,7 +308,8 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
   section('1', 'Warum sich etwas ändern muss')
   stage('01', 'Kundenproblem', input.pain, amberSoft, amber)
   stage('02', 'Geschäftliche Konsequenz', input.consequence, pale, navy)
-  stage('03', 'Ermöglichte Veränderung', input.change, tealSoft, teal)
+  stage('03', 'Angestrebtes Ergebnis', input.outcome, tealSoft, teal)
+  stage('04', 'Erforderliche Veränderung', input.change, tealSoft, teal)
   text('Wichtige Voraussetzung: ' + (input.prerequisites || 'Noch nicht benannt.'), {
     size: 8.8,
     color: muted,

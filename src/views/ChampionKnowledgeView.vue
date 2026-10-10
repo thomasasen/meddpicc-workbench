@@ -12,6 +12,7 @@ import {
 } from '@lucide/vue'
 
 import { championKnowledge as champion } from '../content/meddpicc/champion'
+import KnowledgeSectionNav from '../components/KnowledgeSectionNav.vue'
 </script>
 
 <template>
@@ -54,6 +55,8 @@ import { championKnowledge as champion } from '../content/meddpicc/champion'
           <div><strong>Dein Nutzen</strong><p>{{ champion.benefit }}</p></div>
         </aside>
       </section>
+
+      <KnowledgeSectionNav />
 
       <section class="container knowledge-layout" aria-label="Definition und Nutzen">
         <article class="knowledge-primary-card">
