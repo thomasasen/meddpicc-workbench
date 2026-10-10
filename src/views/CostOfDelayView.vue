@@ -9,9 +9,12 @@ import {
   type DelayScenario,
 } from '../domain/costOfDelay'
 import { consumeCostOfDelayHandoff } from '../domain/costOfDelayHandoff'
+import { queueDelayToBridge } from '../domain/valueBridgeHandoff'
+import { useRouter } from 'vue-router'
 import { buildCostOfDelayPdf } from '../report/costOfDelayPdf'
 import '../styles/costOfDelay.css'
 
+const router = useRouter()
 const draft = ref<CostOfDelayInput>(emptyCostOfDelayInput())
 const step = ref<1 | 2 | 3>(1)
 const chosenDelay = ref(6)
@@ -116,6 +119,14 @@ onMounted(() => {
     notice.value = 'Die lokale Metric-Übergabe war nicht verfügbar.'
   }
 })
+async function transferToBridge(): Promise<void> {
+  try {
+    queueDelayToBridge(draft.value, window.sessionStorage)
+    await router.push('/tools/value-bridge')
+  } catch {
+    notice.value = 'Value-Bridge-Übergabe nicht möglich.'
+  }
+}
 </script>
 
 <template>
@@ -557,6 +568,7 @@ onMounted(() => {
             </div>
           </details>
           <div class="cod-export">
+            <button type="button" class="button button-secondary" @click="transferToBridge">In Value Bridge übernehmen</button>
             <button type="button" class="button button-primary button-with-icon" @click="exportPdf">
               <Download :size="17" aria-hidden="true" /> Kunden-Steckbrief als PDF
             </button>
