@@ -79,7 +79,8 @@ const toolClusters = [
       },
       {
         label: 'Cost of Delay',
-        note: 'Den wirtschaftlichen Effekt einer Verzögerung pro Woche oder Monat sichtbar machen.',
+        note: 'Monatliche Nutzenverläufe bei 3, 6 oder 12 Monaten Verzögerung vergleichen, offene Kosten und Annahmen sichtbar machen.',
+        route: '/tools/cost-of-delay',
         customerReady: true,
       },
       {

@@ -31,8 +31,8 @@ describe('Cost of Delay: gleichbleibender Kalenderhorizont', () => {
   it('Ramp-up wird monatlich und nicht per Pauschalmultiplikation berücksichtigt', () => {
     const input = { ...complete(), benefitStartMonth: 4, rampMonths: 3, horizonMonths: 36 as const }
     const r = calc(input, [3])
-    expect(r.scenarios[1]?.baseBenefitEur).toBeCloseTo(315000, 5)
-    expect(r.scenarios[1]?.delayedBenefitEur).toBeCloseTo(285000, 5)
+    expect(r.scenarios[1]?.baseBenefitEur).toBeCloseTo(320000, 5)
+    expect(r.scenarios[1]?.delayedBenefitEur).toBeCloseTo(290000, 5)
     expect(r.scenarios[1]?.benefitDifferenceEur).toBeCloseTo(30000, 5)
     expect(r.scenarios[1]?.months[4]?.baseBenefitEur).toBeCloseTo(10000 / 3)
   })
