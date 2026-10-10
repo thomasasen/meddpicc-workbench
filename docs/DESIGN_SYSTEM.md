@@ -241,3 +241,8 @@ Die Reflow-Regeln in `src/styles/redesignFoundations.css` ergänzen bestehende P
 
 `src/components/ToolStepNavigation.vue` bildet drei interaktive Schritte aus einer einzigen tastaturbedienbaren, semantischen Navigation ab. Der aktive Schritt verwendet `aria-current="step"`, und der Klick ändert ausschließlich den aktuellen Schritt. Der Draft/Input liegt weiterhin in den Elternkomponenten, damit kein Wechsel Daten verwirft. Eingesetzt in Metric Builder und Cost of Delay; weitere Übernahme nur nach Prüfung der jeweiligen Anforderungen.
 
+
+
+## 20. Produktive UI-Regression am 11.10.2026
+
+Die mobile Schrittnavigation wird unter 480 Pixeln vertikal angezeigt; Cost-of-Delay-Verlaufsgrafiken bleiben auf kleinen Bildschirmen horizontal lesbar und per Tastatur fokussierbar. Die neun Knowledge-Ansichten erhalten gemeinsame Kapitelanker, die den Fokus auf Abschnittsüberschriften führen; die sechs Value-Bridge-Stufen trennen Pain, Konsequenz, Ziel, Veränderung, Messung und monetären Wert. 25 produktive und drei interne Routen sind in vier Größen via CI #38094931479 geprüft (205 bestandene Browserprüfungen). Die repräsentative Bildsichtung ersetzt keine formale WCAG-2.2-AA-Zertifizierung.

@@ -359,11 +359,10 @@ Einmalige ausdrückliche Übernahme aus Metric Builder, Software Business Case u
 
 Der übergreifende Redesign-Audit, die vollständige Routen-/Report-Inventur und der priorisierte Umsetzungsplan stehen in [docs/REDESIGN_AUDIT_2026-10-10.md](docs/REDESIGN_AUDIT_2026-10-10.md). Die technischen Design-Grundlagen sind in [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) und [docs/REPORT_VISUAL_SYSTEM.md](docs/REPORT_VISUAL_SYSTEM.md) dokumentiert. Ein Draft-Branch ist keine Nutzerfreigabe oder Aussage zur visuellen Fertigstellung sämtlicher Ansichten.
 
-### UX-/Report-Redesign – ergänzender Draft PR #64 (11.10.2026)
+### PR #64: UI-/Report-Redesign – geprüfter Stand am 11.10.2026
 
-[PR #64](https://github.com/thomasasen/meddpicc-workbench/pull/64) baut auf den gemergten PRs #62 und #63 auf. Der Branch `feature/ux-report-redesign-20261011` ergänzt gemeinsamen PDF-Textfluss für fünf Generatoren, dynamische Kunden-Langtext-/Metric-Anhänge, eine gemeinsame Schrittnavigation in zwei Tools, responsive Ergebnisregeln und eine 25-Routen-Viewport-Matrix.
+[PR #64](https://github.com/thomasasen/meddpicc-workbench/pull/64) ergänzt alle fünf PDF-Generatoren um gemeinsame Breiten-/Seitenlogik, den mehrseitigen Kundenanhang und den geprüften Langtextfluss. Hinzu kommen sechs ausdrücklich getrennte Value-Bridge-Stufen in UI und PDF, geteilte Workflowschritte, Kapitelnavigation für neun Knowledge-Sichten und responsive Chart-/Ergebnisregeln. Die Finanzformeln und Local-first-Architektur bleiben erhalten.
 
-[CI #38093731202](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38093731202): Format/Lint, 331 Unit-Tests, Build, 195 Playwright-Tests mit einem Skip, Pages-Check und automatisches Rendering von 18 Originalseiten aus fünf PDF-Berichten erfolgreich. [Originalbilder](docs/review-screenshots/redesign/) sind auf dem Branch verfügbar.
+[CI #38094931479](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38094931479): **334 Unit-Tests, 205 Browser-Tests bestanden, ein Skip**, Format/Lint/Build/Pages erfolgreich. Insgesamt 27 von 27 echten PDF-Seiten gerendert, einzeln gesichtet und die Langtext-PDFs mit Textextraktion geprüft. 25 produktive und drei interne Routen auf vier Viewportbreiten getestet. [Abnahmematrix](docs/REDESIGN_ACCEPTANCE_MATRIX_2026-10-11.md) und [Originalbilder](docs/review-screenshots/redesign/) dokumentieren den Stand.
 
-**Technische Prüfung ist keine manuelle visuelle Abnahme.** Das vollständige Redesign der Report-Bodys und aller produktiven Oberflächen, eine umfassende Sonderfall-Sichtprüfung, vollständige WCAG-2.2-AA-Prüfung und abschließende Benutzerfreigabe sind offen. Details: [Abnahmematrix](docs/REDESIGN_ACCEPTANCE_MATRIX_2026-10-11.md). Kein eigenständiger Merge nach `main`.
-
+Die Merge-Freigabe wurde am 11.10.2026 ausdrücklich vorab erteilt. Das Testresultat ersetzt keine formale WCAG-2.2-AA-/PDF/UA-Konformitätsbescheinigung; Standard-PDF-Fonts sind nicht vollständige Unicode-Schriften.

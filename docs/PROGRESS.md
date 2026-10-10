@@ -277,3 +277,12 @@ Siehe [Value Bridge Quellenmatrix und Gap-Analyse](VALUE_BRIDGE_SOURCE_AND_RED_T
 
 **Offen:** keine vollständige manuelle Originalbildabnahme, keine abgeschlossene PDF-Unicode-/Accessibility-Prüfung, der umfassende Report-Body- und UI-Redesign-Gesamtauftrag bleibt nur teilweise erfüllt. Weitere Details in `docs/REDESIGN_ACCEPTANCE_MATRIX_2026-10-11.md`. Kein Merge nach `main`.
 
+
+
+## PR #64: finale technische Abnahme – 11.10.2026
+
+- Ausdrückliche Merge-Freigabe am 11.10.2026 bereits erteilt. Erfolgreiche [CI #38094931479](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38094931479): **334/334 Unit-Tests**, **205 Playwright-Tests**, ein Skip, Format/Lint/Typecheck/Build/Pages grün.
+- 28 Routen (25 produktive, drei interne) bei 375, 768, 1024, 1440 Pixeln geprüft; 106 Viewportbilder veröffentlicht. Repräsentative aktuelle Screenbilder visuell geprüft.
+- 27/27 PDF-Originalseiten der fünf Standard- und zwei Langtextberichte gerendert und jede Seite visuell gesichtet. Langtext-PDFs mit `pdftotext` geprüft; kein abgeschnittener Text oder überlagerter Footer im Testmaterial.
+- Sechs Value-Bridge-Stufen, mobil lesbarer Cost-of-Delay-Chart, gemeinsame Workflow-Navigation, Knowledge-Kapitelanker und seitenübergreifende Textfluss-Logik abgeschlossen.
+- Fachliche Berechnungen und Datenschutz-/Local-first-Grundsätze unverändert. Eine externe WCAG-2.2-AA-/PDF/UA-Zertifizierung und nicht-WinAnsi-Unicode-Font-Abdeckung werden nicht behauptet. Details: `docs/REDESIGN_ACCEPTANCE_MATRIX_2026-10-11.md`.
