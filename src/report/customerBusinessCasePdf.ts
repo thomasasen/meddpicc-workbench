@@ -9,7 +9,7 @@ import {
   type ComparedBusinessScenario,
 } from '../domain/businessCaseScenarios'
 import type { ReportData } from './softwareBusinessCasePdf'
-import { drawReportFooter } from './reportChrome'
+import { drawReportFooter, drawReportMasthead } from './reportChrome'
 
 const W = 595.28
 const H = 841.89
@@ -115,10 +115,18 @@ function section(p: PDFPage, title: string, y: number, f: FontSet): void {
 
 function page(doc: PDFDocument, fonts: FontSet, chapter: string): Paint {
   const p = doc.addPage([W, H])
-  p.drawRectangle({ x: 0, y: H - 77, width: W, height: 77, color: navy })
-  p.drawRectangle({ x: X, y: H - 82, width: 34, height: 4, color: teal })
-  write(p, 'IHRE WIRTSCHAFTLICHKEITSBETRACHTUNG', X, H - 35, 11, fonts.bold, white)
-  write(p, chapter.toUpperCase(), X, H - 55, 8.5, fonts.regular, rgb(0.72, 0.81, 0.88))
+  drawReportMasthead({
+    page: p,
+    normal: fonts.regular,
+    bold: fonts.bold,
+    width: W,
+    height: H,
+    left: X,
+    right: RIGHT,
+    headerHeight: 77,
+    title: 'IHRE WIRTSCHAFTLICHKEITSBETRACHTUNG',
+    subtitle: chapter.toUpperCase(),
+  })
   return { pdf: doc, p, fonts }
 }
 
