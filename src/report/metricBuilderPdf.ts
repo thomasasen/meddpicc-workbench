@@ -8,7 +8,7 @@ import {
   metricTypeLabels,
   type MetricBuilderDraft,
 } from '../domain/metricBuilder'
-import { drawReportFooter } from './reportChrome'
+import { drawReportFooter, drawReportMasthead } from './reportChrome'
 
 /**
  * Visuelle Systematik: konstante linke Achse, Nähe innerhalb einer Information,
@@ -77,26 +77,17 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
 
   function newPage(): void {
     page = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT])
-    page.drawRectangle({
-      x: 0,
-      y: PAGE_HEIGHT - 92,
+    drawReportMasthead({
+      page,
+      normal,
+      bold,
       width: PAGE_WIDTH,
-      height: 92,
-      color: COLORS.navy,
-    })
-    page.drawText('METRIC-STECKBRIEF', {
-      x: LEFT,
-      y: PAGE_HEIGHT - 40,
-      size: 18,
-      font: bold,
-      color: COLORS.white,
-    })
-    page.drawText('KUNDENFÄHIGE DISKUSSIONSGRUNDLAGE', {
-      x: LEFT,
-      y: PAGE_HEIGHT - 63,
-      size: 9.2,
-      font: normal,
-      color: rgb(0.76, 0.83, 0.91),
+      height: PAGE_HEIGHT,
+      left: LEFT,
+      right: RIGHT,
+      headerHeight: 92,
+      title: 'METRIC-STECKBRIEF',
+      subtitle: 'KUNDENFÄHIGE DISKUSSIONSGRUNDLAGE',
     })
     cursor = PAGE_HEIGHT - 120
   }
