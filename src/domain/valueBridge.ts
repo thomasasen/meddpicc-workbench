@@ -269,7 +269,8 @@ export function evaluateValueBridge(input: ValueBridgeInput): ValueBridgeResult 
         ' → ' +
         (m.after || '?') +
         (m.unit ? ' ' + m.unit : '') +
-        ' | Berechnung: ' + (m.calculation || 'noch offen') +
+        ' | Berechnung: ' +
+        (m.calculation || 'noch offen') +
         ' | ' +
         bridgeKindLabels[m.kind] +
         ' | ' +

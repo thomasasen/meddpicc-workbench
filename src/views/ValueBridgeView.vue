@@ -311,8 +311,14 @@ onMounted(() => {
                     />
                   </label>
                   <template v-if="metric.kind === 'saving' || metric.kind === 'margin'">
-                    <label class="vb-field"><span>Wie wird der Jahreswert aus Ausgangs- und Zielwert ermittelt?</span>
-                      <textarea v-model="metric.calculation" rows="2" maxlength="1000" placeholder="z. B. (6.000 - 3.000) EUR/Monat × 12 = 36.000 EUR/Jahr" />
+                    <label class="vb-field"
+                      ><span>Wie wird der Jahreswert aus Ausgangs- und Zielwert ermittelt?</span>
+                      <textarea
+                        v-model="metric.calculation"
+                        rows="2"
+                        maxlength="1000"
+                        placeholder="z. B. (6.000 - 3.000) EUR/Monat × 12 = 36.000 EUR/Jahr"
+                      />
                     </label>
                     <label class="vb-field"
                       ><span>Wirtschaftlich realisierbarer Betrag EUR/Jahr</span>
