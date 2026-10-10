@@ -148,12 +148,20 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
     reserve(height)
     for (const [index, row] of labels.entries()) {
       page.drawText(row, {
-        x: LEFT, y: cursor - index * 12.5, font: bold, size: 8.2, color: COLORS.muted,
+        x: LEFT,
+        y: cursor - index * 12.5,
+        font: bold,
+        size: 8.2,
+        color: COLORS.muted,
       })
     }
     for (const [index, row] of values.entries()) {
       page.drawText(row, {
-        x: valueX, y: cursor - index * LINE_HEIGHT, font: normal, size: 9.8, color: COLORS.ink,
+        x: valueX,
+        y: cursor - index * LINE_HEIGHT,
+        font: normal,
+        size: 9.8,
+        color: COLORS.ink,
       })
     }
     cursor -= height

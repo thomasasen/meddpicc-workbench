@@ -106,7 +106,6 @@ test('Metric Builder: fehlende Annahmen verhindern finanzielle Übernahme', asyn
   await expect(page.getByRole('button', { name: 'Metric in Software-Payback übernehmen' })).toBeDisabled()
 })
 
-
 test('Metric Builder: Textabstände, linke Achsen und Umbruch in allen Schritten', async ({ page }, testInfo) => {
   await page.goto(route)
   for (const [index, stepLabel] of ['1 · Problem', '2 · Messung', '3 · Wirkung & Evidenz'].entries()) {
