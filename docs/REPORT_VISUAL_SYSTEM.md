@@ -36,3 +36,21 @@ Diese Umsetzung ist eine **Referenz** für die übrigen Microtools. Sie überarb
 - Kosten/Nutzen/Saldo/Payback fachlich mit ursprünglicher Version abgleichen
 - Lange deutsche Eingaben über Seitenumbrüche kontrollieren
 - Erst nach technischer und visueller QA explizite Nutzerfreigabe einholen; `main` bleibt unverändert
+
+## Weiterentwicklung: gemeinsamer PDF-Chrome
+
+In `src/report/reportChrome.ts` existiert jetzt ein gemeinsamer, layout-sicher gemessener Footer. Alle **fünf** aktuellen `pdf-lib`-Reportmodule verwenden diese Funktion. Der verbleibende Fachinhalt samt wirtschaftlicher Berechnung wird nicht verändert.
+
+- Der Footer zieht eine konsistente Trennlinie, kennzeichnet den Modell-/Prüfstatus als Text und berechnet Seitenzahlen inklusive Gesamtumfang.
+- Die Textbreite wird anhand der eingebetteten Schrift gemessen; zu lange Fußzeilen werden unter Erhalt der Seitenzahl abgekürzt.
+- Die jeweiligen reservierten Footerflächen (finance: 38/24pt, customer: 46/30pt, übrige: 53/34–36pt) bleiben zunächst bewusst erhalten, damit bestehender Content nicht überdeckt wird.
+- Noch offen: gemeinsames Layout für Header, dynamische Flow-Sections, KPI-Karten, Textumbruch und Unicode-Fonts. `StandardFonts.Helvetica` deckt weiterhin nicht den gesamten Unicode-Zeichensatz ab; Ersatzzeichen sind keine vollständige Lösung.
+- Vor visueller Freigabe müssen **Original-PDFs** aus sämtlichen Exportern gerendert, jede Seite betrachtet und lange deutsche Begriffe, viele Metrics, negative/qualitative/fehlende Werte kontrolliert werden.
+
+Diese Implementierung ist eine technische Grundlage, **kein Beleg für eine vollständig modernisierte Reportgestaltung**. Inventar und offene Abnahmekriterien: `docs/REDESIGN_AUDIT_2026-10-10.md`.
+
+### Gemeinsame Masthead-/Footer-Komponenten
+
+Auch die Kopfzeile wird nun in allen fünf PDF-Generatoren über `drawReportMasthead` in `src/report/reportChrome.ts` gezeichnet. Sie verwendet vollständig lokal gerenderte Vektorformen, eine einheitliche MEDDPICC-Toolbox-Kennung, Dokumenttitel und Reportkontext. Die ursprünglichen Headerhöhen und Textanfänge bleiben bewusst erhalten, um bestehende Datenbereiche nicht zu verdrängen.
+
+Die Redesign-CI rendert **sämtliche Originalseiten** der fünf unterschiedlichen Exportvarianten als PNG (nicht nur Seite 1). Diese Originalbilder und ausgewählte Desktop-/Mobile-Screenshots sollen als `docs/review-screenshots/redesign/` zur fachlichen Sichtabnahme veröffentlicht werden. Ein erfolgreicher Renderjob ist noch keine manuelle Sichtfreigabe.

@@ -49,6 +49,7 @@ function knowledgeLabel(topic: KnowledgeTopicId | undefined): string {
 }
 
 const checked = ref<Record<string, boolean>>({})
+const filter = ref<'all' | 'open' | 'marked'>('all')
 
 const checklist = computed(() => {
   if (props.checklistId === 'decision-criteria') return decisionCriteriaChecklist
@@ -66,8 +67,15 @@ watch(
   () => props.checklistId,
   () => {
     checked.value = {}
+    filter.value = 'all'
   },
 )
+
+const markedCount = computed(() => checklist.value.items.filter((item) => checked.value[item.id]).length)
+const visibleItems = computed(() => {
+  if (filter.value === 'all') return checklist.value.items
+  return checklist.value.items.filter((item) => Boolean(checked.value[item.id]) === (filter.value === 'marked'))
+})
 
 function checkboxId(itemId: string): string {
   return `checklist-${props.checklistId}-${itemId}`
@@ -130,8 +138,22 @@ function checkboxId(itemId: string): string {
           </div>
         </div>
 
+        <div class="checklist-toolbar">
+          <p class="checklist-count" aria-live="polite">
+            {{ markedCount }} von {{ checklist.items.length }} Punkten als Gedankenstütze markiert
+          </p>
+          <div class="checklist-filters" role="group" aria-label="Prüfpunkte filtern">
+            <button type="button" :aria-pressed="filter === 'all'" @click="filter = 'all'">Alle</button>
+            <button type="button" :aria-pressed="filter === 'open'" @click="filter = 'open'">Noch offen</button>
+            <button type="button" :aria-pressed="filter === 'marked'" @click="filter = 'marked'">Markiert</button>
+          </div>
+        </div>
+        <p v-if="visibleItems.length === 0" class="checklist-filter-empty" role="status">
+          {{ filter === 'marked' ? 'Noch keine Punkte markiert.' : 'In dieser Ansicht sind keine Punkte mehr offen.' }}
+          <button type="button" class="button button-secondary" @click="filter = 'all'">Alle anzeigen</button>
+        </p>
         <div class="checklist-item-list">
-          <article v-for="item in checklist.items" :key="item.id" class="checklist-item">
+          <article v-for="item in visibleItems" :key="item.id" class="checklist-item">
             <label class="checklist-question" :for="checkboxId(item.id)">
               <input :id="checkboxId(item.id)" v-model="checked[item.id]" type="checkbox" />
               <span>{{ item.question }}</span>

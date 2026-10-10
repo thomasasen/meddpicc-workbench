@@ -8,6 +8,7 @@ import {
   metricTypeLabels,
   type MetricBuilderDraft,
 } from '../domain/metricBuilder'
+import { drawReportFooter, drawReportMasthead } from './reportChrome'
 
 /**
  * Visuelle Systematik: konstante linke Achse, Nähe innerhalb einer Information,
@@ -76,26 +77,17 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
 
   function newPage(): void {
     page = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT])
-    page.drawRectangle({
-      x: 0,
-      y: PAGE_HEIGHT - 92,
+    drawReportMasthead({
+      page,
+      normal,
+      bold,
       width: PAGE_WIDTH,
-      height: 92,
-      color: COLORS.navy,
-    })
-    page.drawText('METRIC-STECKBRIEF', {
-      x: LEFT,
-      y: PAGE_HEIGHT - 40,
-      size: 18,
-      font: bold,
-      color: COLORS.white,
-    })
-    page.drawText('KUNDENFÄHIGE DISKUSSIONSGRUNDLAGE', {
-      x: LEFT,
-      y: PAGE_HEIGHT - 63,
-      size: 9.2,
-      font: normal,
-      color: rgb(0.76, 0.83, 0.91),
+      height: PAGE_HEIGHT,
+      left: LEFT,
+      right: RIGHT,
+      headerHeight: 92,
+      title: 'METRIC-STECKBRIEF',
+      subtitle: 'KUNDENFÄHIGE DISKUSSIONSGRUNDLAGE',
     })
     cursor = PAGE_HEIGHT - 120
   }
@@ -293,29 +285,17 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
   if (result.issues.length) labeled('Fehlende oder ungültige Angaben', result.issues.join(' '))
   if (!result.complete) highlight('Unvollständige Berechnung', 'Es liegt noch keine abgeschlossene Modellrechnung vor.')
 
-  for (const [index, p] of pdf.getPages().entries()) {
-    p.drawLine({
-      start: { x: LEFT, y: 53 },
-      end: { x: RIGHT, y: 53 },
-      color: COLORS.border,
-      thickness: 0.75,
-    })
-    p.drawText('MODELLANNAHMEN - KEINE GARANTIE ODER BUDGETFREIGABE', {
-      x: LEFT,
-      y: 34,
-      size: 7.6,
-      font: normal,
-      color: COLORS.muted,
-    })
-    const number = 'SEITE ' + (index + 1)
-    p.drawText(number, {
-      x: RIGHT - bold.widthOfTextAtSize(number, 7.6),
-      y: 34,
-      size: 7.6,
-      font: bold,
-      color: COLORS.muted,
-    })
-  }
+  drawReportFooter(pdf.getPages(), normal, bold, {
+    left: LEFT,
+    right: RIGHT,
+    label: 'MODELLANNAHMEN - KEINE GARANTIE ODER BUDGETFREIGABE',
+    borderColor: COLORS.border,
+    textColor: COLORS.muted,
+    textY: 34,
+    fontSize: 7.6,
+    pagePrefix: 'SEITE ',
+    showTotal: true,
+  })
   return pdf.save()
 }
 

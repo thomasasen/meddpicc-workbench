@@ -12,8 +12,25 @@ function handleBeforeUnload(event: BeforeUnloadEvent) {
   event.returnValue = ''
 }
 
-onMounted(() => window.addEventListener('beforeunload', handleBeforeUnload))
-onBeforeUnmount(() => window.removeEventListener('beforeunload', handleBeforeUnload))
+/**
+ * Beim Scrollen den Fokus eines nativen Selects lösen, bevor der Browser
+ * einen Wheel-Impuls als Optionswechsel interpretiert. Das Wheel-Event
+ * kann auf einem überlagerten Element oder der Seite eintreffen, auch wenn
+ * der Select noch fokussiert ist. Tastaturbedienung bleibt unverändert.
+ */
+function handleSelectWheel() {
+  const active = document.activeElement
+  if (active instanceof HTMLSelectElement) active.blur()
+}
+
+onMounted(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload)
+  document.addEventListener('wheel', handleSelectWheel, { capture: true })
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+  document.removeEventListener('wheel', handleSelectWheel, { capture: true })
+})
 </script>
 
 <template>

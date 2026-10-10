@@ -2,6 +2,7 @@
 import { ArrowLeft, Calculator, ClipboardCopy, RotateCcw } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import SoftwarePaybackPanel from '../components/SoftwarePaybackPanel.vue'
+import AnnualBenefitComparison from '../components/AnnualBenefitComparison.vue'
 import { useRoute } from 'vue-router'
 
 import {
@@ -263,6 +264,11 @@ async function copySummary() {
                   <dd>{{ formatEuro(model.inputs.upfrontInvestmentEur) }}</dd>
                 </div>
               </dl>
+
+              <AnnualBenefitComparison
+                :annual-gross-benefit-eur="model.inputs.annualRealizableBenefitEur"
+                :annual-incremental-operating-cost-eur="model.inputs.annualIncrementalOperatingCostEur"
+              />
 
               <div class="quick-formula">
                 <h3>Rechenweg</h3>

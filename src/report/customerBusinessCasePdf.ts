@@ -9,6 +9,7 @@ import {
   type ComparedBusinessScenario,
 } from '../domain/businessCaseScenarios'
 import type { ReportData } from './softwareBusinessCasePdf'
+import { drawReportFooter, drawReportMasthead } from './reportChrome'
 
 const W = 595.28
 const H = 841.89
@@ -22,7 +23,6 @@ const amber = rgb(0.57, 0.31, 0.07)
 const red = rgb(0.68, 0.23, 0.23)
 const pale = rgb(0.948, 0.967, 0.974)
 const line = rgb(0.85, 0.89, 0.92)
-const white = rgb(1, 1, 1)
 type FontSet = { regular: PDFFont; bold: PDFFont }
 type Paint = { pdf: PDFDocument; p: PDFPage; fonts: FontSet }
 
@@ -112,15 +112,20 @@ function section(p: PDFPage, title: string, y: number, f: FontSet): void {
   p.drawLine({ start: { x: X, y: y - 12 }, end: { x: RIGHT, y: y - 12 }, thickness: 0.8, color: line })
 }
 
-function page(doc: PDFDocument, fonts: FontSet, chapter: string, number: number): Paint {
+function page(doc: PDFDocument, fonts: FontSet, chapter: string): Paint {
   const p = doc.addPage([W, H])
-  p.drawRectangle({ x: 0, y: H - 77, width: W, height: 77, color: navy })
-  p.drawRectangle({ x: X, y: H - 82, width: 34, height: 4, color: teal })
-  write(p, 'IHRE WIRTSCHAFTLICHKEITSBETRACHTUNG', X, H - 35, 11, fonts.bold, white)
-  write(p, chapter.toUpperCase(), X, H - 55, 8.5, fonts.regular, rgb(0.72, 0.81, 0.88))
-  p.drawLine({ start: { x: X, y: 46 }, end: { x: RIGHT, y: 46 }, thickness: 0.65, color: line })
-  write(p, 'GESPRÄCHSGRUNDLAGE | ANNAHMEN UND QUELLEN OFFENGELEGT', X, 30, 7.3, fonts.regular, muted)
-  write(p, 'SEITE ' + number, RIGHT - 52, 30, 7.3, fonts.bold, muted, 52)
+  drawReportMasthead({
+    page: p,
+    normal: fonts.regular,
+    bold: fonts.bold,
+    width: W,
+    height: H,
+    left: X,
+    right: RIGHT,
+    headerHeight: 77,
+    title: 'IHRE WIRTSCHAFTLICHKEITSBETRACHTUNG',
+    subtitle: chapter.toUpperCase(),
+  })
   return { pdf: doc, p, fonts }
 }
 
@@ -325,7 +330,7 @@ function statusLabel(evidence: string): string {
 }
 
 function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSummary, chosen: string): void {
-  const { p } = page(pdf, f, '01 | Investition auf einen Blick', 1)
+  const { p } = page(pdf, f, '01 | Investition auf einen Blick')
   write(p, 'Ihre Investition im Überblick', X, 729, 20, f.bold, navy)
   meta(p, 'Unternehmen', data.customer.trim(), 695, f)
   meta(p, 'Vorhaben', data.project.trim(), 674, f)
@@ -372,7 +377,7 @@ function executivePage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSu
 }
 
 function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
-  const { p } = page(pdf, f, '02 | Herkunft des Nutzens', 2)
+  const { p } = page(pdf, f, '02 | Herkunft des Nutzens')
   write(p, 'So entsteht der wirtschaftliche Nutzen', X, 729, 20, f.bold, navy)
   paragraph(
     p,
@@ -457,7 +462,7 @@ function economicsPage(pdf: PDFDocument, f: FontSet, c: CaseSummary): void {
 }
 
 function decisionPage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSummary): void {
-  const { p } = page(pdf, f, '03 | Nächste Schritte', 3)
+  const { p } = page(pdf, f, '03 | Nächste Schritte')
   write(p, 'Die nächsten Schritte für Ihr Vorhaben', X, 729, 19, f.bold, navy)
   section(p, 'Ausgangssituation und gewünschtes Ergebnis', 687, f)
   write(p, 'IHRE AKTUELLE SITUATION', X, 657, 8, f.bold, muted)
@@ -518,7 +523,7 @@ function decisionPage(pdf: PDFDocument, f: FontSet, data: ReportData, c: CaseSum
 }
 
 function scenarioPage(pdf: PDFDocument, f: FontSet, scenarios: ComparedBusinessScenario[]): void {
-  const { p } = page(pdf, f, '04 | Wie belastbar ist die Wirtschaftlichkeit?', 4)
+  const { p } = page(pdf, f, '04 | Wie belastbar ist die Wirtschaftlichkeit?')
   write(p, 'Wie belastbar ist die Wirtschaftlichkeit?', X, 729, 18, f.bold, navy)
   paragraph(
     p,
@@ -618,5 +623,16 @@ export async function buildCustomerBusinessCasePdf(data: ReportData): Promise<Ui
   economicsPage(pdf, fonts, c)
   decisionPage(pdf, fonts, data, c)
   scenarioPage(pdf, fonts, scenarios)
+  drawReportFooter(pdf.getPages(), fonts.regular, fonts.bold, {
+    left: X,
+    right: RIGHT,
+    label: 'GESPRÄCHSGRUNDLAGE | ANNAHMEN UND QUELLEN OFFENGELEGT',
+    borderColor: line,
+    textColor: muted,
+    lineY: 46,
+    textY: 30,
+    pagePrefix: 'SEITE ',
+    showTotal: true,
+  })
   return pdf.save({ useObjectStreams: false })
 }

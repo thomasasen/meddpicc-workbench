@@ -1,6 +1,7 @@
 import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf-lib'
 import { summarizeBusinessCase, economicInterpretation, type CaseSummary } from '../domain/businessCase'
 import type { SoftwarePaybackInput } from '../domain/softwarePayback'
+import { drawReportFooter, drawReportMasthead } from './reportChrome'
 import {
   compareBusinessScenarios,
   describeScenarioAssumptions,
@@ -29,8 +30,7 @@ const navy = rgb(0.09, 0.14, 0.24),
 const muted = rgb(0.38, 0.44, 0.52),
   light = rgb(0.95, 0.97, 0.99),
   border = rgb(0.84, 0.88, 0.92)
-const danger = rgb(0.7, 0.28, 0.19),
-  white = rgb(1, 1, 1)
+const danger = rgb(0.7, 0.28, 0.19)
 type Fonts = { normal: PDFFont; bold: PDFFont }
 type State = { p: PDFPage; y: number; pdf: PDFDocument; f: Fonts; chapter: string }
 const euro = (n: number) =>
@@ -93,9 +93,18 @@ function para(s: State, v: string, f: Fonts, size = 9, width = R - L, spacing = 
 }
 function page(pdf: PDFDocument, f: Fonts, chapter: string): State {
   const p = pdf.addPage([PW, PH])
-  p.drawRectangle({ x: 0, y: PH - 89, width: PW, height: 89, color: navy })
-  draw(p, 'SOFTWARE INVESTMENT / BUSINESS CASE', L, PH - 35, 10, f.bold, white)
-  draw(p, chapter.toUpperCase(), L, PH - 57, 9, f.normal, rgb(0.68, 0.82, 1))
+  drawReportMasthead({
+    page: p,
+    normal: f.normal,
+    bold: f.bold,
+    width: PW,
+    height: PH,
+    left: L,
+    right: R,
+    headerHeight: 89,
+    title: 'SOFTWARE INVESTMENT / BUSINESS CASE',
+    subtitle: chapter.toUpperCase(),
+  })
   return { p, y: PH - 117, pdf, f, chapter }
 }
 /** Keep variable customer text and its following elements above the footer. */
@@ -243,13 +252,17 @@ function tableHead(s: State, f: Fonts, one = 'Kosten- oder Nutzenblock', two = '
   s.y -= 31
 }
 function footer(pdf: PDFDocument, f: Fonts, customer: string) {
-  const pages = pdf.getPages()
-  for (let i = 0; i < pages.length; i++) {
-    const p = pages[i]!
-    p.drawLine({ start: { x: L, y: 38 }, end: { x: R, y: 38 }, thickness: 0.6, color: border })
-    draw(p, 'MODELLRECHNUNG - ' + customer, L, 24, 7.3, f.normal, muted, 355)
-    draw(p, String(i + 1) + ' / ' + String(pages.length), R - 27, 24, 8, f.bold, muted)
-  }
+  drawReportFooter(pdf.getPages(), f.normal, f.bold, {
+    left: L,
+    right: R,
+    label: 'MODELLRECHNUNG - ' + customer,
+    borderColor: border,
+    textColor: muted,
+    lineY: 38,
+    textY: 24,
+    pagePrefix: '',
+    fontSize: 7.3,
+  })
 }
 export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Uint8Array> {
   const c = summarizeBusinessCase(data.input)

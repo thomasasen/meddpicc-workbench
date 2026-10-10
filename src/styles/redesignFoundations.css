@@ -1,0 +1,194 @@
+/*
+ * Übergreifende visuelle Grundlagen für produktive Tools, Checklists und Knowledge.
+ * Ergänzt die vorhandenen Tokens aus main.css, statt pro Tool ein zweites Theme anzulegen.
+ * Keine Business-Logik und keine exportierten Kennzahlen hängen von diesen Regeln ab.
+ */
+:root {
+  --type-display: clamp(1.85rem, 1.5rem + 1.4vw, 2.55rem);
+  --type-section: clamp(1.23rem, 1.12rem + 0.35vw, 1.48rem);
+  --type-number: clamp(1.48rem, 1.23rem + 0.8vw, 2rem);
+  --panel-gap: clamp(1rem, 0.78rem + 0.8vw, 1.5rem);
+  --color-section-rule: #e2e8f0;
+}
+
+:where(.quick-main, .metric-main, .cod-main, .vb-main, .reverse-tool-main, .knowledge-main, .checklist-main) h1 {
+  font-size: var(--type-display);
+  line-height: 1.17;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+:where(.quick-main, .metric-main, .cod-main, .vb-main, .reverse-tool-main, .knowledge-main, .checklist-main) h2 {
+  font-size: var(--type-section);
+  line-height: 1.28;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+}
+
+:where(.quick-main, .metric-main, .cod-main, .vb-main, .reverse-tool-main, .knowledge-main, .checklist-main) p,
+:where(.quick-main, .metric-main, .cod-main, .vb-main, .reverse-tool-main, .knowledge-main, .checklist-main) li {
+  overflow-wrap: anywhere;
+}
+
+:where(.metric-panel, .cod-panel, .vb-panel, .quick-panel, .reverse-config, .reverse-result-section, .checklist-list-section) {
+  min-width: 0;
+  border-color: var(--color-section-rule);
+}
+
+:where(.metric-result-values, .cod-kpis, .quick-metrics, .vb-story-indicators) {
+  font-variant-numeric: tabular-nums;
+}
+
+:where(.metric-result-values, .cod-kpis, .quick-metrics) dd,
+:where(.metric-result-values, .cod-kpis, .quick-metrics) strong {
+  overflow-wrap: anywhere;
+  letter-spacing: -0.014em;
+}
+
+:where(.metric-steps, .cod-steps, .vb-steps) {
+  scroll-margin-top: 1rem;
+}
+
+:where(.metric-steps, .cod-steps, .vb-steps) button {
+  min-height: 44px;
+}
+
+:where(.metric-panel, .cod-panel, .vb-panel, .quick-panel) :is(input, select, textarea) {
+  max-width: 100%;
+}
+
+:where(.site-shell) textarea {
+  font: inherit;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+:where(.site-shell) :is(textarea, summary, [role='button']):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-focus) 42%, transparent);
+  outline-offset: 3px;
+}
+
+:where(.site-shell) :is(input, select, textarea):disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
+:where(.site-shell) :is(button, .button, summary) {
+  touch-action: manipulation;
+}
+
+:where(.site-shell) details > summary {
+  cursor: pointer;
+}
+
+:where(.site-shell) details[open] > summary {
+  color: var(--color-text);
+}
+
+/* Nicht als Qualification-Score zu lesen: nur eine temporäre persönliche Filteransicht. */
+.checklist-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding-block: var(--space-2);
+  border-bottom: 1px solid var(--color-section-rule);
+}
+
+.checklist-count {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.83rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.checklist-filters {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-muted);
+}
+
+.checklist-filters button {
+  min-height: 38px;
+  padding: 0 var(--space-3);
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius-control) - 2px);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.81rem;
+  font-weight: 650;
+}
+
+.checklist-filters button:hover {
+  color: var(--color-text);
+}
+
+.checklist-filters button[aria-pressed='true'] {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1px 3px rgb(23 32 51 / 0.06);
+}
+
+.checklist-filters button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-focus) 42%, transparent);
+  outline-offset: 2px;
+}
+
+.checklist-filter-empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 80px;
+  margin: 0 0 var(--space-5);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface-muted);
+  padding: var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.checklist-question {
+  min-height: 54px;
+}
+
+.checklist-item-details > summary {
+  min-height: 42px;
+}
+
+@media (max-width: 640px) {
+  .checklist-toolbar,
+  .checklist-filter-empty {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .checklist-filters {
+    display: flex;
+    width: 100%;
+  }
+
+  .checklist-filters button {
+    flex: 1 1 0;
+    padding-inline: var(--space-2);
+  }
+
+  :where(.quick-main, .metric-main, .cod-main, .vb-main) h1 {
+    font-size: clamp(1.6rem, 7vw, 1.98rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.checklist-filters, .metric-steps, .cod-steps, .vb-steps) *,
+  :where(.site-shell) summary {
+    transition-duration: 0.01ms !important;
+  }
+}

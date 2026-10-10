@@ -217,3 +217,17 @@ Vor Merge:
 - ist die Aufgabe vollständig per Tastatur bedienbar?
 - funktioniert Desktop und Mobile?
 - hat jede Visualisierung eine nichtgrafische Alternative?
+
+## 18. Gemeinsame Redesign-Primitiven (Entwicklungsbranch ab 10.10.2026)
+
+Die zentralen Tokens bleiben in `src/styles/main.css`; die bereichsübergreifenden typografischen und interaktiven Ergänzungen liegen in `src/styles/redesignFoundations.css` und werden über `src/main.ts` auf alle aktiven Routen geladen.
+
+- `--type-display`, `--type-section` und `--type-number` bilden die inhaltsbezogene Schriftgrößenhierarchie. Überschriften verwenden zurückhaltendes Balancing statt Marketing-Typografie.
+- `--panel-gap` und `--color-section-rule` dienen der ruhigen Trennung fachlicher Bereiche, nicht der Dekoration.
+- Zahlen in Resultatgruppen verwenden tabellarische Ziffern. Einheiten, Zeiträume und Evidenz bleiben weiterhin explizit im Inhalt.
+- Fokussierte native Selects verlieren vor der Wheel-Defaultaktion den Fokus, damit Scrollen ihren Wert nicht versehentlich ändert; Keyboard-Eingaben bleiben möglich. Verhalten ist im E2E-Test abzusichern.
+- Checklists zeigen eine ausschließlich temporäre `Alle / Noch offen / Markiert`-Ansicht. Der Zähler bezeichnet nur markierte Prüfpunkte und ist kein Qualification-, Readiness- oder Confidence-Score.
+- Tabs und Schrittnavigation müssen mindestens 44px hohe Zielbereiche bieten. Focus-Visible gilt auch für Textareas und Disclosure-Zusammenfassungen.
+- Neue Tools sollen dieselben Tokens nutzen, statt eigene per-View-Sonderfarben und Interaktionsmuster zu kopieren.
+
+Die gemeinsame CSS-Grundlage ist **nicht** die vollständige UI-Abnahme jeder Route. Offene Screens und die Testmatrix stehen in `docs/REDESIGN_AUDIT_2026-10-10.md`.

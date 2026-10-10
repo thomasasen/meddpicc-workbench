@@ -1,5 +1,6 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
 import { type CostOfDelayInput, type DelayScenario, type CostOfDelayResult } from '../domain/costOfDelay'
+import { drawReportFooter, drawReportMasthead } from './reportChrome'
 
 const euro = (n: number): string =>
   new Intl.NumberFormat('de-DE', {
@@ -60,14 +61,17 @@ export async function buildCostOfDelayPdf(
 
   function newPage() {
     page = pdf.addPage([W, H])
-    page.drawRectangle({ x: 0, y: H - 88, width: W, height: 88, color: ink })
-    page.drawText('COST OF DELAY', { x: L, y: H - 39, size: 20, color: rgb(1, 1, 1), font: bold })
-    page.drawText('WIRTSCHAFTLICHE AUSWIRKUNG EINER VERSCHIEBUNG', {
-      x: L,
-      y: H - 59,
-      size: 9,
-      color: rgb(0.79, 0.84, 0.91),
-      font: regular,
+    drawReportMasthead({
+      page,
+      normal: regular,
+      bold,
+      width: W,
+      height: H,
+      left: L,
+      right: R,
+      headerHeight: 88,
+      title: 'COST OF DELAY',
+      subtitle: 'WIRTSCHAFTLICHE AUSWIRKUNG EINER VERSCHIEBUNG',
     })
     y = H - 115
   }
@@ -215,17 +219,15 @@ export async function buildCostOfDelayPdf(
       size: 9.1,
       color: gray,
     })
-  for (const [index, p] of pdf.getPages().entries()) {
-    p.drawLine({ start: { x: L, y: 53 }, end: { x: R, y: 53 }, color: lineColor, thickness: 0.75 })
-    p.drawText('MODELLVERGLEICH - KEINE FINANZIELLE FREIGABE ODER CASHFLOW-PROGNOSE', {
-      x: L,
-      y: 36,
-      color: gray,
-      size: 7.2,
-      font: regular,
-    })
-    const number = 'SEITE ' + (index + 1)
-    p.drawText(number, { x: R - bold.widthOfTextAtSize(number, 7.5), y: 36, size: 7.5, font: bold, color: gray })
-  }
+  drawReportFooter(pdf.getPages(), regular, bold, {
+    left: L,
+    right: R,
+    label: 'MODELLVERGLEICH - KEINE FINANZIELLE FREIGABE ODER CASHFLOW-PROGNOSE',
+    borderColor: lineColor,
+    textColor: gray,
+    textY: 36,
+    pagePrefix: 'SEITE ',
+    showTotal: true,
+  })
   return pdf.save()
 }

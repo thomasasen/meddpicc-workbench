@@ -249,3 +249,15 @@ Neu: `src/domain/valueBridge.ts` und `valueBridgeHandoff.ts` mit Evidenz-, Reali
 **Technische Abnahme 10.10.2026:** [CI #38070981674](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38070981674) grün: 326 Unit-Tests, 135 Playwright-Tests, 1 Skip, Format/Lint/Build/Pages. Echte monetäre und nichtmonetäre Desktop-/Mobile-Screenshots sowie je zwei Original-PDF-Seiten visuell geöffnet; überlagernder Skip-Link korrigiert und neue Bilder geprüft. Dritte simulierte Reviewrunde dokumentiert. Zusätzliche Sicherheitsregeln: Einmaleffekt nicht als Jahresnutzen; Umsatzerwartung separat; EUR-Herleitung erforderlich. **Offen:** ausdrückliche visuelle Nutzerfreigabe. Kein Merge nach `main`.
 
 Siehe [Value Bridge Quellenmatrix und Gap-Analyse](VALUE_BRIDGE_SOURCE_AND_RED_TEAM.md).
+
+## UX/UI- und PDF-Redesign – Beginn 10.10.2026
+
+- Branch: `feature/ux-report-redesign-foundations-20261010`; Basis: `feature/value-bridge` aus PR #62. `main` unverändert.
+- Audit: 28 registrierte Routen, fünf PDF-Generatoren, Go-Live-SVG/PNG sowie wiederverwendbare Charts und Styles erfasst: `docs/REDESIGN_AUDIT_2026-10-10.md`.
+- Implementiert: gemeinsamer gemessener Footer `src/report/reportChrome.ts`, auf fünf Reportmodule angewendet; `src/styles/redesignFoundations.css` mit bereichsübergreifenden Tokens/States; Wheel-Guard in `src/App.vue`; temporäre Checklist-Filterung in `ChecklistView.vue`.
+- Neue Tests: `tests/e2e/redesign-foundations.spec.ts` und `src/report/reportChrome.test.ts`.
+- Fachliche Berechnungen: unverändert. Local-first und kein CRM weiterhin verbindlich.
+- **Nicht als bestanden behauptet:** die sechs Quality Gates auf diesem neuen Branch, visuelle Kontrolle aller Views und PDFs sowie ausdrückliche Freigabe.
+- **Noch offen:** tieferes Einzeltool-Redesign, gemeinsame PDF-Body-/Header-Komponenten, reale PDF-Langtext-/Missing-Value-Stressbilder, vollständige responsive und A11y-Abnahme. Keine Merge-Freigabe erteilt.
+
+- Quick Payback (Einfachmodus): zugängliche, einheitlich skalierte jährliche Bruttonutzen-/Betriebskostenbalken mit expliziten EUR-Werten und Evidenzgrenzen in `AnnualBenefitComparison.vue` ergänzt; Wirtschaftlichkeitsmodell unverändert. Zusätzlicher E2E-Test angelegt. Der umfangreiche Projektmodus und die abschließende visuelle Abnahme bleiben offen.
