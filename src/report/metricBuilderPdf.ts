@@ -8,6 +8,7 @@ import {
   metricTypeLabels,
   type MetricBuilderDraft,
 } from '../domain/metricBuilder'
+import { drawReportFooter } from './reportChrome'
 
 /**
  * Visuelle Systematik: konstante linke Achse, Nähe innerhalb einer Information,
@@ -293,29 +294,17 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
   if (result.issues.length) labeled('Fehlende oder ungültige Angaben', result.issues.join(' '))
   if (!result.complete) highlight('Unvollständige Berechnung', 'Es liegt noch keine abgeschlossene Modellrechnung vor.')
 
-  for (const [index, p] of pdf.getPages().entries()) {
-    p.drawLine({
-      start: { x: LEFT, y: 53 },
-      end: { x: RIGHT, y: 53 },
-      color: COLORS.border,
-      thickness: 0.75,
-    })
-    p.drawText('MODELLANNAHMEN - KEINE GARANTIE ODER BUDGETFREIGABE', {
-      x: LEFT,
-      y: 34,
-      size: 7.6,
-      font: normal,
-      color: COLORS.muted,
-    })
-    const number = 'SEITE ' + (index + 1)
-    p.drawText(number, {
-      x: RIGHT - bold.widthOfTextAtSize(number, 7.6),
-      y: 34,
-      size: 7.6,
-      font: bold,
-      color: COLORS.muted,
-    })
-  }
+  drawReportFooter(pdf.getPages(), normal, bold, {
+    left: LEFT,
+    right: RIGHT,
+    label: 'MODELLANNAHMEN - KEINE GARANTIE ODER BUDGETFREIGABE',
+    borderColor: COLORS.border,
+    textColor: COLORS.muted,
+    textY: 34,
+    fontSize: 7.6,
+    pagePrefix: 'SEITE ',
+    showTotal: true,
+  })
   return pdf.save()
 }
 
