@@ -55,3 +55,24 @@ for (const route of routes) {
     expect(errors).toEqual([])
   })
 }
+
+const internalRoutes = ['/evidence', '/risks-actions', '/references'] as const
+
+for (const route of internalRoutes) {
+  test('Erreichbare interne Ansicht bleibt bedienbar: ' + route, async ({ page }, testInfo) => {
+    for (const width of [375, 768, 1024, 1440]) {
+      await page.setViewportSize({ width, height: 900 })
+      await page.goto('/#' + route)
+      await expect(page.getByRole('main')).toBeVisible()
+      await expect(page.locator('main h1').first()).toBeVisible()
+      const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth)
+      expect(scrollWidth, route + ' bei ' + width + 'px').toBeLessThanOrEqual(width + 1)
+      if (width === 375) {
+        await page.screenshot({
+          path: testInfo.outputPath('legacy-' + route.slice(1) + '-375-' + testInfo.project.name + '.png'),
+          fullPage: true,
+        })
+      }
+    }
+  })
+}
