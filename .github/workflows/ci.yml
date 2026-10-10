@@ -191,6 +191,8 @@ jobs:
           fi
           mkdir -p test-results/rendered
           pdfinfo "$report" | head -18
+          pages="$(pdfinfo "$report" | awk '/^Pages:/{print $2}')"
+          test "$pages" = 1 || { echo "::error::Der kurze Metric-Steckbrief muss auf einer Seite lesbar sein"; exit 1; }
           pdftoppm -scale-to 1300 -png "$report" test-results/rendered/metric-builder-brief-all
           pdftotext -layout "$report" test-results/rendered/metric-builder-brief.txt
           grep -q 'METRIC-STECKBRIEF' test-results/rendered/metric-builder-brief.txt
@@ -246,7 +248,7 @@ jobs:
         if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'feature/metric-builder')
         run: |
           mkdir -p docs/review-screenshots
-          for name in metric-builder-empty-desktop-chromium.png metric-builder-empty-mobile-chromium.png metric-builder-result-desktop-chromium.png metric-builder-result-mobile-chromium.png; do
+          for name in metric-builder-empty-desktop-chromium.png metric-builder-empty-mobile-chromium.png metric-builder-result-desktop-chromium.png metric-builder-result-mobile-chromium.png metric-builder-step-1-desktop-chromium.png metric-builder-step-1-mobile-chromium.png metric-builder-step-2-desktop-chromium.png metric-builder-step-2-mobile-chromium.png; do
             source="$(find test-results -type f -name "$name" -print -quit)"
             test -s "$source" || { echo "::error::Browser-Screenshot fehlt: $name"; exit 1; }
             cp "$source" "docs/review-screenshots/$name"
