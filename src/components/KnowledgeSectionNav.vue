@@ -21,13 +21,13 @@ function navigate(id: string): void {
   const heading = nav.value?.closest('main')?.querySelector<HTMLElement>('[id="' + id + '"]')
   if (!heading) return
   heading.setAttribute('tabindex', '-1')
-  heading.scrollIntoView({ behavior: 'instant', block: 'start' })
+  heading.scrollIntoView({ behavior: 'auto', block: 'start' })
   heading.focus({ preventScroll: true })
 }
 </script>
 
 <template>
-  <nav ref="nav" class="container knowledge-section-nav" aria-label="Themen auf dieser Seite" v-if="sections.length">
+  <nav ref="nav" class="container knowledge-section-nav" aria-label="Themen auf dieser Seite" v-show="sections.length > 0">
     <strong>Auf dieser Seite</strong>
     <ol>
       <li v-for="section in sections" :key="section.id">
