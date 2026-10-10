@@ -43,6 +43,11 @@ test('Cost of Delay: fiktives Servicebeispiel, Monatskurve, PDF und Responsive-Q
     .locator('summary')
     .click()
   await expect(page.locator('.cod-table-scroll tbody tr')).toHaveCount(37)
+  await page
+    .locator('.cod-results details')
+    .filter({ hasText: 'Vollständigen Monatsvergleich anzeigen' })
+    .locator('summary')
+    .click()
   const waiting = page.waitForEvent('download')
   await page.getByRole('button', { name: 'Kunden-Steckbrief als PDF' }).click()
   const file = await waiting

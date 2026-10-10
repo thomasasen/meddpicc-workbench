@@ -60,10 +60,16 @@ function reset() {
   example.value = ''
   notice.value = ''
 }
+const chartMaximum = computed(() => {
+  if (!selected.value) return 0
+  return Math.max(1, ...selected.value.months.flatMap((row) => [row.baseCumulativeEur, row.delayedCumulativeEur]))
+})
+const compactEuro = (value: number): string =>
+  new Intl.NumberFormat('de-DE', { notation: 'compact', maximumFractionDigits: 1 }).format(value) + ' €'
 function chartPoints(field: 'baseCumulativeEur' | 'delayedCumulativeEur'): string {
   if (!selected.value) return ''
   const arr = selected.value.months
-  const max = Math.max(1, ...arr.flatMap((row) => [row.baseCumulativeEur, row.delayedCumulativeEur]))
+  const max = chartMaximum.value
   return arr
     .map((row) => {
       const x = 36 + (row.month / draft.value.horizonMonths) * 626
@@ -449,7 +455,9 @@ onMounted(() => {
               <text x="662" y="222" text-anchor="end" font-size="12" fill="currentColor">
                 Monat {{ draft.horizonMonths }}
               </text>
-              <text x="44" y="19" font-size="12" fill="currentColor">Kumulierter Nutzen (EUR), Skala relativ</text>
+              <text x="44" y="19" font-size="12" fill="currentColor">Kumulierter Nutzen (EUR)</text>
+              <text x="44" y="39" font-size="12" fill="currentColor">{{ compactEuro(chartMaximum) }}</text>
+              <text x="44" y="190" font-size="12" fill="currentColor">0 €</text>
             </svg>
             <p class="cod-muted">
               Die Kurven verwenden tatsächliche Monatswerte einschließlich Nutzenstart und Ramp-up. Exakte EUR-Werte
@@ -465,7 +473,7 @@ onMounted(() => {
               </div>
               <div>
                 <dt>Später vermiedene Altsystemkosten</dt>
-                <dd>{{ money(selected.legacyDifferenceEur) }}</dd>
+                <dd>{{ draft.legacyMonthlyEur === null ? 'Noch offen' : money(selected.legacyDifferenceEur) }}</dd>
               </div>
               <div>
                 <dt>Zusätzliche Verzögerungskosten</dt>

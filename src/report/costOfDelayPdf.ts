@@ -89,7 +89,8 @@ export async function buildCostOfDelayPdf(
     y -= opts.after ?? 7
   }
   function heading(text: string) {
-    reserve(37)
+    // Überschrift und nachfolgender Block müssen auf derselben Seite Platz finden.
+    reserve(105)
     y -= 10
     page.drawText(printable(text), { x: L, y, size: 12, color: ink, font: bold })
     y -= 21
@@ -150,7 +151,7 @@ export async function buildCostOfDelayPdf(
   labeled('Differenz Kundennutzen', euro(selected.benefitDifferenceEur))
   labeled(
     'Spätere Altsystemabschaltung',
-    euro(selected.legacyDifferenceEur) + (input.legacyMonthlyEur === null ? ' (nicht erfasst)' : ' Differenz'),
+    input.legacyMonthlyEur === null ? 'Offen; keine Abschaltannahme erfasst' : euro(selected.legacyDifferenceEur) + ' Differenz',
   )
   labeled(
     'Weitere Verzögerungskosten',

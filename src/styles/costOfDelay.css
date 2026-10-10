@@ -375,12 +375,13 @@
     grid-template-columns: 1fr;
   }
   .cod-kpis > div {
-    flex-direction: row;
-    align-items: center;
-    gap: 0.85rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
   .cod-kpis strong {
-    text-align: right;
+    text-align: left;
+    font-size: 1.35rem;
   }
   .cod-breakdown dl div {
     flex-direction: column;
@@ -403,4 +404,13 @@
   .cod-step {
     font-size: 0.72rem;
   }
+}
+
+/* Der Tastatur-Skip-Link bleibt zugänglich, außerhalb des Fokus jedoch sicher unsichtbar. */
+.cod-shell .skip-link:not(:focus) {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
