@@ -288,3 +288,57 @@
     font-size: 0.84rem;
   }
 }
+
+/* Einheitliche lokale Gliederung aller neun längeren Wissensseiten. */
+.knowledge-section-nav {
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+}
+
+.knowledge-section-nav > strong {
+  display: block;
+  margin-bottom: var(--space-3);
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+.knowledge-section-nav ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.knowledge-section-nav button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-bg);
+  color: var(--color-text);
+  text-align: left;
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.knowledge-section-nav button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent-strong);
+}
+
+.knowledge-main h2[tabindex='-1']:focus {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+  .knowledge-section-nav { padding: var(--space-3); }
+  .knowledge-section-nav ol { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .knowledge-section-nav button { width: 100%; }
+}

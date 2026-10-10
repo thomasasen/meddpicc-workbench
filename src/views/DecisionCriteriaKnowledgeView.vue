@@ -7,6 +7,7 @@ import {
   decisionCriteriaKnowledge,
   valueTriangleZones,
 } from '../content/meddpicc/decisionCriteria'
+import KnowledgeSectionNav from '../components/KnowledgeSectionNav.vue'
 </script>
 
 <template>
@@ -52,6 +53,8 @@ import {
           </div>
         </aside>
       </section>
+
+      <KnowledgeSectionNav />
 
       <section class="container knowledge-layout">
         <article class="knowledge-primary-card" aria-labelledby="definition-title">

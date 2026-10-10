@@ -10,6 +10,7 @@ const recognitionConcepts = computed(() =>
     .map((id) => concepts.find((concept) => concept.id === id))
     .filter((concept) => concept !== undefined),
 )
+import KnowledgeSectionNav from '../components/KnowledgeSectionNav.vue'
 </script>
 
 <template>
@@ -52,6 +53,8 @@ const recognitionConcepts = computed(() =>
           </div>
         </aside>
       </section>
+
+      <KnowledgeSectionNav />
 
       <section class="container knowledge-layout">
         <article class="knowledge-primary-card" aria-labelledby="short-definition-title">

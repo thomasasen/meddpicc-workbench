@@ -11,6 +11,7 @@ import {
 } from '@lucide/vue'
 
 import { decisionProcessKnowledge, decisionProcessPhases } from '../content/meddpicc/decisionProcess'
+import KnowledgeSectionNav from '../components/KnowledgeSectionNav.vue'
 </script>
 
 <template>
@@ -56,6 +57,8 @@ import { decisionProcessKnowledge, decisionProcessPhases } from '../content/medd
           </div>
         </aside>
       </section>
+
+      <KnowledgeSectionNav />
 
       <section class="container knowledge-layout">
         <article class="knowledge-primary-card" aria-labelledby="definition-title">

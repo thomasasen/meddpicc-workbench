@@ -11,6 +11,7 @@ import {
 } from '@lucide/vue'
 
 import { painImplicationKnowledge as pain } from '../content/meddpicc/painImplication'
+import KnowledgeSectionNav from '../components/KnowledgeSectionNav.vue'
 </script>
 
 <template>
@@ -48,6 +49,8 @@ import { painImplicationKnowledge as pain } from '../content/meddpicc/painImplic
           <div><strong>Dein Nutzen</strong><p>{{ pain.benefit }}</p></div>
         </aside>
       </section>
+
+      <KnowledgeSectionNav />
 
       <section class="container knowledge-layout">
         <article class="knowledge-primary-card">
