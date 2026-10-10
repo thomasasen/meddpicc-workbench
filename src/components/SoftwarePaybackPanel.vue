@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { consumeMetricHandoff, consumePaybackReturn, queuePaybackReturn } from '../domain/metricBuilderHandoff'
+import { queuePaybackToBridge } from '../domain/valueBridgeHandoff'
 import { useRouter } from 'vue-router'
 import { ArrowDownToLine, ClipboardCopy, Plus, RotateCcw, Trash2 } from '@lucide/vue'
 import {
@@ -134,6 +135,14 @@ async function openMetricBuilder() {
     await router.push('/tools/metric-builder')
   } catch {
     transferMessage.value = 'Der aktuelle Payback-Entwurf konnte nicht lokal zwischengespeichert werden.'
+  }
+}
+async function transferToBridge(): Promise<void> {
+  try {
+    queuePaybackToBridge({ horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value }, window.sessionStorage)
+    await router.push('/tools/value-bridge')
+  } catch {
+    transferMessage.value = 'Value-Bridge-Übergabe nicht möglich. Maximal 15 Metrics und gültige Eingaben erforderlich.'
   }
 }
 function addMetric(formula: MetricFormula = 'direct') {
@@ -466,6 +475,7 @@ async function downloadReport(kind: 'customer' | 'finance') {
           <p class="eyebrow">2 · Customer Metrics</p>
           <h2 id="software-metrics-heading">Kundennutzen erfassen</h2>
         </div>
+        <button type="button" class="button button-secondary" @click="transferToBridge">Value Bridge erstellen</button>
         <button type="button" class="button button-secondary button-with-icon" @click="openMetricBuilder">
           <Plus :size="16" aria-hidden="true" /> Metric entwickeln
         </button>
