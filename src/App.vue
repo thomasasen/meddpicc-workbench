@@ -12,8 +12,26 @@ function handleBeforeUnload(event: BeforeUnloadEvent) {
   event.returnValue = ''
 }
 
-onMounted(() => window.addEventListener('beforeunload', handleBeforeUnload))
-onBeforeUnmount(() => window.removeEventListener('beforeunload', handleBeforeUnload))
+/**
+ * Native Selects behalten die Tastaturbedienung. Beim Scrollen über einem
+ * fokussierten Select wird der Fokus vor der Browser-Defaultaktion gelöst,
+ * damit der Wert nicht versehentlich umgeschaltet wird.
+ */
+function handleSelectWheel(event: WheelEvent) {
+  const target = event.target
+  if (target instanceof HTMLSelectElement && document.activeElement === target) {
+    target.blur()
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload)
+  document.addEventListener('wheel', handleSelectWheel, { capture: true })
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+  document.removeEventListener('wheel', handleSelectWheel, { capture: true })
+})
 </script>
 
 <template>
