@@ -566,7 +566,7 @@ async function transfer(): Promise<void> {
   margin-bottom: var(--space-6);
 }
 .metric-intro h1 {
-  max-width: 24ch;
+  max-width: 800px;
   line-height: 1.14;
   margin-bottom: var(--metric-gap-medium);
   text-wrap: pretty;
