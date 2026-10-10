@@ -151,7 +151,7 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
   heading('3. Wirtschaftliche Wirkung')
   paragraph(
     result.realizedEur === null
-      ? 'Keine konkrete wirtschaftliche Realisierung nachgewiesen. Ein möglicher Kapazitaetsgewinn wird nicht als Einsparung angesetzt.'
+      ? 'Keine konkrete wirtschaftliche Realisierung nachgewiesen. Ein möglicher Kapazitätsgewinn wird nicht als Einsparung angesetzt.'
       : euro(result.realizedEur) +
           ' pro Jahr sind als wirtschaftlich realisierbarer Anteil modelliert. Die Nachprüfung der Annahmen bleibt erforderlich.',
     { background: true },
