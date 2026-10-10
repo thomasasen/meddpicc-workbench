@@ -23,7 +23,7 @@ const LINE_HEIGHT = 14.5
 const COLORS = {
   navy: rgb(0.08, 0.15, 0.25),
   ink: rgb(0.12, 0.19, 0.29),
-  muted: rgb(0.34, 0.40, 0.48),
+  muted: rgb(0.34, 0.4, 0.48),
   blue: rgb(0.12, 0.38, 0.75),
   border: rgb(0.84, 0.88, 0.92),
   surface: rgb(0.95, 0.97, 0.98),
@@ -77,13 +77,25 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
   function newPage(): void {
     page = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT])
     page.drawRectangle({
-      x: 0, y: PAGE_HEIGHT - 92, width: PAGE_WIDTH, height: 92, color: COLORS.navy,
+      x: 0,
+      y: PAGE_HEIGHT - 92,
+      width: PAGE_WIDTH,
+      height: 92,
+      color: COLORS.navy,
     })
     page.drawText('METRIC-STECKBRIEF', {
-      x: LEFT, y: PAGE_HEIGHT - 40, size: 18, font: bold, color: COLORS.white,
+      x: LEFT,
+      y: PAGE_HEIGHT - 40,
+      size: 18,
+      font: bold,
+      color: COLORS.white,
     })
     page.drawText('KUNDENFÄHIGE DISKUSSIONSGRUNDLAGE', {
-      x: LEFT, y: PAGE_HEIGHT - 63, size: 9.2, font: normal, color: rgb(0.76, 0.83, 0.91),
+      x: LEFT,
+      y: PAGE_HEIGHT - 63,
+      size: 9.2,
+      font: normal,
+      color: rgb(0.76, 0.83, 0.91),
     })
     cursor = PAGE_HEIGHT - 120
   }
@@ -94,7 +106,14 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
 
   function text(
     value: string,
-    options: { size?: number; font?: PDFFont; color?: ReturnType<typeof rgb>; left?: number; width?: number; gap?: number } = {},
+    options: {
+      size?: number
+      font?: PDFFont
+      color?: ReturnType<typeof rgb>
+      left?: number
+      width?: number
+      gap?: number
+    } = {},
   ): void {
     if (!value.trim()) return
     const font = options.font ?? normal
@@ -123,7 +142,11 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
     const total = 12.5 + rows.length * LINE_HEIGHT + 11
     reserve(total)
     page.drawText(printable(label.toUpperCase()), {
-      x: LEFT, y: cursor, font: bold, size: 8.2, color: COLORS.muted,
+      x: LEFT,
+      y: cursor,
+      font: bold,
+      size: 8.2,
+      color: COLORS.muted,
     })
     cursor -= 16
     for (const row of rows) {
@@ -140,22 +163,38 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
     reserve(height + 18)
     const top = cursor + 12
     page.drawRectangle({
-      x: LEFT, y: top - height, width: CONTENT_WIDTH, height, color: COLORS.surface,
+      x: LEFT,
+      y: top - height,
+      width: CONTENT_WIDTH,
+      height,
+      color: COLORS.surface,
     })
     page.drawRectangle({
-      x: LEFT, y: top - height, width: 3, height, color: COLORS.blue,
+      x: LEFT,
+      y: top - height,
+      width: 3,
+      height,
+      color: COLORS.blue,
     })
     let local = top - 19
     for (const row of title) {
       page.drawText(row, {
-        x: LEFT + 16, y: local, font: bold, size: 8.4, color: COLORS.muted,
+        x: LEFT + 16,
+        y: local,
+        font: bold,
+        size: 8.4,
+        color: COLORS.muted,
       })
       local -= 12.5
     }
     local -= 8
     for (const row of body) {
       page.drawText(row, {
-        x: LEFT + 16, y: local, font: normal, size: 9.8, color: COLORS.ink,
+        x: LEFT + 16,
+        y: local,
+        font: normal,
+        size: 9.8,
+        color: COLORS.ink,
       })
       local -= LINE_HEIGHT
     }
@@ -176,14 +215,26 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
     for (const [index, value] of values.entries()) {
       const x = LEFT + index * (width + gap)
       page.drawRectangle({
-        x, y: top - height, width, height, color: COLORS.surface,
+        x,
+        y: top - height,
+        width,
+        height,
+        color: COLORS.surface,
       })
       page.drawText(value.label, {
-        x: x + 15, y: top - 21, size: 8.3, font: bold, color: COLORS.muted,
+        x: x + 15,
+        y: top - 21,
+        size: 8.3,
+        font: bold,
+        color: COLORS.muted,
       })
       wrapped[index]!.forEach((row, offset) => {
         page.drawText(row, {
-          x: x + 15, y: top - 42 - offset * 15, size: 10.1, font: bold, color: COLORS.ink,
+          x: x + 15,
+          y: top - 42 - offset * 15,
+          size: 10.1,
+          font: bold,
+          color: COLORS.ink,
         })
       })
     }
@@ -191,10 +242,11 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
   }
 
   newPage()
-  text(
-    metricTypeLabels[draft.formula] + '  |  ' + new Date().toLocaleDateString('de-DE'),
-    { size: 9, color: COLORS.muted, gap: 7 },
-  )
+  text(metricTypeLabels[draft.formula] + '  |  ' + new Date().toLocaleDateString('de-DE'), {
+    size: 9,
+    color: COLORS.muted,
+    gap: 7,
+  })
 
   section('1. Problem und Zielbild')
   labeled('Kundenproblem', draft.problem.trim() || 'Noch zu beschreiben')
@@ -232,14 +284,25 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
 
   for (const [index, p] of pdf.getPages().entries()) {
     p.drawLine({
-      start: { x: LEFT, y: 53 }, end: { x: RIGHT, y: 53 }, color: COLORS.border, thickness: 0.75,
+      start: { x: LEFT, y: 53 },
+      end: { x: RIGHT, y: 53 },
+      color: COLORS.border,
+      thickness: 0.75,
     })
     p.drawText('MODELLANNAHMEN - KEINE GARANTIE ODER BUDGETFREIGABE', {
-      x: LEFT, y: 34, size: 7.6, font: normal, color: COLORS.muted,
+      x: LEFT,
+      y: 34,
+      size: 7.6,
+      font: normal,
+      color: COLORS.muted,
     })
     const number = 'SEITE ' + (index + 1)
     p.drawText(number, {
-      x: RIGHT - bold.widthOfTextAtSize(number, 7.6), y: 34, size: 7.6, font: bold, color: COLORS.muted,
+      x: RIGHT - bold.widthOfTextAtSize(number, 7.6),
+      y: 34,
+      size: 7.6,
+      font: bold,
+      color: COLORS.muted,
     })
   }
   return pdf.save()
