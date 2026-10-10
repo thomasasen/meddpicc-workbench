@@ -68,7 +68,7 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
     page = pdf.addPage([WIDTH, HEIGHT])
     page.drawRectangle({ x: 0, y: HEIGHT - 85, width: WIDTH, height: 85, color: navy })
     page.drawText('METRIC-STECKBRIEF', { x: LEFT, y: HEIGHT - 39, font: bold, size: 18, color: white })
-    page.drawText('KUNDENFAEHIGE DISKUSSIONSGRUNDLAGE', {
+    page.drawText('KUNDENFÄHIGE DISKUSSIONSGRUNDLAGE', {
       x: LEFT,
       y: HEIGHT - 59,
       font: regular,
@@ -132,7 +132,7 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
   if (draft.consequence.trim()) pair('Auswirkung', draft.consequence)
   pair('Angestrebter Zustand', draft.outcome.trim() || 'Noch offen')
 
-  heading('2. Messbare Veraenderung')
+  heading('2. Messbare Veränderung')
   paragraph(
     'Vorher: ' +
       (result.beforeText || 'nicht beziffert') +
@@ -140,7 +140,7 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
       (result.afterText || 'nicht beziffert'),
     { background: true },
   )
-  paragraph(result.calculation || 'Ausgangsdaten und Rechenweg sind noch nicht vollstaendig.')
+  paragraph(result.calculation || 'Ausgangsdaten und Rechenweg sind noch nicht vollständig.')
   if (draft.formula !== 'qualitative') {
     pair(
       'Rechnerisches Potenzial',
@@ -151,21 +151,21 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
   heading('3. Wirtschaftliche Wirkung')
   paragraph(
     result.realizedEur === null
-      ? 'Keine konkrete wirtschaftliche Realisierung nachgewiesen. Ein moeglicher Kapazitaetsgewinn wird nicht als Einsparung angesetzt.'
+      ? 'Keine konkrete wirtschaftliche Realisierung nachgewiesen. Ein möglicher Kapazitaetsgewinn wird nicht als Einsparung angesetzt.'
       : euro(result.realizedEur) +
-          ' pro Jahr sind als wirtschaftlich realisierbarer Anteil modelliert. Die Nachpruefung der Annahmen bleibt erforderlich.',
+          ' pro Jahr sind als wirtschaftlich realisierbarer Anteil modelliert. Die Nachprüfung der Annahmen bleibt erforderlich.',
     { background: true },
   )
   pair('Mechanismus', mechanismLabels[draft.mechanism])
-  if (draft.realizationNote.trim()) paragraph('Begruendung: ' + draft.realizationNote.trim())
+  if (draft.realizationNote.trim()) paragraph('Begründung: ' + draft.realizationNote.trim())
 
   heading('4. Datenbasis und offene Punkte')
   pair('Herkunft', customerEvidenceLabels[draft.evidence])
   if (draft.assumptionNote.trim()) paragraph('Grundlage: ' + draft.assumptionNote)
-  if (result.questions.length) paragraph('Noch zu klaeren: ' + result.questions.join(' '))
-  if (result.issues.length) paragraph('Fehlende / ungueltige Angaben: ' + result.issues.join(' '))
+  if (result.questions.length) paragraph('Noch zu klären: ' + result.questions.join(' '))
+  if (result.issues.length) paragraph('Fehlende / ungültige Angaben: ' + result.issues.join(' '))
   if (!result.complete)
-    paragraph('UNVOLLSTAENDIG: Dieser Steckbrief enthaelt keine abgeschlossene Modellrechnung.', { bold: true })
+    paragraph('UNVOLLSTÄNDIG: Dieser Steckbrief enthält keine abgeschlossene Modellrechnung.', { bold: true })
 
   for (const [index, p] of pdf.getPages().entries()) {
     p.drawLine({ start: { x: LEFT, y: 49 }, end: { x: RIGHT, y: 49 }, thickness: 0.75, color: rgb(0.85, 0.89, 0.92) })
