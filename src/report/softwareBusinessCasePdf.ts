@@ -1,7 +1,7 @@
 import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf-lib'
 import { summarizeBusinessCase, economicInterpretation, type CaseSummary } from '../domain/businessCase'
 import type { SoftwarePaybackInput } from '../domain/softwarePayback'
-import { drawReportFooter } from './reportChrome'
+import { drawReportFooter, drawReportMasthead } from './reportChrome'
 import {
   compareBusinessScenarios,
   describeScenarioAssumptions,
@@ -94,9 +94,18 @@ function para(s: State, v: string, f: Fonts, size = 9, width = R - L, spacing = 
 }
 function page(pdf: PDFDocument, f: Fonts, chapter: string): State {
   const p = pdf.addPage([PW, PH])
-  p.drawRectangle({ x: 0, y: PH - 89, width: PW, height: 89, color: navy })
-  draw(p, 'SOFTWARE INVESTMENT / BUSINESS CASE', L, PH - 35, 10, f.bold, white)
-  draw(p, chapter.toUpperCase(), L, PH - 57, 9, f.normal, rgb(0.68, 0.82, 1))
+  drawReportMasthead({
+    page: p,
+    normal: f.normal,
+    bold: f.bold,
+    width: PW,
+    height: PH,
+    left: L,
+    right: R,
+    headerHeight: 89,
+    title: 'SOFTWARE INVESTMENT / BUSINESS CASE',
+    subtitle: chapter.toUpperCase(),
+  })
   return { p, y: PH - 117, pdf, f, chapter }
 }
 /** Keep variable customer text and its following elements above the footer. */
