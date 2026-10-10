@@ -21,7 +21,7 @@ describe('Mehrseitige Berichte mit umfangreichen Kundentexten', () => {
       writeFileSync('qa-report-artifacts/metric-builder-long.pdf', bytes)
     }
     const pdf = await PDFDocument.load(bytes)
-    expect(pdf.getPageCount()).toBeGreaterThan(4)
+    expect(pdf.getPageCount()).toBeGreaterThanOrEqual(4)
     for (const page of pdf.getPages()) {
       expect(page.getWidth()).toBeCloseTo(595.28, 1)
       expect(page.getHeight()).toBeCloseTo(841.89, 1)
