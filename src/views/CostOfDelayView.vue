@@ -461,32 +461,39 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
               <span><i class="cod-legend-base"></i> Ohne Verschiebung</span>
               <span><i class="cod-legend-delay"></i> Mit Verschiebung</span>
             </div>
-            <div class="cod-chart-viewport" tabindex="0" role="region" aria-label="Diagramm der kumulierten Nutzenverläufe, horizontal scrollbar">
-            <svg
-              viewBox="0 0 700 238"
-              role="img"
-              :aria-label="'Kumulierter Nutzen mit und ohne ' + selected.delayMonths + ' Monate Verschiebung'"
+            <div
+              class="cod-chart-viewport"
+              tabindex="0"
+              role="region"
+              aria-label="Diagramm der kumulierten Nutzenverläufe, horizontal scrollbar"
             >
-              <line x1="36" y1="196" x2="662" y2="196" stroke="#8d9bab" stroke-width="1" />
-              <line x1="36" y1="28" x2="36" y2="196" stroke="#8d9bab" stroke-width="1" />
-              <polyline :points="chartPoints('baseCumulativeEur')" fill="none" stroke="#2256a5" stroke-width="3" />
-              <polyline
-                :points="chartPoints('delayedCumulativeEur')"
-                fill="none"
-                stroke="#c07932"
-                stroke-width="3"
-                stroke-dasharray="7 4"
-              />
-              <text x="36" y="222" font-size="12" fill="currentColor">Monat 0</text>
-              <text x="662" y="222" text-anchor="end" font-size="12" fill="currentColor">
-                Monat {{ draft.horizonMonths }}
-              </text>
-              <text x="44" y="19" font-size="12" fill="currentColor">Kumulierter Nutzen (EUR)</text>
-              <text x="44" y="39" font-size="12" fill="currentColor">{{ compactEuro(chartMaximum) }}</text>
-              <text x="44" y="190" font-size="12" fill="currentColor">0 €</text>
-            </svg>
+              <svg
+                viewBox="0 0 700 238"
+                role="img"
+                :aria-label="'Kumulierter Nutzen mit und ohne ' + selected.delayMonths + ' Monate Verschiebung'"
+              >
+                <line x1="36" y1="196" x2="662" y2="196" stroke="#8d9bab" stroke-width="1" />
+                <line x1="36" y1="28" x2="36" y2="196" stroke="#8d9bab" stroke-width="1" />
+                <polyline :points="chartPoints('baseCumulativeEur')" fill="none" stroke="#2256a5" stroke-width="3" />
+                <polyline
+                  :points="chartPoints('delayedCumulativeEur')"
+                  fill="none"
+                  stroke="#c07932"
+                  stroke-width="3"
+                  stroke-dasharray="7 4"
+                />
+                <text x="36" y="222" font-size="12" fill="currentColor">Monat 0</text>
+                <text x="662" y="222" text-anchor="end" font-size="12" fill="currentColor">
+                  Monat {{ draft.horizonMonths }}
+                </text>
+                <text x="44" y="19" font-size="12" fill="currentColor">Kumulierter Nutzen (EUR)</text>
+                <text x="44" y="39" font-size="12" fill="currentColor">{{ compactEuro(chartMaximum) }}</text>
+                <text x="44" y="190" font-size="12" fill="currentColor">0 €</text>
+              </svg>
             </div>
-            <p class="cod-chart-scroll-hint">Auf kleinen Bildschirmen: Diagramm seitlich scrollen. Die genauen Werte stehen im Monatsvergleich.</p>
+            <p class="cod-chart-scroll-hint">
+              Auf kleinen Bildschirmen: Diagramm seitlich scrollen. Die genauen Werte stehen im Monatsvergleich.
+            </p>
             <p class="cod-muted">
               Die Kurven verwenden tatsächliche Monatswerte einschließlich Nutzenstart und Ramp-up. Exakte EUR-Werte
               stehen in der Tabelle.
