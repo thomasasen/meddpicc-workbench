@@ -40,9 +40,19 @@ Stand: 10.10.2026. Die folgenden Bewertungen sind **simulierte Reviews**, keine 
 | Champion | Wer hat „mit dem Kunden geprüft“ entschieden? | Nur manuelle Auswahl, Quellenhinweis; keine automatische Plausibilitätsbescheinigung |
 | Economic Buyer | Kann derselbe Effekt zweimal angerechnet werden? | Identische Wirkungsgruppe und vorhandene Engineprüfung, keine Voraktivierung |
 
-## Simuliertes Red Team 3: nach visueller Abnahme
+## Simuliertes Red Team 3: auf Grundlage echter visueller Originalartefakte
 
-**Ausstehend.** Diese Runde darf erst nach technischen Quality Gates, echten Desktop-/Mobil-Screenshots und gerenderten PDF-Originalseiten eingetragen werden. Grün bei Browser-Tests ist keine menschliche Sichtprüfung.
+Am 10.10.2026 wurden die von GitHub Actions erzeugten Original-Screenshots **metric-builder-result-desktop-chromium.png** und **metric-builder-result-mobile-chromium.png** sowie der einseitige Original-PDF-Steckbrief tatsächlich heruntergeladen, die PDF-Seite als PNG gerendert und visuell betrachtet. Die folgenden Rollenchecks bleiben **simulierte Fachperspektiven**, keine Kundentests oder empirischen Nachweise.
+
+| Perspektive | Befund der visuellen Prüfung | Maßnahme / Restrisiko |
+| --- | --- | --- |
+| Strategic Account Manager | Drei Stufen schnell erfassbar, CRM-Beispiel und Discovery-Fragen direkt sichtbar; mobil langer, aber zusammenhängender Scrollbereich ohne erkennbare Abschneidung. | Progressive Felder beibehalten; Gesprächsdauer nicht empirisch getestet |
+| CFO / Controlling | 91.666,67 EUR Kapazität stehen explizit neben „Nicht nachgewiesen“ als monetäre Realisierung; im PDF ebenfalls klar abgegrenzt. | Reale Kostenbelege und Budgets müssen extern geprüft werden |
+| COO | 12 auf 8 Minuten und 25.000 Vorgänge/Jahr mit nachvollziehbarem Rechenweg lesbar, auch mobil. | Ist- und Zielwerte bleiben Annahmen bis zur Prüfung |
+| Kundenseitiger Champion | Quellenstatus und konkrete noch offene Fragen bleiben in Metric Card und PDF sichtbar. | PDF zeigt ursprüngliche Umschreibung einiger Umlaute (ae/oe); Korrektur auf echte Umlaute eingecheckt, erneute Renderprüfung erforderlich |
+| Economic Buyer | Ausgangsproblem, Nutzenpotenzial und konservative Nichtanrechnung sind klar, es gibt keine künstliche ROI-Garantie. | Der Tastatur-Sprunglink erschien bei der Full-Page-Screenshot-Erstellung außerhalb seiner üblichen Position; per CSS-Clip bei inaktivem Zustand behoben, Tastaturfunktion erhalten, erneute Screenshotprüfung erforderlich |
+
+**Visuelles Urteil vor Nachprüfung der Korrekturen:** keine erkennbaren abgeschnittenen Eingaben oder Ergebniszahlen auf Desktop/Mobil. Die PDF-Seite ist vollständig lesbar. Das dritte Red Team ist fachlich durchgeführt; **endgültige visuelle Abnahme erst nach erneuter Bildprüfung des korrigierten Stands**.
 
 ## Fiktive Beispiele
 
