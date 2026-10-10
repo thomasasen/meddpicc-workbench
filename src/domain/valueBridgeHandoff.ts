@@ -100,7 +100,7 @@ export function queuePaybackToBridge(input: SoftwarePaybackInput, storage: Pick<
           : m.treatment === 'nonfinancial'
             ? 'qualitative'
             : value !== null
-              ? 'saving'
+              ? 'unclassified'
               : 'potential'
     return {
       ...blankBridgeMetric(m.id),
