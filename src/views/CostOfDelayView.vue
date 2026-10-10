@@ -35,7 +35,10 @@ const money = (value: number): string =>
 type AmountKey = 'annualBenefitEur' | 'legacyMonthlyEur' | 'projectOnceEur' | 'extraCostPerMonthEur'
 function setAmount(key: AmountKey, event: Event) {
   const value = (event.target as HTMLInputElement).value
-  const factor = key === 'annualBenefitEur' && draft.value.benefitKind === 'recurring' && benefitEntryPeriod.value === 'monthly' ? 12 : 1
+  const factor =
+    key === 'annualBenefitEur' && draft.value.benefitKind === 'recurring' && benefitEntryPeriod.value === 'monthly'
+      ? 12
+      : 1
   draft.value[key] = value.trim() === '' ? null : Number(value) * factor
 }
 function setEndMonth(event: Event) {
@@ -197,7 +200,13 @@ onMounted(() => {
                   : 'Realisierbarer Nutzen in EUR/' + (benefitEntryPeriod === 'monthly' ? 'Monat' : 'Jahr')
               }}</span>
               <input
-                :value="draft.annualBenefitEur === null ? '' : draft.benefitKind === 'recurring' && benefitEntryPeriod === 'monthly' ? draft.annualBenefitEur / 12 : draft.annualBenefitEur"
+                :value="
+                  draft.annualBenefitEur === null
+                    ? ''
+                    : draft.benefitKind === 'recurring' && benefitEntryPeriod === 'monthly'
+                      ? draft.annualBenefitEur / 12
+                      : draft.annualBenefitEur
+                "
                 type="number"
                 inputmode="decimal"
                 min="0"

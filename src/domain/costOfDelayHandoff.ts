@@ -26,7 +26,9 @@ export function queueCostOfDelayHandoff(
       'Realisierungsmechanismus: ' + mechanismLabels[draft.mechanism],
       draft.assumptionNote,
       draft.realizationNote,
-    ].filter(Boolean).join(' | '),
+    ]
+      .filter(Boolean)
+      .join(' | '),
     effectGroup: draft.effectGroup,
   }
   storage.setItem(KEY, JSON.stringify(input))
