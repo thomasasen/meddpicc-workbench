@@ -270,3 +270,10 @@ Siehe [Value Bridge Quellenmatrix und Gap-Analyse](VALUE_BRIDGE_SOURCE_AND_RED_T
 - Noch offen: vollständiger Report-Body-Umbau, alle produktiven Screens im einheitlichen Design, alle 4 Viewports und barrierefreie Interaktionen, separate visuelle Abnahme.
 - Neue Änderungen bleiben bis zur ausdrücklichen Freigabe ungemergt.
 
+
+### Verifizierter Qualitätsstand PR #64 – 11.10.2026
+
+[CI #38093731202](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38093731202) erfolgreich: 331 Unit-Tests, 195 Playwright-Tests, 1 Skip; Format/Lint/Build/Pages bestanden. Alle **18 Seiten** der fünf echten PDF-Exporte gerendert und Originaldateien auf dem Draft-Branch abgelegt. Der Kundenbericht kann mit einem Langtext-/Metric-Anhang über vier Seiten hinauswachsen.
+
+**Offen:** keine vollständige manuelle Originalbildabnahme, keine abgeschlossene PDF-Unicode-/Accessibility-Prüfung, der umfassende Report-Body- und UI-Redesign-Gesamtauftrag bleibt nur teilweise erfüllt. Weitere Details in `docs/REDESIGN_ACCEPTANCE_MATRIX_2026-10-11.md`. Kein Merge nach `main`.
+
