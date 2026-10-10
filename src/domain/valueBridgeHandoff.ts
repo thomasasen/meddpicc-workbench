@@ -41,6 +41,7 @@ export function queueBuilderToBridge(
     name: draft.process || draft.problem,
     before: result.beforeText,
     after: result.afterText,
+    calculation: result.calculation,
     evidence: draft.evidence,
     source: [draft.assumptionNote, draft.realizationNote].filter(Boolean).join(' | '),
     effectGroup: draft.effectGroup,
