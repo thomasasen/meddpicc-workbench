@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { PDFDocument } from 'pdf-lib'
 import { mkdirSync, writeFileSync } from 'node:fs'
-import { buildMetricBuilderPdf } from './metricBuilderPdf'
-import { buildCostOfDelayPdf } from './costOfDelayPdf'
-import { emptyMetricDraft, metricDemos } from '../domain/metricBuilder'
-import { costOfDelayDemos, calculateCostOfDelay } from '../domain/costOfDelay'
+import { buildMetricBuilderPdf } from '../src/report/metricBuilderPdf'
+import { buildCostOfDelayPdf } from '../src/report/costOfDelayPdf'
+import { emptyMetricDraft, metricDemos } from '../src/domain/metricBuilder'
+import { costOfDelayDemos, calculateCostOfDelay } from '../src/domain/costOfDelay'
 
 describe('Mehrseitige Berichte mit umfangreichen Kundentexten', () => {
   it('paginiert die vollständigen Datenquellen des Metric Builders', async () => {
