@@ -166,6 +166,8 @@ async function transferToBridge(): Promise<void> {
     message.value = 'Value-Bridge-Übergabe nicht möglich. Bitte Eingaben prüfen.'
   }
 }
+import ToolStepNavigation from '../components/ToolStepNavigation.vue'
+
 </script>
 
 <template>
@@ -196,19 +198,11 @@ async function transferToBridge(): Promise<void> {
         </p>
       </section>
 
-      <nav class="metric-steps" aria-label="Metric entwickeln">
-        <button
-          v-for="(label, index) in ['1 · Problem', '2 · Messung', '3 · Wirkung & Evidenz']"
-          :key="label"
-          type="button"
-          class="metric-step"
-          :class="{ 'metric-step--active': step === index + 1 }"
-          :aria-current="step === index + 1 ? 'step' : undefined"
-          @click="step = (index + 1) as 1 | 2 | 3"
-        >
-          {{ label }}
-        </button>
-      </nav>
+      <ToolStepNavigation
+        v-model="step"
+        label="Metric entwickeln"
+        :steps="['1 · Problem', '2 · Messung', '3 · Wirkung & Evidenz']"
+      />
 
       <section v-if="step === 1" class="metric-panel" aria-labelledby="metric-problem-title">
         <p class="eyebrow">Schritt 1 · Discovery</p>

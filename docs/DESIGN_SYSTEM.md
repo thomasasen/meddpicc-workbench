@@ -236,3 +236,8 @@ Die gemeinsame CSS-Grundlage ist **nicht** die vollständige UI-Abnahme jeder Ro
 
 Die Reflow-Regeln in `src/styles/redesignFoundations.css` ergänzen bestehende Panels und Feldgruppen um begrenzbare Grid-/Flex-Kinder, umbruchfähige Bedienelemente und tabellarische Finanzzahlen. Ein wiederverwendbarer Hinweisstil `.tool-evidence-note` trennt einen Modellwert von einer Validierungsbestätigung. Für einzelne Ansichten müssen visuelle Abnahmen folgen; allein die Existenz dieser Klassen belegt keinen bestandenen Responsive-Test.
 
+
+### Gemeinsamer mehrstufiger Workflow
+
+`src/components/ToolStepNavigation.vue` bildet drei interaktive Schritte aus einer einzigen tastaturbedienbaren, semantischen Navigation ab. Der aktive Schritt verwendet `aria-current="step"`, und der Klick ändert ausschließlich den aktuellen Schritt. Der Draft/Input liegt weiterhin in den Elternkomponenten, damit kein Wechsel Daten verwirft. Eingesetzt in Metric Builder und Cost of Delay; weitere Übernahme nur nach Prüfung der jeweiligen Anforderungen.
+

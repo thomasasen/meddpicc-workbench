@@ -127,6 +127,8 @@ async function transferToBridge(): Promise<void> {
     notice.value = 'Value-Bridge-Übergabe nicht möglich.'
   }
 }
+import ToolStepNavigation from '../components/ToolStepNavigation.vue'
+
 </script>
 
 <template>
@@ -164,19 +166,11 @@ async function transferToBridge(): Promise<void> {
         <p v-if="notice" role="status" class="cod-notice">{{ notice }}</p>
       </section>
 
-      <nav class="cod-steps" aria-label="Cost of Delay berechnen">
-        <button
-          v-for="(label, index) in ['1 · Ausgangspunkt', '2 · Verzögerung', '3 · Konsequenz']"
-          :key="label"
-          type="button"
-          class="cod-step"
-          :class="{ 'cod-step--current': step === index + 1 }"
-          :aria-current="step === index + 1 ? 'step' : undefined"
-          @click="step = (index + 1) as 1 | 2 | 3"
-        >
-          {{ label }}
-        </button>
-      </nav>
+      <ToolStepNavigation
+        v-model="step"
+        label="Cost of Delay berechnen"
+        :steps="['1 · Ausgangspunkt', '2 · Verzögerung', '3 · Konsequenz']"
+      />
 
       <section v-if="step === 1" class="cod-panel" aria-labelledby="cod-input-title">
         <p class="eyebrow">Schritt 1 · Kundenwirkung</p>
