@@ -9,7 +9,6 @@ const euro = (n: number): string =>
   }).format(n)
 const ink = rgb(0.1, 0.16, 0.25)
 const gray = rgb(0.35, 0.41, 0.49)
-const blue = rgb(0.12, 0.38, 0.75)
 const lineColor = rgb(0.84, 0.88, 0.92)
 const W = 595.28
 const H = 841.89
