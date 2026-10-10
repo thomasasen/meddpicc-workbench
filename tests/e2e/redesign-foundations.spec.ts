@@ -37,3 +37,15 @@ test('Ein fokussiertes Select ändert seinen Wert nicht durch Scrollen', async (
   await expect(select).toHaveValue('false')
   await expect(select).not.toBeFocused()
 })
+
+test('Quick Payback: jährliche Nutzen-Kosten-Grafik bleibt textuell verständlich', async ({ page }) => {
+  await page.goto('/#/tools/quick-payback')
+  await page.getByRole('button', { name: 'Fiktives Beispiel einsetzen' }).click()
+  const chart = page.getByRole('figure', {
+    name: 'Vergleich jährlicher Nutzen und zusätzlicher Betriebskosten',
+  })
+  await expect(chart).toBeVisible()
+  await expect(chart.getByText('Angesetzter realisierbarer Bruttonutzen')).toBeVisible()
+  await expect(chart.getByText('Zusätzliche laufende Betriebskosten')).toBeVisible()
+  await expect(chart.getByText('Die Darstellung zeigt keine realisierten Einsparungen.', { exact: false })).toBeVisible()
+})
