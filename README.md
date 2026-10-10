@@ -7,6 +7,10 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 > **Was hilft mir bei meiner aktuellen Aufgabe – und wie komme ich schnell zu einem brauchbaren Ergebnis?**
 
 
+### Metric Builder – Value & Metrics (Feature-Branch)
+
+Der Metric Builder führt über Problem, Before/After und wirtschaftliche Realisierung zu einer überprüfbaren Metric Card. Alle sieben Metric-Typen verwenden die bestehenden Software-Payback-Formeln. Reine Kapazität, Risiko und qualitative Effekte werden nicht automatisch monetarisiert. Ein kundenfähiger PDF-Steckbrief entsteht lokal im Browser. Die ausdrückliche Übernahme in Software-Payback fügt nur **nicht aktivierte** Metrics hinzu; vorhandene Kosten bleiben bei der vorgesehenen Rücknavigation erhalten. Quellen, Formeln und fachliche Abnahme: [Metric Builder Red Team](docs/METRIC_BUILDER_RED_TEAM.md). Stand: Feature-Branch mit abgeschlossener technischer und visueller Abnahme ([CI #38007800785](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38007800785): 115 Playwright-Tests bestanden, 1 übersprungen, Format/Lint/Unit/Build/Pages/PDF erfolgreich); PR #60 wartet auf ausdrückliche Nutzerfreigabe, nicht in `main`.
+
 ### Metrics – Knowledge und Checklist
 
 **Umgesetzt mit PR #45: fachlich mit Whyte und Lahoutifard abgeglichen, technische CI #412 grün und Desktop-/Mobile-Screenshots geprüft.**
@@ -66,7 +70,7 @@ Die zugehörige [Demo-Opportunity](examples/demo-opportunity.meddpicc) verwendet
 
 ### Business-Case-Stresstest – Economic-Buyer-Szenarien (PR #59, 10.10.2026)
 
-**Im Feature-Branch, nicht in `main`:** [PR #59](https://github.com/thomasasen/meddpicc-workbench/pull/59). Die Software-Payback-Engine nutzt weiterhin die V4-Basisrechnung. Neu sind ein konservativer und ein optimistischer Fall mit einzeln editierbaren Änderungen bei Kundennutzen, Einmalkosten und Nutzenverzögerung. Ausgewählte Variante, KPI-Zusammenfassung, V4-Wertverlauf und Kunden-PDF basieren auf derselben Monatsrechnung; die Basis-Eingaben bleiben unverändert. Kündigungs- und Lizenztermine ändern sich nicht automatisch.
+**In `main` integriert:** [PR #59](https://github.com/thomasasen/meddpicc-workbench/pull/59). Die Software-Payback-Engine nutzt weiterhin die V4-Basisrechnung. Neu sind ein konservativer und ein optimistischer Fall mit einzeln editierbaren Änderungen bei Kundennutzen, Einmalkosten und Nutzenverzögerung. Ausgewählte Variante, KPI-Zusammenfassung, V4-Wertverlauf und Kunden-PDF basieren auf derselben Monatsrechnung; die Basis-Eingaben bleiben unverändert. Kündigungs- und Lizenztermine ändern sich nicht automatisch.
 
 - Im Abschnitt **„Wie belastbar ist die Wirtschaftlichkeit?“** werden Amortisation, Endsaldo und Abweichung für alle drei Fälle ausgewiesen. Die V4-Fortführung wird für den aktiven Fall separat und nur unter erfüllten Bedingungen dargestellt.
 - **Kundenbericht 4 Seiten** einschließlich übersichtlichem Szenariovergleich; **Finance-Anhang** mit vollständiger Basis-Herleitung und eigenem Sensitivitätskapitel. Alle gerenderten Beispielseiten, Original-PDFs und Desktop-/Mobilbilder sind in der [CI-Abnahme](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38003943054) dokumentiert.
@@ -140,7 +144,7 @@ Tools erledigen eine konkrete Aufgabe: berechnen, vorbereiten, strukturieren ode
 | Funktion | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
 | **Quick Payback** | ✅ In main | Schneller Payback und optionaler Softwareprojekt-Modus mit zeitlichem SaaS-/Nutzenverlauf und Kunden-Metrics. | Du kannst dem Kunden schnell und verständlich zeigen, **wann der Break-even erreicht wird**, ohne selbst Formeln oder Excel aufzubauen. |
-| **Metric Builder** | 🟡 Als Nächstes | Hilft, aus einem Pain oder gewünschten Outcome eine belastbare, nachvollziehbare Kennzahl abzuleiten. | Du kommst schneller von Aussagen wie „das kostet uns viel Zeit“ zu einer Metric, mit der sich ein Business Case wirklich begründen lässt. |
+| **Metric Builder** | 🟡 PR #60 geprüft, wartet auf Freigabe | Hilft, aus einem Pain oder gewünschten Outcome eine belastbare, nachvollziehbare Kennzahl abzuleiten. | Du kommst schneller von Aussagen wie „das kostet uns viel Zeit“ zu einer Metric, mit der sich ein Business Case wirklich begründen lässt. |
 | **Cost of Delay** | 🟡 Als Nächstes | Berechnet, welchen wirtschaftlichen Wert der Kunde pro Woche oder Monat verliert, wenn sich die Veränderung verzögert. | Du kannst **Why now?** quantifizieren und Dringlichkeit mit wirtschaftlichen Auswirkungen statt nur mit Bauchgefühl begründen. |
 | **Business Case / Value Bridge** | 🟡 Als Nächstes | Führt Nutzen, Kosten, Annahmen und relevante Metrics zu einem nachvollziehbaren Business Case zusammen. | Du erhältst schneller eine belastbare Grundlage für die Kundendiskussion und kannst Value konsistent gegenüber Management und Economic Buyer darstellen. |
 

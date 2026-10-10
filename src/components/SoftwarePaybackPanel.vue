@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { consumeMetricHandoff, consumePaybackReturn, queuePaybackReturn } from '../domain/metricBuilderHandoff'
+import { useRouter } from 'vue-router'
 import { ArrowDownToLine, ClipboardCopy, Plus, RotateCcw, Trash2 } from '@lucide/vue'
 import {
   annualMetricPotential,
@@ -25,9 +27,26 @@ import {
   type ScenarioSettings,
 } from '../domain/businessCaseScenarios'
 
+const router = useRouter()
 const costs = ref<SoftwareCost[]>([])
 const metrics = ref<CustomerMetric[]>([])
+const transferMessage = ref('')
 const horizon = ref<36 | 60>(36)
+onMounted(() => {
+  try {
+    const snapshot = consumePaybackReturn(window.sessionStorage)
+    if (snapshot) {
+      costs.value = snapshot.costs
+      metrics.value = snapshot.metrics
+      horizon.value = snapshot.horizonMonths
+    }
+    const transfer = consumeMetricHandoff(window.sessionStorage, metrics.value, costs.value, horizon.value)
+    metrics.value.push(...transfer.imported)
+    transferMessage.value = transfer.message
+  } catch {
+    transferMessage.value = 'Die lokale Metric-Übergabe ist nicht verfügbar.'
+  }
+})
 const selectedScenario = ref<BusinessScenarioId>('base')
 const configurableScenarioIds: Array<'conservative' | 'optimistic'> = ['conservative', 'optimistic']
 const scenarioSettings = ref<ScenarioSettings>({
@@ -105,6 +124,17 @@ function addCost(kind: CostKind) {
     startMonth: kind === 'one-time' ? 0 : 1,
     effectGroup: kind === 'avoided-legacy' ? id('legacy') : undefined,
   })
+}
+async function openMetricBuilder() {
+  try {
+    queuePaybackReturn(
+      { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
+      window.sessionStorage,
+    )
+    await router.push('/tools/metric-builder')
+  } catch {
+    transferMessage.value = 'Der aktuelle Payback-Entwurf konnte nicht lokal zwischengespeichert werden.'
+  }
 }
 function addMetric(formula: MetricFormula = 'direct') {
   metrics.value.push(newMetric(id('metric'), formula))
@@ -436,11 +466,15 @@ async function downloadReport(kind: 'customer' | 'finance') {
           <p class="eyebrow">2 · Customer Metrics</p>
           <h2 id="software-metrics-heading">Kundennutzen erfassen</h2>
         </div>
+        <button type="button" class="button button-secondary button-with-icon" @click="openMetricBuilder">
+          <Plus :size="16" aria-hidden="true" /> Metric entwickeln
+        </button>
         <button type="button" class="button button-primary button-with-icon" @click="addMetric()">
           <Plus :size="16" aria-hidden="true" /> Metric hinzufügen
         </button>
       </div>
       <p class="software-muted">Eine Kennzahl pro Wirkung. Nur wirtschaftlich belegbare EUR-Effekte anrechnen.</p>
+      <p v-if="transferMessage" class="software-muted" role="status">{{ transferMessage }}</p>
       <p v-if="metrics.length === 0" class="software-empty">
         <strong>Metric hinzufügen</strong> wählen. Als Einstieg reicht eine jährliche Einsparung in EUR.
       </p>
