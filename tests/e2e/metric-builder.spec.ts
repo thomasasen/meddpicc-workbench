@@ -11,9 +11,12 @@ test('Metric Builder: Discovery, leere Werte und geführter Ablauf', async ({ pa
   await entry.click()
   await expect(page).toHaveURL(/#\/tools\/metric-builder/)
   await expect(page.getByRole('heading', { name: 'Vom Kundenproblem zur belastbaren Metric' })).toBeVisible()
+  await expect(page.locator('.metric-result')).toHaveCount(0)
   await page.getByRole('button', { name: 'Weiter', exact: false }).click()
+  await expect(page.locator('.metric-result')).toHaveCount(0)
   await expect(page.getByText('Kein verlässlicher finanzieller Potenzialwert ableitbar.')).toBeVisible()
   await page.getByRole('button', { name: 'Weiter', exact: false }).click()
+  await expect(page.locator('.metric-result')).toBeVisible()
   await expect(
     page.getByText('Unvollständig: Es wird kein abgeschlossener finanzieller Business Case behauptet.'),
   ).toBeVisible()
