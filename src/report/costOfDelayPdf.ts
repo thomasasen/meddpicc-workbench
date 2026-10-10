@@ -1,6 +1,6 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
 import { type CostOfDelayInput, type DelayScenario, type CostOfDelayResult } from '../domain/costOfDelay'
-import { drawReportFooter } from './reportChrome'
+import { drawReportFooter, drawReportMasthead } from './reportChrome'
 
 const euro = (n: number): string =>
   new Intl.NumberFormat('de-DE', {
@@ -61,14 +61,17 @@ export async function buildCostOfDelayPdf(
 
   function newPage() {
     page = pdf.addPage([W, H])
-    page.drawRectangle({ x: 0, y: H - 88, width: W, height: 88, color: ink })
-    page.drawText('COST OF DELAY', { x: L, y: H - 39, size: 20, color: rgb(1, 1, 1), font: bold })
-    page.drawText('WIRTSCHAFTLICHE AUSWIRKUNG EINER VERSCHIEBUNG', {
-      x: L,
-      y: H - 59,
-      size: 9,
-      color: rgb(0.79, 0.84, 0.91),
-      font: regular,
+    drawReportMasthead({
+      page,
+      normal: regular,
+      bold,
+      width: W,
+      height: H,
+      left: L,
+      right: R,
+      headerHeight: 88,
+      title: 'COST OF DELAY',
+      subtitle: 'WIRTSCHAFTLICHE AUSWIRKUNG EINER VERSCHIEBUNG',
     })
     y = H - 115
   }
