@@ -430,7 +430,7 @@ async function transfer(): Promise<void> {
       <p v-if="demoName" class="metric-demo-banner">Fiktives Beispiel · nicht kundenseitig validiert.</p>
       <p v-if="message" class="metric-feedback" role="status">{{ message }}</p>
 
-      <section class="metric-result metric-panel" aria-labelledby="metric-card-title">
+      <section v-if="step === 3" class="metric-result metric-panel" aria-labelledby="metric-card-title">
         <p class="eyebrow">Metric Card · aktueller Stand</p>
         <h2 id="metric-card-title">{{ draft.process.trim() || 'Messbare Veränderung entwickeln' }}</h2>
         <p>{{ draft.problem.trim() || 'Beschreibe zunächst das konkrete Kundenproblem.' }}</p>
