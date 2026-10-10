@@ -81,6 +81,16 @@ describe('Value Bridge: Wirkungs- und Evidenzlogik', () => {
     expect(evaluateValueBridge(input).financial).toBeNull()
   })
 
+  it('verlangt die Herleitung des monetarisierten Jahreswertes', () => {
+    const input = structuredClone(valueBridgeDemos.service!)
+    input.metrics[0]!.calculation = ''
+    const result = evaluateValueBridge(input)
+    expect(result.issues.join(' ')).toContain('Herleitung')
+    expect(result.financial).toBeNull()
+    input.metrics[0]!.calculation = '(6000 - 3000) mal 12 = 36000'
+    expect(evaluateValueBridge(input).issues).toEqual([])
+  })
+
   it('erzwingt eine belegte Realisierung und verbietet Überschreiten des Potenzials', () => {
     const input = structuredClone(valueBridgeDemos.service!)
     input.metrics[0]!.realization = ''
