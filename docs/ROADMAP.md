@@ -351,3 +351,17 @@ Siehe [Cost-of-Delay-Review](COST_OF_DELAY_SOURCE_AND_RED_TEAM.md).
 - [ ] Ausdrückliche Nutzerfreigabe, danach erst Merge nach `main`
 
 [Source-QA, Gap-Analyse und simulierte Red-Teams](VALUE_BRIDGE_SOURCE_AND_RED_TEAM.md).
+
+## Übergreifendes UX-/Report-Redesign (seit 10.10.2026)
+
+**Status: gestartet, Draft, unvollständig.** Eigenständiger Entwicklungszweig auf `feature/value-bridge`, PR #62 bleibt unangetastet.
+
+Der vollständige Umfang umfasst die fünf aktiven Microtools (einschließlich beider Quick-Payback-Modi), zehn Checklists, neun Knowledge-Ansichten, Startseite sowie fünf Reportmodule und Go-Live-SVG-/PNG-Exporte. Die drei Legacy-Routen sind inventarisiert, aber keine ungefragte Modernisierung.
+
+1. Audit / Absicherung und gemeinsame UI-/PDF-Grundlagen (**implementiert, neue CI und visuelle Kontrolle folgen**).
+2. Finance- und Metrics-Workflows mit konsistenten KPI- und Reportlayouts (**offen**).
+3. Cost of Delay und Value Bridge, Szenario-/Kausalvisualisierungen (**offen**, bestehende Value Bridge aus PR #62 erhalten).
+4. Go-Live-Timeline, Checklists und Knowledge nach gemeinsamen Mustern (**teilweise Checklists, übriges offen**).
+5. E2E/Unit, responsive 375/768/1024/1440, Accessibility, tatsächliche PDF-Renderings jeder Seite, Abnahme (**offen**).
+
+Siehe `docs/REDESIGN_AUDIT_2026-10-10.md`. Kein Merge ohne ausdrückliche Nutzerfreigabe.
