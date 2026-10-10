@@ -54,3 +54,11 @@ Diese Implementierung ist eine technische Grundlage, **kein Beleg für eine voll
 Auch die Kopfzeile wird nun in allen fünf PDF-Generatoren über `drawReportMasthead` in `src/report/reportChrome.ts` gezeichnet. Sie verwendet vollständig lokal gerenderte Vektorformen, eine einheitliche MEDDPICC-Toolbox-Kennung, Dokumenttitel und Reportkontext. Die ursprünglichen Headerhöhen und Textanfänge bleiben bewusst erhalten, um bestehende Datenbereiche nicht zu verdrängen.
 
 Die Redesign-CI rendert **sämtliche Originalseiten** der fünf unterschiedlichen Exportvarianten als PNG (nicht nur Seite 1). Diese Originalbilder und ausgewählte Desktop-/Mobile-Screenshots sollen als `docs/review-screenshots/redesign/` zur fachlichen Sichtabnahme veröffentlicht werden. Ein erfolgreicher Renderjob ist noch keine manuelle Sichtfreigabe.
+
+## Erweiterung 11.10.2026: Textfluss und vollständige Langangaben (Draft)
+
+- Die fünf Reportgeneratoren verwenden den gemeinsamen, an der eingebetteten Schrift gemessenen Textumbruch in `src/report/reportText.ts`. Lange Einzelwörter und Absatzgrenzen werden berücksichtigt.
+- Das bisher starre vierseitige Kunden-PDF erhält bei langen Firmen-/Projekt-/Freitextangaben und umfangreichen Nutzenpositionen zusätzliche Anhangseiten. Die vier Managementseiten bleiben für normale Daten erhalten.
+- Quick Payback kennzeichnet die nicht extern geprüften Eingaben sichtbar. Ergänzende Designregeln führen Reflow, Texte und Zahlen über unterschiedliche Tools zusammen.
+- Das ist eine **Teilumsetzung**. Unicode-Font-Einbettung, vollständige dynamische PDF-Body-Pagination, die visuelle Prüfung aller Originalseiten und das Redesign aller produktiven Oberflächen bleiben offen.
+

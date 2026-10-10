@@ -231,3 +231,8 @@ Die zentralen Tokens bleiben in `src/styles/main.css`; die bereichsübergreifend
 - Neue Tools sollen dieselben Tokens nutzen, statt eigene per-View-Sonderfarben und Interaktionsmuster zu kopieren.
 
 Die gemeinsame CSS-Grundlage ist **nicht** die vollständige UI-Abnahme jeder Route. Offene Screens und die Testmatrix stehen in `docs/REDESIGN_AUDIT_2026-10-10.md`.
+
+## 19. Gemeinsame Ergebnishierarchie – Erweiterung vom 11.10.2026
+
+Die Reflow-Regeln in `src/styles/redesignFoundations.css` ergänzen bestehende Panels und Feldgruppen um begrenzbare Grid-/Flex-Kinder, umbruchfähige Bedienelemente und tabellarische Finanzzahlen. Ein wiederverwendbarer Hinweisstil `.tool-evidence-note` trennt einen Modellwert von einer Validierungsbestätigung. Für einzelne Ansichten müssen visuelle Abnahmen folgen; allein die Existenz dieser Klassen belegt keinen bestandenen Responsive-Test.
+

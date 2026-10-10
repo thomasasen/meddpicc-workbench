@@ -223,6 +223,9 @@ async function copySummary() {
           <section class="quick-panel quick-result" aria-labelledby="quick-result-heading">
             <p class="eyebrow">2 · Ergebnis</p>
             <h2 id="quick-result-heading">Einfacher Payback</h2>
+            <p v-if="model" class="tool-evidence-note">
+              Modellrechnung · Die Richtigkeit der Eingaben und ihre kundenseitige Bestätigung sind nicht geprüft.
+            </p>
             <div v-if="calculation.kind === 'empty'" class="quick-empty" role="status">
               Gib Anfangsinvestition und jährlichen Bruttonutzen ein. Die zusätzlichen laufenden Kosten sind bereits
               sichtbar mit 0 EUR vorbelegt.

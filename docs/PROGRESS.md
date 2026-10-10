@@ -261,3 +261,12 @@ Siehe [Value Bridge Quellenmatrix und Gap-Analyse](VALUE_BRIDGE_SOURCE_AND_RED_T
 - **Noch offen:** tieferes Einzeltool-Redesign, gemeinsame PDF-Body-/Header-Komponenten, reale PDF-Langtext-/Missing-Value-Stressbilder, vollständige responsive und A11y-Abnahme. Keine Merge-Freigabe erteilt.
 
 - Quick Payback (Einfachmodus): zugängliche, einheitlich skalierte jährliche Bruttonutzen-/Betriebskostenbalken mit expliziten EUR-Werten und Evidenzgrenzen in `AnnualBenefitComparison.vue` ergänzt; Wirtschaftlichkeitsmodell unverändert. Zusätzlicher E2E-Test angelegt. Der umfangreiche Projektmodus und die abschließende visuelle Abnahme bleiben offen.
+
+## UX-/Report-Redesign – Fortsetzung 11.10.2026
+
+- Branch: `feature/ux-report-redesign-20261011`, Basis: bestätigter `main`-Commit `949166ea8d67e5d04e93d14a726360769de302aa`.
+- Implementiert: gemeinsame Breitenmessung/Textumbrüche in allen fünf PDF-Generatoren, dynamische vollständige Langtext-/Metric-Anhänge im Kunden-PDF, explizite Evidenzgrenze in Quick Payback, zentrale Reflow-Regeln und Unit-Tests für den Textumbruch.
+- Technische und visuelle Abnahme wird nicht behauptet, bevor der neue PR-CI-Lauf und die Originalscreenshots tatsächlich ausgewertet sind.
+- Noch offen: vollständiger Report-Body-Umbau, alle produktiven Screens im einheitlichen Design, alle 4 Viewports und barrierefreie Interaktionen, separate visuelle Abnahme.
+- Neue Änderungen bleiben bis zur ausdrücklichen Freigabe ungemergt.
+
