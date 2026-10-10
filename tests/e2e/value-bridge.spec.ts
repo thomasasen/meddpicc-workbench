@@ -4,7 +4,9 @@ import { readFile } from 'node:fs/promises'
 
 const route = '/meddpicc-workbench/#/tools/value-bridge'
 
-test('Value Bridge: Servicebeispiel, kundenfähige Visualisierung, PDF und vier Viewports', async ({ page }, testInfo) => {
+test('Value Bridge: Servicebeispiel, kundenfähige Visualisierung, PDF und vier Viewports', async ({
+  page,
+}, testInfo) => {
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
   await page.goto(route)
@@ -26,12 +28,16 @@ test('Value Bridge: Servicebeispiel, kundenfähige Visualisierung, PDF und vier 
 
   for (const width of [375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 })
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    )
     expect(overflow, 'Seitenüberlauf bei ' + width + ' px').toBeLessThanOrEqual(1)
   }
   await page.setViewportSize({ width: testInfo.project.name === 'mobile-chromium' ? 393 : 1440, height: 900 })
-  await page.screenshot({ path: testInfo.outputPath('value-bridge-money-' + testInfo.project.name + '.png'),
-    fullPage: true })
+  await page.screenshot({
+    path: testInfo.outputPath('value-bridge-money-' + testInfo.project.name + '.png'),
+    fullPage: true,
+  })
   expect(errors).toEqual([])
 })
 
@@ -42,8 +48,10 @@ test('Value Bridge: Kapazität ohne bestätigte EUR-Realisierung und sichtbare F
   await expect(page.locator('.vb-link--value')).not.toContainText('Saldo nach')
   await expect(page.getByText('Freigesetzte Kapazität, keine EUR-Ersparnis')).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Offene Validierung' })).toBeVisible()
-  await page.screenshot({ path: testInfo.outputPath('value-bridge-open-' + testInfo.project.name + '.png'),
-    fullPage: true })
+  await page.screenshot({
+    path: testInfo.outputPath('value-bridge-open-' + testInfo.project.name + '.png'),
+    fullPage: true,
+  })
 })
 
 test('Value Bridge: doppelte Wirkungsgruppen verhindern finanzielle Freigabe', async ({ page }) => {
@@ -53,7 +61,9 @@ test('Value Bridge: doppelte Wirkungsgruppen verhindern finanzielle Freigabe', a
   await expect(page.locator('.vb-link--value')).toContainText('EUR-Realisierung noch offen')
 })
 
-test('Value Bridge: Metric-Builder-Übergabe ist einmalig, lässt Evidenz unverändert und aktiviert keine Geldrechnung', async ({ page }) => {
+test('Value Bridge: Metric-Builder-Übergabe ist einmalig, lässt Evidenz unverändert und aktiviert keine Geldrechnung', async ({
+  page,
+}) => {
   await page.goto('/meddpicc-workbench/#/tools/metric-builder')
   await page.getByRole('button', { name: 'Servicekosten' }).click()
   await page.getByRole('button', { name: 'Weiter', exact: false }).click()

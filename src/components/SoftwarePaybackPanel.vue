@@ -139,7 +139,10 @@ async function openMetricBuilder() {
 }
 async function transferToBridge(): Promise<void> {
   try {
-    queuePaybackToBridge({ horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value }, window.sessionStorage)
+    queuePaybackToBridge(
+      { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
+      window.sessionStorage,
+    )
     await router.push('/tools/value-bridge')
   } catch {
     transferMessage.value = 'Value-Bridge-Übergabe nicht möglich. Maximal 15 Metrics und gültige Eingaben erforderlich.'

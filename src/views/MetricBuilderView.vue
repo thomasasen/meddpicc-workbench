@@ -506,7 +506,12 @@ async function transferToBridge(): Promise<void> {
             Metrics zum bestehenden Software-Payback hinzu; die spätere finanzielle Aktivierung bleibt manuell.
           </p>
           <div class="metric-actions">
-            <button type="button" class="button button-secondary button-with-icon" :disabled="!result.complete" @click="transferToBridge">
+            <button
+              type="button"
+              class="button button-secondary button-with-icon"
+              :disabled="!result.complete"
+              @click="transferToBridge"
+            >
               <FileCheck2 :size="16" aria-hidden="true" /> In Value Bridge übernehmen
             </button>
             <button type="button" class="button button-secondary button-with-icon" @click="copy">

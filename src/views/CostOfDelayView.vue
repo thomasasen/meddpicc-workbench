@@ -568,7 +568,9 @@ async function transferToBridge(): Promise<void> {
             </div>
           </details>
           <div class="cod-export">
-            <button type="button" class="button button-secondary" @click="transferToBridge">In Value Bridge übernehmen</button>
+            <button type="button" class="button button-secondary" @click="transferToBridge">
+              In Value Bridge übernehmen
+            </button>
             <button type="button" class="button button-primary button-with-icon" @click="exportPdf">
               <Download :size="17" aria-hidden="true" /> Kunden-Steckbrief als PDF
             </button>

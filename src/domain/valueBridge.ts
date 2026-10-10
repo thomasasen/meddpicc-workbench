@@ -155,8 +155,11 @@ export function evaluateValueBridge(input: ValueBridgeInput): ValueBridgeResult 
         issues.push(where + ': realisierbarer Jahresbetrag fehlt.')
       if (!metric.realization.trim()) issues.push(where + ': konkreter Realisierungsmechanismus fehlt.')
       if (!metric.effectGroup.trim()) issues.push(where + ': Wirkungsgruppe zur Doppelzählungsprüfung fehlt.')
-      if (metric.annualPotentialEur !== null && isAmount(metric.annualRealizedEur) &&
-        metric.annualRealizedEur > metric.annualPotentialEur)
+      if (
+        metric.annualPotentialEur !== null &&
+        isAmount(metric.annualRealizedEur) &&
+        metric.annualRealizedEur > metric.annualPotentialEur
+      )
         issues.push(where + ': realisierter Wert übersteigt rechnerisches Potenzial.')
       if (!metric.before.trim() || !metric.after.trim()) {
         questions.push(where + ': Die Messgröße muss noch quantifiziert werden.')
@@ -203,10 +206,22 @@ export function evaluateValueBridge(input: ValueBridgeInput): ValueBridgeResult 
     const model: SoftwarePaybackInput = {
       horizonMonths: input.horizonMonths,
       costs: [
-        { id: 'investment', name: 'Einmalige Projektkosten', kind: 'one-time', amountEur: input.investmentEur!,
-          period: 'monthly', startMonth: 0 },
-        { id: 'saas', name: 'Zusätzliche laufende Kosten', kind: 'saas', amountEur: input.saasMonthlyEur!,
-          period: 'monthly', startMonth: 1 },
+        {
+          id: 'investment',
+          name: 'Einmalige Projektkosten',
+          kind: 'one-time',
+          amountEur: input.investmentEur!,
+          period: 'monthly',
+          startMonth: 0,
+        },
+        {
+          id: 'saas',
+          name: 'Zusätzliche laufende Kosten',
+          kind: 'saas',
+          amountEur: input.saasMonthlyEur!,
+          period: 'monthly',
+          startMonth: 1,
+        },
       ],
       metrics,
     }
@@ -214,7 +229,8 @@ export function evaluateValueBridge(input: ValueBridgeInput): ValueBridgeResult 
     if (!financial) issues.push('Die bestehende Business-Case-Engine hat die Finanzannahmen zurückgewiesen.')
   }
   if (!hasFinancialInputs) questions.push('Welche Investitions- und laufenden Kosten sind bekannt?')
-  if (countedAnnualEur === 0) questions.push('Ist überhaupt eine realisierbare EUR-Wirkung belegt oder nur ein Potenzial?')
+  if (countedAnnualEur === 0)
+    questions.push('Ist überhaupt eine realisierbare EUR-Wirkung belegt oder nur ein Potenzial?')
   const lines = [
     'VALUE BRIDGE' + (input.customer.trim() ? ' | ' + input.customer.trim() : ''),
     'Situation: ' + (input.situation.trim() || 'Offen'),
@@ -223,17 +239,36 @@ export function evaluateValueBridge(input: ValueBridgeInput): ValueBridgeResult 
     'Ziel: ' + (input.outcome.trim() || 'Offen'),
     'Ermöglichte Veränderung: ' + (input.change.trim() || 'Offen'),
     'Voraussetzungen: ' + (input.prerequisites.trim() || 'Offen'),
-    ...input.metrics.map((m) =>
-      '- ' + (m.name || 'Metric offen') + ': ' + (m.before || '?') + ' → ' + (m.after || '?') +
-      (m.unit ? ' ' + m.unit : '') + ' | ' + bridgeKindLabels[m.kind] + ' | ' +
-      bridgeEvidenceLabels[m.evidence] + ' | Quelle: ' + (m.source || 'offen') +
-      ' | EUR-Wirkung im Modell: ' +
-      (m.included && (m.kind === 'saving' || m.kind === 'margin') ? String(m.annualRealizedEur) + ' EUR/Jahr' : 'nicht angerechnet'),
+    ...input.metrics.map(
+      (m) =>
+        '- ' +
+        (m.name || 'Metric offen') +
+        ': ' +
+        (m.before || '?') +
+        ' → ' +
+        (m.after || '?') +
+        (m.unit ? ' ' + m.unit : '') +
+        ' | ' +
+        bridgeKindLabels[m.kind] +
+        ' | ' +
+        bridgeEvidenceLabels[m.evidence] +
+        ' | Quelle: ' +
+        (m.source || 'offen') +
+        ' | EUR-Wirkung im Modell: ' +
+        (m.included && (m.kind === 'saving' || m.kind === 'margin')
+          ? String(m.annualRealizedEur) + ' EUR/Jahr'
+          : 'nicht angerechnet'),
     ),
     financial
-      ? 'Modell über ' + input.horizonMonths + ' Monate: Gesamtkosten ' +
-        financial.totalCostEur.toFixed(2) + ' EUR; Nutzen ' + financial.benefitEur.toFixed(2) +
-        ' EUR; Saldo ' + financial.netValueEur.toFixed(2) + ' EUR. Nur unter den dokumentierten Annahmen.'
+      ? 'Modell über ' +
+        input.horizonMonths +
+        ' Monate: Gesamtkosten ' +
+        financial.totalCostEur.toFixed(2) +
+        ' EUR; Nutzen ' +
+        financial.benefitEur.toFixed(2) +
+        ' EUR; Saldo ' +
+        financial.netValueEur.toFixed(2) +
+        ' EUR. Nur unter den dokumentierten Annahmen.'
       : 'Kein vollständiger finanzieller Business Case berechnet.',
     'Offene Prüfpunkte: ' + (questions.length ? questions.join(' ') : 'Keine zusätzlichen Fragen aus dem Regelwerk.'),
     ...(overlap.length ? ['Doppelzählungswarnung: ' + overlap.join('; ')] : []),
@@ -253,12 +288,24 @@ export const valueBridgeDemos: Record<string, ValueBridgeInput> = {
     prerequisites: 'Anbindung, Akzeptanztests, tatsächliche Vertragsreduzierung.',
     investmentEur: 60000,
     saasMonthlyEur: 500,
-    metrics: [{
-      ...blankBridgeMetric('service-1'), name: 'Wegfall externer Serviceleistungen', before: '6.000', after: '3.000',
-      unit: 'EUR/Monat', kind: 'saving', effectGroup: 'externer-service', annualPotentialEur: 36000,
-      annualRealizedEur: 36000, realization: 'Dienstleisterrechnung wird vertraglich reduziert.',
-      included: true, source: 'Fiktive Annahmen, nicht kundenseitig überprüft', startMonth: 4, rampMonths: 2,
-    }],
+    metrics: [
+      {
+        ...blankBridgeMetric('service-1'),
+        name: 'Wegfall externer Serviceleistungen',
+        before: '6.000',
+        after: '3.000',
+        unit: 'EUR/Monat',
+        kind: 'saving',
+        effectGroup: 'externer-service',
+        annualPotentialEur: 36000,
+        annualRealizedEur: 36000,
+        realization: 'Dienstleisterrechnung wird vertraglich reduziert.',
+        included: true,
+        source: 'Fiktive Annahmen, nicht kundenseitig überprüft',
+        startMonth: 4,
+        rampMonths: 2,
+      },
+    ],
   },
   sales: {
     ...blankValueBridge(),
@@ -272,10 +319,18 @@ export const valueBridgeDemos: Record<string, ValueBridgeInput> = {
     investmentEur: 90000,
     saasMonthlyEur: 1200,
     metrics: ['Abschlussquote', 'Zusätzlicher Deckungsbeitrag'].map((name, i) => ({
-      ...blankBridgeMetric('sales-' + i), name, before: '20', after: '24', unit: '%', kind: 'margin' as const,
-      effectGroup: 'sales-margin', annualPotentialEur: 192000, annualRealizedEur: 192000,
+      ...blankBridgeMetric('sales-' + i),
+      name,
+      before: '20',
+      after: '24',
+      unit: '%',
+      kind: 'margin' as const,
+      effectGroup: 'sales-margin',
+      annualPotentialEur: 192000,
+      annualRealizedEur: 192000,
       realization: 'Nur unter Annahme zusätzlicher, profitabler Abschlüsse.',
-      included: true, source: 'Fiktives Szenario ohne Kundenprüfung',
+      included: true,
+      source: 'Fiktives Szenario ohne Kundenprüfung',
     })),
   },
   capacity: {
@@ -287,9 +342,16 @@ export const valueBridgeDemos: Record<string, ValueBridgeInput> = {
     outcome: 'Schnellere Prüfungen mit stabiler Qualität.',
     change: 'Vorlagen und Automatisierung.',
     prerequisites: 'Pilotmessung und Nutzerakzeptanz.',
-    metrics: [{
-      ...blankBridgeMetric('capacity-1'), name: 'Zeit pro Vorgang', before: '12', after: '8', unit: 'Minuten',
-      kind: 'capacity', source: 'Fiktive operative Hypothese, keine Kostenzusage',
-    }],
+    metrics: [
+      {
+        ...blankBridgeMetric('capacity-1'),
+        name: 'Zeit pro Vorgang',
+        before: '12',
+        after: '8',
+        unit: 'Minuten',
+        kind: 'capacity',
+        source: 'Fiktive operative Hypothese, keine Kostenzusage',
+      },
+    ],
   },
 }

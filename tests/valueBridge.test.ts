@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { PDFDocument } from 'pdf-lib'
-import {
-  blankBridgeMetric,
-  blankValueBridge,
-  evaluateValueBridge,
-  valueBridgeDemos,
-} from '../src/domain/valueBridge'
+import { blankBridgeMetric, blankValueBridge, evaluateValueBridge, valueBridgeDemos } from '../src/domain/valueBridge'
 import { buildValueBridgePdf } from '../src/report/valueBridgePdf'
 import {
   consumeValueBridgeHandoff,
@@ -20,9 +15,15 @@ import { exampleSoftwareProject } from '../src/domain/softwarePayback'
 function fakeStorage() {
   const values = new Map<string, string>()
   return {
-    setItem(key: string, value: string) { values.set(key, value) },
-    getItem(key: string) { return values.get(key) ?? null },
-    removeItem(key: string) { values.delete(key) },
+    setItem(key: string, value: string) {
+      values.set(key, value)
+    },
+    getItem(key: string) {
+      return values.get(key) ?? null
+    },
+    removeItem(key: string) {
+      values.delete(key)
+    },
   }
 }
 
@@ -129,8 +130,14 @@ describe('Value Bridge: Handoff und PDF', () => {
 
   it('übernimmt nur den modellierten Ausgangsnutzen aus Cost of Delay und keine Szenariodifferenz', () => {
     const storage = fakeStorage()
-    const input = { ...emptyCostOfDelayInput(), title: 'Prozess', annualBenefitEur: 12000,
-      effectGroup: 'a', financialTreatment: 'realized' as const, evidence: 'customer-stated' as const }
+    const input = {
+      ...emptyCostOfDelayInput(),
+      title: 'Prozess',
+      annualBenefitEur: 12000,
+      effectGroup: 'a',
+      financialTreatment: 'realized' as const,
+      evidence: 'customer-stated' as const,
+    }
     queueDelayToBridge(input, storage)
     const imported = consumeValueBridgeHandoff(storage)
     expect(imported?.metrics[0]?.annualRealizedEur).toBe(12000)
@@ -153,9 +160,13 @@ describe('Value Bridge: Handoff und PDF', () => {
 
   it('verwirft fremde oder fehlerhafte Handoff-Formate', () => {
     const storage = fakeStorage()
-    storage.setItem('meddpicc-value-bridge-handoff-v1', JSON.stringify({
-      version: 1, input: { ...blankValueBridge(), metrics: [{ ...blankBridgeMetric('x'), included: true }] },
-    }))
+    storage.setItem(
+      'meddpicc-value-bridge-handoff-v1',
+      JSON.stringify({
+        version: 1,
+        input: { ...blankValueBridge(), metrics: [{ ...blankBridgeMetric('x'), included: true }] },
+      }),
+    )
     expect(consumeValueBridgeHandoff(storage)).toBeNull()
   })
 
