@@ -122,7 +122,6 @@ test('Cost of Delay: finanzielle Metric nur nach bewusster Übergabe aus Metric 
   )
 })
 
-
 test('Kumulierter Nutzen bleibt auf schmalen Viewports als scrollbare Grafik lesbar', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 })
   await page.goto('/#/tools/cost-of-delay')
