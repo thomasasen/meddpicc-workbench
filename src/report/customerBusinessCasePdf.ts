@@ -591,8 +591,8 @@ function completeCustomerDetails(pdf: PDFDocument, fonts: FontSet, data: ReportD
     { label: 'Ausgangssituation', value: data.businessPain?.trim() ?? '', size: 9.4, limit: 4, width: RIGHT - X },
     { label: 'Angestrebtes Ergebnis', value: data.targetOutcome?.trim() ?? '', size: 9.4, limit: 2, width: RIGHT - X },
   ].filter((field) => wrap(field.value, fonts.regular, field.size, field.width).length > field.limit)
-  const included = c.metricDetails.filter((m) => m.included)
-  const showAllMetrics = included.length > 3 || included.some((m) => fonts.bold.widthOfTextAtSize(readable(m.name), 10.5) > 355)
+  const metrics = c.metricDetails
+  const showAllMetrics = metrics.length > 3 || metrics.some((m) => fonts.bold.widthOfTextAtSize(readable(m.name), 10.5) > 355)
 
   if (!fields.length && !showAllMetrics) return
   let p = page(pdf, fonts, 'Anhang | Vollständige Angaben').p
@@ -606,8 +606,12 @@ function completeCustomerDetails(pdf: PDFDocument, fonts: FontSet, data: ReportD
 
   function title(label: string): void {
     ensureSpace(45)
-    write(p, label, X, y, 11.3, fonts.bold, navy)
-    y -= 23
+    for (const line of wrap(label, fonts.bold, 11.3, RIGHT - X)) {
+      ensureSpace(18)
+      if (line) write(p, line, X, y, 11.3, fonts.bold, navy)
+      y -= 16
+    }
+    y -= 7
   }
 
   function body(value: string): void {
@@ -628,13 +632,13 @@ function completeCustomerDetails(pdf: PDFDocument, fonts: FontSet, data: ReportD
     body(field.value)
   }
   if (showAllMetrics) {
-    title('Alle angesetzten Nutzenpositionen')
-    for (const metric of included) {
+    title('Alle Nutzenpositionen und Datenstände')
+    for (const metric of metrics) {
       title(metric.name || 'Nicht bezeichnete Nutzenposition')
       body(
-        'Jahrespotenzial: ' +
-          (metric.annualEur === null ? 'kein bestätigter Geldwert' : euro(metric.annualEur)) +
-          '. Datenstatus: ' +
+        'Rechnerisches Jahrespotenzial (nicht automatisch realisiert): ' +
+          (metric.annualEur === null ? 'kein Geldwert angesetzt' : euro(metric.annualEur)) +
+          '. Wirtschaftlich angerechnet: ' + (metric.included ? 'Ja' : 'Nein') + '. Datenstatus: ' +
           statusLabel(metric.evidence) +
           '. Geplanter Nutzenbeginn: Monat ' +
           metric.startMonth +
