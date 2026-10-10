@@ -34,9 +34,17 @@ function removeMetric(id: string): void {
   draft.value.metrics = draft.value.metrics.filter((m) => m.id !== id)
 }
 function changeKind(metric: BridgeMetric): void {
+  // Eine neue Wirkungsart darf niemals automatisch finanziell angerechnet werden.
+  // Der importierte Betrag bleibt zur erneuten fachlichen Einordnung editierbar.
   metric.included = false
-  metric.annualRealizedEur = null
-  metric.realization = ''
+}
+function setMetricAmount(metric: BridgeMetric, key: 'annualPotentialEur' | 'annualRealizedEur', event: Event): void {
+  const raw = (event.target as HTMLInputElement).value
+  metric[key] = raw === '' ? null : Number(raw)
+}
+function setCaseAmount(key: 'investmentEur' | 'saasMonthlyEur', event: Event): void {
+  const raw = (event.target as HTMLInputElement).value
+  draft.value[key] = raw === '' ? null : Number(raw)
 }
 function loadDemo(name: string): void {
   const demo = valueBridgeDemos[name]
@@ -286,7 +294,7 @@ onMounted(() => {
                   <label class="vb-field"
                     ><span>Theoretisches Potenzial in EUR/Jahr (optional)</span>
                     <input
-                      v-model.number="metric.annualPotentialEur"
+                      :value="metric.annualPotentialEur ?? ''" @input="setMetricAmount(metric, 'annualPotentialEur', $event)"
                       type="number"
                       min="0"
                       max="1000000000000"
@@ -298,7 +306,7 @@ onMounted(() => {
                     <label class="vb-field"
                       ><span>Wirtschaftlich realisierbarer Betrag EUR/Jahr</span>
                       <input
-                        v-model.number="metric.annualRealizedEur"
+                        :value="metric.annualRealizedEur ?? ''" @input="setMetricAmount(metric, 'annualRealizedEur', $event)"
                         type="number"
                         min="0"
                         max="1000000000000"
@@ -367,7 +375,7 @@ onMounted(() => {
                 <label class="vb-field"
                   ><span>Einmalige Projektkosten, EUR</span>
                   <input
-                    v-model.number="draft.investmentEur"
+                    :value="draft.investmentEur ?? ''" @input="setCaseAmount('investmentEur', $event)"
                     type="number"
                     min="0"
                     max="1000000000000"
@@ -378,7 +386,7 @@ onMounted(() => {
                 <label class="vb-field"
                   ><span>Zusätzliche laufende Kosten, EUR/Monat</span>
                   <input
-                    v-model.number="draft.saasMonthlyEur"
+                    :value="draft.saasMonthlyEur ?? ''" @input="setCaseAmount('saasMonthlyEur', $event)"
                     type="number"
                     min="0"
                     max="1000000000000"
@@ -442,6 +450,13 @@ onMounted(() => {
             >
               <span class="vb-link-label">{{ item.title }}</span>
               <p>{{ item.text || 'Noch offen' }}</p>
+            </div>
+            <div class="vb-link vb-link--metric">
+              <span class="vb-link-label">Messbare Verbesserung · Metrics</span>
+              <p v-for="metric in draft.metrics" :key="metric.id">
+                <strong>{{ metric.name || 'Messgröße offen' }}</strong>:
+                {{ metric.before || '?' }} → {{ metric.after || '?' }} {{ metric.unit }}
+              </p>
             </div>
             <div class="vb-link vb-link--value">
               <span class="vb-link-label">Wirtschaftliche Wirkung</span>
