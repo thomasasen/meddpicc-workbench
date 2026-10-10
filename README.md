@@ -9,7 +9,7 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 
 ### Metric Builder – Value & Metrics (Feature-Branch)
 
-Der Metric Builder führt über Problem, Before/After und wirtschaftliche Realisierung zu einer überprüfbaren Metric Card. Alle sieben Metric-Typen verwenden die bestehenden Software-Payback-Formeln. Reine Kapazität, Risiko und qualitative Effekte werden nicht automatisch monetarisiert. Ein kundenfähiger PDF-Steckbrief entsteht lokal im Browser. Die ausdrückliche Übernahme in Software-Payback fügt nur **nicht aktivierte** Metrics hinzu; vorhandene Kosten bleiben bei der vorgesehenen Rücknavigation erhalten. Quellen, Formeln und ausstehende Freigabeschritte: [Metric Builder Red Team](docs/METRIC_BUILDER_RED_TEAM.md). Stand: Feature-Branch, vor abschließender QA und Nutzerfreigabe.
+Der Metric Builder führt über Problem, Before/After und wirtschaftliche Realisierung zu einer überprüfbaren Metric Card. Alle sieben Metric-Typen verwenden die bestehenden Software-Payback-Formeln. Reine Kapazität, Risiko und qualitative Effekte werden nicht automatisch monetarisiert. Ein kundenfähiger PDF-Steckbrief entsteht lokal im Browser. Die ausdrückliche Übernahme in Software-Payback fügt nur **nicht aktivierte** Metrics hinzu; vorhandene Kosten bleiben bei der vorgesehenen Rücknavigation erhalten. Quellen, Formeln und fachliche Abnahme: [Metric Builder Red Team](docs/METRIC_BUILDER_RED_TEAM.md). Stand: Feature-Branch mit abgeschlossener technischer und visueller Abnahme ([CI #38007800785](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38007800785): 115 Playwright-Tests bestanden, 1 übersprungen, Format/Lint/Unit/Build/Pages/PDF erfolgreich); PR #60 wartet auf ausdrückliche Nutzerfreigabe, nicht in `main`.
 
 ### Metrics – Knowledge und Checklist
 
@@ -144,7 +144,7 @@ Tools erledigen eine konkrete Aufgabe: berechnen, vorbereiten, strukturieren ode
 | Funktion | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
 | **Quick Payback** | ✅ In main | Schneller Payback und optionaler Softwareprojekt-Modus mit zeitlichem SaaS-/Nutzenverlauf und Kunden-Metrics. | Du kannst dem Kunden schnell und verständlich zeigen, **wann der Break-even erreicht wird**, ohne selbst Formeln oder Excel aufzubauen. |
-| **Metric Builder** | 🟡 Feature-PR in Prüfung | Hilft, aus einem Pain oder gewünschten Outcome eine belastbare, nachvollziehbare Kennzahl abzuleiten. | Du kommst schneller von Aussagen wie „das kostet uns viel Zeit“ zu einer Metric, mit der sich ein Business Case wirklich begründen lässt. |
+| **Metric Builder** | 🟡 PR #60 geprüft, wartet auf Freigabe | Hilft, aus einem Pain oder gewünschten Outcome eine belastbare, nachvollziehbare Kennzahl abzuleiten. | Du kommst schneller von Aussagen wie „das kostet uns viel Zeit“ zu einer Metric, mit der sich ein Business Case wirklich begründen lässt. |
 | **Cost of Delay** | 🟡 Als Nächstes | Berechnet, welchen wirtschaftlichen Wert der Kunde pro Woche oder Monat verliert, wenn sich die Veränderung verzögert. | Du kannst **Why now?** quantifizieren und Dringlichkeit mit wirtschaftlichen Auswirkungen statt nur mit Bauchgefühl begründen. |
 | **Business Case / Value Bridge** | 🟡 Als Nächstes | Führt Nutzen, Kosten, Annahmen und relevante Metrics zu einem nachvollziehbaren Business Case zusammen. | Du erhältst schneller eine belastbare Grundlage für die Kundendiskussion und kannst Value konsistent gegenüber Management und Economic Buyer darstellen. |
 
