@@ -186,12 +186,10 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
       size: 7.7,
       color: muted,
     })
-    const lines = wrap(value, bold, 15, width - 26)
-    let posY = y - 45
-    for (const row of lines.slice(0, 2)) {
-      page.drawText(row, { x: x + 13, y: posY, font: bold, size: 15, color: ink })
-      posY -= 17
-    }
+    const amount = printable(value)
+    let size = 15
+    while (size > 8 && bold.widthOfTextAtSize(amount, size) > width - 26) size -= 0.5
+    page.drawText(amount, { x: x + 13, y: y - 45, font: bold, size, color: ink })
   }
 
   /** Card is measured before drawing so every normal-size card stays together. */
@@ -212,7 +210,11 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
       metric.included && (metric.kind === 'saving' || metric.kind === 'margin')
         ? wrap('Im Modell: ' + euro(metric.annualRealizedEur ?? 0) + ' pro Jahr', bold, 9.5, BODY_W - 32)
         : ['Keine EUR-Anrechnung']
+    const leftPreview = wrap('HEUTE  ' + (metric.before || '?') + ' ' + metric.unit, bold, 9, (BODY_W - 42) / 2)
+    const rightPreview = wrap('ZIEL  ' + (metric.after || '?') + ' ' + metric.unit, bold, 9, (BODY_W - 42) / 2)
+    const extraRows = Math.max(0, Math.max(leftPreview.length, rightPreview.length) - 1)
     const bodyH =
+      extraRows * 12.7 +
       title.length * 14.3 +
       typeLines.length * 12.4 +
       evidenceLines.length * 12.2 +
