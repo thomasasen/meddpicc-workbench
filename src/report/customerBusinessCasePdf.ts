@@ -587,12 +587,19 @@ function completeCustomerDetails(pdf: PDFDocument, fonts: FontSet, data: ReportD
   const fields = [
     { label: 'Unternehmen', value: data.customer.trim(), size: 10.5, limit: 1, width: RIGHT - X - 127 },
     { label: 'Vorhaben', value: data.project.trim(), size: 10.5, limit: 1, width: RIGHT - X - 127 },
-    { label: 'Kontakt', value: data.preparedBy.trim() + '  |  ' + data.date, size: 10.5, limit: 1, width: RIGHT - X - 127 },
+    {
+      label: 'Kontakt',
+      value: data.preparedBy.trim() + '  |  ' + data.date,
+      size: 10.5,
+      limit: 1,
+      width: RIGHT - X - 127,
+    },
     { label: 'Ausgangssituation', value: data.businessPain?.trim() ?? '', size: 9.4, limit: 4, width: RIGHT - X },
     { label: 'Angestrebtes Ergebnis', value: data.targetOutcome?.trim() ?? '', size: 9.4, limit: 2, width: RIGHT - X },
   ].filter((field) => wrap(field.value, fonts.regular, field.size, field.width).length > field.limit)
   const metrics = c.metricDetails
-  const showAllMetrics = metrics.length > 3 || metrics.some((m) => fonts.bold.widthOfTextAtSize(readable(m.name), 10.5) > 355)
+  const showAllMetrics =
+    metrics.length > 3 || metrics.some((m) => fonts.bold.widthOfTextAtSize(readable(m.name), 10.5) > 355)
 
   if (!fields.length && !showAllMetrics) return
   let p = page(pdf, fonts, 'Anhang | Vollständige Angaben').p
@@ -638,7 +645,9 @@ function completeCustomerDetails(pdf: PDFDocument, fonts: FontSet, data: ReportD
       body(
         'Rechnerisches Jahrespotenzial (nicht automatisch realisiert): ' +
           (metric.annualEur === null ? 'kein Geldwert angesetzt' : euro(metric.annualEur)) +
-          '. Wirtschaftlich angerechnet: ' + (metric.included ? 'Ja' : 'Nein') + '. Datenstatus: ' +
+          '. Wirtschaftlich angerechnet: ' +
+          (metric.included ? 'Ja' : 'Nein') +
+          '. Datenstatus: ' +
           statusLabel(metric.evidence) +
           '. Geplanter Nutzenbeginn: Monat ' +
           metric.startMonth +
