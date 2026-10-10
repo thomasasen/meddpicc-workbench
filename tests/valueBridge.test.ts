@@ -76,6 +76,9 @@ describe('Value Bridge: Wirkungs- und Evidenzlogik', () => {
     expect(evaluateValueBridge(input).issues.length).toBeGreaterThan(0)
     input.metrics[0]!.annualRealizedEur = -50
     expect(evaluateValueBridge(input).issues.length).toBeGreaterThan(0)
+    input.metrics[0]!.annualRealizedEur = 36000
+    input.metrics[0]!.before = ''
+    expect(evaluateValueBridge(input).financial).toBeNull()
   })
 
   it('erzwingt eine belegte Realisierung und verbietet Überschreiten des Potenzials', () => {
@@ -143,6 +146,7 @@ describe('Value Bridge: Handoff und PDF', () => {
     expect(imported?.metrics[0]?.annualRealizedEur).toBe(12000)
     expect(imported?.metrics[0]?.evidence).toBe('customer-stated')
     expect(imported?.metrics[0]?.included).toBe(false)
+    expect(imported?.metrics[0]?.kind).toBe('unclassified')
   })
 
   it('übernimmt nur kompatible Payback-Kosten, nicht beliebige Zeitreihen', () => {
