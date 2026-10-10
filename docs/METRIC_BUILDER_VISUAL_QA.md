@@ -33,6 +33,7 @@ Diese Prinzipien sind allgemeine Erkenntnisse bzw. UX-Heuristiken, **keine empir
 - Vorher/Nachher-Werte werden in symmetrischen Karten ausgerichtet, Resultatdefinition und Betrag auf Desktop in festen Spalten, auf Mobil untereinander.
 - Aktionen sind klar zusammengefasst; auf Mobil volle Buttonbreite und linksbündige Texte ohne Abschneiden.
 - Das PDF verwendet feste linke Achsen für Labels und Werte, dynamisch berechnete Textblockhöhen, explizite Innenabstände von farbigen Bereichen und einen stabilen Druckrand mit eigener Fußzeile. Der kurze CRM-Beleg soll auf einer A4-Seite bleiben.
+- Vor der Abschlussphase wird die umfassende Metric Card bewusst ausgeblendet: Schritt 1 konzentriert sich auf Pain und Zielbild, Schritt 2 zeigt eine direkte Berechnungsvorschau, erst Schritt 3 die vollständige Auswertung. Damit entstehen nicht schon beim Einstieg zahlreiche frühe Fehlermeldungen.
 - Keine Änderung der Formel-, Evidenz-, Payback- oder Übergabelogik.
 
 ## Prüfungen
