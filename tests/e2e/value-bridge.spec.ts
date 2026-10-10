@@ -12,6 +12,11 @@ test('Value Bridge: Servicebeispiel, kundenfähige Visualisierung, PDF und vier 
   await page.goto(route)
   await page.getByRole('button', { name: 'CRM / Service' }).click()
   await expect(page.getByRole('heading', { name: 'Wirkungszusammenhang' })).toBeVisible()
+  await expect(page.locator('.vb-story-steps > .vb-story-step')).toHaveCount(3)
+  await expect(page.locator('.vb-story-steps .vb-story-icon svg')).toHaveCount(3)
+  await expect(page.getByRole('heading', { name: 'Was steht auf dem Spiel?' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Was soll sich verbessern?' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Woran erkennen wir den Unterschied?' })).toBeVisible()
   await expect(page.locator('.vb-link--value')).toContainText('36.000')
   await expect(page.locator('.vb-link--value')).toContainText('Saldo nach 36 Monaten')
   await page.getByRole('combobox', { name: 'Ergebnisansicht' }).selectOption('true')
@@ -25,6 +30,7 @@ test('Value Bridge: Servicebeispiel, kundenfähige Visualisierung, PDF und vier 
   await download.saveAs(path)
   const pdf = await PDFDocument.load(await readFile(path))
   expect(pdf.getPageCount()).toBeGreaterThanOrEqual(1)
+  expect(pdf.getPageCount()).toBeLessThanOrEqual(5)
 
   for (const width of [375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 })
@@ -46,6 +52,7 @@ test('Value Bridge: Kapazität ohne bestätigte EUR-Realisierung und sichtbare F
   await page.getByRole('button', { name: 'Kapazität / Qualität' }).click()
   await expect(page.locator('.vb-link--value')).toContainText('EUR-Realisierung noch offen')
   await expect(page.locator('.vb-link--value')).not.toContainText('Saldo nach')
+  await expect(page.locator('.vb-story-steps')).toContainText('Zeit pro Vorgang')
   await expect(
     page.locator('.vb-out-metric').getByText('Freigesetzte Kapazität, keine EUR-Ersparnis', { exact: false }),
   ).toBeVisible()
