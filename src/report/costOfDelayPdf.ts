@@ -151,7 +151,9 @@ export async function buildCostOfDelayPdf(
   labeled('Differenz Kundennutzen', euro(selected.benefitDifferenceEur))
   labeled(
     'Spätere Altsystemabschaltung',
-    input.legacyMonthlyEur === null ? 'Offen; keine Abschaltannahme erfasst' : euro(selected.legacyDifferenceEur) + ' Differenz',
+    input.legacyMonthlyEur === null
+      ? 'Offen; keine Abschaltannahme erfasst'
+      : euro(selected.legacyDifferenceEur) + ' Differenz',
   )
   labeled(
     'Weitere Verzögerungskosten',
