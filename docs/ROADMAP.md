@@ -197,7 +197,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 
 ## Phase T3 – Value & Metrics Tools
 
-**Stand 10.10.2026:** Quick Payback mit Softwareprojekt-Modus und Business-Case-Stresstest aus PR #59 sind in `main`. Der Metric Builder wurde mit [PR #60](https://github.com/thomasasen/meddpicc-workbench/pull/60) am 10.10.2026 nach `main` gemergt (Commit `537af8d`). Cost of Delay wird im separaten Branch `feature/cost-of-delay` umgesetzt und bleibt bis zur visuellen Freigabe ungemergt. Business Case / Value Bridge ist weiterhin geplant.
+**Stand 10.10.2026:** Quick Payback mit Softwareprojekt-Modus und Business-Case-Stresstest aus PR #59 sind in `main`. Der Metric Builder wurde mit [PR #60](https://github.com/thomasasen/meddpicc-workbench/pull/60) am 10.10.2026 nach `main` gemergt (Commit `537af8d`). Cost of Delay wurde mit PR #61 am 10.10.2026 per Squash-Commit `7759a7e09f0c38165bd317cd8f006c0191053d99` nach `main` gemergt. Value Bridge wird im Draft-PR auf `feature/value-bridge` zur technischen und visuellen Prüfung vorbereitet.
 
 
 Priorität:
@@ -324,7 +324,7 @@ Ein neues Feature wird nur aufgenommen, wenn mindestens eine dieser Fragen klar 
 Wenn der primäre Nutzen hingegen „mehr Deal-Daten erfassen, speichern oder reporten“ lautet, gehört das Feature nicht in den Core der Toolbox.
 
 
-### Cost of Delay (Feature-Branch, nicht gemergt)
+### Cost of Delay (PR #61, in `main`)
 
 - [x] Reine monatliche Berechnung im gemeinsamen 36-/60-Monats-Horizont
 - [x] Startmonat, Ramp-up, Einmaleffekt, optionaler Endtermin und fixe vs. verschobene Wirkung
@@ -333,6 +333,21 @@ Wenn der primäre Nutzen hingegen „mehr Deal-Daten erfassen, speichern oder re
 - [x] Drei fiktive Beispiele, nachvollziehbare Kurve, Monats-Tabelle, PDF-Steckbrief
 - [x] Explizite Metric-Builder-Übergabe ohne fiktive Kundenbestätigung
 - [x] CI-Basislauf (309 Unit, 125 Browser bestanden, 1 Skip) und tatsächliche Desktop-/Mobil-/PDF-Bildprüfung dokumentiert
-- [ ] Ausdrückliche UI-Freigabe; Merge nach main bleibt gesperrt
+- [x] Ausdrückliche UI-Freigabe und Merge nach `main` am 10.10.2026 (PR #61, `7759a7e`)
 
 Siehe [Cost-of-Delay-Review](COST_OF_DELAY_SOURCE_AND_RED_TEAM.md).
+
+
+### Value Bridge (Draft auf `feature/value-bridge`, noch nicht gemergt)
+
+- [x] Pain, Konsequenz, Outcome, Mechanismus und Metrics in einem geführten Ablauf
+- [x] Nachvollziehbare Typisierung von Einsparung, Deckungsbeitrag, Kapazität, Potenzial, Risiko und qualitativer Wirkung
+- [x] Direkte Wiederverwendung von `summarizeBusinessCase`; kein doppelter ROI-Rechenkern
+- [x] Opt-in-Session-Handoffs aus Metric Builder, Cost of Delay und Software Business Case; keine automatische Anrechnung
+- [x] Interne / kundenfähige Darstellung, Copy und lokaler PDF-Export
+- [x] Drei fiktive Beispiele und automatisierte Tests angelegt
+- [ ] Technische CI vollständig erfolgreich
+- [ ] Original-Screenshots/PDF-Seiten visuell überprüft und dritte simulierte Red-Team-Runde dokumentiert
+- [ ] Ausdrückliche Nutzerfreigabe, danach erst Merge nach `main`
+
+[Source-QA, Gap-Analyse und simulierte Red-Teams](VALUE_BRIDGE_SOURCE_AND_RED_TEAM.md).
