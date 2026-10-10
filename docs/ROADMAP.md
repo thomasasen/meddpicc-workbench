@@ -197,7 +197,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 
 ## Phase T3 – Value & Metrics Tools
 
-**Stand 10.10.2026:** Quick Payback mit Softwareprojekt-Modus und Business-Case-Stresstest aus PR #59 sind in `main`. Der Metric Builder wird auf `feature/metric-builder` separat implementiert und geprüft; vor Merge bleiben technische Abnahme und ausdrücklich visuelle Nutzerfreigabe erforderlich. Cost of Delay und Business Case / Value Bridge bleiben weitere separate Microtools.
+**Stand 10.10.2026:** Quick Payback mit Softwareprojekt-Modus und Business-Case-Stresstest aus PR #59 sind in `main`. Der Metric Builder ist im separat technisch und visuell geprüften [PR #60](https://github.com/thomasasen/meddpicc-workbench/pull/60) implementiert. Vor Merge ist ausschließlich die ausdrückliche Nutzerfreigabe offen. Cost of Delay und Business Case / Value Bridge bleiben weitere separate Microtools.
 
 
 Priorität:
@@ -222,9 +222,9 @@ Keine dauerhafte Opportunity-Pflege.
 - [x] Evidenzstatus und explizite Doppelzählungsgruppen
 - [x] Metric Card, Copy, lokales Kunden-PDF, ausdrücklicher Payback-Transfer
 - [x] Simulation des fachlichen Red Teams vor Design und nach Domainimplementierung
-- [ ] CI komplett grün, Screenshots und tatsächliche PDF-Bildseiten geprüft
-- [ ] Dritte Red-Team-Runde nach visueller Sichtprüfung und Nutzerfreigabe
-- [ ] Merge nach main
+- [x] CI #38007800785 komplett grün; echte Desktop-/Mobil-Screenshots und einseitige Original-PDF-Bildseite visuell kontrolliert (115 Playwright-Tests bestanden, 1 übersprungen)
+- [x] Dritte simulierte Red-Team-Runde nach tatsächlicher visueller Prüfung durchgeführt und dokumentiert; keine empirischen Interviews
+- [ ] Ausdrückliche Nutzerfreigabe und danach erst Merge nach `main`
 
 Siehe [Metric Builder Red Team](METRIC_BUILDER_RED_TEAM.md).
 
