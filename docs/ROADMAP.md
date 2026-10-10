@@ -197,7 +197,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 
 ## Phase T3 – Value & Metrics Tools
 
-**Stand 10.10.2026:** Quick Payback mit Softwareprojekt-Modus und Business-Case-Stresstest aus PR #59 sind in `main`. Der Metric Builder ist im separat technisch und visuell geprüften [PR #60](https://github.com/thomasasen/meddpicc-workbench/pull/60) implementiert. Vor Merge ist ausschließlich die ausdrückliche Nutzerfreigabe offen. Cost of Delay und Business Case / Value Bridge bleiben weitere separate Microtools.
+**Stand 10.10.2026:** Quick Payback mit Softwareprojekt-Modus und Business-Case-Stresstest aus PR #59 sind in `main`. Der Metric Builder wurde mit [PR #60](https://github.com/thomasasen/meddpicc-workbench/pull/60) am 10.10.2026 nach `main` gemergt (Commit `537af8d`). Cost of Delay wird im separaten Branch `feature/cost-of-delay` umgesetzt und bleibt bis zur visuellen Freigabe ungemergt. Business Case / Value Bridge ist weiterhin geplant.
 
 
 Priorität:
@@ -215,7 +215,7 @@ Leitprinzip:
 
 Keine dauerhafte Opportunity-Pflege.
 
-### Metric Builder (Feature-PR, noch nicht freigegeben)
+### Metric Builder (PR #60, am 10.10.2026 in main)
 
 - [x] Pain → Metric mit 7 typabhängigen Kategorien und kontextbezogenen Fragen
 - [x] Bestehende Payback-Formeln, konservative Trennung von Potenzial und realisierter Wirkung
@@ -224,7 +224,7 @@ Keine dauerhafte Opportunity-Pflege.
 - [x] Simulation des fachlichen Red Teams vor Design und nach Domainimplementierung
 - [x] CI #38007800785 komplett grün; echte Desktop-/Mobil-Screenshots und einseitige Original-PDF-Bildseite visuell kontrolliert (115 Playwright-Tests bestanden, 1 übersprungen)
 - [x] Dritte simulierte Red-Team-Runde nach tatsächlicher visueller Prüfung durchgeführt und dokumentiert; keine empirischen Interviews
-- [ ] Ausdrückliche Nutzerfreigabe und danach erst Merge nach `main`
+- [x] Ausdrückliche Nutzerfreigabe und Merge nach `main` (PR #60)
 
 Siehe [Metric Builder Red Team](METRIC_BUILDER_RED_TEAM.md).
 
@@ -322,3 +322,17 @@ Ein neues Feature wird nur aufgenommen, wenn mindestens eine dieser Fragen klar 
 - Macht es relevantes MEDDPICC-Wissen schneller zugänglich?
 
 Wenn der primäre Nutzen hingegen „mehr Deal-Daten erfassen, speichern oder reporten“ lautet, gehört das Feature nicht in den Core der Toolbox.
+
+
+### Cost of Delay (Feature-Branch, nicht gemergt)
+
+- [x] Reine monatliche Berechnung im gemeinsamen 36-/60-Monats-Horizont
+- [x] Startmonat, Ramp-up, Einmaleffekt, optionaler Endtermin und fixe vs. verschobene Wirkung
+- [x] Separate Behandlung von Altsystemabschaltung, Projektkosten und zusätzlichen Verzögerungskosten
+- [x] Kein finanzieller Wert für bloßen Kapazitätsgewinn; keine unbelegte Netto-Zahl
+- [x] Drei fiktive Beispiele, nachvollziehbare Kurve, Monats-Tabelle, PDF-Steckbrief
+- [x] Explizite Metric-Builder-Übergabe ohne fiktive Kundenbestätigung
+- [x] CI-Basislauf (309 Unit, 125 Browser bestanden, 1 Skip) und tatsächliche Desktop-/Mobil-/PDF-Bildprüfung dokumentiert
+- [ ] Ausdrückliche UI-Freigabe; Merge nach main bleibt gesperrt
+
+Siehe [Cost-of-Delay-Review](COST_OF_DELAY_SOURCE_AND_RED_TEAM.md).

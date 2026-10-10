@@ -25,6 +25,7 @@ import {
   type RealizationMechanism,
 } from '../domain/metricBuilder'
 import { queueMetricHandoff } from '../domain/metricBuilderHandoff'
+import { queueCostOfDelayHandoff } from '../domain/costOfDelayHandoff'
 import { buildMetricBuilderPdf } from '../report/metricBuilderPdf'
 import type { MetricFormula } from '../domain/softwarePayback'
 
@@ -144,6 +145,15 @@ async function transfer(): Promise<void> {
     await router.push({ path: '/tools/quick-payback', query: { importMetric: '1' } })
   } catch {
     message.value = 'Lokale Übergabe nicht möglich. Bitte Browserspeicher für diese Sitzung erlauben.'
+  }
+}
+async function transferToDelay(): Promise<void> {
+  if (!result.value.complete || result.value.realizedEur === null || result.value.realizedEur <= 0) return
+  try {
+    queueCostOfDelayHandoff(draft.value, result.value, window.sessionStorage)
+    await router.push('/tools/cost-of-delay')
+  } catch {
+    message.value = 'Cost-of-Delay-Übergabe nicht möglich. Nur realisierbare Metrics können übertragen werden.'
   }
 }
 </script>
@@ -499,6 +509,14 @@ async function transfer(): Promise<void> {
               @click="transfer"
             >
               <FileCheck2 :size="16" aria-hidden="true" /> Metric in Software-Payback übernehmen
+            </button>
+            <button
+              type="button"
+              class="button button-secondary button-with-icon"
+              :disabled="!result.complete || result.realizedEur === null || result.realizedEur <= 0"
+              @click="transferToDelay"
+            >
+              <Calculator :size="16" aria-hidden="true" /> Realisierbare Metric in Cost of Delay übernehmen
             </button>
           </div>
         </div>

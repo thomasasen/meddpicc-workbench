@@ -1,3 +1,12 @@
+# Cost of Delay – Feature-Branch (10.10.2026)
+
+Basis: `537af8d`. Dreistufiges Microtool mit Monatsengine, drei fiktiven Beispielen, SVG-Kurve, PDF-Export,
+expliziter Metric-Builder-Übernahme und getrenntem Modellvergleich von Nutzen, Abschaltung und Projektkosten.
+Kostenlücken verhindern einen scheinbar vollständigen Nettovergleich. CI-Basislauf erfolgreich: 309 Vitest, 125 Playwright erfolgreich, 1 übersprungen ([#38059322709](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38059322709)). Desktop-/Mobil-Originale und beide PDF-Seiten wurden danach visuell betrachtet. Die dritte simulierte Red-Team-Runde ist dokumentiert; keine echte Autoren- oder Nutzerfreigabe.
+Keine Merge-Freigabe für main. Quellen und simuliertes Red Team: [COST_OF_DELAY_SOURCE_AND_RED_TEAM.md](COST_OF_DELAY_SOURCE_AND_RED_TEAM.md).
+
+---
+
 # Quick Payback · aktueller T3-Draft-Slice (09.10.2026)
 
 - Feature-Branch: `feature/quick-payback-tool` vom bestätigten Main-Commit `c4e99ec682452c29998f33a128deadd8225c90d3`.

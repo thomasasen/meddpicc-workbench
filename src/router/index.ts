@@ -15,6 +15,7 @@ import HomeView from '../views/HomeView.vue'
 import ReverseTimelineView from '../views/ReverseTimelineView.vue'
 import QuickPaybackView from '../views/QuickPaybackView.vue'
 import MetricBuilderView from '../views/MetricBuilderView.vue'
+import CostOfDelayView from '../views/CostOfDelayView.vue'
 import RisksActionsView from '../views/RisksActionsView.vue'
 import ReferencesView from '../views/ReferencesView.vue'
 
@@ -25,6 +26,11 @@ const router = createRouter({
       path: '/',
       name: 'start',
       component: HomeView,
+    },
+    {
+      path: '/tools/cost-of-delay',
+      name: 'cost-of-delay',
+      component: CostOfDelayView,
     },
     {
       path: '/tools/metric-builder',

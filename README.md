@@ -1,5 +1,7 @@
 # MEDDPICC Toolbox
 
+> **Cost of Delay (in Vorbereitung):** Unter `/#/tools/cost-of-delay` bietet der Feature-Branch monatliche Verzögerungsszenarien, kumulierten Vergleich und PDF-Export. Ohne finanzielle Realisierung keine erfundene EUR-Wirkung. Noch nicht nach `main` gemergt.
+
 Praktische **Tools, Checklists und Wissenshilfen** für wiederkehrende Aufgaben im komplexen B2B-Vertrieb.
 
 Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:

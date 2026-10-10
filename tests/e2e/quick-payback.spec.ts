@@ -101,11 +101,13 @@ test('Quick Payback: responsive Breiten, Quellen und Eingabefehler ohne Horizont
   }
 })
 
-test('Quick Payback: Back-Navigation und weiterhin geplante T3-/T9-Tools', async ({ page }) => {
+test('Quick Payback: Back-Navigation und korrekte aktive sowie geplante Tools', async ({ page }) => {
   await page.goto('/meddpicc-workbench/')
   const builder = page.locator('.tool-row').filter({ has: page.getByText('Metric Builder', { exact: true }) })
   await expect(builder).toHaveAttribute('href', /metric-builder/)
-  for (const name of ['Cost of Delay', 'Business Case', 'Competition / Alternatives Map']) {
+  const delay = page.locator('.tool-row').filter({ has: page.getByText('Cost of Delay', { exact: true }) })
+  await expect(delay).toHaveAttribute('href', /cost-of-delay/)
+  for (const name of ['Business Case', 'Competition / Alternatives Map']) {
     const item = page.locator('.tool-row').filter({ has: page.getByText(name, { exact: true }) })
     await expect(item.getByText('Geplant')).toBeVisible()
     await expect(item).not.toHaveAttribute('href')
