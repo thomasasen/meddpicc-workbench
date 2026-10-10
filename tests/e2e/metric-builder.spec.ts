@@ -94,7 +94,6 @@ test('Metric Builder: fehlende Annahmen verhindern finanzielle Übernahme', asyn
   await page.goto(route)
   await page.getByRole('button', { name: 'Conversion' }).click()
   await page.getByRole('button', { name: 'Weiter', exact: false }).click()
-  await page.getByRole('button', { name: 'Weiter', exact: false }).click()
   await page.getByLabel('Tatsächlich realisierbarer Betrag in EUR pro Jahr').fill('99999999')
   await expect(
     page.getByText('Der realisierbare Betrag darf das berechnete Potenzial nicht übersteigen.'),
