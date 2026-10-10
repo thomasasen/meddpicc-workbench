@@ -332,7 +332,7 @@ Wenn der primäre Nutzen hingegen „mehr Deal-Daten erfassen, speichern oder re
 - [x] Kein finanzieller Wert für bloßen Kapazitätsgewinn; keine unbelegte Netto-Zahl
 - [x] Drei fiktive Beispiele, nachvollziehbare Kurve, Monats-Tabelle, PDF-Steckbrief
 - [x] Explizite Metric-Builder-Übergabe ohne fiktive Kundenbestätigung
-- [ ] CI und tatsächliche Browser-, Screenshot- sowie PDF-Sichtprüfung
+- [x] CI-Basislauf (309 Unit, 125 Browser bestanden, 1 Skip) und tatsächliche Desktop-/Mobil-/PDF-Bildprüfung dokumentiert
 - [ ] Ausdrückliche UI-Freigabe; Merge nach main bleibt gesperrt
 
 Siehe [Cost-of-Delay-Review](COST_OF_DELAY_SOURCE_AND_RED_TEAM.md).
