@@ -149,6 +149,38 @@ describe('Value Bridge: Handoff und PDF', () => {
     expect(imported?.metrics[0]?.kind).toBe('unclassified')
   })
 
+  it('übernimmt einen Cost-of-Delay-Einmaleffekt niemals als wiederkehrende Jahreswirkung', () => {
+    const storage = fakeStorage()
+    const input = {
+      ...emptyCostOfDelayInput(),
+      title: 'Einmalige Vertragsgutschrift',
+      benefitKind: 'one-time' as const,
+      annualBenefitEur: 50000,
+      financialTreatment: 'realized' as const,
+      effectGroup: 'einmalig',
+      source: 'Fiktive Gutschrift nur in einem Monat',
+    }
+    queueDelayToBridge(input, storage)
+    const imported = consumeValueBridgeHandoff(storage)
+    expect(imported?.metrics[0]?.kind).toBe('potential')
+    expect(imported?.metrics[0]?.annualRealizedEur).toBeNull()
+    expect(imported?.metrics[0]?.included).toBe(false)
+    expect(imported?.metrics[0]?.source).toContain('Einmaleffekt')
+  })
+
+  it('reine Umsatzerwartung bleibt nichtfinanziell, auch bei hohem Potenzial', () => {
+    const input = structuredClone(valueBridgeDemos.capacity!)
+    input.metrics[0]!.kind = 'revenue'
+    input.metrics[0]!.annualPotentialEur = 999999999
+    input.metrics[0]!.included = false
+    const result = evaluateValueBridge(input)
+    expect(result.countedAnnualEur).toBe(0)
+    expect(result.financial).toBeNull()
+    expect(result.questions.join(' ')).toContain('Umsatzerwartung')
+    input.metrics[0]!.included = true
+    expect(evaluateValueBridge(input).issues.join(' ')).toContain('darf nicht')
+  })
+
   it('übernimmt nur kompatible Payback-Kosten, nicht beliebige Zeitreihen', () => {
     const storage = fakeStorage()
     const input = exampleSoftwareProject()
