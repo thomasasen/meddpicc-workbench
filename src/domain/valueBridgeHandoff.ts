@@ -68,13 +68,15 @@ export function queueBuilderToBridge(
 
 /** Kein Cost-of-Delay-Differenzbetrag: nur der ausdrücklich modellierte Ausgangsnutzen. */
 export function queueDelayToBridge(input: CostOfDelayInput, storage: Pick<Storage, 'setItem'>): void {
-  const amount = input.financialTreatment === 'realized' ? input.annualBenefitEur : null
+  // Einmaliger Nutzen darf nicht in den wiederkehrenden Jahresnutzen der Bridge wandern.
+  const isOneTime = input.benefitKind === 'one-time'
+  const amount = input.financialTreatment === 'realized' && !isOneTime ? input.annualBenefitEur : null
   const metric: BridgeMetric = {
     ...blankBridgeMetric('from-delay'),
     name: input.title,
     kind: amount !== null ? 'unclassified' : input.financialTreatment === 'capacity' ? 'capacity' : 'potential',
     evidence: input.evidence,
-    source: input.source,
+    source: [input.source, isOneTime ? 'Einmaleffekt: kein übertragbarer wiederkehrender Jahreswert.' : ''].filter(Boolean).join(' | '),
     effectGroup: input.effectGroup,
     annualRealizedEur: amount,
     realization: input.source,
