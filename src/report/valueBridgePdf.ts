@@ -82,8 +82,10 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
   function paragraph(value: string, size = 10, gap = 11, font: PDFFont = regular): void {
     const lines = wrap(value || 'Noch offen', font, size, RIGHT - X)
     const leading = size + 4.6
-    reserve(lines.length * leading + gap)
+    // Einzelne Zeilen statt den gesamten Block reservieren: sehr lange deutsche
+    // Fließtexte umbrechen auch über mehrere PDF-Seiten ohne Abschneiden.
     for (const row of lines) {
+      reserve(leading + 2)
       page.drawText(row, { x: X, y: cursor, font, size, color: ink })
       cursor -= leading
     }
