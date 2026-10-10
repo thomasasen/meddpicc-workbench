@@ -49,10 +49,10 @@ Am 10.10.2026 wurden die von GitHub Actions erzeugten Original-Screenshots **met
 | Strategic Account Manager | Drei Stufen schnell erfassbar, CRM-Beispiel und Discovery-Fragen direkt sichtbar; mobil langer, aber zusammenhängender Scrollbereich ohne erkennbare Abschneidung. | Progressive Felder beibehalten; Gesprächsdauer nicht empirisch getestet |
 | CFO / Controlling | 91.666,67 EUR Kapazität stehen explizit neben „Nicht nachgewiesen“ als monetäre Realisierung; im PDF ebenfalls klar abgegrenzt. | Reale Kostenbelege und Budgets müssen extern geprüft werden |
 | COO | 12 auf 8 Minuten und 25.000 Vorgänge/Jahr mit nachvollziehbarem Rechenweg lesbar, auch mobil. | Ist- und Zielwerte bleiben Annahmen bis zur Prüfung |
-| Kundenseitiger Champion | Quellenstatus und konkrete noch offene Fragen bleiben in Metric Card und PDF sichtbar. | PDF zeigt ursprüngliche Umschreibung einiger Umlaute (ae/oe); Korrektur auf echte Umlaute eingecheckt, erneute Renderprüfung erforderlich |
-| Economic Buyer | Ausgangsproblem, Nutzenpotenzial und konservative Nichtanrechnung sind klar, es gibt keine künstliche ROI-Garantie. | Der Tastatur-Sprunglink erschien bei der Full-Page-Screenshot-Erstellung außerhalb seiner üblichen Position; per CSS-Clip bei inaktivem Zustand behoben, Tastaturfunktion erhalten, erneute Screenshotprüfung erforderlich |
+| Kundenseitiger Champion | Quellenstatus und konkrete noch offene Fragen bleiben in Metric Card und PDF sichtbar. | Ursprüngliche Umschreibung einiger Umlaute (ae/oe) wurde korrigiert. Erneut erzeugten, einseitigen Original-Steckbrief als PNG gerendert und gelesen; keine verbleibende fehlerhafte Transliteration beobachtet |
+| Economic Buyer | Ausgangsproblem, Nutzenpotenzial und konservative Nichtanrechnung sind klar, es gibt keine künstliche ROI-Garantie. | Der Tastatur-Sprunglink erschien auf ursprünglichen Full-Page-Screenshots außerhalb seiner üblichen Position. CSS-Clipping im unfokussierten Zustand behebt das Artefakt; die danach erzeugten Desktop-/Mobil-Screenshots wurden erneut geöffnet und zeigen die Metric Card vollständig. |
 
-**Visuelles Urteil vor Nachprüfung der Korrekturen:** keine erkennbaren abgeschnittenen Eingaben oder Ergebniszahlen auf Desktop/Mobil. Die PDF-Seite ist vollständig lesbar. Das dritte Red Team ist fachlich durchgeführt; **endgültige visuelle Abnahme erst nach erneuter Bildprüfung des korrigierten Stands**.
+**Abschließendes visuelles Urteil (10.10.2026):** Keine erkennbaren abgeschnittenen Eingaben oder Ergebniszahlen auf Desktop/Mobil; der aus der finalen CI heruntergeladene, neu gerenderte PDF-Steckbrief ist vollständig lesbar, einseitig und mit korrekt geschriebenen Umlauten. Das dritte simulierte Red Team ist durchgeführt, die technische und visuelle QS mit [CI #38007800785](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38007800785) bestanden (115 Playwright-Tests bestanden, 1 übersprungen). **Ausdrückliche Nutzerfreigabe und Merge stehen weiterhin aus.**
 
 ## Fiktive Beispiele
 
@@ -70,4 +70,4 @@ Es handelt sich ausschließlich um erfundene Schulungswerte, nicht um Referenzf�
 
 Der Builder kann bei belastbaren Inputs eine bessere prüfbare M2-Hypothese ermöglichen, weil Ausgangszahlen, Rechenweg, Realisierungsmechanismus und ungeklärte Annahmen sichtbar bleiben. Ob dies in der Praxis zu besseren Verkaufsentscheidungen führt, ist empirisch **nicht belegt**. Realisierte Effekte benötigen weiterhin eine organisatorische Maßnahme und die Prüfung durch Kunde bzw. Controlling; Risiko, Liquidität und komplexer ROI liegen außerhalb dieses Microtools.
 
-**Freigabe ausstehend:** Format, Lint, Tests, Build, Pages, E2E, PDF-Rendering, visuelle Sichtprüfung und ausdrückliche Nutzerfreigabe vor Merge.
+**Vor Merge allein ausstehend:** ausdrückliche Nutzerfreigabe. Format, Lint, Tests, Build, Pages, E2E, Original-PDF-Rendering und tatsächliche visuelle Sichtprüfung sind durchgeführt.
