@@ -236,3 +236,16 @@ Nach dem T2-Ausbau folgen die Value-&-Metrics-Tools:
 - dauerhaftes MEDDPICC-Scoring
 - Deal Health / Completeness
 - Pflicht-Workflow über alle MEDDPICC-Bereiche
+
+
+## T3 – Value Bridge (10.10.2026, Draft-Stand)
+
+**Verifizierte Ausgangsbasis:** PR #61 Cost of Delay ist mit Squash `7759a7e09f0c38165bd317cd8f006c0191053d99` in `main` enthalten. Ältere Statusangaben in Roadmap und Projektunterlagen, wonach Cost of Delay ungemergt sei, sind überholt.
+
+**Branch:** `feature/value-bridge` · **Status:** in Implementierung / noch nicht für Merge freigegeben.
+
+Neu: `src/domain/valueBridge.ts` und `valueBridgeHandoff.ts` mit Evidenz-, Realisierungs- und Doppelzählungsgates; geführte Oberfläche unter `/tools/value-bridge`; Kundenansicht, Copy, lokaler PDF-Bericht; drei fiktive Szenarien; Tests. Monetäre Gesamtwirkung wird mit `summarizeBusinessCase` und der vorhandenen Monatsengine berechnet. Der Übernahmeprozess bleibt einmalig über Session Storage und aktiviert keine EUR-Position automatisch.
+
+**Offen vor Done:** Sämtliche Quality Gates auf dem tatsächlichen Commit verifizieren, Original-Browserbilder in vier Viewports und sämtliche gerenderten PDF-Seiten sichten, dritte simulierte fachliche Reviewrunde, ausdrückliche visuelle Nutzerfreigabe. Kein Merge nach `main`.
+
+Siehe [Value Bridge Quellenmatrix und Gap-Analyse](VALUE_BRIDGE_SOURCE_AND_RED_TEAM.md).
