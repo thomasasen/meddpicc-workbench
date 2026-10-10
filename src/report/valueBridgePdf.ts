@@ -122,6 +122,7 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
       (metric.before || '?') + ' -> ' + (metric.after || '?') + (metric.unit ? ' ' + metric.unit : ''),
     )
     entry('Art der Wirkung', bridgeKindLabels[metric.kind])
+    if (metric.calculation) entry('Rechenweg des Jahreswerts', metric.calculation)
     entry(
       'Datenherkunft',
       bridgeEvidenceLabels[metric.evidence] + (metric.source ? ' | ' + metric.source : ' | Quelle offen'),
