@@ -399,7 +399,7 @@ onMounted(() => {
                   />
                 </label>
                 <p class="vb-hint">
-                  Der ROI und der Monatsverlauf nutzen die vorhandene Software-Business-Case-Engine. Zusätzliche Kosten-
+                  Der wirtschaftliche Saldo und der Payback nutzen die vorhandene Software-Business-Case-Engine. Zusätzliche Kosten-
                   und Abschaltungsmodelle bitte dort prüfen.
                 </p>
               </div>
