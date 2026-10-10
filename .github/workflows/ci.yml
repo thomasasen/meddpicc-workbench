@@ -83,6 +83,19 @@ jobs:
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
           fi
 
+
+      - name: Cost of Delay Dateien vor Quality Gates formatieren
+        if: startsWith(github.head_ref, 'feature/cost-of-delay')
+        run: |
+          npx prettier --write src/domain/costOfDelay.ts src/domain/costOfDelay.test.ts src/domain/costOfDelayHandoff.ts src/report/costOfDelayPdf.ts src/views/CostOfDelayView.vue src/views/MetricBuilderView.vue src/router/index.ts src/views/HomeView.vue src/styles/costOfDelay.css tests/e2e/cost-of-delay.spec.ts
+          if ! git diff --quiet -- src tests; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src tests
+            git commit -m "style: format Cost of Delay implementation"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
       - name: Formatierung prüfen
         run: npm run format:check
 
@@ -202,6 +215,28 @@ jobs:
           fi
           find test-results/rendered -name 'metric-builder-brief-all-*.png' -size +0c | grep -q .
 
+
+      - name: Cost of Delay PDF Originalseiten rendern
+        if: startsWith(github.head_ref, 'feature/cost-of-delay')
+        run: |
+          report="$(find test-results -type f -name 'cost-of-delay-desktop-chromium.pdf' -print -quit)"
+          test -s "$report" || { echo "::error::Cost of Delay PDF fehlt"; exit 1; }
+          if ! command -v pdftoppm >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y poppler-utils
+          fi
+          mkdir -p test-results/rendered
+          pdfinfo "$report" | head -18
+          pdftotext -layout "$report" test-results/rendered/cost-of-delay-pdf.txt
+          grep -q 'COST OF DELAY' test-results/rendered/cost-of-delay-pdf.txt
+          grep -q 'Ausgangssituation' test-results/rendered/cost-of-delay-pdf.txt
+          grep -q 'Nachvollziehbarkeit' test-results/rendered/cost-of-delay-pdf.txt
+          if grep -Eiq 'Coaching.Score|MEDDPICC.Score|Verkäuferbewertung' test-results/rendered/cost-of-delay-pdf.txt; then
+            echo "::error::Interner Score im Kundenbericht"; exit 1
+          fi
+          pdftoppm -scale-to 1300 -png "$report" test-results/rendered/cost-of-delay-pdf
+          test "$(find test-results/rendered -name 'cost-of-delay-pdf-*.png' -size +0c | wc -l)" -ge 1
+
       - name: Original-PDFs als prüfbare Artefakte sichern
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -212,6 +247,7 @@ jobs:
             test-results/**/metric-builder-brief-*.pdf
             test-results/**/business-case-qa-desktop-chromium.pdf
             test-results/**/scenario-selected-customer-desktop-chromium.pdf
+            test-results/**/cost-of-delay-*.pdf
           if-no-files-found: ignore
 
       - name: UI-QS-Screenshots bereitstellen
@@ -325,6 +361,28 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "test: publish browser review screenshots"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
+
+
+      - name: Cost of Delay Originalbilder für visuelle Abnahme veröffentlichen
+        if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'feature/cost-of-delay')
+        run: |
+          mkdir -p docs/review-screenshots
+          for name in cost-of-delay-empty-desktop-chromium.png cost-of-delay-empty-mobile-chromium.png cost-of-delay-result-desktop-chromium.png cost-of-delay-result-mobile-chromium.png; do
+            source="$(find test-results -type f -name "$name" -print -quit)"
+            test -s "$source" || { echo "::error::Screenshot fehlt: $name"; exit 1; }
+            cp "$source" "docs/review-screenshots/$name"
+          done
+          for source in test-results/rendered/cost-of-delay-pdf-*.png; do
+            test -s "$source" || { echo "::error::Gerenderte PDF-Seite fehlt"; exit 1; }
+            cp "$source" "docs/review-screenshots/$(basename "$source")"
+          done
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/review-screenshots
+          if ! git diff --cached --quiet; then
+            git commit -m "test: Cost of Delay Desktop, Mobil und PDF-Seiten für Abnahme"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
 
   main-pages-integrity:
     if: github.event_name == 'push'
