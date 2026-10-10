@@ -6,6 +6,7 @@ import {
   type BridgeMetric,
   type ValueBridgeInput,
 } from '../domain/valueBridge'
+import { drawReportFooter } from './reportChrome'
 
 const PAGE_W = 595.28
 const PAGE_H = 841.89
@@ -420,29 +421,13 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
     },
   )
 
-  for (const [index, sheet] of pdf.getPages().entries()) {
-    sheet.drawLine({
-      start: { x: PAD, y: 53 },
-      end: { x: PAGE_W - PAD, y: 53 },
-      color: rule,
-      thickness: 0.8,
-    })
-    sheet.drawText('GESPRÄCHSGRUNDLAGE / KEINE GARANTIE ODER BUDGETFREIGABE', {
-      x: PAD,
-      y: 35,
-      font: regular,
-      size: 7.1,
-      color: muted,
-    })
-    const pageInfo = 'Seite ' + (index + 1) + ' / ' + pdf.getPageCount()
-    sheet.drawText(pageInfo, {
-      x: PAGE_W - PAD - regular.widthOfTextAtSize(pageInfo, 7.7),
-      y: 35,
-      font: regular,
-      size: 7.7,
-      color: muted,
-    })
-  }
-
+  drawReportFooter(pdf.getPages(), regular, bold, {
+    left: PAD,
+    right: PAGE_W - PAD,
+    label: 'GESPRÄCHSGRUNDLAGE / KEINE GARANTIE ODER BUDGETFREIGABE',
+    borderColor: rule,
+    textColor: muted,
+    fontSize: 7.1,
+  })
   return pdf.save()
 }
