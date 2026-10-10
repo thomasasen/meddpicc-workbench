@@ -11,6 +11,7 @@ export interface BridgeMetric {
   before: string
   after: string
   unit: string
+  calculation: string
   evidence: MetricEvidence
   source: string
   effectGroup: string
@@ -76,6 +77,7 @@ export function blankBridgeMetric(id: string): BridgeMetric {
     before: '',
     after: '',
     unit: '',
+    calculation: '',
     evidence: 'hypothesis',
     source: '',
     effectGroup: '',
@@ -168,6 +170,7 @@ export function evaluateValueBridge(input: ValueBridgeInput): ValueBridgeResult 
       if (!isAmount(metric.annualRealizedEur) || metric.annualRealizedEur <= 0)
         issues.push(where + ': realisierbarer Jahresbetrag fehlt.')
       if (!metric.realization.trim()) issues.push(where + ': konkreter Realisierungsmechanismus fehlt.')
+      if (!metric.calculation.trim()) issues.push(where + ': Herleitung des Jahreswertes aus den Messgrößen fehlt.')
       if (!metric.effectGroup.trim()) issues.push(where + ': Wirkungsgruppe zur Doppelzählungsprüfung fehlt.')
       if (
         metric.annualPotentialEur !== null &&
@@ -266,6 +269,7 @@ export function evaluateValueBridge(input: ValueBridgeInput): ValueBridgeResult 
         ' → ' +
         (m.after || '?') +
         (m.unit ? ' ' + m.unit : '') +
+        ' | Berechnung: ' + (m.calculation || 'noch offen') +
         ' | ' +
         bridgeKindLabels[m.kind] +
         ' | ' +
@@ -316,6 +320,7 @@ export const valueBridgeDemos: Record<string, ValueBridgeInput> = {
         kind: 'saving',
         effectGroup: 'externer-service',
         annualPotentialEur: 36000,
+        calculation: '(6.000 - 3.000) EUR/Monat × 12 Monate = 36.000 EUR/Jahr',
         annualRealizedEur: 36000,
         realization: 'Dienstleisterrechnung wird vertraglich reduziert.',
         included: true,
@@ -345,6 +350,7 @@ export const valueBridgeDemos: Record<string, ValueBridgeInput> = {
       kind: 'margin' as const,
       effectGroup: 'sales-margin',
       annualPotentialEur: 192000,
+      calculation: '1.200 Angebote/Jahr × 4 Prozentpunkte × 4.000 EUR zusätzlicher Deckungsbeitrag = 192.000 EUR/Jahr',
       annualRealizedEur: 192000,
       realization: 'Nur unter Annahme zusätzlicher, profitabler Abschlüsse.',
       included: true,
