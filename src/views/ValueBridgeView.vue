@@ -144,7 +144,9 @@ onMounted(() => {
     <main id="main-content" class="container vb-main">
       <section class="vb-intro">
         <div class="tool-intro-meta vb-intro-meta">
-          <span class="tool-kind tool-kind--customer"><FileChartColumn :size="15" aria-hidden="true" /> Kundenfähiges Ergebnis</span>
+          <span class="tool-kind tool-kind--customer"
+            ><FileChartColumn :size="15" aria-hidden="true" /> Kundenfähiges Ergebnis</span
+          >
           <span>Value &amp; Metrics · Argumentation</span>
         </div>
         <h1>Vom Kundenproblem zur Investitionsgrundlage</h1>
@@ -458,7 +460,10 @@ onMounted(() => {
         <section class="vb-panel vb-output" aria-labelledby="vb-output-heading">
           <div class="vb-output-top">
             <div>
-              <p class="eyebrow vb-section-eyebrow"><span class="vb-section-round"><FileChartColumn :size="17" aria-hidden="true" /></span> Ergebnis · Value Bridge</p>
+              <p class="eyebrow vb-section-eyebrow">
+                <span class="vb-section-round"><FileChartColumn :size="17" aria-hidden="true" /></span> Ergebnis · Value
+                Bridge
+              </p>
               <h2 id="vb-output-heading">Wirkungszusammenhang</h2>
             </div>
             <label class="vb-view-select"
@@ -484,7 +489,9 @@ onMounted(() => {
                   <span class="vb-story-kicker">01 · Kundenproblem</span>
                   <h3>Was steht auf dem Spiel?</h3>
                   <p class="vb-story-main">{{ draft.pain || 'Das konkrete Problem ist noch offen.' }}</p>
-                  <p class="vb-story-support"><strong>Geschäftliche Folge:</strong> {{ draft.consequence || 'Noch nicht geklärt.' }}</p>
+                  <p class="vb-story-support">
+                    <strong>Geschäftliche Folge:</strong> {{ draft.consequence || 'Noch nicht geklärt.' }}
+                  </p>
                 </div>
               </li>
               <li class="vb-story-step vb-story-step--goal">
@@ -493,7 +500,9 @@ onMounted(() => {
                   <span class="vb-story-kicker">02 · Zielbild</span>
                   <h3>Was soll sich verbessern?</h3>
                   <p class="vb-story-main">{{ draft.outcome || 'Das gewünschte Ergebnis ist noch offen.' }}</p>
-                  <p class="vb-story-support"><strong>Weg dorthin:</strong> {{ draft.change || 'Die notwendige Veränderung ist noch offen.' }}</p>
+                  <p class="vb-story-support">
+                    <strong>Weg dorthin:</strong> {{ draft.change || 'Die notwendige Veränderung ist noch offen.' }}
+                  </p>
                 </div>
               </li>
               <li class="vb-story-step vb-story-step--metric">
@@ -522,26 +531,46 @@ onMounted(() => {
                 <strong v-if="result.countedAnnualEur > 0">{{ money(result.countedAnnualEur) }} pro Jahr</strong>
                 <strong v-else>EUR-Realisierung noch offen</strong>
                 <p v-if="result.financial">
-                  <span>Saldo nach {{ draft.horizonMonths }} Monaten: <b>{{ money(result.financial.netValueEur) }}</b></span>
-                  <span>Anhaltender Payback:
-                    <b>{{ result.financial.sustainedBreakEvenMonth === null ? 'nicht erreicht' : 'Monat ' + result.financial.sustainedBreakEvenMonth }}</b>
+                  <span
+                    >Saldo nach {{ draft.horizonMonths }} Monaten:
+                    <b>{{ money(result.financial.netValueEur) }}</b></span
+                  >
+                  <span
+                    >Anhaltender Payback:
+                    <b>{{
+                      result.financial.sustainedBreakEvenMonth === null
+                        ? 'nicht erreicht'
+                        : 'Monat ' + result.financial.sustainedBreakEvenMonth
+                    }}</b>
                   </span>
                 </p>
                 <p v-else>Keine vollständige Modellrechnung. Nicht angerechnete Wirkungen bleiben sichtbar.</p>
-                <span v-if="draft.metrics.some((metric) => metric.included && metric.evidence !== 'customer-reviewed')"
-                  class="vb-value-status"><CircleDashed :size="15" aria-hidden="true" /> Enthält nicht gemeinsam geprüfte Annahmen</span>
+                <span
+                  v-if="draft.metrics.some((metric) => metric.included && metric.evidence !== 'customer-reviewed')"
+                  class="vb-value-status"
+                  ><CircleDashed :size="15" aria-hidden="true" /> Enthält nicht gemeinsam geprüfte Annahmen</span
+                >
                 <span v-else-if="result.countedAnnualEur === 0" class="vb-value-status">
                   <Lightbulb :size="15" aria-hidden="true" /> Erst Wirkung validieren, dann finanzieren
                 </span>
               </div>
             </div>
           </div>
-          <h3 class="vb-heading-icon"><ChartColumnIncreasing :size="19" aria-hidden="true" /> Nachweise und Herleitung</h3>
+          <h3 class="vb-heading-icon">
+            <ChartColumnIncreasing :size="19" aria-hidden="true" /> Nachweise und Herleitung
+          </h3>
           <div v-for="metric in draft.metrics" :key="metric.id" class="vb-out-metric">
             <strong>{{ metric.name || 'Metric offen' }}</strong>
-            <p class="vb-out-transition"><span>{{ metric.before || '?' }}</span><ArrowRight :size="16" aria-hidden="true" /><span>{{ metric.after || '?' }}</span><small>{{ metric.unit }}</small></p>
+            <p class="vb-out-transition">
+              <span>{{ metric.before || '?' }}</span
+              ><ArrowRight :size="16" aria-hidden="true" /><span>{{ metric.after || '?' }}</span
+              ><small>{{ metric.unit }}</small>
+            </p>
             <p v-if="metric.calculation">Herleitung: {{ metric.calculation }}</p>
-            <p class="vb-evidence-line"><CircleDashed :size="16" aria-hidden="true" /> {{ bridgeKindLabels[metric.kind] }} · {{ bridgeEvidenceLabels[metric.evidence] }}</p>
+            <p class="vb-evidence-line">
+              <CircleDashed :size="16" aria-hidden="true" /> {{ bridgeKindLabels[metric.kind] }} ·
+              {{ bridgeEvidenceLabels[metric.evidence] }}
+            </p>
             <p>Quelle: {{ metric.source || 'Noch nicht dokumentiert' }}</p>
             <p v-if="metric.included">
               Wirtschaftlich angesetzt:

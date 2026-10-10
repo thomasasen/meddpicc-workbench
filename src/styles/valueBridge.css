@@ -337,7 +337,6 @@
   }
 }
 
-
 /* Value Bridge – lesbare Sales-Story statt gleichförmiger Textflächen */
 .vb-shell {
   --vb-pain-bg: #fff7f1;
@@ -409,7 +408,9 @@
 
 .vb-field :is(input, select, textarea) {
   border-radius: var(--radius-panel);
-  transition: border-color 120ms ease, box-shadow 120ms ease;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
 }
 
 .vb-field :is(input, select, textarea):focus-visible {
@@ -739,5 +740,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .vb-field :is(input, select, textarea) { transition: none; }
+  .vb-field :is(input, select, textarea) {
+    transition: none;
+  }
 }

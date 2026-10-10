@@ -13,14 +13,14 @@ const PAD = 43
 const BODY_W = PAGE_W - 2 * PAD
 const BOTTOM = 69
 const navy = rgb(0.09, 0.17, 0.29)
-const ink = rgb(0.13, 0.20, 0.30)
+const ink = rgb(0.13, 0.2, 0.3)
 const muted = rgb(0.34, 0.41, 0.49)
 const rule = rgb(0.82, 0.86, 0.91)
 const blue = rgb(0.16, 0.36, 0.75)
 const blueSoft = rgb(0.93, 0.96, 1)
 const amber = rgb(0.55, 0.31, 0.09)
 const amberSoft = rgb(1, 0.97, 0.93)
-const teal = rgb(0.09, 0.40, 0.37)
+const teal = rgb(0.09, 0.4, 0.37)
 const tealSoft = rgb(0.93, 0.97, 0.96)
 const pale = rgb(0.96, 0.97, 0.99)
 const white = rgb(1, 1, 1)
@@ -86,13 +86,25 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
     page.drawRectangle({ x: PAD, y: PAGE_H - 54, width: 29, height: 29, color: blue })
     page.drawText('M', { x: PAD + 8, y: PAGE_H - 45, font: bold, size: 16, color: white })
     page.drawText('MEDDPICC TOOLBOX', {
-      x: PAD + 39, y: PAGE_H - 35, font: bold, size: 9, color: white,
+      x: PAD + 39,
+      y: PAGE_H - 35,
+      font: bold,
+      size: 9,
+      color: white,
     })
     page.drawText('VALUE BRIDGE / KUNDENGESPRÄCH', {
-      x: PAD + 39, y: PAGE_H - 49, font: regular, size: 7.5, color: rgb(0.80, 0.86, 0.94),
+      x: PAD + 39,
+      y: PAGE_H - 49,
+      font: regular,
+      size: 7.5,
+      color: rgb(0.8, 0.86, 0.94),
     })
     page.drawText('Vom Problem zum messbaren Geschäftswert', {
-      x: PAD, y: PAGE_H - 82, font: bold, size: 14.7, color: white,
+      x: PAD,
+      y: PAGE_H - 82,
+      font: bold,
+      size: 14.7,
+      color: white,
     })
     y = PAGE_H - 124
   }
@@ -135,13 +147,7 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
   }
 
   /** Single compact visual stage. Long user content is rendered as unboxed, automatically paginated text. */
-  function stage(
-    n: string,
-    label: string,
-    value: string,
-    surface: RGB,
-    accent: RGB,
-  ): void {
+  function stage(n: string, label: string, value: string, surface: RGB, accent: RGB): void {
     const body = wrap(value || 'Noch offen', regular, 10.2, BODY_W - 69)
     const height = 22 + body.length * 14.4 + 10
     if (height > PAGE_H - 225) {
@@ -156,7 +162,11 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
     page.drawCircle({ x: PAD + 26, y: top - 24, size: 12, color: white })
     page.drawText(n, { x: PAD + 20, y: top - 28, font: bold, size: 9.1, color: accent })
     page.drawText(label.toUpperCase(), {
-      x: PAD + 50, y: top - 21, font: bold, size: 8.1, color: accent,
+      x: PAD + 50,
+      y: top - 21,
+      font: bold,
+      size: 8.1,
+      color: accent,
     })
     let lineY = top - 39
     for (const row of body) {
@@ -170,7 +180,11 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
     page.drawRectangle({ x, y: y - 64, width, height: 64, color: pale })
     page.drawRectangle({ x, y: y - 64, width: 3, height: 64, color: accent })
     page.drawText(printable(label.toUpperCase()), {
-      x: x + 13, y: y - 19, font: bold, size: 7.7, color: muted,
+      x: x + 13,
+      y: y - 19,
+      font: bold,
+      size: 7.7,
+      color: muted,
     })
     const lines = wrap(value, bold, 15, width - 26)
     let posY = y - 45
@@ -182,29 +196,43 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
 
   /** Card is measured before drawing so every normal-size card stays together. */
   function metricCard(metric: BridgeMetric, index: number): void {
-    const title = wrap((index + 1) + '. ' + (metric.name || 'Messgröße offen'), bold, 10.7, BODY_W - 32)
+    const title = wrap(index + 1 + '. ' + (metric.name || 'Messgröße offen'), bold, 10.7, BODY_W - 32)
     const typeLines = wrap(bridgeKindLabels[metric.kind], regular, 8.9, BODY_W - 32)
     const evidenceLines = wrap(
       bridgeEvidenceLabels[metric.evidence] + ' | ' + (metric.source || 'Quelle offen'),
-      regular, 8.8, BODY_W - 32,
+      regular,
+      8.8,
+      BODY_W - 32,
     )
     const calcLines = metric.calculation ? wrap('Herleitung: ' + metric.calculation, regular, 8.8, BODY_W - 32) : []
     const realizationLines = metric.included
       ? wrap('Realisierung: ' + (metric.realization || 'Noch offen'), regular, 8.8, BODY_W - 32)
       : []
-    const valueLines = metric.included && (metric.kind === 'saving' || metric.kind === 'margin')
-      ? wrap('Im Modell: ' + euro(metric.annualRealizedEur ?? 0) + ' pro Jahr', bold, 9.5, BODY_W - 32)
-      : ['Keine EUR-Anrechnung']
-    const bodyH = title.length * 14.3 + typeLines.length * 12.4 +
-      evidenceLines.length * 12.2 + calcLines.length * 12.2 +
-      realizationLines.length * 12.2 + valueLines.length * 13.6 + 74
+    const valueLines =
+      metric.included && (metric.kind === 'saving' || metric.kind === 'margin')
+        ? wrap('Im Modell: ' + euro(metric.annualRealizedEur ?? 0) + ' pro Jahr', bold, 9.5, BODY_W - 32)
+        : ['Keine EUR-Anrechnung']
+    const bodyH =
+      title.length * 14.3 +
+      typeLines.length * 12.4 +
+      evidenceLines.length * 12.2 +
+      calcLines.length * 12.2 +
+      realizationLines.length * 12.2 +
+      valueLines.length * 13.6 +
+      74
 
     if (bodyH > PAGE_H - 231) {
       keep(50)
-      text((index + 1) + '. ' + (metric.name || 'Messgröße offen'), { font: bold, size: 11 })
+      text(index + 1 + '. ' + (metric.name || 'Messgröße offen'), { font: bold, size: 11 })
       smallLine('Heute -> Ziel', (metric.before || '?') + ' -> ' + (metric.after || '?') + ' ' + metric.unit)
-      smallLine('Art und Quelle', bridgeKindLabels[metric.kind] + ' | ' +
-        bridgeEvidenceLabels[metric.evidence] + ' | ' + (metric.source || 'Quelle offen'))
+      smallLine(
+        'Art und Quelle',
+        bridgeKindLabels[metric.kind] +
+          ' | ' +
+          bridgeEvidenceLabels[metric.evidence] +
+          ' | ' +
+          (metric.source || 'Quelle offen'),
+      )
       if (metric.calculation) smallLine('Herleitung', metric.calculation)
       smallLine('Wirtschaftliche Anrechnung', valueLines.join(' '))
       if (metric.included) smallLine('Realisierung', metric.realization)
@@ -214,8 +242,13 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
     keep(bodyH + 12)
     const top = y
     page.drawRectangle({
-      x: PAD, y: top - bodyH, width: BODY_W, height: bodyH,
-      color: white, borderColor: rule, borderWidth: 0.8,
+      x: PAD,
+      y: top - bodyH,
+      width: BODY_W,
+      height: bodyH,
+      color: white,
+      borderColor: rule,
+      borderWidth: 0.8,
     })
     page.drawRectangle({ x: PAD, y: top - 5, width: BODY_W, height: 5, color: blue })
     let current = top - 23
@@ -234,20 +267,36 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
     const afterLines = wrap('ZIEL  ' + right, bold, 9, (BODY_W - 42) / 2)
     const count = Math.max(beforeLines.length, afterLines.length)
     for (let i = 0; i < count; i++) {
-      if (beforeLines[i]) page.drawText(beforeLines[i], {
-        x: innerX, y: current - i * 12.7, font: bold, size: 9, color: ink,
-      })
-      if (afterLines[i]) page.drawText(afterLines[i], {
-        x: PAD + BODY_W / 2 + 8, y: current - i * 12.7, font: bold, size: 9, color: teal,
-      })
+      if (beforeLines[i])
+        page.drawText(beforeLines[i], {
+          x: innerX,
+          y: current - i * 12.7,
+          font: bold,
+          size: 9,
+          color: ink,
+        })
+      if (afterLines[i])
+        page.drawText(afterLines[i], {
+          x: PAD + BODY_W / 2 + 8,
+          y: current - i * 12.7,
+          font: bold,
+          size: 9,
+          color: teal,
+        })
     }
     current -= Math.max(1, count) * 12.7 + 9
     drawRows(typeLines, regular, 8.9, 12.4, muted, 6)
     drawRows(evidenceLines, regular, 8.8, 12.2, muted, 5)
     if (calcLines.length) drawRows(calcLines, regular, 8.8, 12.2, ink, 5)
     if (realizationLines.length) drawRows(realizationLines, regular, 8.8, 12.2, ink, 5)
-    drawRows(valueLines, metric.included ? bold : regular, metric.included ? 9.5 : 9, 13.6,
-      metric.included ? blue : muted, 0)
+    drawRows(
+      valueLines,
+      metric.included ? bold : regular,
+      metric.included ? 9.5 : 9,
+      13.6,
+      metric.included ? blue : muted,
+      0,
+    )
     y = top - bodyH - 12
   }
 
@@ -263,11 +312,19 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
     const top = y
     page.drawRectangle({ x: PAD, y: top - heroH, width: BODY_W, height: heroH, color: blueSoft })
     page.drawText('ANGESTREBTES GESCHÄFTSERGEBNIS', {
-      x: PAD + 15, y: top - 19, font: bold, size: 8.3, color: blue,
+      x: PAD + 15,
+      y: top - 19,
+      font: bold,
+      size: 8.3,
+      color: blue,
     })
     lines.forEach((lineText, i) => {
       page.drawText(lineText, {
-        x: PAD + 15, y: top - 42 - 19 * i, font: bold, size: 15, color: navy,
+        x: PAD + 15,
+        y: top - 42 - 19 * i,
+        font: bold,
+        size: 15,
+        color: navy,
       })
     })
     y -= heroH + 7
@@ -281,7 +338,9 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
   stage('02', 'Geschäftliche Konsequenz', input.consequence, pale, navy)
   stage('03', 'Ermöglichte Veränderung', input.change, tealSoft, teal)
   text('Wichtige Voraussetzung: ' + (input.prerequisites || 'Noch nicht benannt.'), {
-    size: 8.8, color: muted, gap: 8,
+    size: 8.8,
+    color: muted,
+    gap: 8,
   })
 
   section('2', 'Wie die Verbesserung messbar wird')
@@ -290,7 +349,9 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
   section('3', 'Wirtschaftliche Einordnung')
   if (result.financial) {
     text('Modell über ' + input.horizonMonths + ' Monate, undiskontiert. Keine Investitionsfreigabe.', {
-      size: 9.1, color: muted, gap: 10,
+      size: 9.1,
+      color: muted,
+      gap: 10,
     })
     keep(159)
     const gap = 10
@@ -301,9 +362,10 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
     keyNumber('Nutzen im Zeitraum', euro(result.financial.benefitEur), PAD, width, teal)
     keyNumber('Undiskontierter Saldo', euro(result.financial.netValueEur), PAD + width + gap, width, blue)
     y -= 79
-    const payback = result.financial.sustainedBreakEvenMonth === null
-      ? 'Innerhalb von ' + input.horizonMonths + ' Monaten rechnerisch nicht erreicht'
-      : 'Rechnerisch ab Projektmonat ' + result.financial.sustainedBreakEvenMonth
+    const payback =
+      result.financial.sustainedBreakEvenMonth === null
+        ? 'Innerhalb von ' + input.horizonMonths + ' Monaten rechnerisch nicht erreicht'
+        : 'Rechnerisch ab Projektmonat ' + result.financial.sustainedBreakEvenMonth
     text('ANHALTENDER BREAK-EVEN: ' + payback, { font: bold, size: 9.1, gap: 12, color: navy })
   } else {
     keep(85)
@@ -311,10 +373,19 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
     page.drawRectangle({ x: PAD, y: y - 71, width: 4, height: 71, color: blue })
     y -= 17
     text('NOCH KEIN VOLLSTÄNDIGER FINANZIELLER BUSINESS CASE', {
-      size: 8.8, font: bold, color: navy, gap: 5, x: PAD + 16, width: BODY_W - 32,
+      size: 8.8,
+      font: bold,
+      color: navy,
+      gap: 5,
+      x: PAD + 16,
+      width: BODY_W - 32,
     })
     text('Nicht monetarisierte Wirkungen und offene Kosten bleiben ausdrücklich offen.', {
-      size: 9.2, color: muted, gap: 10, x: PAD + 16, width: BODY_W - 32,
+      size: 9.2,
+      color: muted,
+      gap: 10,
+      x: PAD + 16,
+      width: BODY_W - 32,
     })
     y -= 12
   }
@@ -325,8 +396,11 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
   for (const [index, item] of checklist.entries()) {
     keep(28)
     page.drawCircle({ x: PAD + 7, y: y + 3, size: 3.1, borderColor: blue, borderWidth: 1 })
-    text((index + 1) + '. ' + item, {
-      size: 9.2, x: PAD + 20, width: BODY_W - 20, gap: 8,
+    text(index + 1 + '. ' + item, {
+      size: 9.2,
+      x: PAD + 20,
+      width: BODY_W - 20,
+      gap: 8,
     })
   }
 
@@ -334,23 +408,37 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
   y -= 8
   page.drawLine({ start: { x: PAD, y }, end: { x: PAGE_W - PAD, y }, color: rule, thickness: 0.8 })
   y -= 17
-  text('METHODIK: Alle Zahlen beruhen auf erfassten Annahmen und Datenquellen. Auch als kundenseitig ' +
-    'geprüft markierte Angaben werden durch diesen Bericht nicht unabhängig verifiziert.', {
-    size: 8.3, color: muted, gap: 0,
-  })
+  text(
+    'METHODIK: Alle Zahlen beruhen auf erfassten Annahmen und Datenquellen. Auch als kundenseitig ' +
+      'geprüft markierte Angaben werden durch diesen Bericht nicht unabhängig verifiziert.',
+    {
+      size: 8.3,
+      color: muted,
+      gap: 0,
+    },
+  )
 
   for (const [index, sheet] of pdf.getPages().entries()) {
     sheet.drawLine({
-      start: { x: PAD, y: 53 }, end: { x: PAGE_W - PAD, y: 53 },
-      color: rule, thickness: 0.8,
+      start: { x: PAD, y: 53 },
+      end: { x: PAGE_W - PAD, y: 53 },
+      color: rule,
+      thickness: 0.8,
     })
     sheet.drawText('GESPRÄCHSGRUNDLAGE / KEINE GARANTIE ODER BUDGETFREIGABE', {
-      x: PAD, y: 35, font: regular, size: 7.1, color: muted,
+      x: PAD,
+      y: 35,
+      font: regular,
+      size: 7.1,
+      color: muted,
     })
     const pageInfo = 'Seite ' + (index + 1) + ' / ' + pdf.getPageCount()
     sheet.drawText(pageInfo, {
       x: PAGE_W - PAD - regular.widthOfTextAtSize(pageInfo, 7.7),
-      y: 35, font: regular, size: 7.7, color: muted,
+      y: 35,
+      font: regular,
+      size: 7.7,
+      color: muted,
     })
   }
 
