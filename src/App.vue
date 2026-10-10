@@ -13,15 +13,14 @@ function handleBeforeUnload(event: BeforeUnloadEvent) {
 }
 
 /**
- * Native Selects behalten die Tastaturbedienung. Beim Scrollen über einem
- * fokussierten Select wird der Fokus vor der Browser-Defaultaktion gelöst,
- * damit der Wert nicht versehentlich umgeschaltet wird.
+ * Beim Scrollen den Fokus eines nativen Selects lösen, bevor der Browser
+ * einen Wheel-Impuls als Optionswechsel interpretiert. Das Wheel-Event
+ * kann auf einem überlagerten Element oder der Seite eintreffen, auch wenn
+ * der Select noch fokussiert ist. Tastaturbedienung bleibt unverändert.
  */
-function handleSelectWheel(event: WheelEvent) {
-  const target = event.target
-  if (target instanceof HTMLSelectElement && document.activeElement === target) {
-    target.blur()
-  }
+function handleSelectWheel() {
+  const active = document.activeElement
+  if (active instanceof HTMLSelectElement) active.blur()
 }
 
 onMounted(() => {
