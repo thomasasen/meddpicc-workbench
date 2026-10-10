@@ -579,6 +579,75 @@ function scenarioPage(pdf: PDFDocument, f: FontSet, scenarios: ComparedBusinessS
   )
 }
 
+/**
+ * Die Managementseiten zeigen eine kompakte Auswahl. Ein dynamisch paginierter
+ * Anhang bewahrt lange Kundenangaben und weitere Nutzenpositionen vollständig.
+ */
+function completeCustomerDetails(pdf: PDFDocument, fonts: FontSet, data: ReportData, c: CaseSummary): void {
+  const fields = [
+    { label: 'Unternehmen', value: data.customer.trim(), size: 10.5, limit: 1, width: RIGHT - X - 127 },
+    { label: 'Vorhaben', value: data.project.trim(), size: 10.5, limit: 1, width: RIGHT - X - 127 },
+    { label: 'Kontakt', value: data.preparedBy.trim() + '  |  ' + data.date, size: 10.5, limit: 1, width: RIGHT - X - 127 },
+    { label: 'Ausgangssituation', value: data.businessPain?.trim() ?? '', size: 9.4, limit: 4, width: RIGHT - X },
+    { label: 'Angestrebtes Ergebnis', value: data.targetOutcome?.trim() ?? '', size: 9.4, limit: 2, width: RIGHT - X },
+  ].filter((field) => wrap(field.value, fonts.regular, field.size, field.width).length > field.limit)
+  const included = c.metricDetails.filter((m) => m.included)
+  const showAllMetrics = included.length > 3 || included.some((m) => fonts.bold.widthOfTextAtSize(readable(m.name), 10.5) > 355)
+
+  if (!fields.length && !showAllMetrics) return
+  let p = page(pdf, fonts, 'Anhang | Vollständige Angaben').p
+  let y = 722
+
+  function ensureSpace(height: number): void {
+    if (y - height >= 82) return
+    p = page(pdf, fonts, 'Anhang | Fortsetzung').p
+    y = 723
+  }
+
+  function title(label: string): void {
+    ensureSpace(45)
+    write(p, label, X, y, 11.3, fonts.bold, navy)
+    y -= 23
+  }
+
+  function body(value: string): void {
+    for (const line of wrap(value, fonts.regular, 9.5, RIGHT - X)) {
+      ensureSpace(16)
+      if (line) write(p, line, X, y, 9.5, fonts.regular, ink)
+      y -= 14
+    }
+    y -= 14
+  }
+
+  write(p, 'Vollständige Kundenangaben', X, y, 18, fonts.bold, navy)
+  y -= 35
+  body('Ergänzende Details zur kompakten Managementübersicht. Alle Zahlen bleiben wirtschaftliche Modellannahmen.')
+
+  for (const field of fields) {
+    title(field.label)
+    body(field.value)
+  }
+  if (showAllMetrics) {
+    title('Alle angesetzten Nutzenpositionen')
+    for (const metric of included) {
+      title(metric.name || 'Nicht bezeichnete Nutzenposition')
+      body(
+        'Jahrespotenzial: ' +
+          (metric.annualEur === null ? 'kein bestätigter Geldwert' : euro(metric.annualEur)) +
+          '. Datenstatus: ' +
+          statusLabel(metric.evidence) +
+          '. Geplanter Nutzenbeginn: Monat ' +
+          metric.startMonth +
+          '. Nutzenaufbau: ' +
+          metric.rampMonths +
+          ' Monate. Quelle / Grundlage: ' +
+          (metric.evidenceNote || 'Noch zu dokumentieren.') +
+          '.',
+      )
+    }
+  }
+}
+
 export async function buildCustomerBusinessCasePdf(data: ReportData): Promise<Uint8Array> {
   if (!data.customer.trim() || !data.project.trim() || !data.preparedBy.trim()) {
     throw new Error('Kunde, Projekt und Verfasser sind für den Kundenbericht erforderlich.')
@@ -602,6 +671,7 @@ export async function buildCustomerBusinessCasePdf(data: ReportData): Promise<Ui
   economicsPage(pdf, fonts, c)
   decisionPage(pdf, fonts, data, c)
   scenarioPage(pdf, fonts, scenarios)
+  completeCustomerDetails(pdf, fonts, data, c)
   drawReportFooter(pdf.getPages(), fonts.regular, fonts.bold, {
     left: X,
     right: RIGHT,

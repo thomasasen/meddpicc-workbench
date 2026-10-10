@@ -59,7 +59,7 @@ describe('Kundenbericht - kompakte Executive-Ausgabe', () => {
     expect(free.getPageCount()).toBe(4)
   })
 
-  it('hält den Kundenbericht auch bei 60 Monaten und vielen Metrics auf vier Seiten', async () => {
+  it('erweitert den Kundenbericht bei langen Texten und vielen Metrics um vollständige Anhangseiten', async () => {
     const demo = createCrmSaasDemo()
     demo.horizonMonths = 60
     const extra = Array.from({ length: 12 }, (_, i) => ({
@@ -77,6 +77,6 @@ describe('Kundenbericht - kompakte Executive-Ausgabe', () => {
         input: demo,
       }),
     )
-    expect(report.getPageCount()).toBe(4)
+    expect(report.getPageCount()).toBeGreaterThan(4)
   })
 })
