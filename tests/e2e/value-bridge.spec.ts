@@ -46,7 +46,9 @@ test('Value Bridge: Kapazität ohne bestätigte EUR-Realisierung und sichtbare F
   await page.getByRole('button', { name: 'Kapazität / Qualität' }).click()
   await expect(page.locator('.vb-link--value')).toContainText('EUR-Realisierung noch offen')
   await expect(page.locator('.vb-link--value')).not.toContainText('Saldo nach')
-  await expect(page.locator('.vb-out-metric').getByText('Freigesetzte Kapazität, keine EUR-Ersparnis', { exact: false })).toBeVisible()
+  await expect(
+    page.locator('.vb-out-metric').getByText('Freigesetzte Kapazität, keine EUR-Ersparnis', { exact: false }),
+  ).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Offene Validierung' })).toBeVisible()
   await page.screenshot({
     path: testInfo.outputPath('value-bridge-open-' + testInfo.project.name + '.png'),
