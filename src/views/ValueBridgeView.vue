@@ -1,6 +1,21 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { ArrowLeft, ClipboardCopy, Download, Plus, RotateCcw, Trash2 } from '@lucide/vue'
+import {
+  ArrowLeft,
+  ArrowRight,
+  ChartColumnIncreasing,
+  CircleAlert,
+  CircleDashed,
+  ClipboardCopy,
+  Download,
+  FileChartColumn,
+  Lightbulb,
+  Plus,
+  RotateCcw,
+  Target,
+  Trash2,
+  Workflow,
+} from '@lucide/vue'
 import {
   blankBridgeMetric,
   blankValueBridge,
@@ -128,8 +143,8 @@ onMounted(() => {
 
     <main id="main-content" class="container vb-main">
       <section class="vb-intro">
-        <div class="tool-intro-meta">
-          <span class="tool-kind tool-kind--customer">Kundenfähiges Ergebnis</span>
+        <div class="tool-intro-meta vb-intro-meta">
+          <span class="tool-kind tool-kind--customer"><FileChartColumn :size="15" aria-hidden="true" /> Kundenfähiges Ergebnis</span>
           <span>Value &amp; Metrics · Argumentation</span>
         </div>
         <h1>Vom Kundenproblem zur Investitionsgrundlage</h1>
@@ -156,14 +171,18 @@ onMounted(() => {
 
       <nav class="vb-steps" aria-label="Value Bridge erstellen">
         <button
-          v-for="(label, index) in ['1 · Pain', '2 · Ziel', '3 · Metrics & Wert']"
-          :key="label"
+          v-for="(item, index) in [
+            { label: '1 · Pain', icon: CircleAlert },
+            { label: '2 · Ziel', icon: Target },
+            { label: '3 · Metrics & Wert', icon: ChartColumnIncreasing },
+          ]"
+          :key="item.label"
           type="button"
           :aria-current="step === index + 1 ? 'step' : undefined"
           :class="{ active: step === index + 1 }"
           @click="step = (index + 1) as 1 | 2 | 3"
         >
-          {{ label }}
+          <component :is="item.icon" :size="17" aria-hidden="true" /> {{ item.label }}
         </button>
       </nav>
 
@@ -439,7 +458,7 @@ onMounted(() => {
         <section class="vb-panel vb-output" aria-labelledby="vb-output-heading">
           <div class="vb-output-top">
             <div>
-              <p class="eyebrow">Ergebnis · Value Bridge</p>
+              <p class="eyebrow vb-section-eyebrow"><span class="vb-section-round"><FileChartColumn :size="17" aria-hidden="true" /></span> Ergebnis · Value Bridge</p>
               <h2 id="vb-output-heading">Wirkungszusammenhang</h2>
             </div>
             <label class="vb-view-select"
@@ -453,53 +472,76 @@ onMounted(() => {
           <p class="vb-hint">
             Die Verbindung stellt eine zu prüfende Argumentation dar, keine bestätigte Investitionsempfehlung.
           </p>
-          <div
-            class="vb-bridge"
-            aria-label="Value Bridge: Situation, Problem, Konsequenz, Ziel und wirtschaftliche Wirkung"
-          >
-            <div
-              v-for="item in [
-                { title: 'Ausgangssituation', text: draft.situation },
-                { title: 'Pain', text: draft.pain },
-                { title: 'Geschäftliche Konsequenz', text: draft.consequence },
-                { title: 'Gewünschtes Ergebnis', text: draft.outcome },
-                { title: 'Ermöglichte Veränderung', text: draft.change },
-              ]"
-              :key="item.title"
-              class="vb-link"
-            >
-              <span class="vb-link-label">{{ item.title }}</span>
-              <p>{{ item.text || 'Noch offen' }}</p>
+          <div class="vb-story" aria-label="Value Bridge: vom Problem zum messbaren Geschäftswert">
+            <div class="vb-story-context">
+              <span class="vb-story-context-label"><Workflow :size="16" aria-hidden="true" /> Heute beim Kunden</span>
+              <p>{{ draft.situation || 'Die Ausgangslage ist noch zu klären.' }}</p>
             </div>
-            <div class="vb-link vb-link--metric">
-              <span class="vb-link-label">Messbare Verbesserung · Metrics</span>
-              <p v-for="metric in draft.metrics" :key="metric.id">
-                <strong>{{ metric.name || 'Messgröße offen' }}</strong
-                >: {{ metric.before || '?' }} → {{ metric.after || '?' }} {{ metric.unit }}
-              </p>
-            </div>
+            <ol class="vb-story-steps">
+              <li class="vb-story-step vb-story-step--pain">
+                <span class="vb-story-icon"><CircleAlert :size="20" aria-hidden="true" /></span>
+                <div class="vb-story-copy">
+                  <span class="vb-story-kicker">01 · Kundenproblem</span>
+                  <h3>Was steht auf dem Spiel?</h3>
+                  <p class="vb-story-main">{{ draft.pain || 'Das konkrete Problem ist noch offen.' }}</p>
+                  <p class="vb-story-support"><strong>Geschäftliche Folge:</strong> {{ draft.consequence || 'Noch nicht geklärt.' }}</p>
+                </div>
+              </li>
+              <li class="vb-story-step vb-story-step--goal">
+                <span class="vb-story-icon"><Target :size="20" aria-hidden="true" /></span>
+                <div class="vb-story-copy">
+                  <span class="vb-story-kicker">02 · Zielbild</span>
+                  <h3>Was soll sich verbessern?</h3>
+                  <p class="vb-story-main">{{ draft.outcome || 'Das gewünschte Ergebnis ist noch offen.' }}</p>
+                  <p class="vb-story-support"><strong>Weg dorthin:</strong> {{ draft.change || 'Die notwendige Veränderung ist noch offen.' }}</p>
+                </div>
+              </li>
+              <li class="vb-story-step vb-story-step--metric">
+                <span class="vb-story-icon"><ChartColumnIncreasing :size="20" aria-hidden="true" /></span>
+                <div class="vb-story-copy">
+                  <span class="vb-story-kicker">03 · Metrics</span>
+                  <h3>Woran erkennen wir den Unterschied?</h3>
+                  <div class="vb-story-indicators">
+                    <div v-for="metric in draft.metrics" :key="metric.id" class="vb-story-indicator">
+                      <strong>{{ metric.name || 'Messgröße noch offen' }}</strong>
+                      <div class="vb-story-comparison">
+                        <span>{{ metric.before || '?' }}</span>
+                        <ArrowRight :size="18" aria-hidden="true" />
+                        <span>{{ metric.after || '?' }}</span>
+                        <small>{{ metric.unit }}</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ol>
             <div class="vb-link vb-link--value">
-              <span class="vb-link-label">Wirtschaftliche Wirkung</span>
-              <strong v-if="result.countedAnnualEur > 0">{{ money(result.countedAnnualEur) }} pro Jahr</strong>
-              <strong v-else>EUR-Realisierung noch offen</strong>
-              <p v-if="result.financial">
-                Saldo nach {{ draft.horizonMonths }} Monaten: {{ money(result.financial.netValueEur) }} · Anhaltender
-                Payback:
-                {{
-                  result.financial.sustainedBreakEvenMonth === null
-                    ? 'nicht erreicht'
-                    : 'Monat ' + result.financial.sustainedBreakEvenMonth
-                }}
-              </p>
-              <p v-else>Keine vollständige Modellrechnung. Nicht angerechnete Wirkungen bleiben sichtbar.</p>
+              <span class="vb-value-symbol"><FileChartColumn :size="22" aria-hidden="true" /></span>
+              <div class="vb-value-content">
+                <span class="vb-link-label">04 · Wirtschaftliche Wirkung</span>
+                <strong v-if="result.countedAnnualEur > 0">{{ money(result.countedAnnualEur) }} pro Jahr</strong>
+                <strong v-else>EUR-Realisierung noch offen</strong>
+                <p v-if="result.financial">
+                  <span>Saldo nach {{ draft.horizonMonths }} Monaten: <b>{{ money(result.financial.netValueEur) }}</b></span>
+                  <span>Anhaltender Payback:
+                    <b>{{ result.financial.sustainedBreakEvenMonth === null ? 'nicht erreicht' : 'Monat ' + result.financial.sustainedBreakEvenMonth }}</b>
+                  </span>
+                </p>
+                <p v-else>Keine vollständige Modellrechnung. Nicht angerechnete Wirkungen bleiben sichtbar.</p>
+                <span v-if="draft.metrics.some((metric) => metric.included && metric.evidence !== 'customer-reviewed')"
+                  class="vb-value-status"><CircleDashed :size="15" aria-hidden="true" /> Enthält nicht gemeinsam geprüfte Annahmen</span>
+                <span v-else-if="result.countedAnnualEur === 0" class="vb-value-status">
+                  <Lightbulb :size="15" aria-hidden="true" /> Erst Wirkung validieren, dann finanzieren
+                </span>
+              </div>
             </div>
           </div>
-          <h3>Messgrößen und Datenbasis</h3>
+          <h3 class="vb-heading-icon"><ChartColumnIncreasing :size="19" aria-hidden="true" /> Nachweise und Herleitung</h3>
           <div v-for="metric in draft.metrics" :key="metric.id" class="vb-out-metric">
             <strong>{{ metric.name || 'Metric offen' }}</strong>
-            <p>{{ metric.before || '?' }} → {{ metric.after || '?' }} {{ metric.unit }}</p>
+            <p class="vb-out-transition"><span>{{ metric.before || '?' }}</span><ArrowRight :size="16" aria-hidden="true" /><span>{{ metric.after || '?' }}</span><small>{{ metric.unit }}</small></p>
             <p v-if="metric.calculation">Herleitung: {{ metric.calculation }}</p>
-            <p>{{ bridgeKindLabels[metric.kind] }} · {{ bridgeEvidenceLabels[metric.evidence] }}</p>
+            <p class="vb-evidence-line"><CircleDashed :size="16" aria-hidden="true" /> {{ bridgeKindLabels[metric.kind] }} · {{ bridgeEvidenceLabels[metric.evidence] }}</p>
             <p>Quelle: {{ metric.source || 'Noch nicht dokumentiert' }}</p>
             <p v-if="metric.included">
               Wirtschaftlich angesetzt:
@@ -512,7 +554,7 @@ onMounted(() => {
             Der Finanzwert ist nicht freigegeben: {{ result.issues.join(' ') }}
           </p>
           <template v-if="!customerView">
-            <h3>Offene Validierung</h3>
+            <h3 class="vb-heading-icon"><Lightbulb :size="19" aria-hidden="true" /> Offene Validierung</h3>
             <ul v-if="result.questions.length" class="vb-questions">
               <li v-for="question in result.questions" :key="question">{{ question }}</li>
             </ul>
