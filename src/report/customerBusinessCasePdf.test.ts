@@ -15,7 +15,7 @@ const input = () => ({
 })
 
 describe('Kundenbericht - kompakte Executive-Ausgabe', () => {
-  it('erstellt genau vier A4-Seiten für das fiktive CRM-Beispiel', async () => {
+  it('erhält vier Managementseiten und ergänzt nötigenfalls einen vollständigen Anhang', async () => {
     const bytes = await buildCustomerBusinessCasePdf(input())
     const pdf = await PDFDocument.load(bytes)
     expect(
@@ -23,7 +23,7 @@ describe('Kundenbericht - kompakte Executive-Ausgabe', () => {
         .map((n) => String.fromCharCode(n))
         .join(''),
     ).toBe('%PDF-')
-    expect(pdf.getPageCount()).toBe(4)
+    expect(pdf.getPageCount()).toBe(5)
     expect(pdf.getTitle()).toContain('CRM-Modernisierung')
     expect(pdf.getSubject()).toContain('Kundenbericht')
     for (const page of pdf.getPages()) {

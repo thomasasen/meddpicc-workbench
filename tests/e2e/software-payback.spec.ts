@@ -221,7 +221,7 @@ test('Business Case: eigenständiger Kundengrafik-PDF und Finance-Anhang', async
   expect(bytes.subarray(0, 5).toString()).toBe('%PDF-')
   expect(bytes.byteLength).toBeGreaterThan(7000)
   const parsed = await PDFDocument.load(bytes)
-  expect(parsed.getPageCount()).toBe(4)
+  expect(parsed.getPageCount()).toBe(5)
   expect(parsed.getTitle()).toContain('CRM & Service Transformation')
   for (const pdfPage of parsed.getPages()) {
     expect(pdfPage.getWidth()).toBeCloseTo(595.28, 1)
