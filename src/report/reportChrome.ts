@@ -76,3 +76,60 @@ export function drawReportFooter(
     })
   })
 }
+
+export interface ReportMastheadOptions {
+  page: PDFPage
+  normal: PDFFont
+  bold: PDFFont
+  width: number
+  height: number
+  left: number
+  right: number
+  headerHeight: number
+  title: string
+  subtitle: string
+  titleOffset?: number
+  subtitleOffset?: number
+}
+
+/** Einheitliche Vektor-Kopfzeile, ohne Netzwerk oder externe Bildressourcen. */
+export function drawReportMasthead(options: ReportMastheadOptions): void {
+  const {
+    page, normal, bold, width, height, left, right, headerHeight, title, subtitle,
+    titleOffset = 50,
+    subtitleOffset = 69,
+  } = options
+  const white = rgb(1, 1, 1)
+  const soft = rgb(0.78, 0.85, 0.94)
+  const navy = rgb(0.09, 0.17, 0.29)
+  page.drawRectangle({ x: 0, y: height - headerHeight, width, height: headerHeight, color: navy })
+  page.drawRectangle({
+    x: left,
+    y: height - 32,
+    width: 23,
+    height: 23,
+    color: rgb(0.16, 0.36, 0.75),
+  })
+  page.drawText('M', { x: left + 5.5, y: height - 26, size: 13, font: bold, color: white })
+  page.drawText('MEDDPICC TOOLBOX', {
+    x: left + 33,
+    y: height - 25,
+    size: 9,
+    font: bold,
+    color: white,
+  })
+  page.drawText(fitText(title, bold, 15, right - left), {
+    x: left,
+    y: height - titleOffset,
+    size: 15,
+    font: bold,
+    color: white,
+  })
+  page.drawText(fitText(subtitle, normal, 8, right - left), {
+    x: left,
+    y: height - subtitleOffset,
+    size: 8,
+    font: normal,
+    color: soft,
+  })
+}
