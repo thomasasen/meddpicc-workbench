@@ -181,7 +181,9 @@ export function evaluateValueBridge(input: ValueBridgeInput): ValueBridgeResult 
     if (metric.kind === 'potential' || metric.kind === 'risk')
       questions.push(where + ': Potenzial oder Risiko nicht als sichere Einsparung ausweisen.')
     if (metric.kind === 'unclassified')
-      questions.push(where + ': Bitte zwischen tatsächlich vermeidbaren Kosten und zusätzlichem Deckungsbeitrag unterscheiden.')
+      questions.push(
+        where + ': Bitte zwischen tatsächlich vermeidbaren Kosten und zusätzlichem Deckungsbeitrag unterscheiden.',
+      )
     if (metric.kind === 'margin')
       questions.push(where + ': Bitte zusätzlichen Deckungsbeitrag statt Umsatz validieren.')
   }

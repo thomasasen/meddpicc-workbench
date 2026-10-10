@@ -294,7 +294,8 @@ onMounted(() => {
                   <label class="vb-field"
                     ><span>Theoretisches Potenzial in EUR/Jahr (optional)</span>
                     <input
-                      :value="metric.annualPotentialEur ?? ''" @input="setMetricAmount(metric, 'annualPotentialEur', $event)"
+                      :value="metric.annualPotentialEur ?? ''"
+                      @input="setMetricAmount(metric, 'annualPotentialEur', $event)"
                       type="number"
                       min="0"
                       max="1000000000000"
@@ -306,7 +307,8 @@ onMounted(() => {
                     <label class="vb-field"
                       ><span>Wirtschaftlich realisierbarer Betrag EUR/Jahr</span>
                       <input
-                        :value="metric.annualRealizedEur ?? ''" @input="setMetricAmount(metric, 'annualRealizedEur', $event)"
+                        :value="metric.annualRealizedEur ?? ''"
+                        @input="setMetricAmount(metric, 'annualRealizedEur', $event)"
                         type="number"
                         min="0"
                         max="1000000000000"
@@ -375,7 +377,8 @@ onMounted(() => {
                 <label class="vb-field"
                   ><span>Einmalige Projektkosten, EUR</span>
                   <input
-                    :value="draft.investmentEur ?? ''" @input="setCaseAmount('investmentEur', $event)"
+                    :value="draft.investmentEur ?? ''"
+                    @input="setCaseAmount('investmentEur', $event)"
                     type="number"
                     min="0"
                     max="1000000000000"
@@ -386,7 +389,8 @@ onMounted(() => {
                 <label class="vb-field"
                   ><span>Zusätzliche laufende Kosten, EUR/Monat</span>
                   <input
-                    :value="draft.saasMonthlyEur ?? ''" @input="setCaseAmount('saasMonthlyEur', $event)"
+                    :value="draft.saasMonthlyEur ?? ''"
+                    @input="setCaseAmount('saasMonthlyEur', $event)"
                     type="number"
                     min="0"
                     max="1000000000000"
@@ -454,8 +458,8 @@ onMounted(() => {
             <div class="vb-link vb-link--metric">
               <span class="vb-link-label">Messbare Verbesserung · Metrics</span>
               <p v-for="metric in draft.metrics" :key="metric.id">
-                <strong>{{ metric.name || 'Messgröße offen' }}</strong>:
-                {{ metric.before || '?' }} → {{ metric.after || '?' }} {{ metric.unit }}
+                <strong>{{ metric.name || 'Messgröße offen' }}</strong
+                >: {{ metric.before || '?' }} → {{ metric.after || '?' }} {{ metric.unit }}
               </p>
             </div>
             <div class="vb-link vb-link--value">
