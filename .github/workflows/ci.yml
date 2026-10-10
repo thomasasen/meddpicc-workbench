@@ -111,7 +111,7 @@ jobs:
       - name: Redesign-Dateien vor den Quality Gates formatieren
         if: startsWith(github.head_ref, 'feature/ux-report-redesign-')
         run: |
-          npx prettier --write src/App.vue src/main.ts src/views/ChecklistView.vue src/report/reportChrome.ts src/report/reportChrome.test.ts src/report/valueBridgePdf.ts src/report/metricBuilderPdf.ts src/report/costOfDelayPdf.ts src/report/softwareBusinessCasePdf.ts src/report/customerBusinessCasePdf.ts tests/e2e/redesign-foundations.spec.ts
+          npx prettier --write src/App.vue src/main.ts src/views/ChecklistView.vue src/views/QuickPaybackView.vue src/components/AnnualBenefitComparison.vue src/report/reportChrome.ts src/report/reportChrome.test.ts src/report/valueBridgePdf.ts src/report/metricBuilderPdf.ts src/report/costOfDelayPdf.ts src/report/softwareBusinessCasePdf.ts src/report/customerBusinessCasePdf.ts tests/e2e/redesign-foundations.spec.ts
           if ! git diff --quiet -- src tests; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
