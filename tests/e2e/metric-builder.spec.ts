@@ -111,6 +111,10 @@ test('Metric Builder: Textabstände, linke Achsen und Umbruch in allen Schritten
   for (const [index, stepLabel] of ['1 · Problem', '2 · Messung', '3 · Wirkung & Evidenz'].entries()) {
     await page.getByRole('button', { name: stepLabel, exact: true }).click()
     if (index < 2) {
+      await page.setViewportSize({
+        width: testInfo.project.name === 'mobile-chromium' ? 393 : 1280,
+        height: 900,
+      })
       await page.screenshot({
         path: testInfo.outputPath('metric-builder-step-' + (index + 1) + '-' + testInfo.project.name + '.png'),
         fullPage: true,
