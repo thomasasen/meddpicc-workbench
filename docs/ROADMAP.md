@@ -346,8 +346,8 @@ Siehe [Cost-of-Delay-Review](COST_OF_DELAY_SOURCE_AND_RED_TEAM.md).
 - [x] Opt-in-Session-Handoffs aus Metric Builder, Cost of Delay und Software Business Case; keine automatische Anrechnung
 - [x] Interne / kundenfähige Darstellung, Copy und lokaler PDF-Export
 - [x] Drei fiktive Beispiele und automatisierte Tests angelegt
-- [ ] Technische CI vollständig erfolgreich
-- [ ] Original-Screenshots/PDF-Seiten visuell überprüft und dritte simulierte Red-Team-Runde dokumentiert
+- [x] Technische CI erfolgreich: [#38070981674](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38070981674), 326 Unit-/135 Browser-Tests bestanden, 1 Skip
+- [x] Original-Screenshots (Desktop/Mobile, EUR/Kapazität) sowie je 2 Original-PDF-Seiten überprüft; dritte simulierte Red-Team-Runde dokumentiert
 - [ ] Ausdrückliche Nutzerfreigabe, danach erst Merge nach `main`
 
 [Source-QA, Gap-Analyse und simulierte Red-Teams](VALUE_BRIDGE_SOURCE_AND_RED_TEAM.md).
