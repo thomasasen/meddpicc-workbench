@@ -26,6 +26,7 @@ import {
 } from '../domain/metricBuilder'
 import { queueMetricHandoff } from '../domain/metricBuilderHandoff'
 import { queueCostOfDelayHandoff } from '../domain/costOfDelayHandoff'
+import { queueBuilderToBridge } from '../domain/valueBridgeHandoff'
 import { buildMetricBuilderPdf } from '../report/metricBuilderPdf'
 import type { MetricFormula } from '../domain/softwarePayback'
 
@@ -154,6 +155,15 @@ async function transferToDelay(): Promise<void> {
     await router.push('/tools/cost-of-delay')
   } catch {
     message.value = 'Cost-of-Delay-Übergabe nicht möglich. Nur realisierbare Metrics können übertragen werden.'
+  }
+}
+async function transferToBridge(): Promise<void> {
+  if (!result.value.complete) return
+  try {
+    queueBuilderToBridge(draft.value, result.value, window.sessionStorage)
+    await router.push('/tools/value-bridge')
+  } catch {
+    message.value = 'Value-Bridge-Übergabe nicht möglich. Bitte Eingaben prüfen.'
   }
 }
 </script>
@@ -496,6 +506,9 @@ async function transferToDelay(): Promise<void> {
             Metrics zum bestehenden Software-Payback hinzu; die spätere finanzielle Aktivierung bleibt manuell.
           </p>
           <div class="metric-actions">
+            <button type="button" class="button button-secondary button-with-icon" :disabled="!result.complete" @click="transferToBridge">
+              <FileCheck2 :size="16" aria-hidden="true" /> In Value Bridge übernehmen
+            </button>
             <button type="button" class="button button-secondary button-with-icon" @click="copy">
               <ClipboardCopy :size="16" aria-hidden="true" /> Zusammenfassung kopieren
             </button>
