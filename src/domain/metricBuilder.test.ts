@@ -98,6 +98,9 @@ describe('Metric Builder: nachvollziehbare operative und wirtschaftliche Wirkung
     expect(buildMetric(example('crm', { after: 12 })).complete).toBe(false)
     expect(buildMetric(example('crm', { after: 13 })).issues.join(' ')).toContain('Verschlechterung')
     expect(buildMetric(example('sales', { before: 150 })).issues.join(' ')).toContain('Prozentwerte')
+    const invalidQuality = buildMetric(example('quality', { before: 150 }))
+    expect(invalidQuality.complete).toBe(false)
+    expect(invalidQuality.potentialEur).toBeNull()
     expect(buildMetric(example('quality', { after: 150 })).complete).toBe(false)
   })
 
