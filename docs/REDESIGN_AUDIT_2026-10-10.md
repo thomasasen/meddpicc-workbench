@@ -98,3 +98,5 @@ Quick Payback im Einfachmodus erzeugt eine kopierbare Zusammenfassung; die beide
 5. **Visuelle QA / Dokumentation:** echte Browser-Screenshots, PDF-Renderings, Fehlerkorrektur, 375/768/1024/1440, Screenreader-/Tastaturtests, Abnahme-Liste.
 
 Die PR-Grenzen sind ein Plan, keine Zusage, dass die Folgearbeiten in diesem ersten PR bereits implementiert sind. Alle Feature-PRs bleiben bis zur ausdrücklichen Freigabe Draft; kein Merge nach `main`.
+
+**Technische Erweiterung auf dem Grundlagenbranch:** Die fünf PDF-Generatoren nutzen inzwischen zusätzlich zum gemeinsamen Footer eine gemeinsame Vektor-Masthead-Funktion. Die CI rendert alle echten Seiten der fünf Reportvarianten und publiziert ausgewählte Original-Screenshots. Der Inhaltsaufbau und die fachliche Ergebnisvisualisierung bleiben der nachfolgenden Tool-/Report-Redesignphase vorbehalten.
