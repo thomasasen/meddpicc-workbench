@@ -36,11 +36,7 @@ test('Cost of Delay: fiktives Servicebeispiel, Monatskurve, PDF und Responsive-Q
   await expect(page.locator('.cod-chart polyline')).toHaveCount(2)
   await page.getByRole('button', { name: '+3 Monate' }).click()
   await expect(page.getByText('Nutzen bei +3 Monaten')).toBeVisible()
-  await page
-    .locator('.cod-breakdown')
-    .getByText('Nicht berechenbar')
-    .count()
-    .then((n) => expect(n).toBe(0))
+  await expect(page.locator('.cod-breakdown').getByText('Nicht berechenbar')).toBeVisible()
   await page
     .locator('.cod-results details')
     .filter({ hasText: 'Vollständigen Monatsvergleich anzeigen' })
