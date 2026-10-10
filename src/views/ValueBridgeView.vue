@@ -311,6 +311,9 @@ onMounted(() => {
                     />
                   </label>
                   <template v-if="metric.kind === 'saving' || metric.kind === 'margin'">
+                    <label class="vb-field"><span>Wie wird der Jahreswert aus Ausgangs- und Zielwert ermittelt?</span>
+                      <textarea v-model="metric.calculation" rows="2" maxlength="1000" placeholder="z. B. (6.000 - 3.000) EUR/Monat × 12 = 36.000 EUR/Jahr" />
+                    </label>
                     <label class="vb-field"
                       ><span>Wirtschaftlich realisierbarer Betrag EUR/Jahr</span>
                       <input
@@ -489,6 +492,7 @@ onMounted(() => {
           <div v-for="metric in draft.metrics" :key="metric.id" class="vb-out-metric">
             <strong>{{ metric.name || 'Metric offen' }}</strong>
             <p>{{ metric.before || '?' }} → {{ metric.after || '?' }} {{ metric.unit }}</p>
+            <p v-if="metric.calculation">Herleitung: {{ metric.calculation }}</p>
             <p>{{ bridgeKindLabels[metric.kind] }} · {{ bridgeEvidenceLabels[metric.evidence] }}</p>
             <p>Quelle: {{ metric.source || 'Noch nicht dokumentiert' }}</p>
             <p v-if="metric.included">
