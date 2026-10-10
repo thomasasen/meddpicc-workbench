@@ -200,6 +200,7 @@ export function buildMetric(draft: MetricBuilderDraft): MetricBuilderResult {
       } else operatingChange = improvement
       if ((draft.formula === 'conversion' || draft.formula === 'quality') && (before > 100 || after > 100)) {
         issues.push('Prozentwerte müssen zwischen 0 und 100 liegen.')
+        operatingChange = null
       }
     }
     if (draft.formula !== 'direct') {
