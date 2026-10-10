@@ -330,6 +330,6 @@ test('Szenario-Stresstest: ausgewählter Fall wird konsistent im echten Kunden-P
   const path = testInfo.outputPath('scenario-selected-customer-' + testInfo.project.name + '.pdf')
   await file.saveAs(path)
   const pdf = await PDFDocument.load(readFileSync(path))
-  expect(pdf.getPageCount()).toBe(4)
+  expect(pdf.getPageCount()).toBe(5)
   await expect(page.getByRole('status').filter({ hasText: 'Kundenbericht erstellt.' })).toBeVisible()
 })
