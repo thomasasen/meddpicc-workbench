@@ -1,7 +1,7 @@
 import { summarizeBusinessCase, type CaseSummary } from './businessCase'
 import { newMetric, type MetricEvidence, type SoftwarePaybackInput } from './softwarePayback'
 
-export type ValueKind = 'saving' | 'margin' | 'unclassified' | 'capacity' | 'potential' | 'risk' | 'qualitative'
+export type ValueKind = 'saving' | 'margin' | 'unclassified' | 'capacity' | 'potential' | 'revenue' | 'risk' | 'qualitative'
 export type ValueOrigin = 'manual' | 'metric-builder' | 'software-business-case' | 'cost-of-delay'
 
 export interface BridgeMetric {
@@ -59,6 +59,7 @@ export const bridgeKindLabels: Record<ValueKind, string> = {
   unclassified: 'Finanzielle Wirkung: Einsparung oder Deckungsbeitrag noch zu klären',
   capacity: 'Freigesetzte Kapazität, keine EUR-Ersparnis',
   potential: 'Theoretisches Potenzial, keine EUR-Realisierung',
+  revenue: 'Zusätzlicher erwarteter Umsatz, kein gesicherter Deckungsbeitrag',
   risk: 'Risikoreduzierung, nicht monetarisiert',
   qualitative: 'Qualitative Wirkung',
 }
@@ -110,7 +111,7 @@ export function evaluateValueBridge(input: ValueBridgeInput): ValueBridgeResult 
   const overlap: string[] = []
   const seenIds = new Set<string>()
   const seenGroups = new Map<string, string>()
-  const validKinds: ValueKind[] = ['saving', 'margin', 'unclassified', 'capacity', 'potential', 'risk', 'qualitative']
+  const validKinds: ValueKind[] = ['saving', 'margin', 'unclassified', 'capacity', 'potential', 'revenue', 'risk', 'qualitative']
   const validEvidence: MetricEvidence[] = ['hypothesis', 'reference', 'customer-stated', 'customer-reviewed']
   if (!input.pain.trim()) questions.push('Welches konkrete Kundenproblem soll gelöst werden?')
   if (!input.consequence.trim()) questions.push('Welche Konsequenz hat das Problem für das Geschäft?')
@@ -178,8 +179,8 @@ export function evaluateValueBridge(input: ValueBridgeInput): ValueBridgeResult 
     }
     if (metric.kind === 'capacity' && metric.annualPotentialEur !== null)
       questions.push(where + ': Rechnerischer Zeitwert ist kein eingesparter Geldbetrag.')
-    if (metric.kind === 'potential' || metric.kind === 'risk')
-      questions.push(where + ': Potenzial oder Risiko nicht als sichere Einsparung ausweisen.')
+    if (metric.kind === 'potential' || metric.kind === 'risk' || metric.kind === 'revenue')
+      questions.push(where + ': Potenzial, Umsatzerwartung oder Risiko nicht als sichere Einsparung ausweisen.')
     if (metric.kind === 'unclassified')
       questions.push(
         where + ': Bitte zwischen tatsächlich vermeidbaren Kosten und zusätzlichem Deckungsbeitrag unterscheiden.',
