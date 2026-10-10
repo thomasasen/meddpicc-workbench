@@ -131,37 +131,40 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
   }
 
   function section(title: string): void {
-    reserve(50)
-    cursor -= 13
+    reserve(42)
+    cursor -= 9
     page.drawText(printable(title), { x: LEFT, y: cursor, font: bold, size: 12, color: COLORS.navy })
-    cursor -= 24
+    cursor -= 21
   }
 
+  /** Label und Wert folgen zwei festen vertikalen Achsen; Umbrüche bleiben innerhalb der Zeile. */
   function labeled(label: string, value: string): void {
-    const rows = wrap(value || 'Noch offen', normal, 9.8, CONTENT_WIDTH)
-    const total = 12.5 + rows.length * LINE_HEIGHT + 11
-    reserve(total)
-    page.drawText(printable(label.toUpperCase()), {
-      x: LEFT,
-      y: cursor,
-      font: bold,
-      size: 8.2,
-      color: COLORS.muted,
-    })
-    cursor -= 16
-    for (const row of rows) {
-      page.drawText(row, { x: LEFT, y: cursor, font: normal, size: 9.8, color: COLORS.ink })
-      cursor -= LINE_HEIGHT
+    const labelWidth = 158
+    const valueX = LEFT + labelWidth + 12
+    const valueWidth = RIGHT - valueX
+    const labels = wrap(label.toUpperCase(), bold, 8.2, labelWidth)
+    const values = wrap(value || 'Noch offen', normal, 9.8, valueWidth)
+    const height = Math.max(labels.length * 12.5, values.length * LINE_HEIGHT) + 13
+    reserve(height)
+    for (const [index, row] of labels.entries()) {
+      page.drawText(row, {
+        x: LEFT, y: cursor - index * 12.5, font: bold, size: 8.2, color: COLORS.muted,
+      })
     }
-    cursor -= 9
+    for (const [index, row] of values.entries()) {
+      page.drawText(row, {
+        x: valueX, y: cursor - index * LINE_HEIGHT, font: normal, size: 9.8, color: COLORS.ink,
+      })
+    }
+    cursor -= height
   }
 
   function highlight(label: string, value: string): void {
     const body = wrap(value, normal, 9.8, CONTENT_WIDTH - 30)
     const title = wrap(label.toUpperCase(), bold, 8.4, CONTENT_WIDTH - 30)
-    const height = 18 + title.length * 12.5 + 8 + body.length * LINE_HEIGHT + 13
-    reserve(height + 18)
-    const top = cursor + 12
+    const height = 14 + title.length * 12.5 + 5 + body.length * LINE_HEIGHT + 12
+    reserve(height + 12)
+    const top = cursor + 9
     page.drawRectangle({
       x: LEFT,
       y: top - height,
@@ -176,7 +179,7 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
       height,
       color: COLORS.blue,
     })
-    let local = top - 19
+    let local = top - 16
     for (const row of title) {
       page.drawText(row, {
         x: LEFT + 16,
@@ -187,7 +190,7 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
       })
       local -= 12.5
     }
-    local -= 8
+    local -= 5
     for (const row of body) {
       page.drawText(row, {
         x: LEFT + 16,
@@ -198,7 +201,7 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
       })
       local -= LINE_HEIGHT
     }
-    cursor = top - height - 15
+    cursor = top - height - 12
   }
 
   function beforeAfter(): void {
@@ -209,9 +212,9 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
       { label: 'ANGESTREBTER ZUSTAND', value: result.afterText || 'Nicht beziffert' },
     ]
     const wrapped = values.map((v) => wrap(v.value, bold, 10.1, width - 30))
-    const height = Math.max(...wrapped.map((rows) => rows.length)) * 15 + 48
-    reserve(height + 17)
-    const top = cursor + 10
+    const height = Math.max(...wrapped.map((rows) => rows.length)) * 15 + 42
+    reserve(height + 13)
+    const top = cursor + 7
     for (const [index, value] of values.entries()) {
       const x = LEFT + index * (width + gap)
       page.drawRectangle({
@@ -223,7 +226,7 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
       })
       page.drawText(value.label, {
         x: x + 15,
-        y: top - 21,
+        y: top - 18,
         size: 8.3,
         font: bold,
         color: COLORS.muted,
@@ -231,14 +234,14 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
       wrapped[index]!.forEach((row, offset) => {
         page.drawText(row, {
           x: x + 15,
-          y: top - 42 - offset * 15,
+          y: top - 36 - offset * 15,
           size: 10.1,
           font: bold,
           color: COLORS.ink,
         })
       })
     }
-    cursor = top - height - 16
+    cursor = top - height - 13
   }
 
   newPage()
