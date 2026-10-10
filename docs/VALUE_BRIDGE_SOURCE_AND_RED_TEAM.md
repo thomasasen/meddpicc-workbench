@@ -38,12 +38,12 @@ Aussagen wurden gegen die im Projekt bereitgestellten EPUB-Texte geprüft. Keine
 
 1. Eine monetarisierte Metric wird nur auf ausdrückliche Aktivierung hin berücksichtigt. Ein Handoff belässt `included=false`.
 2. Herkunft: Hypothese, Referenz, Kundenaussage, laut Nutzereingabe gemeinsam geprüft. Die letzte Kategorie ist **keine externe Auditbestätigung**.
-3. Kapazität, theoretischer Nutzen, Risiko und qualitatives Outcome werden nicht als sichere Einsparung addiert.
+3. Kapazität, theoretischer Nutzen, bloße Umsatzerwartung, Risiko und qualitatives Outcome werden nicht als sichere Einsparung addiert.
 4. Zusätzliches Umsatzpotenzial darf nur bei dokumentiertem **inkrementellem Deckungsbeitrag** als monetarisierbare Wirkung beschrieben werden.
 5. Identische Wirkungsgruppen zweier angerechneter Metrics blockieren die Wirtschaftlichkeitsrechnung. Semantisch ähnliche Wirkungen unterschiedlicher Gruppen müssen vom Nutzer weiterhin geprüft werden.
 6. Ohne positive anrechenbare Jahreswirkung **und** benannte einmalige sowie monatliche Kosten erfolgt kein vollständiger finanzieller Business Case.
 7. Die Domain nutzt `summarizeBusinessCase` → `calculateSoftwarePayback`. Der daraus abgeleitete ROI ist undiskontiert; kein NPV, keine Zahlungsstrom- oder Steuerrechnung.
-8. Der Cost-of-Delay-Handoff überträgt **niemals eine Verzögerungs-Horizontdifferenz** als realisierten Jahresbetrag. Da die Ursprungs-Engine nicht zwischen Kostensenkung und zusätzlichem Deckungsbeitrag typisiert, wird der Betrag zunächst als **finanzieller Wirkungstyp ungeklärt** eingeordnet und nicht angerechnet.
+8. Realisierte EUR-Positionen benötigen eine manuell nachvollziehbare Jahreswertherleitung; diese wird im Ergebnis und PDF ausgewiesen. Rechenwegtexte sind Nutzereingaben und keine unabhängig überprüfte Formel.\n9. Der Cost-of-Delay-Handoff überträgt **niemals eine Verzögerungs-Horizontdifferenz** als realisierten Jahresbetrag. Da die Ursprungs-Engine nicht zwischen Kostensenkung und zusätzlichem Deckungsbeitrag typisiert, wird der Betrag zunächst als **finanzieller Wirkungstyp ungeklärt** eingeordnet und nicht angerechnet. Einmaleffekte werden außerdem niemals als wiederkehrende Jahreswerte importiert.
 
 ## 4. Simuliertes fachliches Red Team
 
@@ -69,11 +69,19 @@ Aussagen wurden gegen die im Projekt bereitgestellten EPUB-Texte geprüft. Keine
 
 **Einschränkungen:** Semantische Doppelzählung über unterschiedlich benannte Gruppen kann nicht deterministisch ausgeschlossen werden; eingetippte Belege werden nicht extern überprüft. Sehr komplexe Zahlungs-/Vertragseffekte verbleiben im Software Business Case.
 
-### Review C – nach Sichtprüfung der Originalartefakte
+### Review C – nach Sichtprüfung der Originalartefakte (simuliert, 10.10.2026)
 
-**Ausstehend, nicht als durchgeführt behauptet.** Erst nach erfolgreicher technischer CI, tatsächlichem Öffnen der Desktop-/Mobile-Screenshots und dem Rendern **sämtlicher** Original-PDF-Seiten festhalten: Lesbarkeit, lange deutsche Wörter, Kontrast, Seitenumbrüche, keine Überlagerung, qualitative Fälle ohne EUR.
+**Tatsächlich durchgeführt:** Die vier vom Playwright-Lauf erzeugten Originalscreenshots (Desktop/Mobile, finanzieller und nicht monetarisierbarer Fall) wurden geöffnet und visuell angesehen. Ebenso wurden alle vier Original-Bildseiten des Service-PDFs aus Desktop- und Mobile-Chromium (je 2 Seiten) geöffnet. Die Bilder liegen unter [docs/review-screenshots](review-screenshots). Automatisch wurde außerdem horizontaler Overflow bei 375, 768, 1024 und 1440 px geprüft. Dies ist eine **simulierte fachliche Reviewrunde**, keine echte Freigabe durch Autoren, CFO oder Kunden.
 
-Eine reine Prüfung des Quellcodes oder eines PDFs über `PDFDocument.load` ersetzt diesen visuellen Review **nicht**. Die Nutzerfreigabe und der Merge nach `main` bleiben gesperrt, bis diese Prüfung erledigt ist.
+- **UX/Account Manager:** Desktop hat klar getrennte Eingabe- und Ergebnisspalten; mobil läuft die Ausgabe unter der Eingabe statt gequetscht daneben. Lange Eingabefelder, aufgeklappte Kostendetails und die Value-Bridge-Stufen sind in den Originalbildern lesbar. Ein ursprünglich sichtbar überlagernder „Zum Inhalt springen“-Link wurde als echter Bildfehler erkannt, per `clip-path` für den unfokussierten Zustand korrigiert und im neuen Originalbild nachgeprüft.
+- **Economic Buyer / Champion:** Situation → Pain → Konsequenz → angestrebter Zustand → Änderung → messbare Metric → wirtschaftliche Wirkung ist auf den Bildern zusammenhängend nachvollziehbar. Das Servicebeispiel weist 36.000 EUR/Jahr als **ungeprüfte Modellannahme** und nicht als garantierte Ersparnis aus. Herleitung und Zahlungsannahmen bleiben offen einsehbar.
+- **CFO/Controlling:** Der Servicefall zeigt bei 36 Monaten 78.000 EUR Kosten, 97.500 EUR modellierten Nutzen und 19.500 EUR undiskontierten Saldo, Break-even in Monat 29. Die PDF-Seiten enthalten Rechenweg, Evidenzherkunft und Einschränkungen; keine Tabellen- oder Textüberlagerung in den geprüften Seiten. Der rein operative Kapazitätsfall zeigt **keinen** finanziellen Saldo oder erfundenen Payback.
+- **Fachliche Gegenprüfung:** Die separate Kategorie „Umsatzerwartung“ ist nicht monetarisierbar; importierte einmalige Cost-of-Delay-Wirkungen werden nicht in wiederkehrende Jahresbeträge überführt. Software-Business-Case-Importe mit inkompatiblen Kosten werden ausdrücklich als unvollständig gekennzeichnet.
+- **Drucklayout:** Alle vier Originalbildseiten sind lesbar; die zweite Seite des zweitseitigen Beispiel-PDFs enthält die Wirtschaftlichkeits- und Annahmenabschnitte mit deutlich freiem Seitenraum. Das ist kein Überlagerungsfehler, kann gestalterisch später kompakter werden. Der Unit-Test für sehr lange deutsche Bezeichnungen verifiziert PDF-Erzeugbarkeit und Mehrseitigkeit; eine separate Bildabnahme eines extrem langen Stressdokuments wurde **nicht** durchgeführt.
+
+**Restgrenzen:** Die manuell eingetragene Berechnung wird nicht unabhängig rechnerisch auf ihren Sachbezug geprüft. Wirkungsgruppen verhindern nur identisch gekennzeichnete Doppelzählungen, keine semantisch gleichen Effekte mit unterschiedlichen Bezeichnungen. Externe Belege und Kundenfreigaben werden nicht verifiziert. Die ausdrückliche visuelle **Nutzerfreigabe** und der Merge nach `main` bleiben offen.
+
+**Verifizierter CI-Lauf:** [GitHub Actions #38070981674](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38070981674): Format, Lint, 326 Unit-Tests, Production Build, 135 Playwright-Tests bestanden (1 Skip), PDF-Seitenrendering, Pages-Check und Bildpublikation erfolgreich.
 
 ## 5. Bewusst begrenzter Umfang
 
