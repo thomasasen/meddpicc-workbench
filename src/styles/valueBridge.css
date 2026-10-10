@@ -1,0 +1,329 @@
+.vb-main {
+  padding-block: var(--space-8) var(--space-12);
+}
+
+.vb-intro {
+  max-width: 940px;
+  margin-bottom: var(--space-6);
+}
+
+.vb-intro h1 {
+  max-width: 850px;
+  margin: var(--space-3) 0;
+  font-size: clamp(1.8rem, 3.3vw, 2.65rem);
+  line-height: 1.16;
+}
+
+.vb-demos,
+.vb-actions,
+.vb-step-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.vb-demo-note,
+.vb-notice {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.vb-steps {
+  display: flex;
+  gap: var(--space-2);
+  margin: var(--space-6) 0;
+  flex-wrap: wrap;
+}
+
+.vb-steps button {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  min-height: 44px;
+  padding: 0.55rem 1rem;
+}
+
+.vb-steps button.active {
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+  border-color: var(--color-accent);
+  font-weight: 700;
+}
+
+.vb-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  align-items: start;
+  gap: var(--space-6);
+}
+
+.vb-panel {
+  min-width: 0;
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-panel);
+  overflow-wrap: anywhere;
+}
+
+.vb-panel h2 {
+  font-size: 1.4rem;
+  line-height: 1.25;
+  margin-top: 0;
+}
+
+.vb-panel h3 {
+  font-size: 1.06rem;
+  line-height: 1.3;
+  margin: var(--space-6) 0 var(--space-3);
+}
+
+.vb-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: var(--space-4) 0;
+  font-size: 0.91rem;
+  font-weight: 600;
+}
+
+.vb-field :is(input, select, textarea) {
+  min-width: 0;
+  width: 100%;
+  padding: 0.66rem 0.75rem;
+  border-radius: var(--radius-control);
+  background: #fff;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.vb-field textarea {
+  resize: vertical;
+}
+
+.vb-field :is(input, textarea)::placeholder {
+  color: var(--color-text-muted);
+}
+
+.vb-fields-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.vb-fields-two .vb-field {
+  margin: var(--space-2) 0;
+}
+
+.vb-metric-entry {
+  border-top: 1px solid var(--color-border);
+  padding-block: var(--space-3) var(--space-5);
+}
+
+.vb-entry-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.vb-details {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  padding: var(--space-3) var(--space-4);
+  margin: var(--space-4) 0;
+}
+
+.vb-details summary {
+  cursor: pointer;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.vb-detail-content {
+  padding-top: var(--space-2);
+}
+
+.vb-check {
+  display: flex;
+  gap: var(--space-3);
+  align-items: start;
+  margin: var(--space-5) 0;
+  font-size: 0.9rem;
+}
+
+.vb-check input {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  accent-color: var(--color-accent);
+}
+
+.vb-hint,
+.vb-origin {
+  font-size: 0.89rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.vb-output-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: start;
+  gap: var(--space-4);
+}
+
+.vb-view-select {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.88rem;
+}
+
+.vb-view-select select {
+  min-height: 40px;
+  max-width: 160px;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--color-border-strong);
+  padding-inline: 0.5rem;
+  background: white;
+}
+
+.vb-bridge {
+  display: grid;
+  gap: 0;
+  margin-block: var(--space-5);
+}
+
+.vb-link {
+  position: relative;
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.vb-link:not(:last-child) {
+  margin-bottom: 17px;
+}
+
+.vb-link:not(:last-child)::after {
+  content: '↓';
+  position: absolute;
+  top: 100%;
+  left: 25px;
+  font-size: 15px;
+  color: var(--color-text-muted);
+}
+
+.vb-link-label {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: 0.79rem;
+  font-weight: 700;
+  letter-spacing: 0.015em;
+}
+
+.vb-link p {
+  margin: 0.4rem 0 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.vb-link--value {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.vb-link--value strong {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 1.18rem;
+  line-height: 1.3;
+}
+
+.vb-out-metric {
+  border-top: 1px solid var(--color-divider);
+  padding: var(--space-3) 0;
+  font-size: 0.9rem;
+}
+
+.vb-out-metric p {
+  margin: 0.4rem 0;
+}
+
+.vb-errors {
+  padding: var(--space-3);
+  border-left: 3px solid var(--color-risk);
+  background: var(--color-risk-soft);
+  color: var(--color-risk-text);
+  overflow-wrap: anywhere;
+}
+
+.vb-questions {
+  padding-left: 1.4rem;
+  font-size: 0.9rem;
+}
+
+.vb-questions li {
+  margin-block: var(--space-2);
+}
+
+.vb-sources {
+  margin-block: var(--space-8);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+
+.vb-sources summary {
+  cursor: pointer;
+  font-weight: 650;
+}
+
+.vb-sources p {
+  max-width: 75ch;
+}
+
+@media (max-width: 900px) {
+  .vb-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .vb-panel {
+    padding: var(--space-4);
+  }
+
+  .vb-fields-two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vb-steps button {
+    flex: 1 1 auto;
+  }
+
+  .vb-demos .button,
+  .vb-actions .button {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vb-shell * {
+    scroll-behavior: auto;
+  }
+}
