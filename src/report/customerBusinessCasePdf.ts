@@ -23,7 +23,6 @@ const amber = rgb(0.57, 0.31, 0.07)
 const red = rgb(0.68, 0.23, 0.23)
 const pale = rgb(0.948, 0.967, 0.974)
 const line = rgb(0.85, 0.89, 0.92)
-const white = rgb(1, 1, 1)
 type FontSet = { regular: PDFFont; bold: PDFFont }
 type Paint = { pdf: PDFDocument; p: PDFPage; fonts: FontSet }
 
