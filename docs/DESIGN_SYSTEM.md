@@ -148,6 +148,21 @@ Bestehende zentrale Tokens für Farben, Spacing, Typografie, Radii, Borders, Foc
 
 Systemfont-Strategie. Normale UI-Texte mindestens ca. 14–16 px, Metadaten nicht künstlich verkleinern. Lange deutsche und englische Fachbegriffe müssen sicher umbrechen.
 
+## 11a. Wahrnehmungsorientierte Textausrichtung und Abstände
+
+Übergreifender Standard für alle Microtools, Checklists, Knowledge-Screens und kundenfähigen Exporte.
+
+- **Nähe:** Labels und ihre Controls bilden eine visuelle Einheit. Hilfetexte folgen unmittelbar dem zugehörigen Control; Abstände **zwischen** logischen Gruppen sind größer als Abstände **innerhalb** einer Gruppe.
+- **Ähnlichkeit:** Die gleichen Informationstypen nutzen dieselben Schriftrollen, Abstände und Ausrichtungen. Kein zufälliger Wechsel zwischen zentrierten, links- und rechtsbündigen Fließtexten.
+- **Gemeinsame Region:** Ein Panel fasst genau eine zusammengehörige Aufgabe oder Information zusammen. Flächen und Ränder nicht als Dekoration oder mehrfach ineinander verschachteln.
+- **Hierarchie:** H1 → H2 → Beschriftung → Eingabe/Ergebnis → Erläuterung. Wertkennzahlen dürfen auffallen, ohne Labels und Kontext zu verdrängen.
+- **Ausrichtung:** Fließtext linksbündig; Zahlen wenn sinnvoll in eigenen tabellarischen Spalten. Labels und Werte nutzen wiederkehrende optische Kanten. Lange Texte dürfen umbrechen und werden niemals abgeschnitten.
+- **Vertikaler Rhythmus:** Kleine wiederkehrende Abstände innerhalb eines Labels/Felds (ca. 8 px), mittlere Abstände innerhalb der Gruppe (ca. 16 px), größere zwischen Gruppen/Sektionen (ca. 24 px oder mehr). Das sind Gestaltungsrichtwerte, keine empirisch optimalen Zahlen.
+- **Mobile/Reflow:** Gruppen bleiben beim Stapeln zusammen; keine Textüberlappungen, abgeschnittenen Buttons oder absichtlich winzige Labels. Auch bei erhöhter Schrift- oder Zeilenabstand-Einstellung dürfen keine Informationen verschwinden.
+- **PDF:** Texte vor dem Zeichnen umbrechen und Blockhöhen bestimmen. Auf Seitenumbrüche, Fußzeilen, Kanten, Innenabstände und Überschriften ohne abgeschnittenen Folgeinhalt achten. Originalseiten rendern und tatsächlich sichten.
+
+Prinzipien stammen aus allgemeinen UX- und Gestalt-Heuristiken (u. a. Nähe, Ähnlichkeit und Hierarchie), nicht aus einer spezifischen Nutzungsstudie zur Toolbox. Referenzen und ein praktischer Prüfablauf: [Metric Builder Visual QA](METRIC_BUILDER_VISUAL_QA.md).
+
 ## 12. Status und Farbe
 
 Bedeutung niemals ausschließlich über Farbe vermitteln. Status immer zusätzlich als Text zeigen.
