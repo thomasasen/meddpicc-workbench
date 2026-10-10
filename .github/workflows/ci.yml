@@ -26,7 +26,7 @@ permissions:
 
 jobs:
   pr-quality:
-    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
+    if: github.event_name == 'pull_request' && (github.event.pull_request.draft == false || startsWith(github.head_ref, 'feature/ux-report-redesign-'))
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -105,6 +105,18 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add src tests
             git commit -m "style: format Value Bridge implementation"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
+      - name: Redesign-Dateien vor den Quality Gates formatieren
+        if: startsWith(github.head_ref, 'feature/ux-report-redesign-')
+        run: |
+          npx prettier --write src/App.vue src/main.ts src/views/ChecklistView.vue src/report/reportChrome.ts src/report/reportChrome.test.ts src/report/valueBridgePdf.ts src/report/metricBuilderPdf.ts src/report/costOfDelayPdf.ts src/report/softwareBusinessCasePdf.ts src/report/customerBusinessCasePdf.ts tests/e2e/redesign-foundations.spec.ts
+          if ! git diff --quiet -- src tests; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src tests
+            git commit -m "style: normalize redesign foundations"
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
           fi
 
