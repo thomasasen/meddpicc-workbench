@@ -15,6 +15,7 @@ import '../styles/costOfDelay.css'
 const draft = ref<CostOfDelayInput>(emptyCostOfDelayInput())
 const step = ref<1 | 2 | 3>(1)
 const chosenDelay = ref(6)
+const benefitEntryPeriod = ref<'annual' | 'monthly'>('annual')
 const customDelay = ref<number | null>(null)
 const example = ref('')
 const notice = ref('')
@@ -34,7 +35,8 @@ const money = (value: number): string =>
 type AmountKey = 'annualBenefitEur' | 'legacyMonthlyEur' | 'projectOnceEur' | 'extraCostPerMonthEur'
 function setAmount(key: AmountKey, event: Event) {
   const value = (event.target as HTMLInputElement).value
-  draft.value[key] = value.trim() === '' ? null : Number(value)
+  const factor = key === 'annualBenefitEur' && draft.value.benefitKind === 'recurring' && benefitEntryPeriod.value === 'monthly' ? 12 : 1
+  draft.value[key] = value.trim() === '' ? null : Number(value) * factor
 }
 function setEndMonth(event: Event) {
   const value = (event.target as HTMLInputElement).value
@@ -56,6 +58,7 @@ function reset() {
   draft.value = emptyCostOfDelayInput()
   customDelay.value = null
   chosenDelay.value = 6
+  benefitEntryPeriod.value = 'annual'
   step.value = 1
   example.value = ''
   notice.value = ''
@@ -189,10 +192,12 @@ onMounted(() => {
           <template v-if="draft.financialTreatment === 'realized'">
             <label class="cod-field"
               ><span>{{
-                draft.benefitKind === 'one-time' ? 'Einmaliger Betrag in EUR' : 'Realisierbarer Nutzen in EUR/Jahr'
+                draft.benefitKind === 'one-time'
+                  ? 'Einmaliger Betrag in EUR'
+                  : 'Realisierbarer Nutzen in EUR/' + (benefitEntryPeriod === 'monthly' ? 'Monat' : 'Jahr')
               }}</span>
               <input
-                :value="draft.annualBenefitEur ?? ''"
+                :value="draft.annualBenefitEur === null ? '' : draft.benefitKind === 'recurring' && benefitEntryPeriod === 'monthly' ? draft.annualBenefitEur / 12 : draft.annualBenefitEur"
                 type="number"
                 inputmode="decimal"
                 min="0"
@@ -201,6 +206,13 @@ onMounted(() => {
                 placeholder="Noch offen"
                 @input="setAmount('annualBenefitEur', $event)"
               />
+            </label>
+            <label v-if="draft.benefitKind === 'recurring'" class="cod-field">
+              <span>Eingabezeitraum für realisierten Nutzen</span>
+              <select v-model="benefitEntryPeriod">
+                <option value="annual">EUR pro Jahr</option>
+                <option value="monthly">EUR pro Monat (intern auf Jahreswert umgerechnet)</option>
+              </select>
             </label>
             <label class="cod-field"
               ><span>Art der wirtschaftlichen Wirkung</span>

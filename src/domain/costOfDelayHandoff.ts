@@ -1,4 +1,4 @@
-import { type MetricBuilderDraft, type MetricBuilderResult } from './metricBuilder'
+import { mechanismLabels, type MetricBuilderDraft, type MetricBuilderResult } from './metricBuilder'
 import { emptyCostOfDelayInput, type CostOfDelayInput } from './costOfDelay'
 
 const KEY = 'meddpicc-cost-of-delay-handoff-v1'
@@ -21,7 +21,12 @@ export function queueCostOfDelayHandoff(
     benefitStartMonth: Number(draft.startMonth),
     rampMonths: Number(draft.rampMonths),
     evidence: draft.evidence,
-    source: [draft.assumptionNote, draft.realizationNote].filter(Boolean).join(' | '),
+    source: [
+      'Metric Builder; Ursprungszeitraum: ' + (draft.period === 'monthly' ? 'monatlich' : 'jährlich'),
+      'Realisierungsmechanismus: ' + mechanismLabels[draft.mechanism],
+      draft.assumptionNote,
+      draft.realizationNote,
+    ].filter(Boolean).join(' | '),
     effectGroup: draft.effectGroup,
   }
   storage.setItem(KEY, JSON.stringify(input))

@@ -23,6 +23,15 @@ test('Cost of Delay: Einstieg, leere Eingaben und Kapazitätsgewinn ohne EUR-Sch
   })
 })
 
+test('Cost of Delay: monatliche EUR-Eingabe wird korrekt auf den Jahreswert normalisiert', async ({ page }) => {
+  await page.goto(route)
+  await page.getByRole('button', { name: 'CRM / Service' }).click()
+  await page.getByLabel('Eingabezeitraum für realisierten Nutzen').selectOption('monthly')
+  await page.getByLabel('Realisierbarer Nutzen in EUR/Monat').fill('5000')
+  await page.getByRole('button', { name: '3 · Konsequenz' }).click()
+  await expect(page.getByRole('button', { name: '+3 Monate' })).toContainText('15.000,00')
+})
+
 test('Cost of Delay: fiktives Servicebeispiel, Monatskurve, PDF und Responsive-QA', async ({ page }, testInfo) => {
   const errors: string[] = []
   page.on('pageerror', (err) => errors.push(err.message))
