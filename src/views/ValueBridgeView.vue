@@ -97,6 +97,10 @@ onMounted(() => {
       draft.value = imported
       step.value = 3
       message.value = 'Daten ausdrücklich übernommen. Keine importierte Metric ist für die EUR-Rechnung aktiviert.'
+      if (imported.metrics.some((metric) => metric.origin === 'software-business-case') &&
+          (imported.investmentEur === null || imported.saasMonthlyEur === null)) {
+        message.value += ' Komplexe Kostenpositionen wurden nicht als vereinfachte Beträge übernommen. Bitte im ursprünglichen Business Case prüfen.'
+      }
     }
   } catch {
     message.value = 'Die lokale Übergabe war nicht verfügbar.'
