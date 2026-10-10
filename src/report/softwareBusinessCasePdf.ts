@@ -1,6 +1,7 @@
 import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf-lib'
 import { summarizeBusinessCase, economicInterpretation, type CaseSummary } from '../domain/businessCase'
 import type { SoftwarePaybackInput } from '../domain/softwarePayback'
+import { drawReportFooter } from './reportChrome'
 import {
   compareBusinessScenarios,
   describeScenarioAssumptions,
@@ -243,13 +244,17 @@ function tableHead(s: State, f: Fonts, one = 'Kosten- oder Nutzenblock', two = '
   s.y -= 31
 }
 function footer(pdf: PDFDocument, f: Fonts, customer: string) {
-  const pages = pdf.getPages()
-  for (let i = 0; i < pages.length; i++) {
-    const p = pages[i]!
-    p.drawLine({ start: { x: L, y: 38 }, end: { x: R, y: 38 }, thickness: 0.6, color: border })
-    draw(p, 'MODELLRECHNUNG - ' + customer, L, 24, 7.3, f.normal, muted, 355)
-    draw(p, String(i + 1) + ' / ' + String(pages.length), R - 27, 24, 8, f.bold, muted)
-  }
+  drawReportFooter(pdf.getPages(), f.normal, f.bold, {
+    left: L,
+    right: R,
+    label: 'MODELLRECHNUNG - ' + customer,
+    borderColor: border,
+    textColor: muted,
+    lineY: 38,
+    textY: 24,
+    pagePrefix: '',
+    fontSize: 7.3,
+  })
 }
 export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Uint8Array> {
   const c = summarizeBusinessCase(data.input)
