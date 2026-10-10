@@ -105,3 +105,39 @@ test('Metric Builder: fehlende Annahmen verhindern finanzielle Übernahme', asyn
   ).toBeVisible()
   await expect(page.getByRole('button', { name: 'Metric in Software-Payback übernehmen' })).toBeDisabled()
 })
+
+
+test('Metric Builder: Textabstände, linke Achsen und Umbruch in allen Schritten', async ({ page }, testInfo) => {
+  await page.goto(route)
+  for (const [index, stepLabel] of ['1 · Problem', '2 · Messung', '3 · Wirkung & Evidenz'].entries()) {
+    await page.getByRole('button', { name: stepLabel, exact: true }).click()
+    if (index < 2) {
+      await page.screenshot({
+        path: testInfo.outputPath('metric-builder-step-' + (index + 1) + '-' + testInfo.project.name + '.png'),
+        fullPage: true,
+      })
+    }
+    for (const width of [375, 768, 1024, 1440]) {
+      await page.setViewportSize({ width, height: 900 })
+      const metrics = await page.evaluate(() => {
+        const overflow = document.documentElement.scrollWidth - document.documentElement.clientWidth
+        const fields = Array.from(document.querySelectorAll<HTMLLabelElement>('.metric-fields label.field'))
+        const invalid: string[] = []
+        fields.forEach((field) => {
+          const title = field.querySelector<HTMLElement>(':scope > span')
+          const input = field.querySelector<HTMLElement>('input, select, textarea')
+          if (!title || !input) return
+          const fieldBox = field.getBoundingClientRect()
+          const titleBox = title.getBoundingClientRect()
+          const inputBox = input.getBoundingClientRect()
+          if (inputBox.top - titleBox.bottom < 5) invalid.push('Label und Eingabe überlappen: ' + title.textContent)
+          if (Math.abs(inputBox.left - titleBox.left) > 2) invalid.push('Falsche linke Achse: ' + title.textContent)
+          if (inputBox.right > fieldBox.right + 2) invalid.push('Eingabe ragt über Feld: ' + title.textContent)
+        })
+        return { overflow, invalid }
+      })
+      expect(metrics.overflow, 'Overflow bei ' + stepLabel + ' / ' + width).toBeLessThanOrEqual(0)
+      expect(metrics.invalid, 'Text-Ausrichtung bei ' + stepLabel + ' / ' + width).toEqual([])
+    }
+  }
+})
