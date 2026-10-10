@@ -31,7 +31,10 @@ const money = (value: number): string =>
         <dt>Angesetzter realisierbarer Bruttonutzen</dt>
         <dd>{{ money(annualGrossBenefitEur) }} / Jahr</dd>
         <div class="annual-benefit-chart-track" aria-hidden="true">
-          <div class="annual-benefit-chart-fill annual-benefit-chart-fill--gross" :style="{ width: grossWidth + '%' }" />
+          <div
+            class="annual-benefit-chart-fill annual-benefit-chart-fill--gross"
+            :style="{ width: grossWidth + '%' }"
+          />
         </div>
       </div>
       <div>

@@ -95,7 +95,16 @@ export interface ReportMastheadOptions {
 /** Einheitliche Vektor-Kopfzeile, ohne Netzwerk oder externe Bildressourcen. */
 export function drawReportMasthead(options: ReportMastheadOptions): void {
   const {
-    page, normal, bold, width, height, left, right, headerHeight, title, subtitle,
+    page,
+    normal,
+    bold,
+    width,
+    height,
+    left,
+    right,
+    headerHeight,
+    title,
+    subtitle,
     titleOffset = 50,
     subtitleOffset = 69,
   } = options

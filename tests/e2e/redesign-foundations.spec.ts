@@ -47,5 +47,7 @@ test('Quick Payback: jährliche Nutzen-Kosten-Grafik bleibt textuell verständli
   await expect(chart).toBeVisible()
   await expect(chart.getByText('Angesetzter realisierbarer Bruttonutzen')).toBeVisible()
   await expect(chart.getByText('Zusätzliche laufende Betriebskosten')).toBeVisible()
-  await expect(chart.getByText('Die Darstellung zeigt keine realisierten Einsparungen.', { exact: false })).toBeVisible()
+  await expect(
+    chart.getByText('Die Darstellung zeigt keine realisierten Einsparungen.', { exact: false }),
+  ).toBeVisible()
 })
