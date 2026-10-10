@@ -84,8 +84,9 @@ const toolClusters = [
         customerReady: true,
       },
       {
-        label: 'Business Case',
-        note: 'Nutzen, Kosten und Annahmen strukturiert zusammenführen – als Grundlage für die Kundendiskussion.',
+        label: 'Value Bridge',
+        note: 'Pain, gewünschte Veränderung und Metrics verbinden – mit überprüfbarer finanzieller Wirkung oder offen ausgewiesenen Annahmen.',
+        route: '/tools/value-bridge',
         customerReady: true,
       },
     ],
