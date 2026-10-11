@@ -44,8 +44,8 @@ onMounted(async () => {
         <p class="eyebrow">Konfiguration</p>
         <h1>Einstellungen</h1>
         <p>
-          Verwalte hier die zentralen Konfigurationen der Toolbox. Einstellungen gelten
-          für dieses Browserprofil und sind unabhängig von einzelnen Kundenprojekten.
+          Verwalte hier die zentralen Konfigurationen der Toolbox. Einstellungen gelten für dieses Browserprofil und
+          sind unabhängig von einzelnen Kundenprojekten.
         </p>
       </header>
 
@@ -56,8 +56,8 @@ onMounted(async () => {
             <div>
               <h2 id="settings-document-title">Dokumente und Exporte</h2>
               <p>
-                Firmenname, Logo, Farben und Zusatzangaben für kundenfähige PDFs,
-                SVG- und PNG-Grafiken zentral festlegen.
+                Firmenname, Logo, Farben und Zusatzangaben für kundenfähige PDFs, SVG- und PNG-Grafiken zentral
+                festlegen.
               </p>
             </div>
           </div>
@@ -81,10 +81,9 @@ onMounted(async () => {
             <div>
               <h2 id="settings-storage-title">Lokale Speicherung und Datensicherung</h2>
               <p>
-                Die Dokumentgestaltung speichert dein Firmenprofil ausschließlich lokal im
-                Browser. Im Bereich Dokumentgestaltung kannst du die Konfiguration als JSON
-                exportieren, auf einem anderen Gerät importieren oder vollständig zurücksetzen.
-                Ein Cloud-Konto ist dafür nicht notwendig.
+                Die Dokumentgestaltung speichert dein Firmenprofil ausschließlich lokal im Browser. Im Bereich
+                Dokumentgestaltung kannst du die Konfiguration als JSON exportieren, auf einem anderen Gerät importieren
+                oder vollständig zurücksetzen. Ein Cloud-Konto ist dafür nicht notwendig.
               </p>
             </div>
           </div>

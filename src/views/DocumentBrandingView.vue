@@ -244,7 +244,9 @@ function downloadPreview(): void {
       <div class="container header-inner toolbox-header">
         <RouterLink class="brand" to="/" aria-label="MEDDPICC Toolbox Startseite">
           <span class="brand-mark">M</span>
-          <span class="brand-copy"><strong>MEDDPICC Toolbox</strong><span>Einstellungen · Dokumentgestaltung</span></span>
+          <span class="brand-copy"
+            ><strong>MEDDPICC Toolbox</strong><span>Einstellungen · Dokumentgestaltung</span></span
+          >
         </RouterLink>
         <RouterLink class="button button-quiet button-with-icon" to="/settings">
           <ArrowLeft :size="17" aria-hidden="true" /> Einstellungen

@@ -20,7 +20,9 @@ test('Zahnrad der Startseite öffnet die zentrale Einstellungsübersicht', async
   await page.getByRole('link', { name: 'Einstellungen', exact: true }).click()
   await expect(page).toHaveURL(settingsRoute)
   await page.getByRole('link', { name: 'Zur Startseite' }).click()
-  await expect(page.getByRole('heading', { name: 'Wiederkehrende Sales-Aufgaben schneller und sicherer erledigen.' })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Wiederkehrende Sales-Aufgaben schneller und sicherer erledigen.' }),
+  ).toBeVisible()
 })
 
 test('Firmenprofil bleibt nach Navigation und Reload unverändert gespeichert', async ({ page }) => {
