@@ -77,7 +77,7 @@ test('Dokumentgestaltung: Layout bei vier Viewports ohne horizontalen Überlauf'
 })
 
 const samplePng =
-  'iVBORw0KGgoAAAANSUhEUgAAASwAAABGCAYAAAB2Zan9AAABdklEQVR42u3cu63CQBRFUUCug4S+SBxREZET+iKhEegAG2HMuTNrxfwRW2f09LzbAQAAAAAAAAAA8I393A2O5+vTxwT82uN2me3RwccEVCFYgGABCBYgWACCBbCSoYU3cZ/Gxbc9jZNvHQQrM1Bz9xUwEKyoSC19XPECwYoM1bvnEi4QrNhQCRfUEPlXwn/GKvF1AKHBSouEaIEjYakwOCKChVVuxVhb0HmwqkVAtKDzhQUQH6yqa8XKgs6CVf1HL1rgSAiQFaxW1omVBRYWgGABgtX1McqxECwsAMECBAtAsAAECxAsAMECBGvrJ2ztqp2uQgoWFoBgAYLV5THKcRAsLICsYFVfJ9YVdJawqv7oxQocCQGyg1VtrVhX0PnCqhIBsYL/GtJikHgFT6ECC6tEHMQKBKtEJMQKHAnjj4hCBYIVHy6hAsFaPSZrxkukQLA2XUKfBEygQLCiAga0yb/mAIIFIFiAYAEIFgAAAAAAAAAAQNteGgNlqRWs/fMAAAAASUVORK5CYII='
+  'iVBORw0KGgoAAAANSUhEUgAAAKAAAAAkCAYAAAAO7jHjAAAAmklEQVR42u3b0Q1AMBSG0bqbWMgqZrGKhYzCAkIl2ityzrOn5svfFy0FAACgo6H2w3FadsdFrW2dh1cCFB4tQwzx0dJdQyE+MiMM8ZEZYTgaMoX1I3MFLSDfWkAQIAIEASJAECACBAEiQBAgAgQB8r8Aa//lh6fO2rKAfO8KtoL0WL/LBRQhreO7vYJFSMv4SvEwnaTwAAAAUhw4/SwyqIE0/AAAAABJRU5ErkJggg=='
 
 test('Dokumentgestaltung: Logo prüfen, speichern und ohne Datenverlust entfernen', async ({ page }) => {
   await page.goto(route)
@@ -87,6 +87,7 @@ test('Dokumentgestaltung: Logo prüfen, speichern und ohne Datenverlust entferne
     mimeType: 'image/png',
     buffer: Buffer.from(samplePng, 'base64'),
   })
+  expect(await page.getByRole('alert').allTextContents()).toEqual([])
   await expect(page.getByRole('img', { name: 'Aktuell ausgewähltes Firmenlogo' })).toBeVisible()
   await page.getByRole('button', { name: 'Änderungen speichern' }).click()
   await expect(page.getByText('CI-Profil dauerhaft in diesem Browser gespeichert.')).toBeVisible()
