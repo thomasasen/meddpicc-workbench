@@ -13,7 +13,6 @@ import {
   drawReportMasthead,
   prepareReportBranding,
   applyReportBrandMetadata,
-  type PreparedReportBranding,
   type ReportOptions,
 } from './reportChrome'
 import { wrapReportText } from './reportText'

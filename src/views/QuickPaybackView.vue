@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { loadBrandProfile } from '../services/brandProfileStore'
 import { ArrowLeft, Calculator, ClipboardCopy, RotateCcw } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import SoftwarePaybackPanel from '../components/SoftwarePaybackPanel.vue'

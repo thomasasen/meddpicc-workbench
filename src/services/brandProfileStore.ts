@@ -67,7 +67,7 @@ export async function saveBrandProfile(profile: BrandProfile | null, expectedRev
       const tx = db.transaction(STORE_NAME, 'readwrite')
       const store = tx.objectStore(STORE_NAME)
       const request = store.get(KEY)
-      let revision = expectedRevision + 1
+      const revision = expectedRevision + 1
       let conflict = false
       request.onsuccess = () => {
         const current = request.result as StoredBrandProfile | undefined
