@@ -67,3 +67,10 @@ Die Redesign-CI rendert **sämtliche Originalseiten** der fünf unterschiedliche
 ## Abschlussprüfung der sieben PDF-Originalvarianten (11.10.2026)
 
 [CI #38094931479](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38094931479) hat sämtliche **27 Originalseiten** aus fünf Standard- und zwei Langtextberichten zu PNG gerendert; jede Seite wurde visuell geprüft, die Langtextberichte zusätzlich durch Text-Extraktion. Alle fünf Generatoren verwenden den gemeinsam gemessenen PDF-Header/Footer und breiteabhängigen Zeilenumbruch; große Felder werden sicher auf Fortsetzungsseiten paginiert. Der Finance-/Kundenbericht bewahrt seine fachlich unterschiedliche Struktur. Die Standardfonts unterstützen deutsches WinAnsi, nicht vollständigen Unicode; PDF/UA wird nicht behauptet.
+
+
+## Corporate-Design-Integration (11.10.2026)
+
+Gemeinsame Komponenten in reportChrome.ts sind die einzige Instanz für Firmenname, PDF-Logo, Primärfarbe, passende Schriftfarbe, Footer-Zusatzangaben, Seitennummern und PDF-Creator-Bereinigung. Vier kundenfähige Generatoren und ein interner Finance-Generator nutzen denselben validierten Snapshot; ein zweiter PDF-Stack wird nicht verwendet. Ohne CI-Profil entfällt das bisherige M-Toolbox-Signet. Alle fachlich relevanten Disclaimer und rechnerischen Statusangaben bleiben bestehen. Die verschiedenen festen Kopfzeilenhöhen und Body-Startpositionen bleiben bewusst erhalten.
+
+Einschränkung: Aktuelle StandardFonts.Helvetica unterstützt kein vollständiges Unicode. Die CI-Profilvalidierung weist nicht unterstützte Zeichen ausdrücklich zurück; ältere Reportdatensätze können weiterhin Ersatzzeichenregeln anwenden. Eingebettete frei lizenzierte Unicode-Fonts sind ein gesondertes technisches Folgevorhaben. SVG-/PNG-Export der Rückwärtsplanung erhält in diesem PDF-zentrierten Feature kein eigenes CI-Design. Die Original-PDF-Abnahmematrix und kritischen Prüfpunkte stehen in docs/DOCUMENT_BRANDING_QA.md.

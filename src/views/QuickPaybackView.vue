@@ -80,6 +80,7 @@ async function copySummary() {
             <span>Value &amp; Metrics</span>
           </span>
         </RouterLink>
+        <RouterLink class="button button-quiet" to="/settings/document-design">Dokumentgestaltung</RouterLink>
         <RouterLink class="button button-quiet button-with-icon" to="/">
           <ArrowLeft :size="17" aria-hidden="true" />
           Alle Microtools

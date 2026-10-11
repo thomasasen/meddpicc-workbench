@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
 import {
   ArrowLeft,
@@ -89,7 +90,8 @@ async function copySummary(): Promise<void> {
 }
 async function exportPdf(): Promise<void> {
   try {
-    const bytes = await buildValueBridgePdf(draft.value)
+    const { profile, warning } = await loadBrandForReport()
+    const bytes = await buildValueBridgePdf(draft.value, { brand: profile })
     const blob = new Blob([new Uint8Array(bytes)], { type: 'application/pdf' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -99,7 +101,7 @@ async function exportPdf(): Promise<void> {
     a.click()
     a.remove()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
-    message.value = 'PDF mit Datenherkunft und offenen Annahmen erzeugt.'
+    message.value = 'PDF mit Datenherkunft und offenen Annahmen erzeugt.' + (warning ? ' ' + warning : '')
   } catch {
     message.value = 'PDF-Export fehlgeschlagen.'
   }
@@ -135,6 +137,7 @@ onMounted(() => {
           <span class="brand-mark">M</span>
           <span class="brand-copy"><strong>MEDDPICC Toolbox</strong><span>Value &amp; Metrics</span></span>
         </RouterLink>
+        <RouterLink class="button button-quiet" to="/settings/document-design">Dokumentgestaltung</RouterLink>
         <RouterLink class="button button-quiet button-with-icon" to="/">
           <ArrowLeft :size="17" aria-hidden="true" /> Alle Microtools
         </RouterLink>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {
@@ -131,9 +132,11 @@ function download(bytes: Uint8Array, name: string): void {
 
 async function exportPdf(): Promise<void> {
   try {
-    const bytes = await buildMetricBuilderPdf(draft.value)
+    const { profile, warning } = await loadBrandForReport()
+    const bytes = await buildMetricBuilderPdf(draft.value, { brand: profile })
     download(bytes, 'metric-steckbrief.pdf')
-    message.value = 'Metric-Steckbrief erstellt. Fehlende Werte sind im Dokument gekennzeichnet.'
+    message.value =
+      'Metric-Steckbrief erstellt. Fehlende Werte sind im Dokument gekennzeichnet.' + (warning ? ' ' + warning : '')
   } catch {
     message.value = 'PDF konnte nicht erzeugt werden.'
   }
@@ -178,6 +181,7 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
           <span class="brand-mark">M</span>
           <span class="brand-copy"><strong>MEDDPICC Toolbox</strong><span>Value &amp; Metrics</span></span>
         </RouterLink>
+        <RouterLink class="button button-quiet" to="/settings/document-design">Dokumentgestaltung</RouterLink>
         <RouterLink class="button button-quiet button-with-icon" to="/">
           <ArrowLeft :size="17" aria-hidden="true" /> Alle Microtools
         </RouterLink>

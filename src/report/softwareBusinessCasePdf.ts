@@ -1,7 +1,14 @@
 import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf-lib'
 import { summarizeBusinessCase, economicInterpretation, type CaseSummary } from '../domain/businessCase'
 import type { SoftwarePaybackInput } from '../domain/softwarePayback'
-import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import {
+  drawReportFooter,
+  drawReportMasthead,
+  prepareReportBranding,
+  applyReportBrandMetadata,
+  type PreparedReportBranding,
+  type ReportOptions,
+} from './reportChrome'
 import { wrapReportText } from './reportText'
 import {
   compareBusinessScenarios,
@@ -32,7 +39,7 @@ const muted = rgb(0.38, 0.44, 0.52),
   light = rgb(0.95, 0.97, 0.99),
   border = rgb(0.84, 0.88, 0.92)
 const danger = rgb(0.7, 0.28, 0.19)
-type Fonts = { normal: PDFFont; bold: PDFFont }
+type Fonts = { normal: PDFFont; bold: PDFFont; branding?: PreparedReportBranding }
 type State = { p: PDFPage; y: number; pdf: PDFDocument; f: Fonts; chapter: string }
 const euro = (n: number) =>
   new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n)
@@ -81,6 +88,7 @@ function page(pdf: PDFDocument, f: Fonts, chapter: string): State {
     left: L,
     right: R,
     headerHeight: 89,
+    branding: f.branding,
     title: 'SOFTWARE INVESTMENT / BUSINESS CASE',
     subtitle: chapter.toUpperCase(),
   })
@@ -241,6 +249,7 @@ function footer(pdf: PDFDocument, f: Fonts, customer: string) {
     left: L,
     right: R,
     label: 'MODELLRECHNUNG - ' + customer,
+    branding: f.branding,
     borderColor: border,
     textColor: muted,
     lineY: 38,
@@ -249,18 +258,19 @@ function footer(pdf: PDFDocument, f: Fonts, customer: string) {
     fontSize: 7.3,
   })
 }
-export async function buildSoftwareBusinessCasePdf(data: ReportData): Promise<Uint8Array> {
+export async function buildSoftwareBusinessCasePdf(data: ReportData, options: ReportOptions = {}): Promise<Uint8Array> {
   const c = summarizeBusinessCase(data.input)
   const scenarios = compareBusinessScenarios(data.input, data.scenarioSettings)
   if (!c || !scenarios) throw new Error('Bitte ungültige Angaben, Szenariowerte oder Doppelzählungen korrigieren.')
   const pdf = await PDFDocument.create()
   const f: Fonts = {
+    branding: await prepareReportBranding(pdf, options.brand, 'internal'),
     normal: await pdf.embedFont(StandardFonts.Helvetica),
     bold: await pdf.embedFont(StandardFonts.HelveticaBold),
   }
   pdf.setTitle(safe('Business Case - ' + data.project))
   pdf.setSubject('Undiskontierte wirtschaftliche Projektmodellrechnung')
-  pdf.setCreator('MEDDPICC Toolbox (clientseitig)')
+  applyReportBrandMetadata(pdf, f.branding!)
   const client = data.customer.trim() || 'Nicht angegeben'
   let s = page(pdf, f, '01  Management Summary')
   heading(s, 'Wirtschaftlicher Business Case', f, 21)

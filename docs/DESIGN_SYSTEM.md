@@ -246,3 +246,8 @@ Die Reflow-Regeln in `src/styles/redesignFoundations.css` ergänzen bestehende P
 ## 20. Produktive UI-Regression am 11.10.2026
 
 Die mobile Schrittnavigation wird unter 480 Pixeln vertikal angezeigt; Cost-of-Delay-Verlaufsgrafiken bleiben auf kleinen Bildschirmen horizontal lesbar und per Tastatur fokussierbar. Die neun Knowledge-Ansichten erhalten gemeinsame Kapitelanker, die den Fokus auf Abschnittsüberschriften führen; die sechs Value-Bridge-Stufen trennen Pain, Konsequenz, Ziel, Veränderung, Messung und monetären Wert. 25 produktive und drei interne Routen sind in vier Größen via CI #38094931479 geprüft (205 bestandene Browserprüfungen). Die repräsentative Bildsichtung ersetzt keine formale WCAG-2.2-AA-Zertifizierung.
+
+
+## Dokumentgestaltung
+
+Die Anwendung bleibt MEDDPICC Toolbox; nur ihre PDF-Ausgaben werden firmenneutral oder mit lokalem CI erzeugt. Die Seite /settings/document-design bietet semantisch beschriftete Felder, Status-/Fehlerrollen, Tastaturbedienung und mobile Layouts. Der PDF-Kopf nutzt kontrastreiches Textweiß oder Textdunkel passend zur Primärfarbe. Wirtschaftliche Statusfarben, Risikoangaben und Evidenzkennzeichnungen sind davon unabhängig. Logo und langer Firmenname belegen eine begrenzte reservierte Masthead-Fläche, ohne den Dokumentinhalt nach unten zu überdecken.

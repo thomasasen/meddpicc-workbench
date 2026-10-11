@@ -291,6 +291,9 @@ const knowledgeTopics = [
           </span>
         </RouterLink>
 
+        <RouterLink class="button button-quiet" to="/settings/document-design"
+          >Einstellungen · Dokumentgestaltung</RouterLink
+        >
         <div class="toolbox-header-meta">
           <Wrench :size="17" aria-hidden="true" />
           <span>Berechnen · vorbereiten · nachschlagen</span>

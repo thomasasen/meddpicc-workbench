@@ -6,7 +6,13 @@ import {
   type BridgeMetric,
   type ValueBridgeInput,
 } from '../domain/valueBridge'
-import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import {
+  drawReportFooter,
+  drawReportMasthead,
+  prepareReportBranding,
+  applyReportBrandMetadata,
+  type ReportOptions,
+} from './reportChrome'
 import { wrapReportText } from './reportText'
 
 const PAGE_W = 595.28
@@ -51,9 +57,11 @@ function wrap(value: string, font: PDFFont, size: number, width: number): string
   return wrapReportText(printable(value), font, size, width)
 }
 
-export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint8Array> {
+export async function buildValueBridgePdf(input: ValueBridgeInput, options: ReportOptions = {}): Promise<Uint8Array> {
   const result = evaluateValueBridge(input)
   const pdf = await PDFDocument.create()
+  const branding = await prepareReportBranding(pdf, options.brand, 'customer')
+  applyReportBrandMetadata(pdf, branding)
   const regular = await pdf.embedFont(StandardFonts.Helvetica)
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold)
   let page!: PDFPage
@@ -62,6 +70,7 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
   function pageStart(): void {
     page = pdf.addPage([PAGE_W, PAGE_H])
     drawReportMasthead({
+      branding,
       page,
       normal: regular,
       bold,
@@ -394,6 +403,7 @@ export async function buildValueBridgePdf(input: ValueBridgeInput): Promise<Uint
   drawReportFooter(pdf.getPages(), regular, bold, {
     left: PAD,
     right: PAGE_W - PAD,
+    branding,
     label: 'GESPRÄCHSGRUNDLAGE / KEINE GARANTIE ODER BUDGETFREIGABE',
     borderColor: rule,
     textColor: muted,

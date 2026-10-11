@@ -133,3 +133,12 @@ Arbeitstage sind in v0.1 Montag bis Freitag. Feiertage werden nicht automatisch 
 - kundenfähige Exporte benötigen eine nichtgrafische Informationsalternative im UI
 - Checklists müssen ohne fachlich missverständliche Kurzlabels verständlich sein
 - neue Features werden auf CRM-Drift geprüft
+
+
+## Lokale Corporate Identity für PDF-Berichte
+
+BrandProfile in src/report/brandProfile.ts enthält ausschließlich organisationsbezogene Daten (Firmenname, Farben, Kontakt, optionaler Verfasser, Logo); keinerlei Kunden-/Opportunity-/Sessiondaten. Die versionierte JSON-Struktur (Version 1) wird mit strikter Feld- und Umfangsprüfung validiert. src/services/brandProfileStore.ts speichert sie als einzigen Datensatz im IndexedDB-Speicher meddpicc-document-branding / configuration / active. Eine Revisionsprüfung innerhalb einer readwrite-Transaktion schützt vor verlorenen Änderungen bei konkurrierenden Tabs.
+
+Fünf aufrufende UI-Komponenten laden bei Exportbeginn den gespeicherten Snapshot und reichen ihn über einen optionalen zweiten Parameter ReportOptions an die jeweiligen PDF-Generatoren weiter. Diese lesen nicht selbst aus IndexedDB. prepareReportBranding bindet das Logo einmalig lokal ein, drawReportMasthead, drawReportFooter und applyReportBrandMetadata zeichnen neutrale oder CI-basierte Dokumente. ReportAudience ist typisiert und beim Generator fest auf customer (vier Kundenreports) beziehungsweise internal (Finance-Anhang) gelegt; die Domain-Berechnungen bleiben unangetastet.
+
+Sicherheitsgrenze: Dateisignatur → Bitmap-Dekodierung → Canvas-Normalisierung → Profilparser → IndexedDB-Transaktion → validierter PDF-Snapshot. Keine neue Netzwerkabhängigkeit. Globales Browser-Recovery und Netzwerk-Supply-Chain-Audits verbleiben in den separaten Hardening-Issues #65 und #66.

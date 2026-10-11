@@ -120,6 +120,18 @@ jobs:
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
           fi
 
+      - name: CI-Branding-Dateien normalisieren
+        if: startsWith(github.head_ref, 'feature/corporate-identity-white-label-pdfs-')
+        run: |
+          npx prettier --write src/report/*.ts src/services/brandProfileStore.ts src/services/brandLogo.ts src/views/DocumentBrandingView.vue src/views/HomeView.vue src/views/MetricBuilderView.vue src/views/CostOfDelayView.vue src/views/ValueBridgeView.vue src/views/QuickPaybackView.vue src/components/SoftwarePaybackPanel.vue src/router/index.ts tests/e2e/document-branding.spec.ts tests/brandingReports.test.ts
+          if ! git diff --quiet -- src tests; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src tests
+            git commit -m "style: normalize branding files"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
       - name: Formatierung prüfen
         run: npm run format:check
 
@@ -137,6 +149,62 @@ jobs:
         with:
           name: production-build
           path: dist
+          if-no-files-found: error
+
+      - name: CI-White-Label-Audit und alle 15 PDF-Matrixfälle rendern
+        if: startsWith(github.head_ref, 'feature/corporate-identity-white-label-pdfs-')
+        run: |
+          set -euo pipefail
+          if ! command -v pdftoppm >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y poppler-utils
+          fi
+          mkdir -p test-results/branding-rendered
+          count=0
+          for file in qa-branding-artifacts/*.pdf; do
+            test -s "$file"
+            name="$(basename "$file" .pdf)"
+            pdfinfo "$file" > "test-results/branding-rendered/$name.info"
+            pdftotext -layout "$file" "test-results/branding-rendered/$name.txt"
+            if grep -Eiq 'MEDDPICC[[:space:]]+(TOOLBOX|WORKBENCH)' "test-results/branding-rendered/$name.txt" ||
+               grep -Eiq '^(Creator|Author|Title|Subject|Keywords):.*MEDDPICC' "test-results/branding-rendered/$name.info"; then
+              echo "::error::Systemgenerierte Toolbox-Kennung im PDF $name"
+              exit 1
+            fi
+            pages="$(awk '/^Pages:/{print $2}' "test-results/branding-rendered/$name.info")"
+            test "$pages" -ge 1
+            pdftoppm -scale-to 1150 -png "$file" "test-results/branding-rendered/$name"
+            rendered="$(find test-results/branding-rendered -name "$name-*.png" -size +0c | wc -l)"
+            test "$rendered" -eq "$pages" || { echo "::error::Seitenrendering fehlgeschlagen: $name"; exit 1; }
+            echo "$name: $pages Seiten gerendert und auditiert"
+            count=$((count + 1))
+          done
+          test "$count" -eq 15 || { echo "::error::PDF-Matrix unvollständig: $count/15"; exit 1; }
+          stress_count=0
+          for file in qa-branding-stress/*.pdf; do
+            test -s "$file"
+            name="$(basename "$file" .pdf)"
+            pdfinfo "$file" > "test-results/branding-rendered/$name.info"
+            pdftotext -layout "$file" "test-results/branding-rendered/$name.txt"
+            pages="$(awk '/^Pages:/{print $2}' "test-results/branding-rendered/$name.info")"
+            test "$pages" -ge 4 || { echo "::error::Langtextfall nicht mehrseitig: $name"; exit 1; }
+            pdftoppm -scale-to 1150 -png "$file" "test-results/branding-rendered/$name"
+            rendered="$(find test-results/branding-rendered -name "$name-*.png" -size +0c | wc -l)"
+            test "$rendered" -eq "$pages" || { echo "::error::Langtextseiten unvollständig: $name"; exit 1; }
+            echo "Langtextfall $name: $pages Seiten komplett gerendert"
+            stress_count=$((stress_count + 1))
+          done
+          test "$stress_count" -eq 4 || { echo "::error::Langtext-Matrix unvollständig: $stress_count/4"; exit 1; }
+
+      - name: CI-Original-PDFs und Seitenrenderings sichern
+        if: startsWith(github.head_ref, 'feature/corporate-identity-white-label-pdfs-')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ci-white-label-review
+          path: |
+            qa-branding-artifacts/*.pdf
+            qa-branding-stress/*.pdf
+            test-results/branding-rendered/**
           if-no-files-found: error
 
       - name: Playwright Chromium installieren

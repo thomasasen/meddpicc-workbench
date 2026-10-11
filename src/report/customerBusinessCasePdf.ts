@@ -9,7 +9,14 @@ import {
   type ComparedBusinessScenario,
 } from '../domain/businessCaseScenarios'
 import type { ReportData } from './softwareBusinessCasePdf'
-import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import {
+  drawReportFooter,
+  drawReportMasthead,
+  prepareReportBranding,
+  applyReportBrandMetadata,
+  type PreparedReportBranding,
+  type ReportOptions,
+} from './reportChrome'
 import { wrapReportText } from './reportText'
 
 const W = 595.28
@@ -24,7 +31,7 @@ const amber = rgb(0.57, 0.31, 0.07)
 const red = rgb(0.68, 0.23, 0.23)
 const pale = rgb(0.948, 0.967, 0.974)
 const line = rgb(0.85, 0.89, 0.92)
-type FontSet = { regular: PDFFont; bold: PDFFont }
+type FontSet = { regular: PDFFont; bold: PDFFont; branding?: PreparedReportBranding }
 type Paint = { pdf: PDFDocument; p: PDFPage; fonts: FontSet }
 
 const euro = (n: number) =>
@@ -102,6 +109,7 @@ function page(doc: PDFDocument, fonts: FontSet, chapter: string): Paint {
     left: X,
     right: RIGHT,
     headerHeight: 77,
+    branding: fonts.branding,
     title: 'IHRE WIRTSCHAFTLICHKEITSBETRACHTUNG',
     subtitle: chapter.toUpperCase(),
   })
@@ -661,7 +669,7 @@ function completeCustomerDetails(pdf: PDFDocument, fonts: FontSet, data: ReportD
   }
 }
 
-export async function buildCustomerBusinessCasePdf(data: ReportData): Promise<Uint8Array> {
+export async function buildCustomerBusinessCasePdf(data: ReportData, options: ReportOptions = {}): Promise<Uint8Array> {
   if (!data.customer.trim() || !data.project.trim() || !data.preparedBy.trim()) {
     throw new Error('Kunde, Projekt und Verfasser sind für den Kundenbericht erforderlich.')
   }
@@ -674,12 +682,13 @@ export async function buildCustomerBusinessCasePdf(data: ReportData): Promise<Ui
   const c = chosen.summary
   const pdf = await PDFDocument.create()
   const fonts: FontSet = {
+    branding: await prepareReportBranding(pdf, options.brand, 'customer'),
     regular: await pdf.embedFont(StandardFonts.Helvetica),
     bold: await pdf.embedFont(StandardFonts.HelveticaBold),
   }
   pdf.setTitle(readable('Business Case - ' + data.project))
   pdf.setSubject('Kundenbericht | undiskontierte Wirtschaftlichkeitsmodellrechnung')
-  pdf.setCreator('MEDDPICC Workbench - lokaler Browserexport')
+  applyReportBrandMetadata(pdf, fonts.branding!)
   executivePage(pdf, fonts, data, c, chosen.label)
   economicsPage(pdf, fonts, c)
   decisionPage(pdf, fonts, data, c)
@@ -689,6 +698,7 @@ export async function buildCustomerBusinessCasePdf(data: ReportData): Promise<Ui
     left: X,
     right: RIGHT,
     label: 'GESPRÄCHSGRUNDLAGE | ANNAHMEN UND QUELLEN OFFENGELEGT',
+    branding: fonts.branding,
     borderColor: line,
     textColor: muted,
     lineY: 46,
