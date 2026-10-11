@@ -21,6 +21,7 @@ import {
   type TimelineOwner,
 } from '../domain/reverseTimeline'
 import { buildCustomerTimelineSvg, downloadTimelinePng, downloadTimelineSvg } from '../services/timelineExport'
+import { loadBrandForReport } from '../services/brandProfileStore'
 
 type EditableStep = ReverseTimelineStepInput
 
@@ -101,6 +102,7 @@ const targetGoLiveDate = ref('')
 const compellingEvent = ref('')
 const steps = ref<EditableStep[]>(starterSteps())
 const exportMessage = ref('')
+const exportBusy = ref(false)
 const draggingStepId = ref<string | null>(null)
 const reorderAnnouncement = ref('')
 let activePointerId: number | null = null
@@ -249,30 +251,29 @@ function fileBaseName(): string {
   )
 }
 
-function svgForExport(): string | null {
-  if (!plan.value) return null
-  return buildCustomerTimelineSvg(plan.value, {
-    title: planTitle.value,
-    customerName: customerName.value,
-  })
-}
-
-function exportSvg() {
-  const svg = svgForExport()
-  if (!svg) return
-  downloadTimelineSvg(svg, `${fileBaseName()}-timeline.svg`)
-  exportMessage.value = 'SVG wurde für die Weiterverwendung in Präsentationen erzeugt.'
-}
-
-async function exportPng() {
-  const svg = svgForExport()
-  if (!svg) return
-
+async function exportTimeline(kind: 'svg' | 'png'): Promise<void> {
+  if (exportBusy.value || !plan.value) return
+  exportBusy.value = true
+  exportMessage.value = ''
   try {
-    await downloadTimelinePng(svg, `${fileBaseName()}-timeline.png`)
-    exportMessage.value = 'PNG wurde für die Weiterverwendung in Präsentationen erzeugt.'
+    const { profile, warning } = await loadBrandForReport()
+    const svg = buildCustomerTimelineSvg(plan.value, {
+      title: planTitle.value,
+      customerName: customerName.value,
+      brand: profile,
+    })
+    if (kind === 'svg') {
+      downloadTimelineSvg(svg, `${fileBaseName()}-timeline.svg`)
+    } else {
+      await downloadTimelinePng(svg, `${fileBaseName()}-timeline.png`)
+    }
+    exportMessage.value = (kind === 'svg' ? 'SVG' : 'PNG') +
+      ' wurde für die Weiterverwendung in Präsentationen erzeugt.' +
+      (warning ? ' ' + warning : '')
   } catch (error) {
-    exportMessage.value = error instanceof Error ? error.message : 'PNG-Export ist fehlgeschlagen.'
+    exportMessage.value = error instanceof Error ? error.message : 'Export ist fehlgeschlagen.'
+  } finally {
+    exportBusy.value = false
   }
 }
 </script>
@@ -474,11 +475,12 @@ async function exportPng() {
             <h2 id="result-title">Kundenfähige Timeline</h2>
           </div>
           <div v-if="plan" class="reverse-export-actions">
-            <button class="button button-secondary button-with-icon" type="button" @click="exportSvg">
+            <RouterLink class="button button-quiet" to="/settings/document-design">Dokumentgestaltung</RouterLink>
+            <button class="button button-secondary button-with-icon" type="button" :disabled="exportBusy" @click="exportTimeline('svg')">
               <Download :size="16" aria-hidden="true" />
               SVG
             </button>
-            <button class="button button-primary button-with-icon" type="button" @click="exportPng">
+            <button class="button button-primary button-with-icon" type="button" :disabled="exportBusy" @click="exportTimeline('png')">
               <FileImage :size="16" aria-hidden="true" />
               PNG
             </button>
