@@ -4030,3 +4030,10 @@ button.microtool-card:disabled {
     padding: var(--space-4);
   }
 }
+
+
+@media (max-width: 760px) {
+  .toolbox-header-meta + .toolbox-settings-link {
+    margin-left: auto;
+  }
+}
