@@ -56,6 +56,18 @@ jobs:
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
           fi
 
+      - name: Font-Lockfile aktualisieren (nur Feature-Branch)
+        if: startsWith(github.head_ref, 'feature/document-accessibility-and-timeline-ci-')
+        run: |
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          if ! git diff --quiet -- package-lock.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add package-lock.json
+            git commit -m "build(fonts): lock self-hosted Noto Sans and fontkit"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
@@ -129,6 +141,18 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add src tests
             git commit -m "style: normalize branding files"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
+      - name: Timeline- und Accessibility-Dateien formatieren
+        if: startsWith(github.head_ref, 'feature/document-accessibility-and-timeline-ci-')
+        run: |
+          npx prettier --write src/services/timelineExport.ts src/services/timelineBranding.test.ts src/services/brandProfileStore.ts src/report/*.ts src/views/ReverseTimelineView.vue src/views/DocumentBrandingView.vue tests/e2e/timeline-branding.spec.ts tests/e2e/document-branding.spec.ts
+          if ! git diff --quiet -- src tests; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src tests
+            git commit -m "style: format timeline branding and accessibility"
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
           fi
 
