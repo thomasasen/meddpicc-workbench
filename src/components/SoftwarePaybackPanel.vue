@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { loadBrandProfile } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
 import { consumeMetricHandoff, consumePaybackReturn, queuePaybackReturn } from '../domain/metricBuilderHandoff'
 import { queuePaybackToBridge } from '../domain/valueBridgeHandoff'
@@ -370,8 +371,9 @@ async function downloadReport(kind: 'customer' | 'finance') {
       scenarioSettings: scenarioSettings.value,
       selectedScenario: selectedScenario.value,
     }
+    const { profile } = await loadBrandProfile()
     const bytes =
-      kind === 'customer' ? await buildCustomerBusinessCasePdf(data) : await buildSoftwareBusinessCasePdf(data)
+      kind === 'customer' ? await buildCustomerBusinessCasePdf(data, { brand: profile }) : await buildSoftwareBusinessCasePdf(data, { brand: profile })
     const safeName = reportProject.value.replace(/[^a-z0-9_-]+/gi, '-').slice(0, 55) || 'softwareprojekt'
     const prefix = kind === 'customer' ? 'kundenbericht-' : 'finance-anhang-'
     saveBlob(new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }), prefix + safeName + '.pdf')
