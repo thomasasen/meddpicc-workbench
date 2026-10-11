@@ -1,9 +1,11 @@
 {
   "version": 1,
-  "sourceFingerprint": "2c03f3c77fd7555eaee1f2bf556a62004c17e038675445650b851b75fd3bbcd9",
+  "sourceFingerprint": "8039a6404ee0e65a80d5fe8ad89e8d9545bd63ca680c0cca4271f933a1631322",
   "files": {
-    "index.html": "f641630e0d7bcc8012de73ebdae183f78d7c1cb3e3838eac8511ac21d7b96eea",
-    "assets/index-BwlVxw9k.js": "9784bf02820f480f98d334b6844e8b526cb086324dacb12ad9e02cfb214d1953",
-    "assets/index-CW0nvE2j.css": "c0de1143fe58c5548828237a428e1843244925f27ad37c6402e6c335d483fa2e"
+    "index.html": "70c166e8d8cca46037760212068d1fee948bea6629a32191b93ad19b208c3528",
+    "assets/index-BFssIVyo.js": "5e8d516be576c10b9b04ec9ae0de5caa9ae4a2f4d3d3fb1b1175262ed449f87e",
+    "assets/index-CW0nvE2j.css": "c0de1143fe58c5548828237a428e1843244925f27ad37c6402e6c335d483fa2e",
+    "assets/noto-sans-latin-400-normal-DPpKfCgK.woff": "18e2e5b23a9bc5e8e636d6c7984b8ac6635aefc1c497ed1c5012f3c637761b91",
+    "assets/noto-sans-latin-700-normal-ZyrKABVF.woff": "cac2e44ebc446d5c71a9a16fd5592bf80abf6f56dd564a7b90eb01c5f9d29793"
   }
 }
