@@ -9,7 +9,14 @@ import {
   type ComparedBusinessScenario,
 } from '../domain/businessCaseScenarios'
 import type { ReportData } from './softwareBusinessCasePdf'
-import { drawReportFooter, drawReportMasthead, prepareReportBranding, applyReportBrandMetadata, type PreparedReportBranding, type ReportOptions } from './reportChrome'
+import {
+  drawReportFooter,
+  drawReportMasthead,
+  prepareReportBranding,
+  applyReportBrandMetadata,
+  type PreparedReportBranding,
+  type ReportOptions,
+} from './reportChrome'
 import { wrapReportText } from './reportText'
 
 const W = 595.28

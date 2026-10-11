@@ -1,6 +1,13 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
 import { type CostOfDelayInput, type DelayScenario, type CostOfDelayResult } from '../domain/costOfDelay'
-import { drawReportFooter, drawReportMasthead, prepareReportBranding, applyReportBrandMetadata, type PreparedReportBranding, type ReportOptions } from './reportChrome'
+import {
+  drawReportFooter,
+  drawReportMasthead,
+  prepareReportBranding,
+  applyReportBrandMetadata,
+  type PreparedReportBranding,
+  type ReportOptions,
+} from './reportChrome'
 import { wrapReportText } from './reportText'
 
 const euro = (n: number): string =>

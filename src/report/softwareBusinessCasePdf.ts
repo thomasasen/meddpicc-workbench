@@ -1,7 +1,14 @@
 import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf-lib'
 import { summarizeBusinessCase, economicInterpretation, type CaseSummary } from '../domain/businessCase'
 import type { SoftwarePaybackInput } from '../domain/softwarePayback'
-import { drawReportFooter, drawReportMasthead, prepareReportBranding, applyReportBrandMetadata, type PreparedReportBranding, type ReportOptions } from './reportChrome'
+import {
+  drawReportFooter,
+  drawReportMasthead,
+  prepareReportBranding,
+  applyReportBrandMetadata,
+  type PreparedReportBranding,
+  type ReportOptions,
+} from './reportChrome'
 import { wrapReportText } from './reportText'
 import {
   compareBusinessScenarios,

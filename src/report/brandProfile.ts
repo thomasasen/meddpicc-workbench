@@ -76,7 +76,13 @@ function dimensions(bytes: Uint8Array, mime: BrandLogo['mimeType']): { width: nu
     const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength)
     return { width: view.getUint32(16), height: view.getUint32(20) }
   }
-  if (bytes.length < 16 || bytes[0] !== 0xff || bytes[1] !== 0xd8 || bytes[bytes.length - 2] !== 0xff || bytes[bytes.length - 1] !== 0xd9) {
+  if (
+    bytes.length < 16 ||
+    bytes[0] !== 0xff ||
+    bytes[1] !== 0xd8 ||
+    bytes[bytes.length - 2] !== 0xff ||
+    bytes[bytes.length - 1] !== 0xd9
+  ) {
     throw new Error('Ungültige JPEG-Dateisignatur.')
   }
   let offset = 2
@@ -105,17 +111,30 @@ export function validateBrandLogo(value: unknown): BrandLogo {
     throw new Error('Nur PNG und JPEG sind erlaubt.')
   }
   const mimeType = input.mimeType
-  if (typeof input.base64 !== 'string' || !input.base64 || input.base64.length > Math.ceil(MAX_LOGO_BYTES / 3) * 4 + 4 ||
-      !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(input.base64)) {
+  if (
+    typeof input.base64 !== 'string' ||
+    !input.base64 ||
+    input.base64.length > Math.ceil(MAX_LOGO_BYTES / 3) * 4 + 4 ||
+    !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(input.base64)
+  ) {
     throw new Error('Ungültige oder zu große Logo-Daten.')
   }
   let binary: string
-  try { binary = atob(input.base64) } catch { throw new Error('Logo ist nicht gültig Base64-kodiert.') }
+  try {
+    binary = atob(input.base64)
+  } catch {
+    throw new Error('Logo ist nicht gültig Base64-kodiert.')
+  }
   if (binary.length > MAX_LOGO_BYTES) throw new Error('Logo überschreitet die Grenze von 2 MB.')
   const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0))
   const size = dimensions(bytes, mimeType)
-  if (!size.width || !size.height || size.width > MAX_LOGO_SIDE || size.height > MAX_LOGO_SIDE ||
-      size.width * size.height > MAX_LOGO_PIXELS) {
+  if (
+    !size.width ||
+    !size.height ||
+    size.width > MAX_LOGO_SIDE ||
+    size.height > MAX_LOGO_SIDE ||
+    size.width * size.height > MAX_LOGO_PIXELS
+  ) {
     throw new Error('Logo-Abmessungen liegen außerhalb der zulässigen Grenzen.')
   }
   if (input.width !== size.width || input.height !== size.height) {
@@ -129,7 +148,18 @@ export function validateBrandProfile(value: unknown): BrandProfile {
   if (input.version !== BRAND_SCHEMA_VERSION) {
     throw new Error('Nicht unterstützte CI-Profilversion: ' + String(input.version))
   }
-  const allowed = new Set(['version', 'companyName', 'primaryColor', 'accentColor', 'textColor', 'website', 'contact', 'defaultAuthor', 'footerNote', 'logo'])
+  const allowed = new Set([
+    'version',
+    'companyName',
+    'primaryColor',
+    'accentColor',
+    'textColor',
+    'website',
+    'contact',
+    'defaultAuthor',
+    'footerNote',
+    'logo',
+  ])
   if (Object.keys(input).some((key) => !allowed.has(key))) {
     throw new Error('Das CI-Profil enthält unbekannte Felder.')
   }
@@ -145,9 +175,18 @@ export function validateBrandProfile(value: unknown): BrandProfile {
   const defaultAuthor = stringField(input.defaultAuthor, 'Standardverfasser', 120)
   const footerNote = stringField(input.footerNote, 'Fußzeile', 240)
   const logo = input.logo === undefined ? undefined : validateBrandLogo(input.logo)
-  return { version: BRAND_SCHEMA_VERSION, companyName, primaryColor, accentColor, ...(textColor ? { textColor } : {}),
-    ...(website ? { website } : {}), ...(contact ? { contact } : {}), ...(defaultAuthor ? { defaultAuthor } : {}),
-    ...(footerNote ? { footerNote } : {}), ...(logo ? { logo } : {}) }
+  return {
+    version: BRAND_SCHEMA_VERSION,
+    companyName,
+    primaryColor,
+    accentColor,
+    ...(textColor ? { textColor } : {}),
+    ...(website ? { website } : {}),
+    ...(contact ? { contact } : {}),
+    ...(defaultAuthor ? { defaultAuthor } : {}),
+    ...(footerNote ? { footerNote } : {}),
+    ...(logo ? { logo } : {}),
+  }
 }
 
 export function parseBrandProfileJson(json: string): BrandProfile {
@@ -155,7 +194,11 @@ export function parseBrandProfileJson(json: string): BrandProfile {
     throw new Error('CI-Profildatei ist zu groß (maximal 3 MB).')
   }
   let parsed: unknown
-  try { parsed = JSON.parse(json) } catch { throw new Error('Die Datei enthält kein gültiges JSON.') }
+  try {
+    parsed = JSON.parse(json)
+  } catch {
+    throw new Error('Die Datei enthält kein gültiges JSON.')
+  }
   return validateBrandProfile(parsed)
 }
 
@@ -176,7 +219,8 @@ export function contrastRatio(a: string, b: string): number {
     const c = hexToRgb(hex)
     return 0.2126 * linear(c.red) + 0.7152 * linear(c.green) + 0.0722 * linear(c.blue)
   }
-  const l1 = luminance(a), l2 = luminance(b)
+  const l1 = luminance(a),
+    l2 = luminance(b)
   return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05)
 }
 

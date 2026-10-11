@@ -373,7 +373,9 @@ async function downloadReport(kind: 'customer' | 'finance') {
     }
     const { profile } = await loadBrandProfile()
     const bytes =
-      kind === 'customer' ? await buildCustomerBusinessCasePdf(data, { brand: profile }) : await buildSoftwareBusinessCasePdf(data, { brand: profile })
+      kind === 'customer'
+        ? await buildCustomerBusinessCasePdf(data, { brand: profile })
+        : await buildSoftwareBusinessCasePdf(data, { brand: profile })
     const safeName = reportProject.value.replace(/[^a-z0-9_-]+/gi, '-').slice(0, 55) || 'softwareprojekt'
     const prefix = kind === 'customer' ? 'kundenbericht-' : 'finance-anhang-'
     saveBlob(new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }), prefix + safeName + '.pdf')

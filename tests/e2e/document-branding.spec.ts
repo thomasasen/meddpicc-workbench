@@ -41,7 +41,9 @@ test('Dokumentgestaltung: ungültiger Import verändert gespeicherte Konfigurati
   await page.getByLabel('Firmenname').fill('Unveränderte Firma GmbH')
   await page.getByRole('button', { name: 'Änderungen speichern' }).click()
   await page.locator('input[aria-label="CI-Profil-JSON auswählen"]').setInputFiles({
-    name: 'bad.json', mimeType: 'application/json', buffer: Buffer.from('{ bad }'),
+    name: 'bad.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from('{ bad }'),
   })
   await expect(page.getByRole('alert')).toContainText('kein gültiges JSON')
   await page.reload()

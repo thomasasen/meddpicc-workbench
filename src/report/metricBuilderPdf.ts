@@ -8,7 +8,14 @@ import {
   metricTypeLabels,
   type MetricBuilderDraft,
 } from '../domain/metricBuilder'
-import { drawReportFooter, drawReportMasthead, prepareReportBranding, applyReportBrandMetadata, type PreparedReportBranding, type ReportOptions } from './reportChrome'
+import {
+  drawReportFooter,
+  drawReportMasthead,
+  prepareReportBranding,
+  applyReportBrandMetadata,
+  type PreparedReportBranding,
+  type ReportOptions,
+} from './reportChrome'
 import { wrapReportText } from './reportText'
 
 /**
@@ -46,7 +53,10 @@ function wrap(value: string, font: PDFFont, size: number, maxWidth: number): str
   return wrapReportText(printable(value), font, size, maxWidth)
 }
 
-export async function buildMetricBuilderPdf(draft: MetricBuilderDraft, options: ReportOptions = {}): Promise<Uint8Array> {
+export async function buildMetricBuilderPdf(
+  draft: MetricBuilderDraft,
+  options: ReportOptions = {},
+): Promise<Uint8Array> {
   const result = buildMetric(draft)
   const pdf = await PDFDocument.create()
   const branding = await prepareReportBranding(pdf, options.brand, 'customer')

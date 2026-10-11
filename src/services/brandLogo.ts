@@ -1,4 +1,10 @@
-import { MAX_LOGO_BYTES, MAX_LOGO_PIXELS, MAX_LOGO_SIDE, validateBrandLogo, type BrandLogo } from '../report/brandProfile'
+import {
+  MAX_LOGO_BYTES,
+  MAX_LOGO_PIXELS,
+  MAX_LOGO_SIDE,
+  validateBrandLogo,
+  type BrandLogo,
+} from '../report/brandProfile'
 
 /**
  * Decode über den Browser, Normalisierung auf PNG ohne EXIF/Quellmetadaten.
@@ -23,10 +29,17 @@ export async function normalizeBrandLogo(file: File): Promise<BrandLogo> {
   let image: ImageBitmap
   try {
     image = await createImageBitmap(new Blob([bytes], { type: format }))
-  } catch { throw new Error('Logo kann nicht als Bild dekodiert werden.') }
+  } catch {
+    throw new Error('Logo kann nicht als Bild dekodiert werden.')
+  }
   try {
-    if (image.width === 0 || image.height === 0 || image.width > MAX_LOGO_SIDE || image.height > MAX_LOGO_SIDE ||
-        image.width * image.height > MAX_LOGO_PIXELS) {
+    if (
+      image.width === 0 ||
+      image.height === 0 ||
+      image.width > MAX_LOGO_SIDE ||
+      image.height > MAX_LOGO_SIDE ||
+      image.width * image.height > MAX_LOGO_PIXELS
+    ) {
       throw new Error('Logo ist zu groß: maximal 4096 Pixel pro Seite und 12 Millionen Pixel insgesamt.')
     }
     temporary.width = image.width
@@ -44,5 +57,7 @@ export async function normalizeBrandLogo(file: File): Promise<BrandLogo> {
     const encoded = canvas.toDataURL('image/png').split(',')[1]
     if (!encoded) throw new Error('Logo konnte nicht normalisiert werden.')
     return validateBrandLogo({ mimeType: 'image/png', base64: encoded, width, height })
-  } finally { image.close() }
+  } finally {
+    image.close()
+  }
 }

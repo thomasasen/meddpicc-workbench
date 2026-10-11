@@ -6,7 +6,14 @@ import {
   type BridgeMetric,
   type ValueBridgeInput,
 } from '../domain/valueBridge'
-import { drawReportFooter, drawReportMasthead, prepareReportBranding, applyReportBrandMetadata, type PreparedReportBranding, type ReportOptions } from './reportChrome'
+import {
+  drawReportFooter,
+  drawReportMasthead,
+  prepareReportBranding,
+  applyReportBrandMetadata,
+  type PreparedReportBranding,
+  type ReportOptions,
+} from './reportChrome'
 import { wrapReportText } from './reportText'
 
 const PAGE_W = 595.28

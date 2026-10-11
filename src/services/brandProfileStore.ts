@@ -10,7 +10,9 @@ export interface StoredBrandProfile {
 }
 
 export class BrandConflictError extends Error {
-  constructor() { super('Das CI-Profil wurde in einem anderen Tab geändert. Bitte neu laden, bevor Sie speichern.') }
+  constructor() {
+    super('Das CI-Profil wurde in einem anderen Tab geändert. Bitte neu laden, bevor Sie speichern.')
+  }
 }
 
 function openDatabase(): Promise<IDBDatabase> {
@@ -38,14 +40,21 @@ export async function loadBrandProfile(): Promise<StoredBrandProfile> {
       request.onsuccess = () => {
         try {
           const row = request.result as StoredBrandProfile | undefined
-          if (!row) { resolve({ revision: 0, profile: null }); return }
+          if (!row) {
+            resolve({ revision: 0, profile: null })
+            return
+          }
           if (!Number.isSafeInteger(row.revision) || row.revision < 0) throw new Error('Ungültige CI-Speicherversion.')
           resolve({ revision: row.revision, profile: row.profile === null ? null : validateBrandProfile(row.profile) })
-        } catch (error) { reject(error) }
+        } catch (error) {
+          reject(error)
+        }
       }
       request.onerror = () => reject(request.error ?? new Error('CI-Profil konnte nicht gelesen werden.'))
     })
-  } finally { db.close() }
+  } finally {
+    db.close()
+  }
 }
 
 /** Lesen, Versionsvergleich und Schreiben in EINER readwrite-Transaktion. */
@@ -70,8 +79,15 @@ export async function saveBrandProfile(profile: BrandProfile | null, expectedRev
         store.put({ revision, profile: validated }, KEY)
       }
       tx.oncomplete = () => resolve(revision)
-      tx.onabort = () => reject(conflict ? new BrandConflictError() : tx.error ?? new Error('CI-Profil konnte nicht gespeichert werden.'))
-      tx.onerror = () => { /* Ablehnung erfolgt beim Abbruch; kein falscher Erfolgsstatus. */ }
+      tx.onabort = () =>
+        reject(
+          conflict ? new BrandConflictError() : (tx.error ?? new Error('CI-Profil konnte nicht gespeichert werden.')),
+        )
+      tx.onerror = () => {
+        /* Ablehnung erfolgt beim Abbruch; kein falscher Erfolgsstatus. */
+      }
     })
-  } finally { db.close() }
+  } finally {
+    db.close()
+  }
 }

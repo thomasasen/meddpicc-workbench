@@ -2,7 +2,9 @@ import { rgb, type PDFFont, type PDFPage, type RGB, type PDFDocument, type PDFIm
 import { hexToRgb, readableInkOn, validateBrandProfile, type BrandProfile } from './brandProfile'
 
 export type ReportAudience = 'customer' | 'internal'
-export interface ReportOptions { brand?: BrandProfile | null }
+export interface ReportOptions {
+  brand?: BrandProfile | null
+}
 
 export interface PreparedReportBranding {
   audience: ReportAudience
@@ -155,8 +157,19 @@ export interface ReportMastheadOptions {
  */
 export function drawReportMasthead(options: ReportMastheadOptions): void {
   const {
-    page, normal, bold, width, height, left, right, headerHeight,
-    title, subtitle, titleOffset = 50, subtitleOffset = 69, branding,
+    page,
+    normal,
+    bold,
+    width,
+    height,
+    left,
+    right,
+    headerHeight,
+    title,
+    subtitle,
+    titleOffset = 50,
+    subtitleOffset = 69,
+    branding,
   } = options
   const base = branding?.primary ?? rgb(0.09, 0.17, 0.29)
   const foreground = branding?.onPrimary ?? rgb(1, 1, 1)
@@ -168,12 +181,17 @@ export function drawReportMasthead(options: ReportMastheadOptions): void {
     const fitted = branding.image.scaleToFit(86, 22)
     const patchW = fitted.width + 8
     page.drawRectangle({
-      x: left, y: markTop - 25, width: patchW, height: 26, color: rgb(1, 1, 1),
+      x: left,
+      y: markTop - 25,
+      width: patchW,
+      height: 26,
+      color: rgb(1, 1, 1),
     })
     page.drawImage(branding.image, {
       x: left + (patchW - fitted.width) / 2,
       y: markTop - 24 + (22 - fitted.height) / 2,
-      width: fitted.width, height: fitted.height,
+      width: fitted.width,
+      height: fitted.height,
     })
     companyX += patchW + 9
   }
@@ -181,20 +199,35 @@ export function drawReportMasthead(options: ReportMastheadOptions): void {
     const reserved = branding.audience === 'internal' ? 145 : 0
     const available = Math.max(35, right - companyX - reserved)
     page.drawText(fitText(branding.profile.companyName, bold, 8.5, available), {
-      x: companyX, y: height - 25, size: 8.5, font: bold, color: foreground,
+      x: companyX,
+      y: height - 25,
+      size: 8.5,
+      font: bold,
+      color: foreground,
     })
   }
   if (branding?.audience === 'internal') {
     const label = 'INTERNE ARBEITSUNTERLAGE'
     page.drawText(label, {
       x: right - bold.widthOfTextAtSize(label, 7.2),
-      y: height - 25, size: 7.2, font: bold, color: foreground,
+      y: height - 25,
+      size: 7.2,
+      font: bold,
+      color: foreground,
     })
   }
   page.drawText(fitText(title, bold, 15, right - left), {
-    x: left, y: height - titleOffset, size: 15, font: bold, color: foreground,
+    x: left,
+    y: height - titleOffset,
+    size: 15,
+    font: bold,
+    color: foreground,
   })
   page.drawText(fitText(subtitle, normal, 8, right - left), {
-    x: left, y: height - subtitleOffset, size: 8, font: normal, color: soft,
+    x: left,
+    y: height - subtitleOffset,
+    size: 8,
+    font: normal,
+    color: soft,
   })
 }

@@ -103,7 +103,10 @@ async function exportPdf() {
   if (!selected.value || !result.value.success) return
   try {
     const { profile } = await loadBrandProfile()
-    download(await buildCostOfDelayPdf(draft.value, result.value, selected.value, { brand: profile }), 'cost-of-delay-steckbrief.pdf')
+    download(
+      await buildCostOfDelayPdf(draft.value, result.value, selected.value, { brand: profile }),
+      'cost-of-delay-steckbrief.pdf',
+    )
     notice.value = 'PDF mit aktuellen Modellannahmen erstellt.'
   } catch {
     notice.value = 'Der PDF-Export ist fehlgeschlagen.'

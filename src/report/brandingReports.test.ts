@@ -19,8 +19,10 @@ const profiles = [
 ] as const
 
 const demo = () => ({
-  customer: 'Fiktive Beispielwerke GmbH', project: 'CRM-Testprojekt',
-  preparedBy: 'Musterberatung', date: '11.10.2026',
+  customer: 'Fiktive Beispielwerke GmbH',
+  project: 'CRM-Testprojekt',
+  preparedBy: 'Musterberatung',
+  date: '11.10.2026',
   businessPain: 'Fiktiv: manuelle Übertragungen verursachen Aufwände.',
   targetOutcome: 'Fiktiv: bestätigungsbedürftiger Nutzen und weniger Nacharbeit.',
   input: createCrmSaasDemo(),
@@ -28,33 +30,37 @@ const demo = () => ({
 
 describe('White-Label-Ausgabe: 5 Generatoren × 3 CI-Profile', () => {
   for (const { id, brand } of profiles) {
-    it('prüft alle Dokumente mit Profil ' + id, async () => {
-      const delayInput = costOfDelayDemos.service!
-      const delay = calculateCostOfDelay(delayInput, [3, 6])
-      expect(delay.success).toBe(true)
-      if (!delay.success) return
-      const reports: Record<string, Uint8Array> = {
-        customer: await buildCustomerBusinessCasePdf(demo(), { brand }),
-        finance: await buildSoftwareBusinessCasePdf(demo(), { brand }),
-        metric: await buildMetricBuilderPdf({ ...emptyMetricDraft(), ...metricDemos.crm }, { brand }),
-        'cost-of-delay': await buildCostOfDelayPdf(delayInput, delay, delay.scenarios[1]!, { brand }),
-        'value-bridge': await buildValueBridgePdf(valueBridgeDemos.service!, { brand }),
-      }
-      for (const [kind, bytes] of Object.entries(reports)) {
-        const parsed = await PDFDocument.load(bytes)
-        expect(parsed.getPageCount()).toBeGreaterThan(0)
-        expect(parsed.getCreator() ?? '').not.toMatch(/MEDDPICC|Toolbox|Workbench/i)
-        expect(parsed.getAuthor() ?? '').not.toMatch(/MEDDPICC|Toolbox|Workbench/i)
-        for (const page of parsed.getPages()) {
-          expect(page.getWidth()).toBeCloseTo(595.28, 1)
-          expect(page.getHeight()).toBeCloseTo(841.89, 1)
+    it(
+      'prüft alle Dokumente mit Profil ' + id,
+      async () => {
+        const delayInput = costOfDelayDemos.service!
+        const delay = calculateCostOfDelay(delayInput, [3, 6])
+        expect(delay.success).toBe(true)
+        if (!delay.success) return
+        const reports: Record<string, Uint8Array> = {
+          customer: await buildCustomerBusinessCasePdf(demo(), { brand }),
+          finance: await buildSoftwareBusinessCasePdf(demo(), { brand }),
+          metric: await buildMetricBuilderPdf({ ...emptyMetricDraft(), ...metricDemos.crm }, { brand }),
+          'cost-of-delay': await buildCostOfDelayPdf(delayInput, delay, delay.scenarios[1]!, { brand }),
+          'value-bridge': await buildValueBridgePdf(valueBridgeDemos.service!, { brand }),
         }
-        if (kind === 'finance') expect(parsed.getPageCount()).toBeGreaterThan(5)
-        if (process.env.CI) {
-          mkdirSync('qa-branding-artifacts', { recursive: true })
-          writeFileSync('qa-branding-artifacts/' + kind + '-' + id + '.pdf', bytes)
+        for (const [kind, bytes] of Object.entries(reports)) {
+          const parsed = await PDFDocument.load(bytes)
+          expect(parsed.getPageCount()).toBeGreaterThan(0)
+          expect(parsed.getCreator() ?? '').not.toMatch(/MEDDPICC|Toolbox|Workbench/i)
+          expect(parsed.getAuthor() ?? '').not.toMatch(/MEDDPICC|Toolbox|Workbench/i)
+          for (const page of parsed.getPages()) {
+            expect(page.getWidth()).toBeCloseTo(595.28, 1)
+            expect(page.getHeight()).toBeCloseTo(841.89, 1)
+          }
+          if (kind === 'finance') expect(parsed.getPageCount()).toBeGreaterThan(5)
+          if (process.env.CI) {
+            mkdirSync('qa-branding-artifacts', { recursive: true })
+            writeFileSync('qa-branding-artifacts/' + kind + '-' + id + '.pdf', bytes)
+          }
         }
-      }
-    }, 60000)
+      },
+      60000,
+    )
   }
 })
