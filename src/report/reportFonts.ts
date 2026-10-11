@@ -1,4 +1,5 @@
 import { PDFDocument, StandardFonts, type PDFFont } from 'pdf-lib'
+import { supportsPdfLatinGlyph } from './brandProfile'
 import fontkit from '@pdf-lib/fontkit'
 import regularAsset from '@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff?url'
 import boldAsset from '@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff?url'
@@ -53,5 +54,7 @@ export async function embedReportFonts(pdf: PDFDocument): Promise<ReportFontSet>
  * explizit begrenzt, statt unbemerkt leere Glyphen einzubetten.
  */
 export function normalizeReportUnicode(value: string): string {
-  return value.replace(/\u00a0|\u202f/g, ' ').replace(/[^\u000a\u0020-\u024f\u2000-\u206f\u20ac]/g, '?')
+  return [...value.replace(/\u00a0|\u202f/g, ' ')]
+    .map((character) => (character === '\n' || supportsPdfLatinGlyph(character) ? character : '?'))
+    .join('')
 }
