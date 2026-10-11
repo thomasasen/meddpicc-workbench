@@ -66,7 +66,6 @@ describe('White-Label-Ausgabe: 5 Generatoren × 3 CI-Profile', () => {
   }
 })
 
-
 describe('Export bleibt bei fehlender IndexedDB sicher bedienbar', () => {
   it('liefert ohne Browser-Datenbank ein neutrales Profil mit explizitem Warnhinweis', async () => {
     const resolved = await loadBrandForReport()
