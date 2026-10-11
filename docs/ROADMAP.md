@@ -1,5 +1,7 @@
 # Roadmap
 
+> **Aktueller Status 11.10.2026:** Der priorisierte GitHub-Backlog ist in [Issue-Triage und Umsetzungsplan](ISSUE_TRIAGE_2026-10-11.md) konsolidiert. **P0 #65–#66 (Datenverlust/Privacy) vor P1 #67–#70 (Accessibility/Offline/Migration/Performance), erst danach P2 #71–#77 (Microtools/optionaler Export).** Historische Datums-/PR-Statusnotizen in den einzelnen Phasen beschreiben den damaligen Entwicklungsstand und sind keine aktuellen Freigabeanzeigen. PR #64 ist nach erfolgreichem CI in `main`.
+
 ## Produktdefinition
 
 Die **MEDDPICC Toolbox** ist ausdrücklich **kein ganzheitliches MEDDPICC-System und kein CRM**.
@@ -197,7 +199,7 @@ Diese Phase wird bewusst früh umgesetzt, weil die Wissensbasis später auch Hil
 
 ## Phase T3 – Value & Metrics Tools
 
-**Stand 10.10.2026:** Quick Payback mit Softwareprojekt-Modus und Business-Case-Stresstest aus PR #59 sind in `main`. Der Metric Builder wurde mit [PR #60](https://github.com/thomasasen/meddpicc-workbench/pull/60) am 10.10.2026 nach `main` gemergt (Commit `537af8d`). Cost of Delay wurde mit PR #61 am 10.10.2026 per Squash-Commit `7759a7e09f0c38165bd317cd8f006c0191053d99` nach `main` gemergt. Value Bridge wird im Draft-PR auf `feature/value-bridge` zur technischen und visuellen Prüfung vorbereitet.
+**Stand 10.10.2026:** Quick Payback mit Softwareprojekt-Modus und Business-Case-Stresstest aus PR #59 sind in `main`. Der Metric Builder wurde mit [PR #60](https://github.com/thomasasen/meddpicc-workbench/pull/60) am 10.10.2026 nach `main` gemergt (Commit `537af8d`). Cost of Delay wurde mit PR #61 am 10.10.2026 per Squash-Commit `7759a7e09f0c38165bd317cd8f006c0191053d99` nach `main` gemergt. **Value Bridge ist seit PR #62 in `main`** und wurde durch PR #64 um die vollständige sechsstufige Wertkausalität im UI und PDF ergänzt. Die damaligen PR-Zwischenstände sind im Progress-Log historisch dokumentiert.
 
 
 Priorität:
@@ -240,6 +242,8 @@ Aufbauend auf der vorhandenen Go-Live-Rückwärtsplanung:
 
 Diese Tools strukturieren konkrete Prozessarbeit, ohne daraus einen dauerhaft gepflegten Deal-Plan im CRM-Sinn zu machen.
 
+**Konkreter P2-Slice:** [#74 Paper Process / Closing Prep](https://github.com/thomasasen/meddpicc-workbench/issues/74). Weitere genannten Ideenskizzen werden erst bei eigenem Nutzen-/Abnahmekriterium priorisiert.
+
 ## Phase T5 – Discovery & Pain Tools
 
 - Discovery Prep
@@ -248,6 +252,8 @@ Diese Tools strukturieren konkrete Prozessarbeit, ohne daraus einen dauerhaft ge
 - Compelling Event / Why Now Helper
 
 Ziel ist eine konkrete Gesprächs- oder Workshop-Unterstützung, kein Discovery-Protokollsystem.
+
+**Konkreter P2-Slice:** [#76 Discovery/Pain-to-Impact](https://github.com/thomasasen/meddpicc-workbench/issues/76). Keine Speicherung von Gesprächstranskripten.
 
 ## Phase T6 – Decision Criteria & Differentiation Tools
 
@@ -261,6 +267,8 @@ Priorität:
 
 Die Tools sollen Entscheidungskriterien verständlich machen und Differenzierung unterstützen, nicht den gesamten Beschaffungsprozess verwalten.
 
+**Konkreter P2-Slice:** [#71 Criteria Workshop / Value Triangle](https://github.com/thomasasen/meddpicc-workbench/issues/71).
+
 ## Phase T7 – Economic Buyer Tools
 
 - EB Qualifier
@@ -270,6 +278,8 @@ Die Tools sollen Entscheidungskriterien verständlich machen und Differenzierung
 
 Einzelne Funktionen wie Message Translation oder Kontaktvorbereitung werden zunächst innerhalb dieser Services gebündelt und nicht künstlich zu eigenen Produkten gemacht.
 
+**Konkreter P2-Slice:** [#72 Economic-Buyer-Meeting und Zugang](https://github.com/thomasasen/meddpicc-workbench/issues/72).
+
 ## Phase T8 – Champion Tools
 
 - Champion Tester
@@ -277,6 +287,8 @@ Einzelne Funktionen wie Message Translation oder Kontaktvorbereitung werden zun�
 - Internal Selling Pack
 
 Vorhandene Champion-Domainlogik darf selektiv wiederverwendet werden. Das frühere projektzentrierte UI-/Datenmodell wird nicht übernommen.
+
+**Konkreter P2-Slice:** [#73 Champion Tester](https://github.com/thomasasen/meddpicc-workbench/issues/73).
 
 ## Phase T9 – Competition & Closing Tools
 
@@ -297,6 +309,8 @@ Competition umfasst ausdrücklich nicht nur andere Anbieter, sondern auch Eigene
 
 Kein Closing-Dashboard und kein dauerhaft gepflegter Deal-Status.
 
+**Konkrete P2-Slices:** [#75 Alternatives Map](https://github.com/thomasasen/meddpicc-workbench/issues/75) und [#74 Closing-/Paper-Process-Prep](https://github.com/thomasasen/meddpicc-workbench/issues/74).
+
 ## Phase T10 – Cross-Service Convenience
 
 Erst wenn mehrere Services produktiv sind:
@@ -310,6 +324,8 @@ Erst wenn mehrere Services produktiv sind:
 Leitregel:
 
 > **Informationen dürfen zwischen Services weitergegeben werden, müssen aber niemals zentral als vollständiger Deal gepflegt werden.**
+
+**P2-Exportidee:** [#77 Opt-in-Kunden-Ergebnispaket](https://github.com/thomasasen/meddpicc-workbench/issues/77), ohne globales Dealprofil.
 
 ## Priorisierungsregel für neue Features
 
@@ -338,7 +354,7 @@ Wenn der primäre Nutzen hingegen „mehr Deal-Daten erfassen, speichern oder re
 Siehe [Cost-of-Delay-Review](COST_OF_DELAY_SOURCE_AND_RED_TEAM.md).
 
 
-### Value Bridge (Draft auf `feature/value-bridge`, noch nicht gemergt)
+### Value Bridge (PR #62 in `main`, Redesign PR #64 in `main`)
 
 - [x] Pain, Konsequenz, Outcome, Mechanismus und Metrics in einem geführten Ablauf
 - [x] Nachvollziehbare Typisierung von Einsparung, Deckungsbeitrag, Kapazität, Potenzial, Risiko und qualitativer Wirkung
@@ -348,20 +364,23 @@ Siehe [Cost-of-Delay-Review](COST_OF_DELAY_SOURCE_AND_RED_TEAM.md).
 - [x] Drei fiktive Beispiele und automatisierte Tests angelegt
 - [x] Technische CI erfolgreich: [#38070981674](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38070981674), 326 Unit-/135 Browser-Tests bestanden, 1 Skip
 - [x] Original-Screenshots (Desktop/Mobile, EUR/Kapazität) sowie je 2 Original-PDF-Seiten überprüft; dritte simulierte Red-Team-Runde dokumentiert
-- [ ] Ausdrückliche Nutzerfreigabe, danach erst Merge nach `main`
+- [x] Ausdrückliche Nutzerfreigabe und Merge nach `main` über PR #62; UI-/PDF-Erweiterung über PR #64
 
 [Source-QA, Gap-Analyse und simulierte Red-Teams](VALUE_BRIDGE_SOURCE_AND_RED_TEAM.md).
 
-## Übergreifendes UX-/Report-Redesign (seit 10.10.2026)
+## Übergreifendes UX-/Report-Redesign – abgenommener Stand 11.10.2026
 
-**Status: gestartet, Draft, unvollständig.** Eigenständiger Entwicklungszweig auf `feature/value-bridge`, PR #62 bleibt unangetastet.
+- **Gemergt:** [PR #64](https://github.com/thomasasen/meddpicc-workbench/pull/64) über Squash `13deb4698a1e1c0e31b239ac7a9251a2aad09136` in `main`.
+- **Verifiziert:** [CI #38094931479](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38094931479) erfolgreich mit 334 Unit-, 205 Browser-Tests (ein Skip), Build/Format/Lint/Pages. Fünf reguläre und zwei Langtext-PDF-Testexporte über **27 gerenderte und visuell gesichtete Seiten**.
+- **Umgesetzt:** gemeinsamer PDF-Chrome/Textfluss, mehrseitige kundenfähige Metric-/Langtextberichte, sechs Value-Bridge-Stufen, einheitliche dreistufige Bedienung bei zwei Tools, Kapitelanker aller neun Knowledge-Ansichten, mobile Chart-/Fokus-/Reflow-Regeln.
+- **Nicht als erledigt oder zertifiziert beansprucht:** uneingeschränkte WCAG-2.2-AA-/PDF/UA-Konformität, komplette Font-Unicode-Abdeckung, umfassendes Offline-/Privacy-/Crash-Recovery-Audit. Diese Themen bleiben in [#8](https://github.com/thomasasen/meddpicc-workbench/issues/8) und den ausführbaren Unterissues #65–#70 offen.
+- **Quelle der Abnahme:** [Redesign-Abnahmematrix](REDESIGN_ACCEPTANCE_MATRIX_2026-10-11.md). Der ursprüngliche [Redesign-Audit](REDESIGN_AUDIT_2026-10-10.md) ist als Verlauf erhalten, nicht als Statusanzeige.
 
-Der vollständige Umfang umfasst die fünf aktiven Microtools (einschließlich beider Quick-Payback-Modi), zehn Checklists, neun Knowledge-Ansichten, Startseite sowie fünf Reportmodule und Go-Live-SVG-/PNG-Exporte. Die drei Legacy-Routen sind inventarisiert, aber keine ungefragte Modernisierung.
+## Aktuelle Issue-Roadmap nach Produktkonsolidierung
 
-1. Audit / Absicherung und gemeinsame UI-/PDF-Grundlagen (**implementiert, neue CI und visuelle Kontrolle folgen**).
-2. Finance- und Metrics-Workflows mit konsistenten KPI- und Reportlayouts (**offen**).
-3. Cost of Delay und Value Bridge, Szenario-/Kausalvisualisierungen (**offen**, bestehende Value Bridge aus PR #62 erhalten).
-4. Go-Live-Timeline, Checklists und Knowledge nach gemeinsamen Mustern (**teilweise Checklists, übriges offen**).
-5. E2E/Unit, responsive 375/768/1024/1440, Accessibility, tatsächliche PDF-Renderings jeder Seite, Abnahme (**offen**).
+- **P0 / Datenschutz und Zuverlässigkeit:** [#65 Recovery](https://github.com/thomasasen/meddpicc-workbench/issues/65), [#66 Privacy/Security](https://github.com/thomasasen/meddpicc-workbench/issues/66).
+- **P1 / technische Qualitätslücken:** [#67 Accessibility](https://github.com/thomasasen/meddpicc-workbench/issues/67), [#68 Offline](https://github.com/thomasasen/meddpicc-workbench/issues/68), [#69 Migrationen](https://github.com/thomasasen/meddpicc-workbench/issues/69), [#70 Performance](https://github.com/thomasasen/meddpicc-workbench/issues/70).
+- **P2 / optionale fokussierte Tools:** [#71–#76](https://github.com/thomasasen/meddpicc-workbench/issues/6) als Kinder der Tool-Klammer #6 und [#77](https://github.com/thomasasen/meddpicc-workbench/issues/77) als eigenständiger Export-Slice.
+- **Ablösung der ursprünglichen Deal-Management-Ziele:** #4, #5, #7 geschlossen mit `not_planned` / `superseded`, nicht mit `completed`. Implementierter Legacy-Code bleibt erhalten; ein vollständiges Opportunity-/CRM-System wird ausdrücklich **nicht** wieder eingeführt.
 
-Siehe `docs/REDESIGN_AUDIT_2026-10-10.md`. Kein Merge ohne ausdrückliche Nutzerfreigabe.
+[Verbindliche Crosswalk-Tabelle einschließlich aller 13 konkreten Issues](ISSUE_TRIAGE_2026-10-11.md).

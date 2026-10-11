@@ -286,3 +286,12 @@ Siehe [Value Bridge Quellenmatrix und Gap-Analyse](VALUE_BRIDGE_SOURCE_AND_RED_T
 - 27/27 PDF-Originalseiten der fünf Standard- und zwei Langtextberichte gerendert und jede Seite visuell gesichtet. Langtext-PDFs mit `pdftotext` geprüft; kein abgeschnittener Text oder überlagerter Footer im Testmaterial.
 - Sechs Value-Bridge-Stufen, mobil lesbarer Cost-of-Delay-Chart, gemeinsame Workflow-Navigation, Knowledge-Kapitelanker und seitenübergreifende Textfluss-Logik abgeschlossen.
 - Fachliche Berechnungen und Datenschutz-/Local-first-Grundsätze unverändert. Eine externe WCAG-2.2-AA-/PDF/UA-Zertifizierung und nicht-WinAnsi-Unicode-Font-Abdeckung werden nicht behauptet. Details: `docs/REDESIGN_ACCEPTANCE_MATRIX_2026-10-11.md`.
+
+
+## Roadmap-Issue-Triage – 11.10.2026 (aktueller Stand)
+
+- Die neue Toolbox-Strategie in `docs/PROJECT_CHARTER.md` und `docs/ARCHITECTURE.md` wird ausdrücklich gegenüber dem alten projektzentrierten Roadmap-Zuschnitt bevorzugt. Keine vollständige Deal-Pflege, persistente MEDDPICC-Scores oder CRM-Exports als Core.
+- **#4 (Legacy-Status/History/Dashboard), #5 (acht globale Qualification-Module), #7 (zentraler Deal-Review-/CRM-Export)** aus Produktstrategiegründen `not_planned/superseded` geschlossen, ohne die teils implementierten Funktionen zu entfernen oder unimplementierte Kriterien als erledigt darzustellen.
+- **#6** bleibt als Tool-Klammer für sechs gezielte P2-Issues #71–#76; **#8** bleibt als vorrangige Quality-Klammer für sechs P0/P1-Issues #65–#70. **#77** ist ein optionaler P2-Nachfolger des toolbox-kompatiblen Exportanteils von #7.
+- Reihenfolge: P0 Datenverlust und Privacy/Security; P1 Accessibility, Offline/PWA, Migrationen, Performance; erst anschließend P2 neue Tools/Export.
+- Vollständige Abgrenzung, 13 Issue-Links und Akzeptanzkriterien unter [ISSUE_TRIAGE_2026-10-11.md](ISSUE_TRIAGE_2026-10-11.md). Diese Dokumentationsänderung führt keinen Anwendungscode und keine Domainberechnung ein.
