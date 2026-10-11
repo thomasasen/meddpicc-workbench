@@ -74,7 +74,6 @@ describe('Export bleibt bei fehlender IndexedDB sicher bedienbar', () => {
   })
 })
 
-
 describe('White-Label-Langtext-Stress mit und ohne Branding', () => {
   it('paginiert umfangreiche Kundenberichte ohne Änderung der Seitenzahl durch CI', async () => {
     const report = {
@@ -83,7 +82,10 @@ describe('White-Label-Langtext-Stress mit und ohne Branding', () => {
       targetOutcome: 'Fiktives Zielbild und offene Annahmen zur Wirkung. '.repeat(140),
     }
     const pages: number[] = []
-    for (const [suffix, brand] of [['neutral', null], ['branded', brandedDark()]] as const) {
+    for (const [suffix, brand] of [
+      ['neutral', null],
+      ['branded', brandedDark()],
+    ] as const) {
       const bytes = await buildCustomerBusinessCasePdf(report, { brand })
       const pdf = await PDFDocument.load(bytes)
       pages.push(pdf.getPageCount())
@@ -108,7 +110,10 @@ describe('White-Label-Langtext-Stress mit und ohne Branding', () => {
     expect(result.success).toBe(true)
     if (!result.success) return
     const pages: number[] = []
-    for (const [suffix, brand] of [['neutral', null], ['branded', brandedDark()]] as const) {
+    for (const [suffix, brand] of [
+      ['neutral', null],
+      ['branded', brandedDark()],
+    ] as const) {
       const bytes = await buildCostOfDelayPdf(draft, result, result.scenarios[2]!, { brand })
       const pdf = await PDFDocument.load(bytes)
       pages.push(pdf.getPageCount())
