@@ -8,7 +8,7 @@ import {
   metricTypeLabels,
   type MetricBuilderDraft,
 } from '../domain/metricBuilder'
-import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import { drawReportFooter, drawReportMasthead, prepareReportBranding, applyReportBrandMetadata, type PreparedReportBranding, type ReportOptions } from './reportChrome'
 import { wrapReportText } from './reportText'
 
 /**
@@ -46,9 +46,11 @@ function wrap(value: string, font: PDFFont, size: number, maxWidth: number): str
   return wrapReportText(printable(value), font, size, maxWidth)
 }
 
-export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<Uint8Array> {
+export async function buildMetricBuilderPdf(draft: MetricBuilderDraft, options: ReportOptions = {}): Promise<Uint8Array> {
   const result = buildMetric(draft)
   const pdf = await PDFDocument.create()
+  const branding = await prepareReportBranding(pdf, options.brand, 'customer')
+  applyReportBrandMetadata(pdf, branding)
   const normal = await pdf.embedFont(StandardFonts.Helvetica)
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold)
   let page!: PDFPage
@@ -57,6 +59,7 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
   function newPage(): void {
     page = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT])
     drawReportMasthead({
+      branding,
       page,
       normal,
       bold,
@@ -284,6 +287,7 @@ export async function buildMetricBuilderPdf(draft: MetricBuilderDraft): Promise<
   drawReportFooter(pdf.getPages(), normal, bold, {
     left: LEFT,
     right: RIGHT,
+    branding,
     label: 'MODELLANNAHMEN - KEINE GARANTIE ODER BUDGETFREIGABE',
     borderColor: COLORS.border,
     textColor: COLORS.muted,

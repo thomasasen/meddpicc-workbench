@@ -1,6 +1,6 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
 import { type CostOfDelayInput, type DelayScenario, type CostOfDelayResult } from '../domain/costOfDelay'
-import { drawReportFooter, drawReportMasthead } from './reportChrome'
+import { drawReportFooter, drawReportMasthead, prepareReportBranding, applyReportBrandMetadata, type PreparedReportBranding, type ReportOptions } from './reportChrome'
 import { wrapReportText } from './reportText'
 
 const euro = (n: number): string =>
@@ -34,9 +34,12 @@ export async function buildCostOfDelayPdf(
   input: CostOfDelayInput,
   result: CostOfDelayResult,
   selected: DelayScenario,
+  options: ReportOptions = {},
 ): Promise<Uint8Array> {
   if (!result.success || !result.scenarios.length) throw new Error('Keine wirtschaftliche Rechnung vorhanden.')
   const pdf = await PDFDocument.create()
+  const branding = await prepareReportBranding(pdf, options.brand, 'customer')
+  applyReportBrandMetadata(pdf, branding)
   const regular = await pdf.embedFont(StandardFonts.Helvetica)
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold)
   let page!: PDFPage
@@ -45,6 +48,7 @@ export async function buildCostOfDelayPdf(
   function newPage() {
     page = pdf.addPage([W, H])
     drawReportMasthead({
+      branding,
       page,
       normal: regular,
       bold,
@@ -210,6 +214,7 @@ export async function buildCostOfDelayPdf(
   drawReportFooter(pdf.getPages(), regular, bold, {
     left: L,
     right: R,
+    branding,
     label: 'MODELLVERGLEICH - KEINE FINANZIELLE FREIGABE ODER CASHFLOW-PROGNOSE',
     borderColor: lineColor,
     textColor: gray,
