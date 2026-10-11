@@ -50,9 +50,10 @@ function stringField(value: unknown, field: string, max: number, required = fals
   }
   const normalized = value.trim()
   if (required && !normalized) throw new Error(field + ' ist erforderlich.')
-  // Helvetica/WinAnsi: nicht unterstützte Zeichen nicht stillschweigend durch '?' ersetzen.
-  if (/[^\u0020-\u00ff\u20ac]/.test(normalized)) {
-    throw new Error(field + ': Ein Sonderzeichen wird von der aktuellen PDF-Schrift nicht unterstützt.')
+  // Zulässiger Unicode-Bereich der eingebetteten Noto-Sans-Latin-PDF-Schrift.
+  // Unbekannte Skripte / Emoji werden nicht als leere Glyphen ausgegeben.
+  if (/[^\u0020-\u024f\u2000-\u206f\u20ac]/.test(normalized)) {
+    throw new Error(field + ': Zeichen außerhalb des unterstützten lateinischen PDF-Zeichensatzes.')
   }
   return normalized || undefined
 }

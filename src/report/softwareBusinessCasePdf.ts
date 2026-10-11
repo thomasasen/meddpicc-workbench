@@ -1,4 +1,5 @@
-import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf-lib'
+import { PDFDocument, rgb, type PDFPage, type PDFFont } from 'pdf-lib'
+import { embedReportFonts, normalizeReportUnicode } from './reportFonts'
 import { summarizeBusinessCase, economicInterpretation, type CaseSummary } from '../domain/businessCase'
 import type { SoftwarePaybackInput } from '../domain/softwarePayback'
 import {
@@ -55,7 +56,7 @@ function safe(s: string): string {
     .replace(/[\u2022\u2023]/g, '-')
     .replace(/\u2026/g, '...')
     .replace(/\u00a0/g, ' ')
-    .replace(/[^\u0020-\u00ff\u20ac\n]/g, '?')
+    .replace(/[^\u0020-\u00ff\u20ac\n]/g, (char) => (typeof window === 'undefined' ? '?' : normalizeReportUnicode(char)))
 }
 function draw(p: PDFPage, v: string, x: number, y: number, size: number, font: PDFFont, color = navy, width?: number) {
   let t = safe(v).replace(/\s+/g, ' ')
@@ -263,10 +264,11 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData, options: Re
   const scenarios = compareBusinessScenarios(data.input, data.scenarioSettings)
   if (!c || !scenarios) throw new Error('Bitte ungültige Angaben, Szenariowerte oder Doppelzählungen korrigieren.')
   const pdf = await PDFDocument.create()
+  const embedded = await embedReportFonts(pdf)
   const f: Fonts = {
     branding: await prepareReportBranding(pdf, options.brand, 'internal'),
-    normal: await pdf.embedFont(StandardFonts.Helvetica),
-    bold: await pdf.embedFont(StandardFonts.HelveticaBold),
+    normal: embedded.regular,
+    bold: embedded.bold,
   }
   pdf.setTitle(safe('Business Case - ' + data.project))
   pdf.setSubject('Undiskontierte wirtschaftliche Projektmodellrechnung')

@@ -1,4 +1,5 @@
-import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
+import { PDFDocument, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
+import { embedReportFonts, normalizeReportUnicode } from './reportFonts'
 import { type CostOfDelayInput, type DelayScenario, type CostOfDelayResult } from '../domain/costOfDelay'
 import {
   drawReportFooter,
@@ -29,7 +30,7 @@ function printable(s: string): string {
     .replace(/[\u2018\u2019]/g, "'")
     .replace(/[\u201c\u201d]/g, '"')
     .replace(/\u2192/g, '->')
-    .replace(/[^\u0020-\u00ff\u20ac\n]/g, '?')
+    .replace(/[^\u0020-\u00ff\u20ac\n]/g, (char) => (typeof window === 'undefined' ? '?' : normalizeReportUnicode(char)))
 }
 function wrapped(s: string, font: PDFFont, size: number, width: number): string[] {
   return wrapReportText(printable(s), font, size, width, 'Noch offen')
@@ -46,8 +47,7 @@ export async function buildCostOfDelayPdf(
   const pdf = await PDFDocument.create()
   const branding = await prepareReportBranding(pdf, options.brand, 'customer')
   applyReportBrandMetadata(pdf, branding)
-  const regular = await pdf.embedFont(StandardFonts.Helvetica)
-  const bold = await pdf.embedFont(StandardFonts.HelveticaBold)
+  const { regular: regular, bold } = await embedReportFonts(pdf)
   let page!: PDFPage
   let y = 0
 

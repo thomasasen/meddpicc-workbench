@@ -1,4 +1,5 @@
-import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage, type RGB } from 'pdf-lib'
+import { PDFDocument, rgb, type PDFFont, type PDFPage, type RGB } from 'pdf-lib'
+import { embedReportFonts, normalizeReportUnicode } from './reportFonts'
 import {
   bridgeEvidenceLabels,
   bridgeKindLabels,
@@ -49,7 +50,7 @@ function printable(value: string): string {
     .replace(/\u2192/g, ' -> ')
     .replace(/\u2190/g, ' <- ')
     .replace(/[\u00a0\u202f]/g, ' ')
-    .replace(/[^\u0020-\u00ff\u20ac\n]/g, '?')
+    .replace(/[^\u0020-\u00ff\u20ac\n]/g, (char) => (typeof window === 'undefined' ? '?' : normalizeReportUnicode(char)))
 }
 
 /** Width-aware wrapping, including unbroken words and line-separated user content. */
@@ -62,8 +63,7 @@ export async function buildValueBridgePdf(input: ValueBridgeInput, options: Repo
   const pdf = await PDFDocument.create()
   const branding = await prepareReportBranding(pdf, options.brand, 'customer')
   applyReportBrandMetadata(pdf, branding)
-  const regular = await pdf.embedFont(StandardFonts.Helvetica)
-  const bold = await pdf.embedFont(StandardFonts.HelveticaBold)
+  const { regular: regular, bold } = await embedReportFonts(pdf)
   let page!: PDFPage
   let y = 0
 
