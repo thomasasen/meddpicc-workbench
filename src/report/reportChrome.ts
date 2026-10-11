@@ -99,8 +99,7 @@ export function drawReportFooter(
   } = options
   // Individuelle Textfarbe nur bei WCAG-tauglichem Kontrast auf weißem Papier.
   const requestedInk = branding?.profile?.textColor
-  const footerInk =
-    requestedInk && contrastRatio(requestedInk, '#FFFFFF') >= 4.5 ? rgbHex(requestedInk) : textColor
+  const footerInk = requestedInk && contrastRatio(requestedInk, '#FFFFFF') >= 4.5 ? rgbHex(requestedInk) : textColor
   pages.forEach((page, index) => {
     const number = pagePrefix + (index + 1) + (showTotal ? ' / ' + pages.length : '')
     const numberWidth = bold.widthOfTextAtSize(number, fontSize)
