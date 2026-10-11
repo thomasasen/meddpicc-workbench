@@ -3914,3 +3914,126 @@ button.microtool-card:disabled {
   white-space: nowrap;
   clip-path: inset(50%);
 }
+
+
+/* Zentrale Einstellungen: sekundärer, tastaturbedienbarer Einstieg im Header */
+.toolbox-settings-link {
+  flex: 0 0 auto;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  padding: 0 var(--space-3);
+  color: var(--color-text);
+  font-size: 0.82rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.toolbox-settings-link:hover {
+  border-color: var(--color-accent);
+  background: var(--color-surface-muted);
+}
+
+.toolbox-header-meta {
+  margin-left: auto;
+}
+
+.toolbox-header-meta + .toolbox-settings-link {
+  margin-left: 0;
+}
+
+.settings-main {
+  display: grid;
+  gap: var(--space-6);
+  padding: var(--space-8) 0 var(--space-12);
+}
+
+.settings-main > header {
+  max-width: 740px;
+}
+
+.settings-main > header p:last-child {
+  color: var(--color-text-muted);
+}
+
+.settings-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  max-width: 880px;
+}
+
+.settings-panel {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-panel);
+}
+
+.settings-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.settings-panel-heading > svg {
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+  color: var(--color-accent);
+}
+
+.settings-panel h2,
+.settings-panel p {
+  margin: 0;
+}
+
+.settings-panel h2 {
+  font-size: 1.08rem;
+}
+
+.settings-panel p,
+.settings-panel li {
+  color: var(--color-text-muted);
+  font-size: 0.87rem;
+}
+
+.settings-panel .button {
+  justify-self: start;
+}
+
+.settings-status {
+  font-weight: 650;
+}
+
+@media (max-width: 480px) {
+  .toolbox-settings-link {
+    width: 44px;
+    min-width: 44px;
+    padding: 0;
+  }
+
+  .toolbox-settings-link > span {
+    display: none;
+  }
+
+  .settings-panel {
+    padding: var(--space-4);
+  }
+}
+
+
+@media (max-width: 760px) {
+  .toolbox-header-meta + .toolbox-settings-link {
+    margin-left: auto;
+  }
+}

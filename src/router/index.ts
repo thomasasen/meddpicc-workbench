@@ -13,6 +13,7 @@ import PaperProcessKnowledgeView from '../views/PaperProcessKnowledgeView.vue'
 import EvidenceView from '../views/EvidenceView.vue'
 import HomeView from '../views/HomeView.vue'
 import DocumentBrandingView from '../views/DocumentBrandingView.vue'
+import SettingsView from '../views/SettingsView.vue'
 import ReverseTimelineView from '../views/ReverseTimelineView.vue'
 import QuickPaybackView from '../views/QuickPaybackView.vue'
 import MetricBuilderView from '../views/MetricBuilderView.vue'
@@ -24,6 +25,11 @@ import ReferencesView from '../views/ReferencesView.vue'
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/settings',
+      name: 'settings',
+      component: SettingsView,
+    },
     {
       path: '/settings/document-design',
       name: 'document-design',
