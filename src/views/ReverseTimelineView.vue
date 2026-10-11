@@ -267,7 +267,8 @@ async function exportTimeline(kind: 'svg' | 'png'): Promise<void> {
     } else {
       await downloadTimelinePng(svg, `${fileBaseName()}-timeline.png`)
     }
-    exportMessage.value = (kind === 'svg' ? 'SVG' : 'PNG') +
+    exportMessage.value =
+      (kind === 'svg' ? 'SVG' : 'PNG') +
       ' wurde für die Weiterverwendung in Präsentationen erzeugt.' +
       (warning ? ' ' + warning : '')
   } catch (error) {
@@ -476,11 +477,21 @@ async function exportTimeline(kind: 'svg' | 'png'): Promise<void> {
           </div>
           <div v-if="plan" class="reverse-export-actions">
             <RouterLink class="button button-quiet" to="/settings/document-design">Dokumentgestaltung</RouterLink>
-            <button class="button button-secondary button-with-icon" type="button" :disabled="exportBusy" @click="exportTimeline('svg')">
+            <button
+              class="button button-secondary button-with-icon"
+              type="button"
+              :disabled="exportBusy"
+              @click="exportTimeline('svg')"
+            >
               <Download :size="16" aria-hidden="true" />
               SVG
             </button>
-            <button class="button button-primary button-with-icon" type="button" :disabled="exportBusy" @click="exportTimeline('png')">
+            <button
+              class="button button-primary button-with-icon"
+              type="button"
+              :disabled="exportBusy"
+              @click="exportTimeline('png')"
+            >
               <FileImage :size="16" aria-hidden="true" />
               PNG
             </button>

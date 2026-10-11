@@ -39,7 +39,9 @@ test('Export fällt bei gesperrtem IndexedDB sichtbar neutral zurück', async ({
   await page.addInitScript(() => {
     Object.defineProperty(IDBFactory.prototype, 'open', {
       configurable: true,
-      value() { throw new DOMException('Test-DB gesperrt', 'InvalidStateError') },
+      value() {
+        throw new DOMException('Test-DB gesperrt', 'InvalidStateError')
+      },
     })
   })
   await page.goto(timeline)
@@ -72,12 +74,16 @@ test('Dokumentgestaltung ist tastaturbedienbar und stellt Statusmeldungen semant
   await page.screenshot({ path: info.outputPath('branding-keyboard-validation.png'), fullPage: true })
 })
 
-
 test('Firmenlogo bleibt beim SVG/PNG-Export eingebettet und wird nicht extern geladen', async ({ page }) => {
   await page.goto(settings)
   await page.getByLabel('Firmenname').fill('Fiktive Logo-Beratung GmbH')
   await page.locator('input[aria-label="PNG- oder JPEG-Firmenlogo wählen"]').setInputFiles({
-    name: 'test.png', mimeType: 'image/png', buffer: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAKAAAAAkCAYAAAAO7jHjAAAAmklEQVR42u3b0Q1AMBSG0bqbWMgqZrGKhYzCAkIl2ityzrOn5svfFy0FAACgo6H2w3FadsdFrW2dh1cCFB4tQwzx0dJdQyE+MiMM8ZEZYTgaMoX1I3MFLSDfWkAQIAIEASJAECACBAEiQBAgAgQB8r8Aa//lh6fO2rKAfO8KtoL0WL/LBRQhreO7vYJFSMv4SvEwnaTwAAAAUhw4/SwyqIE0/AAAAABJRU5ErkJggg==', 'base64'),
+    name: 'test.png',
+    mimeType: 'image/png',
+    buffer: Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAKAAAAAkCAYAAAAO7jHjAAAAmklEQVR42u3b0Q1AMBSG0bqbWMgqZrGKhYzCAkIl2ityzrOn5svfFy0FAACgo6H2w3FadsdFrW2dh1cCFB4tQwzx0dJdQyE+MiMM8ZEZYTgaMoX1I3MFLSDfWkAQIAIEASJAECACBAEiQBAgAgQB8r8Aa//lh6fO2rKAfO8KtoL0WL/LBRQhreO7vYJFSMv4SvEwnaTwAAAAUhw4/SwyqIE0/AAAAABJRU5ErkJggg==',
+      'base64',
+    ),
   })
   await expect(page.getByRole('img', { name: 'Aktuell ausgewähltes Firmenlogo' })).toBeVisible()
   await page.getByRole('button', { name: 'Änderungen speichern' }).click()

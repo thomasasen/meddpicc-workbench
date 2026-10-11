@@ -53,7 +53,5 @@ export async function embedReportFonts(pdf: PDFDocument): Promise<ReportFontSet>
  * explizit begrenzt, statt unbemerkt leere Glyphen einzubetten.
  */
 export function normalizeReportUnicode(value: string): string {
-  return value
-    .replace(/\u00a0|\u202f/g, ' ')
-    .replace(/[^\u000a\u0020-\u024f\u2000-\u206f\u20ac]/g, '?')
+  return value.replace(/\u00a0|\u202f/g, ' ').replace(/[^\u000a\u0020-\u024f\u2000-\u206f\u20ac]/g, '?')
 }

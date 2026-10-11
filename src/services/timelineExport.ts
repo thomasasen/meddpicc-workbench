@@ -73,9 +73,7 @@ function bufferColor(plan: ReverseTimelinePlan): string {
 /** Keine fremden SVG-Quellen: ausschließlich validierte eingebettete Bildbytes. */
 function drawTimelineCompanyMark(brand: BrandProfile | null): string {
   if (!brand) return ''
-  const primaryInk = contrastRatio(brand.primaryColor, '#FFFFFF') >= 4.5
-    ? brand.primaryColor
-    : '#172033'
+  const primaryInk = contrastRatio(brand.primaryColor, '#FFFFFF') >= 4.5 ? brand.primaryColor : '#172033'
   const company = escapeXml(truncate(brand.companyName, brand.logo ? 58 : 82))
   if (!brand.logo) {
     return `<text data-brand-name="true" x="70" y="58" font-size="15" font-weight="700" fill="${primaryInk}">${company}</text>`
@@ -94,7 +92,9 @@ function drawTimelineCompanyMark(brand: BrandProfile | null): string {
 
 function timelineAccessibleDescription(plan: ReverseTimelinePlan): string {
   const steps = plan.chronologicalSegments
-    .map((step) => `${step.label}: ${formatDate(step.startDate)} bis ${formatDate(step.endDate)}, ${ownerDisplay(step)}`)
+    .map(
+      (step) => `${step.label}: ${formatDate(step.startDate)} bis ${formatDate(step.endDate)}, ${ownerDisplay(step)}`,
+    )
     .join('; ')
   return `Gemeinsamer Go-Live-Plan. Start: ${formatDate(plan.latestStartDate)}, Ziel: ${formatDate(plan.targetGoLiveDate)}. ${steps}. ${bufferLabel(plan)}. Feiertage sind nicht berücksichtigt.`
 }
@@ -170,7 +170,9 @@ export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: Tim
   const compellingEvent = plan.compellingEvent ? escapeXml(truncate(plan.compellingEvent, 42)) : ''
   const bufferTextColor = bufferColor(plan)
   const headerInk = brand
-    ? (contrastRatio(brand.primaryColor, '#FFFFFF') >= 4.5 ? brand.primaryColor : readableInkOn('#FFFFFF'))
+    ? contrastRatio(brand.primaryColor, '#FFFFFF') >= 4.5
+      ? brand.primaryColor
+      : readableInkOn('#FFFFFF')
     : '#1d4ed8'
   const accessibleTitle = escapeXml(options.title || 'Go-Live-Timeline')
   const accessibleDescription = escapeXml(timelineAccessibleDescription(plan))

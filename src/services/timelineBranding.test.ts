@@ -8,8 +8,22 @@ function plan() {
     referenceDate: '2027-01-04',
     targetGoLiveDate: '2027-07-01',
     steps: [
-      { id: 'legal', label: 'Legal & Datenschutz', duration: 10, durationUnit: 'calendar-days', owner: 'customer', area: 'paper-process' },
-      { id: 'rollout', label: 'Rollout', duration: 30, durationUnit: 'calendar-days', owner: 'shared', area: 'implementation' },
+      {
+        id: 'legal',
+        label: 'Legal & Datenschutz',
+        duration: 10,
+        durationUnit: 'calendar-days',
+        owner: 'customer',
+        area: 'paper-process',
+      },
+      {
+        id: 'rollout',
+        label: 'Rollout',
+        duration: 30,
+        durationUnit: 'calendar-days',
+        owner: 'shared',
+        area: 'implementation',
+      },
     ],
   })
   if (!result.success) throw new Error('Ungültige Testplanung')
@@ -18,8 +32,10 @@ function plan() {
 
 const brand = (logo?: { mimeType: 'image/png'; base64: string; width: number; height: number }) =>
   validateBrandProfile({
-    version: BRAND_SCHEMA_VERSION, companyName: 'A & B <Consulting> GmbH',
-    primaryColor: '#F3EBD7', accentColor: '#E4AC13',
+    version: BRAND_SCHEMA_VERSION,
+    companyName: 'A & B <Consulting> GmbH',
+    primaryColor: '#F3EBD7',
+    accentColor: '#E4AC13',
     ...(logo ? { logo } : {}),
   })
 
@@ -49,7 +65,13 @@ describe('Corporate Design SVG/PNG-Export', () => {
   })
 
   it('verwendet nur validierte, eingebettete PNG-Daten und kein ausführbares SVG', () => {
-    const withLogo = brand({ mimeType: 'image/png', base64: 'iVBORw0KGgoAAAANSUhEUgAAAKAAAAAkCAYAAAAO7jHjAAAAmklEQVR42u3b0Q1AMBSG0bqbWMgqZrGKhYzCAkIl2ityzrOn5svfFy0FAACgo6H2w3FadsdFrW2dh1cCFB4tQwzx0dJdQyE+MiMM8ZEZYTgaMoX1I3MFLSDfWkAQIAIEASJAECACBAEiQBAgAgQB8r8Aa//lh6fO2rKAfO8KtoL0WL/LBRQhreO7vYJFSMv4SvEwnaTwAAAAUhw4/SwyqIE0/AAAAABJRU5ErkJggg==', width: 160, height: 36 })
+    const withLogo = brand({
+      mimeType: 'image/png',
+      base64:
+        'iVBORw0KGgoAAAANSUhEUgAAAKAAAAAkCAYAAAAO7jHjAAAAmklEQVR42u3b0Q1AMBSG0bqbWMgqZrGKhYzCAkIl2ityzrOn5svfFy0FAACgo6H2w3FadsdFrW2dh1cCFB4tQwzx0dJdQyE+MiMM8ZEZYTgaMoX1I3MFLSDfWkAQIAIEASJAECACBAEiQBAgAgQB8r8Aa//lh6fO2rKAfO8KtoL0WL/LBRQhreO7vYJFSMv4SvEwnaTwAAAAUhw4/SwyqIE0/AAAAABJRU5ErkJggg==',
+      width: 160,
+      height: 36,
+    })
     const svg = buildCustomerTimelineSvg(plan(), { title: 'Beispiel', customerName: 'Kunde', brand: withLogo })
     expect(svg).toContain('data-brand-logo="true"')
     expect(svg).toContain('href="data:image/png;base64,')
@@ -57,13 +79,19 @@ describe('Corporate Design SVG/PNG-Export', () => {
   })
 
   it('verwirft XML- und Datenschema-Fremdeingaben vor der SVG-Erzeugung', () => {
-    expect(() => buildCustomerTimelineSvg(plan(), {
-      title: 'Export', customerName: 'Kunde',
-      brand: { ...brand(), primaryColor: 'url(https://evil.test)' },
-    })).toThrow('Hex')
-    expect(() => buildCustomerTimelineSvg(plan(), {
-      title: 'Export', customerName: 'Kunde',
-      brand: { ...brand(), injecting: '<foreignObject />' } as ReturnType<typeof brand>,
-    })).toThrow('unbekannte Felder')
+    expect(() =>
+      buildCustomerTimelineSvg(plan(), {
+        title: 'Export',
+        customerName: 'Kunde',
+        brand: { ...brand(), primaryColor: 'url(https://evil.test)' },
+      }),
+    ).toThrow('Hex')
+    expect(() =>
+      buildCustomerTimelineSvg(plan(), {
+        title: 'Export',
+        customerName: 'Kunde',
+        brand: { ...brand(), injecting: '<foreignObject />' } as ReturnType<typeof brand>,
+      }),
+    ).toThrow('unbekannte Felder')
   })
 })
