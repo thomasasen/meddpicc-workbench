@@ -176,7 +176,7 @@ jobs:
           if-no-files-found: error
 
       - name: CI-White-Label-Audit und alle 15 PDF-Matrixfälle rendern
-        if: startsWith(github.head_ref, 'feature/corporate-identity-white-label-pdfs-')
+        if: startsWith(github.head_ref, 'feature/corporate-identity-white-label-pdfs-') || startsWith(github.head_ref, 'feature/document-accessibility-and-timeline-ci-')
         run: |
           set -euo pipefail
           if ! command -v pdftoppm >/dev/null 2>&1; then
@@ -221,7 +221,7 @@ jobs:
           test "$stress_count" -eq 4 || { echo "::error::Langtext-Matrix unvollständig: $stress_count/4"; exit 1; }
 
       - name: CI-Original-PDFs und Seitenrenderings sichern
-        if: startsWith(github.head_ref, 'feature/corporate-identity-white-label-pdfs-')
+        if: startsWith(github.head_ref, 'feature/corporate-identity-white-label-pdfs-') || startsWith(github.head_ref, 'feature/document-accessibility-and-timeline-ci-')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ci-white-label-review
@@ -230,6 +230,14 @@ jobs:
             qa-branding-stress/*.pdf
             test-results/branding-rendered/**
           if-no-files-found: error
+
+      - name: Poppler für echte PDF-Textextraktion bereitstellen
+        if: startsWith(github.head_ref, 'feature/document-accessibility-and-timeline-ci-')
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y poppler-utils
+          command -v pdftotext
+          command -v pdftoppm
 
       - name: Playwright Chromium installieren
         run: npx playwright install --with-deps chromium
