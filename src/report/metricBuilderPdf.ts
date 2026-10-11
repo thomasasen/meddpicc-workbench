@@ -40,13 +40,14 @@ const COLORS = {
 }
 
 function printable(value: string): string {
+  if (typeof window !== 'undefined') return normalizeReportUnicode(value)
   return value
     .replace(/[\u2010-\u2015]/g, '-')
     .replace(/[\u2018\u2019]/g, "'")
     .replace(/[\u201c\u201d]/g, '"')
     .replace(/\u2192/g, '->')
     .replace(/\u00a0/g, ' ')
-    .replace(/[^\u0020-\u00ff\u20ac\n]/g, (char) => (typeof window === 'undefined' ? '?' : normalizeReportUnicode(char)))
+    .replace(/[^\u0020-\u00ff\u20ac\n]/g, '?')
 }
 
 function wrap(value: string, font: PDFFont, size: number, maxWidth: number): string[] {

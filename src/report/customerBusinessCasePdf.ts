@@ -39,6 +39,7 @@ const euro = (n: number) =>
   new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n)
 
 function readable(value: string): string {
+  if (typeof window !== 'undefined') return normalizeReportUnicode(value)
   return value
     .replace(/[\u2010-\u2015]/g, '-')
     .replace(/[\u2018\u2019]/g, "'")
@@ -46,7 +47,7 @@ function readable(value: string): string {
     .replace(/\u2026/g, '...')
     .replace(/\u00a0/g, ' ')
     .replace(/[\u2022\u2023]/g, '-')
-    .replace(/[^\u0020-\u00ff\u20ac\n]/g, (char) => (typeof window === 'undefined' ? '?' : normalizeReportUnicode(char)))
+    .replace(/[^\u0020-\u00ff\u20ac\n]/g, '?')
 }
 
 function write(

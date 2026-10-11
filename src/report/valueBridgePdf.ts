@@ -43,6 +43,7 @@ const euro = (value: number): string =>
 
 /** Built-in PDF fonts are WinAnsi based. Preserve standard German letters, replace unsupported glyphs. */
 function printable(value: string): string {
+  if (typeof window !== 'undefined') return normalizeReportUnicode(value)
   return value
     .replace(/[\u2010-\u2015]/g, '-')
     .replace(/[\u2018\u2019]/g, "'")
@@ -50,7 +51,7 @@ function printable(value: string): string {
     .replace(/\u2192/g, ' -> ')
     .replace(/\u2190/g, ' <- ')
     .replace(/[\u00a0\u202f]/g, ' ')
-    .replace(/[^\u0020-\u00ff\u20ac\n]/g, (char) => (typeof window === 'undefined' ? '?' : normalizeReportUnicode(char)))
+    .replace(/[^\u0020-\u00ff\u20ac\n]/g, '?')
 }
 
 /** Width-aware wrapping, including unbroken words and line-separated user content. */

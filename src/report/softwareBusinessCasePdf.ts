@@ -49,6 +49,7 @@ const percent = (n: number | null) =>
     ? 'nicht definiert'
     : new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(n) + ' %'
 function safe(s: string): string {
+  if (typeof window !== 'undefined') return normalizeReportUnicode(s)
   return s
     .replace(/[\u2010-\u2015]/g, '-')
     .replace(/[\u2018\u2019]/g, "'")
@@ -56,7 +57,7 @@ function safe(s: string): string {
     .replace(/[\u2022\u2023]/g, '-')
     .replace(/\u2026/g, '...')
     .replace(/\u00a0/g, ' ')
-    .replace(/[^\u0020-\u00ff\u20ac\n]/g, (char) => (typeof window === 'undefined' ? '?' : normalizeReportUnicode(char)))
+    .replace(/[^\u0020-\u00ff\u20ac\n]/g, '?')
 }
 function draw(p: PDFPage, v: string, x: number, y: number, size: number, font: PDFFont, color = navy, width?: number) {
   let t = safe(v).replace(/\s+/g, ' ')

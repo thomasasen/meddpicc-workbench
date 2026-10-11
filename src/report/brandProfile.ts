@@ -53,7 +53,7 @@ function stringField(value: unknown, field: string, max: number, required = fals
   // Zulässiger Unicode-Bereich der eingebetteten Noto-Sans-Latin-PDF-Schrift.
   // Unbekannte Skripte / Emoji werden nicht als leere Glyphen ausgegeben.
   if (/[^\u0020-\u024f\u2000-\u206f\u20ac]/.test(normalized)) {
-    throw new Error(field + ': Zeichen außerhalb des unterstützten lateinischen PDF-Zeichensatzes.')
+    throw new Error(field + ': Sonderzeichen außerhalb des unterstützten lateinischen PDF-Zeichensatzes.')
   }
   return normalized || undefined
 }

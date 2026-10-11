@@ -25,12 +25,13 @@ const L = 48
 const R = W - 48
 
 function printable(s: string): string {
+  if (typeof window !== 'undefined') return normalizeReportUnicode(s)
   return s
     .replace(/[\u2010-\u2015]/g, '-')
     .replace(/[\u2018\u2019]/g, "'")
     .replace(/[\u201c\u201d]/g, '"')
     .replace(/\u2192/g, '->')
-    .replace(/[^\u0020-\u00ff\u20ac\n]/g, (char) => (typeof window === 'undefined' ? '?' : normalizeReportUnicode(char)))
+    .replace(/[^\u0020-\u00ff\u20ac\n]/g, '?')
 }
 function wrapped(s: string, font: PDFFont, size: number, width: number): string[] {
   return wrapReportText(printable(s), font, size, width, 'Noch offen')
