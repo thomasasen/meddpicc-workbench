@@ -73,3 +73,51 @@ describe('Export bleibt bei fehlender IndexedDB sicher bedienbar', () => {
     expect(resolved.warning).toContain('neutral ohne Firmenbranding')
   })
 })
+
+
+describe('White-Label-Langtext-Stress mit und ohne Branding', () => {
+  it('paginiert umfangreiche Kundenberichte ohne Änderung der Seitenzahl durch CI', async () => {
+    const report = {
+      ...demo(),
+      businessPain: 'Fiktive Ausgangslage mit vielen Abstimmungsproblemen. '.repeat(140),
+      targetOutcome: 'Fiktives Zielbild und offene Annahmen zur Wirkung. '.repeat(140),
+    }
+    const pages: number[] = []
+    for (const [suffix, brand] of [['neutral', null], ['branded', brandedDark()]] as const) {
+      const bytes = await buildCustomerBusinessCasePdf(report, { brand })
+      const pdf = await PDFDocument.load(bytes)
+      pages.push(pdf.getPageCount())
+      expect(pdf.getPageCount()).toBeGreaterThan(4)
+      if (process.env.CI) {
+        mkdirSync('qa-branding-stress', { recursive: true })
+        writeFileSync('qa-branding-stress/customer-long-' + suffix + '.pdf', bytes)
+      }
+    }
+    expect(pages[0]).toBe(pages[1])
+  }, 60000)
+
+  it('bricht lange fachliche Cost-of-Delay-Texte profilunabhängig auf Fortsetzungsseiten um', async () => {
+    const draft = {
+      ...costOfDelayDemos.service!,
+      problem: 'Fiktive langfristig zu überprüfende Problembeschreibung. '.repeat(70),
+      outcome: 'Fiktives Ergebnis mit offener Datenherkunft. '.repeat(75),
+      source: 'Fiktive Belege und prüfpflichtige Annahmen. '.repeat(130),
+      extraCostSource: 'Fiktiver Nachweis für Mehraufwände. '.repeat(50),
+    }
+    const result = calculateCostOfDelay(draft, [3, 6, 12])
+    expect(result.success).toBe(true)
+    if (!result.success) return
+    const pages: number[] = []
+    for (const [suffix, brand] of [['neutral', null], ['branded', brandedDark()]] as const) {
+      const bytes = await buildCostOfDelayPdf(draft, result, result.scenarios[2]!, { brand })
+      const pdf = await PDFDocument.load(bytes)
+      pages.push(pdf.getPageCount())
+      expect(pdf.getPageCount()).toBeGreaterThan(3)
+      if (process.env.CI) {
+        mkdirSync('qa-branding-stress', { recursive: true })
+        writeFileSync('qa-branding-stress/cost-of-delay-long-' + suffix + '.pdf', bytes)
+      }
+    }
+    expect(pages[0]).toBe(pages[1])
+  }, 60000)
+})

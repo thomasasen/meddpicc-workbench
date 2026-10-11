@@ -51,3 +51,7 @@ Die Akzentfarbe wird als 2,4-Punkt-Zierlinie am unteren Rand jedes gebrandeten M
 ## Fehlende oder beschädigte IndexedDB im Export
 
 Die konfigurierende Ansicht behält bei Schreib-/Lesefehlern einen ausdrücklich sichtbaren Fehler und markiert das Profil nicht als gespeichert. PDF-Exportwege sind davon entkoppelt: `loadBrandForReport()` liefert bei fehlender oder ungültiger CI-Konfiguration das neutrale Profil und einen sichtbaren Warnhinweis im jeweiligen Tool. So bleibt die fachliche PDF-Funktion auch in Browsern mit blockiertem IndexedDB verfügbar, ohne fälschlich Firmenbranding vorzutäuschen. Die ausführliche allgemeine Recovery-Strategie bleibt #65.
+
+## Zusätzliche Langtext-Matrix
+
+Der gesonderte Stresslauf erzeugt vier echte PDF-Originale mit und ohne Firmenprofil: Kundenbericht und Cost-of-Delay-Bericht mit sehr langen deutschsprachigen Problem-, Ziel- und Herkunftstexten. Die Unit-Tests prüfen die profilunabhängige Seitenanzahl. CI rendert sämtliche zusätzlichen Seiten als PNG, erzeugt pdftotext/pdinfo-Artefakte und blockiert bei unvollständiger Ausgabe. Diese vier PDFs sind im selben Review-Artefakt `ci-white-label-review` enthalten.
