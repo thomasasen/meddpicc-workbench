@@ -251,3 +251,8 @@ Die mobile Schrittnavigation wird unter 480 Pixeln vertikal angezeigt; Cost-of-D
 ## Dokumentgestaltung
 
 Die Anwendung bleibt MEDDPICC Toolbox; nur ihre PDF-Ausgaben werden firmenneutral oder mit lokalem CI erzeugt. Die Seite /settings/document-design bietet semantisch beschriftete Felder, Status-/Fehlerrollen, Tastaturbedienung und mobile Layouts. Der PDF-Kopf nutzt kontrastreiches Textweiß oder Textdunkel passend zur Primärfarbe. Wirtschaftliche Statusfarben, Risikoangaben und Evidenzkennzeichnungen sind davon unabhängig. Logo und langer Firmenname belegen eine begrenzte reservierte Masthead-Fläche, ohne den Dokumentinhalt nach unten zu überdecken.
+
+
+## Zentrale Einstellungsnavigation
+
+Die Startseite erhält im rechten Kopfbereich einen sekundären Zahnrad-Einstieg **Einstellungen** mit Lucide-`Settings` und sichtbarem Text (schmale Mobilansicht: Icon mit zugänglichem Namen). Die Route `/settings` ist die zentrale Einstellungsübersicht. Aktuell gibt es genau einen tatsächlich editierbaren Bereich: **Dokumentgestaltung**, dessen bisheriger Formular- und Datenpersistenzpfad unverändert bleibt. Keine leeren Schalter oder vorgetäuschten Konfigurationen. Der bisherige Deep Link `/settings/document-design` bleibt kompatibel. Einstellungsseiten führen zurück zur Übersicht; der Eingang zur Übersicht führt zum Hauptbildschirm. Tastaturfokus, 375/768/1024/1440 px und kein horizontaler Überlauf müssen geprüft werden.

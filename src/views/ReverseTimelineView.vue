@@ -8,6 +8,7 @@ import {
   GripVertical,
   Plus,
   RotateCcw,
+  Settings,
   Trash2,
 } from '@lucide/vue'
 import { computed, ref } from 'vue'
@@ -476,7 +477,9 @@ async function exportTimeline(kind: 'svg' | 'png'): Promise<void> {
             <h2 id="result-title">Kundenfähige Timeline</h2>
           </div>
           <div v-if="plan" class="reverse-export-actions">
-            <RouterLink class="button button-quiet" to="/settings/document-design">Dokumentgestaltung</RouterLink>
+            <RouterLink class="button button-quiet button-with-icon" to="/settings">
+              <Settings :size="16" aria-hidden="true" /> Einstellungen
+            </RouterLink>
             <button
               class="button button-secondary button-with-icon"
               type="button"

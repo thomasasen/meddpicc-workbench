@@ -385,3 +385,8 @@ Unter **Einstellungen → Dokumentgestaltung** lassen sich Firmenname, Logo (PNG
 ### Corporate Design auch für Go-Live-Grafiken
 
 Der SVG-/PNG-Export der Rückwärtsplanung übernimmt das lokal gespeicherte Firmenprofil. Firmenname und Logo erscheinen ohne Änderung der Planungsformeln in der kundenfähigen Grafik. Ein SVG enthält Bilddaten ausschließlich als eingebettetes, lokal geprüftes PNG/JPEG; externe Bildquellen oder aktive SVG-Elemente werden nicht hinzugefügt. Ohne Profil bleibt die Grafik neutral. PDF-Berichte benutzen im Browser lokal mit der Anwendung ausgelieferte Noto-Sans-Fonts (lateinische Zeichen einschließlich gängiger typografischer Satzzeichen). Es findet kein Schriften-Download von fremden Servern während der Nutzung statt. Schrift- und Assistive-Technology-Grenzen stehen in docs/DOCUMENT_BRANDING_QA.md.
+
+
+### Zentrale Einstellungen
+
+Auf der Toolbox-Startseite öffnet das Zahnrad **Einstellungen** die zentrale Übersicht unter `#/settings`. Unter **Dokumente und Exporte → Dokumentgestaltung** werden Firmenname, Logo, Farben, optionale Kontakt- und Fußzeilenangaben sowie die PDF-Vorschau verwaltet. Die bisherige Direktadresse `#/settings/document-design` funktioniert als Deep Link weiter. Die Go-Live-Rückwärtsplanung verweist ebenfalls auf die zentrale Einstellungsübersicht. Das Firmenprofil bleibt lokal im Browser gespeichert und wird durch die neue Navigation nicht zurückgesetzt. Weitere Konfigurationen werden erst angeboten, wenn sie tatsächlich vorhanden sind.

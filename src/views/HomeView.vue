@@ -12,6 +12,7 @@ import {
   ListChecks,
   Presentation,
   Route,
+  Settings,
   Swords,
   UserRound,
   Wrench,
@@ -291,13 +292,19 @@ const knowledgeTopics = [
           </span>
         </RouterLink>
 
-        <RouterLink class="button button-quiet" to="/settings/document-design"
-          >Einstellungen · Dokumentgestaltung</RouterLink
-        >
         <div class="toolbox-header-meta">
           <Wrench :size="17" aria-hidden="true" />
           <span>Berechnen · vorbereiten · nachschlagen</span>
         </div>
+        <RouterLink
+          class="toolbox-settings-link"
+          to="/settings"
+          aria-label="Einstellungen und Konfigurationen"
+          title="Einstellungen und Konfigurationen"
+        >
+          <Settings :size="19" aria-hidden="true" />
+          <span>Einstellungen</span>
+        </RouterLink>
       </div>
     </header>
 
