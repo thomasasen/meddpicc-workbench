@@ -358,7 +358,8 @@ function downloadPreview(): void {
               <input v-model="draft.textColor" spellcheck="false" maxlength="7" placeholder="#172033"
             /></label>
             <p v-if="draft.textColor && textContrast < 4.5" class="branding-warning" role="status">
-              Die Textfarbe ist auf Weiß zu kontrastarm. Die PDF-Fußzeile erhält automatisch eine gut lesbare Ersatzfarbe.
+              Die Textfarbe ist auf Weiß zu kontrastarm. Die PDF-Fußzeile erhält automatisch eine gut lesbare
+              Ersatzfarbe.
             </p>
           </div>
           <p class="branding-hint">
