@@ -123,7 +123,7 @@ jobs:
       - name: CI-Branding-Dateien normalisieren
         if: startsWith(github.head_ref, 'feature/corporate-identity-white-label-pdfs-')
         run: |
-          npx prettier --write src/report/*.ts src/services/brandProfileStore.ts src/services/brandLogo.ts src/views/DocumentBrandingView.vue src/views/HomeView.vue src/views/MetricBuilderView.vue src/views/CostOfDelayView.vue src/views/ValueBridgeView.vue src/views/QuickPaybackView.vue src/components/SoftwarePaybackPanel.vue src/router/index.ts tests/e2e/document-branding.spec.ts
+          npx prettier --write src/report/*.ts src/services/brandProfileStore.ts src/services/brandLogo.ts src/views/DocumentBrandingView.vue src/views/HomeView.vue src/views/MetricBuilderView.vue src/views/CostOfDelayView.vue src/views/ValueBridgeView.vue src/views/QuickPaybackView.vue src/components/SoftwarePaybackPanel.vue src/router/index.ts tests/e2e/document-branding.spec.ts tests/brandingReports.test.ts
           if ! git diff --quiet -- src tests; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
