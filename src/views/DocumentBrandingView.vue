@@ -94,6 +94,7 @@ onBeforeUnmount(() => {
 async function save(): Promise<void> {
   working.value = true
   error.value = ''
+  status.value = ''
   try {
     const valid = validateBrandProfile(draft.value)
     const newRevision = await saveBrandProfile(valid, revision.value)

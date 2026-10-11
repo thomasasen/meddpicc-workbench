@@ -103,7 +103,9 @@ test('Dokumentgestaltung: Logo prüfen, speichern und ohne Datenverlust entferne
   await expect(page.getByRole('img', { name: 'Aktuell ausgewähltes Firmenlogo' })).toBeVisible()
 
   await page.getByRole('button', { name: 'Logo entfernen' }).click()
+  await expect(page.getByText('Kein Firmenlogo hinterlegt.')).toBeVisible()
   await page.getByRole('button', { name: 'Änderungen speichern' }).click()
+  await expect(page.getByText('CI-Profil dauerhaft in diesem Browser gespeichert.')).toBeVisible()
   await page.reload()
   await expect(page.getByText('Kein Firmenlogo hinterlegt.')).toBeVisible()
 })
