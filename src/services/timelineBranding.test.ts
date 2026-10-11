@@ -48,6 +48,14 @@ describe('Corporate Design SVG/PNG-Export', () => {
     expect(svg).not.toContain('MEDDPICC TOOLBOX')
   })
 
+  it('verwendet nur validierte, eingebettete PNG-Daten und kein ausführbares SVG', () => {
+    const withLogo = brand({ mimeType: 'image/png', base64: 'iVBORw0KGgoAAAANSUhEUgAAAKAAAAAkCAYAAAAO7jHjAAAAmklEQVR42u3b0Q1AMBSG0bqbWMgqZrGKhYzCAkIl2ityzrOn5svfFy0FAACgo6H2w3FadsdFrW2dh1cCFB4tQwzx0dJdQyE+MiMM8ZEZYTgaMoX1I3MFLSDfWkAQIAIEASJAECACBAEiQBAgAgQB8r8Aa//lh6fO2rKAfO8KtoL0WL/LBRQhreO7vYJFSMv4SvEwnaTwAAAAUhw4/SwyqIE0/AAAAABJRU5ErkJggg==', width: 160, height: 36 })
+    const svg = buildCustomerTimelineSvg(plan(), { title: 'Beispiel', customerName: 'Kunde', brand: withLogo })
+    expect(svg).toContain('data-brand-logo="true"')
+    expect(svg).toContain('href="data:image/png;base64,')
+    expect(svg).not.toContain('<foreignObject')
+  })
+
   it('verwirft XML- und Datenschema-Fremdeingaben vor der SVG-Erzeugung', () => {
     expect(() => buildCustomerTimelineSvg(plan(), {
       title: 'Export', customerName: 'Kunde',
