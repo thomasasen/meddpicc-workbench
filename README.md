@@ -107,7 +107,7 @@ Die zugehörige [Demo-Opportunity](examples/demo-opportunity.meddpicc) verwendet
 
 **Seit den Quick-Payback-Merges und PR #64 in `main`**, mit validierter Schnellberechnung und Projektmodus.
 
-- [Quick-Payback-Tool](/meddpicc-workbench/#/tools/quick-payback) mit drei EUR-Inputs, transparenter Formel, Grenzfällen, fiktivem Demo und kopierbarer Schätzung.
+- [Quick-Payback-Tool](https://thomasasen.github.io/meddpicc-workbench/#/tools/quick-payback) mit drei EUR-Inputs, transparenter Formel, Grenzfällen, fiktivem Demo und kopierbarer Schätzung.
 - Ohne Login, Deal-State, Datenspeicherung, AI oder Backend. Kein ROI, keine finanzielle Freigabe und kein Forecast.
 - [Primärquellen, simulierte Red-Teams und QA-Gates](docs/QUICK_PAYBACK_SOURCE_QA.md).
 
