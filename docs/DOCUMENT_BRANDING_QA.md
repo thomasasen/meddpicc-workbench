@@ -43,3 +43,7 @@ Fachliche Regressionen: bestehende Business-Case-, Metrics-, Cost-of-Delay-, Val
 P0: Allgemeiner Datenverlustschutz #65 und Netzwerkaudit/Dependency-Audit #66 getrennt bearbeiten. P1: Eingebettete Unicode-Fonts inklusive Lizenz-/PDF-Regressionsprüfung. P1: Visuelle Sichtprüfung jeder gerenderten Seite und aller Logo-Grenzfälle vor Merge-Empfehlung. P2: CI-Branding für SVG/PNG-Rückwärtsplanung als separater Scope. Fehlende echte QA-Ergebnisse dürfen nicht aus dieser Planung abgeleitet werden.
 
 **Merge-Sperre:** Kein Merge ohne ausdrückliche Freigabe des Nutzers für diesen konkreten PR.
+
+## Abnahme der optionalen Gestaltungswerte
+
+Die Akzentfarbe wird als 2,4-Punkt-Zierlinie am unteren Rand jedes gebrandeten Mastheads eingesetzt. Sie färbt keine wirtschaftlichen Statusinformationen. Eine optionale Textfarbe wird im PDF-Footer nur verwendet, wenn sie auf weißem Hintergrund mindestens ein Kontrastverhältnis von 4,5:1 erreicht; andernfalls bleibt die bestehende gut lesbare Schriftfarbe. Die optionale Kontaktinformation ergänzt Website und freien Footer-Text; Überlänge wird mittels der gemessenen Schriftbreite gekürzt. Die Regel gilt für alle fünf Reporttypen.

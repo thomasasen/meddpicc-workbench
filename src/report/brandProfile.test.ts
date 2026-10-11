@@ -27,6 +27,9 @@ export const brandedLight = () =>
     primaryColor: '#F6EDD4',
     accentColor: '#FFDD22',
     defaultAuthor: 'Beispielberatung',
+    website: 'https://beispiel.de',
+    contact: 'kontakt@beispiel.de',
+    textColor: '#5B1C6A',
     footerNote: 'Nur für den vereinbarten Zweck',
     logo: { mimeType: 'image/jpeg', base64: TALL_JPEG, width: 45, height: 165 },
   })

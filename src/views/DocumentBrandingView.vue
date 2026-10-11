@@ -48,6 +48,11 @@ const primaryContrast = computed(() =>
     ? Math.max(contrastRatio(draft.value.primaryColor, '#FFFFFF'), contrastRatio(draft.value.primaryColor, '#172033'))
     : 0,
 )
+const textContrast = computed(() =>
+  draft.value.textColor && /^#[0-9a-f]{6}$/i.test(draft.value.textColor)
+    ? contrastRatio(draft.value.textColor, '#FFFFFF')
+    : 0,
+)
 const accentContrast = computed(() =>
   /^#[0-9a-f]{6}$/i.test(draft.value.accentColor) ? contrastRatio(draft.value.accentColor, '#FFFFFF') : 0,
 )
@@ -352,6 +357,9 @@ function downloadPreview(): void {
               >Optionale Textfarbe (Hex)
               <input v-model="draft.textColor" spellcheck="false" maxlength="7" placeholder="#172033"
             /></label>
+            <p v-if="draft.textColor && textContrast < 4.5" class="branding-warning" role="status">
+              Die Textfarbe ist auf Weiß zu kontrastarm. Die PDF-Fußzeile erhält automatisch eine gut lesbare Ersatzfarbe.
+            </p>
           </div>
           <p class="branding-hint">
             Hell/Dunkel-Kontrast wird im PDF automatisch berücksichtigt. Warn- und Risikofarben werden nicht umgefärbt.
