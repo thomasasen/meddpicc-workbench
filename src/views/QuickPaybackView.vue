@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { loadBrandProfile } from '../services/brandProfileStore'
 import { ArrowLeft, Calculator, ClipboardCopy, RotateCcw } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import SoftwarePaybackPanel from '../components/SoftwarePaybackPanel.vue'
@@ -81,7 +80,6 @@ async function copySummary() {
             <span>Value &amp; Metrics</span>
           </span>
         </RouterLink>
-        <RouterLink class="button button-quiet" to="/settings/document-design">Dokumentgestaltung</RouterLink>
         <RouterLink class="button button-quiet button-with-icon" to="/">
           <ArrowLeft :size="17" aria-hidden="true" />
           Alle Microtools

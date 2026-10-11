@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { loadBrandProfile } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
 import { ArrowLeft, ArrowRight, Download, RotateCcw } from '@lucide/vue'
 import {
@@ -102,8 +101,7 @@ function download(bytes: Uint8Array, filename: string) {
 async function exportPdf() {
   if (!selected.value || !result.value.success) return
   try {
-    const { profile } = await loadBrandProfile()
-    download(await buildCostOfDelayPdf(draft.value, result.value, selected.value, { brand: profile }), 'cost-of-delay-steckbrief.pdf')
+    download(await buildCostOfDelayPdf(draft.value, result.value, selected.value), 'cost-of-delay-steckbrief.pdf')
     notice.value = 'PDF mit aktuellen Modellannahmen erstellt.'
   } catch {
     notice.value = 'Der PDF-Export ist fehlgeschlagen.'
@@ -141,7 +139,6 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
           <span class="brand-mark">M</span>
           <span class="brand-copy"><strong>MEDDPICC Toolbox</strong><span>Value &amp; Metrics</span></span>
         </RouterLink>
-        <RouterLink class="button button-quiet" to="/settings/document-design">Dokumentgestaltung</RouterLink>
         <RouterLink class="button button-quiet button-with-icon" to="/">
           <ArrowLeft :size="17" aria-hidden="true" /> Alle Microtools
         </RouterLink>
