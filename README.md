@@ -8,10 +8,16 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 
 > **Was hilft mir bei meiner aktuellen Aufgabe – und wie komme ich schnell zu einem brauchbaren Ergebnis?**
 
+### Aktueller Issue-Backlog (11.10.2026)
 
-### Metric Builder – Value & Metrics (Feature-Branch)
+**Zuerst P0:** [#65 Datenverlust/Recovery](https://github.com/thomasasen/meddpicc-workbench/issues/65) und [#66 Privacy/Security](https://github.com/thomasasen/meddpicc-workbench/issues/66). **Danach P1:** [#67 Accessibility](https://github.com/thomasasen/meddpicc-workbench/issues/67), [#68 Offline](https://github.com/thomasasen/meddpicc-workbench/issues/68), [#69 Migrationen](https://github.com/thomasasen/meddpicc-workbench/issues/69), [#70 Performance](https://github.com/thomasasen/meddpicc-workbench/issues/70). **P2:** sechs neue fachliche Tool-Slices [#71–#76](https://github.com/thomasasen/meddpicc-workbench/issues/6) und das optionale [Exportpaket #77](https://github.com/thomasasen/meddpicc-workbench/issues/77).
 
-Der Metric Builder führt über Problem, Before/After und wirtschaftliche Realisierung zu einer überprüfbaren Metric Card. Alle sieben Metric-Typen verwenden die bestehenden Software-Payback-Formeln. Reine Kapazität, Risiko und qualitative Effekte werden nicht automatisch monetarisiert. Ein kundenfähiger PDF-Steckbrief entsteht lokal im Browser. Die ausdrückliche Übernahme in Software-Payback fügt nur **nicht aktivierte** Metrics hinzu; vorhandene Kosten bleiben bei der vorgesehenen Rücknavigation erhalten. Quellen, Formeln und fachliche Abnahme: [Metric Builder Red Team](docs/METRIC_BUILDER_RED_TEAM.md). Stand: Feature-Branch mit abgeschlossener technischer und visueller Abnahme ([CI #38007800785](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38007800785): 115 Playwright-Tests bestanden, 1 übersprungen, Format/Lint/Unit/Build/Pages/PDF erfolgreich); PR #60 wartet auf ausdrückliche Nutzerfreigabe, nicht in `main`.
+Die historischen Roadmap-Issues [#4](https://github.com/thomasasen/meddpicc-workbench/issues/4), [#5](https://github.com/thomasasen/meddpicc-workbench/issues/5) und [#7](https://github.com/thomasasen/meddpicc-workbench/issues/7) wurden als durch die neue Toolbox-Strategie **ersetzt** geschlossen (`not_planned`), nicht als vollständig implementiert. [#6](https://github.com/thomasasen/meddpicc-workbench/issues/6) und [#8](https://github.com/thomasasen/meddpicc-workbench/issues/8) bleiben Sammelissues. [Details und vollständiger Issue-Abgleich](docs/ISSUE_TRIAGE_2026-10-11.md).
+
+
+### Metric Builder – Value & Metrics (seit PR #60 in `main`)
+
+Der Metric Builder führt über Problem, Before/After und wirtschaftliche Realisierung zu einer überprüfbaren Metric Card. Alle sieben Metric-Typen verwenden die bestehenden Software-Payback-Formeln. Reine Kapazität, Risiko und qualitative Effekte werden nicht automatisch monetarisiert. Ein kundenfähiger PDF-Steckbrief entsteht lokal im Browser. Die ausdrückliche Übernahme in Software-Payback fügt nur **nicht aktivierte** Metrics hinzu; vorhandene Kosten bleiben bei der vorgesehenen Rücknavigation erhalten. Quellen, Formeln und fachliche Abnahme: [Metric Builder Red Team](docs/METRIC_BUILDER_RED_TEAM.md). PR #60 wurde am 10.10.2026 nach erfolgreicher Abnahme nach `main` gemergt; der ursprüngliche Qualitätslauf [CI #38007800785](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38007800785) bleibt als historischer Nachweis.
 
 ### Metrics – Knowledge und Checklist
 
@@ -75,7 +81,7 @@ Die zugehörige [Demo-Opportunity](examples/demo-opportunity.meddpicc) verwendet
 **In `main` integriert:** [PR #59](https://github.com/thomasasen/meddpicc-workbench/pull/59). Die Software-Payback-Engine nutzt weiterhin die V4-Basisrechnung. Neu sind ein konservativer und ein optimistischer Fall mit einzeln editierbaren Änderungen bei Kundennutzen, Einmalkosten und Nutzenverzögerung. Ausgewählte Variante, KPI-Zusammenfassung, V4-Wertverlauf und Kunden-PDF basieren auf derselben Monatsrechnung; die Basis-Eingaben bleiben unverändert. Kündigungs- und Lizenztermine ändern sich nicht automatisch.
 
 - Im Abschnitt **„Wie belastbar ist die Wirtschaftlichkeit?“** werden Amortisation, Endsaldo und Abweichung für alle drei Fälle ausgewiesen. Die V4-Fortführung wird für den aktiven Fall separat und nur unter erfüllten Bedingungen dargestellt.
-- **Kundenbericht 4 Seiten** einschließlich übersichtlichem Szenariovergleich; **Finance-Anhang** mit vollständiger Basis-Herleitung und eigenem Sensitivitätskapitel. Alle gerenderten Beispielseiten, Original-PDFs und Desktop-/Mobilbilder sind in der [CI-Abnahme](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38003943054) dokumentiert.
+- **Kundenbericht mit vier Managementseiten**, bei umfangreichen Angaben weiteren Anhangseiten, einschließlich Szenariovergleich; **Finance-Anhang** mit vollständiger Basis-Herleitung und eigenem Sensitivitätskapitel. Alle gerenderten Beispielseiten, Original-PDFs und Desktop-/Mobilbilder sind in der [CI-Abnahme](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38003943054) dokumentiert.
 - [Fachliche Herleitung, fünf simulierte EB-Reviews in drei Phasen, gefundene Fehler und visuelle Abnahme](docs/BUSINESS_CASE_SCENARIO_RED_TEAM.md). Szenarien sind keine Prognosewahrscheinlichkeiten; Ergebnisse sind keine Cashflow- oder Liquiditätsrechnung.
 
 ### Quick-Payback-GUI: Feinschliff und Browser-QS (09.10.2026)
@@ -83,11 +89,11 @@ Die zugehörige [Demo-Opportunity](examples/demo-opportunity.meddpicc) verwendet
 - Der Einstieg erfolgt über zwei beschriftete Auswahlflächen: **Schnellberechnung** (drei Werte) oder **Softwareprojekt & Kunden-Metrics** (zeitlicher Verlauf). Der Nutzer wird in der Projektansicht durch **Kosten → Kundennutzen → Ergebnis** geführt.
 - Kurztexte statt Bedienungsanleitung; passende Aktionen und ein ausdrücklich fiktives Beispiel direkt im ersten Abschnitt. Seltene Nachweis-/Zeitangaben sind in „Zeitplan & Herkunft“ aufklappbar.
 - Einheitliche Feldhöhen, konsistente Spaltenausrichtung, mobile Kartenköpfe und Tastaturfokus; die Monatstabelle scrollt auf schmalen Displays **innerhalb ihres Rahmens**.
-- [Dokumentierte UX-Abnahme, echte Chromium-Bilder und Tests](docs/QUICK_PAYBACK_UX_QA.md) – [CI #37904430171](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37904430171): **230 Unit-Tests, 93 Playwright-Tests bestanden, 1 übersprungen**; Code ist im Feature-Branch, **kein Merge auf `main`**.
+- [Dokumentierte UX-Abnahme, echte Chromium-Bilder und Tests](docs/QUICK_PAYBACK_UX_QA.md) – [CI #37904430171](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37904430171): **230 Unit-Tests, 93 Playwright-Tests bestanden, 1 übersprungen**; diese Version ist inzwischen in `main` enthalten.
 
 ### Softwareprojekt & Customer Metrics · Quick-Payback-Erweiterung (PR #53)
 
-**Technisch und visuell geprüft im Feature-Branch, noch nicht in `main`.** [CI #37862223720](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37862223720): 230 Unit-Tests, 91 Playwright-Tests bestanden (1 übersprungen), Format/Lint/Build/Pages-Prüfung erfolgreich.
+**Seit PR #53 im aktuellen `main`-Stand enthalten;** der folgende CI-Lauf belegt die damalige Feature-Abnahme. [CI #37862223720](https://github.com/thomasasen/meddpicc-workbench/actions/runs/37862223720): 230 Unit-Tests, 91 Playwright-Tests bestanden (1 übersprungen), Format/Lint/Build/Pages-Prüfung erfolgreich.
 
 - **Schnellberechnung** bleibt der Standard mit drei EUR-Eingaben. Der zusätzliche Modus **„Softwareprojekt & Kunden-Metrics“** ist nur bei Auswahl sichtbar.
 - Mehrere einmalige Implementierungs-/Migrationskosten, laufende SaaS-Kosten und tatsächlich wegfallende Altsystemkosten; monatlich/jährlich als wirtschaftliche Beträge, nicht als exakte Zahlungsströme.
@@ -99,9 +105,9 @@ Die zugehörige [Demo-Opportunity](examples/demo-opportunity.meddpicc) verwendet
 
 ### Quick Payback – Value & Metrics Tool (T3)
 
-**Implementierung auf `feature/quick-payback-tool`, visuelle/technische Draft-Abnahme offen; kein Merge auf `main`.**
+**Seit den Quick-Payback-Merges und PR #64 in `main`**, mit validierter Schnellberechnung und Projektmodus.
 
-- [Quick-Payback-Tool](/meddpicc-workbench/#/tools/quick-payback) mit drei EUR-Inputs, transparenter Formel, Grenzfällen, fiktivem Demo und kopierbarer Schätzung.
+- [Quick-Payback-Tool](https://thomasasen.github.io/meddpicc-workbench/#/tools/quick-payback) mit drei EUR-Inputs, transparenter Formel, Grenzfällen, fiktivem Demo und kopierbarer Schätzung.
 - Ohne Login, Deal-State, Datenspeicherung, AI oder Backend. Kein ROI, keine finanzielle Freigabe und kein Forecast.
 - [Primärquellen, simulierte Red-Teams und QA-Gates](docs/QUICK_PAYBACK_SOURCE_QA.md).
 
@@ -118,8 +124,8 @@ Die zugehörige [Demo-Opportunity](examples/demo-opportunity.meddpicc) verwendet
 | Status | Bedeutung |
 | --- | --- |
 | ✅ **Umgesetzt** | Funktion ist implementiert und nutzbar. |
-| 🟡 **In Draft-Abnahme** | Funktion liegt im Feature-PR, ist aber noch nicht gemergt und benötigt Freigabe. |
-| 🟡 **Als Nächstes** | Inhalt und Nutzen sind festgelegt; Umsetzung ist in einer der nächsten Phasen vorgesehen. |
+| 🟡 **In Draft-Abnahme** | Historischer / zukünftiger Feature-Branch, noch nicht nach `main` übernommen. |
+| ⚪ **Nach Hardening** | Kandidat für P2, erst nach P0/P1 und einem konkreten separaten Issue priorisieren. |
 | ⚪ **Geplant** | Funktion gehört zur Roadmap, wird aber später umgesetzt. |
 
 ---
@@ -146,9 +152,9 @@ Tools erledigen eine konkrete Aufgabe: berechnen, vorbereiten, strukturieren ode
 | Funktion | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
 | **Quick Payback** | ✅ In main | Schneller Payback und optionaler Softwareprojekt-Modus mit zeitlichem SaaS-/Nutzenverlauf und Kunden-Metrics. | Du kannst dem Kunden schnell und verständlich zeigen, **wann der Break-even erreicht wird**, ohne selbst Formeln oder Excel aufzubauen. |
-| **Metric Builder** | 🟡 PR #60 geprüft, wartet auf Freigabe | Hilft, aus einem Pain oder gewünschten Outcome eine belastbare, nachvollziehbare Kennzahl abzuleiten. | Du kommst schneller von Aussagen wie „das kostet uns viel Zeit“ zu einer Metric, mit der sich ein Business Case wirklich begründen lässt. |
-| **Cost of Delay** | 🟡 Als Nächstes | Berechnet, welchen wirtschaftlichen Wert der Kunde pro Woche oder Monat verliert, wenn sich die Veränderung verzögert. | Du kannst **Why now?** quantifizieren und Dringlichkeit mit wirtschaftlichen Auswirkungen statt nur mit Bauchgefühl begründen. |
-| **Business Case / Value Bridge** | 🟡 Als Nächstes | Führt Nutzen, Kosten, Annahmen und relevante Metrics zu einem nachvollziehbaren Business Case zusammen. | Du erhältst schneller eine belastbare Grundlage für die Kundendiskussion und kannst Value konsistent gegenüber Management und Economic Buyer darstellen. |
+| **Metric Builder** | ✅ Umgesetzt | Hilft, aus einem Pain oder gewünschten Outcome eine belastbare, nachvollziehbare Kennzahl abzuleiten. | Du kommst schneller von Aussagen wie „das kostet uns viel Zeit“ zu einer Metric, mit der sich ein Business Case wirklich begründen lässt. |
+| **Cost of Delay** | ✅ Umgesetzt | Berechnet, welchen wirtschaftlichen Wert der Kunde pro Woche oder Monat verliert, wenn sich die Veränderung verzögert. | Du kannst **Why now?** quantifizieren und Dringlichkeit mit wirtschaftlichen Auswirkungen statt nur mit Bauchgefühl begründen. |
+| **Business Case / Value Bridge** | ✅ Umgesetzt | Führt Nutzen, Kosten, Annahmen und relevante Metrics zu einem nachvollziehbaren Business Case zusammen. | Du erhältst schneller eine belastbare Grundlage für die Kundendiskussion und kannst Value konsistent gegenüber Management und Economic Buyer darstellen. |
 
 ### Discovery & Pain
 
@@ -214,10 +220,10 @@ Jeder Checklist-Punkt soll bei Bedarf erklären:
 | --- | --- | --- | --- |
 | **Economic-Buyer-Termin** | ✅ Umgesetzt | Prüft vor dem Termin, ob Value, Metrics, Kernfragen und gewünschtes Ergebnis ausreichend vorbereitet sind. | Du kannst dich in wenigen Minuten auf einen wichtigen Executive-Termin vorbereiten und übersiehst weniger kritische Punkte. |
 | **Discovery Call** | ✅ Umgesetzt | Prüft vor einem Discovery-Gespräch Pain, Impact, Stakeholder, Hypothesen und gewünschte Erkenntnisse. | Du gehst strukturierter ins Gespräch und kannst vorhandene Gesprächszeit gezielter nutzen. |
-| **POC / Pilot** | 🟡 Als Nächstes | Prüft Success Criteria, Verantwortliche, Commitment, Entscheidungsweg und den Prozess nach erfolgreichem POC. | Du reduzierst das Risiko eines aufwendigen POCs, der technisch funktioniert, aber anschließend keine Entscheidung auslöst. |
-| **Pricing / Angebot** | 🟡 Als Nächstes | Prüft vor dem kommerziellen Angebot, ob Value, Entscheidungsweg und kommerzieller Kontext ausreichend verstanden sind. | Du verschickst Pricing seltener zu früh und kannst Preis stärker im Kontext des geschaffenen Value positionieren. |
-| **Go-Live / Decision Process** | 🟡 Als Nächstes | Prüft Zeitplan, Verantwortlichkeiten, Abhängigkeiten und relevante Entscheidungs-/Freigabeschritte. | Du kannst einen Go-Live-Plan vor dem Kundengespräch schnell plausibilisieren und vermeidest leicht übersehene Prozesslücken. |
-| **Closing / Paper Process** | 🟡 Als Nächstes | Prüft Einkauf, Legal, Datenschutz, Security, Signaturweg und weitere administrative Schritte vor der Schlussphase. | Du erkennst früher, ob ein Deal wirklich close-ready ist oder noch administrative Arbeit fehlt. |
+| **POC / Pilot** | ⚪ Geplant nach Hardening | Prüft Success Criteria, Verantwortliche, Commitment, Entscheidungsweg und den Prozess nach erfolgreichem POC. | Du reduzierst das Risiko eines aufwendigen POCs, der technisch funktioniert, aber anschließend keine Entscheidung auslöst. |
+| **Pricing / Angebot** | ⚪ Geplant nach Hardening | Prüft vor dem kommerziellen Angebot, ob Value, Entscheidungsweg und kommerzieller Kontext ausreichend verstanden sind. | Du verschickst Pricing seltener zu früh und kannst Preis stärker im Kontext des geschaffenen Value positionieren. |
+| **Go-Live / Decision Process** | ⚪ Geplant nach Hardening | Prüft Zeitplan, Verantwortlichkeiten, Abhängigkeiten und relevante Entscheidungs-/Freigabeschritte. | Du kannst einen Go-Live-Plan vor dem Kundengespräch schnell plausibilisieren und vermeidest leicht übersehene Prozesslücken. |
+| **Closing / Paper Process** | ⚪ Geplant nach Hardening | Prüft Einkauf, Legal, Datenschutz, Security, Signaturweg und weitere administrative Schritte vor der Schlussphase. | Du erkennst früher, ob ein Deal wirklich close-ready ist oder noch administrative Arbeit fehlt. |
 
 ### Themen-Checklists
 
@@ -249,7 +255,7 @@ Die Wissenshilfe ist für Situationen gedacht, in denen du einen MEDDPICC-Begrif
 | **Paper Process** | ✅ Umgesetzt | Welche administrativen Schritte liegen zwischen Entscheidung und Unterschrift? | Du kannst Einkauf, Legal, Security und Signaturweg früher berücksichtigen und besser vom Decision Process unterscheiden. |
 | **Pain & Implication** | ✅ Umgesetzt | Wie wird aus einem Problem eine relevante geschäftliche Konsequenz? | Du bekommst eine schnelle Gedankenstütze, um Discovery tiefer zu führen und Pain nicht nur oberflächlich zu dokumentieren. |
 | **Champion** | ✅ Umgesetzt | Was macht einen echten Champion aus und welche Signale werden häufig überschätzt? | Du kannst Champion und engagierten Ansprechpartner klarer voneinander unterscheiden. |
-| **Competition** | 🟡 In Draft-Abnahme | Warum gehören Status quo, Eigenbau und andere Initiativen genauso zum Wettbewerb? | Du entwickelst ein vollständigeres Bild der tatsächlichen Alternativen und kannst deine Verkaufsstrategie besser darauf ausrichten. |
+| **Competition** | ✅ Umgesetzt | Warum gehören Status quo, Eigenbau und andere Initiativen genauso zum Wettbewerb? | Du entwickelst ein vollständigeres Bild der tatsächlichen Alternativen und kannst deine Verkaufsstrategie besser darauf ausrichten. |
 
 ---
 
@@ -259,11 +265,11 @@ Diese Funktionen werden erst relevant, wenn mehrere Tools produktiv sind.
 
 | Funktion | Status | Was macht sie? | Vorteil für den Account Manager |
 | --- | --- | --- | --- |
-| **Ergebnis an Folgetool übergeben** | ⚪ Später geplant | Übernimmt relevante Ergebnisse eines Tools direkt in ein passendes nächstes Tool. | Du musst dieselben Informationen nicht mehrfach eingeben. |
-| **Temporärer Session Context** | ⚪ Später geplant | Hält während einer Arbeitssession bereits bekannte Informationen für mehrere Tools verfügbar. | Mehrere Services lassen sich nacheinander nutzen, ohne jedes Mal bei null anzufangen. |
+| **Ergebnis an Folgetool übergeben** | ✅ Für ausgewählte Tools | Übernimmt relevante Ergebnisse eines Tools direkt in ein passendes nächstes Tool. | Du musst dieselben Informationen nicht mehrfach eingeben. |
+| **Temporärer Session Context** | ✅ Für ausgewählte Handoffs | Hält während einer Arbeitssession bereits bekannte Informationen für mehrere Tools verfügbar. | Mehrere Services lassen sich nacheinander nutzen, ohne jedes Mal bei null anzufangen. |
 | **Gemeinsame kundenfähige Exporte** | ⚪ Später geplant | Bündelt Ergebnisse mehrerer Services in einem konsistenten Output. | Du kannst Ergebnisse schneller in Kundenterminen oder internen Reviews weiterverwenden. |
 | **PDF / Präsentations-Export** | ⚪ Später geplant | Erstellt aus geeigneten Ergebnissen direkt nutzbare Dokument- oder Präsentationsformate. | Weniger manuelle Nacharbeit in PowerPoint oder anderen Dokumenten. |
-| **Deal Pack Export** | ⚪ Später geplant | Stellt ausgewählte Ergebnisse einer Arbeitssession als kompaktes Paket zusammen. | Du kannst relevante Ergebnisse weitergeben oder dokumentieren, ohne dafür ein vollständiges Deal-System zu pflegen. |
+| **Optionales Tool-Ergebnispaket (#77)** | ⚪ Geplant nach Hardening | Stellt ausgewählte Ergebnisse einer Arbeitssession als kompaktes Paket zusammen. | Du kannst relevante Ergebnisse weitergeben oder dokumentieren, ohne dafür ein vollständiges Deal-System zu pflegen. |
 
 ---
 
@@ -349,7 +355,7 @@ Vor Merge eines Feature-PRs werden mindestens Formatierung, Lint, Unit Tests, Pr
 MIT. Siehe LICENSE.
 
 
-### Value Bridge – vom Pain zur nachvollziehbaren Wirkung (Feature-Branch)
+### Value Bridge – vom Pain zur nachvollziehbaren Wirkung (seit PR #62 in `main`)
 
 Route: `/#/tools/value-bridge`. Drei Schritte von Ausgangssituation, Pain und Konsequenz über das gewünschte Geschäftsergebnis zu messbaren Veränderungen und der begrenzten wirtschaftlichen Wirkung. Ohne bestätigte EUR-Realisierung zeigt das Tool qualitative und kapazitätsbezogene Ergebnisse statt fiktiver Amortisation. Bei konkret angenommenem finanziellen Nutzen nutzt es die vorhandene Business-Case-Monatsengine (36/60 Monate), ohne diese zu duplizieren. Kundenversion, kopierbare Zusammenfassung und PDF werden lokal im Browser erstellt.
 
@@ -357,7 +363,7 @@ Einmalige ausdrückliche Übernahme aus Metric Builder, Software Business Case u
 
 ### UX/UI- und Report-Redesign
 
-Der übergreifende Redesign-Audit, die vollständige Routen-/Report-Inventur und der priorisierte Umsetzungsplan stehen in [docs/REDESIGN_AUDIT_2026-10-10.md](docs/REDESIGN_AUDIT_2026-10-10.md). Die technischen Design-Grundlagen sind in [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) und [docs/REPORT_VISUAL_SYSTEM.md](docs/REPORT_VISUAL_SYSTEM.md) dokumentiert. Ein Draft-Branch ist keine Nutzerfreigabe oder Aussage zur visuellen Fertigstellung sämtlicher Ansichten.
+Der ursprüngliche [Redesign-Audit](docs/REDESIGN_AUDIT_2026-10-10.md) dokumentiert den Ausgangspunkt. Die gemeinsamen Regeln stehen in [Design System](docs/DESIGN_SYSTEM.md) und [Report Visual System](docs/REPORT_VISUAL_SYSTEM.md); das Ergebnis wurde mit [PR #64](https://github.com/thomasasen/meddpicc-workbench/pull/64) gemergt. Eine vollständige Accessibility-/Security-Zertifizierung ist damit nicht verbunden.
 
 ### PR #64: UI-/Report-Redesign – geprüfter Stand am 11.10.2026
 
