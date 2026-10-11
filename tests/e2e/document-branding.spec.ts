@@ -1,4 +1,6 @@
 import { expect, test } from '@playwright/test'
+import { createHash } from 'node:crypto'
+import { readFileSync } from 'node:fs'
 
 const route = '/meddpicc-workbench/#/settings/document-design'
 
@@ -14,9 +16,22 @@ test('Dokumentgestaltung: Speichern, Reload, Import/Export, Vorschau und Reset',
   await expect(page.getByLabel('Firmenname')).toHaveValue('Fiktive Industrie GmbH')
   await page.getByRole('button', { name: 'PDF-Vorschau erzeugen' }).click()
   await expect(page.locator('iframe[title="Fiktive PDF-Vorschau"]')).toBeVisible()
+  const previewHash = await page.evaluate(async () => {
+    const preview = document.querySelector('iframe[title="Fiktive PDF-Vorschau"]')
+    if (!(preview instanceof HTMLIFrameElement)) throw new Error('Die Vorschau fehlt.')
+    const bytes = await (await fetch(preview.src)).arrayBuffer()
+    const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))
+    return Array.from(digest, (n) => n.toString(16).padStart(2, '0')).join('')
+  })
   const download = page.waitForEvent('download')
   await page.getByRole('button', { name: 'Vorschau herunterladen' }).click()
-  expect((await download).suggestedFilename()).toBe('ci-vorschau-customer.pdf')
+  const downloadedPreview = await download
+  expect(downloadedPreview.suggestedFilename()).toBe('ci-vorschau-customer.pdf')
+  const savedPdf = await downloadedPreview.path()
+  expect(savedPdf).toBeTruthy()
+  if (savedPdf) {
+    expect(createHash('sha256').update(readFileSync(savedPdf)).digest('hex')).toBe(previewHash)
+  }
   const profile = page.waitForEvent('download')
   await page.getByRole('button', { name: 'CI-Profil exportieren' }).click()
   const downloaded = await profile
