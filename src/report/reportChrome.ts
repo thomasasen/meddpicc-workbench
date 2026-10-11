@@ -1,5 +1,5 @@
 import { rgb, type PDFFont, type PDFPage, type RGB, type PDFDocument, type PDFImage } from 'pdf-lib'
-import { hexToRgb, readableInkOn, validateBrandProfile, type BrandProfile } from './brandProfile'
+import { contrastRatio, hexToRgb, readableInkOn, validateBrandProfile, type BrandProfile } from './brandProfile'
 
 export type ReportAudience = 'customer' | 'internal'
 export interface ReportOptions {
@@ -97,6 +97,10 @@ export function drawReportFooter(
     pagePrefix = 'Seite ',
     branding,
   } = options
+  // Individuelle Textfarbe nur bei WCAG-tauglichem Kontrast auf weißem Papier.
+  const requestedInk = branding?.profile?.textColor
+  const footerInk =
+    requestedInk && contrastRatio(requestedInk, '#FFFFFF') >= 4.5 ? rgbHex(requestedInk) : textColor
   pages.forEach((page, index) => {
     const number = pagePrefix + (index + 1) + (showTotal ? ' / ' + pages.length : '')
     const numberWidth = bold.widthOfTextAtSize(number, fontSize)
@@ -112,24 +116,26 @@ export function drawReportFooter(
       y: textY,
       font: normal,
       size: fontSize,
-      color: textColor,
+      color: footerInk,
     })
     page.drawText(number, {
       x: right - numberWidth,
       y: textY,
       font: bold,
       size: fontSize,
-      color: textColor,
+      color: footerInk,
     })
     // Fachlich verpflichtende Disclaimer werden nicht durch frei konfigurierten Text ersetzt.
-    const extra = [branding?.profile?.website, branding?.profile?.footerNote].filter(Boolean).join(' | ')
+    const extra = [branding?.profile?.website, branding?.profile?.contact, branding?.profile?.footerNote]
+      .filter(Boolean)
+      .join(' | ')
     if (extra) {
       page.drawText(fitText(extra, normal, 6.3, right - left - 8), {
         x: left,
         y: Math.max(9, textY - 11),
         font: normal,
         size: 6.3,
-        color: textColor,
+        color: footerInk,
       })
     }
   })
@@ -175,6 +181,16 @@ export function drawReportMasthead(options: ReportMastheadOptions): void {
   const foreground = branding?.onPrimary ?? rgb(1, 1, 1)
   const soft = foreground
   page.drawRectangle({ x: 0, y: height - headerHeight, width, height: headerHeight, color: base })
+  // Reine Zierlinie, nicht auf KPIs/Warnings angewandt. Neutrale Exporte bleiben ohne CI-Streifen.
+  if (branding?.profile) {
+    page.drawRectangle({
+      x: 0,
+      y: height - headerHeight,
+      width,
+      height: 2.4,
+      color: branding.accent,
+    })
+  }
   const markTop = height - 10
   let companyX = left
   if (branding?.image) {
