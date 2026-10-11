@@ -379,7 +379,8 @@ async function downloadReport(kind: 'customer' | 'finance') {
     const safeName = reportProject.value.replace(/[^a-z0-9_-]+/gi, '-').slice(0, 55) || 'softwareprojekt'
     const prefix = kind === 'customer' ? 'kundenbericht-' : 'finance-anhang-'
     saveBlob(new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }), prefix + safeName + '.pdf')
-    reportStatus.value = (kind === 'customer' ? 'Kundenbericht erstellt.' : 'Finance-Anhang erstellt.') + (warning ? ' ' + warning : '')
+    reportStatus.value =
+      (kind === 'customer' ? 'Kundenbericht erstellt.' : 'Finance-Anhang erstellt.') + (warning ? ' ' + warning : '')
   } catch {
     reportStatus.value = 'PDF-Erstellung fehlgeschlagen. Bitte Eingaben prüfen und erneut versuchen.'
   }

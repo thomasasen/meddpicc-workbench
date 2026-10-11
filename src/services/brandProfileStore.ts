@@ -92,7 +92,6 @@ export async function saveBrandProfile(profile: BrandProfile | null, expectedRev
   }
 }
 
-
 export interface ReportBrandResolution {
   profile: BrandProfile | null
   warning: string | null
@@ -110,7 +109,8 @@ export async function loadBrandForReport(): Promise<ReportBrandResolution> {
   } catch {
     return {
       profile: null,
-      warning: 'Die lokale CI-Konfiguration konnte nicht gelesen werden. Das PDF wurde neutral ohne Firmenbranding erstellt.',
+      warning:
+        'Die lokale CI-Konfiguration konnte nicht gelesen werden. Das PDF wurde neutral ohne Firmenbranding erstellt.',
     }
   }
 }
