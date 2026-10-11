@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { loadBrandProfile } from '../services/brandProfileStore'
+import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
 import { ArrowLeft, ArrowRight, Download, RotateCcw } from '@lucide/vue'
 import {
@@ -102,12 +102,12 @@ function download(bytes: Uint8Array, filename: string) {
 async function exportPdf() {
   if (!selected.value || !result.value.success) return
   try {
-    const { profile } = await loadBrandProfile()
+    const { profile, warning } = await loadBrandForReport()
     download(
       await buildCostOfDelayPdf(draft.value, result.value, selected.value, { brand: profile }),
       'cost-of-delay-steckbrief.pdf',
     )
-    notice.value = 'PDF mit aktuellen Modellannahmen erstellt.'
+    notice.value = 'PDF mit aktuellen Modellannahmen erstellt.' + (warning ? ' ' + warning : '')
   } catch {
     notice.value = 'Der PDF-Export ist fehlgeschlagen.'
   }

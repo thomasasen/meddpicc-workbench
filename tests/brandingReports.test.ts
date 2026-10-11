@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { loadBrandForReport } from '../src/services/brandProfileStore'
 import { PDFDocument } from 'pdf-lib'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { createCrmSaasDemo } from '../src/data/softwarePaybackDemo'
@@ -63,4 +64,13 @@ describe('White-Label-Ausgabe: 5 Generatoren × 3 CI-Profile', () => {
       60000,
     )
   }
+})
+
+
+describe('Export bleibt bei fehlender IndexedDB sicher bedienbar', () => {
+  it('liefert ohne Browser-Datenbank ein neutrales Profil mit explizitem Warnhinweis', async () => {
+    const resolved = await loadBrandForReport()
+    expect(resolved.profile).toBeNull()
+    expect(resolved.warning).toContain('neutral ohne Firmenbranding')
+  })
 })

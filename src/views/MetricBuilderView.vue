@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { loadBrandProfile } from '../services/brandProfileStore'
+import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {
@@ -132,10 +132,10 @@ function download(bytes: Uint8Array, name: string): void {
 
 async function exportPdf(): Promise<void> {
   try {
-    const { profile } = await loadBrandProfile()
+    const { profile, warning } = await loadBrandForReport()
     const bytes = await buildMetricBuilderPdf(draft.value, { brand: profile })
     download(bytes, 'metric-steckbrief.pdf')
-    message.value = 'Metric-Steckbrief erstellt. Fehlende Werte sind im Dokument gekennzeichnet.'
+    message.value = 'Metric-Steckbrief erstellt. Fehlende Werte sind im Dokument gekennzeichnet.' + (warning ? ' ' + warning : '')
   } catch {
     message.value = 'PDF konnte nicht erzeugt werden.'
   }

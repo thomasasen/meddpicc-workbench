@@ -91,3 +91,26 @@ export async function saveBrandProfile(profile: BrandProfile | null, expectedRev
     db.close()
   }
 }
+
+
+export interface ReportBrandResolution {
+  profile: BrandProfile | null
+  warning: string | null
+}
+
+/**
+ * Nur Reportausgabe: Bei beschädigter/nicht verfügbarer Konfiguration ein
+ * NEUTRALES PDF erzeugen, statt den Kundenexport zu blockieren. Niemals
+ * kommentarlos ein anderes Firmenprofil verwenden.
+ */
+export async function loadBrandForReport(): Promise<ReportBrandResolution> {
+  try {
+    const { profile } = await loadBrandProfile()
+    return { profile, warning: null }
+  } catch {
+    return {
+      profile: null,
+      warning: 'Die lokale CI-Konfiguration konnte nicht gelesen werden. Das PDF wurde neutral ohne Firmenbranding erstellt.',
+    }
+  }
+}

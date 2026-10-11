@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { loadBrandProfile } from '../services/brandProfileStore'
+import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
 import {
   ArrowLeft,
@@ -90,7 +90,7 @@ async function copySummary(): Promise<void> {
 }
 async function exportPdf(): Promise<void> {
   try {
-    const { profile } = await loadBrandProfile()
+    const { profile, warning } = await loadBrandForReport()
     const bytes = await buildValueBridgePdf(draft.value, { brand: profile })
     const blob = new Blob([new Uint8Array(bytes)], { type: 'application/pdf' })
     const url = URL.createObjectURL(blob)
@@ -101,7 +101,7 @@ async function exportPdf(): Promise<void> {
     a.click()
     a.remove()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
-    message.value = 'PDF mit Datenherkunft und offenen Annahmen erzeugt.'
+    message.value = 'PDF mit Datenherkunft und offenen Annahmen erzeugt.' + (warning ? ' ' + warning : '')
   } catch {
     message.value = 'PDF-Export fehlgeschlagen.'
   }

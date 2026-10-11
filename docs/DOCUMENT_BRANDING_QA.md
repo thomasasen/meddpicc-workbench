@@ -47,3 +47,7 @@ P0: Allgemeiner Datenverlustschutz #65 und Netzwerkaudit/Dependency-Audit #66 ge
 ## Abnahme der optionalen Gestaltungswerte
 
 Die Akzentfarbe wird als 2,4-Punkt-Zierlinie am unteren Rand jedes gebrandeten Mastheads eingesetzt. Sie färbt keine wirtschaftlichen Statusinformationen. Eine optionale Textfarbe wird im PDF-Footer nur verwendet, wenn sie auf weißem Hintergrund mindestens ein Kontrastverhältnis von 4,5:1 erreicht; andernfalls bleibt die bestehende gut lesbare Schriftfarbe. Die optionale Kontaktinformation ergänzt Website und freien Footer-Text; Überlänge wird mittels der gemessenen Schriftbreite gekürzt. Die Regel gilt für alle fünf Reporttypen.
+
+## Fehlende oder beschädigte IndexedDB im Export
+
+Die konfigurierende Ansicht behält bei Schreib-/Lesefehlern einen ausdrücklich sichtbaren Fehler und markiert das Profil nicht als gespeichert. PDF-Exportwege sind davon entkoppelt: `loadBrandForReport()` liefert bei fehlender oder ungültiger CI-Konfiguration das neutrale Profil und einen sichtbaren Warnhinweis im jeweiligen Tool. So bleibt die fachliche PDF-Funktion auch in Browsern mit blockiertem IndexedDB verfügbar, ohne fälschlich Firmenbranding vorzutäuschen. Die ausführliche allgemeine Recovery-Strategie bleibt #65.
