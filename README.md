@@ -372,3 +372,12 @@ Der ursprüngliche [Redesign-Audit](docs/REDESIGN_AUDIT_2026-10-10.md) dokumenti
 [CI #38094931479](https://github.com/thomasasen/meddpicc-workbench/actions/runs/38094931479): **334 Unit-Tests, 205 Browser-Tests bestanden, ein Skip**, Format/Lint/Build/Pages erfolgreich. Insgesamt 27 von 27 echten PDF-Seiten gerendert, einzeln gesichtet und die Langtext-PDFs mit Textextraktion geprüft. 25 produktive und drei interne Routen auf vier Viewportbreiten getestet. [Abnahmematrix](docs/REDESIGN_ACCEPTANCE_MATRIX_2026-10-11.md) und [Originalbilder](docs/review-screenshots/redesign/) dokumentieren den Stand.
 
 Die Merge-Freigabe wurde am 11.10.2026 ausdrücklich vorab erteilt. Das Testresultat ersetzt keine formale WCAG-2.2-AA-/PDF/UA-Konformitätsbescheinigung; Standard-PDF-Fonts sind nicht vollständige Unicode-Schriften.
+
+
+## Firmen-CI und White-Label-PDFs
+
+Unter **Einstellungen → Dokumentgestaltung** lassen sich Firmenname, Logo (PNG/JPEG), Primär- und Akzentfarbe, Standardverfasser und optionale Firmenangaben konfigurieren. Nach dem Speichern verwenden alle fünf PDF-Generatoren das Firmen-CI; ohne gespeichertes Profil sind kundenfähige PDFs neutral. Der Finance-Anhang bleibt sichtbar als interne Arbeitsunterlage markiert.
+
+**Kurzanleitung:** Startseite → Dokumentgestaltung → Firmenname eingeben → Logo hochladen/ersetzen → Farben anpassen → Änderungen speichern. In der Vorschau kann ein echter fiktiver Kundenbericht bzw. Finance-Anhang erzeugt und heruntergeladen werden. Der reguläre Export findet weiter im jeweiligen Microtool statt. Für andere Browser/Geräte: CI-Profil als company-branding.json exportieren und dort importieren. Über die Reset-Schaltfläche lässt sich das Firmenprofil vollständig entfernen.
+
+**Datenschutz und Speichergrenzen:** Alle CI-Daten werden lokal in IndexedDB gespeichert. Kein Cloud-Upload, Login, CDN, neues Tracking oder automatischer Datentransfer in .meddpicc-Dateien. Die Einstellungen gelten nur für das jeweilige Browserprofil; Browserdaten können verloren gehen. Exportieren Sie daher eine Profilsicherung. Logos: max. 2 MB, 4096 px pro Seite und 12 Mio. Pixel; nur echte PNG/JPEG, lokal dekodiert und als PNG ohne EXIF gespeichert. SVG und hochgeladene Schriften werden nicht unterstützt. Ungeeignete Sonderzeichen für Helvetica/WinAnsi werden im CI-Profil mit einer Fehlermeldung abgelehnt. Details: docs/DOCUMENT_BRANDING_QA.md.

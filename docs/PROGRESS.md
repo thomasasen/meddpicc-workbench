@@ -295,3 +295,8 @@ Siehe [Value Bridge Quellenmatrix und Gap-Analyse](VALUE_BRIDGE_SOURCE_AND_RED_T
 - **#6** bleibt als Tool-Klammer für sechs gezielte P2-Issues #71–#76; **#8** bleibt als vorrangige Quality-Klammer für sechs P0/P1-Issues #65–#70. **#77** ist ein optionaler P2-Nachfolger des toolbox-kompatiblen Exportanteils von #7.
 - Reihenfolge: P0 Datenverlust und Privacy/Security; P1 Accessibility, Offline/PWA, Migrationen, Performance; erst anschließend P2 neue Tools/Export.
 - Vollständige Abgrenzung, 13 Issue-Links und Akzeptanzkriterien unter [ISSUE_TRIAGE_2026-10-11.md](ISSUE_TRIAGE_2026-10-11.md). Diese Dokumentationsänderung führt keinen Anwendungscode und keine Domainberechnung ein.
+
+
+## 11.10.2026 – Firmen-CI und White-Label-PDFs
+
+Eigenständiger Feature-Branch feature/corporate-identity-white-label-pdfs-20261011 ab main 76a32fa76377db30249337e5425f39bec2916aec. Versioniertes lokales Firmenprofil, IndexedDB mit Konflikterkennung, sichere PNG/JPEG-Normalisierung, Einstellungen mit Import/Export/Reset und echter PDF-Vorschau sowie Integration aller fünf PDF-Generatoren. Kein Eingriff in Finanzformeln oder das bestehende .meddpicc-Format. Testmatrix und Sicherheitsbefunde: docs/DOCUMENT_BRANDING_QA.md. Merge ausdrücklich gesperrt bis zur Nutzerfreigabe.
