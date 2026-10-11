@@ -65,7 +65,6 @@ describe('CI-Profil-Vertrag, Sicherheit und Kontrast', () => {
   })
 })
 
-
 describe('Tatsächliche Unicode-Fontabdeckung', () => {
   it('akzeptiert deutsche Typografie und verweigert fehlende Schriftzeichen', () => {
     const base = brandedDark()

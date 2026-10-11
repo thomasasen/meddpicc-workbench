@@ -41,7 +41,8 @@ function record(value: unknown): Record<string, unknown> {
 }
 
 /** Zeichenvorrat aus der cmap der lokal gebündelten Noto-Sans-Latin-WOFF-400/700. */
-const PDF_LATIN_GLYPH = /^[\u0020-\u007e\u00a0-\u00ff\u0131\u0152-\u0153\u02bb-\u02bc\u02c6\u02da\u02dc\u2002\u2009\u2013-\u2014\u2018-\u201a\u201c-\u201e\u2022\u2026\u2032-\u2033\u2039-\u203a\u2044\u20ac\u2122\u2212]$/u
+const PDF_LATIN_GLYPH =
+  /^[\u0020-\u007e\u00a0-\u00ff\u0131\u0152-\u0153\u02bb-\u02bc\u02c6\u02da\u02dc\u2002\u2009\u2013-\u2014\u2018-\u201a\u201c-\u201e\u2022\u2026\u2032-\u2033\u2039-\u203a\u2044\u20ac\u2122\u2212]$/u
 export function supportsPdfLatinGlyph(value: string): boolean {
   return PDF_LATIN_GLYPH.test(value)
 }
