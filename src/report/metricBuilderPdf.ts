@@ -1,4 +1,5 @@
-import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
+import { PDFDocument, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
+import { embedReportFonts, normalizeReportUnicode } from './reportFonts'
 import {
   buildMetric,
   customerEvidenceLabels,
@@ -39,6 +40,7 @@ const COLORS = {
 }
 
 function printable(value: string): string {
+  if (typeof window !== 'undefined') return normalizeReportUnicode(value)
   return value
     .replace(/[\u2010-\u2015]/g, '-')
     .replace(/[\u2018\u2019]/g, "'")
@@ -60,8 +62,7 @@ export async function buildMetricBuilderPdf(
   const pdf = await PDFDocument.create()
   const branding = await prepareReportBranding(pdf, options.brand, 'customer')
   applyReportBrandMetadata(pdf, branding)
-  const normal = await pdf.embedFont(StandardFonts.Helvetica)
-  const bold = await pdf.embedFont(StandardFonts.HelveticaBold)
+  const { regular: normal, bold } = await embedReportFonts(pdf)
   let page!: PDFPage
   let cursor = 0
 

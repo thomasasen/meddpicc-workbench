@@ -1,9 +1,12 @@
 import type { ReverseTimelinePlan, ReverseTimelineSegment, TimelineOwner } from '../domain/reverseTimeline'
 import { buildTimelineScale, timelineSegmentPosition, timelineTotalDays } from '../domain/timelinePresentation'
+import { contrastRatio, readableInkOn, validateBrandProfile, type BrandProfile } from '../report/brandProfile'
 
 export type TimelineExportOptions = {
   title: string
   customerName: string
+  /** Nur für die kundenfähige Exportgrafik, kein UI- oder Session-State. */
+  brand?: BrandProfile | null
 }
 
 const EXPORT_FONT_STACK = "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif"
@@ -67,7 +70,38 @@ function bufferColor(plan: ReverseTimelinePlan): string {
   return plan.status === 'lead-time-available' ? '#64748b' : '#9a3412'
 }
 
+/** Keine fremden SVG-Quellen: ausschließlich validierte eingebettete Bildbytes. */
+function drawTimelineCompanyMark(brand: BrandProfile | null): string {
+  if (!brand) return ''
+  const primaryInk = contrastRatio(brand.primaryColor, '#FFFFFF') >= 4.5 ? brand.primaryColor : '#172033'
+  const company = escapeXml(truncate(brand.companyName, brand.logo ? 58 : 82))
+  if (!brand.logo) {
+    return `<text data-brand-name="true" x="70" y="58" font-size="15" font-weight="700" fill="${primaryInk}">${company}</text>`
+  }
+  const logo = brand.logo
+  const scale = Math.min(124 / logo.width, 29 / logo.height, 1)
+  const width = Number((logo.width * scale).toFixed(2))
+  const height = Number((logo.height * scale).toFixed(2))
+  const x = 74 + (124 - width) / 2
+  const y = 41 + (29 - height) / 2
+  const dataUrl = `data:${logo.mimeType};base64,${logo.base64}`
+  return `<rect x="70" y="38" width="132" height="35" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <image data-brand-logo="true" aria-hidden="true" x="${x}" y="${y}" width="${width}" height="${height}" preserveAspectRatio="xMidYMid meet" href="${dataUrl}"/>
+    <text data-brand-name="true" x="215" y="60" font-size="14" font-weight="700" fill="${primaryInk}">${company}</text>`
+}
+
+function timelineAccessibleDescription(plan: ReverseTimelinePlan): string {
+  const steps = plan.chronologicalSegments
+    .map(
+      (step) => `${step.label}: ${formatDate(step.startDate)} bis ${formatDate(step.endDate)}, ${ownerDisplay(step)}`,
+    )
+    .join('; ')
+  return `Gemeinsamer Go-Live-Plan. Start: ${formatDate(plan.latestStartDate)}, Ziel: ${formatDate(plan.targetGoLiveDate)}. ${steps}. ${bufferLabel(plan)}. Feiertage sind nicht berücksichtigt.`
+}
+
 export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: TimelineExportOptions): string {
+  // Sicherer Snapshot: Validierung VOR jeglicher SVG-Interpolation.
+  const brand = options.brand ? validateBrandProfile(options.brand) : null
   const width = 1600
   const contentLeft = 70
   const outerRight = width - 45
@@ -135,13 +169,27 @@ export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: Tim
   const buffer = escapeXml(bufferLabel(plan))
   const compellingEvent = plan.compellingEvent ? escapeXml(truncate(plan.compellingEvent, 42)) : ''
   const bufferTextColor = bufferColor(plan)
+  const headerInk = brand
+    ? contrastRatio(brand.primaryColor, '#FFFFFF') >= 4.5
+      ? brand.primaryColor
+      : readableInkOn('#FFFFFF')
+    : '#1d4ed8'
+  const accessibleTitle = escapeXml(options.title || 'Go-Live-Timeline')
+  const accessibleDescription = escapeXml(timelineAccessibleDescription(plan))
+  const brandMarkup = drawTimelineCompanyMark(brand)
+  const accentMarkup = brand
+    ? `<rect data-brand-accent="true" x="70" y="177" width="1485" height="3" fill="${brand.accentColor}"/>`
+    : ''
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" data-export-safe-right="${width - timelineRight}" style="font-family: ${EXPORT_FONT_STACK}; font-synthesis: none; text-rendering: optimizeLegibility;">
+  return `<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="timeline-svg-title timeline-svg-description" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" data-export-safe-right="${width - timelineRight}" style="font-family: ${EXPORT_FONT_STACK}; font-synthesis: none; text-rendering: optimizeLegibility;">
+    <title id="timeline-svg-title">${accessibleTitle}</title>
+    <desc id="timeline-svg-description">${accessibleDescription}</desc>
     <rect width="100%" height="100%" fill="#ffffff"/>
     <rect x="45" y="36" width="${width - 90}" height="${height - 72}" rx="18" fill="#ffffff" stroke="#d7dee7"/>
 
     <g id="export-header" data-zone="header">
-      <text x="${contentLeft}" y="88" font-size="16" font-weight="700" letter-spacing="1.4" fill="#1d4ed8">GEMEINSAME GO-LIVE-TIMELINE</text>
+      ${brandMarkup}
+      <text x="${contentLeft}" y="88" font-size="16" font-weight="700" letter-spacing="1.4" fill="${headerInk}">GEMEINSAME GO-LIVE-TIMELINE</text>
       <text x="${contentLeft}" y="130" font-size="36" font-weight="700" fill="#172033">${safeTitle}</text>
       ${safeCustomer ? `<text x="${contentLeft}" y="162" font-size="19" font-weight="400" fill="#5f6b7a">${safeCustomer}</text>` : ''}
 
@@ -150,6 +198,7 @@ export function buildCustomerTimelineSvg(plan: ReverseTimelinePlan, options: Tim
       <text x="${width - 367}" y="120" font-size="22" font-weight="700" fill="#166534">${goLive}</text>
       ${compellingEvent ? `<text x="${width - 367}" y="143" font-size="12" font-weight="400" fill="#166534">Treiber: ${compellingEvent}</text>` : ''}
     </g>
+    ${accentMarkup}
 
     <g id="export-summary" data-zone="summary" data-y="${summaryY}" data-height="${summaryHeight}">
       <rect x="${contentLeft}" y="${summaryY}" width="${outerRight - contentLeft}" height="${summaryHeight}" rx="10" fill="#f4f7ff" stroke="#cbd9fb"/>

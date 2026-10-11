@@ -1,4 +1,5 @@
-import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
+import { PDFDocument, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
+import { embedReportFonts, normalizeReportUnicode } from './reportFonts'
 import type { CaseSummary } from '../domain/businessCase'
 import { paybackAxisBounds } from '../domain/paybackChart'
 import { balanceChartAreas, chartDisplayEnd, chartMoneyTicks } from '../domain/paybackChartAreas'
@@ -38,6 +39,7 @@ const euro = (n: number) =>
   new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n)
 
 function readable(value: string): string {
+  if (typeof window !== 'undefined') return normalizeReportUnicode(value)
   return value
     .replace(/[\u2010-\u2015]/g, '-')
     .replace(/[\u2018\u2019]/g, "'")
@@ -683,8 +685,7 @@ export async function buildCustomerBusinessCasePdf(data: ReportData, options: Re
   const pdf = await PDFDocument.create()
   const fonts: FontSet = {
     branding: await prepareReportBranding(pdf, options.brand, 'customer'),
-    regular: await pdf.embedFont(StandardFonts.Helvetica),
-    bold: await pdf.embedFont(StandardFonts.HelveticaBold),
+    ...(await embedReportFonts(pdf)),
   }
   pdf.setTitle(readable('Business Case - ' + data.project))
   pdf.setSubject('Kundenbericht | undiskontierte Wirtschaftlichkeitsmodellrechnung')

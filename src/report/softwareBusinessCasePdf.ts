@@ -1,4 +1,5 @@
-import { PDFDocument, StandardFonts, rgb, type PDFPage, type PDFFont } from 'pdf-lib'
+import { PDFDocument, rgb, type PDFPage, type PDFFont } from 'pdf-lib'
+import { embedReportFonts, normalizeReportUnicode } from './reportFonts'
 import { summarizeBusinessCase, economicInterpretation, type CaseSummary } from '../domain/businessCase'
 import type { SoftwarePaybackInput } from '../domain/softwarePayback'
 import {
@@ -48,6 +49,7 @@ const percent = (n: number | null) =>
     ? 'nicht definiert'
     : new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(n) + ' %'
 function safe(s: string): string {
+  if (typeof window !== 'undefined') return normalizeReportUnicode(s)
   return s
     .replace(/[\u2010-\u2015]/g, '-')
     .replace(/[\u2018\u2019]/g, "'")
@@ -263,10 +265,11 @@ export async function buildSoftwareBusinessCasePdf(data: ReportData, options: Re
   const scenarios = compareBusinessScenarios(data.input, data.scenarioSettings)
   if (!c || !scenarios) throw new Error('Bitte ungültige Angaben, Szenariowerte oder Doppelzählungen korrigieren.')
   const pdf = await PDFDocument.create()
+  const embedded = await embedReportFonts(pdf)
   const f: Fonts = {
     branding: await prepareReportBranding(pdf, options.brand, 'internal'),
-    normal: await pdf.embedFont(StandardFonts.Helvetica),
-    bold: await pdf.embedFont(StandardFonts.HelveticaBold),
+    normal: embedded.regular,
+    bold: embedded.bold,
   }
   pdf.setTitle(safe('Business Case - ' + data.project))
   pdf.setSubject('Undiskontierte wirtschaftliche Projektmodellrechnung')

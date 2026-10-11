@@ -40,6 +40,13 @@ function record(value: unknown): Record<string, unknown> {
   return value as Record<string, unknown>
 }
 
+/** Zeichenvorrat aus der cmap der lokal gebündelten Noto-Sans-Latin-WOFF-400/700. */
+const PDF_LATIN_GLYPH =
+  /^[\u0020-\u007e\u00a0-\u00ff\u0131\u0152-\u0153\u02bb-\u02bc\u02c6\u02da\u02dc\u2002\u2009\u2013-\u2014\u2018-\u201a\u201c-\u201e\u2022\u2026\u2032-\u2033\u2039-\u203a\u2044\u20ac\u2122\u2212]$/u
+export function supportsPdfLatinGlyph(value: string): boolean {
+  return PDF_LATIN_GLYPH.test(value)
+}
+
 function stringField(value: unknown, field: string, max: number, required = false): string | undefined {
   if (value === undefined || value === null || value === '') {
     if (required) throw new Error(field + ' ist erforderlich.')
@@ -50,9 +57,10 @@ function stringField(value: unknown, field: string, max: number, required = fals
   }
   const normalized = value.trim()
   if (required && !normalized) throw new Error(field + ' ist erforderlich.')
-  // Helvetica/WinAnsi: nicht unterstützte Zeichen nicht stillschweigend durch '?' ersetzen.
-  if (/[^\u0020-\u00ff\u20ac]/.test(normalized)) {
-    throw new Error(field + ': Ein Sonderzeichen wird von der aktuellen PDF-Schrift nicht unterstützt.')
+  // Zulässiger Unicode-Bereich der eingebetteten Noto-Sans-Latin-PDF-Schrift.
+  // Unbekannte Skripte / Emoji werden nicht als leere Glyphen ausgegeben.
+  if ([...normalized].some((character) => !supportsPdfLatinGlyph(character))) {
+    throw new Error(field + ': Sonderzeichen außerhalb des unterstützten lateinischen PDF-Zeichensatzes.')
   }
   return normalized || undefined
 }

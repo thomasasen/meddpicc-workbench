@@ -64,3 +64,12 @@ describe('CI-Profil-Vertrag, Sicherheit und Kontrast', () => {
     expect(contrastRatio('#F6EDD4', '#FFFFFF')).toBeLessThan(4.5)
   })
 })
+
+describe('Tatsächliche Unicode-Fontabdeckung', () => {
+  it('akzeptiert deutsche Typografie und verweigert fehlende Schriftzeichen', () => {
+    const base = brandedDark()
+    expect(validateBrandProfile({ ...base, companyName: 'Straße – „München“ GmbH' }).companyName).toContain('„')
+    expect(() => validateBrandProfile({ ...base, companyName: 'Łódź GmbH' })).toThrow('Sonderzeichen')
+    expect(() => validateBrandProfile({ ...base, companyName: 'Firma 東京' })).toThrow('Sonderzeichen')
+  })
+})
