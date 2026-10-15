@@ -18,6 +18,24 @@ Das Schulungskonzept soll vorhandene Erfahrung mit **MEDDPICC** und **NUTBASER**
 
 Mögliche Themenfelder sind Qualifizierung, Discovery, Business Value, Stakeholder- und Entscheidungsmanagement, Verhandlungsführung, Deal Reviews und Coaching. Die konkrete Modulauswahl, Reihenfolge und Tiefe sind noch offen.
 
+## Verbindliche fachliche Quellenbasis
+
+Für die spätere Konzeption und Ausarbeitung der Schulungen werden folgende Quellen herangezogen:
+
+1. **Andy Whyte:** *MEDDICC: The ultimate guide to staying one step ahead in the complex sale* – MEDDICC-/MEDDPICC-Grundlagen und Anwendung in komplexen Verkaufsprozessen.
+2. **Darius Lahoutifard:** *Always Be Qualifying: MEDDIC & MEDDPICC Sales* – Qualifizierung, Discovery, Business Value und vertriebliche Anwendung.
+3. **NUTBASER:** verfügbare Methodeninformationen und, sobald vorliegend, die konkreten Schulungsunterlagen zu Sales und Negotiation – zur fachlich sauberen Ergänzung und Abgrenzung gegenüber MEDDPICC.
+4. **[MEDDPICC Workbench](https://github.com/thomasasen/meddpicc-workbench):** ausschließlich die enthaltenen **fachlichen Inhalte** zu MEDDPICC, Qualifizierung, Discovery, Metrics, Business Cases, Entscheidungsprozessen, Stakeholdern und verwandten Vertriebsmethoden.
+5. **[Sales KPI Atlas](https://github.com/thomasasen/saleskpis):** ausschließlich die enthaltenen **fachlichen Inhalte** zu Vertriebskennzahlen, Definitionen, Berechnungslogik, Zusammenhängen, Interpretation, Warnsignalen und Ableitung konkreter Maßnahmen.
+
+### Abgrenzung: Schulungsinhalt statt Tool-Schulung
+
+- **Die beiden GitHub-Repositories sind Wissens- und Quellenbestände, keine Schulungsplattformen.** Es geht ausdrücklich **nicht** um die Bedienung, Navigation, Oberfläche, Architektur oder Implementierung der Websites beziehungsweise ihrer Rechner und Tools.
+- Fachliche Konzepte, sachlich passende Beispiele, Rechenmethoden und KPI-Interpretationen werden für die Schulungsunterlagen **eigenständig und medienunabhängig** aufbereitet. Die Schulungen müssen auch ohne Zugang zu den Websites vollständig verständlich und durchführbar sein.
+- Jede Unit behandelt die **praktische Anwendung im B2B-Softwarevertrieb** und berücksichtigt separat, welche fachlichen Informationen, Arbeitsabläufe und Kennzahlen im **operativen CRM** unterstützt werden sollten. Eine Erklärung zur Nutzung der GitHub-Anwendungen gehört nicht dazu.
+- Aussagen und Kennzahlen werden bei der Detailausarbeitung in den jeweiligen Quellen geprüft; widersprechende Definitionen, unterschiedliche methodische Perspektiven sowie Studienwerte versus Faustregeln werden kenntlich gemacht.
+- Quellenbelege werden in Trainer-/Fachunterlagen nachvollziehbar dokumentiert. Inhalte Dritter werden unter Beachtung der Urheber- und Nutzungsrechte verarbeitet.
+
 ## Geplante Ergebnisse
 
 | Material | Zweck | Stand |
