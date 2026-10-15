@@ -1,0 +1,7 @@
+# Urheberrechtlich geschützte Fachquellen nicht unbeabsichtigt in das öffentliche Repository aufnehmen.
+# Berechtigte, ausdrücklich zur Veröffentlichung freigegebene Dateien nur nach bewusster Prüfung hinzufügen.
+*.pdf
+*.epub
+*.mobi
+*.azw
+*.azw3
