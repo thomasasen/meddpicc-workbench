@@ -18,6 +18,12 @@ Das Schulungskonzept soll vorhandene Erfahrung mit **MEDDPICC** und **NUTBASER**
 
 Mögliche Themenfelder sind Qualifizierung, Discovery, Business Value, Stakeholder- und Entscheidungsmanagement, Verhandlungsführung, Deal Reviews und Coaching. Die konkrete Modulauswahl, Reihenfolge und Tiefe sind noch offen.
 
+## Quellenverzeichnis
+
+Die vollständige Liste der neun im ChatGPT-Projekt bereitgestellten Bücher und NUTBASER-Unterlagen sowie die beiden fachlichen GitHub-Repositories steht unter **[quellen/README.md](quellen/README.md)**.
+
+**Schutzregel:** Das GitHub-Repository ist öffentlich. Daher werden die urheberrechtlich geschützten PDF- und EPUB-Originaldateien hier nicht veröffentlicht. Die Originale dienen im ChatGPT-Projekt als Arbeitsquellen; im GitHub-Ordner liegt ihr Katalog. Die Schulungseinheiten sollen selbstständig formuliert werden und unabhängig von den GitHub-Webanwendungen nutzbar sein.
+
 ## Verbindliche fachliche Quellenbasis
 
 Für die spätere Konzeption und Ausarbeitung der Schulungen werden folgende Quellen herangezogen:
