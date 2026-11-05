@@ -18,22 +18,32 @@ test('inspect overflowing elements in the visual redesign', async ({ page }) => 
             const styles = getComputedStyle(element)
             return {
               tag: element.tagName.toLowerCase(),
-              class: String(element.className).slice(0, 90),
-              text: (element.textContent ?? '').trim().slice(0, 54),
+              class: String(element.className).slice(0, 80),
+              text: (element.textContent ?? '').trim().slice(0, 38),
               left: Math.round(rect.left),
               right: Math.round(rect.right),
               width: Math.round(rect.width),
+              scrollWidth: element.scrollWidth,
+              clientWidth: element.clientWidth,
               minWidth: styles.minWidth,
               overflowX: styles.overflowX,
               whiteSpace: styles.whiteSpace,
             }
           })
-          .filter((element) => element.right > limit + 1 && element.width > 0)
+        const oversized = elements
+          .filter((el) => el.scrollWidth > el.clientWidth + 2 && el.clientWidth > 0)
+          .sort((a, b) => b.scrollWidth - b.clientWidth - (a.scrollWidth - a.clientWidth))
+        const toRight = elements
+          .filter((el) => el.right > limit + 1 && el.width > 0)
           .sort((a, b) => b.right - a.right)
         return {
           limit,
           scrollWidth: document.documentElement.scrollWidth,
-          offenders: elements.slice(0, 16),
+          bodyScrollWidth: document.body.scrollWidth,
+          mainScrollWidth: document.querySelector('main')?.scrollWidth,
+          headerScrollWidth: document.querySelector('.site-header')?.scrollWidth,
+          offenders: toRight.slice(0, 12),
+          oversized: oversized.slice(0, 22),
         }
       })
       console.log('APPLE_OVERFLOW_PROBE ' + JSON.stringify({ route, width, ...result }))
