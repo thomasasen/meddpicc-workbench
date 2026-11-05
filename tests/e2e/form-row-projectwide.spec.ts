@@ -133,6 +133,7 @@ async function auditVisibleRows(page: Page) {
           const hint = label.querySelector<HTMLElement>(':scope > small, :scope > .field-help, :scope > [role="alert"]')
           return {
             label: label.innerText.replace(/\s+/g, ' ').slice(0, 60),
+            controlType: control.tagName.toLowerCase(),
             field: label.getBoundingClientRect(),
             control: control.getBoundingClientRect(),
             labelBottom,
@@ -153,6 +154,9 @@ async function auditVisibleRows(page: Page) {
         checkedControls++
         if (field.control.height < 44) {
           violations.push(`Gruppe ${groupIndex}: "${field.label}" ist nur ${field.control.height}px hoch`)
+        }
+        if (field.controlType !== 'textarea' && Math.abs(field.control.height - 46) > 1) {
+          violations.push(`Gruppe ${groupIndex}: Einzeilen-Control "${field.label}" ist ${field.control.height}px statt 46px hoch`)
         }
         if (field.labelBottom !== undefined && field.labelBottom > field.control.top + 1) {
           violations.push(`Gruppe ${groupIndex}: Label überschneidet Control "${field.label}"`)

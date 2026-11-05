@@ -115,7 +115,8 @@
  * Problembeschreibungen auf Textarea-Höhe gedehnt. Folge und Ziel bleiben
  * als gleich hohe Textareas nebeneinander.
  */
-#app .metric-fields--discovery > label.field:nth-child(-n + 2) {
+#app .metric-fields--discovery > label.field:nth-child(-n + 2),
+#app .metric-fields--impact > label.field--longform {
   grid-column: 1 / -1;
 }
 
