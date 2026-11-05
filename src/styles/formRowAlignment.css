@@ -110,6 +110,15 @@
   grid-column: 1 / -1;
 }
 
+/*
+ * Discovery: Einzellige Prozess-Inputs werden nicht neben mehrzeiligen
+ * Problembeschreibungen auf Textarea-Höhe gedehnt. Folge und Ziel bleiben
+ * als gleich hohe Textareas nebeneinander.
+ */
+#app .metric-fields--discovery > label.field:nth-child(-n + 2) {
+  grid-column: 1 / -1;
+}
+
 /* Das bestehende Reverse-Timeline-Subgrid bleibt unverändert. */
 @supports (grid-template-rows: subgrid) {
   #app
