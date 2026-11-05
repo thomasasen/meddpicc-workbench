@@ -1368,6 +1368,13 @@ h3 {
     gap: var(--space-2);
   }
 
+  /* Legacy-Navigation: alle Aktionen auch auf 320px ohne Überlauf erreichbar. */
+  .header-inner .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
   .app-nav-secondary {
     margin-left: 0;
   }

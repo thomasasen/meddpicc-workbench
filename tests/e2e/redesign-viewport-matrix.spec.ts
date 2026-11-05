@@ -7,6 +7,8 @@ const routes = [
   '/tools/cost-of-delay',
   '/tools/value-bridge',
   '/tools/reverse-timeline',
+  '/settings',
+  '/settings/document-design',
   '/checklists/discovery-call',
   '/checklists/decision-criteria',
   '/checklists/decision-process',

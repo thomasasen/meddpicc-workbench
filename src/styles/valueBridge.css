@@ -21,6 +21,8 @@
   margin: var(--space-3) 0;
   font-size: clamp(1.8rem, 3.3vw, 2.65rem);
   line-height: 1.16;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 .vb-demos,
