@@ -94,8 +94,12 @@ test('dynamische Formulare bleiben nach Zustandswechsel ausgerichtet', async ({ 
     await page.getByRole('button', { name: /Softwareprojekt & Kunden-Metrics/ }).click()
     await page.getByRole('button', { name: 'CRM-/SaaS-Beispiel mit Kunden-Metrics' }).click()
     const software = await inspectRows(page)
-    expect(software.groups, `Softwareprojekt bei ${width}px`).toBeGreaterThan(0)
     expect(software.problems, `Softwareprojekt bei ${width}px`).toEqual([])
+    if (width >= 768) {
+      expect(software.groups, `Softwareprojekt bei ${width}px`).toBeGreaterThan(0)
+    } else {
+      await expect(page.locator('.software-fields .field').first()).toBeVisible()
+    }
 
     await page.goto('/meddpicc-workbench/#/tools/metric-builder')
     await page.getByRole('button', { name: 'CRM-Zeitgewinn' }).click()

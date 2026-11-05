@@ -154,16 +154,27 @@
  * Branding hat reine Text-Labels ohne span und einen Hex- plus Color-Picker.
  * Beide Controls teilen sich die gleiche Rasterzeile; die Farben bleiben bedienbar.
  */
-.site-shell .branding-color-row {
+/* Höhere Spezifität als die scoped Branding-Komponentenregeln. */
+.site-shell .branding-settings .branding-fields {
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.site-shell .branding-settings .branding-color-row {
   display: grid;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   grid-template-columns: minmax(0, 1fr) minmax(74px, 90px);
   align-items: start;
   gap: 0.8rem;
 }
 
-.site-shell .branding-color-row > label {
-  width: auto;
+.site-shell .branding-settings .branding-color-row > label {
+  width: 100%;
   min-width: 0;
+  max-width: 100%;
   margin: 0;
   display: grid;
   grid-template-rows:
@@ -173,7 +184,7 @@
   align-content: start;
 }
 
-.site-shell .branding-color-row > label > input {
+.site-shell .branding-settings .branding-color-row > label > input {
   grid-row: 2;
   width: 100%;
   height: var(--form-alignment-control-height);
@@ -181,12 +192,12 @@
   box-sizing: border-box;
 }
 
-.site-shell .branding-color-row > .branding-picker-label input {
+.site-shell .branding-settings .branding-color-row > .branding-picker-label input {
   max-width: none;
 }
 
 @supports (grid-template-rows: subgrid) {
-  .site-shell .branding-color-row > label {
+  .site-shell .branding-settings .branding-color-row > label {
     grid-row: span 2;
     grid-template-rows: subgrid;
   }
@@ -194,7 +205,7 @@
 
 /* Single-column responsive Zeilen werden nicht künstlich durch andere Zeilen verschoben. */
 @media (max-width: 560px) {
-  .site-shell .branding-color-row {
+  .site-shell .branding-settings .branding-color-row {
     grid-template-columns: minmax(0, 1fr) 80px;
   }
 }
