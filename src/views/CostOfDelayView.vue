@@ -130,6 +130,7 @@ onMounted(() => {
 async function transferToBridge(): Promise<void> {
   try {
     queueDelayToBridge(draft.value, window.sessionStorage)
+    recovery.acknowledgeNavigation()
     await router.push('/tools/value-bridge')
   } catch {
     notice.value = 'Value-Bridge-Übergabe nicht möglich.'
@@ -165,6 +166,7 @@ const recovery = useToolRecovery({
   tool: 'cost-of-delay',
   value: recoveryState,
   validate: validDelayRecovery,
+  tracked: (snapshot) => snapshot.draft,
   restore: (snapshot: DelayRecovery) => {
     draft.value = structuredClone(snapshot.draft)
     step.value = snapshot.step
