@@ -72,7 +72,8 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
       if (serialized === lastSaved) return true
       // Unvollständige Formulare dürfen nicht als Tab-Konflikt gelten.
       if (!validate(value.value)) {
-        message.value = 'Eingaben sind momentan nicht vollständig speicherbar. Änderungen sind noch nicht lokal gesichert.'
+        message.value =
+          'Eingaben sind momentan nicht vollständig speicherbar. Änderungen sind noch nicht lokal gesichert.'
         return false
       }
       try {
@@ -102,7 +103,10 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
         return false
       }
     })
-    pendingFlush = task.then(() => undefined, () => undefined)
+    pendingFlush = task.then(
+      () => undefined,
+      () => undefined,
+    )
     return task
   }
 
