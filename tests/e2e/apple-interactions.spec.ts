@@ -4,16 +4,14 @@ test('Buttons liefern unmittelbares Feedback bei Pointerdown und behalten native
   await page.goto('/meddpicc-workbench/#/tools/quick-payback')
 
   const demo = page.getByRole('button', { name: 'Fiktives Beispiel einsetzen' })
-  const bounds = await demo.boundingBox()
-  expect(bounds).not.toBeNull()
-  if (!bounds) return
-
-  await page.mouse.move(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2)
+  await demo.hover()
   await page.mouse.down()
   await expect(demo).toHaveCSS('transform', /matrix/)
   await page.mouse.up()
 
   await demo.focus()
+  await page.keyboard.press('Shift+Tab')
+  await page.keyboard.press('Tab')
   await expect(demo).toBeFocused()
   await expect(demo).toHaveCSS('outline-style', 'solid')
 })
@@ -28,7 +26,7 @@ test('Reduced Motion deaktiviert Druck-Skalierung und lässt die Navigation bedi
   await tools.dispatchEvent('pointerdown', { pointerType: 'touch', pointerId: 72, button: 0 })
   await expect(tools).toHaveCSS('transform', 'none')
   await tools.press('Enter')
-  await expect(page).toHaveURL(/#tools$/)
+  await expect(page).toHaveURL(/#\/tools$/)
 })
 
 test('Kontrastreicher Modus erhält klare Grenzen und Fokus', async ({ page }) => {
