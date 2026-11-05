@@ -39,7 +39,7 @@ Die Auswertung ist statisch aus den tatsächlichen Call-Sites erfolgt; E2E-Szena
 - `src/composables/useToolRecovery.ts`: Dirty-Fingerprint, 800-ms-Debounce, Konflikterkennung, Router- und `beforeunload`-Guard, Lebenszyklus.
 - `src/components/ToolRecoveryBar.vue`: Opt-in, unauffälliger Status, Fehlerzustand und nativer modaler Entscheidungsdialog.
 
-`schemaVersion=1`; pro Tool Snapshot-Version/Revision und Zeitstempel, Retention-Horizont **7 Tage**, Obergrenze **256 KiB je Snapshot**. Bei nächstem Lesen wird ein abgelaufener Stand nicht wiederhergestellt; eine automatische physische Löschung ohne erneuten Website-Aufruf ist browserseitig nicht garantiert. Bei aktivem Recovery werden nur Änderungen des jeweiligen Tool-Inputs, nicht Diagramme, PDFs, Berechnungen, Pinia oder Session-Handoffs gespeichert.
+`schemaVersion=1`; pro Tool Snapshot-Version/Revision und Zeitstempel, Retention-Horizont **7 Tage**, Obergrenze **256 KiB je Snapshot**. Beim nächsten Lesen eines betroffenen Tools wird ein abgelaufener Snapshot innerhalb der Datenbanktransaktion gelöscht; eine automatische Löschung im Hintergrund ohne Website-Aufruf ist browserseitig nicht garantiert. Bei aktivem Recovery werden nur Änderungen des jeweiligen Tool-Inputs, nicht Diagramme, PDFs, Berechnungen, Pinia oder Session-Handoffs gespeichert.
 
 ## Lifecycle und Konfliktregeln
 
@@ -79,7 +79,7 @@ Bei Legacy-Export wird `prepareDownload` lediglich zum Erzeugen des Download-Inh
 
 Diese Prüfung simuliert drei unabhängige Perspektiven; es wurden keine externen Experten beauftragt.
 
-**Frontend:** Bei unkontrolliertem State-Remount gehen lange Eingaben verloren. Pro Tool abgekapselte Controller statt globalem Pinia, Schreib-Debounce und transaktionale Revisionen reduzieren den Eingriff. Verbliebene Grenze: es gibt keine Browser-Crash-Garantie.
+**Frontend:** Bei unkontrolliertem State-Remount gehen lange Eingaben verloren. Pro Tool abgekapselte Controller statt globalem Pinia, Schreib-Debounce, ein synchronisierter Schreibabschluss vor internem Route-Wechsel und transaktionale Revisionen reduzieren den Eingriff. Verbliebene Grenze: es gibt keine Browser-Crash-Garantie.
 
 **Datenschutz/Sicherheit:** Untrusted Snapshots dürfen nicht ungeprüft in Vue zurückgeladen werden. Strikte Envelopes, Schemas, Größenlimits, Expiry und erneutes Lesen vor Restore schließen beschädigte/incompatible Nutzdaten aus. Restrisiko: unverschlüsselte IDB-Daten im gemeinsamen Browserprofil.
 
