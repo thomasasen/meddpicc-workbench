@@ -149,6 +149,7 @@ async function transfer(): Promise<void> {
   if (!result.value.complete || !result.value.transfer.length) return
   try {
     queueMetricHandoff(result.value.transfer, window.sessionStorage)
+    recovery.acknowledgeNavigation()
     await router.push({ path: '/tools/quick-payback', query: { importMetric: '1' } })
   } catch {
     message.value = 'Lokale Übergabe nicht möglich. Bitte Browserspeicher für diese Sitzung erlauben.'
@@ -158,6 +159,7 @@ async function transferToDelay(): Promise<void> {
   if (!result.value.complete || result.value.realizedEur === null || result.value.realizedEur <= 0) return
   try {
     queueCostOfDelayHandoff(draft.value, result.value, window.sessionStorage)
+    recovery.acknowledgeNavigation()
     await router.push('/tools/cost-of-delay')
   } catch {
     message.value = 'Cost-of-Delay-Übergabe nicht möglich. Nur realisierbare Metrics können übertragen werden.'
@@ -167,6 +169,7 @@ async function transferToBridge(): Promise<void> {
   if (!result.value.complete) return
   try {
     queueBuilderToBridge(draft.value, result.value, window.sessionStorage)
+    recovery.acknowledgeNavigation()
     await router.push('/tools/value-bridge')
   } catch {
     message.value = 'Value-Bridge-Übergabe nicht möglich. Bitte Eingaben prüfen.'
@@ -187,6 +190,7 @@ const recovery = useToolRecovery({
   tool: 'metric-builder',
   value: recoveryState,
   validate: validMetricRecovery,
+  tracked: (snapshot) => snapshot.draft,
   restore: (snapshot: MetricRecovery) => {
     draft.value = structuredClone(snapshot.draft)
     step.value = snapshot.step
