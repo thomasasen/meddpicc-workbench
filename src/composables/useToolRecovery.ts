@@ -102,10 +102,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
         return false
       }
     })
-    pendingFlush = task.then(
-      () => undefined,
-      () => undefined,
-    )
+    pendingFlush = task.then(() => undefined, () => undefined)
     return task
   }
 
