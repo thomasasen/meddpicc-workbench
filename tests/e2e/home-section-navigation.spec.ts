@@ -43,7 +43,9 @@ test('Auch die drei großen Einstiegskarten verwenden gültige Vue-Router-Links'
 
 test('Abschnittslinks funktionieren auch direkt, nach Reload und mit Tastatur', async ({ page }) => {
   await page.goto(root + '#/#checklists')
-  await expect(page.getByRole('heading', { name: 'Wiederkehrende Sales-Aufgaben schneller und sicherer erledigen.' })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Wiederkehrende Sales-Aufgaben schneller und sicherer erledigen.' }),
+  ).toBeVisible()
   await expect(page.locator('#checklists')).toBeInViewport({ ratio: 0.05 })
 
   await page.reload()
