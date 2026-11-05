@@ -14,23 +14,27 @@ type RecoveryOptions<T> = {
   validate: (value: unknown) => value is T
   /** Ersetzt den vollständigen Tool-Input in einem synchronen Commit. */
   restore: (value: T) => void
+  tracked?: (value: T) => unknown
 }
 
 const CHANNEL = 'meddpicc-tool-recovery-events'
 
-export function useToolRecovery<T>({ tool, value, validate, restore }: RecoveryOptions<T>) {
+export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: RecoveryOptions<T>) {
   const enabled = ref(false)
   const candidate = shallowRef<RecoverySnapshot<T> | null>(null)
   const message = ref('')
   const conflict = ref(false)
   const busy = ref(true)
+  const project = tracked ?? ((draft: T) => draft)
   const initial = JSON.stringify(value.value)
-  const modified = computed(() => JSON.stringify(value.value) !== initial)
+  const initialTracked = JSON.stringify(project(value.value))
+  const modified = computed(() => JSON.stringify(project(value.value)) !== initialTracked)
   let lastSaved = initial
   let observedToken: string | null = null
   let timer: ReturnType<typeof setTimeout> | undefined
   let currentWrite: Promise<boolean> | null = null
   let disposed = false
+  let acknowledgedNavigation = false
   let channel: BroadcastChannel | null = null
 
   function signalOtherTabs() {
@@ -203,12 +207,20 @@ export function useToolRecovery<T>({ tool, value, validate, restore }: RecoveryO
   watch(value, schedule, { deep: true })
 
   onBeforeRouteLeave(async () => {
+    if (acknowledgedNavigation) {
+      acknowledgedNavigation = false
+      return true
+    }
     if (!modified.value) return true
     if (enabled.value && (await flush())) return true
     return window.confirm('Ungesicherte Eingaben gehen beim Verlassen dieses Tools verloren. Trotzdem fortfahren?')
   })
 
-  return { enabled, candidate, message, conflict, busy, modified, activate, recover, discard }
+  function acknowledgeNavigation() {
+    acknowledgedNavigation = true
+  }
+
+  return { enabled, candidate, message, conflict, busy, modified, activate, recover, discard, acknowledgeNavigation }
 }
 
 export function announceAllRecoveryDeleted() {
