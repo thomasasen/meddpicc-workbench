@@ -128,12 +128,14 @@ onMounted(() => {
   }
 })
 async function transferToBridge(): Promise<void> {
+  if (!(await recovery.prepareHandoff())) return
   try {
     queueDelayToBridge(draft.value, window.sessionStorage)
-    recovery.acknowledgeNavigation()
     await router.push('/tools/value-bridge')
   } catch {
     notice.value = 'Value-Bridge-Übergabe nicht möglich.'
+  } finally {
+    recovery.clearHandoffApproval()
   }
 }
 import ToolStepNavigation from '../components/ToolStepNavigation.vue'

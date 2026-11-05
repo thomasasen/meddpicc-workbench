@@ -147,32 +147,38 @@ async function exportPdf(): Promise<void> {
 
 async function transfer(): Promise<void> {
   if (!result.value.complete || !result.value.transfer.length) return
+  if (!(await recovery.prepareHandoff())) return
   try {
     queueMetricHandoff(result.value.transfer, window.sessionStorage)
-    recovery.acknowledgeNavigation()
     await router.push({ path: '/tools/quick-payback', query: { importMetric: '1' } })
   } catch {
     message.value = 'Lokale Übergabe nicht möglich. Bitte Browserspeicher für diese Sitzung erlauben.'
+  } finally {
+    recovery.clearHandoffApproval()
   }
 }
 async function transferToDelay(): Promise<void> {
   if (!result.value.complete || result.value.realizedEur === null || result.value.realizedEur <= 0) return
+  if (!(await recovery.prepareHandoff())) return
   try {
     queueCostOfDelayHandoff(draft.value, result.value, window.sessionStorage)
-    recovery.acknowledgeNavigation()
     await router.push('/tools/cost-of-delay')
   } catch {
     message.value = 'Cost-of-Delay-Übergabe nicht möglich. Nur realisierbare Metrics können übertragen werden.'
+  } finally {
+    recovery.clearHandoffApproval()
   }
 }
 async function transferToBridge(): Promise<void> {
   if (!result.value.complete) return
+  if (!(await recovery.prepareHandoff())) return
   try {
     queueBuilderToBridge(draft.value, result.value, window.sessionStorage)
-    recovery.acknowledgeNavigation()
     await router.push('/tools/value-bridge')
   } catch {
     message.value = 'Value-Bridge-Übergabe nicht möglich. Bitte Eingaben prüfen.'
+  } finally {
+    recovery.clearHandoffApproval()
   }
 }
 import ToolStepNavigation from '../components/ToolStepNavigation.vue'

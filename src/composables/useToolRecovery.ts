@@ -234,19 +234,8 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
 
   async function canLeave(): Promise<boolean> {
     if (acknowledgedNavigation) {
+      // Ein Handoff wurde vor dem Schreiben in sessionStorage bestätigt.
       acknowledgedNavigation = false
-      // Ein ausdrücklicher Tool-Handoff ist keine Zusage, dass der gesamte
-      // Ursprungsentwurf gespeichert wurde. Vor dem Wechsel ausstehendes
-      // Opt-in-Recovery abschließen oder einen Verlust ausdrücklich bestätigen.
-      if (enabled.value) {
-        if (await flush()) return true
-        return window.confirm('Die aktuellen Änderungen konnten nicht lokal gesichert werden. Trotzdem fortfahren?')
-      }
-      if (modified.value) {
-        return window.confirm(
-          'Der Toolwechsel überträgt nicht den gesamten Entwurf. Ungesicherte Eingaben gehen verloren. Trotzdem fortfahren?',
-        )
-      }
       return true
     }
     if (enabled.value) {
@@ -259,8 +248,25 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
 
   onBeforeRouteLeave(canLeave)
 
-  function acknowledgeNavigation() {
+  /** Erst die Verlustprüfung, dann die Session-Übergabe schreiben. */
+  async function prepareHandoff(): Promise<boolean> {
+    if (enabled.value) {
+      if (!(await flush())) {
+        const proceed = window.confirm('Die aktuellen Änderungen konnten nicht lokal gesichert werden. Trotzdem fortfahren?')
+        if (!proceed) return false
+      }
+    } else if (modified.value) {
+      const proceed = window.confirm(
+        'Der Toolwechsel überträgt nicht den gesamten Entwurf. Ungesicherte Eingaben gehen verloren. Trotzdem fortfahren?',
+      )
+      if (!proceed) return false
+    }
     acknowledgedNavigation = true
+    return true
+  }
+
+  function clearHandoffApproval() {
+    acknowledgedNavigation = false
   }
 
   return {
@@ -273,7 +279,8 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
     activate,
     recover,
     discard,
-    acknowledgeNavigation,
+    prepareHandoff,
+    clearHandoffApproval,
     canLeave,
   }
 }

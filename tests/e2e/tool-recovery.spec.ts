@@ -243,6 +243,8 @@ test('Expliziter Tool-Handoff ohne Opt-in warnt vor verlorenen Quellinformatione
   await page.getByRole('button', { name: 'Metric entwickeln' }).click()
   await expect(page).toHaveURL(/quick-payback/)
   await expect(name).toHaveValue('Vertrauliche nicht exportierte Kosten')
+  const pending = await page.evaluate(() => window.sessionStorage.getItem('meddpicc-payback-return-v1'))
+  expect(pending, 'Abgelehnte Handoffs dürfen keine Übergabedaten anlegen').toBeNull()
   page.once('dialog', async (dialog) => {
     expect(dialog.type()).toBe('confirm')
     expect(dialog.message()).toContain('nicht den gesamten Entwurf')

@@ -72,3 +72,5 @@ Die Regressionstests wurden erweitert. **Die erfolgreiche Ausführung aller Qual
 ## Gezielte Handoff-Navigationsprüfung
 
 Ein ausdrücklicher Session-Handoff überträgt ausschließlich die fachlich vereinbarten Felder, nicht zwingend den vollständigen Ursprungsentwurf. Der bisherige Sonderpfad `acknowledgeNavigation` konnte ohne Opt-in die normale Verlustwarnung überspringen. Bei tatsächlich veränderten ungesicherten Eingaben wird nun auch vor einem solchen bewussten Toolwechsel eine Bestätigung verlangt. Abbrechen erhält den bisherigen Entwurf; ausdrücklich bestätigtes Fortfahren ist weiterhin möglich. Browser-Regressionen prüfen beide Entscheidungen sowie die regulären fachlichen Übergaben.
+
+**Reihenfolge bei Handoffs:** `prepareHandoff` prüft und bestätigt zuerst den möglichen Verlust. Erst danach darf ein fachlich begrenzter Wert über `sessionStorage` eingereiht werden. Ein abgebrochener Wechsel erzeugt damit keine unerwünschten Handoff-Daten. Der zuvor bestätigte Wechsel wird im Router einmalig ohne zweiten Dialog ausgeführt; ein fehlgeschlagener Übergabeversuch setzt diese Freigabe zurück.

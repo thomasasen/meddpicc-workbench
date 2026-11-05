@@ -131,27 +131,31 @@ function addCost(kind: CostKind) {
   })
 }
 async function openMetricBuilder() {
+  if (!(await recovery.prepareHandoff())) return
   try {
     queuePaybackReturn(
       { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
       window.sessionStorage,
     )
-    recovery.acknowledgeNavigation()
     await router.push('/tools/metric-builder')
   } catch {
     transferMessage.value = 'Der aktuelle Payback-Entwurf konnte nicht lokal zwischengespeichert werden.'
+  } finally {
+    recovery.clearHandoffApproval()
   }
 }
 async function transferToBridge(): Promise<void> {
+  if (!(await recovery.prepareHandoff())) return
   try {
     queuePaybackToBridge(
       { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
       window.sessionStorage,
     )
-    recovery.acknowledgeNavigation()
     await router.push('/tools/value-bridge')
   } catch {
     transferMessage.value = 'Value-Bridge-Übergabe nicht möglich. Maximal 15 Metrics und gültige Eingaben erforderlich.'
+  } finally {
+    recovery.clearHandoffApproval()
   }
 }
 function addMetric(formula: MetricFormula = 'direct') {
