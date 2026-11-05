@@ -15,6 +15,13 @@ import {
 
 const route = useRoute()
 const calculationMode = ref<'quick' | 'project'>(route.query.importMetric === '1' ? 'project' : 'quick')
+const softwarePanel = ref<InstanceType<typeof SoftwarePaybackPanel> | null>(null)
+
+async function changeMode(next: 'quick' | 'project') {
+  if (calculationMode.value === next) return
+  if (calculationMode.value === 'project' && softwarePanel.value && !(await softwarePanel.value.canLeave())) return
+  calculationMode.value = next
+}
 const upfrontInvestmentEur = ref('')
 const annualRealizableBenefitEur = ref('')
 const annualIncrementalOperatingCostEur = ref('0')
@@ -110,7 +117,7 @@ async function copySummary() {
           class="quick-mode-option"
           :class="{ 'quick-mode-option--active': calculationMode === 'quick' }"
           :aria-pressed="calculationMode === 'quick'"
-          @click="calculationMode = 'quick'"
+          @click="changeMode('quick')"
         >
           <span class="quick-mode-option__title">Schnellberechnung</span>
           <span class="quick-mode-option__hint">3 Werte · sofort ein Ergebnis</span>
@@ -120,7 +127,7 @@ async function copySummary() {
           class="quick-mode-option"
           :class="{ 'quick-mode-option--active': calculationMode === 'project' }"
           :aria-pressed="calculationMode === 'project'"
-          @click="calculationMode = 'project'"
+          @click="changeMode('project')"
         >
           <span class="quick-mode-option__title">Softwareprojekt &amp; Kunden-Metrics</span>
           <span class="quick-mode-option__hint">SaaS, Kosten und Nutzen im Zeitverlauf</span>
@@ -314,7 +321,7 @@ async function copySummary() {
           <p class="quick-copy-status" role="status">{{ copyMessage }}</p>
         </section>
       </template>
-      <SoftwarePaybackPanel v-else class="container" />
+      <SoftwarePaybackPanel v-else ref="softwarePanel" class="container" />
 
       <section class="container quick-related" aria-label="Passende Wissenshilfen">
         <h2>Was vor dem Kundengespräch zu prüfen ist</h2>
