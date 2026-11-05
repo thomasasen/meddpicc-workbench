@@ -320,7 +320,7 @@ function saveBlob(blob: Blob, filename: string) {
 function exportSvg() {
   try {
     saveBlob(new Blob([graphMarkup()], { type: 'image/svg+xml;charset=utf-8' }), 'software-payback.svg')
-    exportStatus.value = 'SVG-Grafik erstellt.'
+    exportStatus.value = 'SVG-Grafik erstellt. Download angestoßen; Datei bitte prüfen.'
   } catch {
     exportStatus.value = 'SVG-Export nicht möglich.'
   }
@@ -348,7 +348,7 @@ async function exportPng() {
       const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/png'))
       if (!blob) throw new Error('PNG-Konvertierung fehlgeschlagen')
       saveBlob(blob, 'software-payback.png')
-      exportStatus.value = 'PNG-Grafik erstellt.'
+      exportStatus.value = 'PNG-Grafik erstellt. Download angestoßen; Datei bitte prüfen.'
     } finally {
       URL.revokeObjectURL(src)
     }
@@ -391,7 +391,7 @@ async function downloadReport(kind: 'customer' | 'finance') {
     const prefix = kind === 'customer' ? 'kundenbericht-' : 'finance-anhang-'
     saveBlob(new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }), prefix + safeName + '.pdf')
     reportStatus.value =
-      (kind === 'customer' ? 'Kundenbericht erstellt.' : 'Finance-Anhang erstellt.') + (warning ? ' ' + warning : '')
+      (kind === 'customer' ? 'Kundenbericht erstellt. Download angestoßen; Datei bitte prüfen.' : 'Finance-Anhang erstellt. Download angestoßen; Datei bitte prüfen.') + (warning ? ' ' + warning : '')
   } catch {
     reportStatus.value = 'PDF-Erstellung fehlgeschlagen. Bitte Eingaben prüfen und erneut versuchen.'
   }
