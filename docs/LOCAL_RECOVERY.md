@@ -32,9 +32,9 @@ Der bewusst kurze Schnellrechner, einzelne Checklists und Wissensseiten erhalten
 - Standard: Keine Recovery-Schreibvorgänge vor dem ausdrücklich betätigten Aktivierungsbutton.
 - Format: versionierter JSON-Envelope, Tool-ID, zufälliger Token, `savedAt`, `expiresAt`, fachlicher Input-Snapshot. Keine Projektdatei-Metadaten.
 - Validierung: Version, Zugehörigkeit, Datum, Ablauf, maximale Bytezahl und streng begrenzter, toolspezifischer TypeScript-Inputvertrag.
-- Aufbewahrung: maximal sieben Tage nach dem letzten tatsächlich ausgeführten Schreibvorgang. Ein abgelaufener oder beschädigter Stand wird nicht übernommen.
+- Aufbewahrung: Gültigkeit maximal sieben Tage nach dem letzten tatsächlich ausgeführten Schreibvorgang. Bei jedem Recovery-Zugriff werden abgelaufene Stände aller Tools bereinigt. Ohne erneuten Browserzugriff ist eine physische Löschung zum Ablaufzeitpunkt nicht garantiert. Ein abgelaufener oder beschädigter Stand wird nicht übernommen.
 - Größe: höchstens 256 KiB pro Snapshot einschließlich Envelope. Listen besitzen zusätzliche fachliche Mengenlimits.
-- Schreibfrequenz: 600 ms Debounce nach Eingabeänderung, keine Schreibvorgänge für identischen Zustand.
+- Schreibfrequenz: sofortiger erster Snapshot nach Opt-in (auch bei bereits vorhandenen Eingaben); anschließend 600 ms Debounce nach Änderungen, keine erneuten Schreibvorgänge für identischen Zustand.
 - Konkurrenz: Lesen, erwarteten Token prüfen und Schreiben erfolgen **innerhalb derselben IndexedDB-readwrite-Transaktion**. Ändert ein zweiter Tab die Daten, wird der veraltete Schreibversuch abgewiesen. `BroadcastChannel` signalisiert Änderungen ohne Kundendaten an andere Tabs.
 - Wiederherstellung: nur durch bewusste Auswahl, nach erneutem vollständigem Lesen und Validieren. Der aktuelle Datenstand wird bei Auswahl ausdrücklich ersetzt, nicht mit importierten Daten vermischt.
 - Fehler: Speicherverbot, beschädigte Snapshots, Quota oder Konflikt erzeugen eine sichtbare Nachricht. Die Anwendung verarbeitet ihre Eingaben weiter; der lokale Sicherungsstatus wird nicht behauptet.
@@ -56,4 +56,6 @@ Ein ausgelöster Browser-Download wird lediglich als **angefordert** dargestellt
 - **Sicherheit/Datenschutz:** Explizites Opt-in, Datenlimits, Ablaufprüfung, strikte Snapshot-Schemata, sichtbare Quota-Fehler, Löschfunktion und reiner In-Browser-Signalkanal. Recovery ersetzt keine importierten Dateien.
 - **UX/Regression:** Gemeinsamer Recovery-Controller, explizites Wiederherstellen/Verwerfen, präziser nicht als Datei gespeicherter Status und vorhandener Navigationsschutz. Die Browsergrenzen werden in der UI erläutert.
 
-Die Gegenprüfung ist **simuliert** und nicht durch externe Fachprüfer durchgeführt. Maßgeblich bleiben die tatsächlichen Vitest-, Playwright-, Build- und Render-Ergebnisse des Pull Requests.
+Die Gegenprüfung ist **simuliert** und nicht durch externe Fachprüfer durchgeführt. Nachprüfung: fehlende erste Sicherung unmittelbar nach Opt-in behoben, Ablaufchronologie strenger validiert, abgelaufene Snapshots anderer Tools werden beim Zugriff mitbereinigt, und die nichtmodale Recovery-Oberfläche ist eine semantische Region statt eines Dialogs. Diese Änderungen müssen durch den CI-Lauf des abschließenden Commits bestätigt werden.
+
+Die von GitHub Actions zuvor vorgenommene automatische Formatierung und der selbsttätige Commit auf dem Feature-Branch wurden für diesen PR entfernt. Formatierungsfehler sollen als Quality-Gate-Fehler auffallen, statt die geprüfte Revision während der CI zu verändern.

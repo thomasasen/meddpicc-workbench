@@ -58,6 +58,7 @@ export function parseRecoverySnapshot<T>(
       !Number.isFinite(Date.parse(value.expiresAt)) ||
       Date.parse(value.savedAt) > now + 60_000 ||
       Date.parse(value.expiresAt) <= now ||
+      Date.parse(value.expiresAt) <= Date.parse(value.savedAt) ||
       Date.parse(value.expiresAt) - Date.parse(value.savedAt) > RECOVERY_RETENTION_MS ||
       !validate(value.data)
     ) {
@@ -116,21 +117,29 @@ export async function readRecovery<T>(
       let result: RecoveryRead<T> = { kind: 'none' }
       request.onsuccess = () => {
         result = parseRecoverySnapshot(request.result, tool, validate, now)
-        // Bei nächster Öffnung abgelaufene sensible Daten transaktional löschen.
-        if (typeof request.result !== 'string') return
-        try {
-          const value: unknown = JSON.parse(request.result)
-          if (
-            isObject(value) &&
-            typeof value.expiresAt === 'string' &&
-            Number.isFinite(Date.parse(value.expiresAt)) &&
-            Date.parse(value.expiresAt) <= now
-          ) {
-            store.delete(tool)
+      }
+      // Abgelaufene Snapshots aller Tools beim nächsten Recovery-Zugriff
+      // bereinigen, nicht erst beim Öffnen des jeweiligen Tools.
+      const cursorRequest = store.openCursor()
+      cursorRequest.onsuccess = () => {
+        const cursor = cursorRequest.result
+        if (!cursor) return
+        if (typeof cursor.value === 'string') {
+          try {
+            const record: unknown = JSON.parse(cursor.value)
+            if (
+              isObject(record) &&
+              typeof record.expiresAt === 'string' &&
+              Number.isFinite(Date.parse(record.expiresAt)) &&
+              Date.parse(record.expiresAt) <= now
+            ) {
+              cursor.delete()
+            }
+          } catch {
+            // Beschädigte Daten bleiben ausdrücklich manuell verwerfbar.
           }
-        } catch {
-          /* Beschädigte Daten bleiben ausdrücklich verwerfbar. */
         }
+        cursor.continue()
       }
       tx.oncomplete = () => resolve(result)
       tx.onabort = () => reject(classify(tx.error))

@@ -71,18 +71,6 @@ jobs:
       - name: Abhängigkeiten installieren
         run: npm ci --no-audit --no-fund
 
-      - name: Recovery-Feature formatieren
-        if: startsWith(github.head_ref, 'feat/65-opt-in-local-recovery')
-        run: |
-          npx prettier --write src/services/toolRecovery.ts src/services/recoveryDrafts.ts src/composables/useToolRecovery.ts src/components/ToolRecoveryPanel.vue src/components/SoftwarePaybackPanel.vue src/views/ReverseTimelineView.vue src/views/MetricBuilderView.vue src/views/CostOfDelayView.vue src/views/ValueBridgeView.vue src/views/SettingsView.vue src/views/EvidenceView.vue src/views/RisksActionsView.vue src/views/ReferencesView.vue src/views/QuickPaybackView.vue tests/toolRecovery.test.ts tests/e2e/tool-recovery.spec.ts
-          if ! git diff --quiet -- src tests; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src tests
-            git commit -m "style: format P0 recovery implementation"
-            git push origin HEAD:${{ github.event.pull_request.head.ref }}
-          fi
-
       - name: Business-Case-Dateien normalisieren
         if: startsWith(github.head_ref, 'feature/business-case-') || startsWith(github.head_ref, 'feature/customer-business-case-')
         run: |

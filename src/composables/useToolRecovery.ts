@@ -91,6 +91,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
         } else if (error instanceof RecoveryStorageError && error.reason === 'quota') {
           message.value = 'Speichergrenze erreicht. Die aktuellen Änderungen sind nicht lokal gesichert.'
         } else {
+          enabled.value = false
           message.value = 'Lokales Zwischenspeichern fehlgeschlagen. Die aktuellen Änderungen sind nicht gesichert.'
         }
         return false
@@ -116,9 +117,12 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
       return
     }
     enabled.value = true
-    lastSaved = initial
-    message.value = 'Recovery aktiviert. Änderungen werden nur auf diesem Gerät gesichert.'
-    schedule()
+    // Auch bereits vor dem Opt-in erfasste oder per Handoff übernommene
+    // Eingaben sofort sichern. Eine Aktivierung ohne spätere Änderung darf
+    // keinen vermeintlich geschützten, aber nie geschriebenen Entwurf erzeugen.
+    lastSaved = ''
+    message.value = 'Recovery aktiviert. Die erste lokale Sicherung wird erstellt.'
+    void flush()
   }
 
   async function recover() {
@@ -223,8 +227,11 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
       }
       return true
     }
+    if (enabled.value) {
+      if (await flush()) return true
+      return window.confirm('Die aktuellen Änderungen konnten nicht lokal gesichert werden. Trotzdem fortfahren?')
+    }
     if (!modified.value) return true
-    if (enabled.value && (await flush())) return true
     return window.confirm('Ungesicherte Eingaben gehen beim Verlassen dieses Tools verloren. Trotzdem fortfahren?')
   }
 

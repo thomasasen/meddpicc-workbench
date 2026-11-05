@@ -37,6 +37,8 @@ describe('Recovery-Snapshot-Parser (keine Browserspeicherung)', () => {
       { version: 2 },
       { tool: 'value-bridge' },
       { expiresAt: new Date(now).toISOString() },
+      { expiresAt: new Date(now - 1).toISOString() },
+      { savedAt: new Date(now + 30_000).toISOString(), expiresAt: new Date(now + 5_000).toISOString() },
       { data: { label: 10 } },
       { data: { label: 'Test', unexpected: true } },
       { token: '' },

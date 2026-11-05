@@ -29,6 +29,17 @@ test('Opt-in, Neustart des Tabs, manuelles Wiederherstellen und Verwerfen', asyn
   await expect(page.getByRole('button', { name: 'Wiederherstellen' })).toHaveCount(0)
 })
 
+test('Opt-in sichert bereits eingegebene Daten ohne eine weitere Änderung', async ({ page }) => {
+  await page.goto(timeline)
+  await customer(page).fill('Bereits vor Opt-in erfasst')
+  await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+  await expect(page.getByText('Nur lokal zwischengesichert.', { exact: false })).toBeVisible()
+  await page.reload()
+  await expect(page.getByRole('button', { name: 'Wiederherstellen' })).toBeVisible()
+  await page.getByRole('button', { name: 'Wiederherstellen' }).click()
+  await expect(customer(page)).toHaveValue('Bereits vor Opt-in erfasst')
+})
+
 test('Tab schließen und im gleichen Browserprofil erneut öffnen', async ({ context }) => {
   const first = await context.newPage()
   await first.goto(timeline)
@@ -67,6 +78,53 @@ test('beschädigte Snapshots werden weder übernommen noch still überschrieben'
   await expect(customer(page)).toHaveValue('')
   await page.getByRole('button', { name: 'Recoverydaten löschen und deaktivieren' }).click()
   await expect(page.getByText('Recoverydaten gelöscht', { exact: false })).toBeVisible()
+})
+
+test('abgelaufene Recoverydaten aller Tools werden bei erneutem Zugriff bereinigt', async ({ page }) => {
+  await page.goto(timeline)
+  await page.evaluate(async () => {
+    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open('meddpicc-tool-recovery', 1)
+      request.onsuccess = () => resolve(request.result)
+      request.onerror = () => reject(request.error)
+    })
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction('snapshots', 'readwrite')
+      tx.objectStore('snapshots').put(
+        JSON.stringify({
+          version: 1,
+          tool: 'metric-builder',
+          token: 'expired-token-123',
+          savedAt: '2020-01-01T00:00:00.000Z',
+          expiresAt: '2020-01-08T00:00:00.000Z',
+          data: {},
+        }),
+        'metric-builder',
+      )
+      tx.oncomplete = () => resolve()
+      tx.onabort = () => reject(tx.error)
+    })
+    db.close()
+  })
+  await page.reload()
+  await expect(page.getByRole('button', { name: 'Lokales Recovery aktivieren' })).toBeEnabled()
+  await expect.poll(async () =>
+    page.evaluate(async () => {
+      const db = await new Promise<IDBDatabase>((resolve, reject) => {
+        const request = indexedDB.open('meddpicc-tool-recovery', 1)
+        request.onsuccess = () => resolve(request.result)
+        request.onerror = () => reject(request.error)
+      })
+      const result = await new Promise<unknown>((resolve, reject) => {
+        const tx = db.transaction('snapshots', 'readonly')
+        const request = tx.objectStore('snapshots').get('metric-builder')
+        request.onsuccess = () => resolve(request.result)
+        request.onerror = () => reject(request.error)
+      })
+      db.close()
+      return result === undefined
+    }),
+  ).toBe(true)
 })
 
 test('Zwei Tabs erkennen den Schreibkonflikt ohne stilles Überschreiben', async ({ context }) => {
@@ -112,7 +170,20 @@ test('unfreiwillige Tool-Navigation wird bei ungesicherten Eingaben verhindert',
   await expect(customer(page)).toHaveValue('Vor Navigationsverlust schützen')
 })
 
-test('Recoverybedienung bleibt fokussierbar und verursacht keinen horizontalen Overflow', async ({ page }) => {
+test('deaktivierte IndexedDB zeigt einen Fehler und keinen gespeicherten Zustand', async ({ page }, testInfo) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'indexedDB', { configurable: true, value: undefined })
+  })
+  await page.goto(timeline)
+  await expect(page.getByText('Lokaler Browserspeicher nicht verfügbar.', { exact: false })).toBeVisible()
+  await customer(page).fill('Ohne Browserspeicher')
+  await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+  await expect(page.getByText('Lokales Zwischenspeichern fehlgeschlagen.', { exact: false })).toBeVisible()
+  await expect(page.getByText('Aktiv', { exact: true })).toHaveCount(0)
+  await page.screenshot({ path: testInfo.outputPath('recovery-storage-error.png'), fullPage: true })
+})
+
+test('Recoverybedienung bleibt fokussierbar und verursacht keinen horizontalen Overflow', async ({ page }, testInfo) => {
   await page.goto(timeline)
   const enable = page.getByRole('button', { name: 'Lokales Recovery aktivieren' })
   await enable.focus()
@@ -125,6 +196,7 @@ test('Recoverybedienung bleibt fokussierbar und verursacht keinen horizontalen O
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
     )
     expect(overflow, 'Viewport ' + width).toBeLessThanOrEqual(0)
+    await page.screenshot({ path: testInfo.outputPath('recovery-active-' + width + '.png'), fullPage: true })
   }
 })
 
