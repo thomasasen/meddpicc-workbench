@@ -33,7 +33,13 @@ export function useToolRecovery<T>({ tool, value, validate, restore }: RecoveryO
   }
 
   function readCandidate() {
-    const result = readRecovery(storage(), tool, validate)
+    let result: ReturnType<typeof readRecovery<T>>
+    try {
+      result = readRecovery(storage(), tool, validate)
+    } catch {
+      message.value = 'Der lokale Browserspeicher ist nicht verfügbar.'
+      return
+    }
     if (result.kind === 'available') {
       candidate.value = result.snapshot
       observedToken = result.snapshot.token
@@ -80,7 +86,13 @@ export function useToolRecovery<T>({ tool, value, validate, restore }: RecoveryO
     const snapshot = candidate.value
     if (!snapshot) return
     // Prüfen unmittelbar vor dem vollständigen, vom Tool bereitgestellten Restore.
-    const current = readRecovery(storage(), tool, validate)
+    let current: ReturnType<typeof readRecovery<T>>
+    try {
+      current = readRecovery(storage(), tool, validate)
+    } catch {
+      message.value = 'Der lokale Browserspeicher ist nicht verfügbar.'
+      return
+    }
     if (current.kind !== 'available' || current.snapshot.token !== snapshot.token) {
       conflict.value = true
       message.value = 'Der Recoverystand hat sich geändert. Bitte die Seite neu laden und erneut prüfen.'
@@ -112,7 +124,11 @@ export function useToolRecovery<T>({ tool, value, validate, restore }: RecoveryO
   }
 
   function storageChanged(event: StorageEvent) {
-    if (event.storageArea !== storage() || (event.key !== recoveryStorageKey(tool) && event.key !== null)) return
+    try {
+      if (event.storageArea !== storage() || (event.key !== recoveryStorageKey(tool) && event.key !== null)) return
+    } catch {
+      return
+    }
     clearTimeout(timer)
     conflict.value = true
     enabled.value = false
