@@ -118,7 +118,7 @@ async function auditVisibleRows(page: Page) {
           const labelText = label.querySelector<HTMLElement>(':scope > span')
           const hint = label.querySelector<HTMLElement>(':scope > small, :scope > .field-help, :scope > [role="alert"]')
           return {
-            label: label.innerText.replace(/\\s+/g, ' ').slice(0, 60),
+            label: label.innerText.replace(/\s+/g, ' ').slice(0, 60),
             field: label.getBoundingClientRect(),
             control: control.getBoundingClientRect(),
             labelBottom: labelText?.getBoundingClientRect().bottom,
