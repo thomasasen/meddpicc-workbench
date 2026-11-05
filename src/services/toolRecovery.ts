@@ -160,7 +160,7 @@ export async function writeRecovery<T>(
       const request = store.get(tool)
       let failure: RecoveryStorageError | null = null
       request.onsuccess = () => {
-        const current = decode(request.result, tool, validate, now)
+        const current = parseRecoverySnapshot(request.result, tool, validate, now)
         if (current.kind === 'invalid') {
           failure = new RecoveryStorageError('invalid')
           tx.abort()
