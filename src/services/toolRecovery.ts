@@ -80,11 +80,23 @@ export async function readToolRecovery(toolId: RecoveryToolId): Promise<Recovery
   const db = await openDatabase()
   try {
     return await new Promise<RecoveryReadResult>((resolve, reject) => {
-      const tx = db.transaction(['preferences', 'snapshots'], 'readonly')
+      const tx = db.transaction(['preferences', 'snapshots'], 'readwrite')
       const choice = tx.objectStore('preferences').get(toolId)
-      const draft = tx.objectStore('snapshots').get(toolId)
+      const snapshots = tx.objectStore('snapshots')
+      const draft = snapshots.get(toolId)
+      let expired = false
+      draft.onsuccess = () => {
+        const value: unknown = draft.result
+        if (isRecord(value) && typeof value.expiresAt === 'string') {
+          const expiry = Date.parse(value.expiresAt)
+          if (Number.isFinite(expiry) && expiry <= Date.now()) {
+            expired = true
+            snapshots.delete(toolId)
+          }
+        }
+      }
       tx.oncomplete = () => {
-        const snapshot = draft.result as unknown
+        const snapshot = expired ? undefined : (draft.result as unknown)
         resolve({
           enabled: choice.result === true,
           snapshot: isRecoverySnapshot(snapshot, toolId) ? snapshot : null,
