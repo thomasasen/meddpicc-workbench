@@ -28,7 +28,9 @@ const router = createRouter({
     if (savedPosition) return savedPosition
     if (to.hash) {
       const section = document.getElementById(decodeURIComponent(to.hash.slice(1)))
-      const scrollOffset = section ? Number.parseFloat(window.getComputedStyle(section).scrollMarginTop) || 0 : 0
+      const scrollOffset = section
+        ? Number.parseFloat(window.getComputedStyle(section).scrollMarginTop) || 0
+        : 0
       return {
         el: to.hash,
         top: scrollOffset,
