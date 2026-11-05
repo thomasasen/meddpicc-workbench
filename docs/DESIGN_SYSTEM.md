@@ -206,6 +206,8 @@ Diese Regeln ersetzen frühere pauschale Einschränkungen für Bewegung und tran
 - Focus-Management, Semantik, Textgrößenanpassung, reversibles Verhalten/Undo und klare Fehlerrückmeldungen gehen einer optischen Animation vor.
 - Keine Audio- oder Haptik-API voraussetzen, keine neuen Runtime-Abhängigkeiten oder externen Services ohne nachgewiesenen Mehrwert einführen.
 
+Die produktive, gemeinsame Implementierung dieser Prinzipien liegt in `src/styles/appleInteractions.css` (Feedback/Accessibility) und für die Go-Live-Planung in `src/views/ReverseTimelineView.vue` sowie `src/styles/reverseTimelineDragElevation.css`. Neue Spezialeffekte benötigen einen nachweisbaren funktionalen Nutzen und passende Browser-Regressionen. Der Umsetzungs- und QA-Umfang ist unter `docs/APPLE_DESIGN_IMPLEMENTATION_QA_2026-11-05.md` dokumentiert.
+
 ## 13. Accessibility
 
 Mindestens:

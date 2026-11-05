@@ -156,3 +156,92 @@ test('respektiert reduzierte Bewegung beim angehobenen Drag-State', async ({ pag
     clientY: handleBox.y + handleBox.height / 2,
   })
 })
+
+test('zeigt eine kontinuierliche Drag-Vorschau ohne vorzeitige Datenmutation', async ({ page }) => {
+  await page.goto('/meddpicc-workbench/#/tools/reverse-timeline')
+
+  const firstHandle = page.getByRole('button', { name: /Implementierung.*Rollout verschieben/ })
+  const target = page.locator('.reverse-step-card').nth(2)
+  const sourceRect = await firstHandle.boundingBox()
+  const targetRect = await target.boundingBox()
+  expect(sourceRect).not.toBeNull()
+  expect(targetRect).not.toBeNull()
+  if (!sourceRect || !targetRect) return
+
+  const y = sourceRect.y + sourceRect.height / 2
+  const targetY = targetRect.y + targetRect.height / 2
+  await firstHandle.dispatchEvent('pointerdown', {
+    pointerId: 70,
+    pointerType: 'touch',
+    button: 0,
+    clientY: y,
+  })
+  await firstHandle.dispatchEvent('pointermove', {
+    pointerId: 70,
+    pointerType: 'touch',
+    buttons: 1,
+    clientY: targetY,
+  })
+
+  const source = page.locator('.reverse-step-card').first()
+  await expect(source).toHaveClass(/reverse-step-card--dragging/)
+  await expect(target).toHaveClass(/reverse-step-card--drop-target/)
+  await expect(page.locator('.reverse-step-card--shifting')).toHaveCount(2)
+  await expect(source).toHaveCSS('transform', /matrix/)
+  expect(await stepLabels(page)).toEqual([
+    'Implementierung / Rollout',
+    'Vertrag & Unterschrift',
+    'Legal / Datenschutz',
+    'Einkauf / Procurement',
+    'Finale Entscheidung',
+  ])
+
+  await firstHandle.dispatchEvent('pointerup', {
+    pointerId: 70,
+    pointerType: 'touch',
+    button: 0,
+    clientY: targetY,
+  })
+  await expect(source).not.toHaveClass(/reverse-step-card--dragging/)
+  expect(await stepLabels(page)).toEqual([
+    'Vertrag & Unterschrift',
+    'Legal / Datenschutz',
+    'Implementierung / Rollout',
+    'Einkauf / Procurement',
+    'Finale Entscheidung',
+  ])
+})
+
+test('Pointer-Cancel verwirft einen nicht bestätigten Drag', async ({ page }) => {
+  await page.goto('/meddpicc-workbench/#/tools/reverse-timeline')
+
+  const firstHandle = page.getByRole('button', { name: /Implementierung.*Rollout verschieben/ })
+  const handleRect = await firstHandle.boundingBox()
+  const destinationRect = await page.locator('.reverse-step-card').nth(3).boundingBox()
+  expect(handleRect).not.toBeNull()
+  expect(destinationRect).not.toBeNull()
+  if (!handleRect || !destinationRect) return
+
+  await firstHandle.dispatchEvent('pointerdown', {
+    pointerId: 71,
+    pointerType: 'touch',
+    button: 0,
+    clientY: handleRect.y + handleRect.height / 2,
+  })
+  await firstHandle.dispatchEvent('pointermove', {
+    pointerId: 71,
+    pointerType: 'touch',
+    buttons: 1,
+    clientY: destinationRect.y + destinationRect.height / 2,
+  })
+  await expect(page.locator('.reverse-step-card--drop-target')).toHaveCount(1)
+
+  await firstHandle.dispatchEvent('pointercancel', {
+    pointerId: 71,
+    pointerType: 'touch',
+    clientY: destinationRect.y + destinationRect.height / 2,
+  })
+  await expect(page.locator('.reverse-step-card--dragging')).toHaveCount(0)
+  await expect(page.locator('.reverse-step-card--drop-target')).toHaveCount(0)
+  expect((await stepLabels(page))[0]).toBe('Implementierung / Rollout')
+})

@@ -55,4 +55,5 @@ Die in diesem Dokument beschriebenen Prüfungen sind dokumentarisch/statisch. Si
 - Die PR-Dateien und Originalquellen werden nach den Korrekturen erneut abgerufen; Überschneidungen, Links, Lizenzhinweise und Markdown-Grundstruktur statisch geprüft.
 - Es wurden **keine** Browser-, Unit-, Build- oder Performance-Tests am neuen Design durchgeführt: Der PR ändert nur Agent-Instruktionen und Dokumentation, **nicht** die Anwendung. Bestehende UI-Tests beweisen keine zukünftige Apple-Design-Umsetzung.
 - Die tatsächliche Umsetzung (z. B. Reverse-Timeline-Drag mit kontinuierlicher Pointer-Führung) benötigt einen separaten Code-PR mit Playwright-Tests bei ca. 375/768/1024/1440 px sowie Tastatur-, Reduced-Motion-, Transparenz-/Kontrast- und Performance-Prüfung.
-- Dieser PR bleibt als **Draft** geöffnet; `main` wird nicht verändert.
+- Die ergänzenden UI-Implementierungen und ihre separaten Laufzeit-Prüfkriterien stehen in `docs/APPLE_DESIGN_IMPLEMENTATION_QA_2026-11-05.md`; der ursprüngliche dokumentarische QA-Nachweis allein belegt keine UI-Freigabe.
+- Dieser PR bleibt bis zur UI-Freigabe ungemergt; `main` wird nicht verändert.

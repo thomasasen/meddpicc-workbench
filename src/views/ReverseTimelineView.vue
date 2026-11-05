@@ -11,7 +11,7 @@ import {
   Settings,
   Trash2,
 } from '@lucide/vue'
-import { computed, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref } from 'vue'
 
 import CustomerTimelineChart from '../components/CustomerTimelineChart.vue'
 import {
@@ -105,9 +105,67 @@ const steps = ref<EditableStep[]>(starterSteps())
 const exportMessage = ref('')
 const exportBusy = ref(false)
 const draggingStepId = ref<string | null>(null)
+const dragTargetIndex = ref<number | null>(null)
+const dragOffsetY = ref(0)
 const reorderAnnouncement = ref('')
-let activePointerId: number | null = null
 let stepCounter = 0
+
+interface DragSession {
+  pointerId: number
+  originY: number
+  originIndex: number
+  baseOffsetY: number
+  height: number
+  gap: number
+  centers: number[]
+  handle: HTMLElement
+}
+
+let dragSession: DragSession | null = null
+
+function stepCards(): HTMLElement[] {
+  return Array.from(document.querySelectorAll<HTMLElement>('.reverse-step-card'))
+}
+
+function prefersReducedMotion(): boolean {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+function cardPositions(): Map<string, number> {
+  return new Map(
+    stepCards()
+      .filter((card) => card.dataset.stepId)
+      .map((card) => [card.dataset.stepId as string, card.getBoundingClientRect().top]),
+  )
+}
+
+/** The release starts at each card's actual on-screen position, not its layout target. */
+function settleDroppedCards(previous: Map<string, number>): void {
+  if (prefersReducedMotion()) return
+
+  void nextTick(() => {
+    for (const card of stepCards()) {
+      const oldTop = previous.get(card.dataset.stepId ?? '')
+      if (oldTop === undefined || typeof card.animate !== 'function') continue
+
+      const difference = oldTop - card.getBoundingClientRect().top
+      if (Math.abs(difference) < 1) continue
+
+      const animation = card.animate(
+        [
+          { transform: `translate3d(0, ${difference}px, 0)` },
+          { transform: 'translate3d(0, 0, 0)' },
+        ],
+        {
+          duration: 260,
+          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          fill: 'both',
+        },
+      )
+      animation.onfinish = () => animation.cancel()
+    }
+  })
+}
 
 const calculation = computed(() =>
   calculateReverseTimeline({
@@ -151,63 +209,121 @@ function moveStep(index: number, direction: -1 | 1) {
   reorderStep(index, index + direction)
 }
 
-function stepIndexAtPoint(y: number): number {
-  const cards = Array.from(document.querySelectorAll<HTMLElement>('.reverse-step-card'))
-  let closestIndex = -1
-  let closestDistance = Number.POSITIVE_INFINITY
+/** Only the active card follows the pointer. Neighboring cards preview the insertion slot. */
+function isPreviewShifted(index: number): boolean {
+  if (!dragSession || dragTargetIndex.value === null) return false
 
-  for (const card of cards) {
-    if (!card.dataset.stepId) continue
-
-    const rect = card.getBoundingClientRect()
-    const distance = y < rect.top ? rect.top - y : y > rect.bottom ? y - rect.bottom : 0
-    if (distance >= closestDistance) continue
-
-    const index = steps.value.findIndex((step) => step.id === card.dataset.stepId)
-    if (index < 0) continue
-
-    closestIndex = index
-    closestDistance = distance
-  }
-
-  return closestIndex
+  const origin = dragSession.originIndex
+  const target = dragTargetIndex.value
+  return origin < target ? index > origin && index <= target : index >= target && index < origin
 }
 
-function startStepDrag(event: PointerEvent, index: number) {
-  if (event.pointerType === 'mouse' && event.button !== 0) return
+function stepDragStyle(stepId: string, index: number): Record<string, string> | undefined {
+  if (!dragSession || !draggingStepId.value) return undefined
 
-  const step = steps.value[index]
-  draggingStepId.value = step.id
-  activePointerId = event.pointerId
+  if (stepId === draggingStepId.value) {
+    return { '--drag-offset-y': `${dragOffsetY.value}px` }
+  }
+  if (!isPreviewShifted(index)) return undefined
+
+  const direction = dragSession.originIndex < (dragTargetIndex.value ?? 0) ? -1 : 1
+  const distance = direction * (dragSession.height + dragSession.gap)
+  return { '--neighbor-offset-y': `${distance}px` }
+}
+
+function startStepDrag(event: PointerEvent, index: number): void {
+  if (dragSession || (event.pointerType === 'mouse' && event.button !== 0)) return
+
+  const handle = event.currentTarget as HTMLElement
+  const card = handle.closest<HTMLElement>('.reverse-step-card')
+  if (!card) return
+
+  // Interrupt a still-settling card without snapping it back to its layout position.
+  const beforeCancel = card.getBoundingClientRect().top
+  for (const animation of card.getAnimations()) animation.cancel()
+  const baseOffsetY = beforeCancel - card.getBoundingClientRect().top
+  const cards = stepCards()
+  const rect = card.getBoundingClientRect()
+  const gap = Number.parseFloat(getComputedStyle(card.parentElement as HTMLElement).rowGap) || 0
+
+  dragSession = {
+    pointerId: event.pointerId,
+    originY: event.clientY,
+    originIndex: index,
+    baseOffsetY,
+    height: rect.height,
+    gap,
+    centers: cards.map((item) => {
+      const bounds = item.getBoundingClientRect()
+      return bounds.top + bounds.height / 2
+    }),
+    handle,
+  }
+  draggingStepId.value = steps.value[index].id
+  dragTargetIndex.value = index
+  dragOffsetY.value = baseOffsetY
 
   try {
-    ;(event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId)
+    handle.setPointerCapture(event.pointerId)
   } catch {
-    // Synthetic test events may not create an active browser pointer. Reordering still works without capture.
+    // Synthetic pointer events in Playwright may not create an active native pointer.
   }
 }
 
-function moveDraggedStep(event: PointerEvent) {
-  if (!draggingStepId.value || event.pointerId !== activePointerId) return
+function moveDraggedStep(event: PointerEvent): void {
+  const session = dragSession
+  if (!session || session.pointerId !== event.pointerId) return
 
-  event.preventDefault()
-  const fromIndex = steps.value.findIndex((step) => step.id === draggingStepId.value)
-  const toIndex = stepIndexAtPoint(event.clientY)
-  if (fromIndex >= 0 && toIndex >= 0 && fromIndex !== toIndex) reorderStep(fromIndex, toIndex)
+  if (event.cancelable) event.preventDefault()
+  dragOffsetY.value = session.baseOffsetY + event.clientY - session.originY
+
+  let nearest = session.originIndex
+  let nearestDistance = Number.POSITIVE_INFINITY
+  session.centers.forEach((center, index) => {
+    const distance = Math.abs(event.clientY - center)
+    if (distance < nearestDistance) {
+      nearest = index
+      nearestDistance = distance
+    }
+  })
+  dragTargetIndex.value = nearest
 }
 
-function finishStepDrag(event: PointerEvent) {
-  if (event.pointerId !== activePointerId) return
+function finishStepDrag(event: PointerEvent): void {
+  const session = dragSession
+  if (!session || session.pointerId !== event.pointerId) return
 
-  const target = event.currentTarget as HTMLElement
+  const previous = cardPositions()
+  const target = dragTargetIndex.value
+  if (event.type === 'pointerup' && target !== null) {
+    reorderStep(session.originIndex, target)
+  }
+
   try {
-    if (target.hasPointerCapture?.(event.pointerId)) target.releasePointerCapture(event.pointerId)
+    if (session.handle.hasPointerCapture(event.pointerId)) session.handle.releasePointerCapture(event.pointerId)
   } catch {
-    // Pointer capture may already be gone after cancellation or a synthetic event.
+    // Capture may already have ended after cancellation.
   }
+
+  dragSession = null
   draggingStepId.value = null
-  activePointerId = null
+  dragTargetIndex.value = null
+  dragOffsetY.value = 0
+  settleDroppedCards(previous)
 }
+
+onBeforeUnmount(() => {
+  if (dragSession) {
+    try {
+      if (dragSession.handle.hasPointerCapture(dragSession.pointerId)) {
+        dragSession.handle.releasePointerCapture(dragSession.pointerId)
+      }
+    } catch {
+      // A detached element may have lost capture already.
+    }
+  }
+  dragSession = null
+})
 
 function handleDragKey(event: KeyboardEvent, index: number) {
   if (event.key === 'ArrowUp') {
@@ -392,7 +508,12 @@ async function exportTimeline(kind: 'svg' | 'png'): Promise<void> {
             v-for="(step, index) in steps"
             :key="step.id"
             class="reverse-step-card"
-            :class="{ 'reverse-step-card--dragging': draggingStepId === step.id }"
+            :class="{
+              'reverse-step-card--dragging': draggingStepId === step.id,
+              'reverse-step-card--shifting': isPreviewShifted(index),
+              'reverse-step-card--drop-target': dragTargetIndex === index && draggingStepId !== step.id,
+            }"
+            :style="stepDragStyle(step.id, index)"
             :data-step-id="step.id"
           >
             <div class="reverse-step-leading">
