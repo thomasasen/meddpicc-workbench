@@ -62,9 +62,11 @@ watch(
 
     <p v-if="recovery.enabled" class="recovery-note" role="status">
       {{
-        recovery.saving
-          ? 'Entwurf wird lokal zwischengesichert …'
-          : recovery.savedAt
+        recovery.pending
+          ? 'Ein früherer lokaler Entwurf wartet auf deine Entscheidung.'
+          : recovery.saving
+            ? 'Entwurf wird lokal zwischengesichert …'
+            : recovery.savedAt
             ? 'Zuletzt lokal zwischengesichert: ' + formattedDate(recovery.savedAt)
             : 'Noch kein Entwurf lokal zwischengesichert.'
       }}
