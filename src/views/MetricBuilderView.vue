@@ -211,7 +211,7 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
         <p class="eyebrow">Schritt 1 · Discovery</p>
         <h2 id="metric-problem-title">Was soll sich beim Kunden verändern?</h2>
         <p>Beginne mit dem Problem. Noch keine Euro-Beträge behaupten.</p>
-        <div class="metric-fields">
+        <div class="metric-fields metric-fields--discovery">
           <label class="field"
             ><span>Welches konkrete Problem besteht?</span>
             <textarea
