@@ -29,4 +29,16 @@
 
 Dieser PR verbessert **gemeinsame Interaktionsprimitiven über die aktiven Routen** und überarbeitet den konkreten komplexen Drag-Workflow. Es ist **kein Pixel-für-Pixel-Redesign sämtlicher Views**. Kontextfreie Apple-Liquid-Glass-Effekte oder animierte Datencharts sind bewusst nicht integriert.
 
-Die technische Verifikation ist über Format, Lint, TypeScript/Build, Vitest und Playwright Desktop/Mobile im bestehenden GitHub-CI-Workflow durchzuführen. Bis erfolgreiche Läufe vorliegen, ist dies **kein vollständiger Laufzeit-Freigabenachweis**. Der PR bleibt bis zur ausdrücklich erteilten UI-Freigabe ungemergt.
+## Tatsächlich durchgeführte technische Prüfung
+
+- GitHub Actions: [CI #42019174928](https://github.com/thomasasen/meddpicc-workbench/actions/runs/42019174928), Abschluss **success** am 05.11.2026.
+- `npm run format:check`: erfolgreich.
+- `npm run lint`: erfolgreich.
+- `npm test`: **356 Tests bestanden** (48 Testdateien).
+- `npm run build`: erfolgreich, einschließlich TypeScript-Validierung.
+- `npm run test:e2e`: **247 Tests bestanden, 1 übersprungen** in Chromium Desktop und Mobile.
+- Pages-Root wurde synchronisiert und `pages:check` erfolgreich ausgeführt.
+- Der erste Browserlauf fand **vier Fehler in zwei neuen Testfällen** (jeweils Desktop und Mobile): fehlender Scroll-to-View vor der Press-Prüfung und falsche erwartete Hash-URL. **Beide Testannahmen wurden korrigiert**, ohne den fachlichen Anwendungscode dafür anzupassen. Zweiter vollständiger Lauf grün.
+- Verfügbare CI-Artefakte: `ui-qs-screenshots` und `production-build` am verlinkten GitHub-Actions-Lauf.
+
+**Offene Abnahme:** Keine unabhängige manuelle Originalbildprüfung oder dedizierte Frame-Time-Performance-Messung in dieser Runde. Die CI belegt technische Funktion und Regression, aber keine vollständige visuelle UX-Abnahme oder WCAG-Zertifizierung. Vor einem Merge bleibt die sichtbare UI ausdrücklich freizugeben.

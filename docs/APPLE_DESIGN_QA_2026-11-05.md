@@ -4,7 +4,7 @@
 
 **Gegenstand:** PR #83, Branch `docs/apple-design-priority-2026-11`
 
-**Umfang:** Anweisungs-/Dokumentationsintegration, keine Anwendungscode-Änderungen.
+**Umfang der hier dokumentierten ersten Runde:** Anweisungs-/Dokumentationsintegration. Später hinzugefügte Anwendungscode-Änderungen und ihre eigenständige Laufzeitprüfung sind in `APPLE_DESIGN_IMPLEMENTATION_QA_2026-11-05.md` dokumentiert.
 
 ## Methode
 
@@ -48,12 +48,12 @@ Die in diesem Dokument beschriebenen Prüfungen sind dokumentarisch/statisch. Si
 3. Das aktuelle Tools/Checklists/Knowledge-Modell hat fachlichen Vorrang; keine verpflichtenden Deal-/Opportunity-Entitäten in normativen UI-Anweisungen.
 4. Direkte Manipulation, unterbrechbare Animation und Materialtiefe werden sachgerecht angewendet und benötigen keine neue Produktionsabhängigkeit.
 5. Accessibility-Fallbacks (Tastatur, Reduced Motion, Reduced Transparency, höherer Kontrast) sowie local-first bleiben verbindlich.
-6. Keine Vue-/CSS-/Runtime-Datei wird in diesem PR geändert; seine Integration verursacht daher keine unmittelbare UI-Regression.
+6. In der ersten dokumentarischen Prüfrunde wurden keine Vue-/CSS-/Runtime-Dateien geändert. Die **anschließend implementierten UI-Änderungen** haben separate Regressionstests und eine erfolgreiche GitHub-CI erhalten.
 
 ## Verifikation und Grenzen
 
 - Die PR-Dateien und Originalquellen werden nach den Korrekturen erneut abgerufen; Überschneidungen, Links, Lizenzhinweise und Markdown-Grundstruktur statisch geprüft.
-- Es wurden **keine** Browser-, Unit-, Build- oder Performance-Tests am neuen Design durchgeführt: Der PR ändert nur Agent-Instruktionen und Dokumentation, **nicht** die Anwendung. Bestehende UI-Tests beweisen keine zukünftige Apple-Design-Umsetzung.
-- Die tatsächliche Umsetzung (z. B. Reverse-Timeline-Drag mit kontinuierlicher Pointer-Führung) benötigt einen separaten Code-PR mit Playwright-Tests bei ca. 375/768/1024/1440 px sowie Tastatur-, Reduced-Motion-, Transparenz-/Kontrast- und Performance-Prüfung.
+- Für die **ursprüngliche Dokumentations-QS** waren keine Browser-, Unit- oder Build-Tests nötig. Anschließend wurde die UI tatsächlich angepasst und über GitHub-CI überprüft: **356 Vitest bestanden, 247 Playwright bestanden, 1 übersprungen**, Format, Lint, Build und Pages-Integrität grün ([CI-Lauf](https://github.com/thomasasen/meddpicc-workbench/actions/runs/42019174928)). Diese Tests ersetzen keine manuelle visuelle Abnahme.
+- Die tatsächliche Umsetzung (u. a. Reverse-Timeline-Drag mit kontinuierlicher Pointer-Führung) wurde anschließend auf demselben PR-Branch ergänzt. Bestehende Responsive-/Tastatur- und neue Reduced-Motion-/Kontrast-Tests sind grün. Manuelle Sichtung der generierten Screenshots sowie ein eigenständiges Performance-Profiling bleiben gesonderte Aufgaben.
 - Die ergänzenden UI-Implementierungen und ihre separaten Laufzeit-Prüfkriterien stehen in `docs/APPLE_DESIGN_IMPLEMENTATION_QA_2026-11-05.md`; der ursprüngliche dokumentarische QA-Nachweis allein belegt keine UI-Freigabe.
 - Dieser PR bleibt bis zur UI-Freigabe ungemergt; `main` wird nicht verändert.
