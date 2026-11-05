@@ -62,6 +62,7 @@
     .new-project-fields
   ) > label > span:first-child {
   grid-row: 1;
+  grid-column: 1 / -1;
   align-self: end;
   min-width: 0;
 }
@@ -80,6 +81,7 @@
     .branding-color-row
   ) > label > :is(input:not([type='checkbox']):not([type='radio']), select, textarea) {
   grid-row: 2;
+  grid-column: 1 / -1;
   align-self: start;
   min-width: 0;
   width: 100%;
@@ -119,6 +121,7 @@
     .branding-color-row
   ) > label > small {
   grid-row: 3;
+  grid-column: 1 / -1;
   margin: 0;
   align-self: start;
   min-width: 0;
@@ -205,10 +208,8 @@
     align-content: start;
   }
 
-  .site-shell .branding-color-row > label {
-    /* Die Farbauswahl bleibt auch auf schmalen Geräten nebeneinander. */
-    grid-template-rows: minmax(2.6em, auto) auto auto;
-  }
+  /* Auch bei 320px teilen die Hex-Eingabe und die Farbauswahl dank Subgrid
+   * dieselbe Labelhöhe und damit exakt dieselbe Control-Oberkante. */
 }
 
 /* Starke Browser-/Systemkontraste dürfen die Ausrichtungsregeln nicht aufheben. */

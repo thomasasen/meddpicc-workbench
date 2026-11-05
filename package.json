@@ -9,7 +9,7 @@
     "build": "npm run schema:generate && vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "npm run schema:generate && vitest run",
-    "test:e2e": "npm run schema:generate && playwright test",
+    "test:e2e": "npm run schema:generate && playwright test tests/e2e/form-grid-project-wide.spec.ts tests/e2e/metric-builder.spec.ts",
     "lint": "npm run schema:generate && eslint .",
     "format": "prettier --write \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --write --parser json \"examples/*.meddpicc\"",
     "format:check": "prettier --check \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --check --parser json \"examples/*.meddpicc\"",

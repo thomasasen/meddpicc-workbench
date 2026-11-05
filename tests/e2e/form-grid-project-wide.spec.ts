@@ -136,8 +136,9 @@ test('Metric Builder: alle drei Eingabeschritte einschließlich Hilfetexten', as
   for (const width of [375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 920 })
     await page.goto('/meddpicc-workbench/#/tools/metric-builder')
-    await page.getByRole('button', { name: 'CRM-Zeitgewinn' }).click()
     const steps = page.getByRole('navigation', { name: 'Metric entwickeln' }).getByRole('button')
+    await steps.first().click()
+    await page.locator('.metric-demo .button').first().click()
     for (let step = 0; step < 3; step++) {
       await steps.nth(step).click()
       compared += await checkFormRows(page, `Metric Builder / Schritt ${step + 1} / ${width}px`)
