@@ -80,6 +80,7 @@ test('Zwei Tabs erkennen den Schreibkonflikt ohne stilles Überschreiben', async
   await expect(first.getByText('Nur lokal zwischengesichert.', { exact: false })).toBeVisible()
   await expect(second.getByText('in einem anderen Tab geändert', { exact: false })).toBeVisible()
   await customer(second).fill('Nicht übernommener Stand aus Tab B')
+  second.once('dialog', (dialog) => void dialog.accept())
   await second.reload()
   await expect(second.getByRole('button', { name: 'Wiederherstellen' })).toBeVisible()
   await second.getByRole('button', { name: 'Wiederherstellen' }).click()
@@ -125,4 +126,64 @@ test('Recoverybedienung bleibt fokussierbar und verursacht keinen horizontalen O
     )
     expect(overflow, 'Viewport ' + width).toBeLessThanOrEqual(0)
   }
+})
+
+test('Metric Builder, Cost of Delay und Value Bridge: unabhängige Opt-in-Wiederherstellung', async ({ page }) => {
+  const workflows = [
+    {
+      route: '/meddpicc-workbench/#/tools/metric-builder',
+      input: 'textarea[placeholder*="Unsere Servicemitarbeiter"]',
+      value: 'Neues Kundenproblem mit vielen Detailannahmen',
+    },
+    {
+      route: '/meddpicc-workbench/#/tools/cost-of-delay',
+      input: 'input[placeholder*="Vermiedene externe Servicekosten"]',
+      value: 'Verzögerung bei der Implementierung',
+    },
+    {
+      route: '/meddpicc-workbench/#/tools/value-bridge',
+      input: 'input[placeholder="Kunde oder Projekt"]',
+      value: 'Wiederhergestelltes Unternehmen',
+    },
+  ] as const
+  page.on('dialog', (dialog) => void dialog.accept())
+  for (const workflow of workflows) {
+    await page.goto(workflow.route)
+    const field = page.locator(workflow.input)
+    await expect(field).toBeVisible()
+    await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+    await field.fill(workflow.value)
+    await expect(page.getByText('Nur lokal zwischengesichert.', { exact: false })).toBeVisible()
+    await page.reload()
+    await expect(field).toHaveValue('')
+    await page.getByRole('button', { name: 'Wiederherstellen' }).click()
+    await expect(field).toHaveValue(workflow.value)
+  }
+})
+
+test('Software-Payback: umfangreicher Kostenentwurf wird im Projektmodus wiederhergestellt', async ({ page }) => {
+  await page.goto('/meddpicc-workbench/#/tools/quick-payback')
+  await page.getByRole('button', { name: 'Softwareprojekt & Kunden-Metrics' }).click()
+  await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+  await page.getByRole('button', { name: 'Einmalkosten' }).click()
+  const name = page.locator('.software-entry input').first()
+  await name.fill('Kundenprojekt 4711 mit spezifischen Kosten')
+  await expect(page.getByText('Nur lokal zwischengesichert.', { exact: false })).toBeVisible()
+  await page.reload()
+  await page.getByRole('button', { name: 'Softwareprojekt & Kunden-Metrics' }).click()
+  await expect(page.getByRole('button', { name: 'Wiederherstellen' })).toBeVisible()
+  await page.getByRole('button', { name: 'Wiederherstellen' }).click()
+  await expect(page.locator('.software-entry input').first()).toHaveValue('Kundenprojekt 4711 mit spezifischen Kosten')
+})
+
+test('blockierter IndexedDB-Zugriff: keine falsche Sicherungsbestätigung', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'indexedDB', { configurable: true, value: undefined })
+  })
+  await page.goto(timeline)
+  await expect(page.getByText('Lokaler Browserspeicher nicht verfügbar.', { exact: false })).toBeVisible()
+  await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+  await customer(page).fill('Kann nicht gesichert werden')
+  await expect(page.getByText('Lokales Zwischenspeichern fehlgeschlagen.', { exact: false })).toBeVisible()
+  await expect(page.getByText('Nur lokal zwischengesichert.', { exact: false })).toHaveCount(0)
 })
