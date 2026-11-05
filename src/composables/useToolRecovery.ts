@@ -294,6 +294,8 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
 
   async function resetAcknowledged(): Promise<void> {
     clearTimer()
+    // A reset must not race an earlier, still-open IndexedDB write and resurrect old inputs.
+    if (activeSave) await activeSave
     baseline = fingerprint()
     updateDirty()
     try {
