@@ -485,6 +485,7 @@ const recovery = useToolRecovery({
     reportDate.value = snapshot.reportDate
   },
 })
+defineExpose({ canLeave: recovery.canLeave })
 </script>
 
 <template>
