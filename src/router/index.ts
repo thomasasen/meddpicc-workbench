@@ -28,10 +28,9 @@ const router = createRouter({
     if (savedPosition) return savedPosition
     if (to.hash) {
       const section = document.getElementById(decodeURIComponent(to.hash.slice(1)))
-      let scrollOffset = 0
-      if (section) {
-        scrollOffset = Number.parseFloat(window.getComputedStyle(section).scrollMarginTop) || 0
-      }
+      const sectionMargin = section ? Number.parseFloat(window.getComputedStyle(section).scrollMarginTop) || 0 : 0
+      const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height ?? 0
+      const scrollOffset = Math.max(sectionMargin, headerHeight + 16)
       return {
         el: to.hash,
         top: scrollOffset,
