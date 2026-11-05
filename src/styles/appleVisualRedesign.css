@@ -1001,3 +1001,63 @@ body {
     align-self: flex-end;
   }
 }
+
+/*
+ * Gemeinsames Zeilenraster für nebeneinanderliegende Formulareingaben:
+ * Label | Control | Hilfetext. Hinweise dürfen niemals ein Control verschieben.
+ * Das Control ist die visuelle Bezugslinie, nicht die Unterkante des ganzen Feldes.
+ */
+.reverse-context-grid {
+  --form-row-control-height: 46px;
+  --form-row-label-height: 1.5rem;
+  align-items: start;
+}
+
+.reverse-context-grid > .field {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: minmax(var(--form-row-label-height), auto) var(--form-row-control-height) auto;
+  align-content: start;
+  row-gap: 0.4rem;
+}
+
+.reverse-context-grid > .field > span {
+  grid-row: 1;
+  align-self: end;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.reverse-context-grid > .field > :is(input, select) {
+  grid-row: 2;
+  width: 100%;
+  height: var(--form-row-control-height);
+  min-height: var(--form-row-control-height);
+  align-self: start;
+}
+
+.reverse-context-grid > .field > small {
+  grid-row: 3;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+
+/* Bei langem Label/Subgrid teilen alle Controls die gleiche vertikale Spur. */
+@supports (grid-template-rows: subgrid) {
+  .reverse-context-grid {
+    row-gap: 0.4rem;
+  }
+
+  .reverse-context-grid > .field {
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: 0.4rem;
+  }
+
+  .reverse-context-grid > .reverse-compelling-event {
+    margin-top: 0.6rem;
+  }
+}

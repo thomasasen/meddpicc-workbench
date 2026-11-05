@@ -129,6 +129,11 @@ Keine Deal-Gesamtbewertung, kein gespeicherter Score und kein permanenter Fortsc
 - Validierung direkt beim Problem
 - Eingaben nach Fehlern erhalten
 - native Input-Typen nutzen
+- **Verbindliches Zeilenraster:** Wenn mehrere Felder in einer Zeile stehen, müssen ihre Eingabe-Controls auf exakt derselben horizontalen Linie beginnen und gleich hoch sein. Das gilt unabhängig von unterschiedlich langen Beschriftungen, optionalen Markierungen, Hilfetexten oder Fehlermeldungen.
+- **Label, Eingabe, Hinweis sind getrennte Ebenen:** Erst die Beschriftung, dann die einheitlich hohe Eingabebox, danach optionaler Hilfe- oder Fehlertext. Ein Hinweis darf **nicht** die Eingabebox des eigenen Felds nach oben oder unten verschieben. Controls sind die visuelle Hauptlinie.
+- **Kein Bottom-Alignment vollständiger Feldcontainer** und keine freien Grid-Auto-Tracks, die Felder mit und ohne Hinweise gegeneinander versetzen. Für komplexere Formularzeilen ein gemeinsames CSS-Grid/Subgrid verwenden; bei fehlender Subgrid-Unterstützung Labels und Control-Höhen konsistent reservieren.
+- **Responsive:** Sobald sich das Spaltenraster ändert, muss die Ausrichtung innerhalb jeder neu entstehenden Zeile erhalten bleiben. Lange Labels dürfen umbrechen, ohne Eingabeboxen in benachbarten Spalten zu verschieben.
+- **Abnahme:** Auf Desktop und Mobile tatsächliche `getBoundingClientRect()`-Positionen und -Höhen prüfen, nicht nur gleich wirkende CSS-Werte. Hilfe- und Fehlermeldungen müssen vollständig unterhalb des zugehörigen Controls bleiben.
 
 ## 8. Kundenfähige Ergebnisse
 
