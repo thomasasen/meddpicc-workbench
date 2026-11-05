@@ -98,15 +98,20 @@ onMounted(async () => {
             <div>
               <h2 id="settings-storage-title">Lokale Speicherung und Datensicherung</h2>
               <p>
-                Die Dokumentgestaltung speichert ein Firmenprofil lokal im Browser. Für ausgewählte längere
-                Microtools kannst du zusätzlich freiwillig eine unverschlüsselte Entwurfssicherung aktivieren.
-                Diese Recoverydaten sind keine .meddpicc-Dateien. Sie werden spätestens nach sieben Tagen
-                als abgelaufen behandelt und können hier einschließlich der Einwilligungen gelöscht werden.
-                Das Firmenprofil bleibt von dieser Löschung unberührt.
+                Die Dokumentgestaltung speichert ein Firmenprofil lokal im Browser. Für ausgewählte längere Microtools
+                kannst du zusätzlich freiwillig eine unverschlüsselte Entwurfssicherung aktivieren. Diese Recoverydaten
+                sind keine .meddpicc-Dateien. Sie werden spätestens nach sieben Tagen als abgelaufen behandelt und
+                können hier einschließlich der Einwilligungen gelöscht werden. Das Firmenprofil bleibt von dieser
+                Löschung unberührt.
               </p>
             </div>
           </div>
-          <button type="button" class="button button-secondary button-with-icon" :disabled="clearingRecovery" @click="deleteAllRecovery">
+          <button
+            type="button"
+            class="button button-secondary button-with-icon"
+            :disabled="clearingRecovery"
+            @click="deleteAllRecovery"
+          >
             Alle Recoverydaten löschen
           </button>
           <p v-if="recoveryStatus" role="status" class="settings-status">{{ recoveryStatus }}</p>
