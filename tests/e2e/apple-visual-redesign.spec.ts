@@ -7,9 +7,9 @@ test('zeigt das sichtbare Redesign mit Bereichsnavigation und sofortigem Tool-Ei
 
   const nav = page.getByRole('navigation', { name: 'Toolbox-Bereiche' })
   await expect(nav).toBeVisible()
-  await expect(nav.getByRole('link', { name: 'Tools' })).toHaveAttribute('href', '#tools')
-  await expect(nav.getByRole('link', { name: 'Checklists' })).toHaveAttribute('href', '#checklists')
-  await expect(nav.getByRole('link', { name: 'Wissen' })).toHaveAttribute('href', '#knowledge')
+  await expect(nav.getByRole('link', { name: 'Tools' })).toHaveAttribute('href', '#/#tools')
+  await expect(nav.getByRole('link', { name: 'Checklists' })).toHaveAttribute('href', '#/#checklists')
+  await expect(nav.getByRole('link', { name: 'Wissen' })).toHaveAttribute('href', '#/#knowledge')
 
   const hero = page.locator('.toolbox-hero')
   const action = hero.getByRole('link', { name: /Planung öffnen/ })
@@ -42,7 +42,7 @@ test('arbeitet mit Tab-/Enter-Navigation und sichtbaren Fokuszuständen', async 
   await expect(tools).toBeFocused()
   await expect(tools).toHaveCSS('outline-style', 'solid')
   await tools.press('Enter')
-  await expect(page).toHaveURL(/#\/tools$/)
+  await expect(page).toHaveURL(/\/#\/\#tools$/)
 })
 
 test('Startseite bleibt bei 320–1440 Pixeln vollständig zugänglich', async ({ page }) => {

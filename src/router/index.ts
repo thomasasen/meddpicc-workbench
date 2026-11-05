@@ -24,6 +24,24 @@ import ReferencesView from '../views/ReferencesView.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition
+    if (to.hash) {
+      const section = document.getElementById(decodeURIComponent(to.hash.slice(1)))
+      let sectionMargin = 0
+      if (section) {
+        sectionMargin = Number.parseFloat(window.getComputedStyle(section).scrollMarginTop) || 0
+      }
+      const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height ?? 0
+      const scrollOffset = Math.max(sectionMargin, headerHeight + 16)
+      return {
+        el: to.hash,
+        top: scrollOffset,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      }
+    }
+    if (to.path !== from.path) return { top: 0 }
+  },
   routes: [
     {
       path: '/settings',
