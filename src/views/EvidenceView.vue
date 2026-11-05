@@ -17,7 +17,7 @@ import { downloadTextFile } from '../services/browserFile'
 import { useProjectStore } from '../stores/projectStore'
 
 const projectStore = useProjectStore()
-const { project, dirty, fileName } = storeToRefs(projectStore)
+const { project, dirty, fileName, source } = storeToRefs(projectStore)
 
 const areaLabels = qualificationAreaLabels
 const areaEntries = Object.entries(areaLabels) as Array<[ProjectAreaKey, string]>
@@ -235,8 +235,7 @@ function saveProject() {
   try {
     const download = projectStore.prepareDownload()
     downloadTextFile(download.content, download.fileName)
-    projectStore.confirmDownloaded(download)
-    statusMessage.value = `${download.fileName} wurde als validierte Projektdatei heruntergeladen.`
+    statusMessage.value = `${download.fileName}: Browser-Download angestoßen. Bitte prüfe, ob die Datei tatsächlich gespeichert wurde. Der Bearbeitungsstand bleibt ungesichert.`
   } catch (error) {
     if (error instanceof ProjectValidationError) {
       issues.value = error.issues
@@ -299,7 +298,7 @@ function saveProject() {
             <strong>{{ project.project.accountName }} · {{ project.project.name }}</strong>
             <small>{{ fileName ?? 'Noch nicht gespeichert' }}</small>
             <span class="project-save-state" :class="{ 'project-save-state--dirty': dirty }">
-              {{ dirty ? 'Ungespeicherte Änderungen' : 'Gespeicherter Stand' }}
+              {{ dirty ? 'Änderungen nicht als Datei bestätigt' : source === 'file' ? 'Importierter Dateistand' : 'Keine gespeicherte Projektdatei' }}
             </span>
           </div>
         </div>
