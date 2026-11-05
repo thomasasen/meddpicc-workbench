@@ -108,7 +108,7 @@ test('abgelaufene Recoverydaten aller Tools werden bei erneutem Zugriff bereinig
   })
   await page.reload()
   await expect(page.getByRole('button', { name: 'Lokales Recovery aktivieren' })).toBeEnabled()
-  await expect.poll(async () =>
+  const expiredRemoved = () =>
     page.evaluate(async () => {
       const db = await new Promise<IDBDatabase>((resolve, reject) => {
         const request = indexedDB.open('meddpicc-tool-recovery', 1)
@@ -124,7 +124,7 @@ test('abgelaufene Recoverydaten aller Tools werden bei erneutem Zugriff bereinig
       db.close()
       return result === undefined
     }),
-  ).toBe(true)
+  await expect.poll(expiredRemoved).toBe(true)
 })
 
 test('Zwei Tabs erkennen den Schreibkonflikt ohne stilles Überschreiben', async ({ context }) => {
