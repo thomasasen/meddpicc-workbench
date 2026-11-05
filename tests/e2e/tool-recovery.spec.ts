@@ -229,6 +229,29 @@ test('globale Löschung entfernt Recovery-Snapshots', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Wiederherstellen' })).toHaveCount(0)
 })
 
+test('Expliziter Tool-Handoff ohne Opt-in warnt vor verlorenen Quellinformationen', async ({ page }) => {
+  await page.goto('/meddpicc-workbench/#/tools/quick-payback')
+  await page.getByRole('button', { name: /Softwareprojekt & Kunden-Metrics/ }).click()
+  await page.getByRole('button', { name: 'Einmalkosten' }).click()
+  const name = page.locator('.software-entry input').first()
+  await name.fill('Vertrauliche nicht exportierte Kosten')
+  page.once('dialog', async (dialog) => {
+    expect(dialog.type()).toBe('confirm')
+    expect(dialog.message()).toContain('nicht den gesamten Entwurf')
+    await dialog.dismiss()
+  })
+  await page.getByRole('button', { name: 'Metric entwickeln' }).click()
+  await expect(page).toHaveURL(/quick-payback/)
+  await expect(name).toHaveValue('Vertrauliche nicht exportierte Kosten')
+  page.once('dialog', async (dialog) => {
+    expect(dialog.type()).toBe('confirm')
+    expect(dialog.message()).toContain('nicht den gesamten Entwurf')
+    await dialog.accept()
+  })
+  await page.getByRole('button', { name: 'Metric entwickeln' }).click()
+  await expect(page).toHaveURL(/metric-builder/)
+})
+
 test('unfreiwillige Tool-Navigation wird bei ungesicherten Eingaben verhindert', async ({ page }) => {
   await page.goto(timeline)
   await customer(page).fill('Vor Navigationsverlust schützen')

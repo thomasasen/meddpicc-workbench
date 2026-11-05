@@ -68,3 +68,7 @@ Zwei zusätzliche Datenintegritätsrisiken wurden anhand des Quellcodes untersuc
 2. **Vorübergehend leere numerische Eingabefelder:** Bei `v-model.number` kann während der Bearbeitung der Wert `''` entstehen. Solche spezifischen Zwischenwerte werden im lokalen Snapshot zugelassen, beliebige andere Zahlenstrings weiterhin abgelehnt. Ein nicht validierbarer aktueller UI-Stand wird als ungesichert gemeldet und nicht als konkurrierender Tab klassifiziert.
 
 Die Regressionstests wurden erweitert. **Die erfolgreiche Ausführung aller Quality Gates und die visuelle Nutzerfreigabe stehen separat aus; dieser Abschnitt ist kein Test-Erfolgsnachweis.**
+
+## Gezielte Handoff-Navigationsprüfung
+
+Ein ausdrücklicher Session-Handoff überträgt ausschließlich die fachlich vereinbarten Felder, nicht zwingend den vollständigen Ursprungsentwurf. Der bisherige Sonderpfad `acknowledgeNavigation` konnte ohne Opt-in die normale Verlustwarnung überspringen. Bei tatsächlich veränderten ungesicherten Eingaben wird nun auch vor einem solchen bewussten Toolwechsel eine Bestätigung verlangt. Abbrechen erhält den bisherigen Entwurf; ausdrücklich bestätigtes Fortfahren ist weiterhin möglich. Browser-Regressionen prüfen beide Entscheidungen sowie die regulären fachlichen Übergaben.

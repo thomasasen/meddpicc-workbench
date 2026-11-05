@@ -238,8 +238,14 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
       // Ein ausdrücklicher Tool-Handoff ist keine Zusage, dass der gesamte
       // Ursprungsentwurf gespeichert wurde. Vor dem Wechsel ausstehendes
       // Opt-in-Recovery abschließen oder einen Verlust ausdrücklich bestätigen.
-      if (enabled.value && !(await flush())) {
+      if (enabled.value) {
+        if (await flush()) return true
         return window.confirm('Die aktuellen Änderungen konnten nicht lokal gesichert werden. Trotzdem fortfahren?')
+      }
+      if (modified.value) {
+        return window.confirm(
+          'Der Toolwechsel überträgt nicht den gesamten Entwurf. Ungesicherte Eingaben gehen verloren. Trotzdem fortfahren?',
+        )
       }
       return true
     }
