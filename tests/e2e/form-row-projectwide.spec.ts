@@ -156,7 +156,9 @@ async function auditVisibleRows(page: Page) {
           violations.push(`Gruppe ${groupIndex}: "${field.label}" ist nur ${field.control.height}px hoch`)
         }
         if (field.controlType !== 'textarea' && Math.abs(field.control.height - 46) > 1) {
-          violations.push(`Gruppe ${groupIndex}: Einzeilen-Control "${field.label}" ist ${field.control.height}px statt 46px hoch`)
+          violations.push(
+            `Gruppe ${groupIndex}: Einzeilen-Control "${field.label}" ist ${field.control.height}px statt 46px hoch`,
+          )
         }
         if (field.labelBottom !== undefined && field.labelBottom > field.control.top + 1) {
           violations.push(`Gruppe ${groupIndex}: Label überschneidet Control "${field.label}"`)
