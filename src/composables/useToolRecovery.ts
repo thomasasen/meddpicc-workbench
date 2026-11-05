@@ -86,7 +86,8 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
         if (error instanceof RecoveryStorageError && (error.reason === 'conflict' || error.reason === 'invalid')) {
           conflict.value = true
           enabled.value = false
-          message.value = 'Recoverystand ist ungültig oder wurde in einem anderen Tab verändert. Automatisches Sichern angehalten.'
+          message.value =
+            'Recoverystand ist ungültig oder wurde in einem anderen Tab verändert. Automatisches Sichern angehalten.'
         } else if (error instanceof RecoveryStorageError && error.reason === 'quota') {
           message.value = 'Speichergrenze erreicht. Die aktuellen Änderungen sind nicht lokal gesichert.'
         } else {

@@ -19,9 +19,7 @@ export type RecoverySnapshot<T> = {
 }
 
 export type RecoveryRead<T> =
-  | { kind: 'none' }
-  | { kind: 'available'; snapshot: RecoverySnapshot<T> }
-  | { kind: 'invalid' }
+  { kind: 'none' } | { kind: 'available'; snapshot: RecoverySnapshot<T> } | { kind: 'invalid' }
 
 export class RecoveryStorageError extends Error {
   constructor(readonly reason: 'unavailable' | 'quota' | 'conflict' | 'invalid') {
@@ -38,10 +36,14 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
 }
 
-export function parseRecoverySnapshot<T>(raw: unknown, tool: string, validate: (data: unknown) => data is T, now: number): RecoveryRead<T> {
+export function parseRecoverySnapshot<T>(
+  raw: unknown,
+  tool: string,
+  validate: (data: unknown) => data is T,
+  now: number,
+): RecoveryRead<T> {
   if (raw === undefined) return { kind: 'none' }
-  if (typeof raw !== 'string' || new TextEncoder().encode(raw).length > RECOVERY_MAX_BYTES)
-    return { kind: 'invalid' }
+  if (typeof raw !== 'string' || new TextEncoder().encode(raw).length > RECOVERY_MAX_BYTES) return { kind: 'invalid' }
   try {
     const value: unknown = JSON.parse(raw)
     if (

@@ -120,7 +120,9 @@ test('Recoverybedienung bleibt fokussierbar und verursacht keinen horizontalen O
   await expect(page.getByText('Recovery aktiviert.', { exact: false })).toBeVisible()
   for (const width of [320, 375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 850 })
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    )
     expect(overflow, 'Viewport ' + width).toBeLessThanOrEqual(0)
   }
 })

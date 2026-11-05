@@ -13,13 +13,19 @@ const deletingRecovery = ref(false)
 const recoveryMessage = ref('')
 
 async function clearRecovery() {
-  if (!window.confirm('Alle lokalen Recovery-Arbeitsstände in diesem Browser löschen? Dies kann nicht rückgängig gemacht werden.')) return
+  if (
+    !window.confirm(
+      'Alle lokalen Recovery-Arbeitsstände in diesem Browser löschen? Dies kann nicht rückgängig gemacht werden.',
+    )
+  )
+    return
   deletingRecovery.value = true
   recoveryMessage.value = ''
   try {
     await deleteAllRecovery()
     announceAllRecoveryDeleted()
-    recoveryMessage.value = 'Alle lokalen Recovery-Arbeitsstände wurden gelöscht. Andere Browserdaten bleiben unverändert.'
+    recoveryMessage.value =
+      'Alle lokalen Recovery-Arbeitsstände wurden gelöscht. Andere Browserdaten bleiben unverändert.'
   } catch {
     recoveryMessage.value = 'Recoverydaten konnten nicht gelöscht werden. Bitte Browserspeicher prüfen.'
   } finally {
@@ -107,8 +113,8 @@ onMounted(async () => {
             </div>
           </div>
           <p class="settings-status">
-            Die freiwilligen Recovery-Arbeitsstände der Microtools liegen unverschlüsselt in diesem Browser und verfallen
-            nach spätestens sieben Tagen ohne Änderung. Eine lokale Zwischensicherung ist kein Datei-Export.
+            Die freiwilligen Recovery-Arbeitsstände der Microtools liegen unverschlüsselt in diesem Browser und
+            verfallen nach spätestens sieben Tagen ohne Änderung. Eine lokale Zwischensicherung ist kein Datei-Export.
           </p>
           <button class="button button-secondary" type="button" :disabled="deletingRecovery" @click="clearRecovery">
             Alle lokalen Recoverydaten löschen

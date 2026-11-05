@@ -181,9 +181,11 @@ type MetricRecovery = { draft: MetricBuilderDraft; step: 1 | 2 | 3 }
 function validMetricRecovery(value: unknown): value is MetricRecovery {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false
   const entry = value as Record<string, unknown>
-  return Object.keys(entry).length === 2 &&
+  return (
+    Object.keys(entry).length === 2 &&
     validMetricBuilderDraft(entry.draft) &&
     (entry.step === 1 || entry.step === 2 || entry.step === 3)
+  )
 }
 const recoveryState = computed<MetricRecovery>(() => ({ draft: draft.value, step: step.value }))
 const recovery = useToolRecovery({
@@ -196,7 +198,6 @@ const recovery = useToolRecovery({
     step.value = snapshot.step
   },
 })
-
 </script>
 
 <template>

@@ -448,7 +448,6 @@ const recovery = useToolRecovery({
     steps.value = structuredClone(snapshot.steps)
   },
 })
-
 </script>
 
 <template>

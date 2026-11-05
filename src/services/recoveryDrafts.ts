@@ -32,12 +32,23 @@ export function validMetricBuilderDraft(value: unknown): value is MetricBuilderD
   if (!object(value)) return false
   const sample = emptyMetricDraft()
   if (!sameKeys(value, Object.keys(sample))) return false
-  const nums = ['volume', 'before', 'after', 'hourlyCost', 'valuePerEvent', 'realizedAnnual', 'startMonth', 'rampMonths']
-  return Object.keys(sample).every((key) => (nums.includes(key) ? numberOrEmpty(value[key]) : shortText(value[key]))) &&
+  const nums = [
+    'volume',
+    'before',
+    'after',
+    'hourlyCost',
+    'valuePerEvent',
+    'realizedAnnual',
+    'startMonth',
+    'rampMonths',
+  ]
+  return (
+    Object.keys(sample).every((key) => (nums.includes(key) ? numberOrEmpty(value[key]) : shortText(value[key]))) &&
     oneOf(value.formula, formula) &&
     oneOf(value.period, ['monthly', 'annual']) &&
     oneOf(value.evidence, evidence) &&
     oneOf(value.mechanism, mechanism)
+  )
 }
 
 export function validCostOfDelayInput(value: unknown): value is CostOfDelayInput {
@@ -48,7 +59,8 @@ export function validCostOfDelayInput(value: unknown): value is CostOfDelayInput
   const money = ['annualBenefitEur', 'benefitEndMonth', 'legacyMonthlyEur', 'projectOnceEur', 'extraCostPerMonthEur']
   const numbers = ['benefitStartMonth', 'rampMonths', 'legacyStartMonth', 'projectCostMonth']
   const bools = ['legacyMovesWithProject', 'projectCostsMove']
-  return text.every((k) => shortText(value[k])) &&
+  return (
+    text.every((k) => shortText(value[k])) &&
     money.every((k) => optionalNumber(value[k])) &&
     numbers.every((k) => finite(value[k])) &&
     bools.every((k) => typeof value[k] === 'boolean') &&
@@ -57,6 +69,7 @@ export function validCostOfDelayInput(value: unknown): value is CostOfDelayInput
     oneOf(value.expiry, ['fixed', 'follows-start']) &&
     oneOf(value.financialTreatment, ['realized', 'capacity', 'unconfirmed']) &&
     oneOf(value.evidence, evidence)
+  )
 }
 
 export function validBridgeMetric(value: unknown): boolean {
@@ -64,14 +77,17 @@ export function validBridgeMetric(value: unknown): boolean {
   const sample = blankBridgeMetric('template')
   if (!sameKeys(value, Object.keys(sample))) return false
   const text = ['id', 'name', 'before', 'after', 'unit', 'calculation', 'source', 'effectGroup', 'realization']
-  return text.every((k) => shortText(value[k])) &&
+  return (
+    text.every((k) => shortText(value[k])) &&
     optionalNumber(value.annualPotentialEur) &&
     optionalNumber(value.annualRealizedEur) &&
     typeof value.included === 'boolean' &&
-    finite(value.startMonth) && finite(value.rampMonths) &&
+    finite(value.startMonth) &&
+    finite(value.rampMonths) &&
     oneOf(value.evidence, evidence) &&
     oneOf(value.kind, kinds) &&
     oneOf(value.origin, ['manual', 'metric-builder', 'software-business-case', 'cost-of-delay'])
+  )
 }
 
 export function validValueBridgeInput(value: unknown): value is ValueBridgeInput {
@@ -79,42 +95,72 @@ export function validValueBridgeInput(value: unknown): value is ValueBridgeInput
   const sample = blankValueBridge()
   if (!sameKeys(value, Object.keys(sample))) return false
   const text = ['situation', 'pain', 'consequence', 'outcome', 'change', 'prerequisites', 'customer']
-  return text.every((k) => shortText(value[k])) &&
+  return (
+    text.every((k) => shortText(value[k])) &&
     (value.horizonMonths === 36 || value.horizonMonths === 60) &&
     optionalNumber(value.investmentEur) &&
     optionalNumber(value.saasMonthlyEur) &&
-    Array.isArray(value.metrics) && value.metrics.length <= 100 &&
+    Array.isArray(value.metrics) &&
+    value.metrics.length <= 100 &&
     value.metrics.every(validBridgeMetric)
+  )
 }
 
 export function validSoftwareCost(value: unknown): value is SoftwareCost {
   if (!object(value)) return false
   const keys = ['id', 'name', 'kind', 'amountEur', 'period', 'startMonth', 'endMonth', 'effectGroup']
-  return recordKeys(value, keys) &&
-    shortText(value.id) && shortText(value.name) &&
+  return (
+    recordKeys(value, keys) &&
+    shortText(value.id) &&
+    shortText(value.name) &&
     oneOf(value.kind, ['one-time', 'saas', 'avoided-legacy']) &&
     oneOf(value.period, ['monthly', 'annual']) &&
-    finite(value.amountEur) && finite(value.startMonth) &&
+    finite(value.amountEur) &&
+    finite(value.startMonth) &&
     (value.endMonth === undefined || finite(value.endMonth)) &&
     (value.effectGroup === undefined || shortText(value.effectGroup))
+  )
 }
 
 export function validSoftwareMetric(value: unknown): value is CustomerMetric {
   if (!object(value)) return false
   const keys = [
-    'id', 'name', 'formula', 'treatment', 'evidence', 'evidenceNote', 'effectGroup', 'included',
-    'annualAmountEur', 'annualVolume', 'before', 'after', 'hourlyCostEur', 'valuePerEventEur',
-    'startMonth', 'rampMonths', 'endMonth',
+    'id',
+    'name',
+    'formula',
+    'treatment',
+    'evidence',
+    'evidenceNote',
+    'effectGroup',
+    'included',
+    'annualAmountEur',
+    'annualVolume',
+    'before',
+    'after',
+    'hourlyCostEur',
+    'valuePerEventEur',
+    'startMonth',
+    'rampMonths',
+    'endMonth',
   ]
   const nums = [
-    'annualAmountEur', 'annualVolume', 'before', 'after', 'hourlyCostEur', 'valuePerEventEur',
-    'startMonth', 'rampMonths',
+    'annualAmountEur',
+    'annualVolume',
+    'before',
+    'after',
+    'hourlyCostEur',
+    'valuePerEventEur',
+    'startMonth',
+    'rampMonths',
   ]
-  return recordKeys(value, keys) &&
+  return (
+    recordKeys(value, keys) &&
     ['id', 'name', 'evidenceNote', 'effectGroup'].every((k) => shortText(value[k])) &&
     nums.every((k) => finite(value[k])) &&
     (value.endMonth === undefined || finite(value.endMonth)) &&
     typeof value.included === 'boolean' &&
-    oneOf(value.formula, formula) && oneOf(value.evidence, evidence) &&
+    oneOf(value.formula, formula) &&
+    oneOf(value.evidence, evidence) &&
     oneOf(value.treatment, ['realized', 'capacity', 'risk', 'nonfinancial'])
+  )
 }

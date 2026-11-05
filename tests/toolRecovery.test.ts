@@ -36,9 +36,9 @@ describe('Recovery-Snapshot-Parser (keine Browserspeicherung)', () => {
       { data: { label: 'Test', unexpected: true } },
       { token: '' },
     ]) {
-      expect(parseRecoverySnapshot(JSON.stringify({ ...snapshot(), ...changes }), 'metric-builder', valid, now).kind).toBe(
-        'invalid',
-      )
+      expect(
+        parseRecoverySnapshot(JSON.stringify({ ...snapshot(), ...changes }), 'metric-builder', valid, now).kind,
+      ).toBe('invalid')
     }
   })
 

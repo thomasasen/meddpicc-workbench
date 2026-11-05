@@ -408,29 +408,50 @@ function validPaybackRecovery(value: unknown): value is PaybackRecovery {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false
   const record = value as Record<string, unknown>
   const keys = [
-    'costs', 'metrics', 'horizon', 'selectedScenario', 'scenarioSettings', 'reportCustomer',
-    'reportProject', 'reportAuthor', 'reportPain', 'reportGoal', 'reportDate',
+    'costs',
+    'metrics',
+    'horizon',
+    'selectedScenario',
+    'scenarioSettings',
+    'reportCustomer',
+    'reportProject',
+    'reportAuthor',
+    'reportPain',
+    'reportGoal',
+    'reportDate',
   ]
   if (Object.keys(record).length !== keys.length || !keys.every((key) => Object.hasOwn(record, key))) return false
   if (!Array.isArray(record.costs) || record.costs.length > 100 || !record.costs.every(validSoftwareCost)) return false
-  if (!Array.isArray(record.metrics) || record.metrics.length > 100 || !record.metrics.every(validSoftwareMetric)) return false
+  if (!Array.isArray(record.metrics) || record.metrics.length > 100 || !record.metrics.every(validSoftwareMetric))
+    return false
   if (record.horizon !== 36 && record.horizon !== 60) return false
-  if (record.selectedScenario !== 'base' && record.selectedScenario !== 'conservative' && record.selectedScenario !== 'optimistic') return false
-  if (['reportCustomer', 'reportProject', 'reportAuthor', 'reportPain', 'reportGoal', 'reportDate'].some((key) =>
-    typeof record[key] !== 'string' || (record[key] as string).length > 5000,
-  )) return false
+  if (
+    record.selectedScenario !== 'base' &&
+    record.selectedScenario !== 'conservative' &&
+    record.selectedScenario !== 'optimistic'
+  )
+    return false
+  if (
+    ['reportCustomer', 'reportProject', 'reportAuthor', 'reportPain', 'reportGoal', 'reportDate'].some(
+      (key) => typeof record[key] !== 'string' || (record[key] as string).length > 5000,
+    )
+  )
+    return false
   const settings = record.scenarioSettings
   if (!settings || typeof settings !== 'object' || Array.isArray(settings)) return false
   const item = settings as Record<string, unknown>
-  if (Object.keys(item).length !== 2 || !Object.hasOwn(item, 'conservative') || !Object.hasOwn(item, 'optimistic')) return false
+  if (Object.keys(item).length !== 2 || !Object.hasOwn(item, 'conservative') || !Object.hasOwn(item, 'optimistic'))
+    return false
   return ['conservative', 'optimistic'].every((key) => {
     const scenario = item[key]
     if (!scenario || typeof scenario !== 'object' || Array.isArray(scenario)) return false
     const fields = scenario as Record<string, unknown>
-    return Object.keys(fields).length === 3 &&
-      ['benefitPercent', 'oneTimeCostPercent', 'benefitDelayMonths'].every((name) =>
-        typeof fields[name] === 'number' && Number.isFinite(fields[name]),
+    return (
+      Object.keys(fields).length === 3 &&
+      ['benefitPercent', 'oneTimeCostPercent', 'benefitDelayMonths'].every(
+        (name) => typeof fields[name] === 'number' && Number.isFinite(fields[name]),
       )
+    )
   })
 }
 const recoveryState = computed<PaybackRecovery>(() => ({
@@ -464,7 +485,6 @@ const recovery = useToolRecovery({
     reportDate.value = snapshot.reportDate
   },
 })
-
 </script>
 
 <template>

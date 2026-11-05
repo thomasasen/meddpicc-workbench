@@ -148,12 +148,15 @@ type DelayRecovery = {
 function validDelayRecovery(value: unknown): value is DelayRecovery {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false
   const entry = value as Record<string, unknown>
-  return Object.keys(entry).length === 5 &&
+  return (
+    Object.keys(entry).length === 5 &&
     validCostOfDelayInput(entry.draft) &&
     (entry.step === 1 || entry.step === 2 || entry.step === 3) &&
-    typeof entry.chosenDelay === 'number' && Number.isFinite(entry.chosenDelay) &&
+    typeof entry.chosenDelay === 'number' &&
+    Number.isFinite(entry.chosenDelay) &&
     (entry.benefitEntryPeriod === 'annual' || entry.benefitEntryPeriod === 'monthly') &&
     (entry.customDelay === null || (typeof entry.customDelay === 'number' && Number.isFinite(entry.customDelay)))
+  )
 }
 const recoveryState = computed<DelayRecovery>(() => ({
   draft: draft.value,
@@ -175,7 +178,6 @@ const recovery = useToolRecovery({
     customDelay.value = snapshot.customDelay
   },
 })
-
 </script>
 
 <template>

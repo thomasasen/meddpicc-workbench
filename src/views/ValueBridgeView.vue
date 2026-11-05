@@ -140,12 +140,14 @@ type BridgeRecovery = {
 function validBridgeRecovery(value: unknown): value is BridgeRecovery {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false
   const entry = value as Record<string, unknown>
-  return Object.keys(entry).length === 5 &&
+  return (
+    Object.keys(entry).length === 5 &&
     validValueBridgeInput(entry.draft) &&
     (entry.step === 1 || entry.step === 2 || entry.step === 3) &&
     typeof entry.customerView === 'boolean' &&
     typeof entry.showFinance === 'boolean' &&
     typeof entry.isDemo === 'boolean'
+  )
 }
 const recoveryState = computed<BridgeRecovery>(() => ({
   draft: draft.value,
@@ -167,7 +169,6 @@ const recovery = useToolRecovery({
     isDemo.value = snapshot.isDemo
   },
 })
-
 </script>
 
 <template>
