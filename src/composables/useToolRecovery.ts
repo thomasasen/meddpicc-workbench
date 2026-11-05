@@ -252,7 +252,9 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
   async function prepareHandoff(): Promise<boolean> {
     if (enabled.value) {
       if (!(await flush())) {
-        const proceed = window.confirm('Die aktuellen Änderungen konnten nicht lokal gesichert werden. Trotzdem fortfahren?')
+        const proceed = window.confirm(
+          'Die aktuellen Änderungen konnten nicht lokal gesichert werden. Trotzdem fortfahren?',
+        )
         if (!proceed) return false
       }
     } else if (modified.value) {
