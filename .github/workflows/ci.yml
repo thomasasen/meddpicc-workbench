@@ -168,6 +168,13 @@ jobs:
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
           fi
 
+      - name: Recovery-Prettier-Differenz zur Fehlerdiagnose
+        if: startsWith(github.head_ref, 'feat/65-opt-in-local-recovery')
+        run: |
+          npx prettier --write tests/e2e/tool-recovery.spec.ts
+          git diff -- tests/e2e/tool-recovery.spec.ts
+          exit 1
+
       - name: Formatierung prüfen
         run: npm run format:check
 
