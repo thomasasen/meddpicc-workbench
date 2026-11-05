@@ -20,11 +20,9 @@ test('Kopfmenü navigiert zu den Startseitenabschnitten statt die Hash-Route zu 
       await link.click()
       await expect(page).toHaveURL(new RegExp('/#/#' + section.id + '$'))
       await expect(page.locator('#' + section.id)).toBeInViewport({ ratio: 0.05 })
-      const sectionTop = await page.locator('#' + section.id).evaluate((element) => element.getBoundingClientRect().top)
-      const headerHeight = await page.locator('.site-header').evaluate((element) => element.getBoundingClientRect().height)
-      expect(sectionTop, section.id + ' darf nicht unter der fixierten Navigation beginnen').toBeGreaterThanOrEqual(
-        headerHeight - 1,
-      )
+      const sectionTop = await page.locator('#' + section.id).evaluate((e) => e.getBoundingClientRect().top)
+      const headerHeight = await page.locator('.site-header').evaluate((e) => e.getBoundingClientRect().height)
+      expect(sectionTop, 'Abschnitt ' + section.id + ' unter dem Header').toBeGreaterThanOrEqual(headerHeight - 1)
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     }
 
