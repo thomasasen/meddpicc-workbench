@@ -3,10 +3,27 @@ import { onMounted, ref } from 'vue'
 import { ArrowLeft, ArrowRight, FileText, Settings, ShieldCheck } from '@lucide/vue'
 
 import { loadBrandProfile } from '../services/brandProfileStore'
+import { clearAllToolRecovery } from '../services/toolRecovery'
 
 const loading = ref(true)
 const company = ref('')
 const loadError = ref(false)
+const clearingRecovery = ref(false)
+const recoveryStatus = ref('')
+
+async function deleteAllRecovery() {
+  if (!window.confirm('Alle lokalen Recovery-Entwürfe und Einwilligungen dieses Browserprofils löschen?')) return
+  clearingRecovery.value = true
+  recoveryStatus.value = ''
+  try {
+    await clearAllToolRecovery()
+    recoveryStatus.value = 'Alle lokalen Recovery-Entwürfe und zugehörigen Einstellungen wurden gelöscht.'
+  } catch {
+    recoveryStatus.value = 'Die Recoverydaten konnten nicht vollständig gelöscht werden. Bitte Browserspeicher prüfen.'
+  } finally {
+    clearingRecovery.value = false
+  }
+}
 
 onMounted(async () => {
   try {
@@ -81,12 +98,18 @@ onMounted(async () => {
             <div>
               <h2 id="settings-storage-title">Lokale Speicherung und Datensicherung</h2>
               <p>
-                Die Dokumentgestaltung speichert dein Firmenprofil ausschließlich lokal im Browser. Im Bereich
-                Dokumentgestaltung kannst du die Konfiguration als JSON exportieren, auf einem anderen Gerät importieren
-                oder vollständig zurücksetzen. Ein Cloud-Konto ist dafür nicht notwendig.
+                Die Dokumentgestaltung speichert ein Firmenprofil lokal im Browser. Für ausgewählte längere
+                Microtools kannst du zusätzlich freiwillig eine unverschlüsselte Entwurfssicherung aktivieren.
+                Diese Recoverydaten sind keine .meddpicc-Dateien. Sie werden spätestens nach sieben Tagen
+                als abgelaufen behandelt und können hier einschließlich der Einwilligungen gelöscht werden.
+                Das Firmenprofil bleibt von dieser Löschung unberührt.
               </p>
             </div>
           </div>
+          <button type="button" class="button button-secondary button-with-icon" :disabled="clearingRecovery" @click="deleteAllRecovery">
+            Alle Recoverydaten löschen
+          </button>
+          <p v-if="recoveryStatus" role="status" class="settings-status">{{ recoveryStatus }}</p>
         </section>
       </div>
     </main>
