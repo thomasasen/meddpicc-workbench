@@ -110,11 +110,27 @@ export async function readRecovery<T>(
   const db = await database()
   try {
     return await new Promise<RecoveryRead<T>>((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, 'readonly')
-      const request = tx.objectStore(STORE_NAME).get(tool)
+      const tx = db.transaction(STORE_NAME, 'readwrite')
+      const store = tx.objectStore(STORE_NAME)
+      const request = store.get(tool)
       let result: RecoveryRead<T> = { kind: 'none' }
       request.onsuccess = () => {
         result = parseRecoverySnapshot(request.result, tool, validate, now)
+        // Bei nächster Öffnung abgelaufene sensible Daten transaktional löschen.
+        if (typeof request.result !== 'string') return
+        try {
+          const value: unknown = JSON.parse(request.result)
+          if (
+            isObject(value) &&
+            typeof value.expiresAt === 'string' &&
+            Number.isFinite(Date.parse(value.expiresAt)) &&
+            Date.parse(value.expiresAt) <= now
+          ) {
+            store.delete(tool)
+          }
+        } catch {
+          /* Beschädigte Daten bleiben ausdrücklich verwerfbar. */
+        }
       }
       tx.oncomplete = () => resolve(result)
       tx.onabort = () => reject(classify(tx.error))
@@ -188,15 +204,32 @@ export async function writeRecovery<T>(
   }
 }
 
-export async function deleteRecovery(tool: string): Promise<void> {
+/** Löschen nur, wenn seit dem Anzeigen kein anderer Tab neu geschrieben hat. */
+export async function deleteRecovery<T>(
+  tool: string,
+  validate: (data: unknown) => data is T,
+  expectedToken: string | null,
+): Promise<void> {
   validateTool(tool)
   const db = await database()
   try {
     await new Promise<void>((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, 'readwrite')
-      tx.objectStore(STORE_NAME).delete(tool)
+      const store = tx.objectStore(STORE_NAME)
+      const request = store.get(tool)
+      let failure: RecoveryStorageError | null = null
+      request.onsuccess = () => {
+        const current = parseRecoverySnapshot(request.result, tool, validate, Date.now())
+        const token = current.kind === 'available' ? current.snapshot.token : null
+        if (token !== expectedToken) {
+          failure = new RecoveryStorageError('conflict')
+          tx.abort()
+          return
+        }
+        store.delete(tool)
+      }
       tx.oncomplete = () => resolve()
-      tx.onabort = () => reject(classify(tx.error))
+      tx.onabort = () => reject(failure ?? classify(tx.error))
     })
   } finally {
     db.close()
