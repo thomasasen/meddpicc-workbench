@@ -279,6 +279,7 @@ test('Ein abgelaufener Snapshot wird bei der nächsten Werkzeugöffnung physisch
 test('Fehler beim Export erzeugt keinen Erfolgshinweis und verliert die Eingaben nicht', async ({ page }) => {
   await page.goto(builder)
   await page.getByRole('button', { name: 'CRM-Zeitgewinn' }).click()
+  await page.getByRole('button', { name: 'Weiter', exact: false }).click()
   await page.evaluate(() => {
     URL.createObjectURL = () => {
       throw new Error('Download durch Browser blockiert')
