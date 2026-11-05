@@ -68,22 +68,19 @@ async function checkFormRows(page: Page, routeAndState: string): Promise<number>
   for (const group of groups) {
     for (const item of group.items) {
       if (item.kind !== 'textarea') {
-        expect.soft(
-          Math.abs(item.controlHeight - 46),
-          `${routeAndState} / ${group.className}: Control-Höhe`,
-        ).toBeLessThanOrEqual(1)
+        expect
+          .soft(Math.abs(item.controlHeight - 46), `${routeAndState} / ${group.className}: Control-Höhe`)
+          .toBeLessThanOrEqual(1)
       }
       if (item.labelBottom !== null) {
-        expect.soft(
-          item.labelBottom,
-          `${routeAndState} / ${group.className}: Label muss oberhalb stehen`,
-        ).toBeLessThanOrEqual(item.controlTop + 1)
+        expect
+          .soft(item.labelBottom, `${routeAndState} / ${group.className}: Label muss oberhalb stehen`)
+          .toBeLessThanOrEqual(item.controlTop + 1)
       }
       if (item.hintTop !== null) {
-        expect.soft(
-          item.hintTop,
-          `${routeAndState} / ${group.className}: Hilfetext muss darunter stehen`,
-        ).toBeGreaterThanOrEqual(item.controlBottom - 1)
+        expect
+          .soft(item.hintTop, `${routeAndState} / ${group.className}: Hilfetext muss darunter stehen`)
+          .toBeGreaterThanOrEqual(item.controlBottom - 1)
       }
     }
 
@@ -95,10 +92,7 @@ async function checkFormRows(page: Page, routeAndState: string): Promise<number>
         compared++
         const context = `${routeAndState} / ${group.className} / Gruppe ${group.groupIndex} / ${i}:${j}`
         expect.soft(Math.abs(a.controlTop - b.controlTop), `${context}: Oberkanten`).toBeLessThanOrEqual(1)
-        expect.soft(
-          Math.abs(a.controlHeight - b.controlHeight),
-          `${context}: gleiche Höhe`,
-        ).toBeLessThanOrEqual(1)
+        expect.soft(Math.abs(a.controlHeight - b.controlHeight), `${context}: gleiche Höhe`).toBeLessThanOrEqual(1)
       }
     }
   }
@@ -106,11 +100,7 @@ async function checkFormRows(page: Page, routeAndState: string): Promise<number>
   return compared
 }
 
-async function auditRoute(
-  page: Page,
-  route: string,
-  prepare?: (page: Page) => Promise<void>,
-): Promise<number> {
+async function auditRoute(page: Page, route: string, prepare?: (page: Page) => Promise<void>): Promise<number> {
   let totalCompared = 0
   for (const width of [320, 375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 920 })
