@@ -15,7 +15,7 @@ test('Kopfmenü navigiert zu den Startseitenabschnitten statt die Hash-Route zu 
     const navigation = page.getByRole('navigation', { name: 'Toolbox-Bereiche' })
     for (const section of sections) {
       const link = navigation.getByRole('link', { name: section.label })
-      await expect(link).toHaveAttribute('href', new RegExp('/#/#' + section.id + '$'))
+      await expect(link).toHaveAttribute('href', '#/#' + section.id)
       await link.click()
       await expect(page).toHaveURL(new RegExp('/#/#' + section.id + '$'))
       await expect(page.locator('#' + section.id)).toBeInViewport({ ratio: 0.05 })
