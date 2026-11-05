@@ -75,10 +75,9 @@ async function verifyVisibleFieldRows(page: Page, screen: string) {
     return { checkedFields, comparedPairs, violations }
   }, fieldGroups)
 
-  expect(
-    result.violations,
-    `${screen}: ${result.checkedFields} Felder, ${result.comparedPairs} Zeilenpaare`,
-  ).toEqual([])
+  expect(result.violations, `${screen}: ${result.checkedFields} Felder, ${result.comparedPairs} Zeilenpaare`).toEqual(
+    [],
+  )
   return result
 }
 
@@ -113,9 +112,7 @@ test('Alle produktiven Formularraster über 375–1440 px und mehrere Wizard-Sch
       }
     }
   }
-  expect(checkedPairs, 'Mindestens ein tatsächliches nebeneinanderliegendes Eingabepaar geprüft').toBeGreaterThan(
-    15,
-  )
+  expect(checkedPairs, 'Mindestens ein tatsächliches nebeneinanderliegendes Eingabepaar geprüft').toBeGreaterThan(15)
 })
 
 test('Farbauswahl in der Dokumentgestaltung nutzt gleiche Control-Oberkante und Höhe', async ({ page }) => {
