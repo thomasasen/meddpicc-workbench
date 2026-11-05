@@ -59,8 +59,9 @@ test('Abschnittslinks funktionieren auch direkt, nach Reload und mit Tastatur', 
 
   // Der Skip-Link darf im Hash-Modus nicht auf eine nicht existente Route zeigen.
   await page.goto(root)
+  const initialUrl = page.url()
   await page.locator('.skip-link').focus()
   await page.keyboard.press('Enter')
   await expect(page.locator('#main-content')).toBeFocused()
-  await expect(page).toHaveURL(/\/meddpicc-workbench\/#\/$/)
+  expect(page.url()).toBe(initialUrl)
 })
