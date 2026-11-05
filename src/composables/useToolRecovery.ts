@@ -67,6 +67,7 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
   let offered: RecoverySnapshot<T> | null = null
   let timer: ReturnType<typeof setTimeout> | null = null
   let inFlight = false
+  let activeSave: Promise<void> | null = null
   let mounted = false
   let allowOneNavigation = false
   let channel: BroadcastChannel | null = null
@@ -99,7 +100,7 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
     clearTimer()
     if (!state.ready || !state.enabled || state.pending || state.invalid || state.conflict || !state.dirty) return
     if (fingerprint() === latestSaved) return
-    timer = setTimeout(() => void save(), SAVE_DEBOUNCE_MS)
+    timer = setTimeout(() => void startSave(), SAVE_DEBOUNCE_MS)
   }
 
   async function save(): Promise<void> {
@@ -130,6 +131,23 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
       state.saving = false
       if (fingerprint() !== current && !state.conflict) scheduleSave()
     }
+  }
+
+  function startSave(): Promise<void> {
+    if (activeSave) return activeSave
+    const task = save()
+    activeSave = task
+    void task.finally(() => {
+      if (activeSave === task) activeSave = null
+    })
+    return task
+  }
+
+  async function flushForNavigation(): Promise<boolean> {
+    if (!state.enabled || state.pending || state.invalid || state.conflict) return true
+    if (activeSave) await activeSave
+    if (fingerprint() !== latestSaved) await startSave()
+    return fingerprint() === latestSaved
   }
 
   watch(
@@ -279,17 +297,25 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
     allowOneNavigation = true
   }
 
-  const unregisterGuard = router.beforeEach((to, from) => {
+  const unregisterGuard = router.beforeEach(async (to, from) => {
     if (!mounted || to.fullPath === from.fullPath) return true
-    if (allowOneNavigation) {
-      allowOneNavigation = false
-      return true
-    }
+    const explicitHandoff = allowOneNavigation
+    allowOneNavigation = false
     if (!state.dirty) return true
-    return window.confirm(
-      'Ungesicherte Eingaben dieses Tools verlassen? Ein Recovery-Snapshot ist keine gespeicherte Datei. ' +
-        'Du kannst hierbleiben und deine Arbeit fortsetzen.',
-    )
+    if (
+      !explicitHandoff &&
+      !window.confirm(
+        'Ungesicherte Eingaben dieses Tools verlassen? Ein Recovery-Snapshot ist keine gespeicherte Datei. ' +
+          'Du kannst hierbleiben und deine Arbeit fortsetzen.',
+      )
+    ) return false
+
+    // A pending debounce must not be discarded merely because a route changes.
+    const secured = await flushForNavigation()
+    if (!secured && state.enabled && !explicitHandoff) {
+      return window.confirm('Die letzte lokale Recovery-Sicherung ist fehlgeschlagen oder noch nicht bestätigt. Trotzdem verlassen?')
+    }
+    return true
   })
 
   onMounted(async () => {
