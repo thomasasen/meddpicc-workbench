@@ -211,7 +211,7 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
         <p class="eyebrow">Schritt 1 · Discovery</p>
         <h2 id="metric-problem-title">Was soll sich beim Kunden verändern?</h2>
         <p>Beginne mit dem Problem. Noch keine Euro-Beträge behaupten.</p>
-        <div class="metric-fields">
+        <div class="metric-fields metric-fields--discovery">
           <label class="field"
             ><span>Welches konkrete Problem besteht?</span>
             <textarea
@@ -369,7 +369,7 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
           </div>
         </div>
 
-        <div class="metric-fields">
+        <div class="metric-fields metric-fields--impact">
           <label v-if="realizationPossible" class="field"
             ><span>Wie kann der Nutzen finanziell realisiert werden?</span>
             <select v-model="draft.mechanism">
@@ -384,7 +384,7 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
               <input v-model.number="draft.realizedAnnual" type="number" min="0" step="any" inputmode="decimal" />
               <small>Darf nicht höher sein als das berechnete Potenzial.</small>
             </label>
-            <label class="field"
+            <label class="field field--longform"
               ><span>Welche konkrete Ausgabe entfällt oder welcher Deckungsbeitrag entsteht?</span>
               <textarea
                 v-model="draft.realizationNote"
@@ -411,7 +411,7 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
               >„Mit dem Kunden geprüft“ nur selbst und bewusst wählen; der Rechner validiert keine Quelldaten.</small
             >
           </label>
-          <label class="field"
+          <label class="field field--longform"
             ><span>Quellen, geprüfte Annahmen oder offene Datenbasis</span>
             <textarea
               v-model="draft.assumptionNote"
