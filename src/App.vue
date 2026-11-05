@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted } from 'vue'
-import { RouterView } from 'vue-router'
+import { RouterView, useRouter } from 'vue-router'
 
 import { useProjectStore } from './stores/projectStore'
 
 const projectStore = useProjectStore()
+const router = useRouter()
+const legacyRoutes = new Set(['/evidence', '/risks-actions', '/references'])
+const unregisterGuard = router.beforeEach((to, from) => {
+  if (!projectStore.dirty || !legacyRoutes.has(from.path) || legacyRoutes.has(to.path)) return true
+  return window.confirm('Das Legacy-Projekt enthält Änderungen, die nicht als .meddpicc-Datei bestätigt sind. Bereich wirklich verlassen?')
+})
 
 function handleBeforeUnload(event: BeforeUnloadEvent) {
   if (!projectStore.dirty) return
@@ -28,6 +34,7 @@ onMounted(() => {
   document.addEventListener('wheel', handleSelectWheel, { capture: true })
 })
 onBeforeUnmount(() => {
+  unregisterGuard()
   window.removeEventListener('beforeunload', handleBeforeUnload)
   document.removeEventListener('wheel', handleSelectWheel, { capture: true })
 })
