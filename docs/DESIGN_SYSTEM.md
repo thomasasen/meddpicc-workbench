@@ -134,6 +134,7 @@ Keine Deal-Gesamtbewertung, kein gespeicherter Score und kein permanenter Fortsc
 - **Kein Bottom-Alignment vollständiger Feldcontainer** und keine freien Grid-Auto-Tracks, die Felder mit und ohne Hinweise gegeneinander versetzen. Für komplexere Formularzeilen ein gemeinsames CSS-Grid/Subgrid verwenden; bei fehlender Subgrid-Unterstützung Labels und Control-Höhen konsistent reservieren.
 - **Responsive:** Sobald sich das Spaltenraster ändert, muss die Ausrichtung innerhalb jeder neu entstehenden Zeile erhalten bleiben. Lange Labels dürfen umbrechen, ohne Eingabeboxen in benachbarten Spalten zu verschieben.
 - **Abnahme:** Auf Desktop und Mobile tatsächliche `getBoundingClientRect()`-Positionen und -Höhen prüfen, nicht nur gleich wirkende CSS-Werte. Hilfe- und Fehlermeldungen müssen vollständig unterhalb des zugehörigen Controls bleiben.
+- **Gemeinsame Implementierung:** `src/styles/formRowAlignment.css` regelt das Raster mehrspaltiger Eingaben in allen produktiven Tools (einschließlich der dynamischen Softwareprojekt- und Wizard-Modi), der Dokumentgestaltung und den noch erreichbaren internen Formularansichten. Mehrzeilige Freitexte behalten ihre sinnvolle Höhe und erhalten bei Mischformularen bevorzugt eine eigene volle Zeile.
 
 ## 8. Kundenfähige Ergebnisse
 

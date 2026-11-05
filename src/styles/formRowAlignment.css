@@ -1,0 +1,219 @@
+/*
+ * Projektweites Formularraster (Apple Design / MEDDPICC Toolbox).
+ * Beschriftung, Control und optionaler Hinweis belegen drei gemeinsame Spuren.
+ * So verschiebt ein langer Label- oder Hilfetext niemals nur eine Eingabebox.
+ * Mehrzeilige Textfelder bleiben mehrzeilig; sie werden nicht auf 46px gestaucht.
+ */
+:root {
+  --form-control-row-height: 46px;
+  --form-field-row-gap: 0.375rem;
+}
+
+.site-shell :is(
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .cod-field-row,
+    .vb-fields-two,
+    .evidence-form,
+    .work-object-form,
+    .new-project-fields,
+    .branding-color-row
+  ) {
+  align-items: start;
+}
+
+/* Auch bei zwei-/dreizeiligen Labels verläuft das nächste Control auf einer Linie. */
+.site-shell :is(
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .cod-field-row,
+    .vb-fields-two,
+    .evidence-form,
+    .work-object-form,
+    .new-project-fields,
+    .branding-color-row
+  ) > label {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: minmax(2.6em, auto) minmax(var(--form-control-row-height), auto) auto;
+  row-gap: var(--form-field-row-gap);
+  align-self: stretch;
+  align-content: start;
+  min-width: 0;
+  margin-block: 0;
+}
+
+.site-shell :is(
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .cod-field-row,
+    .vb-fields-two,
+    .evidence-form,
+    .work-object-form,
+    .new-project-fields
+  ) > label > span:first-child {
+  grid-row: 1;
+  align-self: end;
+  min-width: 0;
+}
+
+.site-shell :is(
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .cod-field-row,
+    .vb-fields-two,
+    .evidence-form,
+    .work-object-form,
+    .new-project-fields,
+    .branding-color-row
+  ) > label > :is(input:not([type='checkbox']):not([type='radio']), select, textarea) {
+  grid-row: 2;
+  align-self: start;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Einheitliche Höhe für einzeilige Eingaben, getrennt von Textareas. */
+.site-shell :is(
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .cod-field-row,
+    .vb-fields-two,
+    .evidence-form,
+    .work-object-form,
+    .new-project-fields,
+    .branding-color-row
+  ) > label > :is(input:not([type='checkbox']):not([type='radio']), select) {
+  height: var(--form-control-row-height);
+  min-height: var(--form-control-row-height);
+}
+
+.site-shell :is(
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .cod-field-row,
+    .vb-fields-two,
+    .evidence-form,
+    .work-object-form,
+    .new-project-fields,
+    .branding-color-row
+  ) > label > small {
+  grid-row: 3;
+  margin: 0;
+  align-self: start;
+  min-width: 0;
+}
+
+/* Subgrid übernimmt die Label- und Hinweisgröße aus der gemeinsamen Formularzeile.
+ * Modernes Edge/Chromium, Firefox und Safari: unterstützt. Fallback oben bleibt lesbar. */
+@supports (grid-template-rows: subgrid) {
+  .site-shell :is(
+      .reverse-step-fields,
+      .metric-fields,
+      .metric-timing,
+      .software-fields,
+      .software-report-story,
+      .cod-field-row,
+      .vb-fields-two,
+      .evidence-form,
+      .work-object-form,
+      .new-project-fields,
+      .branding-color-row
+    ) > label {
+    grid-template-rows: subgrid;
+  }
+}
+
+/* Freitext erhält eine eigene Zeile statt ein einzeiliges Control daneben
+ * unverhältnismäßig groß zu ziehen. Das betrifft die Discovery im Metric Builder. */
+.site-shell .metric-fields > label:has(> textarea) {
+  grid-column: 1 / -1;
+}
+
+/* Eingeschobene fachliche Hinweise / Unterraster müssen als eigener
+ * Formulareintrag die nächste vollständige Zeile belegen. */
+.site-shell .metric-fields > :is(.metric-timing, .metric-muted) {
+  grid-row: span 3;
+}
+
+/* Freitextberichte in Software Payback bleiben echte mehrzeilige Eingaben. */
+.site-shell .software-report-story > label > textarea {
+  min-height: 88px;
+}
+
+/* Hex-Eingabe und Farbauswahl haben trotz unterschiedlicher Breite
+ * exakt dieselbe Oberkante und dieselbe Höhe. */
+.site-shell .branding-color-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(82px, 96px);
+  column-gap: 0.8rem;
+  align-items: start;
+  max-width: 455px;
+}
+
+.site-shell .branding-color-row > label:first-child {
+  width: auto;
+  min-width: 0;
+}
+
+.site-shell .branding-color-row > label {
+  min-width: 0;
+}
+
+.site-shell .branding-color-row > label > input[type='color'] {
+  max-width: none;
+  padding: 0.35rem;
+}
+
+/* Für einspaltige Layouts gibt es keine benachbarten Controls, deren
+ * Labelhöhen gekoppelt werden müssten. Keinen Platz künstlich reservieren. */
+@media (max-width: 560px) {
+  .site-shell :is(
+      .reverse-step-fields,
+      .metric-fields,
+      .metric-timing,
+      .software-fields,
+      .software-report-story,
+      .cod-field-row,
+      .vb-fields-two,
+      .evidence-form,
+      .work-object-form,
+      .new-project-fields
+    ) > label {
+    grid-row: auto;
+    grid-template-rows: auto auto auto;
+    align-content: start;
+  }
+
+  .site-shell .branding-color-row > label {
+    /* Die Farbauswahl bleibt auch auf schmalen Geräten nebeneinander. */
+    grid-template-rows: minmax(2.6em, auto) auto auto;
+  }
+}
+
+/* Starke Browser-/Systemkontraste dürfen die Ausrichtungsregeln nicht aufheben. */
+@media (forced-colors: active) {
+  .site-shell .branding-color-row > label > input[type='color'] {
+    border: 1px solid ButtonText;
+  }
+}
