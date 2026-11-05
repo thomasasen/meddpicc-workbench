@@ -391,7 +391,9 @@ async function downloadReport(kind: 'customer' | 'finance') {
     const prefix = kind === 'customer' ? 'kundenbericht-' : 'finance-anhang-'
     saveBlob(new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }), prefix + safeName + '.pdf')
     reportStatus.value =
-      (kind === 'customer' ? 'Kundenbericht erstellt. Download angestoßen; Datei bitte prüfen.' : 'Finance-Anhang erstellt. Download angestoßen; Datei bitte prüfen.') + (warning ? ' ' + warning : '')
+      (kind === 'customer'
+        ? 'Kundenbericht erstellt. Download angestoßen; Datei bitte prüfen.'
+        : 'Finance-Anhang erstellt. Download angestoßen; Datei bitte prüfen.') + (warning ? ' ' + warning : '')
   } catch {
     reportStatus.value = 'PDF-Erstellung fehlgeschlagen. Bitte Eingaben prüfen und erneut versuchen.'
   }

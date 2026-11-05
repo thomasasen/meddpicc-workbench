@@ -229,7 +229,9 @@ test('QuotaExceededError während des Schreibens zeigt keinen falschen Sicherung
   })
   await page.goto(builder)
   await page.getByRole('button', { name: 'Lokale Sicherung aktivieren' }).click()
-  await page.getByRole('textbox', { name: 'Welches konkrete Problem besteht?' }).fill('Keine Sicherung bei vollem Speicher')
+  await page
+    .getByRole('textbox', { name: 'Welches konkrete Problem besteht?' })
+    .fill('Keine Sicherung bei vollem Speicher')
   await expect(page.getByRole('alert')).toContainText('Speicher gesperrt oder voll')
   await expect(page.getByText('Zuletzt lokal zwischengesichert:', { exact: false })).toHaveCount(0)
 })

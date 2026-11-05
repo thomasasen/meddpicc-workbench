@@ -173,7 +173,16 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
   )
 
   watch(
-    () => [state.dirty, state.enabled, state.pending, state.invalid, state.conflict, state.error, state.savedAt, fingerprint()],
+    () => [
+      state.dirty,
+      state.enabled,
+      state.pending,
+      state.invalid,
+      state.conflict,
+      state.error,
+      state.savedAt,
+      fingerprint(),
+    ],
     () => {
       state.atRisk = shouldWarn()
       if (!mounted) return

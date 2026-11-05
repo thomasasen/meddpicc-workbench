@@ -9,7 +9,9 @@ async function createUnsavedEvidence(page: import('@playwright/test').Page): Pro
   await expect(page.locator('.project-save-state')).toContainText('Änderungen nicht als Datei bestätigt')
 }
 
-test('Legacy: Browser-Download bestätigt keine Dateispeicherung oder neue Revision im laufenden Projekt', async ({ page }) => {
+test('Legacy: Browser-Download bestätigt keine Dateispeicherung oder neue Revision im laufenden Projekt', async ({
+  page,
+}) => {
   await createUnsavedEvidence(page)
   const downloadPromise = page.waitForEvent('download')
   await page.getByRole('button', { name: 'Projekt speichern' }).click()
