@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ToolRecoveryBar from '../components/ToolRecoveryBar.vue'
+import { useToolRecovery } from '../composables/useToolRecovery'
+import { isReverseTimelineRecovery, type ReverseTimelineRecovery } from '../services/toolRecoveryValidators'
 import {
   ArrowLeft,
   CalendarDays,
@@ -391,6 +394,35 @@ async function exportTimeline(kind: 'svg' | 'png'): Promise<void> {
     exportBusy.value = false
   }
 }
+const recovery = useToolRecovery<ReverseTimelineRecovery>({
+  toolId: 'reverse-timeline',
+  read: () => ({
+    customerName: customerName.value,
+    planTitle: planTitle.value,
+    referenceDate: referenceDate.value,
+    targetGoLiveDate: targetGoLiveDate.value,
+    compellingEvent: compellingEvent.value,
+    steps: steps.value,
+  }),
+  restore: (value) => {
+    customerName.value = value.customerName
+    planTitle.value = value.planTitle
+    referenceDate.value = value.referenceDate
+    targetGoLiveDate.value = value.targetGoLiveDate
+    compellingEvent.value = value.compellingEvent
+    steps.value = value.steps
+  },
+  validate: isReverseTimelineRecovery,
+  isMeaningful: (value) =>
+    Boolean(
+      value.customerName.trim() ||
+      value.targetGoLiveDate ||
+      value.compellingEvent.trim() ||
+      value.planTitle !== 'Go-Live-Timeline' ||
+      value.referenceDate !== localTodayIso() ||
+      JSON.stringify(value.steps) !== JSON.stringify(starterSteps()),
+    ),
+})
 </script>
 
 <template>
@@ -435,6 +467,8 @@ async function exportTimeline(kind: 'svg' | 'png'): Promise<void> {
           </p>
         </aside>
       </section>
+
+      <ToolRecoveryBar :recovery="recovery" class="container" />
 
       <section class="container reverse-config" aria-labelledby="plan-input-title">
         <div class="section-heading-row">
