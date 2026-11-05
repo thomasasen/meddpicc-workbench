@@ -33,7 +33,7 @@ for (const route of routes) {
     test.setTimeout(120_000)
     const errors: string[] = []
     page.on('pageerror', (error) => errors.push(error.message))
-    for (const width of [375, 768, 1024, 1440]) {
+    for (const width of [320, 375, 768, 1024, 1440]) {
       await page.setViewportSize({ width, height: 900 })
       await page.goto('/#' + route)
       await expect(page.locator('main').first()).toBeVisible()
@@ -44,7 +44,7 @@ for (const route of routes) {
         document: document.documentElement.scrollWidth,
       }))
       expect(overflow.document, route + ' bei ' + width + 'px').toBeLessThanOrEqual(overflow.width + 1)
-      if (width === 375 || width === 1440) {
+      if (width === 320 || width === 375 || width === 1440) {
         const name = route.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'start'
         await page.screenshot({
           path: testInfo.outputPath(name + '-' + width + '-' + testInfo.project.name + '.png'),
@@ -60,7 +60,7 @@ const internalRoutes = ['/evidence', '/risks-actions', '/references'] as const
 
 for (const route of internalRoutes) {
   test('Erreichbare interne Ansicht bleibt bedienbar: ' + route, async ({ page }, testInfo) => {
-    for (const width of [375, 768, 1024, 1440]) {
+    for (const width of [320, 375, 768, 1024, 1440]) {
       await page.setViewportSize({ width, height: 900 })
       await page.goto('/#' + route)
       await expect(page.getByRole('main')).toBeVisible()

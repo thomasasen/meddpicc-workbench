@@ -1,0 +1,225 @@
+/*
+ * Gemeinsames Formular-Zeilenraster für produktive Tools und Legacy-Formulare.
+ * Controls stehen in Spur 2, Labels in Spur 1, Hinweise in Spur 3.
+ * Subgrid synchronisiert auch umgebrochene Labels und dynamische Hinweise.
+ * Textareas behalten ihre Mindesthöhe und Resize-Funktion; andere Controls
+ * strecken sich bei gemischten Zeilen auf dieselbe Höhe.
+ */
+:root {
+  --form-row-control-height: 46px;
+  --form-row-track-gap: 0.4rem;
+  --form-row-group-space: 0.7rem;
+}
+
+#app
+  :is(
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .vb-fields-two,
+    .cod-field-row,
+    .reverse-step-fields,
+    .evidence-form,
+    .work-object-form
+  ) {
+  align-items: start;
+}
+
+#app
+  :is(
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .vb-fields-two,
+    .cod-field-row,
+    .reverse-step-fields,
+    .evidence-form,
+    .work-object-form
+  ) > :is(label.field, label.cod-field, label.vb-field) {
+  display: grid;
+  grid-template-rows: minmax(1.5em, auto) minmax(var(--form-row-control-height), auto) auto;
+  align-content: start;
+  align-items: stretch;
+  gap: var(--form-row-track-gap);
+  min-width: 0;
+  padding-bottom: var(--form-row-group-space);
+}
+
+#app
+  :is(
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .vb-fields-two,
+    .cod-field-row,
+    .reverse-step-fields,
+    .evidence-form,
+    .work-object-form
+  ) > :is(label.field, label.cod-field, label.vb-field) > span {
+  grid-row: 1;
+  align-self: end;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+#app
+  :is(
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .vb-fields-two,
+    .cod-field-row,
+    .reverse-step-fields,
+    .evidence-form,
+    .work-object-form
+  ) > :is(label.field, label.cod-field, label.vb-field) > :is(input:not([type='checkbox']):not([type='radio']), select, textarea) {
+  grid-row: 2;
+  align-self: stretch;
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  min-height: var(--form-row-control-height);
+}
+
+#app
+  :is(
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .vb-fields-two,
+    .cod-field-row,
+    .reverse-step-fields,
+    .evidence-form,
+    .work-object-form
+  ) > :is(label.field, label.cod-field, label.vb-field) > :is(small, .field-help, [role='alert']) {
+  grid-row: 3;
+  align-self: start;
+  min-width: 0;
+  margin-top: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Freie Erläuterungen belegen eine vollständige Zeile, keine halbe Grid-Spur. */
+#app .metric-fields > .metric-muted {
+  grid-column: 1 / -1;
+}
+
+/*
+ * Discovery: Einzellige Prozess-Inputs werden nicht neben mehrzeiligen
+ * Problembeschreibungen auf Textarea-Höhe gedehnt. Folge und Ziel bleiben
+ * als gleich hohe Textareas nebeneinander.
+ */
+#app .metric-fields--discovery > label.field:nth-child(-n + 2) {
+  grid-column: 1 / -1;
+}
+
+/* Das bestehende Reverse-Timeline-Subgrid bleibt unverändert. */
+@supports (grid-template-rows: subgrid) {
+  #app
+    :is(
+      .metric-fields,
+      .metric-timing,
+      .software-fields,
+      .software-report-story,
+      .vb-fields-two,
+      .cod-field-row,
+      .reverse-step-fields,
+      .evidence-form,
+      .work-object-form
+    ) {
+    row-gap: var(--form-row-track-gap);
+  }
+
+  #app
+    :is(
+      .metric-fields,
+      .metric-timing,
+      .software-fields,
+      .software-report-story,
+      .vb-fields-two,
+      .cod-field-row,
+      .reverse-step-fields,
+      .evidence-form,
+      .work-object-form
+    ) > :is(label.field, label.cod-field, label.vb-field) {
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+  }
+}
+
+/*
+ * Farbeingabe im Dokumentdesign: zwei echte Feldspalten statt Flex-End-Alignment.
+ * Auch die Text-/Farbwahl bekommt eine gemeinsame Control-Spur.
+ */
+#app .branding-color-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px;
+  align-items: start;
+  gap: 0.8rem;
+}
+
+#app .branding-color-row > label {
+  display: grid;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  grid-template-rows: minmax(1.5em, auto) var(--form-row-control-height);
+  align-content: start;
+  align-items: stretch;
+  gap: var(--form-row-track-gap);
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+#app .branding-color-row > label > input {
+  grid-row: 2;
+  width: 100%;
+  min-width: 0;
+  height: var(--form-row-control-height);
+  min-height: var(--form-row-control-height);
+}
+
+#app .branding-color-row > label > input[type='color'] {
+  padding: 0.2rem;
+}
+
+@supports (grid-template-rows: subgrid) {
+  #app .branding-color-row {
+    row-gap: var(--form-row-track-gap);
+  }
+
+  #app .branding-color-row > label {
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+  }
+}
+
+/* Alte Browser: lieber eine Spalte als scheinbar ausgerichtete, versetzte Inputs. */
+@supports not (grid-template-rows: subgrid) {
+  #app
+    :is(
+      .metric-fields,
+      .metric-timing,
+      .software-fields,
+      .software-report-story,
+      .vb-fields-two,
+      .cod-field-row,
+      .reverse-context-grid,
+      .reverse-step-fields,
+      .evidence-form,
+      .work-object-form,
+      .branding-color-row
+    ) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #app .reverse-step-owner-detail {
+    grid-column: auto;
+  }
+}
