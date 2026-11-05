@@ -26,7 +26,7 @@ MEDDPICC bleibt als fachliche Orientierung sichtbar, aber nicht als erzwungener 
 - B2B-tauglich
 - informationsdicht, aber nicht dashboard-lastig
 - neutrale Flächen mit zurückhaltender Akzentfarbe
-- funktionale Materialtiefe: schwebende Navigation, Popover und Sheets dürfen/transparente Oberflächen und Blur zur räumlichen Trennung nutzen, solange Kontrast und Hierarchie erhalten bleiben
+- funktionale Materialtiefe: tatsächlich schwebende Navigation, Popover und Sheets dürfen transparente Oberflächen und Blur zur räumlichen Trennung nutzen, sofern Kontrast, Hierarchie und solide Fallbacks erhalten bleiben
 - keine beliebigen Glasflächen, Neon-/AI-Gradienten oder Marketing-Hero-Optik ohne funktionalen Bezug
 - unmittelbare Reaktion auf Eingaben, reversible, räumlich konsistente Übergänge und physikalisch nachvollziehbare Gesten
 - Zweck, Nutzerkontrolle, Verantwortlichkeit, Vertrautheit, Flexibilität, Einfachheit (nicht bloß Minimalismus), Sorgfalt und Freude an reibungsloser Bedienung als acht Leitprinzipien
@@ -202,7 +202,7 @@ Diese Regeln ersetzen frühere pauschale Einschränkungen für Bewegung und tran
 ### Plattform, Barrierefreiheit und Kontrolle
 
 - Desktop bleibt präzise per Maus/Tastatur bedienbar, Touch erhält direkte Manipulation. **Keine Pointer-Geste ohne gleichwertigen tastaturbedienbaren Weg.**
-- `prefers-reduced-motion: reduce`: Bewegung/Parallax/Overshoot durch statische Zustände oder kurze Überblendungen ersetzen. `prefers-reduced-transparency: reduce`: Materialien deckender/solid darstellen. `prefers-contrast: more`: Kontrast und klare Grenzen erhöhen.
+- `prefers-reduced-motion: reduce`: Bewegung/Parallax/Overshoot durch statische Zustände oder kurze Überblendungen ersetzen. `prefers-reduced-transparency: reduce`: Materialien deckender/solid darstellen. **Nicht überall unterstützte Media Queries** dürfen kein Ersatz für solide, kontrastreiche Basisdarstellungen sein. `prefers-contrast: more`: Kontrast und klare Grenzen erhöhen.
 - Focus-Management, Semantik, Textgrößenanpassung, reversibles Verhalten/Undo und klare Fehlerrückmeldungen gehen einer optischen Animation vor.
 - Keine Audio- oder Haptik-API voraussetzen, keine neuen Runtime-Abhängigkeiten oder externen Services ohne nachgewiesenen Mehrwert einführen.
 

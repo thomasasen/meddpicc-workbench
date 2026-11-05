@@ -63,7 +63,7 @@ Wiederverwenden nur, wenn:
 
 Bei UI-Arbeiten `docs/DESIGN_SYSTEM.md`, `docs/ICON_SYSTEM.md` und beide lokalen Skills `.agents/skills/meddpicc-ui-ux/SKILL.md` sowie `.agents/skills/apple-design/SKILL.md` beachten.
 
-**Verbindliche UI/UX-Priorität:** Wo sich bisherige Stil-, Material-, Typografie-, Bewegungs- oder Gestenregeln mit `apple-design` überschneiden, ersetzen die Apple-Design-Prinzipien die älteren Empfehlungen (auch aus UI UX Pro Max). `docs/DESIGN_SYSTEM.md` und `meddpicc-ui-ux` setzen diese Prinzipien projektspezifisch um. Nicht zur Disposition stehen Produktzweck (Tools/Checklists/Knowledge statt CRM), fachliche Richtigkeit, Accessibility, Datenschutz, Performance und deutsche UI-Texte. Ein scheinbarer Konflikt wird nach diesem Schema aufgelöst, nicht durch parallele widersprüchliche Regeln.
+**Verbindliche UI/UX-Priorität:** Bei überlappenden Stil-, Material-, Typografie-, Bewegungs- und Gestenvorgaben ersetzen die Apple-Design-Prinzipien die älteren Empfehlungen (auch aus UI UX Pro Max). `docs/DESIGN_SYSTEM.md` und `meddpicc-ui-ux` konkretisieren sie für die Toolbox. **Nicht übersteuerbar** sind fachliche Korrektheit, das Produktmodell (Tools/Checklists/Knowledge statt CRM), Barrierefreiheit, Datenschutz, Performance und deutsche UI-Texte. Physikalische Effekte sind auf tatsächlich geeignete Interaktionen anzuwenden: keine Pflichtanimation, keine Pflichttransparenz, keine zwanghafte iOS-Optik. Historische Audit-/Redesign-Dokumente sind keine aktuellen Normquellen; bei Widersprüchen gelten diese Regeln und das aktuelle Designsystem.
 
 Grundrichtung:
 

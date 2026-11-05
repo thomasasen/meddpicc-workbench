@@ -12,12 +12,12 @@ Die Vorrangregel steht auch in `AGENTS.md` und `.github/copilot-instructions.md`
 
 ## Apple Design (vorrangig bei UI/UX-Überschneidungen)
 
-- Upstream: https://github.com/emilkowalski/skills/tree/main/skills/apple-design
+- Upstream (Community-Skill von Emil Kowalski, **keine offizielle Apple-Designvorgabe**): https://github.com/emilkowalski/skills/tree/main/skills/apple-design
 - Gepinnter Stand des Upstream-Repositories: `c8a79627b59d72d764d6ab6f2c87c09a48169833`
 - Lizenz: MIT, Copyright (c) 2026 Emil Kowalski
 - Lokaler Codex-Skill: `.agents/skills/apple-design/SKILL.md`
 - Mitgelieferter Lizenztext: `.agents/skills/apple-design/LICENSE`
-- Anpassung: Die spezielle Upstream-Erstantwortanweisung wurde nicht übernommen, da sie keine UI-Anforderung ist und mit normalen Codex-Aufgaben kollidieren würde; ergänzend wurde die projektbezogene Vorrangregel dokumentiert. Die inhaltlichen Design-/Interaktionsprinzipien bleiben erhalten.
+- Anpassung: Die spezielle Upstream-Erstantwortanweisung wurde nicht übernommen, da sie keine UI-Anforderung ist und mit Codex-Aufgaben kollidieren würde. Zusätzlich wurden Vorrang, Kontext und Browser-/Abhängigkeits-Fallbacks ergänzt. Die pauschale Empfehlung zu translucenter Navigation und ein Beispiel zu Spring-APIs wurden für das Vue-/B2B-Projekt präzisiert; die fachlichen Designprinzipien bleiben erhalten.
 
 ### Übernommene Bereiche
 
@@ -56,7 +56,7 @@ Relevante historische Upstream-Pfade:
 
 ## Agent-Integration und Laufzeitgrenze
 
-Codex lädt die beiden lokalen Skills unter `.agents/skills/`; `AGENTS.md` legt die Prioritäten fest. Für Editor-Agents außerhalb von Codex dokumentiert `.github/copilot-instructions.md` dieselben Regeln.
+Die beiden lokalen Skills liegen unter `.agents/skills/` und sind für Codex auffindbar; `AGENTS.md` fordert ihre Berücksichtigung bei UI-Arbeiten und regelt die Prioritäten. Eine automatische Anwendung ohne passenden Agent-Kontext oder Skill-Erkennung darf nicht unterstellt werden. Für andere Editor-Agents dokumentiert `.github/copilot-instructions.md` dieselben Regeln.
 
 Das gesamte UI UX Pro Max-Tooling wird weiterhin nicht vendort. Apple Design liegt dagegen als geprüfte, versionsgebundene Textreferenz einschließlich Lizenz im Repository.
 

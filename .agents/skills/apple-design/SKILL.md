@@ -11,7 +11,7 @@ Dieser Skill gilt für **alle** UI/UX-Arbeiten an MEDDPICC Toolbox. Er ist die v
 
 Dies ist eine angepasste, versionsgebundene Kopie des Skills von Emil Kowalski (`c8a79627b59d72d764d6ab6f2c87c09a48169833`). Die reine Upstream-Erstantwortvorgabe wurde gestrichen, weil sie keine Designanforderung ist. Lizenztext in `LICENSE`, Einordnung in `docs/UI_UX_REFERENCE.md`.
 
-**Anwendungspräzisierung:** Funktionale Transparenz und animierte Raumbeziehungen sind erwünscht, keine dauerhaften Dekorationen ohne Nutzen. Standardmäßig physikalisch schlüssig und unmittelbar reagieren; Sprung/Bounce nur, wenn durch Gestenimpuls begründet. Wo Browser-APIs fehlen, auf robuste progressive Enhancement und zugängliche Alternativen setzen. CSS-Transitions können für diskrete Zustände verwendet werden, nicht für direkt-manipulierbare, während der Bewegung jederzeit umkehrbare Gesten.
+**Anwendungspräzisierung:** Funktionale Transparenz und animierte Raumbeziehungen sind erwünscht, aber weder Pflicht für alle Navigationselemente noch Ersatz für klare Information. Statt einer dekorativen iOS-Kopie zählt eine präzise B2B-Bedienung. Spring/Momentum nur bei physikalisch passenden Gesten, Bounce nur bei Gestenimpuls; andere Zustandswechsel dürfen schlicht bleiben. Wenn Browser-Features fehlen, progressive Enhancement und zugängliche Alternativen verwenden. Die Ausgangsdarstellung bleibt auch **ohne** `backdrop-filter`, `prefers-reduced-transparency`-Unterstützung oder Animationsbibliothek vollständig lesbar. Native Klick-/Tastatursemantik nicht durch Pointer-Handler ersetzen. CSS-Transitions dürfen diskrete Zustände steuern, nicht direkt greifbare, jederzeit umkehrbare Gesten. Codebeispiele mit `motion`/Framer Motion sind **Illustrationen**, kein Auftrag zur Installation einer neuen Runtime-Abhängigkeit.
 
 ## The Core Idea
 
@@ -89,7 +89,7 @@ Apple deliberately replaced the physics triplet (mass/stiffness/damping) with tw
 | Rotation | `0.8` | `0.4` |
 | Drawer / sheet | `0.8` | `0.3` |
 
-**Web mapping (Motion / Framer Motion):** the `bounce` + `duration` spring API maps closely to Apple's damping + response. A safe house style is `damping: 1.0` springs everywhere by default; reserve bounce for momentum-driven, physical interactions.
+**Web mapping (Motion / Framer Motion):** the `bounce` + `duration` spring API maps closely to Apple's damping + response. A safe interaction style uses critically damped motion for physically manipulated objects and reserves bounce for momentum-driven releases. **Motion and Framer Motion are illustrative APIs, not installed dependencies** of MEDDPICC Toolbox. Choose a Vue-compatible implementation only when its value justifies the additional complexity.
 
 ```js
 import { animate } from 'motion';
@@ -176,7 +176,7 @@ Smoothness is about *what's in the frames*, not just the frame rate.
 
 Apple uses translucent materials as a floating functional layer that brings structure without stealing focus. On the web, approximate with `backdrop-filter`.
 
-- **Build nav/toolbars/sheets as translucent layers** (`backdrop-filter: blur()` + a semi-transparent background) with content scrolling underneath — not opaque bars that consume a fixed strip.
+- **For genuinely floating nav/toolbars/sheets, consider translucent layers** (`backdrop-filter: blur()` plus a semi-transparent background) when they clarify hierarchy and scrolling context. Keep ordinary nonfloating navigation solid if that is clearer, and always provide a legible opaque fallback.
 - **Material weight encodes hierarchy:** darker/heavier materials separate structural regions (sidebars); lighter materials draw attention to interactive elements (buttons). **Never stack a light translucent surface on another** — legibility collapses.
 - **Bigger surfaces should read as thicker:** stronger blur + a deeper shadow than small chips. Consider context-aware shadow — heavier over busy/text content for separation, lighter over plain backgrounds.
 - **Dim to focus, separate to keep flow.** A modal task pairs the surface with a dimming scrim and pushes the background back/down. A parallel, non-blocking panel uses translucency and offset *without* a scrim so the flow isn't broken. For stacked sheets, progressively dim and push back each parent layer.
@@ -205,7 +205,7 @@ Three rules for combining senses (from *Designing Audio-Haptic Experiences*):
 Reduced motion doesn't mean *no* feedback — it means a gentler, non-vestibular equivalent. Respond to three independent signals and bake them into your components:
 
 - **`prefers-reduced-motion: reduce`** — replace slides/springs/parallax with short opacity **cross-fades or static transitions**. Drop elastic/overshoot. Keep opacity/color changes that aid comprehension.
-- **`prefers-reduced-transparency: reduce`** — make translucent surfaces frostier/solid: raise background opacity, drop the blur.
+- **`prefers-reduced-transparency: reduce`** — make translucent surfaces frostier/solid: raise background opacity, drop the blur. Browser support is not guaranteed: start with a readable opaque default and enable blur/transparency only where supported; do not rely on this media query alone for accessibility.
 - **`prefers-contrast: more`** — near-solid backgrounds with a defined, contrasting border.
 
 Also: avoid full-viewport moving backgrounds, slow looping oscillations (near 0.2 Hz / one cycle per 5s), and abrupt brightness jumps (ease dark↔light theme changes). Make large moving objects semi-transparent while they travel, and fade big surfaces out during a large reposition and back in once settled.

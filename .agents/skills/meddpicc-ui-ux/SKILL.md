@@ -7,7 +7,7 @@ description: Wendet das MEDDPICC-Workbench-Designsystem und die UI/UX-Qualitäts
 
 Diesen Skill bei jeder UI-Implementierung oder UI-Review in diesem Repository **zusammen mit** `.agents/skills/apple-design/SKILL.md` verwenden.
 
-**Konfliktregel:** Bei sich überschneidenden Vorgaben zu Interaktion, Animation, Gesten, Materialtiefe oder Typografie hat Apple Design Vorrang vor älteren Style-Empfehlungen (einschließlich UI UX Pro Max). Dieses Dokument regelt den fachlichen MEDDPICC-Kontext, die Inhaltsstruktur, Accessibility und Vue-Konventionen. `AGENTS.md` und `docs/DESIGN_SYSTEM.md` konkretisieren die Grenze zu Produkt- und Sicherheitsanforderungen.
+**Konfliktregel:** Bei sich überschneidenden Vorgaben zu Interaktion, Animation, Gesten, Materialtiefe oder Typografie hat Apple Design Vorrang vor älteren Stil-Empfehlungen (einschließlich UI UX Pro Max). Fachliche Korrektheit, das aktuelle Microtool-Produktmodell, Accessibility, Datenschutz und Performance bleiben vorrangige Randbedingungen. Apple Design beschreibt keine Pflicht zu Effekten auf jeder Oberfläche. `AGENTS.md` und `docs/DESIGN_SYSTEM.md` konkretisieren diese Abgrenzung.
 
 ## 1. Projektkontext laden
 
@@ -58,7 +58,7 @@ Die wichtigste UX-Regel lautet:
 
 > **Seller-Workflow vor Datenstruktur.**
 
-Ein Screen soll möglichst eine konkrete Aufgabe unterstützen: Deal prüfen, Gap verstehen, nächste Aktion wählen, Qualification Gate prüfen, Champion/EB testen, Business Case rechnen, Closing Process planen oder Meeting vorbereiten.
+Ein Screen unterstützt eine fokussierte Aufgabe: etwa Wirtschaftlichkeit berechnen, Kennzahlen entwickeln, Cost of Delay einschätzen, Value Bridge erstellen, Closing-Timeline planen oder eine Checklist/Wissensfrage klären. Legacy-Deal-Inspector und Qualification Gates sind keine Standard-Muster für neue Screens.
 
 Nicht aus jedem Schemaobjekt automatisch eine Hauptnavigation oder CRUD-Maske erzeugen.
 
@@ -133,7 +133,7 @@ Apple-Design-Fokus: Jeder Screen beantwortet „Wo bin ich? Was kann ich tun? Wi
 
 - aktuelle Sektion visuell und programmatisch erkennbar
 - Tastaturnavigation vollständig
-- geladene Opportunity im Application Chrome sichtbar halten
+- aktiven Tool-, Checklist- oder Knowledge-Kontext im Application Chrome verständlich machen; keine dauerhaft geladene Opportunity voraussetzen
 
 ## 7. Charts und Visualisierungen
 
