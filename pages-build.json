@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "sourceFingerprint": "c3673862be5549788ecbdc5ae4f7d2ca7f713f00b06790acedbe203ad9e08d53",
+  "sourceFingerprint": "b55b95e7665ead3d93ca32a605e8aead08cd9d33b932a3c64829e20470773e09",
   "files": {
-    "index.html": "7bef1cb9a0920cb1f19f8068c5df98698cdf27fc0549fec26c2aead95196f532",
-    "assets/index-B4aBAbkb.js": "304ba3edd6cdb8fef865a054740708cc0d33b03abea1342e49104f8aa3e35ac7",
+    "index.html": "fbcd12a66c8a4fce071c956e21d6882318db9854c5d3fad376bad402cae30abf",
     "assets/index-Bdn08xFR.css": "1acf9a2bbf3bea9e2759843042b4a253ef1ff04035157ef6e92c5756bcbf3ad6",
+    "assets/index-CCq-j2PR.js": "4df34d17860e87327046a347df29ee5a9509c634525953e09b71060c0a900bff",
     "assets/noto-sans-latin-400-normal-DPpKfCgK.woff": "18e2e5b23a9bc5e8e636d6c7984b8ac6635aefc1c497ed1c5012f3c637761b91",
     "assets/noto-sans-latin-700-normal-ZyrKABVF.woff": "cac2e44ebc446d5c71a9a16fd5592bf80abf6f56dd564a7b90eb01c5f9d29793"
   }
