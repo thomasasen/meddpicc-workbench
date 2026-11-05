@@ -159,6 +159,11 @@ test('Software Payback: sichtbare Einstiege, progressive Eingaben und saubere Au
 })
 
 test('Software Payback: responsive, direkte Navigation und Tastatur', async ({ page }) => {
+  const acceptedDialogs: string[] = []
+  page.on('dialog', (dialog) => {
+    acceptedDialogs.push(dialog.type())
+    void dialog.accept()
+  })
   for (const width of [375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 812 })
     await projectMode(page)
@@ -172,6 +177,7 @@ test('Software Payback: responsive, direkte Navigation und Tastatur', async ({ p
   await page.getByRole('button', { name: 'Schnellberechnung' }).focus()
   await page.keyboard.press('Enter')
   await expect(page.getByRole('heading', { name: 'Einfacher Payback' })).toBeVisible()
+  expect(acceptedDialogs).toContain('confirm')
   await page.getByRole('button', { name: 'Softwareprojekt & Kunden-Metrics' }).click()
   await expect(page.getByTestId('project-empty')).toContainText('keine wirtschaftliche Aussage')
   await page.getByRole('link', { name: 'Alle Microtools' }).click()
