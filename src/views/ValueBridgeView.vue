@@ -158,6 +158,7 @@ const recovery = useToolRecovery({
   tool: 'value-bridge',
   value: recoveryState,
   validate: validBridgeRecovery,
+  tracked: (snapshot) => snapshot.draft,
   restore: (snapshot: BridgeRecovery) => {
     draft.value = structuredClone(snapshot.draft)
     step.value = snapshot.step
