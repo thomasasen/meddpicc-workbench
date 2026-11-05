@@ -172,6 +172,11 @@ jobs:
       - name: Formatierung prüfen
         run: npm run format:check
 
+      - name: Formatierungsdifferenz ausgeben (nur bei Fehler)
+        if: failure()
+        run: |
+          npx prettier src/composables/useToolRecovery.ts | diff -u src/composables/useToolRecovery.ts - || true
+
       - name: Linting ausführen
         run: npm run lint
 
