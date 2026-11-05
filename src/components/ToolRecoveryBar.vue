@@ -6,7 +6,7 @@ import type { ToolRecoveryController } from '../composables/useToolRecovery'
 
 const props = defineProps<{ recovery: ToolRecoveryController }>()
 const dialog = ref<HTMLDialogElement | null>(null)
-const trigger = ref<HTMLButtonElement | null>(null)
+const panel = ref<HTMLElement | null>(null)
 
 function formattedDate(value: string): string {
   return new Date(value).toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' })
@@ -18,9 +18,9 @@ watch(
     await nextTick()
     if (pending && dialog.value && !dialog.value.open) {
       dialog.value.showModal()
-    } else if (!pending && dialog.value?.open) {
-      dialog.value.close()
-      trigger.value?.focus()
+    } else if (!pending) {
+      if (dialog.value?.open) dialog.value.close()
+      panel.value?.focus()
     }
   },
   { flush: 'post', immediate: true },
@@ -28,7 +28,7 @@ watch(
 </script>
 
 <template>
-  <section class="recovery-panel" aria-label="Schutz vor Datenverlust">
+  <section ref="panel" class="recovery-panel" aria-label="Schutz vor Datenverlust" tabindex="-1">
     <div class="recovery-heading">
       <div class="recovery-caption">
         <ShieldCheck v-if="recovery.enabled" :size="19" aria-hidden="true" />
@@ -101,7 +101,7 @@ watch(
         <p v-if="recovery.error" class="recovery-error" role="alert">{{ recovery.error }}</p>
         <div class="recovery-dialog-actions">
           <button type="button" class="button button-secondary" @click="recovery.discard">Recovery verwerfen</button>
-          <button ref="trigger" type="button" class="button button-primary" @click="recovery.restore">
+          <button type="button" class="button button-primary" @click="recovery.restore">
             Entwurf wiederherstellen
           </button>
         </div>
