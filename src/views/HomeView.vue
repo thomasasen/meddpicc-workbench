@@ -21,7 +21,7 @@ import {
 function scrollToSection(id: string): void {
   document.getElementById(id)?.scrollIntoView({
     block: 'start',
-    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
   })
 }
 
