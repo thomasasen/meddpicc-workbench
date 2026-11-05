@@ -135,6 +135,8 @@ Keine Deal-Gesamtbewertung, kein gespeicherter Score und kein permanenter Fortsc
 - **Responsive:** Sobald sich das Spaltenraster ändert, muss die Ausrichtung innerhalb jeder neu entstehenden Zeile erhalten bleiben. Lange Labels dürfen umbrechen, ohne Eingabeboxen in benachbarten Spalten zu verschieben.
 - **Abnahme:** Auf Desktop und Mobile tatsächliche `getBoundingClientRect()`-Positionen und -Höhen prüfen, nicht nur gleich wirkende CSS-Werte. Hilfe- und Fehlermeldungen müssen vollständig unterhalb des zugehörigen Controls bleiben.
 
+**Geltungsbereich der Formular-QS:** Die Regel ist nicht auf den Planungsrahmen beschränkt. Zu prüfen sind alle produktiven mehrspaltigen Formularzeilen, insbesondere Software Payback, Metric Builder (alle Wizard-Schritte), Cost of Delay, Value Bridge und die Go-Live-Schrittliste. Weiterhin erreichbare interne Formulare (Evidenz, Risiken/Aktionen, Referenzen) und die PDF-Dokumentgestaltung gehören ebenfalls zur Bestandsprüfung. Mehrzeilige Textareas werden nicht künstlich auf die Höhe einzeiliger Controls gekürzt, sondern bei Bedarf separat über die volle Zeile geführt.
+
 ## 8. Kundenfähige Ergebnisse
 
 Kundenfähige Ansichten sollen:

@@ -1061,3 +1061,140 @@ body {
     margin-top: 0.6rem;
   }
 }
+
+/*
+ * Projektweites Raster für produktive und weiterhin erreichbare interne
+ * Formulare: Controls bilden die gemeinsame Zeile, Hilfen liegen darunter.
+ * Keine starre Label-Höhe bei langem Text/Zoom: Subgrid teilt die Zeilenspuren.
+ */
+:is(
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .vb-fields-two,
+    .cod-field-row,
+    .evidence-form,
+    .work-object-form,
+    .project-meta-grid
+  ) {
+  --form-aligned-control-height: 46px;
+  align-items: start;
+}
+
+:is(
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .vb-fields-two,
+    .cod-field-row,
+    .evidence-form,
+    .work-object-form,
+    .project-meta-grid
+  ) > :is(label.field, label.vb-field, label.cod-field):has(> :is(input, select, textarea)) {
+  display: grid;
+  grid-template-rows: minmax(2.75rem, auto) minmax(var(--form-aligned-control-height), auto) auto;
+  align-content: start;
+  align-items: stretch;
+  min-width: 0;
+  row-gap: 0.4rem;
+  margin-block: 0;
+}
+
+:is(
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .vb-fields-two,
+    .cod-field-row,
+    .evidence-form,
+    .work-object-form,
+    .project-meta-grid
+  ) > :is(label.field, label.vb-field, label.cod-field) > span:first-child {
+  grid-row: 1;
+  align-self: end;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+:is(
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .vb-fields-two,
+    .cod-field-row,
+    .evidence-form,
+    .work-object-form,
+    .project-meta-grid
+  ) > :is(label.field, label.vb-field, label.cod-field) > :is(input:not([type='checkbox']):not([type='radio']), select, textarea) {
+  grid-row: 2;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: var(--form-aligned-control-height);
+  align-self: stretch;
+}
+
+:is(
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .vb-fields-two,
+    .cod-field-row,
+    .evidence-form,
+    .work-object-form,
+    .project-meta-grid
+  ) > :is(label.field, label.vb-field, label.cod-field) > :is(small, .field-help, .quick-error) {
+  grid-row: 3;
+  align-self: start;
+  margin: 0;
+}
+
+/* Mehrzeilige Controls nicht mit einzeiligen Eingaben in einer Datenzeile mischen. */
+.metric-fields > label.field:has(> textarea),
+.software-fields > label.field:has(> textarea) {
+  grid-column: 1 / -1;
+}
+
+@supports (grid-template-rows: subgrid) {
+  :is(
+      .reverse-step-fields,
+      .metric-fields,
+      .metric-timing,
+      .software-fields,
+      .vb-fields-two,
+      .cod-field-row,
+      .evidence-form,
+      .work-object-form,
+      .project-meta-grid
+    ) > :is(label.field, label.vb-field, label.cod-field):has(> :is(input, select, textarea)) {
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+  }
+}
+
+/* Auch die Farbauswahl der PDF-Dokumentgestaltung hat eine gemeinsame Control-Linie. */
+.branding-color-row {
+  align-items: stretch;
+}
+
+.branding-color-row > label {
+  justify-content: end;
+}
+
+.branding-color-row > label > input {
+  box-sizing: border-box;
+  min-height: 46px;
+  height: 46px;
+}
+
+/* Einstellungsfelder mit mehrzeiligen Beschriftungen dürfen nicht die Nachbarzelle verschieben. */
+@media (prefers-reduced-motion: reduce) {
+  :is(.reverse-step-fields, .metric-fields, .software-fields) > label {
+    transition: none;
+  }
+}
