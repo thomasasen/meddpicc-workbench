@@ -9,7 +9,9 @@ const router = useRouter()
 const legacyRoutes = new Set(['/evidence', '/risks-actions', '/references'])
 const unregisterGuard = router.beforeEach((to, from) => {
   if (!projectStore.dirty || !legacyRoutes.has(from.path) || legacyRoutes.has(to.path)) return true
-  return window.confirm('Das Legacy-Projekt enthält Änderungen, die nicht als .meddpicc-Datei bestätigt sind. Bereich wirklich verlassen?')
+  return window.confirm(
+    'Das Legacy-Projekt enthält Änderungen, die nicht als .meddpicc-Datei bestätigt sind. Bereich wirklich verlassen?',
+  )
 })
 
 function handleBeforeUnload(event: BeforeUnloadEvent) {
