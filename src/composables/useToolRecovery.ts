@@ -215,6 +215,12 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
   async function canLeave(): Promise<boolean> {
     if (acknowledgedNavigation) {
       acknowledgedNavigation = false
+      // Ein ausdrücklicher Tool-Handoff ist keine Zusage, dass der gesamte
+      // Ursprungsentwurf gespeichert wurde. Vor dem Wechsel ausstehendes
+      // Opt-in-Recovery abschließen oder einen Verlust ausdrücklich bestätigen.
+      if (enabled.value && !(await flush())) {
+        return window.confirm('Die aktuellen Änderungen konnten nicht lokal gesichert werden. Trotzdem fortfahren?')
+      }
       return true
     }
     if (!modified.value) return true
