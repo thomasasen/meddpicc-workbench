@@ -1,5 +1,7 @@
 # MEDDPICC Toolbox Design System
 
+**Rangfolge für UI/UX:** Die in `.agents/skills/apple-design/SKILL.md` dokumentierten Apple-Design-Prinzipien ersetzen bei Überschneidungen ältere Gestaltungsregeln aus diesem Projekt und aus UI UX Pro Max. Diese Datei konkretisiert ihre Anwendung in einer B2B-Toolbox. Unverändert verbindlich bleiben Produktmodell, MEDDPICC-Semantik, Barrierefreiheit, Datensicherheit, Datenschutz, Leistungsfähigkeit und die deutsche Projektsprache. Funktionale Materialtiefe und Bewegung sind daher erlaubt und erwünscht, rein dekorative Effekte aber keine Pflicht.
+
 ## 1. Designziel
 
 Die Oberfläche unterstützt fokussierte Sales Services und vermeidet bewusst CRM-/Dashboard-Anmutung.
@@ -24,7 +26,10 @@ MEDDPICC bleibt als fachliche Orientierung sichtbar, aber nicht als erzwungener 
 - B2B-tauglich
 - informationsdicht, aber nicht dashboard-lastig
 - neutrale Flächen mit zurückhaltender Akzentfarbe
-- keine Glassmorphism-, Neon-, AI-Gradient- oder Marketing-Hero-Optik
+- funktionale Materialtiefe: schwebende Navigation, Popover und Sheets dürfen/transparente Oberflächen und Blur zur räumlichen Trennung nutzen, solange Kontrast und Hierarchie erhalten bleiben
+- keine beliebigen Glasflächen, Neon-/AI-Gradienten oder Marketing-Hero-Optik ohne funktionalen Bezug
+- unmittelbare Reaktion auf Eingaben, reversible, räumlich konsistente Übergänge und physikalisch nachvollziehbare Gesten
+- Zweck, Nutzerkontrolle, Verantwortlichkeit, Vertrautheit, Flexibilität, Einfachheit (nicht bloß Minimalismus), Sorgfalt und Freude an reibungsloser Bedienung als acht Leitprinzipien
 
 ## 3. Startseite
 
@@ -142,11 +147,11 @@ Keine Radar-Charts, Gauges, 3D-Charts oder dekorativen Diagramme.
 
 ## 10. Design Tokens
 
-Bestehende zentrale Tokens für Farben, Spacing, Typografie, Radii, Borders, Focus und Motion weiterverwenden. Keine verstreuten Einzelwerte, wenn ein Token sinnvoll existiert.
+Bestehende zentrale Tokens für Farben, Spacing, Typografie, Radii, Borders, Focus und Motion weiterverwenden. Keine verstreuten Einzelwerte, wenn ein Token sinnvoll existiert. Für neue UI-Anforderungen benötigte Motion-, Material- und Kontrastvarianten als gemeinsame Tokens vorsehen statt pro View Einzelwerte zu erfinden. Gesten-Animationen dürfen nicht durch pauschale globale CSS-Transitions blockiert werden.
 
 ## 11. Typografie
 
-Systemfont-Strategie. Normale UI-Texte mindestens ca. 14–16 px, Metadaten nicht künstlich verkleinern. Lange deutsche und englische Fachbegriffe müssen sicher umbrechen.
+Systemfont-Strategie vor eigenen Fonts. Normale UI-Texte mindestens ca. 14–16 px, Metadaten nicht künstlich verkleinern. Lange deutsche und englische Fachbegriffe müssen sicher umbrechen. Nach Apple Design Schriftgröße, Gewicht, Laufweite und Zeilenhöhe **gemeinsam** abstimmen: größere Überschriften mit engerer Laufweite/Zeilenhöhe, Fließtext mit mehr Zeilenhöhe und gut lesbarem Tracking. Keine feste negative Laufweite für alle Größen. `rem`/`em` und responsive Typografie verwenden, damit Zoom und vergrößerte Schrift das Layout nicht brechen.
 
 ## 11a. Wahrnehmungsorientierte Textausrichtung und Abstände
 
@@ -167,6 +172,40 @@ Prinzipien stammen aus allgemeinen UX- und Gestalt-Heuristiken (u. a. Nähe, Äh
 
 Bedeutung niemals ausschließlich über Farbe vermitteln. Status immer zusätzlich als Text zeigen.
 
+## 12a. Direkte Interaktion, Bewegung und Materialtiefe (Apple Design)
+
+Diese Regeln ersetzen frühere pauschale Einschränkungen für Bewegung und transluzente Materialien. Einzelheiten und technische Beispiele: `.agents/skills/apple-design/SKILL.md`.
+
+### Eingabe und Feedback
+
+- Bei Drücken/Tap **sofort** eine sichtbare Rückmeldung auf `pointerdown`/`:active` geben; die eigentliche Aktion üblicherweise erst auf `pointerup`/Klick auslösen. Wegziehen muss ein versehentliches Auslösen abbrechen können.
+- Keine künstlichen Wartezeiten auf dem Eingabepfad. Bei Drag, Schiebereglern und vergleichbaren Manipulationen Inhalt **fortlaufend 1:1** mit dem Zeiger/Finger bewegen, inklusive ursprünglichem Greifpunkt.
+- Für Gesten Pointer Events mit `setPointerCapture`, sinnvoller Bewegungs-Schwelle (Richtwert ca. 10 px), Geschwindigkeitsverlauf und klarer Abbruchbehandlung nutzen. Früh Gestenabsicht erkennen, ohne unnötig auf ein Endereignis zu warten.
+- Rückmeldungen gezielt für Status, abgeschlossene Aktionen, Warnungen und Fehler einsetzen; kausal, direkt und nicht inflationär. Optionale Sound-/Haptik-Signale dürfen niemals die einzige Rückmeldung sein.
+
+### Bewegung
+
+- Gestengetriebene Animationen **jederzeit unterbrechbar** machen, vom aktuellen gerenderten Zustand und der bisherigen Geschwindigkeit weiterführen und ohne sichtbaren Sprung umkehren lassen.
+- Für physikalisch bewegte Objekte Spring-Animationen nutzen; als Ausgangspunkt **kritische Dämpfung (Ratio ca. 1,0) und Response 0,3–0,4 s**. Bounce (ca. 0,8) nur bei tatsächlichem Schwung, etwa einem Flick. Zahlen sind Startwerte, keine global erzwungenen Zeitvorgaben.
+- Beim Loslassen Geschwindigkeit an die folgende Animation weitergeben; wenn Schnappunkte vorhanden sind, das natürliche Ziel aus Impuls/Projektion statt allein aus dem Loslasspunkt bestimmen. Für X und Y bei Bedarf getrennte Springs verwenden.
+- Ein- und Ausblenden entlang konsistenter, spiegelbildlicher Wege gestalten. Popover/Sheets am Auslöser verankern; Grenzen dürfen bei Touch-Gesten mit zunehmendem Widerstand reagieren (Rubber-banding), sofern fachlich passend.
+- Keine fest vorgegebene CSS-Transition oder `@keyframes` für direkt greifbare/umkehrbare Gesten. Bei diskreten Zustandswechseln sind einfache, ruhige CSS-Transitions weiterhin zulässig.
+- Pro Frame bevorzugt `transform`/`opacity`, zeitkritisch via `requestAnimationFrame`; unnötige Layout-Reflows und dauerhaft gesetztes `will-change` vermeiden. Kein Bewegungs-Effekt ohne erkennbaren funktionalen Mehrwert.
+
+### Funktionale transluzente Materialien
+
+- Floating Navigation, Toolbars, Popover und Sheets können `backdrop-filter`, Transparenz, gezielte Schatten und Dimmer verwenden, **wenn** dies räumliche Zusammenhänge und Trennung besser erklärt als eine deckende Fläche.
+- Materialgewicht nach Funktion staffeln; nicht mehrere helle Glasflächen stapeln. Lesbarkeit über wechselndem Hintergrund, ausreichenden Kontrast und ausreichende Textstärke sichern.
+- Blockierende Dialoge dürfen den Hintergrund abdunkeln. Nichtblockierende Panels müssen den Arbeitsfluss erkennbar belassen. Scrollkanten weich auslaufen lassen, wenn tatsächlich überlappende UI vorhanden ist.
+- Ein Material soll beim Erscheinen nachvollziehbar entstehen (beispielsweise Opacity/Skalierung/Blur), nicht bloß beliebig ein- oder ausblenden. Kein Glas-Effekt als Selbstzweck.
+
+### Plattform, Barrierefreiheit und Kontrolle
+
+- Desktop bleibt präzise per Maus/Tastatur bedienbar, Touch erhält direkte Manipulation. **Keine Pointer-Geste ohne gleichwertigen tastaturbedienbaren Weg.**
+- `prefers-reduced-motion: reduce`: Bewegung/Parallax/Overshoot durch statische Zustände oder kurze Überblendungen ersetzen. `prefers-reduced-transparency: reduce`: Materialien deckender/solid darstellen. `prefers-contrast: more`: Kontrast und klare Grenzen erhöhen.
+- Focus-Management, Semantik, Textgrößenanpassung, reversibles Verhalten/Undo und klare Fehlerrückmeldungen gehen einer optischen Animation vor.
+- Keine Audio- oder Haptik-API voraussetzen, keine neuen Runtime-Abhängigkeiten oder externen Services ohne nachgewiesenen Mehrwert einführen.
+
 ## 13. Accessibility
 
 Mindestens:
@@ -178,7 +217,7 @@ Mindestens:
 - korrekt verknüpfte Labels
 - ausreichender Kontrast
 - keine Bedeutung nur über Farbe
-- Reduced Motion
+- Reduced Motion, Reduced Transparency und höheren Kontrast respektieren
 - keine essenziellen Hover-only-Inhalte
 - stabile Darstellung bei Zoom/Textskalierung
 
@@ -217,6 +256,8 @@ Vor Merge:
 - ist die Aufgabe vollständig per Tastatur bedienbar?
 - funktioniert Desktop und Mobile?
 - hat jede Visualisierung eine nichtgrafische Alternative?
+- reagieren Controls unmittelbar, sind Bewegung und räumliche Übergänge konsistent und unterbrechbar?
+- sind Gesten auch per Tastatur möglich und sind die drei entsprechenden Accessibility-Media-Queries bedacht?
 
 ## 18. Gemeinsame Redesign-Primitiven (Entwicklungsbranch ab 10.10.2026)
 

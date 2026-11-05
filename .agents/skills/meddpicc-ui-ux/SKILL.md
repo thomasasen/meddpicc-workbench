@@ -5,7 +5,9 @@ description: Wendet das MEDDPICC-Workbench-Designsystem und die UI/UX-Qualitäts
 
 # MEDDPICC Workbench UI/UX Skill
 
-Diesen Skill bei jeder UI-Implementierung oder UI-Review in diesem Repository verwenden.
+Diesen Skill bei jeder UI-Implementierung oder UI-Review in diesem Repository **zusammen mit** `.agents/skills/apple-design/SKILL.md` verwenden.
+
+**Konfliktregel:** Bei sich überschneidenden Vorgaben zu Interaktion, Animation, Gesten, Materialtiefe oder Typografie hat Apple Design Vorrang vor älteren Style-Empfehlungen (einschließlich UI UX Pro Max). Dieses Dokument regelt den fachlichen MEDDPICC-Kontext, die Inhaltsstruktur, Accessibility und Vue-Konventionen. `AGENTS.md` und `docs/DESIGN_SYSTEM.md` konkretisieren die Grenze zu Produkt- und Sicherheitsanforderungen.
 
 ## 1. Projektkontext laden
 
@@ -60,16 +62,7 @@ Ein Screen soll möglichst eine konkrete Aufgabe unterstützen: Deal prüfen, Ga
 
 Nicht aus jedem Schemaobjekt automatisch eine Hauptnavigation oder CRUD-Maske erzeugen.
 
-Primäre Design-Einflüsse:
-
-- Accessible & Ethical
-- Minimalism / Swiss-style hierarchy
-- Data-Dense Dashboard
-- Drill-Down Analytics
-
-Die Workbench soll ruhig, präzise, professionell und operativ wirken.
-
-Kein dekoratives Glassmorphism, keine Neon-/AI-Gradienten, keine übergroßen Marketing-Hero-Bereiche, kein Parallax, keine dekorative Bewegung und keine optisch beeindruckenden Charts ohne echten Nutzen für eine Sales-Entscheidung.
+Gestaltungsgrundlage sind die acht Apple-Design-Prinzipien (Purpose, Agency, Responsibility, Familiarity, Flexibility, Simplicity, Craft, Delight) und ihre Web-Umsetzung aus `apple-design`. Die Workbench bleibt dennoch ein präzises, sachliches B2B-Arbeitswerkzeug. Unmittelbares Feedback, räumliche Kontinuität, flüssige und abbrechbare Interaktion sowie funktionale transluzente Materialien **ersetzen** frühere pauschale Verbote von Glassmorphism und Animation. Keine Neon-/AI-Gradienten, Marketing-Hero-Bereiche oder Charts ohne fachlichen Erkenntnisgewinn.
 
 ## 4. MEDDPICC-Semantik schützen
 
@@ -89,33 +82,15 @@ Jede abgeleitete Warnung oder Bewertung soll die zugrunde liegende Begründung b
 
 ## 5. Informationsarchitektur
 
-Bevorzugte Hierarchie:
+Die **aktuelle** Produktstruktur ist **Tools → Checklists → Knowledge**, nicht „Opportunity → Deal-Dashboard“. Ein konkreter Seller-Arbeitsschritt steht vor Schema-/Datenpflege; kein Tool erfordert ohne fachlichen Grund einen vollständigen Opportunity-Datensatz.
 
-```text
-Opportunity
-├── Deal-Fokus
-│   ├── aktuell wichtig
-│   ├── Gaps / Risiken
-│   └── nächste Aktionen
-├── Coaching-Workflows
-│   ├── Deal Inspector
-│   ├── Next Best Action
-│   ├── Qualification Gates
-│   ├── Champion / Economic Buyer
-│   ├── Value / Business Case
-│   ├── Decision / Paper / Closing
-│   └── Meeting Prep
-├── Source Data / Drill-down
-│   ├── MEDDPICC-Entities
-│   ├── Evidence / References
-│   ├── Risks / Actions
-│   └── Historie
-└── Review / Export
-```
+- **Tools:** Aufgabe → minimale Eingabe → nachvollziehbares Ergebnis → gegebenenfalls Export.
+- **Checklists:** Situation → schnell prüfbare Frage → nur bei Bedarf fachliche Erklärung.
+- **Knowledge:** direkte Definition → praktische Bedeutung → Beispiele, Grenzen und passende Werkzeuge.
+- Nur implementierte Workflows als aktiv darstellen; beim Drill-down Orientierung, Fokus und Rückweg beibehalten.
+- Quelle, Evidenz und fachliche Unsicherheit klar erläutern; keine künstlichen Deal-Scores oder versteckte CRM-Verwaltung.
 
-Nur bereits implementierte Workflows als aktiv darstellen.
-
-Workflow → Finding → Begründung → Evidence/Source Data als bevorzugten Drill-down nutzen. Kontext erhalten und Rücknavigation eindeutig machen.
+Apple-Design-Fokus: Jeder Screen beantwortet „Wo bin ich? Was kann ich tun? Wie komme ich zurück?“. Direkte, verständliche Labels vor abstrakten Menünamen; Kontrollflächen nahe an dem Objekt, das sie beeinflussen.
 
 ## 6. Komponentenregeln
 
@@ -152,6 +127,7 @@ Workflow → Finding → Begründung → Evidence/Source Data als bevorzugten Dr
 - Escape schließt, wenn fachlich sicher
 - aktuellen Kontext nicht unnötig verdecken
 - verschachtelte Dialoge vermeiden
+- Ein-/Austritt räumlich symmetrisch am Auslöser verankern; unterbrechbare Bewegung und funktionale Materialtiefe gemäß Apple Design
 
 ### Navigation
 
@@ -180,7 +156,17 @@ Nicht standardmäßig verwenden:
 
 Für wesentliche Chart-Informationen immer eine zugängliche Text-/Tabellenalternative anbieten.
 
-## 8. Accessibility Review
+## 8. Apple-Design-Interaktionsreview
+
+- Unmittelbares Feedback beim Drücken; finale Aktion erst beim Commit, Abbruch bei Wegziehen möglich.
+- Drag/Swipe/Slider direkt mit dem Zeiger mitführen und den Greifversatz bewahren; Pointer Capture/Cancel sauber behandeln.
+- Bewegung aus dem aktuellen sichtbaren Wert und der vorhandenen Geschwindigkeit starten; während des Übergangs jederzeit reversibel.
+- Spring und Momentum nur für passende physische Gesten; keine pauschale Bounce-Animation.
+- Räumlich konsistente Popover/Sheets; funktionale Transparenz, Dimmer, Blur und Schatten mit hinreichendem Kontrast.
+- Typografie nach Größe unterschiedlich setzen (Tracking, Leading, Gewicht); Text-Zoom und Reflow erhalten.
+- Keine zusätzliche Animationsbibliothek ohne konkreten Qualitätsgewinn; Desktop- und Touch-Verhalten prüfen.
+
+## 9. Accessibility Review
 
 Prüfen:
 
@@ -191,13 +177,13 @@ Prüfen:
 - korrekte Zustandsattribute
 - Kontrast
 - keine Bedeutung nur durch Farbe
-- `prefers-reduced-motion`
+- `prefers-reduced-motion`, `prefers-reduced-transparency` und `prefers-contrast: more`
 - keine essenziellen Hover-only-Informationen
 - Zoom/Textskalierung ohne Clipping
 - ausreichend große Touch Targets
 - Fehler korrekt Controls zugeordnet/angekündigt
 
-## 9. Responsive Review
+## 10. Responsive Review
 
 Ungefähr prüfen bei:
 
@@ -213,7 +199,7 @@ Kein separates Mobile-Produkt bauen, wenn Reflow genügt:
 - Tabellen → Scroll oder bewusstes Responsive-Layout
 - Action Bars → umbrechen, ohne Labels zu verlieren
 
-## 10. Vue-Implementierung
+## 11. Vue-Implementierung
 
 Bevorzugen:
 
@@ -226,23 +212,13 @@ Bevorzugen:
 - typisierte Props und Emits
 - Verhalten testen, nicht interne Implementierungsdetails
 
-## 11. Externe UI/UX-Referenz
+## 12. Externe UI/UX-Referenzen und Vorrang
 
-Das Projekt darf konsultieren:
+1. **Apple Design**: `.agents/skills/apple-design/SKILL.md` ist für überlappende Gestaltungs- und Interaktionsfragen **vorrangig**. Es liefert die konkreten Prinzipien für Bewegung, direkte Manipulation, Transparenz, Feedback, Typografie und Nutzerkontrolle.
+2. **UI UX Pro Max**: `nextlevelbuilder/ui-ux-pro-max-skill` bleibt ergänzend für Vue, Formular-/Tabellen-Accessibility und Chart-Entscheidungen verfügbar. In Überlappungen mit Apple Design werden seine alten Stilvorgaben nicht angewendet.
+3. **MEDDPICC-spezifische Regeln**: Fachsemantik, Produkteinteilung, Datenschutz, Barrierefreiheit und technischer Stack bleiben verbindlich.
 
-`nextlevelbuilder/ui-ux-pro-max-skill`
-
-Den gepinnten Stand und die Provenienz aus `docs/UI_UX_REFERENCE.md` verwenden.
-
-Besonders nützliche Upstream-Bereiche:
-
-- Vue-Guidance
-- UX-/Accessibility-Regeln
-- Data-Dense-Dashboard-Muster
-- Drill-Down-Muster
-- Chart-Auswahl und Chart-Accessibility
-
-Nicht den gesamten Upstream-Skill kopieren und nicht als Produktions-/Runtime-Abhängigkeit hinzufügen.
+Provenienz, Version und Lizenzen: `docs/UI_UX_REFERENCE.md`. Beide Referenzen sind **keine Runtime-Abhängigkeiten**.
 
 ## Definition of Done
 
@@ -251,7 +227,8 @@ Eine UI-Änderung ist erst fertig, wenn sie:
 - eine konkrete Seller-Aufgabe unterstützt oder einen notwendigen Drill-down ermöglicht
 - keine CRM-/CRUD-Doppelpflege als Hauptworkflow erzeugt
 - keine noch nicht implementierte Coaching-Logik vortäuscht
-- `docs/DESIGN_SYSTEM.md` entspricht
+- `docs/DESIGN_SYSTEM.md` und bei Überlappungen dem Apple-Design-Skill entspricht
+- Eingaben direkt beantwortet, Gesten kontinuierlich und reversibel gestaltet und bei bewegten Oberflächen passende Motion-/Material-Fallbacks vorsieht
 - per Tastatur bedienbar ist
 - responsive funktioniert
 - MEDDPICC-Statussemantik explizit darstellt

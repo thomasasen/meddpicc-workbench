@@ -58,28 +58,31 @@ Priorisierte Services stehen in `docs/ROADMAP.md`; `docs/PROGRESS.md` bestimmt d
 
 ## UI/UX-Regeln
 
-Bei UI-Arbeiten `docs/DESIGN_SYSTEM.md` und `.agents/skills/meddpicc-ui-ux/SKILL.md` befolgen.
+Bei UI-Arbeiten `docs/DESIGN_SYSTEM.md` sowie **beide** Skills `.agents/skills/meddpicc-ui-ux/SKILL.md` und `.agents/skills/apple-design/SKILL.md` befolgen.
 
-`nextlevelbuilder/ui-ux-pro-max-skill` wird nur als externe Entwicklungs- und Designreferenz genutzt und ist keine Anwendungsabhängigkeit. Details und gepinnter Upstream-Stand: `docs/UI_UX_REFERENCE.md`.
+**Bei überlappenden Style-, Typografie-, Gesten-, Material- oder Bewegungsanforderungen gilt Apple Design vor den älteren Projekt- und UI UX Pro Max-Empfehlungen.** Die MEDDPICC-Produktarchitektur, Accessibility, Sicherheit und fachliche Semantik behalten Vorrang vor einer rein ästhetischen Technik. Beide Upstream-Referenzen und ihre Versionen sind in `docs/UI_UX_REFERENCE.md` dokumentiert; keine Runtime-Abhängigkeit.
 
 Bevorzugen:
 
 - task-/workflow-orientierte Einstiege wie „Deal prüfen“ oder „Sind wir bereit für …?“
 - aktuelle Handlungsbedarfe vor administrativer Projektpflege
 - zugängliche Enterprise-Workbench-Muster
-- minimale/Swiss Informationshierarchie
+- klare, nach Apple Design gestaltete Informationshierarchie
 - informationsdichte, aber gut lesbare Layouts
 - Overview → Drill-Down
 - semantische Statuslabels plus Icons und zurückhaltende Farbe
 - responsive Tabellen und Formulare
 - vollständige Tastaturbedienung
+- sofortiges Eingabefeedback; natürliche, unterbrechbare Bewegung und Pointer-treue Gesten
+- funktionale transluzente Floating Surfaces mit Kontrast- und Reduced-Transparency-Fallback
+- typografische Hierarchie aus Größe, Tracking, Leading und Gewicht
 
 Vermeiden:
 
-- Glassmorphism und dekorative Effekte
+- Glas-/Blur-Effekte ohne räumliche Funktion
 - Marketing-Landingpage-Muster in der Anwendung
 - Status nur über Farbe
-- übermäßige Animation
+- übermäßige, nicht zweckgebundene Animation; physikalisch nachvollziehbare Gesten ausdrücklich zulassen
 - externe Webfonts/CDN-Assets als Standard
 - unnötige Charts oder Gauges
 - CRM-artige Tabellen-/Formularoberflächen ohne klaren Coaching-Workflow
