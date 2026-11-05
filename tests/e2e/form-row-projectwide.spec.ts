@@ -214,7 +214,10 @@ for (const scenario of scenarios) {
         expect(result.checkedPairs, `${scenario.name}: kein Feldpaar in einer Zeile geprüft`).toBeGreaterThan(0)
       }
       if (width === 320 || width === 1440) {
-        const slug = scenario.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+        const slug = scenario.name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '')
         await page.screenshot({ path: testInfo.outputPath(`form-${slug}-${width}.png`), fullPage: true })
       }
     }
