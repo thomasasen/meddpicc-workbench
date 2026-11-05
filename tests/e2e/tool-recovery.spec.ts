@@ -218,3 +218,74 @@ test('Metric-Handoff funktioniert ohne Recovery und aktiviert keine importierte 
   await expect(checkbox).not.toBeChecked()
   await expect(page.getByRole('button', { name: 'Lokale Sicherung aktivieren' })).toBeVisible()
 })
+
+test('QuotaExceededError während des Schreibens zeigt keinen falschen Sicherungsstatus', async ({ page }) => {
+  await page.addInitScript(() => {
+    const originalPut = IDBObjectStore.prototype.put
+    IDBObjectStore.prototype.put = function (value: unknown, key?: IDBValidKey) {
+      if (this.name === 'snapshots') throw new DOMException('Storage quota full', 'QuotaExceededError')
+      return originalPut.call(this, value, key)
+    }
+  })
+  await page.goto(builder)
+  await page.getByRole('button', { name: 'Lokale Sicherung aktivieren' }).click()
+  await page.getByRole('textbox', { name: 'Welches konkrete Problem besteht?' }).fill('Keine Sicherung bei vollem Speicher')
+  await expect(page.getByRole('alert')).toContainText('Speicher gesperrt oder voll')
+  await expect(page.getByText('Zuletzt lokal zwischengesichert:', { exact: false })).toHaveCount(0)
+})
+
+test('Ein abgelaufener Snapshot wird bei der nächsten Werkzeugöffnung physisch gelöscht', async ({ page }) => {
+  await enableAndFill(page, 'Snapshot mit abgelaufener Gültigkeit')
+  await page.evaluate(async () => {
+    const request = indexedDB.open('meddpicc-tool-recovery')
+    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+      request.onsuccess = () => resolve(request.result)
+      request.onerror = () => reject(request.error)
+    })
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction('snapshots', 'readwrite')
+      const store = tx.objectStore('snapshots')
+      const get = store.get('metric-builder')
+      get.onsuccess = () => {
+        const snapshot = get.result as { expiresAt: string }
+        snapshot.expiresAt = new Date(Date.now() - 1000).toISOString()
+        store.put(snapshot, 'metric-builder')
+      }
+      tx.oncomplete = () => resolve()
+      tx.onerror = () => reject(tx.error)
+    })
+    db.close()
+  })
+  acceptBeforeUnload(page)
+  await page.reload()
+  await expect(page.getByRole('dialog')).toHaveCount(0)
+  const count = await page.evaluate(async () => {
+    const request = indexedDB.open('meddpicc-tool-recovery')
+    return await new Promise<number>((resolve, reject) => {
+      request.onsuccess = () => {
+        const db = request.result
+        const tx = db.transaction('snapshots', 'readonly')
+        const get = tx.objectStore('snapshots').count()
+        get.onsuccess = () => resolve(get.result)
+        get.onerror = () => reject(get.error)
+        tx.oncomplete = () => db.close()
+      }
+      request.onerror = () => reject(request.error)
+    })
+  })
+  expect(count).toBe(0)
+})
+
+test('Fehler beim Export erzeugt keinen Erfolgshinweis und verliert die Eingaben nicht', async ({ page }) => {
+  await page.goto(builder)
+  await page.getByRole('button', { name: 'CRM-Zeitgewinn' }).click()
+  await page.getByRole('button', { name: 'Weiter', exact: false }).click()
+  await page.evaluate(() => {
+    URL.createObjectURL = () => {
+      throw new Error('Download durch Browser blockiert')
+    }
+  })
+  await page.getByRole('button', { name: 'Steckbrief als PDF' }).click()
+  await expect(page.getByText('PDF konnte nicht erzeugt werden.')).toBeVisible()
+  await expect(page.getByRole('textbox', { name: 'Welches konkrete Problem besteht?' })).not.toHaveValue('')
+})

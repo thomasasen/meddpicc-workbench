@@ -23,6 +23,7 @@ export interface ToolRecoveryController {
   ready: boolean
   enabled: boolean
   dirty: boolean
+  atRisk: boolean
   saving: boolean
   savedAt: string
   error: string
@@ -53,6 +54,7 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
     ready: false,
     enabled: false,
     dirty: false,
+    atRisk: false,
     saving: false,
     savedAt: '',
     error: '',
@@ -67,6 +69,7 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
   let offered: RecoverySnapshot<T> | null = null
   let timer: ReturnType<typeof setTimeout> | null = null
   let inFlight = false
+  let activeSave: Promise<void> | null = null
   let mounted = false
   let allowOneNavigation = false
   let channel: BroadcastChannel | null = null
@@ -85,9 +88,21 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
   }
 
   function beforeUnload(event: BeforeUnloadEvent): void {
-    if (!state.dirty) return
+    if (!shouldWarn()) return
     event.preventDefault()
     event.returnValue = ''
+  }
+
+  function shouldWarn(): boolean {
+    return (
+      state.dirty &&
+      (!state.enabled ||
+        !!state.pending ||
+        state.invalid ||
+        state.conflict ||
+        state.error !== '' ||
+        fingerprint() !== latestSaved)
+    )
   }
 
   function updateDirty(): void {
@@ -99,7 +114,7 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
     clearTimer()
     if (!state.ready || !state.enabled || state.pending || state.invalid || state.conflict || !state.dirty) return
     if (fingerprint() === latestSaved) return
-    timer = setTimeout(() => void save(), SAVE_DEBOUNCE_MS)
+    timer = setTimeout(() => void startSave(), SAVE_DEBOUNCE_MS)
   }
 
   async function save(): Promise<void> {
@@ -132,6 +147,23 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
     }
   }
 
+  function startSave(): Promise<void> {
+    if (activeSave) return activeSave
+    const task = save()
+    activeSave = task
+    void task.finally(() => {
+      if (activeSave === task) activeSave = null
+    })
+    return task
+  }
+
+  async function flushForNavigation(): Promise<boolean> {
+    if (!state.enabled || state.pending || state.invalid || state.conflict) return true
+    if (activeSave) await activeSave
+    if (fingerprint() !== latestSaved) await startSave()
+    return fingerprint() === latestSaved
+  }
+
   watch(
     () => fingerprint(),
     () => {
@@ -141,12 +173,14 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
   )
 
   watch(
-    () => state.dirty,
-    (dirty) => {
+    () => [state.dirty, state.enabled, state.pending, state.invalid, state.conflict, state.error, state.savedAt, fingerprint()],
+    () => {
+      state.atRisk = shouldWarn()
       if (!mounted) return
-      if (dirty) window.addEventListener('beforeunload', beforeUnload)
+      if (state.atRisk) window.addEventListener('beforeunload', beforeUnload)
       else window.removeEventListener('beforeunload', beforeUnload)
     },
+    { immediate: true },
   )
 
   async function inspectConflict(): Promise<void> {
@@ -260,6 +294,8 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
 
   async function resetAcknowledged(): Promise<void> {
     clearTimer()
+    // A reset must not race an earlier, still-open IndexedDB write and resurrect old inputs.
+    if (activeSave) await activeSave
     baseline = fingerprint()
     updateDirty()
     try {
@@ -279,16 +315,19 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
     allowOneNavigation = true
   }
 
-  const unregisterGuard = router.beforeEach((to, from) => {
+  const unregisterGuard = router.beforeEach(async (to, from) => {
     if (!mounted || to.fullPath === from.fullPath) return true
-    if (allowOneNavigation) {
-      allowOneNavigation = false
-      return true
-    }
+    const explicitHandoff = allowOneNavigation
+    allowOneNavigation = false
     if (!state.dirty) return true
+
+    // Flush pending writes first: successful recovery avoids an unnecessary warning.
+    const secured = await flushForNavigation()
+    if (secured && !shouldWarn()) return true
+    if (explicitHandoff) return true
     return window.confirm(
-      'Ungesicherte Eingaben dieses Tools verlassen? Ein Recovery-Snapshot ist keine gespeicherte Datei. ' +
-        'Du kannst hierbleiben und deine Arbeit fortsetzen.',
+      'Ungesicherte Eingaben dieses Tools verlassen? Eine lokale Recovery-Sicherung ist nicht aktuell oder ' +
+        'fehlgeschlagen. Du kannst hierbleiben und deine Eingaben sichern.',
     )
   })
 
@@ -299,6 +338,19 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
         channel = new BroadcastChannel(RECOVERY_CHANNEL)
         channel.onmessage = (event: MessageEvent) => {
           const data = event.data as { type?: string; toolId?: string }
+          if (data?.type === 'cleared' && data.toolId === '*') {
+            clearTimer()
+            state.enabled = false
+            state.pending = null
+            state.invalid = false
+            state.conflict = false
+            state.savedAt = ''
+            state.error = 'Alle Recoverydaten wurden in einem anderen Tab gelöscht.'
+            revision = null
+            latestSaved = ''
+            offered = null
+            return
+          }
           if (data?.toolId !== adapter.toolId) return
           clearTimer()
           state.conflict = true
@@ -309,7 +361,7 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
     } finally {
       state.ready = true
       updateDirty()
-      if (state.dirty) window.addEventListener('beforeunload', beforeUnload)
+      if (shouldWarn()) window.addEventListener('beforeunload', beforeUnload)
       scheduleSave()
     }
   })

@@ -231,4 +231,10 @@ export async function clearAllToolRecovery(): Promise<void> {
   } finally {
     db.close()
   }
+  // Notify other open tabs only after committed deletion. Never transmit customer data.
+  if (typeof BroadcastChannel !== 'undefined') {
+    const channel = new BroadcastChannel('meddpicc-recovery-notifications')
+    channel.postMessage({ type: 'cleared', toolId: '*' })
+    channel.close()
+  }
 }

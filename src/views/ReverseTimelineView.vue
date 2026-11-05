@@ -386,7 +386,7 @@ async function exportTimeline(kind: 'svg' | 'png'): Promise<void> {
     }
     exportMessage.value =
       (kind === 'svg' ? 'SVG' : 'PNG') +
-      ' wurde für die Weiterverwendung in Präsentationen erzeugt.' +
+      ' wurde für die Weiterverwendung in Präsentationen erzeugt. Browser-Download angestoßen; bitte Datei prüfen.' +
       (warning ? ' ' + warning : '')
   } catch (error) {
     exportMessage.value = error instanceof Error ? error.message : 'Export ist fehlgeschlagen.'
