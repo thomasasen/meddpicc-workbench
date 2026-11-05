@@ -36,8 +36,9 @@ defineEmits<{
       <span v-if="enabled" class="recovery-label">Aktiv</span>
     </div>
     <p class="recovery-description">
-      Nach ausdrücklicher Aktivierung bleiben deine Eingaben maximal sieben Tage in diesem Browser. Nicht verschlüsselt,
-      keine gespeicherte Datei und keine Bestätigung von Kundenangaben. Nicht für gemeinsam genutzte Geräte empfohlen.
+      Nur nach Aktivierung werden Eingaben in diesem Browser zwischengespeichert. Der Stand verfällt nach sieben Tagen
+      und wird beim nächsten Zugriff entfernt. Die Daten sind nicht verschlüsselt und keine gespeicherte Datei oder
+      Bestätigung von Kundenangaben. Auf gemeinsam genutzten Geräten nicht empfohlen.
     </p>
     <p v-if="candidate" class="recovery-description">
       Lokaler Arbeitsstand vom <strong>{{ new Date(candidate.savedAt).toLocaleString('de-DE') }}</strong> vorhanden.
