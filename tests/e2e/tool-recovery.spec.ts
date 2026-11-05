@@ -37,6 +37,31 @@ test('Opt-in, Neustart des Tabs, manuelles Wiederherstellen und Verwerfen', asyn
   await expect(page.getByRole('button', { name: 'Wiederherstellen' })).toHaveCount(0)
 })
 
+test('Leere numerische Zwischenfelder stoppen Recovery nicht dauerhaft', async ({ page }) => {
+  await page.goto(timeline)
+  await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+  await customer(page).fill('Mit unvollständiger Dauer')
+  const duration = page.locator('.reverse-step-fields input[type="number"]').first()
+  await expect(duration).toBeVisible()
+  await duration.fill('')
+  await expect(page.getByText('Nur lokal zwischengesichert.', { exact: false })).toBeVisible()
+  await page.reload()
+  await page.getByRole('button', { name: 'Wiederherstellen' }).click()
+  await expect(customer(page)).toHaveValue('Mit unvollständiger Dauer')
+  await expect(page.locator('.reverse-step-fields input[type="number"]').first()).toHaveValue('')
+})
+
+test('Navigationsflush kann mit Debounce konkurrieren, ohne einen Konflikt auszulösen', async ({ page }) => {
+  await page.goto(timeline)
+  await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+  await customer(page).fill('Schneller Werkzeugwechsel')
+  await page.getByRole('link', { name: 'Alle Microtools' }).click()
+  await expect(page).not.toHaveURL(/reverse-timeline/)
+  await page.goto(timeline)
+  await page.getByRole('button', { name: 'Wiederherstellen' }).click()
+  await expect(customer(page)).toHaveValue('Schneller Werkzeugwechsel')
+})
+
 test('Opt-in sichert bereits eingegebene Daten ohne eine weitere Änderung', async ({ page }) => {
   await page.goto(timeline)
   await customer(page).fill('Bereits vor Opt-in erfasst')

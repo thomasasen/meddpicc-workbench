@@ -62,7 +62,7 @@ export function validCostOfDelayInput(value: unknown): value is CostOfDelayInput
   return (
     text.every((k) => shortText(value[k])) &&
     money.every((k) => optionalNumber(value[k])) &&
-    numbers.every((k) => finite(value[k])) &&
+    numbers.every((k) => numberOrEmpty(value[k])) &&
     bools.every((k) => typeof value[k] === 'boolean') &&
     (value.horizonMonths === 36 || value.horizonMonths === 60) &&
     oneOf(value.benefitKind, ['recurring', 'one-time']) &&
@@ -82,8 +82,8 @@ export function validBridgeMetric(value: unknown): boolean {
     optionalNumber(value.annualPotentialEur) &&
     optionalNumber(value.annualRealizedEur) &&
     typeof value.included === 'boolean' &&
-    finite(value.startMonth) &&
-    finite(value.rampMonths) &&
+    numberOrEmpty(value.startMonth) &&
+    numberOrEmpty(value.rampMonths) &&
     oneOf(value.evidence, evidence) &&
     oneOf(value.kind, kinds) &&
     oneOf(value.origin, ['manual', 'metric-builder', 'software-business-case', 'cost-of-delay'])
@@ -115,9 +115,9 @@ export function validSoftwareCost(value: unknown): value is SoftwareCost {
     shortText(value.name) &&
     oneOf(value.kind, ['one-time', 'saas', 'avoided-legacy']) &&
     oneOf(value.period, ['monthly', 'annual']) &&
-    finite(value.amountEur) &&
-    finite(value.startMonth) &&
-    (value.endMonth === undefined || finite(value.endMonth)) &&
+    numberOrEmpty(value.amountEur) &&
+    numberOrEmpty(value.startMonth) &&
+    (value.endMonth === undefined || numberOrEmpty(value.endMonth)) &&
     (value.effectGroup === undefined || shortText(value.effectGroup))
   )
 }
@@ -156,8 +156,8 @@ export function validSoftwareMetric(value: unknown): value is CustomerMetric {
   return (
     recordKeys(value, keys) &&
     ['id', 'name', 'evidenceNote', 'effectGroup'].every((k) => shortText(value[k])) &&
-    nums.every((k) => finite(value[k])) &&
-    (value.endMonth === undefined || finite(value.endMonth)) &&
+    nums.every((k) => numberOrEmpty(value[k])) &&
+    (value.endMonth === undefined || numberOrEmpty(value.endMonth)) &&
     typeof value.included === 'boolean' &&
     oneOf(value.formula, formula) &&
     oneOf(value.evidence, evidence) &&

@@ -5,7 +5,12 @@ import {
   RECOVERY_MAX_BYTES,
   RECOVERY_RETENTION_MS,
 } from '../src/services/toolRecovery'
-import { validMetricBuilderDraft, validCostOfDelayInput, validValueBridgeInput } from '../src/services/recoveryDrafts'
+import {
+  validMetricBuilderDraft,
+  validCostOfDelayInput,
+  validValueBridgeInput,
+  validSoftwareCost,
+} from '../src/services/recoveryDrafts'
 import { emptyMetricDraft } from '../src/domain/metricBuilder'
 import { emptyCostOfDelayInput } from '../src/domain/costOfDelay'
 import { blankValueBridge } from '../src/domain/valueBridge'
@@ -65,6 +70,21 @@ describe('Tool-Verträge für untrusted Recoverydaten', () => {
     expect(validMetricBuilderDraft(emptyMetricDraft())).toBe(true)
     expect(validCostOfDelayInput(emptyCostOfDelayInput())).toBe(true)
     expect(validValueBridgeInput(blankValueBridge())).toBe(true)
+  })
+
+  it('erlaubt bei Zahlenfeldern ausschließlich vorübergehend leere Zeichenketten', () => {
+    expect(validCostOfDelayInput({ ...emptyCostOfDelayInput(), benefitStartMonth: '' })).toBe(true)
+    expect(validCostOfDelayInput({ ...emptyCostOfDelayInput(), benefitStartMonth: 'ungültig' })).toBe(false)
+    const cost = {
+      id: 'test',
+      name: 'Implementierung',
+      kind: 'one-time',
+      amountEur: '',
+      period: 'monthly',
+      startMonth: 0,
+    }
+    expect(validSoftwareCost(cost)).toBe(true)
+    expect(validSoftwareCost({ ...cost, amountEur: '12 Euro' })).toBe(false)
   })
 
   it('verweigert fremde Felder, fehlerhafte Zahlen und falsch geformte Metrics', () => {

@@ -421,10 +421,11 @@ function validTimelineRecovery(value: unknown): value is TimelineRecovery {
     return (
       typeof item.label === 'string' &&
       item.label.length <= 250 &&
-      typeof item.duration === 'number' &&
-      Number.isFinite(item.duration) &&
-      item.duration >= 0 &&
-      item.duration <= 10000 &&
+      (item.duration === '' ||
+        (typeof item.duration === 'number' &&
+          Number.isFinite(item.duration) &&
+          item.duration >= 0 &&
+          item.duration <= 10000)) &&
       (item.durationUnit === 'business-days' || item.durationUnit === 'calendar-days') &&
       (item.owner === 'customer' || item.owner === 'seller' || item.owner === 'shared') &&
       (item.area === 'decision-process' || item.area === 'paper-process' || item.area === 'implementation') &&

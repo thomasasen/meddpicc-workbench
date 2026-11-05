@@ -32,7 +32,8 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
   let lastSaved = initial
   let observedToken: string | null = null
   let timer: ReturnType<typeof setTimeout> | undefined
-  let currentWrite: Promise<boolean> | null = null
+  // Serialisiert parallele Debounce-, Navigations- und Löschvorgänge.
+  let pendingFlush: Promise<void> = Promise.resolve()
   let disposed = false
   let acknowledgedNavigation = false
   let channel: BroadcastChannel | null = null
@@ -63,16 +64,17 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
     }
   }
 
-  async function flush(): Promise<boolean> {
+  function flush(): Promise<boolean> {
     clearTimeout(timer)
-    if (!enabled.value || conflict.value || disposed) return false
-    if (currentWrite) {
-      await currentWrite
+    const task = pendingFlush.then(async () => {
       if (!enabled.value || conflict.value || disposed) return false
-    }
-    const serialized = JSON.stringify(value.value)
-    if (serialized === lastSaved) return true
-    currentWrite = (async () => {
+      const serialized = JSON.stringify(value.value)
+      if (serialized === lastSaved) return true
+      // Unvollständige Formulare dürfen nicht als Tab-Konflikt gelten.
+      if (!validate(value.value)) {
+        message.value = 'Eingaben sind momentan nicht vollständig speicherbar. Änderungen sind noch nicht lokal gesichert.'
+        return false
+      }
       try {
         const saved = await writeRecovery(tool, value.value, observedToken, validate)
         if (disposed) return false
@@ -83,7 +85,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
             ? 'Nur lokal zwischengesichert. Nicht als Datei gespeichert.'
             : 'Neuere Änderungen sind noch nicht lokal gesichert.'
         signalOtherTabs()
-        return true
+        return serialized === JSON.stringify(value.value)
       } catch (error) {
         if (disposed) return false
         if (error instanceof RecoveryStorageError && (error.reason === 'conflict' || error.reason === 'invalid')) {
@@ -99,13 +101,12 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
         }
         return false
       }
-    })()
-    try {
-      const written = await currentWrite
-      return written && serialized === JSON.stringify(value.value)
-    } finally {
-      currentWrite = null
-    }
+    })
+    pendingFlush = task.then(
+      () => undefined,
+      () => undefined,
+    )
+    return task
   }
 
   function schedule() {
@@ -168,7 +169,8 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
     busy.value = true
     clearTimeout(timer)
     try {
-      if (currentWrite) await currentWrite
+      enabled.value = false
+      await pendingFlush
       await deleteRecovery(tool, validate, observedToken)
       candidate.value = null
       observedToken = null

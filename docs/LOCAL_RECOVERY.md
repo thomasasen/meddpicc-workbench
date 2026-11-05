@@ -59,3 +59,12 @@ Ein ausgelöster Browser-Download wird lediglich als **angefordert** dargestellt
 Die Gegenprüfung ist **simuliert** und nicht durch externe Fachprüfer durchgeführt. Nachprüfung: fehlende erste Sicherung unmittelbar nach Opt-in behoben, Ablaufchronologie strenger validiert, abgelaufene Snapshots anderer Tools werden beim Zugriff mitbereinigt, und die nichtmodale Recovery-Oberfläche ist eine semantische Region statt eines Dialogs. Diese Änderungen müssen durch den CI-Lauf des abschließenden Commits bestätigt werden.
 
 Die von GitHub Actions zuvor vorgenommene automatische Formatierung und der selbsttätige Commit auf dem Feature-Branch wurden für diesen PR entfernt. Formatierungsfehler sollen als Quality-Gate-Fehler auffallen, statt die geprüfte Revision während der CI zu verändern.
+
+## Ergänzende statische Red-Team-Prüfung (6. November 2026)
+
+Zwei zusätzliche Datenintegritätsrisiken wurden anhand des Quellcodes untersucht und korrigiert:
+
+1. **Konkurrierende Flush-Vorgänge:** Debounce, Navigation und Verwerfen konnten dieselbe Sicherungsgeneration gleichzeitig bearbeiten. Eine Promise-Warteschlange serialisiert Schreibversuche. Das Verwerfen deaktiviert weitere Sicherungen und wartet eingereihte Schreibversuche vor dem Löschen ab.
+2. **Vorübergehend leere numerische Eingabefelder:** Bei `v-model.number` kann während der Bearbeitung der Wert `''` entstehen. Solche spezifischen Zwischenwerte werden im lokalen Snapshot zugelassen, beliebige andere Zahlenstrings weiterhin abgelehnt. Ein nicht validierbarer aktueller UI-Stand wird als ungesichert gemeldet und nicht als konkurrierender Tab klassifiziert.
+
+Die Regressionstests wurden erweitert. **Die erfolgreiche Ausführung aller Quality Gates und die visuelle Nutzerfreigabe stehen separat aus; dieser Abschnitt ist kein Test-Erfolgsnachweis.**

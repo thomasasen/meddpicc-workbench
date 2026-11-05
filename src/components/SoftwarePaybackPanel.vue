@@ -449,7 +449,8 @@ function validPaybackRecovery(value: unknown): value is PaybackRecovery {
     return (
       Object.keys(fields).length === 3 &&
       ['benefitPercent', 'oneTimeCostPercent', 'benefitDelayMonths'].every(
-        (name) => typeof fields[name] === 'number' && Number.isFinite(fields[name]),
+        (name) =>
+          fields[name] === '' || (typeof fields[name] === 'number' && Number.isFinite(fields[name])),
       )
     )
   })
