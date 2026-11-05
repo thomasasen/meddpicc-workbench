@@ -7,7 +7,8 @@ export const RECOVERY_VERSION = 1
 export const RECOVERY_TTL_MS = 7 * 24 * 60 * 60 * 1000
 export const RECOVERY_MAX_BYTES = 256 * 1024
 
-export type RecoveryToolId = 'reverse-timeline' | 'metric-builder' | 'software-payback' | 'cost-of-delay' | 'value-bridge'
+export type RecoveryToolId =
+  'reverse-timeline' | 'metric-builder' | 'software-payback' | 'cost-of-delay' | 'value-bridge'
 
 export interface RecoverySnapshot<T> {
   schemaVersion: 1
@@ -26,7 +27,9 @@ export interface RecoveryReadResult {
 
 export class RecoveryConflictError extends Error {
   constructor() {
-    super('Ein anderer Tab hat diesen lokalen Recovery-Stand geändert. Bitte diesen Tab neu laden und die Stände prüfen.')
+    super(
+      'Ein anderer Tab hat diesen lokalen Recovery-Stand geändert. Bitte diesen Tab neu laden und die Stände prüfen.',
+    )
     this.name = 'RecoveryConflictError'
   }
 }
@@ -34,7 +37,11 @@ export class RecoveryConflictError extends Error {
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   value !== null && typeof value === 'object' && !Array.isArray(value)
 
-export function isRecoverySnapshot(value: unknown, toolId: RecoveryToolId, now = Date.now()): value is RecoverySnapshot<unknown> {
+export function isRecoverySnapshot(
+  value: unknown,
+  toolId: RecoveryToolId,
+  now = Date.now(),
+): value is RecoverySnapshot<unknown> {
   if (!isRecord(value)) return false
   if (value.schemaVersion !== RECOVERY_VERSION || value.toolId !== toolId) return false
   if (typeof value.revision !== 'number' || !Number.isSafeInteger(value.revision) || value.revision < 1) return false
@@ -189,7 +196,8 @@ export async function discardToolRecovery(toolId: RecoveryToolId, expectedRevisi
         }
       }
       tx.oncomplete = () => resolve()
-      tx.onabort = () => reject(conflict ? new RecoveryConflictError() : new Error('Recoverydaten konnten nicht gelöscht werden.'))
+      tx.onabort = () =>
+        reject(conflict ? new RecoveryConflictError() : new Error('Recoverydaten konnten nicht gelöscht werden.'))
       tx.onerror = () => reject(new Error('Recoverydaten konnten nicht gelöscht werden.'))
     })
   } finally {
