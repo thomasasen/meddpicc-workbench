@@ -336,6 +336,19 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
         channel = new BroadcastChannel(RECOVERY_CHANNEL)
         channel.onmessage = (event: MessageEvent) => {
           const data = event.data as { type?: string; toolId?: string }
+          if (data?.type === 'cleared' && data.toolId === '*') {
+            clearTimer()
+            state.enabled = false
+            state.pending = null
+            state.invalid = false
+            state.conflict = false
+            state.savedAt = ''
+            state.error = 'Alle Recoverydaten wurden in einem anderen Tab gelöscht.'
+            revision = null
+            latestSaved = ''
+            offered = null
+            return
+          }
           if (data?.toolId !== adapter.toolId) return
           clearTimer()
           state.conflict = true
