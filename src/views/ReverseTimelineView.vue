@@ -409,19 +409,26 @@ function validTimelineRecovery(value: unknown): value is TimelineRecovery {
   const fields = ['customerName', 'planTitle', 'referenceDate', 'targetGoLiveDate', 'compellingEvent']
   if (Object.keys(record).length !== 6 || !fields.every((key) => typeof record[key] === 'string')) return false
   if (!Array.isArray(record.steps) || record.steps.length < 1 || record.steps.length > 100) return false
+  if (!fields.every((key) => (record[key] as string).length <= 5000)) return false
+  const ids = new Set<string>()
   return record.steps.every((step: unknown) => {
     if (!step || typeof step !== 'object' || Array.isArray(step)) return false
     const item = step as Record<string, unknown>
+    const allowed = ['id', 'label', 'duration', 'durationUnit', 'owner', 'area', 'ownerDetail']
+    if (Object.keys(item).some((key) => !allowed.includes(key))) return false
+    if (typeof item.id !== 'string' || !item.id || item.id.length > 120 || ids.has(item.id)) return false
+    ids.add(item.id)
     return (
-      typeof item.id === 'string' &&
       typeof item.label === 'string' &&
+      item.label.length <= 250 &&
       typeof item.duration === 'number' &&
       Number.isFinite(item.duration) &&
       item.duration >= 0 &&
+      item.duration <= 10000 &&
       (item.durationUnit === 'business-days' || item.durationUnit === 'calendar-days') &&
       (item.owner === 'customer' || item.owner === 'seller' || item.owner === 'shared') &&
       (item.area === 'decision-process' || item.area === 'paper-process' || item.area === 'implementation') &&
-      (item.ownerDetail === undefined || typeof item.ownerDetail === 'string')
+      (item.ownerDetail === undefined || (typeof item.ownerDetail === 'string' && item.ownerDetail.length <= 200))
     )
   })
 }
