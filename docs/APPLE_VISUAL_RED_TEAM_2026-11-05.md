@@ -25,6 +25,17 @@ Stand: 05.11.2026. Feature-Branch `feature/apple-design-visible-redesign-2026-11
 | Screens für Checklists/Knowledge bleiben unberührt | explizite Panels, Checklisten, Wissenskarten, Steps und Settings im neuen Theme |
 | CSS verändert PDF-Export und Kundencharts | Exportcode und SVG/PDF-Metriken nicht geändert; bestehende Regressionstests als Gate |
 
+## Ergebnisse der technischen Qualitätssicherung
+
+- Vollständig erfolgreicher Workflow: [GitHub Actions #42035429161](https://github.com/thomasasen/meddpicc-workbench/actions/runs/42035429161).
+- Formatierung, Linting und TypeScript-/Vite-Produktionsbuild: **bestanden**.
+- Vitest: **356 Tests bestanden** in 48 Testdateien.
+- Playwright Chromium Desktop und Mobile: **255 Tests bestanden**, **1 bestehender Skip**, **0 Fehler**.
+- GitHub-Pages-Root mit gebauten Assets synchronisiert und Integritätsprüfung **bestanden**.
+- Neue Szenarien prüfen die tatsächlich gerenderte Bereichsnavigation und ihren Tastaturfokus, direkte Go-Live-Navigation, messbare Hero-Materialeigenschaften, horizontale Überläufe bei **320, 375, 768, 1024 und 1440 px** sowie Reduced Motion und erhöhten Kontrast.
+- Reale CI-Regression: Vor der Korrektur erwartete `smoke.spec.ts` nur **einen** Link zu `#tools`. Nach Einführung des zusätzlichen Navigationslinks lagen legitimerweise zwei vor. Die Prüfung ist auf semantisch benannte Bereichsnavigation plus drei separate Einstiegskarten umgestellt. Zweiter vollständiger CI-Lauf grün.
+- Die CI stellt das Artefakt `ui-qs-screenshots` bereit. Dies sind Screenshots für ein menschliches Review, kein automatisch bestandener Pixel-Freigabetest.
+
 ## Prüflimits
 
-Diese Red-Team-Rollen sind **simulierte Gegenprüfungen**, keine unabhängigen externen menschlichen Reviewer. Die CI-Ergebnisse, Browser-Screenshots und gegebenenfalls nachträglich gefundene Mängel werden nach den GitHub-Actions-Läufen ergänzt. Ohne diese Nachweise ist keine vollständige technische oder visuelle Freigabe gerechtfertigt.
+Diese Red-Team-Rollen sind **simulierte Gegenprüfungen**, keine unabhängigen externen menschlichen Reviewer. Eine unabhängige visuelle Prüfung sämtlicher Originalscreenshots und dediziertes Framerate-/Performance-Profiling wurde **nicht** durchgeführt. Die erfolgreiche CI belegt technische Regressionen und Browserbedienbarkeit; sie ist keine WCAG-Zertifizierung und ersetzt nicht die gestalterische Abnahme durch echte Nutzer.
