@@ -1,7 +1,9 @@
 # Qualitätssicherung und Red-Team: Apple-Design-Integration
 
-**Stand:** 05.11.2026  
-**Gegenstand:** PR #83, Branch `docs/apple-design-priority-2026-11`  
+**Stand:** 05.11.2026
+
+**Gegenstand:** PR #83, Branch `docs/apple-design-priority-2026-11`
+
 **Umfang:** Anweisungs-/Dokumentationsintegration, keine Anwendungscode-Änderungen.
 
 ## Methode
