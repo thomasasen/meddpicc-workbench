@@ -443,6 +443,7 @@ const recovery = useToolRecovery<SoftwarePaybackRecovery>({
         optimistic: DEFAULT_SCENARIO_SETTINGS.optimistic,
       }),
 })
+defineExpose({ hasUnsaved: () => recovery.dirty })
 </script>
 
 <template>
