@@ -53,9 +53,7 @@ test('Startseite bleibt bei 320–1440 Pixeln vollständig zugänglich', async (
       viewport: document.documentElement.clientWidth,
       scrollWidth: document.documentElement.scrollWidth,
     }))
-    expect(state.scrollWidth, `horizontales Überlaufen bei ${width}px`).toBeLessThanOrEqual(
-      state.viewport + 2,
-    )
+    expect(state.scrollWidth, `horizontales Überlaufen bei ${width}px`).toBeLessThanOrEqual(state.viewport + 2)
     await expect(page.getByRole('heading', { name: /Wiederkehrende Sales-Aufgaben/ })).toBeVisible()
     await expect(page.getByRole('navigation', { name: 'Toolbox-Bereiche' })).toBeVisible()
     await expect(page.locator('.toolbox-entry-card')).toHaveCount(3)
@@ -72,9 +70,7 @@ test('Reduzierte Bewegung und erhöhter Kontrast bleiben erhalten', async ({ pag
     return { borderWidth: style.borderTopWidth, transitionDuration: style.transitionDuration }
   })
   expect(css.borderWidth).toBe('1px')
-  expect(css.transitionDuration.split(',').every((duration) => Number.parseFloat(duration) <= 0.01)).toBe(
-    true,
-  )
+  expect(css.transitionDuration.split(',').every((duration) => Number.parseFloat(duration) <= 0.01)).toBe(true)
 
   await card.focus()
   await expect(card).toHaveCSS('outline-style', 'solid')
