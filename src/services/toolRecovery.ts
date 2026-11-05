@@ -137,16 +137,19 @@ export async function writeRecovery<T>(
 ): Promise<RecoverySnapshot<T>> {
   validateTool(tool)
   if (!validate(data)) throw new RecoveryStorageError('invalid')
-  const snapshot: RecoverySnapshot<T> = {
-    version: RECOVERY_VERSION,
-    tool,
-    token: crypto.randomUUID(),
-    savedAt: new Date(now).toISOString(),
-    expiresAt: new Date(now + RECOVERY_RETENTION_MS).toISOString(),
-    data: structuredClone(data),
-  }
+  let snapshot: RecoverySnapshot<T>
   let raw: string
   try {
+    // Vue-Proxies lassen sich nicht structuredClone-n. JSON bildet den
+    // expliziten Snapshot-Vertrag ab und trennt den Datensatz vom UI-State.
+    snapshot = {
+      version: RECOVERY_VERSION,
+      tool,
+      token: crypto.randomUUID(),
+      savedAt: new Date(now).toISOString(),
+      expiresAt: new Date(now + RECOVERY_RETENTION_MS).toISOString(),
+      data: JSON.parse(JSON.stringify(data)) as T,
+    }
     raw = JSON.stringify(snapshot)
   } catch {
     throw new RecoveryStorageError('invalid')
