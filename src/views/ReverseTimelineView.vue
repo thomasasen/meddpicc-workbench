@@ -478,18 +478,7 @@ const recovery = useToolRecovery({
     </header>
 
     <main id="main-content" class="reverse-tool-main">
-      <div class="container">
-        <ToolRecoveryPanel
-          :candidate="recovery.candidate.value"
-          :enabled="recovery.enabled.value"
-          :busy="recovery.busy.value"
-          :conflict="recovery.conflict.value"
-          :message="recovery.message.value"
-          @activate="recovery.activate"
-          @recover="recovery.recover"
-          @discard="recovery.discard"
-        />
-      </div>
+
 
       <section class="container tool-intro" aria-labelledby="reverse-title">
         <div>
@@ -512,6 +501,19 @@ const recovery = useToolRecovery({
           </p>
         </aside>
       </section>
+
+      <div class="container">
+        <ToolRecoveryPanel
+          :candidate="recovery.candidate.value"
+          :enabled="recovery.enabled.value"
+          :busy="recovery.busy.value"
+          :conflict="recovery.conflict.value"
+          :message="recovery.message.value"
+          @activate="recovery.activate"
+          @recover="recovery.recover"
+          @discard="recovery.discard"
+        />
+      </div>
 
       <section class="container reverse-config" aria-labelledby="plan-input-title">
         <div class="section-heading-row">
