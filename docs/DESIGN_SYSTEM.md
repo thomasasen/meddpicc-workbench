@@ -208,6 +208,17 @@ Diese Regeln ersetzen frühere pauschale Einschränkungen für Bewegung und tran
 
 Die produktive, gemeinsame Implementierung dieser Prinzipien liegt in `src/styles/appleInteractions.css` (Feedback/Accessibility) und für die Go-Live-Planung in `src/views/ReverseTimelineView.vue` sowie `src/styles/reverseTimelineDragElevation.css`. Neue Spezialeffekte benötigen einen nachweisbaren funktionalen Nutzen und passende Browser-Regressionen. Der Umsetzungs- und QA-Umfang ist unter `docs/APPLE_DESIGN_IMPLEMENTATION_QA_2026-11-05.md` dokumentiert.
 
+## 12b. Sichtbares Apple-Design-System (05.11.2026)
+
+Die verbindliche visuelle Implementierung liegt zentral in `src/styles/appleRedesign.css`; dieses Stylesheet wird **nach** den bisherigen UI-Basisdateien geladen. Es überschreibt gemeinsame Tokens und produktive Komponenten gezielt, ohne Fachlogik oder kundenfähige Exporte zu verändern.
+
+- **Kontrast und Tonalität:** Grundfläche `#f3f6fb`, opake Surface `#ffffff`, Text `#16243b`, Sekundärtext `#516279`, Akzent `#265ed4`. Navigation und Kunden-Statusmeldungen bleiben semantisch unterscheidbar.
+- **Räumliche Hierarchie:** Sticky Header mit Blur nur als wirklich schwebende Ebene; transparente Oberfläche **nicht** als Pflicht für normale Karten, Tabellen oder Formulare. Nicht unterstützte Browser verwenden Weiß.
+- **Typografie und Dichte:** responsive Display-Typografie und optisch angepasste Laufweite, großzügigere aber begrenzte Abstände, größere Click-/Tap-Flächen. Keine neue Font- oder Framework-Abhängigkeit.
+- **Übergreifende Views:** Tools, Checklists, Knowledge, Go-Live-Timeline, Settings und Dokumentgestaltung verwenden denselben Material-, Fokus-, Formular- und Button-Vertrag.
+- **Physik:** Das Reordering nutzt `src/domain/dragSpring.ts`: kritisch gedämpftes Einrasten ab aktueller Bildschirmposition und mit der gültigen Pointer-Freigabegeschwindigkeit; keine unnötige Momentum-Projektion für präzises Sortieren.
+- **Gegenprüfungen:** `tests/e2e/apple-visual-redesign.spec.ts` und die bestehende vollständige Viewport-/Funktionsmatrix. Simulierte Red-Team-Auditierung unter `docs/APPLE_VISUAL_RED_TEAM_QA_2026-11-05.md`.
+
 ## 13. Accessibility
 
 Mindestens:
