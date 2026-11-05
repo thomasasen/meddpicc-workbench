@@ -4,8 +4,9 @@ const timeline = '/meddpicc-workbench/#/tools/reverse-timeline'
 const entry = 'z. B. Beispielwerke GmbH'
 const customer = (page: import('@playwright/test').Page) => page.getByPlaceholder(entry)
 
-test('ohne Opt-in keine dauerhafte Wiederherstellung nach Reload', async ({ page }) => {
+test('ohne Opt-in keine dauerhafte Wiederherstellung nach Reload', async ({ page }, testInfo) => {
   await page.goto(timeline)
+  await page.screenshot({ path: testInfo.outputPath('recovery-opt-out.png'), fullPage: true })
   await customer(page).fill('Nicht gespeichert')
   page.on('dialog', (dialog) => void dialog.accept())
   await page.reload()
@@ -13,7 +14,7 @@ test('ohne Opt-in keine dauerhafte Wiederherstellung nach Reload', async ({ page
   await expect(page.getByRole('button', { name: 'Wiederherstellen' })).toHaveCount(0)
 })
 
-test('Opt-in, Neustart des Tabs, manuelles Wiederherstellen und Verwerfen', async ({ page }) => {
+test('Opt-in, Neustart des Tabs, manuelles Wiederherstellen und Verwerfen', async ({ page }, testInfo) => {
   await page.goto(timeline)
   await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
   await customer(page).fill('Recovery Beispielwerke')
@@ -21,10 +22,17 @@ test('Opt-in, Neustart des Tabs, manuelles Wiederherstellen und Verwerfen', asyn
   await page.reload()
   await expect(customer(page)).toHaveValue('')
   await expect(page.getByRole('button', { name: 'Wiederherstellen' })).toBeVisible()
+  await page.setViewportSize({ width: 375, height: 850 })
+  await page.screenshot({ path: testInfo.outputPath('recovery-candidate-375.png'), fullPage: true })
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.screenshot({ path: testInfo.outputPath('recovery-candidate-1440.png'), fullPage: true })
   await page.getByRole('button', { name: 'Wiederherstellen' }).click()
   await expect(customer(page)).toHaveValue('Recovery Beispielwerke')
   await expect(page.getByText('nicht neu bestätigt', { exact: false })).toBeVisible()
+  await page.screenshot({ path: testInfo.outputPath('recovery-restored-1440.png'), fullPage: true })
   await page.getByRole('button', { name: 'Recoverydaten löschen und deaktivieren' }).click()
+  await expect(page.getByText('Recoverydaten gelöscht und lokales Recovery deaktiviert.')).toBeVisible()
+  await page.screenshot({ path: testInfo.outputPath('recovery-discarded-1440.png'), fullPage: true })
   await page.reload()
   await expect(page.getByRole('button', { name: 'Wiederherstellen' })).toHaveCount(0)
 })
@@ -127,7 +135,7 @@ test('abgelaufene Recoverydaten aller Tools werden bei erneutem Zugriff bereinig
   await expect.poll(expiredRemoved).toBe(true)
 })
 
-test('Zwei Tabs erkennen auch ohne BroadcastChannel den Schreibkonflikt', async ({ context }) => {
+test('Zwei Tabs erkennen auch ohne BroadcastChannel den Schreibkonflikt', async ({ context }, testInfo) => {
   const first = await context.newPage()
   const second = await context.newPage()
   await second.addInitScript(() => {
@@ -139,6 +147,7 @@ test('Zwei Tabs erkennen auch ohne BroadcastChannel den Schreibkonflikt', async 
   await expect(first.getByText('Nur lokal zwischengesichert.', { exact: false })).toBeVisible()
   await second.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
   await expect(second.getByText('in einem anderen Tab verändert', { exact: false })).toBeVisible()
+  await second.screenshot({ path: testInfo.outputPath('recovery-conflict.png'), fullPage: true })
   await customer(first).fill('Stand aus Tab A')
   await expect(first.getByText('Nur lokal zwischengesichert.', { exact: false })).toBeVisible()
   await customer(second).fill('Nicht übernommener Stand aus Tab B')
@@ -184,6 +193,7 @@ test('deaktivierte IndexedDB zeigt einen Fehler und keinen gespeicherten Zustand
   await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
   await expect(page.getByText('Lokales Zwischenspeichern fehlgeschlagen.', { exact: false })).toBeVisible()
   await expect(page.locator('.recovery-panel .recovery-label')).toHaveCount(0)
+  await page.setViewportSize({ width: 375, height: 850 })
   await page.screenshot({ path: testInfo.outputPath('recovery-storage-error.png'), fullPage: true })
 })
 
@@ -202,6 +212,14 @@ test('Recovery: Tastaturfokus und responsive Breiten ohne Overflow', async ({ pa
     expect(overflow, 'Viewport ' + width).toBeLessThanOrEqual(0)
     await page.screenshot({ path: testInfo.outputPath('recovery-active-' + width + '.png'), fullPage: true })
   }
+})
+
+test('Reduced Motion: Recovery-Oberfläche bleibt ohne Animation verständlich', async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.setViewportSize({ width: 375, height: 850 })
+  await page.goto(timeline)
+  expect(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches)).toBe(true)
+  await page.screenshot({ path: testInfo.outputPath('recovery-reduced-motion-375.png'), fullPage: true })
 })
 
 test('Metric Builder, Cost of Delay und Value Bridge: unabhängige Opt-in-Wiederherstellung', async ({ page }) => {
