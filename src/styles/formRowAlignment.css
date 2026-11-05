@@ -1,0 +1,200 @@
+/*
+ * Verbindliche Zeilenausrichtung für alle produktiven mehrspaltigen Formulare.
+ *
+ * Gemeinsame Spuren: 1 Label, 2 Control, 3 optionale Hinweise.
+ * Ein langes Label oder ein Hilfetext darf das Control nicht verschieben.
+ * Mehrzeilige Textareas behalten ihre natürliche Höhe; Checkboxen sind ausgenommen.
+ * CSS Subgrid synchronisiert auch mehrzeilige Labels pro tatsächlicher Zeile.
+ * Fallback: ausreichende Label-Mindesthöhe für Browser ohne Subgrid.
+ */
+:root {
+  --form-alignment-control-height: 46px;
+  --form-alignment-label-min: 2.75rem;
+  --form-alignment-internal-gap: 0.4rem;
+}
+
+.site-shell :is(
+    .reverse-context-grid,
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .cod-field-row,
+    .vb-fields-two,
+    .evidence-form,
+    .work-object-form
+  ) {
+  align-items: stretch;
+}
+
+.site-shell :is(
+    .reverse-context-grid,
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .cod-field-row,
+    .vb-fields-two,
+    .evidence-form,
+    .work-object-form
+  ) > :is(.field, .cod-field, .vb-field) {
+  display: grid;
+  grid-template-rows:
+    minmax(var(--form-alignment-label-min), auto)
+    minmax(var(--form-alignment-control-height), auto)
+    minmax(0, auto);
+  align-content: start;
+  align-items: start;
+  min-width: 0;
+  gap: var(--form-alignment-internal-gap);
+  margin-block: 0;
+}
+
+.site-shell :is(
+    .reverse-context-grid,
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .cod-field-row,
+    .vb-fields-two,
+    .evidence-form,
+    .work-object-form
+  ) > :is(.field, .cod-field, .vb-field) > span:first-child {
+  grid-row: 1;
+  align-self: end;
+  min-height: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+
+.site-shell :is(
+    .reverse-context-grid,
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .cod-field-row,
+    .vb-fields-two,
+    .evidence-form,
+    .work-object-form
+  ) > :is(.field, .cod-field, .vb-field) > :is(
+    input:not([type='checkbox']):not([type='radio']):not([type='file']):not([type='color']),
+    select
+  ) {
+  grid-row: 2;
+  align-self: start;
+  width: 100%;
+  height: var(--form-alignment-control-height);
+  min-height: var(--form-alignment-control-height);
+  box-sizing: border-box;
+}
+
+.site-shell :is(
+    .reverse-context-grid,
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .cod-field-row,
+    .vb-fields-two,
+    .evidence-form,
+    .work-object-form
+  ) > :is(.field, .cod-field, .vb-field) > textarea {
+  grid-row: 2;
+  align-self: start;
+  width: 100%;
+  min-height: var(--form-alignment-control-height);
+}
+
+.site-shell :is(
+    .reverse-context-grid,
+    .reverse-step-fields,
+    .metric-fields,
+    .metric-timing,
+    .software-fields,
+    .software-report-story,
+    .cod-field-row,
+    .vb-fields-two,
+    .evidence-form,
+    .work-object-form
+  ) > :is(.field, .cod-field, .vb-field) > small {
+  grid-row: 3;
+  align-self: start;
+  min-width: 0;
+  margin: 0;
+  line-height: 1.42;
+}
+
+/* Kein verschobener Control-Start bei langen Labels oder bedingten Feldern. */
+@supports (grid-template-rows: subgrid) {
+  .site-shell :is(
+      .reverse-context-grid,
+      .reverse-step-fields,
+      .metric-fields,
+      .metric-timing,
+      .software-fields,
+      .software-report-story,
+      .cod-field-row,
+      .vb-fields-two,
+      .evidence-form,
+      .work-object-form
+    ) > :is(.field, .cod-field, .vb-field) {
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+  }
+}
+
+/*
+ * Branding hat reine Text-Labels ohne span und einen Hex- plus Color-Picker.
+ * Beide Controls teilen sich die gleiche Rasterzeile; die Farben bleiben bedienbar.
+ */
+.site-shell .branding-color-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(74px, 90px);
+  align-items: start;
+  gap: 0.8rem;
+}
+
+.site-shell .branding-color-row > label {
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  display: grid;
+  grid-template-rows:
+    minmax(var(--form-alignment-label-min), auto)
+    var(--form-alignment-control-height);
+  gap: var(--form-alignment-internal-gap);
+  align-content: start;
+}
+
+.site-shell .branding-color-row > label > input {
+  grid-row: 2;
+  width: 100%;
+  height: var(--form-alignment-control-height);
+  min-height: var(--form-alignment-control-height);
+  box-sizing: border-box;
+}
+
+.site-shell .branding-color-row > .branding-picker-label input {
+  max-width: none;
+}
+
+@supports (grid-template-rows: subgrid) {
+  .site-shell .branding-color-row > label {
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+  }
+}
+
+/* Single-column responsive Zeilen werden nicht künstlich durch andere Zeilen verschoben. */
+@media (max-width: 560px) {
+  .site-shell .branding-color-row {
+    grid-template-columns: minmax(0, 1fr) 80px;
+  }
+}

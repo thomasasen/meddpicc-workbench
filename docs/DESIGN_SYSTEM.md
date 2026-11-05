@@ -134,6 +134,7 @@ Keine Deal-Gesamtbewertung, kein gespeicherter Score und kein permanenter Fortsc
 - **Kein Bottom-Alignment vollständiger Feldcontainer** und keine freien Grid-Auto-Tracks, die Felder mit und ohne Hinweise gegeneinander versetzen. Für komplexere Formularzeilen ein gemeinsames CSS-Grid/Subgrid verwenden; bei fehlender Subgrid-Unterstützung Labels und Control-Höhen konsistent reservieren.
 - **Responsive:** Sobald sich das Spaltenraster ändert, muss die Ausrichtung innerhalb jeder neu entstehenden Zeile erhalten bleiben. Lange Labels dürfen umbrechen, ohne Eingabeboxen in benachbarten Spalten zu verschieben.
 - **Abnahme:** Auf Desktop und Mobile tatsächliche `getBoundingClientRect()`-Positionen und -Höhen prüfen, nicht nur gleich wirkende CSS-Werte. Hilfe- und Fehlermeldungen müssen vollständig unterhalb des zugehörigen Controls bleiben.
+- **Projektweite Umsetzung:** Für mehrspaltige Formulargruppen das gemeinsame Raster in `src/styles/formRowAlignment.css` verwenden. Es gilt auch für verschachtelte Formulare, bedingt angezeigte Felder und die Softwareprojekt-Ansicht; neue Formulare dürfen diese zentrale Lösung nicht mit eigenen Label-Mindesthöhen umgehen. Einzeilige `input`-/`select`-Controls sind standardmäßig 46 px hoch; mehrzeilige `textarea`-Felder dürfen bei gleichem oberen Anschluss höher sein. Keine Pauschalhöhe für Checkboxen, Radio-Buttons, Kalender-Popover oder Dateiuploads.
 
 ## 8. Kundenfähige Ergebnisse
 

@@ -98,7 +98,7 @@ Apple-Design-Fokus: Jeder Screen beantwortet „Wo bin ich? Was kann ich tun? Wi
 
 - nur dann eigene Formulare schaffen, wenn ein konkreter Workflow oder notwendiger Source-Data-Drill-down sie braucht
 - sichtbare Labels
-- nebeneinanderliegende Controls müssen auf derselben oberen und unteren Kante liegen und dieselbe Höhe haben, auch wenn nur einzelne Felder Hilfetexte, optionale Hinweise oder Fehler anzeigen; die Eingabefelder sind die primäre Ausrichtungslinie
+- nebeneinanderliegende einzeilige `input`-/`select`-Controls müssen auf derselben oberen und unteren Kante liegen und dieselbe Höhe haben, auch wenn nur einzelne Felder Hilfetexte, optionale Hinweise oder Fehler anzeigen; die Eingabefelder sind die primäre Ausrichtungslinie. Mehrzeilige `textarea`-Felder beginnen auf gleicher Höhe, behalten aber ihre erforderliche natürliche Höhe
 - Layout grundsätzlich in drei Spuren denken: **Label → gleich hohes Control → optionaler Hilfetext/Fehler darunter**. Gemeinsames CSS-Grid/Subgrid oder äquivalente Layouts statt Bottom-Alignment der gesamten Feldcontainer; Responsivität und Zoom prüfen
 - sinnvolle fachliche Gruppierung
 - klare Unterscheidung zwischen Pflichtfeld und optional
