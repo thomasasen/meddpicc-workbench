@@ -127,16 +127,20 @@ test('abgelaufene Recoverydaten aller Tools werden bei erneutem Zugriff bereinig
   await expect.poll(expiredRemoved).toBe(true)
 })
 
-test('Zwei Tabs erkennen den Schreibkonflikt ohne stilles Überschreiben', async ({ context }) => {
+test('Zwei Tabs erkennen auch ohne BroadcastChannel den Schreibkonflikt', async ({ context }) => {
   const first = await context.newPage()
   const second = await context.newPage()
+  await second.addInitScript(() => {
+    Object.defineProperty(window, 'BroadcastChannel', { configurable: true, value: undefined })
+  })
   await first.goto(timeline)
   await second.goto(timeline)
   await first.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+  await expect(first.getByText('Nur lokal zwischengesichert.', { exact: false })).toBeVisible()
   await second.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+  await expect(second.getByText('in einem anderen Tab verändert', { exact: false })).toBeVisible()
   await customer(first).fill('Stand aus Tab A')
   await expect(first.getByText('Nur lokal zwischengesichert.', { exact: false })).toBeVisible()
-  await expect(second.getByText('in einem anderen Tab geändert', { exact: false })).toBeVisible()
   await customer(second).fill('Nicht übernommener Stand aus Tab B')
   second.once('dialog', (dialog) => void dialog.accept())
   await second.reload()
@@ -179,17 +183,17 @@ test('deaktivierte IndexedDB zeigt einen Fehler und keinen gespeicherten Zustand
   await customer(page).fill('Ohne Browserspeicher')
   await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
   await expect(page.getByText('Lokales Zwischenspeichern fehlgeschlagen.', { exact: false })).toBeVisible()
-  await expect(page.getByText('Aktiv', { exact: true })).toHaveCount(0)
+  await expect(page.locator('.recovery-panel .recovery-label')).toHaveCount(0)
   await page.screenshot({ path: testInfo.outputPath('recovery-storage-error.png'), fullPage: true })
 })
 
-test('Recoverybedienung bleibt fokussierbar und verursacht keinen horizontalen Overflow', async ({ page }, testInfo) => {
+test('Recovery: Tastaturfokus und responsive Breiten ohne Overflow', async ({ page }, testInfo) => {
   await page.goto(timeline)
   const enable = page.getByRole('button', { name: 'Lokales Recovery aktivieren' })
   await enable.focus()
   await expect(enable).toBeFocused()
   await page.keyboard.press('Enter')
-  await expect(page.getByText('Recovery aktiviert.', { exact: false })).toBeVisible()
+  await expect(page.getByText('Nur lokal zwischengesichert.', { exact: false })).toBeVisible()
   for (const width of [320, 375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 850 })
     const overflow = await page.evaluate(
