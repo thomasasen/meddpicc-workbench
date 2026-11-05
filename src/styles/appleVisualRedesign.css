@@ -1,0 +1,1003 @@
+/*
+ * Sichtbares Apple-inspiriertes B2B-Redesign der MEDDPICC Toolbox.
+ * Entscheidungen: ruhige Materialtiefe, klare Typografie, echte Orientierung,
+ * direkte native Interaktion; kein iOS-Klon, keine dekorativen Charts.
+ *
+ * Wichtig: Diese Datei ist bewusst der letzte Stylesheet-Import.
+ * Bestandteile der fachlichen Charts und PDF-/SVG-Exports werden nicht verändert.
+ */
+
+/* 1. Gemeinsame Oberflächentokens und typografische Hierarchie. */
+:root {
+  --color-bg: #f4f6fb;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f0f3f9;
+  --color-text: #18243c;
+  --color-text-muted: #52617a;
+  --color-border: #dce3ee;
+  --color-border-strong: #b7c5d9;
+  --color-divider: #e9eef6;
+  --color-accent: #1863db;
+  --color-accent-strong: #124caa;
+  --color-accent-soft: #eaf2ff;
+  --color-focus: #125ac9;
+  --color-dark: #172640;
+  --radius-control: 0.8rem;
+  --radius-panel: 1.25rem;
+  --shadow-panel: 0 2px 5px rgb(26 43 72 / 0.035), 0 18px 44px rgb(26 43 72 / 0.055);
+  --container: 1260px;
+
+  --apple-radius-card: 1.4rem;
+  --apple-radius-hero: 2rem;
+  --apple-shadow-card: 0 2px 3px rgb(22 40 68 / 0.025), 0 12px 32px rgb(22 40 68 / 0.055);
+  --apple-shadow-hover: 0 9px 20px rgb(22 40 68 / 0.06), 0 25px 52px rgb(22 40 68 / 0.10);
+  --apple-surface-tint: #f8faff;
+  --apple-motion-gentle: 200ms cubic-bezier(0.22, 0.8, 0.2, 1);
+}
+
+body {
+  background: var(--color-bg);
+  line-height: 1.58;
+}
+
+.site-shell {
+  min-height: 100svh;
+  background: transparent;
+}
+
+:where(.site-shell) h1,
+:where(.site-shell) h2,
+:where(.site-shell) h3 {
+  color: var(--color-text);
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+
+:where(.site-shell) p,
+:where(.site-shell) li {
+  line-height: 1.58;
+}
+
+:where(.site-shell) .container {
+  width: min(calc(100% - 3rem), var(--container));
+}
+
+:where(.site-shell) .eyebrow {
+  color: var(--color-accent-strong);
+  font-size: 0.72rem;
+  letter-spacing: 0.085em;
+  font-weight: 770;
+}
+
+:where(.site-shell) .intro-text {
+  color: var(--color-text-muted);
+  font-size: clamp(0.96rem, 0.88rem + 0.18vw, 1.07rem);
+  line-height: 1.72;
+}
+
+/* 2. Ein gemeinsam nutzbarer, ruhiger Navigationsrahmen. */
+.site-shell .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid rgb(183 197 217 / 0.66);
+  background: rgb(255 255 255 / 0.98);
+  box-shadow: 0 3px 18px rgb(22 40 68 / 0.035);
+}
+
+.site-shell .header-inner {
+  min-height: 74px;
+  gap: 1.4rem;
+}
+
+.site-shell .brand {
+  gap: 0.76rem;
+}
+
+.site-shell .brand-mark {
+  width: 43px;
+  height: 43px;
+  border-radius: 0.93rem;
+  background: #1c477f;
+  color: #ffffff;
+  font-size: 1.18rem;
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.23), 0 5px 12px rgb(18 71 130 / 0.16);
+}
+
+.site-shell .brand-copy strong {
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 790;
+  letter-spacing: -0.024em;
+}
+
+.site-shell .brand-copy span {
+  margin-top: 0.19rem;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+.toolbox-primary-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.34rem;
+  margin-inline: auto;
+  padding: 0.28rem;
+  border: 1px solid #e7edf6;
+  border-radius: 999px;
+  background: #f1f5fb;
+}
+
+.toolbox-primary-nav a {
+  min-height: 39px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.44rem;
+  padding: 0.46rem 1.05rem;
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+  font-weight: 720;
+  text-decoration: none;
+  transition: background-color var(--apple-motion-gentle), color var(--apple-motion-gentle);
+}
+
+.toolbox-primary-nav a:hover,
+.toolbox-primary-nav a:focus-visible {
+  color: var(--color-accent-strong);
+  background: white;
+}
+
+.toolbox-primary-nav a:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.site-shell .toolbox-settings-link {
+  margin-left: auto;
+  min-height: 42px;
+  border-radius: 999px;
+  padding-inline: 1rem;
+  background: #ffffff;
+  border-color: #e1e7f0;
+  font-size: 0.83rem;
+}
+
+.site-shell .toolbox-settings-link:hover {
+  background: #eaf2ff;
+}
+
+@supports ((-webkit-backdrop-filter: blur(14px)) or (backdrop-filter: blur(14px))) {
+  .site-shell .site-header {
+    background: rgb(255 255 255 / 0.88);
+    backdrop-filter: saturate(135%) blur(16px);
+    -webkit-backdrop-filter: saturate(135%) blur(16px);
+  }
+}
+
+/* 3. Landing: klar gegliederter Arbeitsbereich statt einer flachen Linkliste. */
+.site-shell .toolbox-main,
+.site-shell .reverse-tool-main {
+  padding-top: 2.2rem;
+}
+
+.site-shell .toolbox-home-v2 {
+  gap: clamp(2.1rem, 4vw, 3.6rem);
+}
+
+.toolbox-home-v2 .toolbox-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(290px, 0.7fr);
+  align-items: stretch;
+  gap: clamp(1.3rem, 3vw, 2.8rem);
+  padding: clamp(1.45rem, 3.6vw, 3.35rem);
+  border: 1px solid #d9e5f5;
+  border-radius: var(--apple-radius-hero);
+  background: linear-gradient(115deg, #f1f6ff 0%, #f9fbff 72%, #ffffff 100%);
+  box-shadow: inset 0 1px 0 #ffffff, var(--apple-shadow-card);
+}
+
+.toolbox-home-v2 .toolbox-hero-copy {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.toolbox-home-v2 .toolbox-hero h1 {
+  max-width: 800px;
+  font-size: clamp(2rem, 3.25vw, 3.35rem);
+  line-height: 1.1;
+  letter-spacing: -0.055em;
+  margin: 0 0 1.35rem;
+}
+
+.toolbox-home-v2 .toolbox-hero .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  padding: 0.47rem 0.8rem;
+  border: 1px solid #d2e3fb;
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.toolbox-home-v2 .toolbox-hero .eyebrow::before {
+  content: '';
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.toolbox-home-v2 .toolbox-hero .intro-text {
+  max-width: 60ch;
+  margin: 0;
+}
+
+.toolbox-hero-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+  min-width: 0;
+  border: 1px solid #dfebf9;
+  border-radius: 1.5rem;
+  padding: clamp(1.3rem, 2.2vw, 2rem);
+  background: #ffffff;
+  box-shadow: 0 12px 35px rgb(29 73 131 / 0.07);
+}
+
+.toolbox-hero-action-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 1.05rem;
+  color: #ffffff;
+  background: var(--color-accent);
+}
+
+.toolbox-hero-action-kicker {
+  margin: 0.35rem 0 0;
+  color: var(--color-accent-strong);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-weight: 780;
+  letter-spacing: 0.08em;
+}
+
+.toolbox-hero-action h2 {
+  margin: 0;
+  font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+  line-height: 1.24;
+}
+
+.toolbox-hero-action > p:not(.toolbox-hero-action-kicker) {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.87rem;
+  line-height: 1.58;
+}
+
+.toolbox-hero-action-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  width: 100%;
+  min-height: 46px;
+  margin-top: auto;
+  border-radius: var(--radius-control);
+  padding: 0.7rem 0.95rem;
+  background: var(--color-accent);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 750;
+  font-size: 0.9rem;
+  transition: background-color var(--apple-motion-gentle), transform 110ms ease-out;
+}
+
+.toolbox-hero-action-link:hover {
+  background: var(--color-accent-strong);
+}
+
+.toolbox-hero-action-link:active {
+  transform: scale(0.985);
+}
+
+.toolbox-hero-action-footnote {
+  color: var(--color-text-muted);
+  font-size: 0.74rem;
+}
+
+.toolbox-home-v2 .toolbox-entry-grid {
+  gap: 1.15rem;
+}
+
+.toolbox-home-v2 .toolbox-entry-card {
+  min-height: 205px;
+  gap: 0.65rem;
+  border-radius: var(--apple-radius-card);
+  padding: 1.55rem;
+  border: 1px solid #dfe6f1;
+  background: #ffffff;
+  box-shadow: var(--apple-shadow-card);
+}
+
+.toolbox-home-v2 .toolbox-entry-card > svg {
+  width: 43px;
+  height: 43px;
+  padding: 11px;
+  color: var(--color-accent-strong);
+  background: var(--color-accent-soft);
+  border-radius: 0.9rem;
+}
+
+.toolbox-home-v2 .toolbox-entry-card > strong {
+  font-size: 1.29rem;
+  font-weight: 770;
+  letter-spacing: -0.035em;
+}
+
+.toolbox-home-v2 .toolbox-entry-card > span:not(.toolbox-entry-kicker):not(.toolbox-entry-link) {
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.toolbox-home-v2 .toolbox-entry-kicker {
+  font-size: 0.72rem;
+  letter-spacing: 0.065em;
+}
+
+.toolbox-home-v2 .toolbox-entry-link {
+  font-size: 0.86rem;
+  font-weight: 760;
+  gap: 0.5rem;
+}
+
+.toolbox-home-v2 .toolbox-section-heading {
+  align-items: center;
+  gap: 1.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.toolbox-home-v2 .toolbox-section-heading h2 {
+  font-size: clamp(1.45rem, 2vw, 1.9rem);
+  letter-spacing: -0.035em;
+}
+
+.toolbox-home-v2 .toolbox-section-heading p:not(.eyebrow) {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.toolbox-home-v2 .toolbox-section {
+  scroll-margin-top: 115px;
+}
+
+.toolbox-home-v2 .tool-cluster-grid {
+  gap: 1.2rem;
+}
+
+.toolbox-home-v2 .tool-cluster-card {
+  border-radius: var(--apple-radius-card);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--apple-shadow-card);
+}
+
+.toolbox-home-v2 .tool-cluster-heading {
+  padding: 1.35rem 1.5rem;
+  gap: 0.9rem;
+  background: #fbfcff;
+}
+
+.toolbox-home-v2 .tool-cluster-heading > svg {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  background: var(--color-accent-soft);
+  border-radius: 0.85rem;
+}
+
+.toolbox-home-v2 .tool-cluster-heading h3 {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.toolbox-home-v2 .tool-cluster-heading p {
+  margin-top: 0.25rem;
+  font-size: 0.81rem;
+  line-height: 1.5;
+}
+
+.toolbox-home-v2 .tool-row {
+  min-height: 88px;
+  padding: 0.95rem 1.35rem;
+  gap: 0.95rem;
+}
+
+.toolbox-home-v2 .tool-row--active {
+  background: #ffffff;
+}
+
+.toolbox-home-v2 .tool-row--active:hover {
+  background: #f2f7ff;
+}
+
+.toolbox-home-v2 .tool-row-icon {
+  width: 40px;
+  height: 40px;
+  flex-basis: 40px;
+  border-radius: 0.8rem;
+  background: #eff5ff;
+  border-color: #dfebfa;
+}
+
+.toolbox-home-v2 .tool-row strong {
+  font-size: 0.92rem;
+  letter-spacing: -0.01em;
+}
+
+.toolbox-home-v2 .tool-row small {
+  font-size: 0.78rem;
+}
+
+.toolbox-home-v2 .tool-row-meta {
+  min-width: 0;
+}
+
+.toolbox-home-v2 .checklist-preview-grid,
+.toolbox-home-v2 .knowledge-grid {
+  gap: 0.9rem;
+}
+
+.toolbox-home-v2 .checklist-preview-card,
+.toolbox-home-v2 .knowledge-card {
+  border: 1px solid var(--color-border);
+  background: #ffffff;
+  border-radius: 1.1rem;
+  padding: 1.15rem;
+  box-shadow: 0 3px 10px rgb(22 40 68 / 0.028);
+}
+
+.toolbox-home-v2 .checklist-preview-card {
+  min-height: 148px;
+  column-gap: 0.85rem;
+}
+
+.toolbox-home-v2 .checklist-preview-card > svg {
+  margin-top: 0;
+  width: 34px;
+  height: 34px;
+  padding: 8px;
+  border-radius: 0.8rem;
+  background: var(--color-accent-soft);
+}
+
+.toolbox-home-v2 .checklist-preview-card strong {
+  font-size: 0.94rem;
+}
+
+.toolbox-home-v2 .checklist-preview-card p {
+  margin-top: 0.35rem;
+  font-size: 0.79rem;
+}
+
+.toolbox-home-v2 .knowledge-card {
+  min-height: 145px;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 0.7rem;
+}
+
+.toolbox-home-v2 .knowledge-card > svg {
+  display: none;
+}
+
+.toolbox-home-v2 .knowledge-letter {
+  background: #eaf2ff;
+  color: #124caa;
+  border-radius: 0.75rem;
+  width: 38px;
+  height: 38px;
+  font-size: 0.89rem;
+}
+
+.toolbox-home-v2 .knowledge-card > div {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  gap: 0.3rem;
+}
+
+.toolbox-home-v2 .knowledge-card strong {
+  font-size: 0.9rem;
+}
+
+.toolbox-home-v2 .knowledge-card small {
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.toolbox-home-v2 .knowledge-card .knowledge-card-action,
+.toolbox-home-v2 .knowledge-card .microtool-planned {
+  grid-column: 2;
+}
+
+.toolbox-home-v2 .checklist-explainer {
+  padding: 1rem 1.2rem;
+  border: 1px solid #dde7f4;
+  background: #f9fbff;
+  border-radius: 1rem;
+}
+
+/* Kein ständiges Hovern oder dekoratives Bouncen; nur produktive Ziele reagieren. */
+@media (hover: hover) and (pointer: fine) {
+  .toolbox-home-v2 :is(
+      .toolbox-entry-card,
+      .checklist-preview-card--active,
+      .knowledge-card--active
+    ):hover {
+    border-color: #a9c5ed;
+    box-shadow: var(--apple-shadow-hover);
+    transform: translateY(-3px);
+  }
+
+  .toolbox-home-v2 .tool-row--active:hover .tool-row-meta > svg {
+    transform: translateX(2px);
+  }
+}
+
+.toolbox-home-v2 .tool-row-meta > svg {
+  transition: transform var(--apple-motion-gentle);
+}
+
+/* 4. Einheitliche Panels über Rechner, Wissensartikel und Einstellungen. */
+.site-shell :is(
+    .reverse-config,
+    .reverse-steps-section,
+    .reverse-result-section,
+    .quick-panel,
+    .metric-panel,
+    .cod-panel,
+    .vb-panel,
+    .knowledge-primary-card,
+    .knowledge-source-card,
+    .knowledge-section,
+    .checklist-list-section,
+    .checklist-sources,
+    .settings-panel,
+    .software-panel
+  ) {
+  border: 1px solid #dce5f1;
+  border-radius: var(--apple-radius-card);
+  background: #ffffff;
+  box-shadow: var(--apple-shadow-card);
+}
+
+.site-shell :is(
+    .reverse-config,
+    .reverse-steps-section,
+    .reverse-result-section,
+    .knowledge-primary-card,
+    .knowledge-source-card,
+    .knowledge-section,
+    .checklist-list-section,
+    .checklist-sources,
+    .settings-panel,
+    .metric-panel,
+    .cod-panel,
+    .vb-panel
+  ) {
+  padding: clamp(1.15rem, 2.15vw, 1.95rem);
+}
+
+.site-shell :is(
+    .reverse-step-card,
+    .knowledge-concept-card,
+    .checklist-item,
+    .metric-entry,
+    .vb-metric-entry,
+    .cod-scenario
+  ) {
+  border-color: #dfe6f0;
+  border-radius: 1rem;
+  background: var(--apple-surface-tint);
+}
+
+.site-shell .reverse-step-card--dragging {
+  background: #ffffff;
+}
+
+.site-shell .reverse-step-card--drop-target {
+  background: var(--color-accent-soft);
+}
+
+.site-shell :is(
+    .tool-intro,
+    .metric-intro,
+    .cod-intro,
+    .vb-intro,
+    .knowledge-hero,
+    .checklist-hero
+  ) h1 {
+  font-size: clamp(1.9rem, 2.6vw, 2.65rem);
+  line-height: 1.13;
+  letter-spacing: -0.045em;
+}
+
+.site-shell :is(.knowledge-main, .checklist-main, .metric-main, .cod-main, .vb-main) {
+  padding-top: clamp(1.5rem, 3vw, 2.6rem);
+}
+
+.site-shell :is(
+    .knowledge-benefit,
+    .checklist-context,
+    .tool-source-note,
+    .toolbox-principles
+  ) {
+  border-radius: 1.12rem;
+  border-color: #dce6f4;
+  background: #f8fbff;
+}
+
+.site-shell .settings-content {
+  max-width: 1080px;
+  gap: 1.1rem;
+}
+
+.site-shell .settings-panel h2 {
+  font-size: 1.16rem;
+}
+
+/* 5. Eingaben haben ein ruhiges, durchgängiges Material und klare Fokuszustände. */
+.site-shell :is(
+    .field input:not([type='checkbox']):not([type='radio']),
+    .field select,
+    .field textarea,
+    .metric-field input,
+    .metric-field select,
+    .metric-field textarea,
+    .cod-field input:not([type='checkbox']):not([type='radio']),
+    .cod-field select,
+    .cod-field textarea,
+    .vb-field input:not([type='checkbox']):not([type='radio']),
+    .vb-field select,
+    .vb-field textarea
+  ) {
+  min-height: 45px;
+  border-radius: 0.8rem;
+  border: 1px solid #bfccdc;
+  background: #ffffff;
+  color: var(--color-text);
+  padding: 0.65rem 0.82rem;
+  font-size: 0.91rem;
+  line-height: 1.45;
+  box-shadow: inset 0 1px 2px rgb(20 41 76 / 0.025);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.site-shell :is(
+    .field input,
+    .field select,
+    .field textarea,
+    .cod-field input,
+    .cod-field select,
+    .cod-field textarea,
+    .vb-field input,
+    .vb-field select,
+    .vb-field textarea
+  ):focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px rgb(24 99 219 / 0.13);
+}
+
+.site-shell :is(
+    .field > span,
+    .cod-field > span,
+    .vb-field > span
+  ) {
+  color: #2a3b57;
+  font-size: 0.84rem;
+  font-weight: 690;
+}
+
+.site-shell :is(.button, .toolbox-settings-link) {
+  min-height: 42px;
+  border-radius: 0.83rem;
+  padding-inline: 1rem;
+  font-size: 0.86rem;
+  font-weight: 730;
+}
+
+.site-shell .button-primary {
+  color: #ffffff;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 0 3px 8px rgb(24 99 219 / 0.12);
+}
+
+.site-shell .button-primary:hover {
+  background: var(--color-accent-strong);
+  border-color: var(--color-accent-strong);
+}
+
+.site-shell .button-secondary {
+  background: #ffffff;
+  border-color: #c5d0e0;
+}
+
+.site-shell .button-secondary:hover {
+  background: #f4f8ff;
+  border-color: #8db2e8;
+}
+
+.site-shell :is(
+    .tool-step-navigation__item,
+    .checklist-filters button,
+    .metric-steps button,
+    .cod-steps button,
+    .vb-steps button
+  ) {
+  border-radius: 0.85rem;
+}
+
+.site-shell .tool-step-navigation__item[aria-current='step'],
+.site-shell .checklist-filters button[aria-pressed='true'] {
+  background: #e9f2ff;
+  color: #124caa;
+  border-color: #a9c8f0;
+}
+
+.site-shell .tool-step-navigation__item {
+  min-height: 58px;
+}
+
+.site-shell .knowledge-section-nav {
+  background: #f8fbff;
+  border-color: #dce6f4;
+  border-radius: 1rem;
+}
+
+.site-shell .knowledge-section-nav button {
+  border-radius: 0.75rem;
+}
+
+.site-shell .checklist-item {
+  background: #ffffff;
+}
+
+.site-shell .checklist-question {
+  min-height: 62px;
+}
+
+.site-shell .checklist-item:has(input:checked) {
+  background: #f7faff;
+}
+
+.site-shell .checklist-item-details {
+  border-radius: 0.85rem;
+}
+
+.site-shell .tool-kind {
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+}
+
+.site-shell .tool-kind--customer {
+  background: #e9f4ff;
+  border-color: #c5ddfb;
+  color: #174d9d;
+}
+
+/* 6. Bewegungs-/Kontrastpräferenzen haben Vorrang vor Materialästhetik. */
+@media (prefers-reduced-motion: reduce) {
+  .toolbox-home-v2 :is(
+      .toolbox-entry-card,
+      .checklist-preview-card--active,
+      .knowledge-card--active
+    ):hover {
+    transform: none;
+  }
+
+  .toolbox-home-v2 .tool-row--active:hover .tool-row-meta > svg {
+    transform: none;
+  }
+
+  .toolbox-hero-action-link:active {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-shell .site-header {
+    background: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .site-shell :is(
+      .toolbox-entry-card,
+      .tool-cluster-card,
+      .checklist-preview-card,
+      .knowledge-card,
+      .reverse-config,
+      .reverse-steps-section,
+      .reverse-result-section,
+      .knowledge-section,
+      .checklist-list-section,
+      .metric-panel,
+      .cod-panel,
+      .vb-panel
+    ) {
+    border-color: #71829c;
+  }
+
+  .toolbox-home-v2 .toolbox-hero,
+  .toolbox-hero-action {
+    border-color: #71829c;
+  }
+
+  .site-shell .site-header {
+    background: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .site-shell :is(
+      .toolbox-entry-card,
+      .tool-cluster-card,
+      .knowledge-card,
+      .checklist-preview-card,
+      .toolbox-hero,
+      .toolbox-hero-action
+    ) {
+    border: 1px solid CanvasText;
+  }
+
+  .toolbox-hero-action-link,
+  .site-shell .button-primary {
+    border: 1px solid ButtonText;
+    color: ButtonText;
+    background: ButtonFace;
+  }
+}
+
+/* 7. Responsive reflow, auch bei 200% Zoom und langen deutschen Titeln. */
+@media (max-width: 1024px) {
+  .toolbox-home-v2 .toolbox-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.8fr);
+    padding: 1.6rem;
+  }
+
+  .toolbox-home-v2 .toolbox-entry-grid,
+  .toolbox-home-v2 .checklist-preview-grid {
+    gap: 0.8rem;
+  }
+
+  .site-shell .header-inner {
+    gap: 0.8rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .site-shell .container {
+    width: min(calc(100% - 1.6rem), var(--container));
+  }
+
+  .toolbox-home-v2 .toolbox-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbox-hero-action {
+    gap: 0.55rem;
+  }
+
+  .toolbox-home-v2 .toolbox-entry-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbox-home-v2 .toolbox-entry-card {
+    min-height: 150px;
+  }
+
+  .toolbox-primary-nav {
+    gap: 0.15rem;
+  }
+
+  .toolbox-primary-nav a {
+    padding-inline: 0.65rem;
+  }
+
+  .toolbox-home-v2 .toolbox-section-heading {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-shell .header-inner {
+    min-height: 67px;
+    flex-wrap: wrap;
+    padding-block: 0.7rem;
+    gap: 0.65rem;
+  }
+
+  .site-shell .toolbox-primary-nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    margin-inline: 0;
+  }
+
+  .site-shell .toolbox-primary-nav a {
+    flex: 1 1 0;
+    padding-inline: 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  .site-shell .toolbox-settings-link {
+    margin-left: auto;
+  }
+
+  .site-shell .toolbox-main,
+  .site-shell .reverse-tool-main {
+    padding-top: 1.1rem;
+  }
+
+  .toolbox-home-v2 .toolbox-hero {
+    border-radius: 1.4rem;
+    padding: 1.3rem;
+  }
+
+  .toolbox-home-v2 .toolbox-hero h1 {
+    font-size: clamp(1.75rem, 7vw, 2.4rem);
+  }
+
+  .toolbox-home-v2 .toolbox-section {
+    scroll-margin-top: 155px;
+  }
+
+  .site-shell :is(.reverse-config, .reverse-steps-section, .reverse-result-section) {
+    margin-top: 0.9rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .site-shell .brand-copy strong {
+    font-size: 0.84rem;
+  }
+
+  .site-shell .brand-copy span {
+    font-size: 0.66rem;
+  }
+
+  .site-shell .brand-mark {
+    width: 37px;
+    height: 37px;
+  }
+
+  .site-shell .toolbox-settings-link {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .toolbox-home-v2 .tool-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .toolbox-home-v2 .tool-row-meta {
+    align-self: flex-end;
+  }
+}
