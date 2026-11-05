@@ -127,6 +127,14 @@ async function auditVisibleRows(page: Page) {
         })
         .filter((field): field is NonNullable<typeof field> => field !== null)
 
+      if (group.matches('.branding-color-row')) {
+        for (const label of group.querySelectorAll<HTMLLabelElement>(':scope > label')) {
+          if (label.scrollWidth > label.clientWidth + 1) {
+            violations.push(`Farbauswahl-Beschriftung ragt aus dem Feld (${label.scrollWidth}/${label.clientWidth}px)`)
+          }
+        }
+      }
+
       for (const field of fields) {
         checkedControls++
         if (field.control.height < 44) {
