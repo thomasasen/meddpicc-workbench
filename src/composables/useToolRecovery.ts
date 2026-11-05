@@ -273,7 +273,13 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
 
 export function announceAllRecoveryDeleted() {
   if (typeof BroadcastChannel === 'undefined') return
-  const channel = new BroadcastChannel(CHANNEL)
-  channel.postMessage({ tool: '*' })
-  channel.close()
+  let channel: BroadcastChannel | null = null
+  try {
+    channel = new BroadcastChannel(CHANNEL)
+    channel.postMessage({ tool: '*' })
+  } catch {
+    // Ein blockierter Signalkanal ändert nichts an einer bereits erfolgten Löschung.
+  } finally {
+    channel?.close()
+  }
 }

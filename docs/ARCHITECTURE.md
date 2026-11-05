@@ -142,3 +142,11 @@ BrandProfile in src/report/brandProfile.ts enthält ausschließlich organisation
 Fünf aufrufende UI-Komponenten laden bei Exportbeginn den gespeicherten Snapshot und reichen ihn über einen optionalen zweiten Parameter ReportOptions an die jeweiligen PDF-Generatoren weiter. Diese lesen nicht selbst aus IndexedDB. prepareReportBranding bindet das Logo einmalig lokal ein, drawReportMasthead, drawReportFooter und applyReportBrandMetadata zeichnen neutrale oder CI-basierte Dokumente. ReportAudience ist typisiert und beim Generator fest auf customer (vier Kundenreports) beziehungsweise internal (Finance-Anhang) gelegt; die Domain-Berechnungen bleiben unangetastet.
 
 Sicherheitsgrenze: Dateisignatur → Bitmap-Dekodierung → Canvas-Normalisierung → Profilparser → IndexedDB-Transaktion → validierter PDF-Snapshot. Keine neue Netzwerkabhängigkeit. Globales Browser-Recovery und Netzwerk-Supply-Chain-Audits verbleiben in den separaten Hardening-Issues #65 und #66.
+
+## Optionales lokales Tool-Recovery
+
+Für längere Microtool-Eingaben kapselt `useToolRecovery` die ausdrücklich aktivierte lokale Sicherung. `toolRecovery.ts` verwaltet versionierte, validierte, sieben Tage gültige IndexedDB-Snapshots pro Tool. Ein Schreibversuch vergleicht den erwarteten Revisionstoken innerhalb derselben `readwrite`-Transaktion, bevor ein neuer Stand gespeichert wird.
+
+Debounce- und Navigationsschreibvorgänge werden in einer Promise-Warteschlange nacheinander ausgeführt. Beim Verwerfen werden ausstehende Schreibvorgänge abgewartet; nach Opt-in bleibt die lokale Sicherung ausdrücklich von einem Datei-Export getrennt. Ein `BroadcastChannel` informiert lediglich über Änderungen, ohne Kundendaten zu übertragen. Der Kanal ist optional und darf bei Blockade die eigentliche Löschung nicht als fehlgeschlagen melden.
+
+Der Snapshot-Speicher ist nicht verschlüsselt, nicht vom Betriebssystem- oder Browser-Löschverhalten unabhängig und kein Ersatz für eine gespeicherte `.meddpicc`-Projektdatei. Detaillierte Grenzen und betroffene Tools: [LOCAL_RECOVERY.md](LOCAL_RECOVERY.md).

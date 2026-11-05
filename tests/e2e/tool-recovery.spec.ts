@@ -183,6 +183,39 @@ test('Zwei Tabs erkennen auch ohne BroadcastChannel den Schreibkonflikt', async 
   await expect(customer(second)).toHaveValue('Stand aus Tab A')
 })
 
+test('Globale Löschung bleibt auch bei blockiertem BroadcastChannel erfolgreich', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'BroadcastChannel', {
+      configurable: true,
+      value: class {
+        constructor() {
+          throw new Error('BroadcastChannel blockiert')
+        }
+      },
+    })
+  })
+  await page.goto('/meddpicc-workbench/#/settings')
+  page.once('dialog', (dialog) => void dialog.accept())
+  await page.getByRole('button', { name: 'Alle lokalen Recoverydaten löschen' }).click()
+  await expect(page.getByText('Alle lokalen Recovery-Arbeitsstände wurden gelöscht.', { exact: false })).toBeVisible()
+})
+
+test('Software-Payback-Moduswechsel erhält den Opt-in-Entwurf', async ({ page }) => {
+  await page.goto('/meddpicc-workbench/#/tools/quick-payback')
+  const projectMode = page.getByRole('button', { name: /Softwareprojekt & Kunden-Metrics/ })
+  await projectMode.click()
+  await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+  await page.getByRole('button', { name: 'Einmalkosten' }).click()
+  await page.locator('.software-entry input').first().fill('Gesicherter Projektentwurf')
+  await page.getByRole('button', { name: /Schnellberechnung/ }).click()
+  await projectMode.click()
+  await expect(page.getByRole('button', { name: 'Wiederherstellen' })).toBeVisible()
+  await page.getByRole('button', { name: 'Einmalkosten' }).click()
+  await page.locator('.software-entry input').first().fill('Nicht gespeicherte neue Eingabe')
+  await page.getByRole('button', { name: 'Wiederherstellen' }).click()
+  await expect(page.locator('.software-entry input').first()).toHaveValue('Gesicherter Projektentwurf')
+})
+
 test('globale Löschung entfernt Recovery-Snapshots', async ({ page }) => {
   await page.goto(timeline)
   await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
