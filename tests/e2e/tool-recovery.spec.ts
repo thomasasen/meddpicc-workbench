@@ -85,7 +85,10 @@ test('explizites Opt-in, Reload, Dialog und atomare Wiederherstellung', async ({
     'Nur lokal: nicht kundenseitig bestätigt',
   )
   await expect(dialog).toHaveCount(0)
-  await page.screenshot({ path: testInfo.outputPath('recovery-restored-' + testInfo.project.name + '.png'), fullPage: true })
+  await page.screenshot({
+    path: testInfo.outputPath('recovery-restored-' + testInfo.project.name + '.png'),
+    fullPage: true,
+  })
 })
 
 test('Tab-Schließen, erneutes Öffnen und bewusstes Verwerfen', async ({ page }) => {
@@ -149,7 +152,10 @@ test('zwei Tabs überschreiben einander nicht; Konflikt ist ausdrücklich sichtb
   await enableAndFill(page, 'Version eins')
   const other = await page.context().newPage()
   await other.goto(builder)
-  await other.getByRole('dialog', { name: 'Lokalen Entwurf gefunden' }).getByRole('button', { name: 'Entwurf wiederherstellen' }).click()
+  await other
+    .getByRole('dialog', { name: 'Lokalen Entwurf gefunden' })
+    .getByRole('button', { name: 'Entwurf wiederherstellen' })
+    .click()
   await expect(other.getByRole('textbox', { name: 'Welches konkrete Problem besteht?' })).toHaveValue('Version eins')
 
   await page.getByRole('textbox', { name: 'Welches konkrete Problem besteht?' }).fill('Version zwei')
@@ -159,7 +165,9 @@ test('zwei Tabs überschreiben einander nicht; Konflikt ist ausdrücklich sichtb
   await other.getByRole('button', { name: 'Anderen Datenstand prüfen' }).click()
   const conflict = other.getByRole('dialog', { name: 'Lokalen Entwurf gefunden' })
   await expect(conflict).toBeVisible()
-  await expect(conflict.getByText('Wiederherstellen ersetzt den aktuellen Arbeitsstand vollständig.', { exact: false })).toBeVisible()
+  await expect(
+    conflict.getByText('Wiederherstellen ersetzt den aktuellen Arbeitsstand vollständig.', { exact: false }),
+  ).toBeVisible()
 })
 
 test('gesicherte Eingaben bleiben bei Speicherfehlern als ungesichert gekennzeichnet', async ({ page }) => {
@@ -169,7 +177,9 @@ test('gesicherte Eingaben bleiben bei Speicherfehlern als ungesichert gekennzeic
   await page.goto(builder)
   await page.getByRole('button', { name: 'Lokale Sicherung aktivieren' }).click()
   await expect(page.getByRole('alert').filter({ hasText: 'nicht verfügbar' })).toBeVisible()
-  await page.getByRole('textbox', { name: 'Welches konkrete Problem besteht?' }).fill('Keine falsche Sicherungsbestätigung')
+  await page
+    .getByRole('textbox', { name: 'Welches konkrete Problem besteht?' })
+    .fill('Keine falsche Sicherungsbestätigung')
   await expect(page.getByText('Zuletzt lokal zwischengesichert:', { exact: false })).toHaveCount(0)
 })
 
@@ -185,9 +195,13 @@ test('Tastaturfokus, Dialog, mobil und Breitbild ohne horizontales Überlaufen',
   expect(await dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true)
   for (const width of [320, 375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 850 })
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    )
     expect(overflow, 'Recovery-Dialog bei ' + width).toBeLessThanOrEqual(0)
-    await page.screenshot({ path: testInfo.outputPath('recovery-dialog-' + width + '-' + testInfo.project.name + '.png') })
+    await page.screenshot({
+      path: testInfo.outputPath('recovery-dialog-' + width + '-' + testInfo.project.name + '.png'),
+    })
   }
   await dialog.getByRole('button', { name: 'Recovery verwerfen' }).click()
   await expect(dialog).toHaveCount(0)
