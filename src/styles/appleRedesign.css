@@ -656,7 +656,7 @@ body,
 
 /* Forms: large, stable controls, strong keyboard indication and uninterrupted editing. */
 .site-shell :is(
-  input:not([type='checkbox']):not([type='radio']):not([type='color']):not([type='file']),
+  input:not([type='checkbox']):not([type='radio']):not([type='color']):not([type='file']):not([type='range']):not([type='button']):not([type='submit']):not([type='reset']):not([type='image']),
   select,
   textarea
 ) {
@@ -683,7 +683,7 @@ body,
 }
 
 .site-shell :is(
-  input:not([type='checkbox']):not([type='radio']):not([type='color']):not([type='file']),
+  input:not([type='checkbox']):not([type='radio']):not([type='color']):not([type='file']):not([type='range']):not([type='button']):not([type='submit']):not([type='reset']):not([type='image']),
   select,
   textarea
 ):focus {

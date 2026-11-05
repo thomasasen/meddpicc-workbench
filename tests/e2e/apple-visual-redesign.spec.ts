@@ -55,9 +55,7 @@ test('Die globale Navigation schwebt beim Scrollen und bleibt ohne Verschiebung 
   await expect(header).toHaveCSS('position', 'sticky')
   await expect(material).toHaveCSS('border-top-left-radius', '20px')
   await page.evaluate(() => window.scrollTo(0, 650))
-  await expect
-    .poll(() => header.evaluate((element) => Math.round(element.getBoundingClientRect().top)))
-    .toBe(0)
+  await expect.poll(() => header.evaluate((element) => Math.round(element.getBoundingClientRect().top))).toBe(0)
 
   const brand = header.getByRole('link', { name: 'MEDDPICC Toolbox Startseite' })
   await brand.focus()
