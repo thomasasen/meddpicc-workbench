@@ -15,6 +15,14 @@ import {
 
 const route = useRoute()
 const calculationMode = ref<'quick' | 'project'>(route.query.importMetric === '1' ? 'project' : 'quick')
+const softwarePanelRef = ref<InstanceType<typeof SoftwarePaybackPanel> | null>(null)
+
+function selectMode(mode: 'quick' | 'project') {
+  if (calculationMode.value === mode) return
+  if (calculationMode.value === 'project' && softwarePanelRef.value?.hasUnsaved() &&
+      !window.confirm('Der aktuelle Software-Payback-Entwurf wird beim Wechsel aus dieser Ansicht entfernt. Lokal gesicherte Recoverydaten sind keine Datei. Trotzdem wechseln?')) return
+  calculationMode.value = mode
+}
 const upfrontInvestmentEur = ref('')
 const annualRealizableBenefitEur = ref('')
 const annualIncrementalOperatingCostEur = ref('0')
@@ -110,7 +118,7 @@ async function copySummary() {
           class="quick-mode-option"
           :class="{ 'quick-mode-option--active': calculationMode === 'quick' }"
           :aria-pressed="calculationMode === 'quick'"
-          @click="calculationMode = 'quick'"
+          @click="selectMode('quick')"
         >
           <span class="quick-mode-option__title">Schnellberechnung</span>
           <span class="quick-mode-option__hint">3 Werte · sofort ein Ergebnis</span>
@@ -120,7 +128,7 @@ async function copySummary() {
           class="quick-mode-option"
           :class="{ 'quick-mode-option--active': calculationMode === 'project' }"
           :aria-pressed="calculationMode === 'project'"
-          @click="calculationMode = 'project'"
+          @click="selectMode('project')"
         >
           <span class="quick-mode-option__title">Softwareprojekt &amp; Kunden-Metrics</span>
           <span class="quick-mode-option__hint">SaaS, Kosten und Nutzen im Zeitverlauf</span>
@@ -314,7 +322,7 @@ async function copySummary() {
           <p class="quick-copy-status" role="status">{{ copyMessage }}</p>
         </section>
       </template>
-      <SoftwarePaybackPanel v-else class="container" />
+      <SoftwarePaybackPanel v-else ref="softwarePanelRef" class="container" />
 
       <section class="container quick-related" aria-label="Passende Wissenshilfen">
         <h2>Was vor dem Kundengespräch zu prüfen ist</h2>
