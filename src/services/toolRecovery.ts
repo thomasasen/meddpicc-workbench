@@ -38,7 +38,7 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
 }
 
-function decode<T>(raw: unknown, tool: string, validate: (data: unknown) => data is T, now: number): RecoveryRead<T> {
+export function parseRecoverySnapshot<T>(raw: unknown, tool: string, validate: (data: unknown) => data is T, now: number): RecoveryRead<T> {
   if (raw === undefined) return { kind: 'none' }
   if (typeof raw !== 'string' || new TextEncoder().encode(raw).length > RECOVERY_MAX_BYTES)
     return { kind: 'invalid' }
@@ -112,7 +112,7 @@ export async function readRecovery<T>(
       const request = tx.objectStore(STORE_NAME).get(tool)
       let result: RecoveryRead<T> = { kind: 'none' }
       request.onsuccess = () => {
-        result = decode(request.result, tool, validate, now)
+        result = parseRecoverySnapshot(request.result, tool, validate, now)
       }
       tx.oncomplete = () => resolve(result)
       tx.onabort = () => reject(classify(tx.error))
