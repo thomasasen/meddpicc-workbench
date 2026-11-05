@@ -19,8 +19,14 @@ import {
 } from '@lucide/vue'
 
 function scrollToSection(id: string): void {
-  document.getElementById(id)?.scrollIntoView({
-    block: 'start',
+  const section = document.getElementById(id)
+  if (!section) return
+
+  const sectionMargin = Number.parseFloat(window.getComputedStyle(section).scrollMarginTop) || 0
+  const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height ?? 0
+  const scrollOffset = Math.max(sectionMargin, headerHeight + 16)
+  window.scrollTo({
+    top: window.scrollY + section.getBoundingClientRect().top - scrollOffset,
     behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
   })
 }
