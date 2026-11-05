@@ -139,6 +139,7 @@ test('beschädigte und inkompatible Snapshots werden nie geladen', async ({ page
 
 test('älterer Recovery-Stand ersetzt übergebene Daten nicht automatisch', async ({ page }) => {
   await enableAndFill(page, 'Vorheriger Entwurf')
+  acceptBeforeUnload(page)
   await page.goto(valueBridge)
   await page.goto(builder)
   const dialog = page.getByRole('dialog', { name: 'Lokalen Entwurf gefunden' })
