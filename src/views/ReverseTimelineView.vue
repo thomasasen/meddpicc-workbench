@@ -152,10 +152,7 @@ function settleDroppedCards(previous: Map<string, number>): void {
       if (Math.abs(difference) < 1) continue
 
       const animation = card.animate(
-        [
-          { transform: `translate3d(0, ${difference}px, 0)` },
-          { transform: 'translate3d(0, 0, 0)' },
-        ],
+        [{ transform: `translate3d(0, ${difference}px, 0)` }, { transform: 'translate3d(0, 0, 0)' }],
         {
           duration: 260,
           easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
