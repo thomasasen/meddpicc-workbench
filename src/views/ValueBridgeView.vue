@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ToolRecoveryPanel from '../components/ToolRecoveryPanel.vue'
+import { useToolRecovery } from '../composables/useToolRecovery'
+import { validValueBridgeInput } from '../services/recoveryDrafts'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
 import {
@@ -126,6 +129,44 @@ onMounted(() => {
     message.value = 'Die lokale Übergabe war nicht verfügbar.'
   }
 })
+
+type BridgeRecovery = {
+  draft: ValueBridgeInput
+  step: 1 | 2 | 3
+  customerView: boolean
+  showFinance: boolean
+  isDemo: boolean
+}
+function validBridgeRecovery(value: unknown): value is BridgeRecovery {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false
+  const entry = value as Record<string, unknown>
+  return Object.keys(entry).length === 5 &&
+    validValueBridgeInput(entry.draft) &&
+    (entry.step === 1 || entry.step === 2 || entry.step === 3) &&
+    typeof entry.customerView === 'boolean' &&
+    typeof entry.showFinance === 'boolean' &&
+    typeof entry.isDemo === 'boolean'
+}
+const recoveryState = computed<BridgeRecovery>(() => ({
+  draft: draft.value,
+  step: step.value,
+  customerView: customerView.value,
+  showFinance: showFinance.value,
+  isDemo: isDemo.value,
+}))
+const recovery = useToolRecovery({
+  tool: 'value-bridge',
+  value: recoveryState,
+  validate: validBridgeRecovery,
+  restore: (snapshot: BridgeRecovery) => {
+    draft.value = structuredClone(snapshot.draft)
+    step.value = snapshot.step
+    customerView.value = snapshot.customerView
+    showFinance.value = snapshot.showFinance
+    isDemo.value = snapshot.isDemo
+  },
+})
+
 </script>
 
 <template>
@@ -173,6 +214,17 @@ onMounted(() => {
         <p v-if="message" class="vb-notice" role="status">{{ message }}</p>
         <p v-if="isDemo" class="vb-demo-note">Demodaten sind vollständig erfunden und nicht kundenseitig validiert.</p>
       </section>
+
+      <ToolRecoveryPanel
+        :candidate="recovery.candidate.value"
+        :enabled="recovery.enabled.value"
+        :busy="recovery.busy.value"
+        :conflict="recovery.conflict.value"
+        :message="recovery.message.value"
+        @activate="recovery.activate"
+        @recover="recovery.recover"
+        @discard="recovery.discard"
+      />
 
       <nav class="vb-steps" aria-label="Value Bridge erstellen">
         <button
