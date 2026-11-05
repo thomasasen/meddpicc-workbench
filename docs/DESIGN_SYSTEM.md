@@ -2,6 +2,12 @@
 
 **Rangfolge für UI/UX:** Die in `.agents/skills/apple-design/SKILL.md` dokumentierten Apple-Design-Prinzipien ersetzen bei Überschneidungen ältere Gestaltungsregeln aus diesem Projekt und aus UI UX Pro Max. Diese Datei konkretisiert ihre Anwendung in einer B2B-Toolbox. Unverändert verbindlich bleiben Produktmodell, MEDDPICC-Semantik, Barrierefreiheit, Datensicherheit, Datenschutz, Leistungsfähigkeit und die deutsche Projektsprache. Funktionale Materialtiefe und Bewegung sind daher erlaubt und erwünscht, rein dekorative Effekte aber keine Pflicht.
 
+## Sichtbare Implementierung (05.11.2026)
+
+Die projektweiten Apple-Design-Vorgaben werden in `src/styles/appleVisualRedesign.css` als gemeinsames Oberflächensystem und in `src/styles/appleInteractions.css` als Interaktionsgrundlage angewendet. Die Startseite nutzt zusätzlich eine echte Bereichsnavigation und einen direkten Tool-Einstieg. Die bestehende MEDDPICC-/Tool-Logik bleibt davon unberührt.
+
+Die folgende Abnahmematrix gilt für den sichtbar überarbeiteten Stand: Hierarchie und Lesbarkeit der Startseite, Tools, Checklists, Knowledge und Einstellungen; 320/375/768/1024/1440 px; Fokus, Pointer, Reduced Motion, Reduced Transparency und erhöhte Kontraste; deterministische Exportdarstellung unabhängig von Shell-Effekten. Ein eigenes simuliertes Red-Team-Protokoll liegt in `docs/APPLE_VISUAL_RED_TEAM_2026-11-05.md`.
+
 ## 1. Designziel
 
 Die Oberfläche unterstützt fokussierte Sales Services und vermeidet bewusst CRM-/Dashboard-Anmutung.

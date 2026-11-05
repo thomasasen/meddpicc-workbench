@@ -11,9 +11,11 @@ test('zeigt die MEDDPICC Toolbox mit Tools, Checklists und Knowledge', async ({ 
     page.getByRole('heading', { name: 'Wiederkehrende Sales-Aufgaben schneller und sicherer erledigen.' }),
   ).toBeVisible()
 
-  await expect(page.locator('a[href="#tools"]')).toBeVisible()
-  await expect(page.locator('a[href="#checklists"]')).toBeVisible()
-  await expect(page.locator('a[href="#knowledge"]')).toBeVisible()
+  const nav = page.getByRole('navigation', { name: 'Toolbox-Bereiche' })
+  await expect(nav.getByRole('link', { name: 'Tools' })).toBeVisible()
+  await expect(nav.getByRole('link', { name: 'Checklists' })).toBeVisible()
+  await expect(nav.getByRole('link', { name: 'Wissen' })).toBeVisible()
+  await expect(page.locator('.toolbox-entry-card')).toHaveCount(3)
 
   await expect(page.getByRole('heading', { name: 'Eine konkrete Aufgabe erledigen' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Vor wichtigen Sales-Situationen kurz gegenprüfen' })).toBeVisible()

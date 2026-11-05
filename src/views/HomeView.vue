@@ -292,10 +292,11 @@ const knowledgeTopics = [
           </span>
         </RouterLink>
 
-        <div class="toolbox-header-meta">
-          <Wrench :size="17" aria-hidden="true" />
-          <span>Berechnen · vorbereiten · nachschlagen</span>
-        </div>
+        <nav class="toolbox-primary-nav" aria-label="Toolbox-Bereiche">
+          <a href="#tools"><Wrench :size="16" aria-hidden="true" />Tools</a>
+          <a href="#checklists"><ListChecks :size="16" aria-hidden="true" />Checklists</a>
+          <a href="#knowledge"><FileText :size="16" aria-hidden="true" />Wissen</a>
+        </nav>
         <RouterLink
           class="toolbox-settings-link"
           to="/settings"
@@ -318,6 +319,16 @@ const knowledgeTopics = [
             einen MEDDPICC-Punkt kurz und praxisnah nachschlagen möchtest.
           </p>
         </div>
+        <aside class="toolbox-hero-action" aria-labelledby="toolbox-hero-action-title">
+          <span class="toolbox-hero-action-icon"><ChartNoAxesGantt :size="25" aria-hidden="true" /></span>
+          <p class="toolbox-hero-action-kicker">Direkt loslegen</p>
+          <h2 id="toolbox-hero-action-title">Von deinem Go-Live-Termin zum konkreten Plan.</h2>
+          <p>Erstelle in wenigen Schritten eine Rückwärtsplanung mit Verantwortlichkeiten und teilbarer Timeline.</p>
+          <RouterLink class="toolbox-hero-action-link" to="/tools/reverse-timeline">
+            Planung öffnen <ArrowRight :size="18" aria-hidden="true" />
+          </RouterLink>
+          <span class="toolbox-hero-action-footnote">Lokal im Browser · kein Account nötig</span>
+        </aside>
       </section>
 
       <section class="container toolbox-entry-grid" aria-label="Einstiege in die Toolbox">
