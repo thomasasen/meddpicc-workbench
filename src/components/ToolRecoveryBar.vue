@@ -85,13 +85,19 @@ watch(
       </button>
     </div>
 
-    <dialog v-if="recovery.pending" ref="dialog" class="recovery-dialog" aria-labelledby="recovery-dialog-title"
-      aria-describedby="recovery-dialog-description" @cancel.prevent>
+    <dialog
+      v-if="recovery.pending"
+      ref="dialog"
+      class="recovery-dialog"
+      aria-labelledby="recovery-dialog-title"
+      aria-describedby="recovery-dialog-description"
+      @cancel.prevent
+    >
       <div class="recovery-dialog-content">
         <h2 id="recovery-dialog-title">Lokalen Entwurf gefunden</h2>
         <p id="recovery-dialog-description">
-          Ein Recovery-Stand vom {{ formattedDate(recovery.pending.savedAt) }} liegt in diesem Browserprofil.
-          Er wurde nicht als Datei gespeichert. Die Werte sind nicht automatisch kundenseitig bestätigt.
+          Ein Recovery-Stand vom {{ formattedDate(recovery.pending.savedAt) }} liegt in diesem Browserprofil. Er wurde
+          nicht als Datei gespeichert. Die Werte sind nicht automatisch kundenseitig bestätigt.
         </p>
         <p v-if="recovery.pending.conflict" class="recovery-conflict">
           Achtung: Die aktuellen Eingaben unterscheiden sich vom Recovery-Stand. Wiederherstellen ersetzt den aktuellen
@@ -145,18 +151,21 @@ watch(
   font-size: 0.875rem;
   line-height: 1.5;
 }
-.recovery-actions, .recovery-dialog-actions {
+.recovery-actions,
+.recovery-dialog-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.65rem;
 }
-.recovery-actions button, .recovery-dialog-actions button {
+.recovery-actions button,
+.recovery-dialog-actions button {
   min-height: 44px;
   white-space: normal;
   text-align: center;
 }
-.recovery-error, .recovery-conflict {
+.recovery-error,
+.recovery-conflict {
   margin-block: 0.75rem;
   color: var(--color-risk-text);
   overflow-wrap: anywhere;
@@ -193,16 +202,23 @@ watch(
   margin-top: 1.25rem;
 }
 @media (max-width: 375px) {
-  .recovery-actions, .recovery-dialog-actions {
+  .recovery-actions,
+  .recovery-dialog-actions {
     width: 100%;
     flex-direction: column;
     align-items: stretch;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .recovery-panel, .recovery-dialog { scroll-behavior: auto; }
+  .recovery-panel,
+  .recovery-dialog {
+    scroll-behavior: auto;
+  }
 }
 @media (prefers-contrast: more) {
-  .recovery-panel, .recovery-dialog { border-width: 2px; }
+  .recovery-panel,
+  .recovery-dialog {
+    border-width: 2px;
+  }
 }
 </style>

@@ -9,25 +9,39 @@ type Check = (value: unknown) => boolean
 type Rules = Record<string, Check>
 
 const record = (value: unknown): value is Record<string, unknown> =>
-  value !== null && typeof value === 'object' && !Array.isArray(value) && Object.getPrototypeOf(value) === Object.prototype
+  value !== null &&
+  typeof value === 'object' &&
+  !Array.isArray(value) &&
+  Object.getPrototypeOf(value) === Object.prototype
 
 const string: Check = (value) => typeof value === 'string' && value.length <= 6000
 const number: Check = (value) => typeof value === 'number' && Number.isFinite(value) && Math.abs(value) <= 1e12
 const nullableNumber: Check = (value) => value === null || number(value)
 const inputNumber: Check = (value) => value === '' || number(value)
 const boolean: Check = (value) => typeof value === 'boolean'
-const choice = (...values: string[]): Check => (value) => values.includes(value as string)
-const optional = (check: Check): Check => (value) => value === undefined || check(value)
-const array = (check: Check, max = 100): Check => (value) =>
-  Array.isArray(value) && value.length <= max && value.every(check)
+const choice =
+  (...values: string[]): Check =>
+  (value) =>
+    values.includes(value as string)
+const optional =
+  (check: Check): Check =>
+  (value) =>
+    value === undefined || check(value)
+const array =
+  (check: Check, max = 100): Check =>
+  (value) =>
+    Array.isArray(value) && value.length <= max && value.every(check)
 
 /** Exact keys: unknown/malicious or future-version fields never enter live Vue state. */
-const object = (rules: Rules): Check => (value) => {
-  if (!record(value)) return false
-  const keys = Object.keys(value)
-  return keys.every((key) => Object.hasOwn(rules, key)) &&
-    Object.entries(rules).every(([key, check]) => check(value[key]))
-}
+const object =
+  (rules: Rules): Check =>
+  (value) => {
+    if (!record(value)) return false
+    const keys = Object.keys(value)
+    return (
+      keys.every((key) => Object.hasOwn(rules, key)) && Object.entries(rules).every(([key, check]) => check(value[key]))
+    )
+  }
 
 const evidence = choice('hypothesis', 'reference', 'customer-stated', 'customer-reviewed')
 const formula = choice('direct', 'process', 'time', 'conversion', 'quality', 'risk', 'qualitative')
@@ -79,7 +93,14 @@ const builderCheck = object({
   evidence,
   assumptionNote: string,
   effectGroup: string,
-  mechanism: choice('unresolved', 'avoidable-cost', 'avoided-hiring', 'avoided-external', 'incremental-margin', 'reduced-error-cost'),
+  mechanism: choice(
+    'unresolved',
+    'avoidable-cost',
+    'avoided-hiring',
+    'avoided-external',
+    'incremental-margin',
+    'reduced-error-cost',
+  ),
   realizationNote: string,
   realizedAnnual: inputNumber,
   startMonth: inputNumber,
