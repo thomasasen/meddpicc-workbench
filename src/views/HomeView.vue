@@ -18,6 +18,19 @@ import {
   Wrench,
 } from '@lucide/vue'
 
+function scrollToSection(id: string): void {
+  document.getElementById(id)?.scrollIntoView({
+    block: 'start',
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+  })
+}
+
+function focusMainContent(): void {
+  const main = document.getElementById('main-content')
+  main?.focus()
+  main?.scrollIntoView({ block: 'start' })
+}
+
 const pillars = [
   {
     id: 'tools',
@@ -280,7 +293,7 @@ const knowledgeTopics = [
 
 <template>
   <div class="site-shell toolbox-shell">
-    <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
+    <a class="skip-link" href="#main-content" @click.prevent="focusMainContent">Zum Inhalt springen</a>
 
     <header class="site-header">
       <div class="container header-inner toolbox-header">
@@ -293,9 +306,15 @@ const knowledgeTopics = [
         </RouterLink>
 
         <nav class="toolbox-primary-nav" aria-label="Toolbox-Bereiche">
-          <a href="#tools"><Wrench :size="16" aria-hidden="true" />Tools</a>
-          <a href="#checklists"><ListChecks :size="16" aria-hidden="true" />Checklists</a>
-          <a href="#knowledge"><FileText :size="16" aria-hidden="true" />Wissen</a>
+          <RouterLink :to="{ name: 'start', hash: '#tools' }" @click="scrollToSection('tools')"
+            ><Wrench :size="16" aria-hidden="true" />Tools</RouterLink
+          >
+          <RouterLink :to="{ name: 'start', hash: '#checklists' }" @click="scrollToSection('checklists')"
+            ><ListChecks :size="16" aria-hidden="true" />Checklists</RouterLink
+          >
+          <RouterLink :to="{ name: 'start', hash: '#knowledge' }" @click="scrollToSection('knowledge')"
+            ><FileText :size="16" aria-hidden="true" />Wissen</RouterLink
+          >
         </nav>
         <RouterLink
           class="toolbox-settings-link"
@@ -309,7 +328,7 @@ const knowledgeTopics = [
       </div>
     </header>
 
-    <main id="main-content" class="toolbox-main toolbox-home-v2">
+    <main id="main-content" class="toolbox-main toolbox-home-v2" tabindex="-1">
       <section class="container toolbox-hero" aria-labelledby="toolbox-title">
         <div class="toolbox-hero-copy">
           <p class="eyebrow">MEDDPICC Toolbox</p>
@@ -332,13 +351,19 @@ const knowledgeTopics = [
       </section>
 
       <section class="container toolbox-entry-grid" aria-label="Einstiege in die Toolbox">
-        <a v-for="pillar in pillars" :key="pillar.id" class="toolbox-entry-card" :href="'#' + pillar.id">
+        <RouterLink
+          v-for="pillar in pillars"
+          :key="pillar.id"
+          class="toolbox-entry-card"
+          :to="{ name: 'start', hash: '#' + pillar.id }"
+          @click="scrollToSection(pillar.id)"
+        >
           <component :is="pillar.icon" :size="22" :stroke-width="2" aria-hidden="true" />
           <span class="toolbox-entry-kicker">{{ pillar.kicker }}</span>
           <strong>{{ pillar.title }}</strong>
           <span>{{ pillar.description }}</span>
           <span class="toolbox-entry-link">Ansehen <ArrowRight :size="16" aria-hidden="true" /></span>
-        </a>
+        </RouterLink>
       </section>
 
       <section id="tools" class="container toolbox-section" aria-labelledby="tools-title">
