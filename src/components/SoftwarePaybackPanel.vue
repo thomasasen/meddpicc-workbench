@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ToolRecoveryBar from './ToolRecoveryBar.vue'
+import { useToolRecovery } from '../composables/useToolRecovery'
+import { isSoftwarePaybackRecovery, type SoftwarePaybackRecovery } from '../services/toolRecoveryValidators'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
 import { consumeMetricHandoff, consumePaybackReturn, queuePaybackReturn } from '../domain/metricBuilderHandoff'
@@ -113,8 +116,13 @@ const result = computed(() =>
 )
 
 function id(prefix: string): string {
-  idCounter += 1
-  return prefix + '-' + idCounter
+  // Avoid duplicate IDs after a session handoff or recovery.
+  let next: string
+  do {
+    idCounter += 1
+    next = prefix + '-' + idCounter
+  } while (costs.value.some((cost) => cost.id === next) || metrics.value.some((metric) => metric.id === next))
+  return next
 }
 function addCost(kind: CostKind) {
   costs.value.push({
@@ -133,6 +141,7 @@ async function openMetricBuilder() {
       { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
       window.sessionStorage,
     )
+    recovery.allowNextNavigation()
     await router.push('/tools/metric-builder')
   } catch {
     transferMessage.value = 'Der aktuelle Payback-Entwurf konnte nicht lokal zwischengespeichert werden.'
@@ -144,6 +153,7 @@ async function transferToBridge(): Promise<void> {
       { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
       window.sessionStorage,
     )
+    recovery.allowNextNavigation()
     await router.push('/tools/value-bridge')
   } catch {
     transferMessage.value = 'Value-Bridge-Übergabe nicht möglich. Maximal 15 Metrics und gültige Eingaben erforderlich.'
@@ -222,6 +232,7 @@ function clear() {
   horizon.value = 36
   copyStatus.value = ''
   exportStatus.value = ''
+  void recovery.resetAcknowledged()
 }
 
 const metricTypes: { value: MetricFormula; label: string }[] = [
@@ -385,10 +396,58 @@ async function downloadReport(kind: 'customer' | 'finance') {
     reportStatus.value = 'PDF-Erstellung fehlgeschlagen. Bitte Eingaben prüfen und erneut versuchen.'
   }
 }
+const recovery = useToolRecovery<SoftwarePaybackRecovery>({
+  toolId: 'software-payback',
+  read: () => ({
+    costs: costs.value,
+    metrics: metrics.value,
+    horizon: horizon.value,
+    selectedScenario: selectedScenario.value,
+    scenarioSettings: scenarioSettings.value,
+    reportCustomer: reportCustomer.value,
+    reportProject: reportProject.value,
+    reportAuthor: reportAuthor.value,
+    reportPain: reportPain.value,
+    reportGoal: reportGoal.value,
+    reportDate: reportDate.value,
+  }),
+  restore: (value) => {
+    costs.value = value.costs
+    metrics.value = value.metrics
+    horizon.value = value.horizon
+    selectedScenario.value = value.selectedScenario
+    scenarioSettings.value = value.scenarioSettings
+    reportCustomer.value = value.reportCustomer
+    reportProject.value = value.reportProject
+    reportAuthor.value = value.reportAuthor
+    reportPain.value = value.reportPain
+    reportGoal.value = value.reportGoal
+    reportDate.value = value.reportDate
+    demoMessage.value = ''
+    transferMessage.value = 'Lokaler Entwurf wiederhergestellt. Herkunft und Wirtschaftswerte bitte erneut prüfen.'
+  },
+  validate: isSoftwarePaybackRecovery,
+  isMeaningful: (value) =>
+    value.costs.length > 0 ||
+    value.metrics.length > 0 ||
+    value.horizon !== 36 ||
+    value.reportCustomer.trim() !== '' ||
+    value.reportAuthor.trim() !== '' ||
+    value.reportProject !== 'Softwareprojekt' ||
+    value.reportPain.trim() !== '' ||
+    value.reportGoal.trim() !== '' ||
+    value.selectedScenario !== 'base' ||
+    JSON.stringify(value.scenarioSettings) !==
+      JSON.stringify({
+        conservative: DEFAULT_SCENARIO_SETTINGS.conservative,
+        optimistic: DEFAULT_SCENARIO_SETTINGS.optimistic,
+      }),
+})
 </script>
 
 <template>
   <div class="software-panel">
+    <ToolRecoveryBar :recovery="recovery" />
     <section class="quick-panel software-block" aria-labelledby="software-cost-heading">
       <div class="software-heading">
         <div>
