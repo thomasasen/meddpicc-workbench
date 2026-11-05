@@ -1,9 +1,17 @@
 import { expect, test, type Page } from '@playwright/test'
 
 const containers = [
-  '.reverse-context-grid', '.reverse-step-fields', '.metric-fields', '.metric-timing',
-  '.software-fields', '.software-report-story', '.cod-field-row', '.vb-fields-two',
-  '.evidence-form', '.work-object-form', '.branding-color-row',
+  '.reverse-context-grid',
+  '.reverse-step-fields',
+  '.metric-fields',
+  '.metric-timing',
+  '.software-fields',
+  '.software-report-story',
+  '.cod-field-row',
+  '.vb-fields-two',
+  '.evidence-form',
+  '.work-object-form',
+  '.branding-color-row',
 ].join(', ')
 
 async function inspectRows(page: Page) {
@@ -15,7 +23,10 @@ async function inspectRows(page: Page) {
       const fields = Array.from(grid.children).flatMap((child) => {
         if (!(child instanceof HTMLLabelElement) || !child.getClientRects().length) return []
         const control = Array.from(child.children).find(
-          (node) => node instanceof HTMLInputElement || node instanceof HTMLSelectElement || node instanceof HTMLTextAreaElement,
+          (node) =>
+            node instanceof HTMLInputElement ||
+            node instanceof HTMLSelectElement ||
+            node instanceof HTMLTextAreaElement,
         )
         if (!(control instanceof HTMLElement) || !control.getClientRects().length) return []
         if (control instanceof HTMLInputElement && ['checkbox', 'radio', 'file'].includes(control.type)) return []
@@ -28,7 +39,7 @@ async function inspectRows(page: Page) {
         if (noteTop !== null && noteTop < rect.bottom - 1) problems.push(`${grid.className}: Hinweis überlappt ${name}`)
         return [{ name, top: child.getBoundingClientRect().top, y: rect.top, height: rect.height, single }]
       })
-      const rows: typeof fields[] = []
+      const rows: (typeof fields)[] = []
       for (const field of fields) {
         const row = rows.find((items) => Math.abs(items[0].top - field.top) <= 1)
         if (row) row.push(field)
@@ -39,7 +50,10 @@ async function inspectRows(page: Page) {
         if (Math.max(...row.map((v) => v.y)) - Math.min(...row.map((v) => v.y)) > 1)
           problems.push(`${grid.className}: versetzte Eingaben ${row.map((v) => v.name).join(' / ')}`)
         const singles = row.filter((v) => v.single)
-        if (singles.length > 1 && Math.max(...singles.map((v) => v.height)) - Math.min(...singles.map((v) => v.height)) > 1)
+        if (
+          singles.length > 1 &&
+          Math.max(...singles.map((v) => v.height)) - Math.min(...singles.map((v) => v.height)) > 1
+        )
           problems.push(`${grid.className}: verschiedene Höhen ${singles.map((v) => v.name).join(' / ')}`)
       }
     }
@@ -53,9 +67,14 @@ test('Formular-Matrix: alle Bereiche bei vier Viewportbreiten', async ({ page })
   for (const width of [375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 })
     for (const route of [
-      '/tools/reverse-timeline', '/tools/metric-builder', '/tools/cost-of-delay',
-      '/tools/value-bridge', '/settings/document-design', '/evidence',
-      '/risks-actions', '/references',
+      '/tools/reverse-timeline',
+      '/tools/metric-builder',
+      '/tools/cost-of-delay',
+      '/tools/value-bridge',
+      '/settings/document-design',
+      '/evidence',
+      '/risks-actions',
+      '/references',
     ]) {
       await page.goto('/meddpicc-workbench/#' + route)
       await expect(page.locator('main').first()).toBeVisible()
