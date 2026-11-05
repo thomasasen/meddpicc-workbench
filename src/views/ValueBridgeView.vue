@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ToolRecoveryBar from '../components/ToolRecoveryBar.vue'
+import { useToolRecovery } from '../composables/useToolRecovery'
+import { isValueBridgeRecovery, type ValueBridgeRecovery } from '../services/toolRecoveryValidators'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
 import {
@@ -79,6 +82,7 @@ function reset(): void {
   customerView.value = false
   isDemo.value = false
   message.value = ''
+  void recovery.resetAcknowledged()
 }
 async function copySummary(): Promise<void> {
   try {
@@ -126,6 +130,18 @@ onMounted(() => {
     message.value = 'Die lokale Übergabe war nicht verfügbar.'
   }
 })
+const recovery = useToolRecovery<ValueBridgeRecovery>({
+  toolId: 'value-bridge',
+  read: () => ({ draft: draft.value, step: step.value }),
+  restore: (value) => {
+    draft.value = value.draft
+    step.value = value.step
+    isDemo.value = false
+    message.value = 'Lokaler Entwurf wiederhergestellt. Wirtschaftsannahmen und Evidenz bleiben ungeprüft.'
+  },
+  validate: isValueBridgeRecovery,
+  isMeaningful: (value) => JSON.stringify(value.draft) !== JSON.stringify(blankValueBridge()),
+})
 </script>
 
 <template>
@@ -145,6 +161,8 @@ onMounted(() => {
     </header>
 
     <main id="main-content" class="container vb-main">
+      <ToolRecoveryBar :recovery="recovery" />
+
       <section class="vb-intro">
         <div class="tool-intro-meta vb-intro-meta">
           <span class="tool-kind tool-kind--customer"
