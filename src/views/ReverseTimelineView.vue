@@ -478,8 +478,6 @@ const recovery = useToolRecovery({
     </header>
 
     <main id="main-content" class="reverse-tool-main">
-
-
       <section class="container tool-intro" aria-labelledby="reverse-title">
         <div>
           <div class="tool-intro-meta">
