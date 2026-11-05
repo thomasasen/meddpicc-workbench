@@ -24,6 +24,16 @@ import ReferencesView from '../views/ReferencesView.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      }
+    }
+    if (to.path !== from.path) return { top: 0 }
+  },
   routes: [
     {
       path: '/settings',
