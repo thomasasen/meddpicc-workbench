@@ -26,7 +26,11 @@ defineEmits<{
 </script>
 
 <template>
-  <section class="quick-panel recovery-panel" :role="candidate ? 'dialog' : 'region'" aria-labelledby="recovery-heading">
+  <section
+    class="quick-panel recovery-panel"
+    :role="candidate ? 'dialog' : 'region'"
+    aria-labelledby="recovery-heading"
+  >
     <div class="recovery-heading">
       <h2 id="recovery-heading" ref="recoveryHeading" tabindex="-1">Optionales lokales Recovery</h2>
       <span v-if="enabled" class="recovery-label">Aktiv</span>
