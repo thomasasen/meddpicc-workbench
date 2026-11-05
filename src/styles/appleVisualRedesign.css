@@ -1067,7 +1067,7 @@ body {
  * Formulare: Controls bilden die gemeinsame Zeile, Hilfen liegen darunter.
  * Keine starre Label-Höhe bei langem Text/Zoom: Subgrid teilt die Zeilenspuren.
  */
-:is(
+.site-shell :is(
     .reverse-step-fields,
     .metric-fields,
     .metric-timing,
@@ -1082,7 +1082,7 @@ body {
   align-items: start;
 }
 
-:is(
+.site-shell :is(
     .reverse-step-fields,
     .metric-fields,
     .metric-timing,
@@ -1102,7 +1102,7 @@ body {
   margin-block: 0;
 }
 
-:is(
+.site-shell :is(
     .reverse-step-fields,
     .metric-fields,
     .metric-timing,
@@ -1119,7 +1119,7 @@ body {
   overflow-wrap: anywhere;
 }
 
-:is(
+.site-shell :is(
     .reverse-step-fields,
     .metric-fields,
     .metric-timing,
@@ -1138,7 +1138,7 @@ body {
   align-self: stretch;
 }
 
-:is(
+.site-shell :is(
     .reverse-step-fields,
     .metric-fields,
     .metric-timing,
@@ -1155,13 +1155,13 @@ body {
 }
 
 /* Mehrzeilige Controls nicht mit einzeiligen Eingaben in einer Datenzeile mischen. */
-.metric-fields > label.field:has(> textarea),
-.software-fields > label.field:has(> textarea) {
+.site-shell .metric-fields > label.field:has(> textarea),
+.site-shell .software-fields > label.field:has(> textarea) {
   grid-column: 1 / -1;
 }
 
 @supports (grid-template-rows: subgrid) {
-  :is(
+  .site-shell :is(
       .reverse-step-fields,
       .metric-fields,
       .metric-timing,
@@ -1178,15 +1178,15 @@ body {
 }
 
 /* Auch die Farbauswahl der PDF-Dokumentgestaltung hat eine gemeinsame Control-Linie. */
-.branding-color-row {
+.site-shell .branding-color-row {
   align-items: stretch;
 }
 
-.branding-color-row > label {
+.site-shell .branding-color-row > label {
   justify-content: end;
 }
 
-.branding-color-row > label > input {
+.site-shell .branding-color-row > label > input {
   box-sizing: border-box;
   min-height: 46px;
   height: 46px;
@@ -1194,7 +1194,7 @@ body {
 
 /* Einstellungsfelder mit mehrzeiligen Beschriftungen dürfen nicht die Nachbarzelle verschieben. */
 @media (prefers-reduced-motion: reduce) {
-  :is(.reverse-step-fields, .metric-fields, .software-fields) > label {
+  .site-shell :is(.reverse-step-fields, .metric-fields, .software-fields) > label {
     transition: none;
   }
 }

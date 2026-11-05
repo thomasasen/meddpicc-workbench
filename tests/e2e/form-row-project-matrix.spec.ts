@@ -119,7 +119,7 @@ test('Farbauswahl in der Dokumentgestaltung nutzt gleiche Control-Oberkante und 
   for (const width of [375, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 })
     await page.goto('/meddpicc-workbench/#/settings/document-design')
-    await expect(page.getByRole('heading', { name: 'Gestaltung' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Gestaltung', exact: true })).toBeVisible()
     const rows = await page.locator('.branding-color-row').evaluateAll((groups) =>
       groups.map((group) =>
         Array.from(group.querySelectorAll(':scope > label > input')).map((control) => {
