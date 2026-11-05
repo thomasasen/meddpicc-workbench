@@ -124,14 +124,17 @@ test('Farbauswahl in der Dokumentgestaltung nutzt gleiche Control-Oberkante und 
       groups.map((group) =>
         Array.from(group.querySelectorAll(':scope > label > input')).map((control) => {
           const rect = control.getBoundingClientRect()
-          return { y: rect.y, height: rect.height }
+          return { x: rect.x, y: rect.y, height: rect.height }
         }),
       ),
     )
     expect(rows.length).toBeGreaterThanOrEqual(2)
     for (const inputs of rows) {
       expect(inputs.length).toBe(2)
-      expect(Math.abs(inputs[0].y - inputs[1].y), `Farbauswahl bei ${width}px`).toBeLessThanOrEqual(1)
+      // Auf schmalen Displays sind das zwei getrennte Zeilen; nur Gleiches vergleichen.
+      if (Math.abs(inputs[0].x - inputs[1].x) > 8) {
+        expect(Math.abs(inputs[0].y - inputs[1].y), `Farbauswahl bei ${width}px`).toBeLessThanOrEqual(1)
+      }
       expect(Math.abs(inputs[0].height - inputs[1].height)).toBeLessThanOrEqual(1)
     }
   }
