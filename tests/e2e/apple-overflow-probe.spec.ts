@@ -12,8 +12,7 @@ test('inspect overflowing elements in the visual redesign', async ({ page }) => 
       }
       const result = await page.evaluate(() => {
         const limit = document.documentElement.clientWidth
-        const elements = Array.from(document.querySelectorAll<HTMLElement>('body *'))
-          .map((element) => {
+        const elements = Array.from(document.querySelectorAll<HTMLElement>('body *')).map((element) => {
             const rect = element.getBoundingClientRect()
             const styles = getComputedStyle(element)
             return {
@@ -29,13 +28,11 @@ test('inspect overflowing elements in the visual redesign', async ({ page }) => 
               overflowX: styles.overflowX,
               whiteSpace: styles.whiteSpace,
             }
-          })
+        })
         const oversized = elements
           .filter((el) => el.scrollWidth > el.clientWidth + 2 && el.clientWidth > 0)
           .sort((a, b) => b.scrollWidth - b.clientWidth - (a.scrollWidth - a.clientWidth))
-        const toRight = elements
-          .filter((el) => el.right > limit + 1 && el.width > 0)
-          .sort((a, b) => b.right - a.right)
+        const toRight = elements.filter((el) => el.right > limit + 1 && el.width > 0).sort((a, b) => b.right - a.right)
         return {
           limit,
           scrollWidth: document.documentElement.scrollWidth,
