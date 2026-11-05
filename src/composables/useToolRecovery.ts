@@ -223,7 +223,19 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
     acknowledgedNavigation = true
   }
 
-  return { enabled, candidate, message, conflict, busy, modified, activate, recover, discard, acknowledgeNavigation, canLeave }
+  return {
+    enabled,
+    candidate,
+    message,
+    conflict,
+    busy,
+    modified,
+    activate,
+    recover,
+    discard,
+    acknowledgeNavigation,
+    canLeave,
+  }
 }
 
 export function announceAllRecoveryDeleted() {
