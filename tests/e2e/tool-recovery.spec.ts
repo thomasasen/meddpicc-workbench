@@ -123,7 +123,7 @@ test('abgelaufene Recoverydaten aller Tools werden bei erneutem Zugriff bereinig
       })
       db.close()
       return result === undefined
-    }),
+    })
   await expect.poll(expiredRemoved).toBe(true)
 })
 
