@@ -1,11 +1,22 @@
 <script setup lang="ts">
-defineProps<{
+import { nextTick, ref, watch } from 'vue'
+const props = defineProps<{
   enabled: boolean
   busy: boolean
   conflict: boolean
   candidate: { savedAt: string } | null
   message: string
 }>()
+
+const recoveryHeading = ref<HTMLElement | null>(null)
+watch(
+  () => props.candidate,
+  async (value) => {
+    if (!value) return
+    await nextTick()
+    if (document.activeElement === document.body) recoveryHeading.value?.focus()
+  },
+)
 
 defineEmits<{
   activate: []
@@ -15,9 +26,9 @@ defineEmits<{
 </script>
 
 <template>
-  <section class="quick-panel recovery-panel" aria-label="Lokale Wiederherstellung">
+  <section class="quick-panel recovery-panel" :role="candidate ? 'dialog' : 'region'" aria-labelledby="recovery-heading">
     <div class="recovery-heading">
-      <h2>Optionales lokales Recovery</h2>
+      <h2 id="recovery-heading" ref="recoveryHeading" tabindex="-1">Optionales lokales Recovery</h2>
       <span v-if="enabled" class="recovery-label">Aktiv</span>
     </div>
     <p class="recovery-description">
