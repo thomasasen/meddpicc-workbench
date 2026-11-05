@@ -136,6 +136,7 @@ async function openMetricBuilder() {
       { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
       window.sessionStorage,
     )
+    recovery.acknowledgeNavigation()
     await router.push('/tools/metric-builder')
   } catch {
     transferMessage.value = 'Der aktuelle Payback-Entwurf konnte nicht lokal zwischengespeichert werden.'
@@ -147,6 +148,7 @@ async function transferToBridge(): Promise<void> {
       { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
       window.sessionStorage,
     )
+    recovery.acknowledgeNavigation()
     await router.push('/tools/value-bridge')
   } catch {
     transferMessage.value = 'Value-Bridge-Übergabe nicht möglich. Maximal 15 Metrics und gültige Eingaben erforderlich.'
