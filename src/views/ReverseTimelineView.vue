@@ -14,6 +14,7 @@ import {
 import { computed, nextTick, onBeforeUnmount, ref } from 'vue'
 
 import CustomerTimelineChart from '../components/CustomerTimelineChart.vue'
+import { criticallyDampedOffsets } from '../domain/dragSpring'
 import {
   calculateReverseTimeline,
   type ReverseTimelineStepInput,
@@ -119,6 +120,9 @@ interface DragSession {
   gap: number
   centers: number[]
   handle: HTMLElement
+  lastSampleY: number
+  lastSampleTime: number
+  velocityY: number
 }
 
 let dragSession: DragSession | null = null
@@ -140,7 +144,7 @@ function cardPositions(): Map<string, number> {
 }
 
 /** The release starts at each card's actual on-screen position, not its layout target. */
-function settleDroppedCards(previous: Map<string, number>): void {
+function settleDroppedCards(previous: Map<string, number>, draggedStepId: string | null, releaseVelocity = 0): void {
   if (prefersReducedMotion()) return
 
   void nextTick(() => {
@@ -151,11 +155,14 @@ function settleDroppedCards(previous: Map<string, number>): void {
       const difference = oldTop - card.getBoundingClientRect().top
       if (Math.abs(difference) < 1) continue
 
+      const velocity = card.dataset.stepId === draggedStepId ? releaseVelocity : 0
       const animation = card.animate(
-        [{ transform: `translate3d(0, ${difference}px, 0)` }, { transform: 'translate3d(0, 0, 0)' }],
+        criticallyDampedOffsets(difference, velocity).map((offset) => ({
+          transform: `translate3d(0, ${offset}px, 0)`,
+        })),
         {
-          duration: 260,
-          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          duration: 540,
+          easing: 'linear',
           fill: 'both',
         },
       )
@@ -255,6 +262,9 @@ function startStepDrag(event: PointerEvent, index: number): void {
       return bounds.top + bounds.height / 2
     }),
     handle,
+    lastSampleY: event.clientY,
+    lastSampleTime: event.timeStamp,
+    velocityY: 0,
   }
   draggingStepId.value = steps.value[index].id
   dragTargetIndex.value = index
@@ -272,6 +282,14 @@ function moveDraggedStep(event: PointerEvent): void {
   if (!session || session.pointerId !== event.pointerId) return
 
   if (event.cancelable) event.preventDefault()
+  const elapsed = event.timeStamp - session.lastSampleTime
+  if (elapsed >= 8 && elapsed <= 180) {
+    session.velocityY = Math.max(-900, Math.min(900, ((event.clientY - session.lastSampleY) / elapsed) * 1000))
+  } else if (elapsed > 180) {
+    session.velocityY = 0
+  }
+  session.lastSampleY = event.clientY
+  session.lastSampleTime = event.timeStamp
   dragOffsetY.value = session.baseOffsetY + event.clientY - session.originY
 
   let nearest = session.originIndex
@@ -292,6 +310,9 @@ function finishStepDrag(event: PointerEvent): void {
 
   const previous = cardPositions()
   const target = dragTargetIndex.value
+  const draggedId = draggingStepId.value
+  const releaseVelocity =
+    event.type === 'pointerup' && event.timeStamp - session.lastSampleTime < 100 ? session.velocityY : 0
   if (event.type === 'pointerup' && target !== null) {
     reorderStep(session.originIndex, target)
   }
@@ -306,7 +327,7 @@ function finishStepDrag(event: PointerEvent): void {
   draggingStepId.value = null
   dragTargetIndex.value = null
   dragOffsetY.value = 0
-  settleDroppedCards(previous)
+  settleDroppedCards(previous, draggedId, releaseVelocity)
 }
 
 onBeforeUnmount(() => {

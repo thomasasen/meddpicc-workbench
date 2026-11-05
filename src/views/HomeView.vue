@@ -13,6 +13,7 @@ import {
   Presentation,
   Route,
   Settings,
+  ShieldCheck,
   Swords,
   UserRound,
   Wrench,
@@ -316,6 +317,10 @@ const knowledgeTopics = [
           <p class="intro-text">
             Nutze ein passendes Tool für konkrete Arbeit, eine Checklist zur Vorbereitung oder die Wissenshilfe, wenn du
             einen MEDDPICC-Punkt kurz und praxisnah nachschlagen möchtest.
+          </p>
+          <p class="toolbox-hero-assurance">
+            <ShieldCheck :size="17" aria-hidden="true" />
+            Lokal im Browser · Ohne Anmeldung
           </p>
         </div>
       </section>
