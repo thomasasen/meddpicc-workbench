@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ToolRecoveryBar from '../components/ToolRecoveryBar.vue'
+import { useToolRecovery } from '../composables/useToolRecovery'
+import { isMetricBuilderRecovery, type MetricBuilderRecovery } from '../services/toolRecoveryValidators'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -83,6 +86,7 @@ function reset(): void {
   step.value = 1
   message.value = ''
   demoName.value = ''
+  void recovery.resetAcknowledged()
 }
 
 function loadDemo(name: string): void {
@@ -146,6 +150,7 @@ async function transfer(): Promise<void> {
   if (!result.value.complete || !result.value.transfer.length) return
   try {
     queueMetricHandoff(result.value.transfer, window.sessionStorage)
+    recovery.allowNextNavigation()
     await router.push({ path: '/tools/quick-payback', query: { importMetric: '1' } })
   } catch {
     message.value = 'Lokale Übergabe nicht möglich. Bitte Browserspeicher für diese Sitzung erlauben.'
@@ -155,6 +160,7 @@ async function transferToDelay(): Promise<void> {
   if (!result.value.complete || result.value.realizedEur === null || result.value.realizedEur <= 0) return
   try {
     queueCostOfDelayHandoff(draft.value, result.value, window.sessionStorage)
+    recovery.allowNextNavigation()
     await router.push('/tools/cost-of-delay')
   } catch {
     message.value = 'Cost-of-Delay-Übergabe nicht möglich. Nur realisierbare Metrics können übertragen werden.'
@@ -164,12 +170,25 @@ async function transferToBridge(): Promise<void> {
   if (!result.value.complete) return
   try {
     queueBuilderToBridge(draft.value, result.value, window.sessionStorage)
+    recovery.allowNextNavigation()
     await router.push('/tools/value-bridge')
   } catch {
     message.value = 'Value-Bridge-Übergabe nicht möglich. Bitte Eingaben prüfen.'
   }
 }
 import ToolStepNavigation from '../components/ToolStepNavigation.vue'
+const recovery = useToolRecovery<MetricBuilderRecovery>({
+  toolId: 'metric-builder',
+  read: () => ({ draft: draft.value, step: step.value }),
+  restore: (value) => {
+    draft.value = value.draft
+    step.value = value.step
+    demoName.value = ''
+    message.value = 'Lokaler Entwurf wiederhergestellt. Angaben und Evidenz bitte selbst prüfen.'
+  },
+  validate: isMetricBuilderRecovery,
+  isMeaningful: (value) => JSON.stringify(value.draft) !== JSON.stringify(emptyMetricDraft()),
+})
 </script>
 
 <template>
@@ -200,6 +219,8 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
           Zeit ist nicht automatisch eine Kostenersparnis.
         </p>
       </section>
+
+      <ToolRecoveryBar :recovery="recovery" />
 
       <ToolStepNavigation
         v-model="step"
