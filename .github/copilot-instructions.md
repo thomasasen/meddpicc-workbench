@@ -37,9 +37,9 @@ Bei Prioritätskonflikten gelten die aktuelle Roadmap und Progress-Datei vor äl
 
 ## Produktziel und Produktgrenzen
 
-MEDDPICC Workbench ist eine **local-first, deterministische Deal-Reasoning- und Coaching-Workbench**.
+MEDDPICC Toolbox ist eine **local-first, deterministische Sammlung fokussierter Sales-Tools, Checklists und Knowledge-Inhalte**. Sie ist ausdrücklich kein CRM und kein durchgehend gepflegtes Deal-Management-System.
 
-Primäres Ziel ist nicht, MEDDPICC als acht CRUD-Masken abzubilden, sondern dem Seller konkrete Arbeit abzunehmen: Deal prüfen, Gaps erkennen, nächste Aktionen priorisieren, Qualification Gates prüfen, Champion/Economic Buyer testen, Business Value rechnen, Decision-/Paper-Process planen und Meetings vorbereiten.
+Primäres Ziel: wiederkehrende Seller-Aufgaben vereinfachen (z. B. Quick Payback, Metric Builder, Cost of Delay, Value Bridge, Go-Live-Rückwärtsplanung), Prüf- und Meeting-Situationen erklären und MEDDPICC-Wissen zugänglich machen. Tools haben jeweils nur die für ihren Zweck nötigen Eingaben; Checklists erzeugen keine persistierten Deal-Scores.
 
 Verbindlich:
 
@@ -50,7 +50,7 @@ Verbindlich:
 - Kein verpflichtendes Backend.
 - Kein Core-Feature darf eine AI-/LLM-Runtime oder externe AI-API benötigen.
 - AI darf später optional nur als Input-Layer Candidate Evidence aus unstrukturiertem Material erzeugen; Nutzerbestätigung bleibt erforderlich.
-- Kein stiller Cloud-Sync, keine Analytics mit Opportunity-Inhalten und keine zweite kanonische Datenquelle neben der `.meddpicc`-Projektdatei.
+- Kein stiller Cloud-Sync und keine Analytics mit Kundendaten. Eine `.meddpicc`-Projektdatei gehört zum Legacy-Bestand und darf kein verpflichtendes Datenmodell oder Einstieg in neue Microtools werden. Optionaler temporärer Session Context ist nur bei fachlichem Mehrwert zulässig.
 - Keine Account-/Kontaktverwaltung, Pipeline, Activity Timeline oder generische Task-App bauen.
 - Neue UI nicht aus der Schema-Struktur ableiten, sondern aus konkreten Seller-Aufgaben.
 
@@ -58,28 +58,31 @@ Priorisierte Services stehen in `docs/ROADMAP.md`; `docs/PROGRESS.md` bestimmt d
 
 ## UI/UX-Regeln
 
-Bei UI-Arbeiten `docs/DESIGN_SYSTEM.md` und `.agents/skills/meddpicc-ui-ux/SKILL.md` befolgen.
+Bei UI-Arbeiten `docs/DESIGN_SYSTEM.md` sowie **beide** Skills `.agents/skills/meddpicc-ui-ux/SKILL.md` und `.agents/skills/apple-design/SKILL.md` befolgen.
 
-`nextlevelbuilder/ui-ux-pro-max-skill` wird nur als externe Entwicklungs- und Designreferenz genutzt und ist keine Anwendungsabhängigkeit. Details und gepinnter Upstream-Stand: `docs/UI_UX_REFERENCE.md`.
+**Bei überlappenden Stil-, Typografie-, Gesten-, Material- oder Bewegungsanforderungen gilt Apple Design vor älteren Projekt- und UI UX Pro Max-Empfehlungen.** Fachliche Korrektheit, aktuelle Tools/Checklists/Knowledge-Produktarchitektur, Accessibility, Sicherheit, Performance und Datenschutz sind davon ausgenommen. Apple-Prinzipien sind kontextgerecht anzuwenden: Transparenz ist nicht für jede Fläche Pflicht, Spring-/Momentum-Effekte nicht für jeden Button. Provenienz: `docs/UI_UX_REFERENCE.md`; keine Runtime-Abhängigkeit.
 
 Bevorzugen:
 
-- task-/workflow-orientierte Einstiege wie „Deal prüfen“ oder „Sind wir bereit für …?“
+- konkrete Einstiege wie „Payback berechnen“, „Kennzahl herleiten“, „Go-Live rückwärts planen“ oder „Economic Buyer verstehen“
 - aktuelle Handlungsbedarfe vor administrativer Projektpflege
 - zugängliche Enterprise-Workbench-Muster
-- minimale/Swiss Informationshierarchie
+- klare, nach Apple Design gestaltete Informationshierarchie
 - informationsdichte, aber gut lesbare Layouts
 - Overview → Drill-Down
 - semantische Statuslabels plus Icons und zurückhaltende Farbe
 - responsive Tabellen und Formulare
 - vollständige Tastaturbedienung
+- sofortiges Eingabefeedback; natürliche, unterbrechbare Bewegung und Pointer-treue Gesten
+- funktionale transluzente Floating Surfaces mit Kontrast- und Reduced-Transparency-Fallback
+- typografische Hierarchie aus Größe, Tracking, Leading und Gewicht
 
 Vermeiden:
 
-- Glassmorphism und dekorative Effekte
+- Glas-/Blur-Effekte ohne räumliche Funktion
 - Marketing-Landingpage-Muster in der Anwendung
 - Status nur über Farbe
-- übermäßige Animation
+- übermäßige, nicht zweckgebundene Animation; physikalisch nachvollziehbare Gesten ausdrücklich zulassen
 - externe Webfonts/CDN-Assets als Standard
 - unnötige Charts oder Gauges
 - CRM-artige Tabellen-/Formularoberflächen ohne klaren Coaching-Workflow

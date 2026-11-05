@@ -61,7 +61,9 @@ Wiederverwenden nur, wenn:
 
 ## UI/UX
 
-Bei UI-Arbeiten docs/DESIGN_SYSTEM.md und docs/ICON_SYSTEM.md beachten.
+Bei UI-Arbeiten `docs/DESIGN_SYSTEM.md`, `docs/ICON_SYSTEM.md` und beide lokalen Skills `.agents/skills/meddpicc-ui-ux/SKILL.md` sowie `.agents/skills/apple-design/SKILL.md` beachten.
+
+**Verbindliche UI/UX-Priorität:** Bei überlappenden Stil-, Material-, Typografie-, Bewegungs- und Gestenvorgaben ersetzen die Apple-Design-Prinzipien die älteren Empfehlungen (auch aus UI UX Pro Max). `docs/DESIGN_SYSTEM.md` und `meddpicc-ui-ux` konkretisieren sie für die Toolbox. **Nicht übersteuerbar** sind fachliche Korrektheit, das Produktmodell (Tools/Checklists/Knowledge statt CRM), Barrierefreiheit, Datenschutz, Performance und deutsche UI-Texte. Physikalische Effekte sind auf tatsächlich geeignete Interaktionen anzuwenden: keine Pflichtanimation, keine Pflichttransparenz, keine zwanghafte iOS-Optik. Historische Audit-/Redesign-Dokumente sind keine aktuellen Normquellen; bei Widersprüchen gelten diese Regeln und das aktuelle Designsystem.
 
 Grundrichtung:
 
@@ -69,7 +71,8 @@ Grundrichtung:
 - In sichtbaren Knowledge- und Checklist-Inhalten den praktischen Nutzen und die Methode erklären, nicht ihre Herkunft aus Büchern oder einzelne Autoren betonen.
 - Quellenangaben und Autorenperspektiven nur am **Ende** der Seite in einem standardmäßig **eingeklappten** Bereich „Quellen und fachliche Einordnung“ aufführen; keine verstreuten Quellenlabels unter einzelnen Fragen oder Karten.
 - klare Navigation über Tools, Checklists und Knowledge; MEDDPICC bleibt fachliche Orientierung
-- wenig dekorativer Ballast
+- gestalterische Zurückhaltung ohne pauschales Verbot funktionaler Transluzenz oder natürlicher Bewegung
+- unmittelbar spürbares, konsistentes Feedback; Gesten folgen dem Pointer und bleiben unterbrechbar
 - konkrete Tool-Aktion sofort erkennbar
 - Input und Ergebnis deutlich getrennt
 - kundenfähige Outputs visuell präsentationsgeeignet
@@ -77,6 +80,7 @@ Grundrichtung:
 - vollständige Tastaturbedienbarkeit
 - sichtbarer Fokus
 - Responsive-Verhalten bei ca. 375, 768, 1024 und 1440 px
+- `prefers-reduced-motion`, `prefers-reduced-transparency` und `prefers-contrast: more` berücksichtigen; keine Animation oder Transparenz darf Inhalt unzugänglich machen
 
 ## Accessibility
 

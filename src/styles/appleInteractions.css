@@ -1,0 +1,111 @@
+/*
+ * Apple-Design-Interaktionsgrundlage für alle produktiven Toolbox-Routen.
+ * Die Basiskomponenten bleiben opak, lokal und tastaturbedienbar.
+ * Keine Spring-/Material-Bibliothek zur Runtime erforderlich.
+ */
+:root {
+  --motion-feedback: 110ms ease-out;
+  --motion-state: 160ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  --focus-ring-strong: 3px solid var(--color-focus);
+}
+
+/* Sofortige Rückmeldung beim Drücken; die native Click-/Keyboard-Semantik bleibt erhalten. */
+:where(.site-shell) :is(
+    .button,
+    .app-nav-link,
+    .toolbox-settings-link,
+    .tool-step-navigation__item,
+    .checklist-filters button,
+    .reverse-drag-handle,
+    .toolbox-entry-card,
+    .tool-row--active,
+    .checklist-preview-card--active,
+    .knowledge-card--active
+  ) {
+  transition:
+    background-color var(--motion-state),
+    border-color var(--motion-state),
+    color var(--motion-state),
+    box-shadow var(--motion-state),
+    transform var(--motion-feedback);
+}
+
+:where(.site-shell) :is(
+    .button,
+    .app-nav-link,
+    .toolbox-settings-link,
+    .tool-step-navigation__item,
+    .checklist-filters button,
+    .toolbox-entry-card,
+    .tool-row--active,
+    .checklist-preview-card--active,
+    .knowledge-card--active
+  ):active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+/* Relative inhaltliche Zusammenhänge bleiben klar statt dekorativ bewegter Karten. */
+:where(.site-shell) :is(.toolbox-entry-card, .tool-row--active, .checklist-preview-card--active, .knowledge-card--active):focus-visible {
+  outline: var(--focus-ring-strong);
+  outline-offset: 3px;
+}
+
+/* Zustandswechsel sind optisch erkennbar, unabhängig von Eingabemodus. */
+:where(.site-shell) :is(.tool-step-navigation__item, .checklist-filters button):focus-visible {
+  outline: var(--focus-ring-strong);
+  outline-offset: 3px;
+}
+
+/* Native Browser-Unterstützung ist optional; die Grundansicht bleibt grundsätzlich opak. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .reverse-step-card--dragging {
+    /* Die bewegte Ebene bleibt für gut lesbare Formulare bewusst deckend. */
+    isolation: isolate;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.site-shell) :is(
+      .button,
+      .app-nav-link,
+      .toolbox-settings-link,
+      .tool-step-navigation__item,
+      .checklist-filters button,
+      .toolbox-entry-card,
+      .tool-row--active,
+      .checklist-preview-card--active,
+      .knowledge-card--active
+    ):active:not(:disabled) {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .reverse-step-card--dragging,
+  :where(.site-shell) :is(.site-header, .tool-step-navigation__item, .toolbox-entry-card) {
+    background-color: var(--color-surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :where(.site-shell) :is(button, a, input, select, textarea, summary):focus-visible {
+    outline: var(--focus-ring-strong);
+    outline-offset: 3px;
+  }
+
+  :where(.site-shell) :is(.tool-step-navigation__item, .toolbox-entry-card, .checklist-preview-card--active, .knowledge-card--active) {
+    border-color: var(--color-border-strong);
+  }
+
+  :where(.site-shell) :is(.tool-step-navigation__item[aria-current='step'], .checklist-filters button[aria-pressed='true']) {
+    border: 2px solid var(--color-focus);
+  }
+}
+
+@media (forced-colors: active) {
+  :where(.site-shell) :is(button, a, input, select, textarea, summary):focus-visible {
+    outline: 3px solid Highlight;
+  }
+}
