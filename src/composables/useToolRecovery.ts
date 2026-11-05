@@ -78,7 +78,10 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
         if (disposed) return false
         observedToken = saved.token
         lastSaved = serialized
-        message.value = 'Nur lokal zwischengesichert. Nicht als Datei gespeichert.'
+        message.value =
+          serialized === JSON.stringify(value.value)
+            ? 'Nur lokal zwischengesichert. Nicht als Datei gespeichert.'
+            : 'Neuere Änderungen sind noch nicht lokal gesichert.'
         signalOtherTabs()
         return true
       } catch (error) {
@@ -108,6 +111,11 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
   function schedule() {
     if (!enabled.value || conflict.value || candidate.value) return
     clearTimeout(timer)
+    if (JSON.stringify(value.value) === lastSaved) {
+      message.value = 'Nur lokal zwischengesichert. Nicht als Datei gespeichert.'
+      return
+    }
+    message.value = 'Änderungen sind noch nicht lokal gesichert.'
     timer = setTimeout(() => void flush(), 600)
   }
 
