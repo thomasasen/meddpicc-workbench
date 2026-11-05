@@ -23,6 +23,7 @@ import {
 } from '../domain/reverseTimeline'
 import { buildCustomerTimelineSvg, downloadTimelinePng, downloadTimelineSvg } from '../services/timelineExport'
 import { loadBrandForReport } from '../services/brandProfileStore'
+import { useToolRecovery } from '../composables/useToolRecovery'
 
 type EditableStep = ReverseTimelineStepInput
 
@@ -391,6 +392,62 @@ async function exportTimeline(kind: 'svg' | 'png'): Promise<void> {
     exportBusy.value = false
   }
 }
+
+type TimelineRecovery = {
+  customerName: string
+  planTitle: string
+  referenceDate: string
+  targetGoLiveDate: string
+  compellingEvent: string
+  steps: EditableStep[]
+}
+
+function validTimelineRecovery(value: unknown): value is TimelineRecovery {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false
+  const record = value as Record<string, unknown>
+  const fields = ['customerName', 'planTitle', 'referenceDate', 'targetGoLiveDate', 'compellingEvent']
+  if (Object.keys(record).length !== 6 || !fields.every((key) => typeof record[key] === 'string')) return false
+  if (!Array.isArray(record.steps) || record.steps.length < 1 || record.steps.length > 100) return false
+  return record.steps.every((step: unknown) => {
+    if (!step || typeof step !== 'object' || Array.isArray(step)) return false
+    const item = step as Record<string, unknown>
+    return (
+      typeof item.id === 'string' &&
+      typeof item.label === 'string' &&
+      typeof item.duration === 'number' &&
+      Number.isFinite(item.duration) &&
+      item.duration >= 0 &&
+      (item.durationUnit === 'business-days' || item.durationUnit === 'calendar-days') &&
+      (item.owner === 'customer' || item.owner === 'seller' || item.owner === 'shared') &&
+      (item.area === 'decision-process' || item.area === 'paper-process' || item.area === 'implementation') &&
+      (item.ownerDetail === undefined || typeof item.ownerDetail === 'string')
+    )
+  })
+}
+
+const recoveryState = computed<TimelineRecovery>(() => ({
+  customerName: customerName.value,
+  planTitle: planTitle.value,
+  referenceDate: referenceDate.value,
+  targetGoLiveDate: targetGoLiveDate.value,
+  compellingEvent: compellingEvent.value,
+  steps: steps.value,
+}))
+
+const recovery = useToolRecovery({
+  tool: 'reverse-timeline',
+  value: recoveryState,
+  validate: validTimelineRecovery,
+  restore: (snapshot: TimelineRecovery) => {
+    customerName.value = snapshot.customerName
+    planTitle.value = snapshot.planTitle
+    referenceDate.value = snapshot.referenceDate
+    targetGoLiveDate.value = snapshot.targetGoLiveDate
+    compellingEvent.value = snapshot.compellingEvent
+    steps.value = structuredClone(snapshot.steps)
+  },
+})
+
 </script>
 
 <template>
@@ -414,6 +471,22 @@ async function exportTimeline(kind: 'svg' | 'png'): Promise<void> {
     </header>
 
     <main id="main-content" class="reverse-tool-main">
+      <section class="container quick-panel" aria-label="Lokale Wiederherstellung">
+        <p><strong>Optionales lokales Recovery</strong></p>
+        <p>Nur nach Aktivierung werden Eingaben sieben Tage lang unverschlüsselt in diesem Browser zwischengespeichert. Keine Projektdatei und keine bestätigten Kundendaten. Auf gemeinsam genutzten Geräten nicht empfohlen.</p>
+        <div v-if="recovery.candidate.value" class="software-actions">
+          <p>Lokaler Stand vom {{ new Date(recovery.candidate.value.savedAt).toLocaleString('de-DE') }} vorhanden. Wiederherstellung ersetzt die aktuellen Eingaben.</p>
+          <button type="button" class="button button-primary" @click="recovery.recover">Wiederherstellen</button>
+          <button type="button" class="button button-secondary" @click="recovery.discard">Verwerfen und löschen</button>
+        </div>
+        <div v-else class="software-actions">
+          <button v-if="!recovery.enabled.value" type="button" class="button button-secondary" @click="recovery.activate">Lokales Recovery aktivieren</button>
+          <span v-else>Recovery ist für diesen Arbeitsstand aktiviert.</span>
+          <button type="button" class="button button-quiet" @click="recovery.discard">Recoverydaten löschen und deaktivieren</button>
+        </div>
+        <p v-if="recovery.message.value" role="status" aria-live="polite">{{ recovery.message.value }}</p>
+      </section>
+
       <section class="container tool-intro" aria-labelledby="reverse-title">
         <div>
           <div class="tool-intro-meta">
