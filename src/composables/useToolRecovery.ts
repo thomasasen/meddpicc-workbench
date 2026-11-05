@@ -207,7 +207,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
 
   watch(value, schedule, { deep: true })
 
-  onBeforeRouteLeave(async () => {
+  async function canLeave(): Promise<boolean> {
     if (acknowledgedNavigation) {
       acknowledgedNavigation = false
       return true
@@ -215,13 +215,15 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
     if (!modified.value) return true
     if (enabled.value && (await flush())) return true
     return window.confirm('Ungesicherte Eingaben gehen beim Verlassen dieses Tools verloren. Trotzdem fortfahren?')
-  })
+  }
+
+  onBeforeRouteLeave(canLeave)
 
   function acknowledgeNavigation() {
     acknowledgedNavigation = true
   }
 
-  return { enabled, candidate, message, conflict, busy, modified, activate, recover, discard, acknowledgeNavigation }
+  return { enabled, candidate, message, conflict, busy, modified, activate, recover, discard, acknowledgeNavigation, canLeave }
 }
 
 export function announceAllRecoveryDeleted() {
