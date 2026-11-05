@@ -159,7 +159,7 @@
  */
 #app .branding-color-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 96px;
+  grid-template-columns: minmax(0, 1fr) 108px;
   align-items: start;
   gap: 0.8rem;
 }
