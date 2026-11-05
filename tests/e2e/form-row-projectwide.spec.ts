@@ -117,11 +117,7 @@ async function auditVisibleRows(page: Page) {
       if (group.getBoundingClientRect().width < 1) continue
 
       const fields = [...group.children]
-        .filter(
-          (node): node is HTMLLabelElement =>
-            node instanceof HTMLLabelElement &&
-            (group.matches('.branding-color-row') || node.matches('.field, .cod-field, .vb-field')),
-        )
+        .filter((node): node is HTMLLabelElement => node instanceof HTMLLabelElement)
         .map((label) => {
           const control = label.querySelector<HTMLElement>(
             ':scope > input:not([type="checkbox"]):not([type="radio"]), :scope > select, :scope > textarea',
@@ -210,13 +206,8 @@ for (const scenario of scenarios) {
       }
 
       const result = await auditVisibleRows(page)
-      const overflow = await page.evaluate(() => ({
-        width: window.innerWidth,
-        scrollWidth: document.documentElement.scrollWidth,
-      }))
-      expect(overflow.scrollWidth, `${scenario.name} bei ${width}px: horizontaler Überlauf`).toBeLessThanOrEqual(
-        overflow.width + 1,
-      )
+      const horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
+      expect(horizontalOverflow, `${scenario.name} bei ${width}px: horizontaler Überlauf`).toBeLessThanOrEqual(1)
       expect(result.checkedControls, `${scenario.name} bei ${width}px: keine Eingabefelder geprüft`).toBeGreaterThan(0)
       expect(result.violations, `${scenario.name} bei ${width}px`).toEqual([])
       if (scenario.pairedAtDesktop && width === 1440) {
