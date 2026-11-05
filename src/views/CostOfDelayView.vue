@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ToolRecoveryBar from '../components/ToolRecoveryBar.vue'
+import { useToolRecovery } from '../composables/useToolRecovery'
+import { isCostOfDelayRecovery, type CostOfDelayRecovery } from '../services/toolRecoveryValidators'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
 import { ArrowLeft, ArrowRight, Download, RotateCcw } from '@lucide/vue'
@@ -69,6 +72,7 @@ function reset() {
   step.value = 1
   example.value = ''
   notice.value = ''
+  void recovery.resetAcknowledged()
 }
 const chartMaximum = computed(() => {
   if (!selected.value) return 0
@@ -127,12 +131,35 @@ onMounted(() => {
 async function transferToBridge(): Promise<void> {
   try {
     queueDelayToBridge(draft.value, window.sessionStorage)
+    recovery.allowNextNavigation()
     await router.push('/tools/value-bridge')
   } catch {
     notice.value = 'Value-Bridge-Übergabe nicht möglich.'
   }
 }
 import ToolStepNavigation from '../components/ToolStepNavigation.vue'
+const recovery = useToolRecovery<CostOfDelayRecovery>({
+  toolId: 'cost-of-delay',
+  read: () => ({
+    draft: draft.value,
+    step: step.value,
+    chosenDelay: chosenDelay.value,
+    customDelay: customDelay.value,
+    benefitEntryPeriod: benefitEntryPeriod.value,
+  }),
+  restore: (value) => {
+    draft.value = value.draft
+    step.value = value.step
+    chosenDelay.value = value.chosenDelay
+    customDelay.value = value.customDelay
+    benefitEntryPeriod.value = value.benefitEntryPeriod
+    example.value = ''
+    notice.value = 'Lokaler Entwurf wiederhergestellt. Die Annahmen sind nicht kundenseitig validiert.'
+  },
+  validate: isCostOfDelayRecovery,
+  isMeaningful: (value) =>
+    JSON.stringify(value.draft) !== JSON.stringify(emptyCostOfDelayInput()) || value.customDelay !== null,
+})
 </script>
 
 <template>
@@ -152,6 +179,8 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
     </header>
 
     <main id="main-content" class="container cod-main">
+      <ToolRecoveryBar :recovery="recovery" />
+
       <section class="cod-intro">
         <div class="tool-intro-meta">
           <span class="tool-kind tool-kind--customer">Kundenfähiger Steckbrief</span>
