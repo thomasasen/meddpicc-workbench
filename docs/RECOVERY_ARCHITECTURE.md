@@ -81,7 +81,7 @@ Diese Prüfung simuliert drei unabhängige Perspektiven; es wurden keine externe
 
 **Frontend:** Bei unkontrolliertem State-Remount gehen lange Eingaben verloren. Pro Tool abgekapselte Controller statt globalem Pinia, Schreib-Debounce, ein synchronisierter Schreibabschluss vor internem Route-Wechsel und transaktionale Revisionen reduzieren den Eingriff. Verbliebene Grenze: es gibt keine Browser-Crash-Garantie.
 
-**Datenschutz/Sicherheit:** Untrusted Snapshots dürfen nicht ungeprüft in Vue zurückgeladen werden. Strikte Envelopes, Schemas, Größenlimits, Expiry und erneutes Lesen vor Restore schließen beschädigte/incompatible Nutzdaten aus. Restrisiko: unverschlüsselte IDB-Daten im gemeinsamen Browserprofil.
+**Datenschutz/Sicherheit:** Untrusted Snapshots dürfen nicht ungeprüft in Vue zurückgeladen werden. Strikte Envelopes, Schemas, Größenlimits, Expiry und erneutes Lesen vor Restore schließen beschädigte/incompatible Nutzdaten aus. Abgelaufene Snapshots werden beim nächsten Tool-Aufruf physisch gelöscht; browserweite Löschung meldet sich ohne Nutzdaten an andere Tabs. Restrisiko: unverschlüsselte IDB-Daten im gemeinsamen Browserprofil.
 
 **UX/Regression:** Ein geklickter Download darf nicht als gespeicherte Datei gelten. Der Legacy-Status bleibt nach Download dirty; Recovery heißt ausdrücklich „lokal zwischengesichert“. Der native Dialog erzwingt bewusste Entscheidung und macht Konflikte sichtbar. Moduswechsel aus dem Payback-Panel war ein weiterer Datenverlustpfad und warnt jetzt bei Dirty-State.
 
