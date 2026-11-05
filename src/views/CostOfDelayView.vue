@@ -111,7 +111,7 @@ async function exportPdf() {
       await buildCostOfDelayPdf(draft.value, result.value, selected.value, { brand: profile }),
       'cost-of-delay-steckbrief.pdf',
     )
-    notice.value = 'PDF mit aktuellen Modellannahmen erstellt.' + (warning ? ' ' + warning : '')
+    notice.value = 'PDF mit aktuellen Modellannahmen erstellt. Download angestoßen; Datei bitte prüfen.' + (warning ? ' ' + warning : '')
   } catch {
     notice.value = 'Der PDF-Export ist fehlgeschlagen.'
   }
