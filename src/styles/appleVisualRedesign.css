@@ -630,6 +630,13 @@ body {
   letter-spacing: -0.045em;
 }
 
+/* Auf sehr schmalen Displays bleiben auch lange zusammengesetzte Titel lesbar. */
+@media (max-width: 350px) {
+  .site-shell :is(.tool-intro, .metric-intro, .cod-intro, .vb-intro, .knowledge-hero, .checklist-hero) h1 {
+    font-size: 1.65rem;
+  }
+}
+
 .site-shell :is(.knowledge-main, .checklist-main, .metric-main, .cod-main, .vb-main) {
   padding-top: clamp(1.5rem, 3vw, 2.6rem);
 }
