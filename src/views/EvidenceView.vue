@@ -298,7 +298,13 @@ function saveProject() {
             <strong>{{ project.project.accountName }} · {{ project.project.name }}</strong>
             <small>{{ fileName ?? 'Noch nicht gespeichert' }}</small>
             <span class="project-save-state" :class="{ 'project-save-state--dirty': dirty }">
-              {{ dirty ? 'Ungespeicherte Änderungen' : source === 'file' ? 'Importierter Dateistand' : 'Demo-Arbeitsstand' }}
+              {{
+                dirty
+                  ? 'Ungespeicherte Änderungen'
+                  : source === 'file'
+                    ? 'Importierter Dateistand'
+                    : 'Demo-Arbeitsstand'
+              }}
             </span>
           </div>
         </div>
