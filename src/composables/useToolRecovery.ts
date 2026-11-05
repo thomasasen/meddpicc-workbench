@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch, type Ref } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
 import {
   deleteRecovery,
@@ -18,7 +18,7 @@ type RecoveryOptions<T> = {
 
 export function useToolRecovery<T>({ tool, value, validate, restore }: RecoveryOptions<T>) {
   const enabled = ref(false)
-  const candidate = ref<RecoverySnapshot<T> | null>(null)
+  const candidate = shallowRef<RecoverySnapshot<T> | null>(null)
   const message = ref('')
   const conflict = ref(false)
   const initial = JSON.stringify(value.value)
