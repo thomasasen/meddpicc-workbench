@@ -140,7 +140,7 @@ async function exportPdf(): Promise<void> {
     const bytes = await buildMetricBuilderPdf(draft.value, { brand: profile })
     download(bytes, 'metric-steckbrief.pdf')
     message.value =
-      'Metric-Steckbrief erstellt. Fehlende Werte sind im Dokument gekennzeichnet.' + (warning ? ' ' + warning : '')
+      'Metric-Steckbrief erstellt. Download angestoßen, tatsächliche Speicherung bitte prüfen. Fehlende Werte sind im Dokument gekennzeichnet.' + (warning ? ' ' + warning : '')
   } catch {
     message.value = 'PDF konnte nicht erzeugt werden.'
   }
