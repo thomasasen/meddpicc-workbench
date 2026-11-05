@@ -23,6 +23,7 @@ export interface ToolRecoveryController {
   ready: boolean
   enabled: boolean
   dirty: boolean
+  atRisk: boolean
   saving: boolean
   savedAt: string
   error: string
@@ -53,6 +54,7 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
     ready: false,
     enabled: false,
     dirty: false,
+    atRisk: false,
     saving: false,
     savedAt: '',
     error: '',
@@ -86,9 +88,21 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
   }
 
   function beforeUnload(event: BeforeUnloadEvent): void {
-    if (!state.dirty) return
+    if (!shouldWarn()) return
     event.preventDefault()
     event.returnValue = ''
+  }
+
+  function shouldWarn(): boolean {
+    return (
+      state.dirty &&
+      (!state.enabled ||
+        !!state.pending ||
+        state.invalid ||
+        state.conflict ||
+        state.error !== '' ||
+        fingerprint() !== latestSaved)
+    )
   }
 
   function updateDirty(): void {
@@ -159,12 +173,14 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
   )
 
   watch(
-    () => state.dirty,
-    (dirty) => {
+    () => [state.dirty, state.enabled, state.pending, state.invalid, state.conflict, state.error, state.savedAt, fingerprint()],
+    () => {
+      state.atRisk = shouldWarn()
       if (!mounted) return
-      if (dirty) window.addEventListener('beforeunload', beforeUnload)
+      if (state.atRisk) window.addEventListener('beforeunload', beforeUnload)
       else window.removeEventListener('beforeunload', beforeUnload)
     },
+    { immediate: true },
   )
 
   async function inspectConflict(): Promise<void> {
@@ -302,20 +318,15 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
     const explicitHandoff = allowOneNavigation
     allowOneNavigation = false
     if (!state.dirty) return true
-    if (
-      !explicitHandoff &&
-      !window.confirm(
-        'Ungesicherte Eingaben dieses Tools verlassen? Ein Recovery-Snapshot ist keine gespeicherte Datei. ' +
-          'Du kannst hierbleiben und deine Arbeit fortsetzen.',
-      )
-    ) return false
 
-    // A pending debounce must not be discarded merely because a route changes.
+    // Flush pending writes first: successful recovery avoids an unnecessary warning.
     const secured = await flushForNavigation()
-    if (!secured && state.enabled && !explicitHandoff) {
-      return window.confirm('Die letzte lokale Recovery-Sicherung ist fehlgeschlagen oder noch nicht bestätigt. Trotzdem verlassen?')
-    }
-    return true
+    if (secured && !shouldWarn()) return true
+    if (explicitHandoff) return true
+    return window.confirm(
+      'Ungesicherte Eingaben dieses Tools verlassen? Eine lokale Recovery-Sicherung ist nicht aktuell oder ' +
+        'fehlgeschlagen. Du kannst hierbleiben und deine Eingaben sichern.',
+    )
   })
 
   onMounted(async () => {
@@ -335,7 +346,7 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
     } finally {
       state.ready = true
       updateDirty()
-      if (state.dirty) window.addEventListener('beforeunload', beforeUnload)
+      if (shouldWarn()) window.addEventListener('beforeunload', beforeUnload)
       scheduleSave()
     }
   })
