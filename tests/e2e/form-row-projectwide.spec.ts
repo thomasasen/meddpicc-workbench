@@ -170,7 +170,7 @@ async function auditVisibleRows(page: Page) {
 
 for (const scenario of scenarios) {
   test(`Formularraster projektweit: ${scenario.name}`, async ({ page }) => {
-    test.setTimeout(120_000)
+    test.setTimeout(60_000)
 
     for (const width of [375, 800, 1024, 1440]) {
       await page.setViewportSize({ width, height: 900 })
