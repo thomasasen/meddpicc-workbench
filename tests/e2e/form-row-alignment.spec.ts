@@ -28,13 +28,9 @@ test('Planungsrahmen: gleich hohe und ausgerichtete Controls trotz unterschiedli
 
     for (const field of fieldLayout) {
       expect(field.height, `Control-Höhe bei ${width}px`).toBeCloseTo(46, 0)
-      expect(field.labelBottom, `Label oberhalb des Controls bei ${width}px`).toBeLessThanOrEqual(
-        field.y + 1,
-      )
+      expect(field.labelBottom, `Label oberhalb des Controls bei ${width}px`).toBeLessThanOrEqual(field.y + 1)
       if (field.helpTop !== null) {
-        expect(field.helpTop, `Hilfetext unter dem Control bei ${width}px`).toBeGreaterThanOrEqual(
-          field.bottom - 1,
-        )
+        expect(field.helpTop, `Hilfetext unter dem Control bei ${width}px`).toBeGreaterThanOrEqual(field.bottom - 1)
       }
     }
 
@@ -43,13 +39,9 @@ test('Planungsrahmen: gleich hohe und ausgerichtete Controls trotz unterschiedli
         const first = fieldLayout[i]
         const second = fieldLayout[j]
         // Nur Eingaben in derselben Rasterzeile vergleichen, keine übereinanderliegenden Felder.
-        if (Math.abs(first.y - second.y) > 90) continue
-        expect(Math.abs(first.y - second.y), `Y-Versatz bei ${width}px (${i},${j})`).toBeLessThanOrEqual(
-          1,
-        )
-        expect(Math.abs(first.height - second.height), `Höhenversatz bei ${width}px`).toBeLessThanOrEqual(
-          1,
-        )
+        if (Math.abs(first.x - second.x) < 2 || Math.abs(first.y - second.y) > 55) continue
+        expect(Math.abs(first.y - second.y), `Y-Versatz bei ${width}px (${i},${j})`).toBeLessThanOrEqual(1)
+        expect(Math.abs(first.height - second.height), `Höhenversatz bei ${width}px`).toBeLessThanOrEqual(1)
       }
     }
   }
