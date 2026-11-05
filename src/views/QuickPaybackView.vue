@@ -19,8 +19,14 @@ const softwarePanelRef = ref<InstanceType<typeof SoftwarePaybackPanel> | null>(n
 
 function selectMode(mode: 'quick' | 'project') {
   if (calculationMode.value === mode) return
-  if (calculationMode.value === 'project' && softwarePanelRef.value?.hasUnsaved() &&
-      !window.confirm('Der aktuelle Software-Payback-Entwurf wird beim Wechsel aus dieser Ansicht entfernt. Lokal gesicherte Recoverydaten sind keine Datei. Trotzdem wechseln?')) return
+  if (
+    calculationMode.value === 'project' &&
+    softwarePanelRef.value?.hasUnsaved() &&
+    !window.confirm(
+      'Der aktuelle Software-Payback-Entwurf wird beim Wechsel aus dieser Ansicht entfernt. Lokal gesicherte Recoverydaten sind keine Datei. Trotzdem wechseln?',
+    )
+  )
+    return
   calculationMode.value = mode
 }
 const upfrontInvestmentEur = ref('')
