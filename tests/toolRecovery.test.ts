@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseRecoverySnapshot, RECOVERY_MAX_BYTES, RECOVERY_RETENTION_MS } from '../src/services/toolRecovery'
+import { parseRecoverySnapshot, writeRecovery, RECOVERY_MAX_BYTES, RECOVERY_RETENTION_MS } from '../src/services/toolRecovery'
 import { validMetricBuilderDraft, validCostOfDelayInput, validValueBridgeInput } from '../src/services/recoveryDrafts'
 import { emptyMetricDraft } from '../src/domain/metricBuilder'
 import { emptyCostOfDelayInput } from '../src/domain/costOfDelay'
@@ -65,5 +65,13 @@ describe('Tool-Verträge für untrusted Recoverydaten', () => {
     expect(validMetricBuilderDraft({ ...emptyMetricDraft(), extra: true })).toBe(false)
     expect(validCostOfDelayInput({ ...emptyCostOfDelayInput(), annualBenefitEur: 'not a number' })).toBe(false)
     expect(validValueBridgeInput({ ...blankValueBridge(), metrics: [{ included: true }] })).toBe(false)
+  })
+})
+
+describe('Recovery-Grenzen vor dem Browserzugriff', () => {
+  it('verhindert übergroße Schreibvorgänge bereits vor dem Öffnen der Datenbank', async () => {
+    await expect(
+      writeRecovery('metric-builder', { label: 'X'.repeat(RECOVERY_MAX_BYTES) }, null, valid),
+    ).rejects.toMatchObject({ reason: 'quota' })
   })
 })
