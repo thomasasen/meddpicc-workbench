@@ -152,15 +152,20 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
     clearTimeout(timer)
     try {
       if (currentWrite) await currentWrite
-      await deleteRecovery(tool)
+      await deleteRecovery(tool, validate, observedToken)
       candidate.value = null
       observedToken = null
       enabled.value = false
       conflict.value = false
       message.value = 'Recoverydaten gelöscht und lokales Recovery deaktiviert.'
       signalOtherTabs()
-    } catch {
-      message.value = 'Die Recoverydaten konnten nicht gelöscht werden.'
+    } catch (error) {
+      if (error instanceof RecoveryStorageError && error.reason === 'conflict') {
+        conflict.value = true
+        message.value = 'Ein anderer Tab hat neuere Recoverydaten. Sie wurden nicht gelöscht. Bitte neu laden.'
+      } else {
+        message.value = 'Die Recoverydaten konnten nicht gelöscht werden.'
+      }
     } finally {
       busy.value = false
     }
