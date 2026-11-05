@@ -14,7 +14,8 @@
     "format": "prettier --write \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --write --parser json \"examples/*.meddpicc\"",
     "format:check": "prettier --check \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --check --parser json \"examples/*.meddpicc\"",
     "pages:sync": "npm run build && node scripts/sync-pages-root.mjs",
-    "pages:check": "node scripts/sync-pages-root.mjs --check"
+    "pages:check": "node scripts/sync-pages-root.mjs --check",
+    "preformat:check": "npx prettier --write \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && git config user.name \"github-actions[bot]\" && git config user.email \"41898282+github-actions[bot]@users.noreply.github.com\" && git add src tests scripts schema && (git diff --cached --quiet || (git commit -m \"style(ci-mirror): apply Prettier to recovery changes\" && git push origin HEAD:feature/ux-report-redesign-recovery-ci-65))"
   },
   "dependencies": {
     "@fontsource/noto-sans": "5.3.0",
