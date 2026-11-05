@@ -9,5 +9,6 @@ export function downloadTextFile(content: string, fileName: string): void {
   document.body.append(link)
   link.click()
   link.remove()
-  URL.revokeObjectURL(url)
+  // A click only requests a download. Revocation must not race the browser's file hand-off.
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
