@@ -24,6 +24,7 @@ import {
 import { buildCustomerTimelineSvg, downloadTimelinePng, downloadTimelineSvg } from '../services/timelineExport'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { useToolRecovery } from '../composables/useToolRecovery'
+import ToolRecoveryPanel from '../components/ToolRecoveryPanel.vue'
 
 type EditableStep = ReverseTimelineStepInput
 
@@ -471,21 +472,18 @@ const recovery = useToolRecovery({
     </header>
 
     <main id="main-content" class="reverse-tool-main">
-      <section class="container quick-panel" aria-label="Lokale Wiederherstellung">
-        <p><strong>Optionales lokales Recovery</strong></p>
-        <p>Nur nach Aktivierung werden Eingaben sieben Tage lang unverschlüsselt in diesem Browser zwischengespeichert. Keine Projektdatei und keine bestätigten Kundendaten. Auf gemeinsam genutzten Geräten nicht empfohlen.</p>
-        <div v-if="recovery.candidate.value" class="software-actions">
-          <p>Lokaler Stand vom {{ new Date(recovery.candidate.value.savedAt).toLocaleString('de-DE') }} vorhanden. Wiederherstellung ersetzt die aktuellen Eingaben.</p>
-          <button type="button" class="button button-primary" @click="recovery.recover">Wiederherstellen</button>
-          <button type="button" class="button button-secondary" @click="recovery.discard">Verwerfen und löschen</button>
-        </div>
-        <div v-else class="software-actions">
-          <button v-if="!recovery.enabled.value" type="button" class="button button-secondary" @click="recovery.activate">Lokales Recovery aktivieren</button>
-          <span v-else>Recovery ist für diesen Arbeitsstand aktiviert.</span>
-          <button type="button" class="button button-quiet" @click="recovery.discard">Recoverydaten löschen und deaktivieren</button>
-        </div>
-        <p v-if="recovery.message.value" role="status" aria-live="polite">{{ recovery.message.value }}</p>
-      </section>
+      <div class="container">
+        <ToolRecoveryPanel
+          :candidate="recovery.candidate.value"
+          :enabled="recovery.enabled.value"
+          :busy="recovery.busy.value"
+          :conflict="recovery.conflict.value"
+          :message="recovery.message.value"
+          @activate="recovery.activate"
+          @recover="recovery.recover"
+          @discard="recovery.discard"
+        />
+      </div>
 
       <section class="container tool-intro" aria-labelledby="reverse-title">
         <div>
