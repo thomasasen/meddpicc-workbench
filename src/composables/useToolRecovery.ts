@@ -3,7 +3,6 @@ import { onBeforeRouteLeave } from 'vue-router'
 import {
   deleteRecovery,
   readRecovery,
-  recoveryStorageKey,
   RecoveryStorageError,
   writeRecovery,
   type RecoverySnapshot,
@@ -13,165 +12,208 @@ type RecoveryOptions<T> = {
   tool: string
   value: Readonly<Ref<T>>
   validate: (value: unknown) => value is T
+  /** Ersetzt den vollständigen Tool-Input in einem synchronen Commit. */
   restore: (value: T) => void
 }
+
+const CHANNEL = 'meddpicc-tool-recovery-events'
 
 export function useToolRecovery<T>({ tool, value, validate, restore }: RecoveryOptions<T>) {
   const enabled = ref(false)
   const candidate = shallowRef<RecoverySnapshot<T> | null>(null)
   const message = ref('')
   const conflict = ref(false)
+  const busy = ref(true)
   const initial = JSON.stringify(value.value)
   const modified = computed(() => JSON.stringify(value.value) !== initial)
   let lastSaved = initial
   let observedToken: string | null = null
   let timer: ReturnType<typeof setTimeout> | undefined
+  let currentWrite: Promise<boolean> | null = null
   let disposed = false
+  let channel: BroadcastChannel | null = null
 
-  function storage(): Storage {
-    return window.localStorage
-  }
-
-  function readCandidate() {
-    let result: ReturnType<typeof readRecovery<T>>
+  function signalOtherTabs() {
     try {
-      result = readRecovery(storage(), tool, validate)
+      channel?.postMessage({ tool })
     } catch {
-      message.value = 'Der lokale Browserspeicher ist nicht verfügbar.'
-      return
-    }
-    if (result.kind === 'available') {
-      candidate.value = result.snapshot
-      observedToken = result.snapshot.token
-    } else if (result.kind === 'invalid') {
-      message.value = 'Vorhandene Recoverydaten sind ungültig oder abgelaufen. Sie werden nicht geladen.'
-    } else if (result.kind === 'unavailable') {
-      message.value = 'Der lokale Browserspeicher ist nicht verfügbar.'
+      /* Keine Daten übertragen; Konflikte werden zudem transaktional geprüft. */
     }
   }
 
-  function flush(): boolean {
-    if (!enabled.value || conflict.value || disposed) return false
+  async function inspect() {
+    busy.value = true
+    try {
+      const result = await readRecovery(tool, validate)
+      if (disposed) return
+      if (result.kind === 'available') {
+        candidate.value = result.snapshot
+        observedToken = result.snapshot.token
+      } else if (result.kind === 'invalid') {
+        message.value = 'Recoverydaten sind beschädigt, inkompatibel oder abgelaufen. Sie werden nicht geladen.'
+      }
+    } catch {
+      if (!disposed) message.value = 'Lokaler Browserspeicher nicht verfügbar. Es wurde nichts gesichert.'
+    } finally {
+      if (!disposed) busy.value = false
+    }
+  }
+
+  async function flush(): Promise<boolean> {
     clearTimeout(timer)
+    if (!enabled.value || conflict.value || disposed) return false
+    if (currentWrite) {
+      await currentWrite
+      if (!enabled.value || conflict.value || disposed) return false
+    }
     const serialized = JSON.stringify(value.value)
     if (serialized === lastSaved) return true
-    try {
-      const saved = writeRecovery(storage(), tool, value.value, observedToken, validate)
-      observedToken = saved.token
-      lastSaved = serialized
-      message.value = 'Nur lokal zwischengesichert. Keine gespeicherte Projektdatei.'
-      return true
-    } catch (error) {
-      if (error instanceof RecoveryStorageError && error.reason === 'conflict') {
-        conflict.value = true
-        message.value = 'Ein anderer Tab hat den Recoverystand verändert. Automatisches Sichern wurde angehalten.'
-      } else {
-        message.value = 'Lokales Zwischenspeichern fehlgeschlagen. Die Eingaben sind nicht gesichert.'
+    currentWrite = (async () => {
+      try {
+        const saved = await writeRecovery(tool, value.value, observedToken, validate)
+        if (disposed) return false
+        observedToken = saved.token
+        lastSaved = serialized
+        message.value = 'Nur lokal zwischengesichert. Nicht als Datei gespeichert.'
+        signalOtherTabs()
+        return true
+      } catch (error) {
+        if (disposed) return false
+        if (error instanceof RecoveryStorageError && (error.reason === 'conflict' || error.reason === 'invalid')) {
+          conflict.value = true
+          enabled.value = false
+          message.value = 'Recoverystand ist ungültig oder wurde in einem anderen Tab verändert. Automatisches Sichern angehalten.'
+        } else if (error instanceof RecoveryStorageError && error.reason === 'quota') {
+          message.value = 'Speichergrenze erreicht. Die aktuellen Änderungen sind nicht lokal gesichert.'
+        } else {
+          message.value = 'Lokales Zwischenspeichern fehlgeschlagen. Die aktuellen Änderungen sind nicht gesichert.'
+        }
+        return false
       }
-      return false
+    })()
+    try {
+      const written = await currentWrite
+      return written && serialized === JSON.stringify(value.value)
+    } finally {
+      currentWrite = null
     }
+  }
+
+  function schedule() {
+    if (!enabled.value || conflict.value || candidate.value) return
+    clearTimeout(timer)
+    timer = setTimeout(() => void flush(), 600)
   }
 
   function activate() {
-    if (candidate.value) {
-      message.value = 'Bitte zuerst den vorhandenen Recoverystand wiederherstellen oder verwerfen.'
+    if (busy.value || candidate.value || conflict.value) {
+      message.value = 'Bitte zuerst vorhandene Recoverydaten prüfen oder den Konflikt durch Neuladen auflösen.'
       return
     }
     enabled.value = true
-    lastSaved = ''
-    flush()
+    lastSaved = initial
+    message.value = 'Recovery aktiviert. Änderungen werden nur auf diesem Gerät gesichert.'
+    schedule()
   }
 
-  function recover() {
-    const snapshot = candidate.value
-    if (!snapshot) return
-    // Prüfen unmittelbar vor dem vollständigen, vom Tool bereitgestellten Restore.
-    let current: ReturnType<typeof readRecovery<T>>
+  async function recover() {
+    const pending = candidate.value
+    if (!pending || busy.value) return
+    busy.value = true
     try {
-      current = readRecovery(storage(), tool, validate)
-    } catch {
-      message.value = 'Der lokale Browserspeicher ist nicht verfügbar.'
-      return
-    }
-    if (current.kind !== 'available' || current.snapshot.token !== snapshot.token) {
-      conflict.value = true
-      message.value = 'Der Recoverystand hat sich geändert. Bitte die Seite neu laden und erneut prüfen.'
-      return
-    }
-    try {
-      restore(structuredClone(snapshot.data))
-      enabled.value = true
-      observedToken = snapshot.token
-      lastSaved = JSON.stringify(snapshot.data)
+      const current = await readRecovery(tool, validate)
+      if (current.kind !== 'available' || current.snapshot.token !== pending.token) {
+        conflict.value = true
+        message.value = 'Der lokale Stand hat sich geändert. Bitte neu laden und erneut prüfen.'
+        return
+      }
+      // Ein Tool muss seine Werte über EINEN synchronen Commit ersetzen.
+      restore(structuredClone(current.snapshot.data))
+      observedToken = current.snapshot.token
+      lastSaved = JSON.stringify(value.value)
       candidate.value = null
-      message.value = 'Arbeitsstand wiederhergestellt. Werte und Annahmen sind weiterhin ungeprüft.'
+      enabled.value = true
+      message.value = 'Arbeitsstand wiederhergestellt. Wirtschaftliche Annahmen und Evidenz sind nicht neu bestätigt.'
     } catch {
-      message.value = 'Die Wiederherstellung konnte nicht vollständig abgeschlossen werden.'
+      message.value = 'Wiederherstellung fehlgeschlagen. Bestehende Eingaben bleiben erhalten.'
+    } finally {
+      busy.value = false
     }
   }
 
-  function discard() {
+  async function discard() {
+    if (busy.value) return
+    busy.value = true
+    clearTimeout(timer)
     try {
-      deleteRecovery(storage(), tool)
+      if (currentWrite) await currentWrite
+      await deleteRecovery(tool)
       candidate.value = null
       observedToken = null
       enabled.value = false
       conflict.value = false
-      message.value = 'Lokale Recoverydaten verworfen.'
+      message.value = 'Recoverydaten gelöscht und lokales Recovery deaktiviert.'
+      signalOtherTabs()
     } catch {
-      message.value = 'Recoverydaten konnten nicht gelöscht werden.'
+      message.value = 'Die Recoverydaten konnten nicht gelöscht werden.'
+    } finally {
+      busy.value = false
     }
   }
 
-  function storageChanged(event: StorageEvent) {
-    try {
-      if (event.storageArea !== storage() || (event.key !== recoveryStorageKey(tool) && event.key !== null)) return
-    } catch {
-      return
-    }
+  function otherTab(event: MessageEvent) {
+    const data: unknown = event.data
+    if (!data || typeof data !== 'object') return
+    const notice = data as Record<string, unknown>
+    if (notice.tool !== tool && notice.tool !== '*') return
     clearTimeout(timer)
-    conflict.value = true
     enabled.value = false
+    conflict.value = true
     message.value = 'Recoverydaten wurden in einem anderen Tab geändert oder gelöscht. Bitte neu laden.'
   }
 
   function beforeUnload(event: BeforeUnloadEvent) {
     if (!modified.value) return
-    if (enabled.value) flush()
-    if (JSON.stringify(value.value) === lastSaved && enabled.value && !conflict.value) return
+    if (enabled.value && !conflict.value && lastSaved === JSON.stringify(value.value)) return
     event.preventDefault()
     event.returnValue = ''
   }
 
   onMounted(() => {
-    readCandidate()
-    window.addEventListener('storage', storageChanged)
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        channel = new BroadcastChannel(CHANNEL)
+        channel.addEventListener('message', otherTab)
+      }
+    } catch {
+      channel = null
+    }
+    void inspect()
     window.addEventListener('beforeunload', beforeUnload)
   })
+
   onBeforeUnmount(() => {
-    if (enabled.value) flush()
     disposed = true
     clearTimeout(timer)
-    window.removeEventListener('storage', storageChanged)
+    channel?.removeEventListener('message', otherTab)
+    channel?.close()
     window.removeEventListener('beforeunload', beforeUnload)
   })
 
-  watch(
-    value,
-    () => {
-      if (!enabled.value || conflict.value) return
-      clearTimeout(timer)
-      timer = setTimeout(flush, 750)
-    },
-    { deep: true },
-  )
+  watch(value, schedule, { deep: true })
 
-  onBeforeRouteLeave(() => {
+  onBeforeRouteLeave(async () => {
     if (!modified.value) return true
-    if (enabled.value) flush()
-    if (enabled.value && !conflict.value && JSON.stringify(value.value) === lastSaved) return true
+    if (enabled.value && (await flush())) return true
     return window.confirm('Ungesicherte Eingaben gehen beim Verlassen dieses Tools verloren. Trotzdem fortfahren?')
   })
 
-  return { enabled, candidate, message, conflict, modified, activate, recover, discard }
+  return { enabled, candidate, message, conflict, busy, modified, activate, recover, discard }
+}
+
+export function announceAllRecoveryDeleted() {
+  if (typeof BroadcastChannel === 'undefined') return
+  const channel = new BroadcastChannel(CHANNEL)
+  channel.postMessage({ tool: '*' })
+  channel.close()
 }
