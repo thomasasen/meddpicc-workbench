@@ -9,10 +9,10 @@
     "build": "npm run schema:generate && vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "npm run schema:generate && vitest run",
-    "test:e2e": "npm run schema:generate && playwright test tests/e2e/apple-overflow-probe.spec.ts --project=desktop-chromium",
+    "test:e2e": "npm run schema:generate && playwright test",
     "lint": "npm run schema:generate && eslint .",
     "format": "prettier --write \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --write --parser json \"examples/*.meddpicc\"",
-    "format:check": "node -e \"console.log('diagnostic probe only; regular format check restored afterward')\"",
+    "format:check": "prettier --check \"src/**/*.{ts,vue}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"schema/**/*.json\" \"*.{ts,js,json}\" && prettier --check --parser json \"examples/*.meddpicc\"",
     "pages:sync": "npm run build && node scripts/sync-pages-root.mjs",
     "pages:check": "node scripts/sync-pages-root.mjs --check"
   },

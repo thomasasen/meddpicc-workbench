@@ -30,7 +30,7 @@ Dies ist ein **simuliertes Red-Team**, keine externe Designagentur oder menschli
 | Physics | Drag-Einrasten springt von logischem statt visuellem Startwert, `ease` statt Feder | `criticallyDampedOffsets` mit gemessener aktiver Position, Übergabe der Freigabegeschwindigkeit, Vitest |
 | Technik | Externe UI-/Spring-Abhängigkeit oder Cloud-Calls | Nur CSS, native Web Animations API und reine TS-Federberechnung; keine `package.json`-Änderung |
 | Performance | Dauerhafte `will-change`-Layer oder flächiger Blur | Materialeffekt auf einen Header begrenzt; Drag `will-change` nur während Drag |
-| Fehler | Layout bricht bei 320/375 px, deutsche Langtexte laufen über | Vorhandene E2E-Viewport-Matrix plus 320-px-Zusatztest |
+| Fehler | Layout bricht bei 320/375 px, deutsche Langtexte laufen über | Der erste CI-Lauf fand Überlauf in Value Bridge und Dokumentgestaltung. Die Root-Cause-Messung zeigte überbreite `h1` durch lange zusammengesetzte Wörter; zentral mit `overflow-wrap: anywhere` und `hyphens: auto` korrigiert. 320-px-Prüfung um beide Seiten erweitert. |
 | Stil/Legibilität | Redesign überschreibt semantische Statusfarben | Warn-/Fehler-/Erfolgsfarben und Labeltexte bleiben getrennt von navigationalen Akzentfarben |
 | Export | Schönere UI verfälscht kundenfähige Dokumente | Berechnungslogik und PDF-/SVG-Renderer nicht angefasst; Export-Regression läuft im bestehenden E2E-Test |
 
@@ -62,3 +62,10 @@ Dies ist ein **simuliertes Red-Team**, keine externe Designagentur oder menschli
 6. PR bleibt bis zur sichtbaren UI-Freigabe ohne Merge in `main`.
 
 **Bekannte Grenze:** Nicht sämtliche optionalen Apple-Features (Vibration API, Audio-Haptics, Rubber-banding, Velocity-Projektion) sind für eine deutschsprachige Sales-Toolbox fachlich sinnvoll. „Vollständig“ heißt in diesem Projekt, alle **relevanten** verbindlichen UX-Prinzipien ohne Widerspruch umzusetzen, nicht jede Demo-Animation aus dem Skill zu kopieren.
+
+
+## Tatsächlich aufgedeckte Red-Team-Regressionsfälle
+
+Der erste vollständige Playwright-Lauf auf PR #84 zeigte **6 fehlgeschlagene Tests** (249 bestanden, 1 übersprungen). Davon betrafen 5 Tests in Desktop/Mobile zwei eng begrenzte Ursachen: Auf 375 px liefen die langen deutschen Überschriften `Dokumentgestaltung` und `Investitionsgrundlage` visuell über. Der sechste Fehler war eine falsche, nicht responsive Testannahme für den Header-Radius (16 px bei Mobile statt 20 px Desktop). Für die Überlaufanalyse wurde ein temporärer, ausdrücklich nicht als Qualitätstest gezählter Browserdiagnose-Lauf mit ausgelesenen DOM-`scrollWidth`-Werten verwendet. Der gemeinsame `h1`-Umbruch und der mobile Radius-Test sind jetzt korrigiert. Temporäre Diagnoseskripte werden im selben Commit entfernt, die Original-`npm`-Quality-Gates vollständig wiederhergestellt.
+
+Der Nachweis eines **grünen Abschlusslaufs** ist separat nach dem nächsten CI-Durchgang nachzutragen; bis dahin keine Merge-Freigabe.

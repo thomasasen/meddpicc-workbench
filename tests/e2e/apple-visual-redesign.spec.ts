@@ -53,7 +53,7 @@ test('Die globale Navigation schwebt beim Scrollen und bleibt ohne Verschiebung 
   const material = header.locator('.header-inner')
 
   await expect(header).toHaveCSS('position', 'sticky')
-  await expect(material).toHaveCSS('border-top-left-radius', '20px')
+  await expect(material).toHaveCSS('border-top-left-radius', page.viewportSize()!.width <= 640 ? '16px' : '20px')
   await page.evaluate(() => window.scrollTo(0, 650))
   await expect.poll(() => header.evaluate((element) => Math.round(element.getBoundingClientRect().top))).toBe(0)
 
@@ -83,7 +83,14 @@ test('Auf 320px bleiben Startseite, Tool, Checklist und Wissen ohne horizontales
   page,
 }) => {
   await page.setViewportSize({ width: 320, height: 760 })
-  for (const route of ['/', '/tools/quick-payback', '/checklists/metrics', '/knowledge/metrics']) {
+  for (const route of [
+    '/',
+    '/tools/quick-payback',
+    '/tools/value-bridge',
+    '/checklists/metrics',
+    '/knowledge/metrics',
+    '/settings/document-design',
+  ]) {
     await page.goto('/meddpicc-workbench/#' + route)
     await expect(page.locator('main h1').first()).toBeVisible()
     const dimensions = await page.evaluate(() => ({

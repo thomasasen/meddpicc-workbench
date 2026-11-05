@@ -62,6 +62,8 @@ body,
   font-weight: 750;
   letter-spacing: -0.042em;
   line-height: 1.105;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 .site-shell h2 {
