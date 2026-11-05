@@ -105,6 +105,11 @@
   overflow-wrap: anywhere;
 }
 
+/* Freie Erläuterungen belegen eine vollständige Zeile, keine halbe Grid-Spur. */
+#app .metric-fields > .metric-muted {
+  grid-column: 1 / -1;
+}
+
 /* Das bestehende Reverse-Timeline-Subgrid bleibt unverändert. */
 @supports (grid-template-rows: subgrid) {
   #app
