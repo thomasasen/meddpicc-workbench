@@ -105,7 +105,9 @@ async function exportPdf(): Promise<void> {
     a.click()
     a.remove()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
-    message.value = 'PDF mit Datenherkunft und offenen Annahmen erzeugt. Download angestoßen; Datei bitte prüfen.' + (warning ? ' ' + warning : '')
+    message.value =
+      'PDF mit Datenherkunft und offenen Annahmen erzeugt. Download angestoßen; Datei bitte prüfen.' +
+      (warning ? ' ' + warning : '')
   } catch {
     message.value = 'PDF-Export fehlgeschlagen.'
   }
