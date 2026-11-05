@@ -104,7 +104,8 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
 
   async function save(): Promise<void> {
     clearTimer()
-    if (inFlight || !mounted || !state.enabled || state.pending || state.invalid || state.conflict || !state.dirty) return
+    if (inFlight || !mounted || !state.enabled || state.pending || state.invalid || state.conflict || !state.dirty)
+      return
     const data = adapter.read()
     if (!adapter.validate(data)) {
       state.error = 'Der aktuelle Entwurf enthält ungültige Werte und konnte nicht lokal gesichert werden.'
@@ -156,7 +157,8 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
       revision = read.snapshot?.revision ?? null
       state.invalid = read.invalid || (read.snapshot !== null && !adapter.validate(read.snapshot.payload))
       if (state.invalid) {
-        state.error = 'Der lokale Recovery-Stand ist beschädigt, abgelaufen oder nicht kompatibel. Er wird nicht geladen.'
+        state.error =
+          'Der lokale Recovery-Stand ist beschädigt, abgelaufen oder nicht kompatibel. Er wird nicht geladen.'
         state.pending = null
         offered = null
         state.conflict = false
@@ -300,8 +302,7 @@ export function useToolRecovery<T>(adapter: ToolRecoveryAdapter<T>): ToolRecover
           if (data?.toolId !== adapter.toolId) return
           clearTimer()
           state.conflict = true
-          state.error =
-            'Recovery wurde in einem anderen Tab geändert oder gelöscht. Bitte den aktuellen Stand prüfen.'
+          state.error = 'Recovery wurde in einem anderen Tab geändert oder gelöscht. Bitte den aktuellen Stand prüfen.'
         }
       }
       await inspectConflict()
