@@ -26,7 +26,7 @@ test('Reduced Motion deaktiviert Druck-Skalierung und lässt die Navigation bedi
   await tools.dispatchEvent('pointerdown', { pointerType: 'touch', pointerId: 72, button: 0 })
   await expect(tools).toHaveCSS('transform', 'none')
   await tools.press('Enter')
-  await expect(page).toHaveURL(/#\/tools$/)
+  await expect(page).toHaveURL(/\/#\/\#tools$/)
 })
 
 test('Kontrastreicher Modus erhält klare Grenzen und Fokus', async ({ page }) => {
