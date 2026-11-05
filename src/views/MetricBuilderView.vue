@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ToolRecoveryPanel from '../components/ToolRecoveryPanel.vue'
+import { useToolRecovery } from '../composables/useToolRecovery'
+import { validMetricBuilderDraft } from '../services/recoveryDrafts'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -170,6 +173,26 @@ async function transferToBridge(): Promise<void> {
   }
 }
 import ToolStepNavigation from '../components/ToolStepNavigation.vue'
+
+type MetricRecovery = { draft: MetricBuilderDraft; step: 1 | 2 | 3 }
+function validMetricRecovery(value: unknown): value is MetricRecovery {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false
+  const entry = value as Record<string, unknown>
+  return Object.keys(entry).length === 2 &&
+    validMetricBuilderDraft(entry.draft) &&
+    (entry.step === 1 || entry.step === 2 || entry.step === 3)
+}
+const recoveryState = computed<MetricRecovery>(() => ({ draft: draft.value, step: step.value }))
+const recovery = useToolRecovery({
+  tool: 'metric-builder',
+  value: recoveryState,
+  validate: validMetricRecovery,
+  restore: (snapshot: MetricRecovery) => {
+    draft.value = structuredClone(snapshot.draft)
+    step.value = snapshot.step
+  },
+})
+
 </script>
 
 <template>
@@ -200,6 +223,17 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
           Zeit ist nicht automatisch eine Kostenersparnis.
         </p>
       </section>
+
+      <ToolRecoveryPanel
+        :candidate="recovery.candidate.value"
+        :enabled="recovery.enabled.value"
+        :busy="recovery.busy.value"
+        :conflict="recovery.conflict.value"
+        :message="recovery.message.value"
+        @activate="recovery.activate"
+        @recover="recovery.recover"
+        @discard="recovery.discard"
+      />
 
       <ToolStepNavigation
         v-model="step"
