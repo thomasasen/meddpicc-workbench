@@ -39,7 +39,10 @@ const currentSection = computed(() => {
       </RouterLink>
 
       <nav class="toolbox-secondary-nav" aria-label="Toolbox-Bereiche">
-        <RouterLink :to="{ name: 'start', hash: '#tools' }" :aria-current="currentSection === 'tools' ? 'page' : undefined">
+        <RouterLink
+          :to="{ name: 'start', hash: '#tools' }"
+          :aria-current="currentSection === 'tools' ? 'page' : undefined"
+        >
           <Wrench :size="16" aria-hidden="true" />Tools
         </RouterLink>
         <RouterLink
