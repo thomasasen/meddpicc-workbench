@@ -201,3 +201,23 @@ test('Touch-Ansicht behaelt den durchgehenden Drag-Griff und gut erreichbare Akt
     await expect(page.locator('.recovery-panel--inline')).toBeVisible()
   }
 })
+
+test('Auf schmalen Displays sitzt die Schritt-Nummer direkt neben dem Textfeld', async ({ page }) => {
+  for (const width of [320, 375]) {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto(route)
+    const positions = await page.locator('.reverse-step-card').first().evaluate((card) => {
+      const badge = card.querySelector<HTMLElement>('.reverse-step-position')
+      const field = card.querySelector<HTMLInputElement>('.reverse-step-name input')
+      const unit = card.querySelector<HTMLSelectElement>('.reverse-step-fields select')
+      if (!badge || !field || !unit) throw new Error('Prozessfelder fehlen')
+      const b = badge.getBoundingClientRect()
+      const f = field.getBoundingClientRect()
+      const u = unit.getBoundingClientRect()
+      return { numberTop: b.top, fieldTop: f.top, numberHeight: b.height, fieldHeight: f.height, unitWidth: u.width }
+    })
+    expect(Math.abs(positions.numberTop - positions.fieldTop)).toBeLessThanOrEqual(2)
+    expect(Math.abs(positions.numberHeight - positions.fieldHeight)).toBeLessThanOrEqual(2)
+    expect(positions.unitWidth).toBeGreaterThanOrEqual(160)
+  }
+})
