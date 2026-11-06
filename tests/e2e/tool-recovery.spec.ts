@@ -201,6 +201,7 @@ test('Globale Löschung invalidiert auch einen noch offenen Tab vor dessen erste
   await editor.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
   await expect(editor.getByText('in einem anderen Tab verändert', { exact: false })).toBeVisible()
 
+  editor.once('dialog', (dialog) => void dialog.accept())
   await editor.reload()
   await expect(editor.getByRole('button', { name: 'Wiederherstellen' })).toHaveCount(0)
   await editor.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
