@@ -1416,6 +1416,10 @@ body {
   padding: 0.7rem 0 0.2rem;
 }
 
+#app .reverse-tool-shell .reverse-step-detail-grid .reverse-step-owner-detail {
+  grid-column: auto;
+}
+
 #app .reverse-tool-shell .reverse-step-detail-grid > label.field {
   display: grid;
   grid-template-rows: minmax(1.5em, auto) var(--form-row-control-height);
