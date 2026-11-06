@@ -129,13 +129,13 @@ defineEmits<{
               <strong>{{ new Date(candidate.savedAt).toLocaleString('de-DE') }}</strong>
             </p>
             <p class="recovery-snapshot-warning">
-              Wiederherstellen ersetzt die aktuell sichtbaren Eingaben. Daten werden nicht automatisch zusammengeführt.
+              Wiederherstellen ersetzt die aktuell sichtbaren Eingaben. Eine Zusammenführung findet nicht statt.
             </p>
           </div>
         </div>
         <p v-else-if="compact" class="recovery-description">
-          Optional: sieben Tage unverschlüsselt in diesem Browser zwischenspeichern. Keine Cloud, keine Datei. Nicht für
-          gemeinsam genutzte Geräte empfohlen.
+          Optional: sieben Tage unverschlüsselt im Browser zwischenspeichern. Keine Cloud, keine Datei.
+          Nicht für gemeinsam genutzte Geräte empfohlen.
         </p>
         <p v-else class="recovery-description">
           Die lokale Zwischensicherung ist optional und bleibt auf diesen Browser beschränkt. Sie ersetzt keine
@@ -153,8 +153,8 @@ defineEmits<{
           <p>
             Die lokale Sicherung beginnt erst nach ausdrücklicher Aktivierung. Der Stand verfällt nach sieben Tagen
             und wird beim nächsten Zugriff entfernt. Die Daten sind nicht verschlüsselt, werden nicht in eine Cloud
-            übertragen und sind weder eine gespeicherte Datei noch eine Bestätigung von Kundenangaben. Auf gemeinsam
-            genutzten Geräten nicht empfohlen.
+            übertragen und sind keine gespeicherte Datei oder Bestätigung von Kundenangaben.
+            Auf gemeinsam genutzten Geräten nicht empfohlen.
           </p>
         </details>
       </div>
@@ -364,7 +364,7 @@ defineEmits<{
 .recovery-privacy-summary {
   max-width: 80ch;
   color: var(--color-text-muted);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   line-height: 1.45;
 }
 
@@ -372,7 +372,7 @@ defineEmits<{
   min-width: 0;
   max-width: 80ch;
   color: var(--color-text-muted);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
 }
 
 .recovery-details summary {
@@ -384,7 +384,7 @@ defineEmits<{
   border-radius: var(--radius-control);
   padding: 0.2rem 0.35rem;
   color: var(--color-accent-strong);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 620;
   cursor: pointer;
   list-style: none;
@@ -476,5 +476,4 @@ defineEmits<{
     transition: none;
   }
 }
-
 </style>
