@@ -1412,6 +1412,10 @@ body {
   transform: rotate(180deg);
 }
 
+#app .reverse-tool-shell .reverse-step-more:not([open]) > .reverse-step-detail-grid {
+  display: none;
+}
+
 #app .reverse-tool-shell .reverse-step-detail-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
