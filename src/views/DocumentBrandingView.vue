@@ -241,7 +241,7 @@ function downloadPreview(): void {
 <template>
   <div class="site-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
-    <ToolboxHeader area="Einstellungen · Dokumentgestaltung" back-to="/settings" back-label="class="button button-quiet button-with-icon" to="/settings"> Einstellungen" />
+    <ToolboxHeader area="Einstellungen · Dokumentgestaltung" back-to="/settings" back-label="Einstellungen" />
     <main id="main-content" class="container branding-settings">
       <header class="branding-intro">
         <p class="eyebrow">Einstellungen</p>
