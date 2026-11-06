@@ -26,7 +26,7 @@ for (const route of routes) {
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
       expect(overflow, route + ' bei ' + width + ' px').toBeLessThanOrEqual(1)
       await page.screenshot({
-        path: testInfo.outputPath(route.slice(1).replace(/\\//g, '-') + '-recovery-' + width + '.png'),
+        path: testInfo.outputPath(route.slice(1).replaceAll('/', '-') + '-recovery-' + width + '.png'),
       })
     }
   })
