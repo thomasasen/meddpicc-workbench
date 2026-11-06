@@ -157,6 +157,10 @@ test('Recovery bleibt eine kompakte Optionszeile und legt den Datenschutztext of
   expect(geometry.buttonHeight).toBeGreaterThanOrEqual(44)
   expect(geometry.buttonTop - geometry.panelTop).toBeGreaterThanOrEqual(0)
 
+  await recovery.screenshot({
+    path: test.info().outputPath('reverse-timeline-compact-recovery-1440.png'),
+  })
+
   const disclosure = recovery.locator('details')
   await expect(disclosure).not.toHaveAttribute('open', '')
   await disclosure.locator('summary').click()
