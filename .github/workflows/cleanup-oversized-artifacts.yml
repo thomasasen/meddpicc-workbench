@@ -1,33 +1,27 @@
 name: Einmalige Bereinigung grosser Screenshot-Artefakte
 on:
-  push:
-    branches: [main]
-    paths:
-      - .github/workflows/cleanup-oversized-artifacts.yml
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
 
 permissions:
   actions: write
   contents: read
 
 jobs:
-  delete-known-oversized-artifacts:
+  cleanup-old-ci:
+    if: ${{ github.event.workflow_run.id == 42271527599 }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Alte Screenshot-Artefakte gezielt loeschen
+      - name: Zu grosse Screenshot-ZIPs aus dem alten CI-Lauf loeschen
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
         run: |
           set -euo pipefail
-          for id in 13527048424 13528248903; do
-            echo "Deleting oversized artifact $id"
+          gh api "repos/$REPO/actions/runs/$RUN_ID/artifacts" --paginate --jq '.artifacts[] | select(.name=="ui-qs-screenshots" and .size_in_bytes > 31457280) | .id' | while read -r id; do
+            echo "Deleting oversized legacy screenshot artifact $id"
             gh api --method DELETE "repos/$REPO/actions/artifacts/$id"
           done
-          for id in 13527048424 13528248903; do
-            if gh api "repos/$REPO/actions/artifacts/$id" >/dev/null 2>&1; then
-              echo "::error::Artifact $id still exists"
-              exit 1
-            fi
-          done
-          echo "Both oversized artifacts deleted."
