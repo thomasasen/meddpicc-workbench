@@ -462,7 +462,7 @@ const recovery = useToolRecovery({
   <div class="site-shell reverse-tool-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
 
-    <ToolboxHeader area="Decision Process" back-to="/" back-label="class="button button-quiet button-with-icon" to="/"> Alle Microtools" />
+    <ToolboxHeader area="Decision Process" back-to="/" back-label="Alle Microtools" />
 
     <main id="main-content" class="reverse-tool-main">
       <section class="container tool-intro" aria-labelledby="reverse-title">
