@@ -49,7 +49,7 @@ onMounted(async () => {
 <template>
   <div class="site-shell toolbox-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
-    <ToolboxHeader area="Einstellungen" back-to="/" back-label="class="button button-quiet button-with-icon" to="/"> Zur Startseite" />
+    <ToolboxHeader area="Einstellungen" back-to="/" back-label="Zur Startseite" />
 
     <main id="main-content" class="container settings-main">
       <header>
