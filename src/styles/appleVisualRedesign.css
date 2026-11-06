@@ -1343,6 +1343,10 @@ body {
   padding-bottom: 0;
 }
 
+#app .reverse-tool-shell .reverse-step-fields > .reverse-step-name {
+  grid-column: auto;
+}
+
 #app .reverse-tool-shell .reverse-step-controls {
   grid-column: 3;
   grid-row: 1;
