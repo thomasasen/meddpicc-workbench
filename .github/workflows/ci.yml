@@ -450,13 +450,44 @@ jobs:
             qa-report-artifacts/*.pdf
           if-no-files-found: ignore
 
-      - name: UI-QS-Screenshots bereitstellen
+      - name: Kleine Auswahl an Abnahme-Screenshots vorbereiten
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p review-artifacts/screenshots
+          count=0
+          bytes=0
+          # Nur eine begrenzte Auswahl echter Browserbilder, nicht alle PNGs aus test-results.
+          while IFS= read -r -d '' file; do
+            size="$(stat -c %s "$file")"
+            if (( size > 5242880 || bytes + size > 31457280 || count >= 16 )); then
+              continue
+            fi
+            dest="$(printf '%02d' "$count")-$(basename "$file")"
+            cp "$file" "review-artifacts/screenshots/$dest"
+            count=$((count + 1))
+            bytes=$((bytes + size))
+          done < <(find test-results -type f -name '*.png' -print0 | sort -z)
+          echo "Ausgewaehlte Screenshots: $count; Bytes: $bytes (Maximum 30 MiB)."
+
+      - name: Kompakte Abnahme-Screenshots bereitstellen
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ui-qs-screenshots
-          path: test-results/**/*.png
+          path: review-artifacts/screenshots/*.png
           if-no-files-found: ignore
+          retention-days: 3
+
+      - name: Playwright-Diagnose nur bei Fehlern bereitstellen
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: playwright-failure-traces
+          path: test-results/**/trace.zip
+          if-no-files-found: ignore
+          retention-days: 3
 
       - name: geprüften Build in den Pages-Root synchronisieren
         if: github.event.pull_request.head.repo.full_name == github.repository
