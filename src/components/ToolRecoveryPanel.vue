@@ -46,7 +46,7 @@ const statusContent = computed(() => {
       }
     case 'unsaved':
       return {
-        text: 'Nicht gesichert',
+        text: 'Nur in diesem Tab',
         detail: 'Recovery ist aus. Änderungen bleiben nur im aktuellen Tab.',
         icon: SaveOff,
       }
@@ -94,6 +94,9 @@ defineEmits<{
   <Teleport defer to=".site-header .header-inner">
     <span
       class="recovery-header-status"
+      role="status"
+      aria-live="off"
+      aria-atomic="true"
       :data-state="saveStatus"
       data-testid="recovery-header-status"
       :title="statusContent.detail"
