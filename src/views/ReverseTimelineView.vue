@@ -611,6 +611,17 @@ const recovery = useToolRecovery({
                   <option value="calendar-days">Kalendertage</option>
                 </select>
               </label>
+            </div>
+
+            <details class="reverse-step-more">
+              <summary>
+                <span class="reverse-step-overview">{{ areaLabels[step.area] }} · {{ ownerDisplay(step) }}</span>
+                <span class="reverse-step-more-action">
+                  Details bearbeiten
+                  <ChevronDown :size="17" aria-hidden="true" />
+                </span>
+              </summary>
+              <div class="reverse-step-detail-grid">
               <label class="field">
                 <span>Verantwortlich</span>
                 <select v-model="step.owner">
@@ -636,8 +647,8 @@ const recovery = useToolRecovery({
                   placeholder="z. B. Einkauf, Dr. Müller / Legal"
                 />
               </label>
-            </div>
-
+              </div>
+            </details>
             <div class="reverse-step-controls" aria-label="Schritt entfernen">
               <button
                 class="icon-action icon-action--danger"
