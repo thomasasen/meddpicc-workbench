@@ -36,7 +36,7 @@ test('Recovery-Header liest nicht jeden technischen Zwischenzustand vor', async 
   await page.goto('/meddpicc-workbench/#/tools/reverse-timeline')
   const header = page.getByTestId('recovery-header-status')
   const announcement = page.getByTestId('recovery-announcement')
-  await expect(header).not.toHaveAttribute('aria-live', /.+/)
+  await expect(header).toHaveAttribute('aria-live', 'off')
   await expect(announcement).toHaveAttribute('role', 'status')
   await expect(announcement).toHaveAttribute('aria-live', 'polite')
 
