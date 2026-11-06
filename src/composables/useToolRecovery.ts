@@ -152,6 +152,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
     if (!enabled.value || conflict.value || candidate.value) return
     clearTimeout(timer)
     if (JSON.stringify(value.value) === lastSaved) {
+      if (savedOnce.value) saveFailed.value = false
       if (
         message.value === 'Änderungen sind noch nicht lokal gesichert.' ||
         message.value === 'Neuere Änderungen sind noch nicht lokal gesichert.'
