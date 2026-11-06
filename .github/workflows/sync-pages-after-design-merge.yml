@@ -1,4 +1,5 @@
 name: Einmaliger Pages-Sync nach Design-PR-Merges
+# Zweiter Lauf synchronisiert die korrigierten Metadaten aus app/index.html.
 
 on:
   push:
