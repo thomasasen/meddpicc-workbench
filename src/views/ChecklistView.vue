@@ -87,7 +87,7 @@ function checkboxId(itemId: string): string {
   <div class="site-shell checklist-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
 
-    <ToolboxHeader area="Checklists" back-to="/#checklists" back-label="class="button button-quiet button-with-icon" to="/#checklists"> Zur Checklist-Übersicht" />
+    <ToolboxHeader area="Checklists" back-to="/#checklists" back-label="Zur Checklist-Übersicht" />
 
     <main id="main-content" class="checklist-main">
       <section class="container checklist-hero" aria-labelledby="checklist-title">
