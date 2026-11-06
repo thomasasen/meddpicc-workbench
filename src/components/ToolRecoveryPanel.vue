@@ -125,8 +125,8 @@ defineEmits<{
         <p>
           Die lokale Sicherung beginnt erst nach ausdrücklicher Aktivierung. Der Stand verfällt nach sieben Tagen und
           wird beim nächsten Zugriff entfernt. Die Daten sind nicht verschlüsselt, werden nicht in eine Cloud übertragen
-          und sind weder eine gespeicherte Datei noch eine Bestätigung von Kundenangaben. Auf gemeinsam genutzten Geräten
-          nicht empfohlen.
+          und sind weder eine gespeicherte Datei noch eine Bestätigung von Kundenangaben. Auf gemeinsam genutzten
+          Geräten nicht empfohlen.
         </p>
       </details>
     </template>
