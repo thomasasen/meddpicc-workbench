@@ -1501,7 +1501,7 @@ body {
     grid-template-columns: minmax(0, 1fr) minmax(110px, 0.7fr);
   }
 
-  #app .reverse-tool-shell .reverse-step-name {
+  #app .reverse-tool-shell .reverse-step-fields > .reverse-step-name {
     grid-column: 1 / -1;
   }
 
