@@ -42,6 +42,22 @@ Der bewusst kurze Schnellrechner, einzelne Checklists und Wissensseiten erhalten
 
 Der Speicher ist browserprofil- und originspezifisch, **nicht verschlüsselt**. `BroadcastChannel` kommuniziert nur im Browser auf demselben Origin; es gibt keine Serverübertragung und keine Telemetrie von Recoverydaten.
 
+## Speicherstatus im Tool-Header
+
+Die fünf Recovery-fähigen Microtools zeigen im jeweiligen Header einen kompakten, barrierefrei beschrifteten Status mit Lucide-Symbol. Der Status stammt aus `useToolRecovery` und wird **nicht** aus einem angeforderten Datei-Download oder bloß aktiviertem Opt-in abgeleitet.
+
+| Anzeige | Bedeutung |
+| --- | --- |
+| Prüfe Speicher | Beim Öffnen wird der Browserspeicher geprüft. |
+| Recovery aus | Für dieses Tool ist keine automatische lokale Sicherung aktiv. |
+| Nicht gesichert | Ohne Opt-in sind Eingaben nur im aktuellen Tab vorhanden, oder geänderte Werte warten noch auf die nächste Sicherung. |
+| Sichert lokal | IndexedDB-Schreibvorgang läuft. |
+| Lokal gesichert | Erst nach erfolgreichem transaktionalem IndexedDB-Commit des angezeigten Eingabestands. Kein Datei-Export. |
+| Entwurf vorhanden | Ein vorhandener Snapshot erfordert eine bewusste Wiederherstellungsentscheidung. |
+| Speicherproblem | Schreibfehler, invalider Snapshot oder Mehr-Tab-Konflikt; keine falsche Erfolgsanzeige. |
+
+Die Darstellung verwendet Symbol **und** sichtbaren deutschen Text, eine kurze erklärende Titelinformation, Screenreader-Status und Reduced-Motion-Fallback. Bei schmalen Displays darf sich der Header um eine Zeile erweitern. Schnellrechner, Checklists und Wissensseiten ohne Recovery erhalten bewusst keinen vermeintlichen Speicherstatus.
+
 ## Browser- und Datenschutzgrenzen
 
 **Recovery ist keine dauerhafte Datensicherung.** Der Browser oder das Betriebssystem kann IndexedDB-Inhalte löschen, private Sitzungen können Speicher unterbinden, und ein Absturz vor Ablauf des Debounce-Intervalls kann die letzten Eingaben kosten. `beforeunload` kann nur mit eingeschränkter Browser-Unterstützung warnen und nicht zuverlässig asynchron schreiben. Eine vollständige physische Löschung aus Browser-Backups, Snapshots des Betriebssystems und externen Browserprofil-Kopien kann die Anwendung nicht garantieren.

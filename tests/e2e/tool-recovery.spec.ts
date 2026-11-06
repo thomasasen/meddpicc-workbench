@@ -4,6 +4,38 @@ const timeline = '/meddpicc-workbench/#/tools/reverse-timeline'
 const entry = 'z. B. Beispielwerke GmbH'
 const customer = (page: import('@playwright/test').Page) => page.getByPlaceholder(entry)
 
+test('Header zeigt nur bestätigte lokale Sicherung und alle Recovery-Zustände', async ({ page }) => {
+  await page.goto(timeline)
+  const status = page.getByTestId('recovery-header-status')
+
+  await expect(status).toHaveAttribute('data-state', 'inactive')
+  await expect(status).toContainText('Recovery aus')
+  await customer(page).fill('Noch ungesichert')
+  await expect(status).toHaveAttribute('data-state', 'unsaved')
+  await expect(status).toContainText('Nicht gesichert')
+
+  await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+  await expect(status).toHaveAttribute('data-state', 'saved')
+  await expect(status).toContainText('Lokal gesichert')
+  await expect(status).toHaveAttribute('title', /Keine gespeicherte Datei/)
+
+  await customer(page).fill('Neue lokale Sicherung')
+  await expect(status).toHaveAttribute('data-state', 'saved')
+  await page.reload()
+  await expect(status).toHaveAttribute('data-state', 'available')
+  await expect(status).toContainText('Entwurf vorhanden')
+  await page.getByRole('button', { name: 'Wiederherstellen' }).click()
+  await expect(status).toHaveAttribute('data-state', 'saved')
+  await expect(customer(page)).toHaveValue('Neue lokale Sicherung')
+
+  await page.getByRole('button', { name: 'Recoverydaten löschen und deaktivieren' }).click()
+  await expect(status).toHaveAttribute('data-state', 'unsaved')
+  await page.setViewportSize({ width: 320, height: 740 })
+  await expect(status).toBeVisible()
+  const horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
+  expect(horizontalOverflow).toBeLessThanOrEqual(1)
+})
+
 test('ohne Opt-in keine dauerhafte Wiederherstellung nach Reload', async ({ page }, testInfo) => {
   await page.goto(timeline)
   await page.screenshot({ path: testInfo.outputPath('recovery-opt-out.png'), fullPage: true })
@@ -107,6 +139,7 @@ test('beschädigte Snapshots werden weder übernommen noch still überschrieben'
   })
   await page.reload()
   await expect(page.getByText('Recoverydaten sind beschädigt', { exact: false })).toBeVisible()
+  await expect(page.getByTestId('recovery-header-status')).toHaveAttribute('data-state', 'error')
   await expect(page.getByRole('button', { name: 'Wiederherstellen' })).toHaveCount(0)
   await expect(customer(page)).toHaveValue('')
   await page.getByRole('button', { name: 'Recoverydaten löschen und deaktivieren' }).click()
