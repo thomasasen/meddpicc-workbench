@@ -12,7 +12,7 @@ test('Header zeigt nur bestätigte lokale Sicherung und alle Recovery-Zustände'
   await expect(status).toContainText('Recovery aus')
   await customer(page).fill('Noch ungesichert')
   await expect(status).toHaveAttribute('data-state', 'unsaved')
-  await expect(status).toContainText('Nicht gesichert')
+  await expect(status).toContainText('Nur in diesem Tab')
 
   await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
   await expect(status).toHaveAttribute('data-state', 'saved')
