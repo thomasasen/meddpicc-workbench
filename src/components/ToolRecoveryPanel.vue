@@ -18,19 +18,39 @@ const statusContent = computed(() => {
     case 'checking':
       return { text: 'Prüfe Speicher', detail: 'Vorhandene lokale Recoverydaten werden geprüft.', icon: LoaderCircle }
     case 'available':
-      return { text: 'Entwurf vorhanden', detail: 'Ein lokaler Stand ist vorhanden. Wiederherstellung erst nach Bestätigung.', icon: FileClock }
+      return {
+        text: 'Entwurf vorhanden',
+        detail: 'Ein lokaler Stand ist vorhanden. Wiederherstellung erst nach Bestätigung.',
+        icon: FileClock,
+      }
     case 'unsaved':
-      return { text: 'Nicht gesichert', detail: 'Recovery ist aus. Änderungen bleiben nur im aktuellen Tab.', icon: SaveOff }
+      return {
+        text: 'Nicht gesichert',
+        detail: 'Recovery ist aus. Änderungen bleiben nur im aktuellen Tab.',
+        icon: SaveOff,
+      }
     case 'pending':
       return { text: 'Nicht gesichert', detail: 'Änderungen warten auf die lokale Sicherung.', icon: Clock3 }
     case 'saving':
       return { text: 'Sichert lokal', detail: 'Schreibvorgang im lokalen Browserspeicher läuft.', icon: LoaderCircle }
     case 'saved':
-      return { text: 'Lokal gesichert', detail: 'Recovery-Snapshot im Browser geschrieben. Keine gespeicherte Datei.', icon: SaveCheck }
+      return {
+        text: 'Lokal gesichert',
+        detail: 'Recovery-Snapshot im Browser geschrieben. Keine gespeicherte Datei.',
+        icon: SaveCheck,
+      }
     case 'error':
-      return { text: 'Speicherproblem', detail: 'Aktuelle Änderungen sind nicht zuverlässig gesichert. Hinweise im Recovery-Bereich beachten.', icon: TriangleAlert }
+      return {
+        text: 'Speicherproblem',
+        detail: 'Aktuelle Änderungen sind nicht zuverlässig gesichert. Hinweise im Recovery-Bereich beachten.',
+        icon: TriangleAlert,
+      }
     default:
-      return { text: 'Recovery aus', detail: 'Lokale Zwischensicherung ist für dieses Tool nicht aktiviert.', icon: SaveOff }
+      return {
+        text: 'Recovery aus',
+        detail: 'Lokale Zwischensicherung ist für dieses Tool nicht aktiviert.',
+        icon: SaveOff,
+      }
   }
 })
 watch(
