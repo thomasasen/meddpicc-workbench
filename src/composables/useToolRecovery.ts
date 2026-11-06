@@ -20,12 +20,26 @@ type RecoveryOptions<T> = {
 
 const CHANNEL = 'meddpicc-tool-recovery-events'
 
+/** Explizite, ausschließlich auf dem aktiven Microtool basierende Sicherungsanzeige. */
+export type ToolSaveStatus =
+  | 'checking'
+  | 'available'
+  | 'inactive'
+  | 'unsaved'
+  | 'pending'
+  | 'saving'
+  | 'saved'
+  | 'error'
+
 export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: RecoveryOptions<T>) {
   const enabled = ref(false)
   const candidate = shallowRef<RecoverySnapshot<T> | null>(null)
   const message = ref('')
   const conflict = ref(false)
   const busy = ref(true)
+  const saving = ref(false)
+  const savedOnce = ref(false)
+  const saveFailed = ref(false)
   const project = tracked ?? ((draft: T) => draft)
   const initial = JSON.stringify(value.value)
   const initialTracked = JSON.stringify(project(value.value))
@@ -39,6 +53,15 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
   let disposed = false
   let acknowledgedNavigation = false
   let channel: BroadcastChannel | null = null
+
+  const saveStatus = computed<ToolSaveStatus>(() => {
+    if (conflict.value || saveFailed.value) return 'error'
+    if (candidate.value) return 'available'
+    if (busy.value) return 'checking'
+    if (!enabled.value) return modified.value ? 'unsaved' : 'inactive'
+    if (saving.value) return 'saving'
+    return savedOnce.value && JSON.stringify(value.value) === lastSaved ? 'saved' : 'pending'
+  })
 
   function signalOtherTabs() {
     try {
@@ -59,10 +82,14 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
         candidate.value = result.snapshot
         observedToken = result.snapshot.token
       } else if (result.kind === 'invalid') {
+        saveFailed.value = true
         message.value = 'Recoverydaten sind beschädigt, inkompatibel oder abgelaufen. Sie werden nicht geladen.'
       }
     } catch {
-      if (!disposed) message.value = 'Lokaler Browserspeicher nicht verfügbar. Es wurde nichts gesichert.'
+      if (!disposed) {
+        saveFailed.value = true
+        message.value = 'Lokaler Browserspeicher nicht verfügbar. Es wurde nichts gesichert.'
+      }
     } finally {
       if (!disposed) busy.value = false
     }
@@ -76,15 +103,19 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
       if (serialized === lastSaved) return true
       // Unvollständige Formulare dürfen nicht als Tab-Konflikt gelten.
       if (!validate(value.value)) {
+        saveFailed.value = true
         message.value =
           'Eingaben sind momentan nicht vollständig speicherbar. Änderungen sind noch nicht lokal gesichert.'
         return false
       }
+      saving.value = true
       try {
         const saved = await writeRecovery(tool, value.value, observedToken, validate, Date.now(), observedEpoch)
         if (disposed) return false
         observedToken = saved.token
         lastSaved = serialized
+        savedOnce.value = true
+        saveFailed.value = false
         message.value =
           serialized === JSON.stringify(value.value)
             ? 'Nur lokal zwischengesichert. Nicht als Datei gespeichert.'
@@ -93,6 +124,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
         return serialized === JSON.stringify(value.value)
       } catch (error) {
         if (disposed) return false
+        saveFailed.value = true
         if (error instanceof RecoveryStorageError && (error.reason === 'conflict' || error.reason === 'invalid')) {
           conflict.value = true
           enabled.value = false
@@ -105,6 +137,8 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
           message.value = 'Lokales Zwischenspeichern fehlgeschlagen. Die aktuellen Änderungen sind nicht gesichert.'
         }
         return false
+      } finally {
+        saving.value = false
       }
     })
     pendingFlush = task.then(
@@ -126,6 +160,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
       }
       return
     }
+    saveFailed.value = false
     message.value = 'Änderungen sind noch nicht lokal gesichert.'
     timer = setTimeout(() => void flush(), 600)
   }
@@ -136,6 +171,8 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
       return
     }
     enabled.value = true
+    savedOnce.value = false
+    saveFailed.value = false
     // Auch bereits vor dem Opt-in erfasste oder per Handoff übernommene
     // Eingaben sofort sichern. Eine Aktivierung ohne spätere Änderung darf
     // keinen vermeintlich geschützten, aber nie geschriebenen Entwurf erzeugen.
@@ -161,6 +198,8 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
       observedToken = current.snapshot.token
       observedEpoch = epoch
       lastSaved = JSON.stringify(value.value)
+      savedOnce.value = true
+      saveFailed.value = false
       candidate.value = null
       enabled.value = true
       message.value = 'Arbeitsstand wiederhergestellt. Wirtschaftliche Annahmen und Evidenz sind nicht neu bestätigt.'
@@ -182,10 +221,13 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
       candidate.value = null
       observedToken = null
       enabled.value = false
+      savedOnce.value = false
+      saveFailed.value = false
       conflict.value = false
       message.value = 'Recoverydaten gelöscht und lokales Recovery deaktiviert.'
       signalOtherTabs()
     } catch (error) {
+      saveFailed.value = true
       if (error instanceof RecoveryStorageError && error.reason === 'conflict') {
         conflict.value = true
         message.value = 'Ein anderer Tab hat neuere Recoverydaten. Sie wurden nicht gelöscht. Bitte neu laden.'
@@ -279,6 +321,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
 
   return {
     enabled,
+    saveStatus,
     candidate,
     message,
     conflict,
