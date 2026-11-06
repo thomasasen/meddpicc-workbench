@@ -251,15 +251,15 @@ function saveProject() {
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="container header-inner">
-        <RouterLink class="brand" to="/" aria-label="Zur MEDDPICC Workbench">
+        <RouterLink class="brand" to="/" aria-label="Zur MEDDPICC Toolbox">
           <span class="brand-mark" aria-hidden="true">M</span>
           <span class="brand-copy"
-            ><strong>MEDDPICC Workbench</strong><span>Local-first Deal-Qualifizierung</span></span
+            ><strong>MEDDPICC Toolbox</strong><span>Legacy · Projektverwaltung</span></span
           >
         </RouterLink>
         <div class="header-actions">
           <RouterLink class="icon-link heading-with-icon" to="/"
-            ><ArrowLeft :size="16" aria-hidden="true" /><span>Dashboard</span></RouterLink
+            ><ArrowLeft :size="16" aria-hidden="true" /><span>Zur Toolbox</span></RouterLink
           >
           <RouterLink class="icon-link" to="/evidence">Evidenzregister</RouterLink>
           <RouterLink class="icon-link" to="/references">Quellen</RouterLink>
@@ -270,6 +270,13 @@ function saveProject() {
       </div>
     </header>
 
+    <div class="container legacy-notice" role="note">
+      <div>
+        <strong>Legacy-Bereich</strong>
+        <span>Ältere projektbezogene Funktionen. Sie gehören nicht zum aktuellen Toolbox-Kern.</span>
+      </div>
+      <RouterLink to="/" class="button button-quiet">Zur Toolbox</RouterLink>
+    </div>
     <main id="main-content">
       <section class="evidence-hero">
         <div class="container evidence-hero-inner">
