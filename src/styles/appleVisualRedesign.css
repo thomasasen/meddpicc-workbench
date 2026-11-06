@@ -1385,7 +1385,7 @@ body {
  */
 #app .reverse-tool-shell .reverse-step-card {
   grid-template-columns: 44px 32px minmax(0, 1fr) 44px;
-  grid-template-rows: calc(1.3125rem + var(--form-row-track-gap)) var(--form-row-control-height) minmax(44px, auto);
+  grid-template-rows: calc(1.225rem + var(--form-row-track-gap)) var(--form-row-control-height) minmax(44px, auto);
   align-items: stretch;
   column-gap: 0.65rem;
   row-gap: 0;
@@ -1602,7 +1602,7 @@ body {
 
   #app .reverse-tool-shell .reverse-step-card {
     grid-template-columns: 44px 32px minmax(0, 1fr);
-    grid-template-rows: calc(1.3125rem + var(--form-row-track-gap)) var(--form-row-control-height) auto auto auto;
+    grid-template-rows: calc(1.17rem + var(--form-row-track-gap)) var(--form-row-control-height) auto auto auto;
     column-gap: 0.5rem;
     row-gap: 0;
     padding: 0.7rem;

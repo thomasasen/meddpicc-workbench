@@ -127,7 +127,7 @@ test('Drag-Leiste fuellt die Kartenhoehe; Nummer, Eingabe und Papierkorb liegen 
       })
 
     for (const control of [geometry.badge, geometry.duration, geometry.unit, geometry.deleteButton]) {
-      expect(Math.abs(control.top - geometry.name.top), `Oberkante bei ${width}px`).toBeLessThanOrEqual(2)
+      expect(Math.abs(control.top - geometry.name.top), `Oberkante bei ${width}px`).toBeLessThanOrEqual(0.75)
       expect(Math.abs(control.height - geometry.name.height), `Control-Hoehe bei ${width}px`).toBeLessThanOrEqual(2)
     }
 
@@ -223,7 +223,7 @@ test('Auf schmalen Displays sitzt die Schritt-Nummer direkt neben dem Textfeld',
         const u = unit.getBoundingClientRect()
         return { numberTop: b.top, fieldTop: f.top, numberHeight: b.height, fieldHeight: f.height, unitWidth: u.width }
       })
-    expect(Math.abs(positions.numberTop - positions.fieldTop)).toBeLessThanOrEqual(2)
+    expect(Math.abs(positions.numberTop - positions.fieldTop)).toBeLessThanOrEqual(0.75)
     expect(Math.abs(positions.numberHeight - positions.fieldHeight)).toBeLessThanOrEqual(2)
     expect(positions.unitWidth).toBeGreaterThanOrEqual(160)
   }
