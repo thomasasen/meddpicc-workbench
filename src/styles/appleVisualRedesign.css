@@ -3,7 +3,7 @@
  * Entscheidungen: ruhige Materialtiefe, klare Typografie, echte Orientierung,
  * direkte native Interaktion; kein iOS-Klon, keine dekorativen Charts.
  *
- * Wichtig: Diese Datei ist bewusst der letzte Stylesheet-Import.
+ * Importreihenfolge: Danach folgt formRowAlignment.css für ausschließliches Formularraster.
  * Bestandteile der fachlichen Charts und PDF-/SVG-Exports werden nicht verändert.
  */
 
@@ -1167,5 +1167,62 @@ body {
     margin-inline-start: 0;
     padding: 0.35rem 0.6rem;
     white-space: normal;
+  }
+}
+
+
+/* RT-05: Legacy klar abgrenzen, ohne alte Fachansichten umzubauen. */
+.legacy-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.65rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+.legacy-notice > div {
+  display: grid;
+  gap: 0.1rem;
+}
+.legacy-notice strong {
+  color: var(--color-text);
+}
+.legacy-notice span {
+  font-size: var(--type-content-help, 0.875rem);
+}
+
+/* RT-08: Geplante Services bleiben erreichbar, dominieren aber nicht die Startseite. */
+.tool-cluster-planned {
+  border-top: 1px solid var(--color-border);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+.tool-cluster-planned > summary {
+  min-height: var(--touch-target, 44px);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: var(--type-content-help, 0.875rem);
+  font-weight: 650;
+}
+.tool-cluster-planned > summary::before {
+  content: '+';
+  display: inline-grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-inline-end: 0.5rem;
+  border-radius: var(--radius-control);
+  background: var(--color-surface-muted);
+}
+.tool-cluster-planned[open] > summary::before {
+  content: '−';
+}
+@media (max-width: 640px) {
+  .legacy-notice {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
