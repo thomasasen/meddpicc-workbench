@@ -16,8 +16,10 @@ test('Prozesskarten sind auf Desktop kompakt, alle Felder haben dieselbe Eingabe
       return { top: rect.top, bottom: rect.bottom, height: rect.height }
     }),
   )
-  expect(Math.max(...rects.map((rect) => rect.top)) - Math.min(...rects.map((rect) => rect.top))).toBeLessThanOrEqual(2)
-  expect(Math.max(...rects.map((rect) => rect.height)) - Math.min(...rects.map((rect) => rect.height))).toBeLessThanOrEqual(2)
+  const tops = rects.map((rect) => rect.top)
+  const heights = rects.map((rect) => rect.height)
+  expect(Math.max(...tops) - Math.min(...tops)).toBeLessThanOrEqual(2)
+  expect(Math.max(...heights) - Math.min(...heights)).toBeLessThanOrEqual(2)
 
   const cardHeight = await first.evaluate((element) => element.getBoundingClientRect().height)
   expect(cardHeight).toBeLessThan(175)
