@@ -1,0 +1,33 @@
+name: Einmalige Bereinigung grosser Screenshot-Artefakte
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/cleanup-oversized-artifacts.yml
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  delete-known-oversized-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Alte Screenshot-Artefakte gezielt loeschen
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          for id in 13527048424 13528248903; do
+            echo "Deleting oversized artifact $id"
+            gh api --method DELETE "repos/$REPO/actions/artifacts/$id"
+          done
+          for id in 13527048424 13528248903; do
+            if gh api "repos/$REPO/actions/artifacts/$id" >/dev/null 2>&1; then
+              echo "::error::Artifact $id still exists"
+              exit 1
+            fi
+          done
+          echo "Both oversized artifacts deleted."
