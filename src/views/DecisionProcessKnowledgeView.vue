@@ -1,14 +1,6 @@
 <script setup lang="ts">
 import ToolboxHeader from '../components/ToolboxHeader.vue'
-import {
-  CheckCircle2,
-  CircleAlert,
-  Compass,
-  ListChecks,
-  MessageCircleQuestion,
-  Route,
-  Workflow,
-} from '@lucide/vue'
+import { CheckCircle2, CircleAlert, Compass, ListChecks, MessageCircleQuestion, Route, Workflow } from '@lucide/vue'
 
 import { decisionProcessKnowledge, decisionProcessPhases } from '../content/meddpicc/decisionProcess'
 import KnowledgeSectionNav from '../components/KnowledgeSectionNav.vue'
