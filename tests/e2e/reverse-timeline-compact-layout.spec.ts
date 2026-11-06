@@ -46,8 +46,19 @@ test('Prozesskarten sind bei allen relevanten Breiten kompakt und ohne Überlauf
       expect(result.listWidth).toBeLessThanOrEqual(1041)
       expect(Math.max(...result.cardHeights)).toBeLessThan(170)
     }
-    if (width <= 375) expect(Math.max(...result.cardHeights)).toBeLessThan(330)
-    if ([320, 375, 1440].includes(width)) {
+    if (width <= 375) {
+      expect(Math.max(...result.cardHeights)).toBeLessThan(330)
+      const unitWidth = await cards.first().locator('.reverse-step-fields select').evaluate(
+        (element) => element.getBoundingClientRect().width,
+      )
+      expect(unitWidth, `Einheitenauswahl bei ${width}px`).toBeGreaterThanOrEqual(160)
+    }
+    if ([320, 375, 1440].includes(width) && test.info().project.name === 'desktop-chromium') {
+      /* Die fixe Kopfzeile darf das reine Abschnittsbild nicht überlagern.
+       * Interaktiv bleibt sie unverändert sticky. */
+      await page.addStyleTag({
+        content: '.site-header { position: static !important; } .skip-link { display: none !important; }',
+      })
       await page.locator('.reverse-steps-section').screenshot({
         path: test.info().outputPath(`reverse-timeline-compact-${width}.png`),
       })

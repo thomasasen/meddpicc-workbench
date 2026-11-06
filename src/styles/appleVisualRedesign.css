@@ -1502,7 +1502,8 @@ body {
   }
 
   #app .reverse-tool-shell .reverse-step-fields {
-    grid-template-columns: minmax(0, 1fr) minmax(110px, 0.7fr);
+    /* Dauer bleibt knapp, die Einheitenbezeichnung wird vollständig lesbar. */
+    grid-template-columns: minmax(72px, 0.42fr) minmax(0, 1fr);
   }
 
   #app .reverse-tool-shell .reverse-step-fields > .reverse-step-name {
