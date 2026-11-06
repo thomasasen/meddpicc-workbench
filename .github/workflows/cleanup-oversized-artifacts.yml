@@ -1,5 +1,10 @@
-name: Einmalige Bereinigung grosser Screenshot-Artefakte
+name: Grosse CI-Artefakte bereinigen
+
 on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/cleanup-oversized-artifacts.yml
   workflow_run:
     workflows: [CI]
     types: [completed]
@@ -8,20 +13,56 @@ permissions:
   actions: write
   contents: read
 
+concurrency:
+  group: cleanup-oversized-artifacts
+  cancel-in-progress: false
+
 jobs:
-  cleanup-old-ci:
-    if: ${{ github.event.workflow_run.id == 42271527599 }}
+  cleanup:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
-      - name: Zu grosse Screenshot-ZIPs aus dem alten CI-Lauf loeschen
+      - name: Repositoryweit grosse Test-, Screenshot- und Debug-Artefakte finden und loeschen
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
-          RUN_ID: ${{ github.event.workflow_run.id }}
+        shell: bash
         run: |
           set -euo pipefail
-          gh api "repos/$REPO/actions/runs/$RUN_ID/artifacts" --paginate --jq '.artifacts[] | select(.name=="ui-qs-screenshots" and .size_in_bytes > 31457280) | .id' | while read -r id; do
-            echo "Deleting oversized legacy screenshot artifact $id"
+          # Es werden bewusst nur Test-/Bild-/Debug-Artefakte entfernt,
+          # nicht Produktionsbuilds oder fachliche PDF-Berichte.
+          gh api --paginate "repos/$REPO/actions/artifacts?per_page=100" \
+            --jq '.artifacts[] | [.id, .name, .size_in_bytes, .created_at, (.workflow_run.id // 0)] | @tsv' \
+            > "$RUNNER_TEMP/artifacts.tsv"
+
+          total="$(wc -l < "$RUNNER_TEMP/artifacts.tsv")"
+          echo "Aktive Artefakte vor Bereinigung: $total"
+          echo 'Groesse MiB | ID | Name | Workflow-Lauf'
+          sort -t $'\t' -k3,3nr "$RUNNER_TEMP/artifacts.tsv" \
+            | awk -F '\t' '$3 >= 10485760 {printf "%.1f | %s | %s | %s\n", $3 / 1048576, $1, $2, $5}' \
+            | head -n 80 || true
+
+          deleted=0
+          freed=0
+          while IFS=$'\t' read -r id name bytes created run_id; do
+            if (( bytes < 31457280 )); then
+              continue
+            fi
+            if ! [[ "$name" =~ (screenshot|screen-shot|ui-qs|playwright|trace|debug|test-results|visual|render|review-images|browser-images) ]]; then
+              continue
+            fi
+            echo "Entferne Testbild-/Debug-Artefakt $id ($name, $((bytes / 1048576)) MiB, Lauf $run_id)"
             gh api --method DELETE "repos/$REPO/actions/artifacts/$id"
-          done
+            deleted=$((deleted + 1))
+            freed=$((freed + bytes))
+          done < "$RUNNER_TEMP/artifacts.tsv"
+
+          echo "Geloescht: $deleted Artefakte, $((freed / 1048576)) MiB."
+          {
+            echo '## Bereinigung grosser Testartefakte'
+            echo "Aktive Artefakte vor Bereinigung: $total"
+            echo "Geloescht: $deleted"
+            echo "Freigegebener Speicher: $((freed / 1048576)) MiB"
+            echo 'Grenze: 30 MiB je Screenshot-/Trace-/Debug-Paket.'
+            echo 'Fachliche Berichte und Produktionsbuilds bleiben erhalten.'
+          } >> "$GITHUB_STEP_SUMMARY"
