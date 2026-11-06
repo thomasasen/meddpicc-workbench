@@ -156,6 +156,11 @@ Jede Visualisierung braucht eine textuelle Alternative mit den wesentlichen Wert
 
 Keine Radar-Charts, Gauges, 3D-Charts oder dekorativen Diagramme.
 
+
+### Reverse Timeline: kompakte und ausgerichtete Prozesskarten
+
+Bei der Go-Live-Rückwärtsplanung liegen die fünf operativen Felder eines Schritts auf breiten Ansichten in **einer Zeile**; die optionalen Angaben „Name / Rolle“ sind pro Schritt über ein natives, tastaturbedienbares `details` aufklappbar. Dadurch entstehen keine ungenutzten halben Formularzeilen. Auf schmalen Ansichten bleibt „Schritt“ in voller Breite, die übrigen Felder bilden ein ausgerichtetes Zweispaltenraster. Alle Controls einer Reihe beginnen auf derselben Höhe und sind mindestens 44 px hoch. Der Drag-Griff behält mindestens 44 × 44 px; Position und Löschen bleiben klar getrennt. Gruppenabstände werden über das gemeinsame Spacing-System statt über freie Einzelwerte gesteuert.
+
 ## 10. Design Tokens
 
 Bestehende zentrale Tokens für Farben, Spacing, Typografie, Radii, Borders, Focus und Motion weiterverwenden. Keine verstreuten Einzelwerte, wenn ein Token sinnvoll existiert. Für neue UI-Anforderungen benötigte Motion-, Material- und Kontrastvarianten als gemeinsame Tokens vorsehen statt pro View Einzelwerte zu erfinden. Gesten-Animationen dürfen nicht durch pauschale globale CSS-Transitions blockiert werden.

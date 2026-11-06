@@ -1,0 +1,265 @@
+/*
+ * Go-Live-Rueckwaertsplanung: kompakte Prozesskarten und konsistente Abstaende.
+ * Lokaler Layout-Layer nach formRowAlignment.css; keine Aenderung der Drag-
+ * Logik, Formularwerte, Berechnung oder kundenfaehigen Exporte.
+ */
+.reverse-tool-shell {
+  --reverse-section-gap: var(--space-4);
+  --reverse-card-gap: var(--space-2);
+  --reverse-card-inline-gap: 0.65rem;
+}
+
+#app .reverse-tool-shell .reverse-tool-main {
+  padding-block: clamp(1rem, 2vw, 1.5rem) var(--space-10);
+}
+
+#app .reverse-tool-shell .tool-intro {
+  align-items: start;
+  gap: var(--space-5);
+  margin-block: 0 var(--space-4);
+}
+
+#app .reverse-tool-shell .tool-intro h1 {
+  margin-block: var(--space-2) var(--space-2);
+}
+
+#app .reverse-tool-shell .tool-intro .intro-text {
+  margin-block: 0;
+}
+
+#app .reverse-tool-shell .tool-source-note {
+  align-self: center;
+}
+
+#app .reverse-tool-shell :is(.reverse-config, .reverse-steps-section, .reverse-result-section) {
+  margin-top: var(--reverse-section-gap);
+  padding: clamp(1rem, 1.65vw, 1.5rem);
+}
+
+#app .reverse-tool-shell .section-heading-row {
+  align-items: start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+#app .reverse-tool-shell .section-heading-row .eyebrow {
+  margin-block: 0 var(--space-1);
+}
+
+#app .reverse-tool-shell .section-heading-row h2 {
+  margin: 0;
+}
+
+#app .reverse-tool-shell .section-heading-row .section-note {
+  margin-top: var(--space-2);
+  max-width: 65ch;
+  line-height: 1.5;
+}
+
+#app .reverse-tool-shell .reverse-steps-section > .section-heading-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--space-5);
+}
+
+#app .reverse-tool-shell .reverse-step-actions {
+  justify-content: flex-end;
+  align-self: start;
+  gap: var(--space-2);
+}
+
+#app .reverse-tool-shell .reverse-step-list {
+  max-width: 1120px;
+  margin-inline: auto;
+  gap: var(--reverse-card-gap);
+}
+
+#app .reverse-tool-shell .reverse-step-card {
+  grid-template-columns: 76px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: var(--reverse-card-inline-gap);
+  padding: 0.65rem 0.75rem;
+}
+
+#app .reverse-tool-shell .reverse-step-leading {
+  gap: var(--space-1);
+}
+
+#app .reverse-tool-shell .reverse-drag-handle {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+#app .reverse-tool-shell .reverse-step-position {
+  width: 28px;
+  height: 44px;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+#app .reverse-tool-shell .reverse-step-body {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-1);
+}
+
+#app .reverse-tool-shell .reverse-step-fields {
+  min-width: 0;
+  grid-template-columns:
+    minmax(165px, 2.1fr) minmax(66px, 0.58fr) minmax(116px, 1fr)
+    minmax(118px, 1fr) minmax(132px, 1.1fr);
+  gap: 0 var(--reverse-card-inline-gap);
+}
+
+#app .reverse-tool-shell .reverse-step-fields > label.field {
+  padding-bottom: 0;
+}
+
+#app .reverse-tool-shell .reverse-step-fields > label.field > span {
+  line-height: 1.4;
+}
+
+#app .reverse-tool-shell .reverse-step-controls {
+  justify-content: end;
+  align-self: center;
+  padding: 0;
+}
+
+#app .reverse-tool-shell .reverse-step-controls .icon-action {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+#app .reverse-tool-shell .reverse-step-extra {
+  min-width: 0;
+  justify-self: start;
+}
+
+#app .reverse-tool-shell .reverse-step-extra > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  min-height: 36px;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-control);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.35;
+  list-style: none;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+#app .reverse-tool-shell .reverse-step-extra > summary::-webkit-details-marker {
+  display: none;
+}
+
+#app .reverse-tool-shell .reverse-step-extra > summary:hover {
+  color: var(--color-accent-strong);
+  background: var(--color-accent-soft);
+}
+
+#app .reverse-tool-shell .reverse-step-extra > summary > svg {
+  flex: 0 0 auto;
+  transition: transform var(--apple-motion-gentle);
+}
+
+#app .reverse-tool-shell .reverse-step-extra[open] > summary > svg {
+  transform: rotate(180deg);
+}
+
+#app .reverse-tool-shell .reverse-step-extra .reverse-step-owner-detail {
+  grid-column: auto;
+  display: grid;
+  min-width: min(100%, 320px);
+  margin-top: var(--space-2);
+  padding: 0;
+}
+
+#app .reverse-tool-shell .reverse-step-extra .reverse-step-owner-detail input {
+  min-height: var(--form-row-control-height);
+}
+
+@media (max-width: 990px) {
+  #app .reverse-tool-shell .reverse-steps-section > .section-heading-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #app .reverse-tool-shell .reverse-step-actions {
+    justify-content: flex-start;
+  }
+
+  #app .reverse-tool-shell .reverse-step-card {
+    grid-template-columns: 76px minmax(0, 1fr) 44px;
+    align-items: center;
+  }
+
+  #app .reverse-tool-shell .reverse-step-leading {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  #app .reverse-tool-shell .reverse-step-controls {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  #app .reverse-tool-shell .reverse-step-body {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  #app .reverse-tool-shell .reverse-step-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2) var(--space-3);
+  }
+
+  #app .reverse-tool-shell .reverse-step-fields > .reverse-step-name {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  #app .reverse-tool-shell .reverse-tool-main .container {
+    width: min(calc(100% - 1.25rem), var(--container));
+  }
+
+  #app .reverse-tool-shell :is(.reverse-config, .reverse-steps-section, .reverse-result-section) {
+    padding: var(--space-3);
+  }
+
+  #app .reverse-tool-shell .section-heading-row {
+    gap: var(--space-3);
+  }
+
+  #app .reverse-tool-shell .reverse-step-card {
+    gap: var(--space-2);
+    padding: var(--space-2);
+  }
+
+  #app .reverse-tool-shell .reverse-step-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  #app .reverse-tool-shell .reverse-step-extra > summary {
+    min-height: 44px;
+  }
+}
+
+@media (pointer: coarse) {
+  #app .reverse-tool-shell .reverse-step-extra > summary {
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #app .reverse-tool-shell .reverse-step-extra > summary > svg {
+    transition: none;
+  }
+}

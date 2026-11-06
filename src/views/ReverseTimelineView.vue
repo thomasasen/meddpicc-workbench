@@ -595,7 +595,8 @@ const recovery = useToolRecovery({
               <div class="reverse-step-position" :aria-label="`Position ${index + 1}`">{{ index + 1 }}</div>
             </div>
 
-            <div class="reverse-step-fields">
+            <div class="reverse-step-body">
+              <div class="reverse-step-fields">
               <label class="field reverse-step-name">
                 <span>Schritt</span>
                 <input v-model="step.label" type="text" maxlength="160" />
@@ -627,15 +628,23 @@ const recovery = useToolRecovery({
                   <option value="implementation">Implementierung</option>
                 </select>
               </label>
-              <label class="field reverse-step-owner-detail">
-                <span>Name / Rolle <small>optional</small></span>
-                <input
-                  v-model="step.ownerDetail"
-                  type="text"
-                  maxlength="120"
-                  placeholder="z. B. Einkauf, Dr. Müller / Legal"
-                />
-              </label>
+              </div>
+              <details class="reverse-step-extra">
+                <summary>
+                  <span v-if="step.ownerDetail?.trim()">Name / Rolle: {{ step.ownerDetail }}</span>
+                  <span v-else>Name / Rolle ergänzen</span>
+                  <ChevronDown :size="16" aria-hidden="true" />
+                </summary>
+                <label class="field reverse-step-owner-detail">
+                  <span>Name / Rolle <small>optional</small></span>
+                  <input
+                    v-model="step.ownerDetail"
+                    type="text"
+                    maxlength="120"
+                    placeholder="z. B. Einkauf, Dr. Müller / Legal"
+                  />
+                </label>
+              </details>
             </div>
 
             <div class="reverse-step-controls" aria-label="Schritt entfernen">

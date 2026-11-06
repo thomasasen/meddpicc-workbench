@@ -9,5 +9,6 @@ import './styles/redesignFoundations.css'
 import './styles/appleInteractions.css'
 import './styles/appleVisualRedesign.css'
 import './styles/formRowAlignment.css'
+import './styles/reverseTimelineCompact.css'
 
 createApp(App).use(createPinia()).use(router).mount('#app')
