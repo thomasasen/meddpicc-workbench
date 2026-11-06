@@ -1,14 +1,38 @@
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
+import { Clock3, FileClock, LoaderCircle, SaveCheck, SaveOff, TriangleAlert } from '@lucide/vue'
+import type { ToolSaveStatus } from '../composables/useToolRecovery'
 const props = defineProps<{
   enabled: boolean
   busy: boolean
   conflict: boolean
   candidate: { savedAt: string } | null
   message: string
+  saveStatus: ToolSaveStatus
 }>()
 
 const recoveryHeading = ref<HTMLElement | null>(null)
+
+const statusContent = computed(() => {
+  switch (props.saveStatus) {
+    case 'checking':
+      return { text: 'Prüfe Speicher', detail: 'Vorhandene lokale Recoverydaten werden geprüft.', icon: LoaderCircle }
+    case 'available':
+      return { text: 'Entwurf vorhanden', detail: 'Ein lokaler Stand ist vorhanden. Wiederherstellung erst nach Bestätigung.', icon: FileClock }
+    case 'unsaved':
+      return { text: 'Nicht gesichert', detail: 'Recovery ist aus. Änderungen bleiben nur im aktuellen Tab.', icon: SaveOff }
+    case 'pending':
+      return { text: 'Nicht gesichert', detail: 'Änderungen warten auf die lokale Sicherung.', icon: Clock3 }
+    case 'saving':
+      return { text: 'Sichert lokal', detail: 'Schreibvorgang im lokalen Browserspeicher läuft.', icon: LoaderCircle }
+    case 'saved':
+      return { text: 'Lokal gesichert', detail: 'Recovery-Snapshot im Browser geschrieben. Keine gespeicherte Datei.', icon: SaveCheck }
+    case 'error':
+      return { text: 'Speicherproblem', detail: 'Aktuelle Änderungen sind nicht zuverlässig gesichert. Hinweise im Recovery-Bereich beachten.', icon: TriangleAlert }
+    default:
+      return { text: 'Recovery aus', detail: 'Lokale Zwischensicherung ist für dieses Tool nicht aktiviert.', icon: SaveOff }
+  }
+})
 watch(
   () => props.candidate,
   async (value) => {
@@ -26,6 +50,19 @@ defineEmits<{
 </script>
 
 <template>
+  <Teleport to=".site-header .header-inner">
+    <span
+      class="recovery-header-status"
+      :data-state="saveStatus"
+      data-testid="recovery-header-status"
+      role="status"
+      aria-live="polite"
+      :title="statusContent.detail"
+    >
+      <component :is="statusContent.icon" :size="16" aria-hidden="true" />
+      <span>{{ statusContent.text }}</span>
+    </span>
+  </Teleport>
   <section class="quick-panel recovery-panel" role="region" aria-labelledby="recovery-heading">
     <div class="recovery-heading">
       <h2 id="recovery-heading" ref="recoveryHeading" tabindex="-1">Optionales lokales Recovery</h2>
@@ -78,6 +115,56 @@ defineEmits<{
 </template>
 
 <style scoped>
+.recovery-header-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  padding: 0.36rem 0.6rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: var(--color-surface, #fff);
+  color: #475569;
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.recovery-header-status[data-state='saved'] {
+  color: #28664d;
+  border-color: #a2cdb9;
+}
+.recovery-header-status[data-state='error'],
+.recovery-header-status[data-state='unsaved'] {
+  color: #97402c;
+  border-color: #d9ab9d;
+}
+.recovery-header-status[data-state='saving'] svg,
+.recovery-header-status[data-state='checking'] svg {
+  animation: recovery-header-rotate 1.4s linear infinite;
+}
+@keyframes recovery-header-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .recovery-header-status svg {
+    animation: none !important;
+  }
+}
+@media (prefers-contrast: more) {
+  .recovery-header-status {
+    border-color: currentColor;
+  }
+}
+@media (forced-colors: active) {
+  .recovery-header-status {
+    border-color: CanvasText;
+    color: CanvasText;
+  }
+}
 .recovery-panel {
   margin-block: 1.25rem;
   min-width: 0;
