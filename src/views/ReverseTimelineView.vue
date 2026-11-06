@@ -597,37 +597,37 @@ const recovery = useToolRecovery({
 
             <div class="reverse-step-body">
               <div class="reverse-step-fields">
-              <label class="field reverse-step-name">
-                <span>Schritt</span>
-                <input v-model="step.label" type="text" maxlength="160" />
-              </label>
-              <label class="field">
-                <span>Dauer</span>
-                <input v-model.number="step.duration" type="number" min="0" max="1000" step="1" inputmode="numeric" />
-              </label>
-              <label class="field">
-                <span>Einheit</span>
-                <select v-model="step.durationUnit">
-                  <option value="business-days">Arbeitstage</option>
-                  <option value="calendar-days">Kalendertage</option>
-                </select>
-              </label>
-              <label class="field">
-                <span>Verantwortlich</span>
-                <select v-model="step.owner">
-                  <option value="customer">Kunde</option>
-                  <option value="seller">Anbieter</option>
-                  <option value="shared">Gemeinsam</option>
-                </select>
-              </label>
-              <label class="field">
-                <span>Bereich</span>
-                <select v-model="step.area">
-                  <option value="decision-process">Decision Process</option>
-                  <option value="paper-process">Paper Process</option>
-                  <option value="implementation">Implementierung</option>
-                </select>
-              </label>
+                <label class="field reverse-step-name">
+                  <span>Schritt</span>
+                  <input v-model="step.label" type="text" maxlength="160" />
+                </label>
+                <label class="field">
+                  <span>Dauer</span>
+                  <input v-model.number="step.duration" type="number" min="0" max="1000" step="1" inputmode="numeric" />
+                </label>
+                <label class="field">
+                  <span>Einheit</span>
+                  <select v-model="step.durationUnit">
+                    <option value="business-days">Arbeitstage</option>
+                    <option value="calendar-days">Kalendertage</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Verantwortlich</span>
+                  <select v-model="step.owner">
+                    <option value="customer">Kunde</option>
+                    <option value="seller">Anbieter</option>
+                    <option value="shared">Gemeinsam</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Bereich</span>
+                  <select v-model="step.area">
+                    <option value="decision-process">Decision Process</option>
+                    <option value="paper-process">Paper Process</option>
+                    <option value="implementation">Implementierung</option>
+                  </select>
+                </label>
               </div>
               <details class="reverse-step-extra">
                 <summary>
