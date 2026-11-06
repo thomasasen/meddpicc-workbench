@@ -8,6 +8,8 @@ export const RECOVERY_RETENTION_MS = 7 * 24 * 60 * 60 * 1000
 
 const DB_NAME = 'meddpicc-tool-recovery'
 const STORE_NAME = 'snapshots'
+// Anwendungsweite Löschgeneration im selben transaktionalen Store.
+const DELETION_EPOCH_KEY = '__recovery-deletion-epoch__'
 
 export type RecoverySnapshot<T> = {
   version: 1
@@ -152,6 +154,25 @@ export async function readRecovery<T>(
   }
 }
 
+/** Die letzte globale Löschung muss beim ersten Opt-in berücksichtigt werden. */
+export async function readRecoveryEpoch(): Promise<string | null> {
+  const db = await database()
+  try {
+    return await new Promise<string | null>((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readonly')
+      const request = tx.objectStore(STORE_NAME).get(DELETION_EPOCH_KEY)
+      let epoch: string | null = null
+      request.onsuccess = () => {
+        epoch = typeof request.result === 'string' ? request.result : null
+      }
+      tx.oncomplete = () => resolve(epoch)
+      tx.onabort = () => reject(classify(tx.error))
+    })
+  } finally {
+    db.close()
+  }
+}
+
 /** Get + token check + put finden in derselben readwrite-Transaktion statt. */
 export async function writeRecovery<T>(
   tool: string,
@@ -159,6 +180,7 @@ export async function writeRecovery<T>(
   expectedToken: string | null,
   validate: (data: unknown) => data is T,
   now = Date.now(),
+  expectedEpoch?: string | null,
 ): Promise<RecoverySnapshot<T>> {
   validateTool(tool)
   if (!validate(data)) throw new RecoveryStorageError('invalid')
@@ -185,9 +207,16 @@ export async function writeRecovery<T>(
     return await new Promise<RecoverySnapshot<T>>((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, 'readwrite')
       const store = tx.objectStore(STORE_NAME)
+      const epochRequest = store.get(DELETION_EPOCH_KEY)
       const request = store.get(tool)
       let failure: RecoveryStorageError | null = null
       request.onsuccess = () => {
+        const currentEpoch = typeof epochRequest.result === 'string' ? epochRequest.result : null
+        if (expectedEpoch !== undefined && currentEpoch !== expectedEpoch) {
+          failure = new RecoveryStorageError('conflict')
+          tx.abort()
+          return
+        }
         const current = parseRecoverySnapshot(request.result, tool, validate, now)
         if (current.kind === 'invalid') {
           failure = new RecoveryStorageError('invalid')
@@ -250,7 +279,10 @@ export async function deleteAllRecovery(): Promise<void> {
   try {
     await new Promise<void>((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, 'readwrite')
-      tx.objectStore(STORE_NAME).clear()
+      const store = tx.objectStore(STORE_NAME)
+      store.clear()
+      // Verhindert, dass bereits geöffnete Tabs den gelöschten Stand erneut anlegen.
+      store.put(crypto.randomUUID(), DELETION_EPOCH_KEY)
       tx.oncomplete = () => resolve()
       tx.onabort = () => reject(classify(tx.error))
     })
