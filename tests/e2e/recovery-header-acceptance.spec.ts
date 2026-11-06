@@ -48,7 +48,9 @@ test('Der Headerstatus funktioniert in allen fünf Tools auf 320 bis 1440 Pixeln
     const status = page.getByTestId('recovery-header-status')
     const field = page.locator(tool.selector).first()
     await expect(status).toHaveCount(1)
-    await expect(status).toHaveAttribute('data-state', 'inactive')
+    // Der Wechsel vom Schnellrechner in den Projektmodus erzeugt selbst bereits
+    // einen neuen, noch nicht gesicherten Tool-Input. Das ist fachlich korrekt.
+    await expect(status).toHaveAttribute('data-state', tool.id === 'software-payback' ? 'unsaved' : 'inactive')
     await expect(field).toBeVisible()
     await field.fill(tool.value)
     await expect(status).toHaveAttribute('data-state', 'unsaved')
