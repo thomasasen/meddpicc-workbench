@@ -500,7 +500,7 @@ defineExpose({ canLeave: recovery.canLeave })
       :busy="recovery.busy.value"
       :conflict="recovery.conflict.value"
       :message="recovery.message.value"
-          :save-status="recovery.saveStatus.value"
+      :save-status="recovery.saveStatus.value"
       @activate="recovery.activate"
       @recover="recovery.recover"
       @discard="recovery.discard"
