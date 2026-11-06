@@ -12,6 +12,27 @@ const props = defineProps<{
 }>()
 
 const recoveryHeading = ref<HTMLElement | null>(null)
+const compact = computed(() => !props.enabled && !props.candidate && !props.conflict && !props.message)
+const statusAnnouncement = ref('')
+let lastSavedAnnouncement = 0
+
+// Technische Übergänge (checking/pending/saving) bleiben sichtbar, aber stumm.
+// Eine erfolgreiche Sicherung wird höchstens alle 30 Sekunden angesagt.
+watch(
+  () => props.saveStatus,
+  (state) => {
+    if (state === 'available') {
+      statusAnnouncement.value = 'Ein lokaler Entwurf ist vorhanden. Wiederherstellung nach Bestätigung möglich.'
+    } else if (state === 'saved' && Date.now() - lastSavedAnnouncement > 30_000) {
+      statusAnnouncement.value = 'Recoverystand ist lokal im Browser gesichert. Es wurde keine Datei gespeichert.'
+      lastSavedAnnouncement = Date.now()
+    } else if (state === 'error' && !props.message) {
+      statusAnnouncement.value = 'Fehler bei der lokalen Recovery-Sicherung.'
+    } else {
+      statusAnnouncement.value = ''
+    }
+  },
+)
 
 const statusContent = computed(() => {
   switch (props.saveStatus) {
@@ -25,7 +46,7 @@ const statusContent = computed(() => {
       }
     case 'unsaved':
       return {
-        text: 'Nicht gesichert',
+        text: 'Nur in diesem Tab',
         detail: 'Recovery ist aus. Änderungen bleiben nur im aktuellen Tab.',
         icon: SaveOff,
       }
@@ -73,23 +94,46 @@ defineEmits<{
   <Teleport defer to=".site-header .header-inner">
     <span
       class="recovery-header-status"
+      role="status"
+      aria-live="off"
+      aria-atomic="true"
       :data-state="saveStatus"
       data-testid="recovery-header-status"
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
       :title="statusContent.detail"
     >
       <component :is="statusContent.icon" :size="16" aria-hidden="true" />
       <span>{{ statusContent.text }}</span>
     </span>
   </Teleport>
-  <section class="quick-panel recovery-panel" role="region" aria-labelledby="recovery-heading">
+  <span class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-testid="recovery-announcement">
+    {{ statusAnnouncement }}
+  </span>
+  <section
+    class="quick-panel recovery-panel"
+    :class="{ 'recovery-panel--compact': compact }"
+    role="region"
+    aria-labelledby="recovery-heading"
+  >
     <div class="recovery-heading">
       <h2 id="recovery-heading" ref="recoveryHeading" tabindex="-1">Optionales lokales Recovery</h2>
       <span v-if="enabled" class="recovery-label">Aktiv</span>
     </div>
-    <p class="recovery-description">
+    <template v-if="compact">
+      <p class="recovery-description recovery-description--short">
+        Optional: sieben Tage unverschlüsselt in diesem Browser zwischenspeichern. Keine Cloud, keine Datei. Nicht für
+        gemeinsam genutzte Geräte empfohlen.
+      </p>
+      <details class="recovery-details">
+        <summary>Datenschutz- und Speicherhinweise</summary>
+        <p>
+          Die lokale Sicherung beginnt erst nach ausdrücklicher Aktivierung. Der Stand verfällt nach sieben Tagen und
+          wird beim nächsten Zugriff entfernt. Die Daten sind nicht verschlüsselt, werden nicht in eine Cloud übertragen
+          und sind weder eine gespeicherte Datei noch eine Bestätigung von Kundenangaben. Auf gemeinsam genutzten
+          Geräten nicht empfohlen.
+        </p>
+      </details>
+    </template>
+    <p v-else class="recovery-description">
       Nur nach Aktivierung werden Eingaben in diesem Browser zwischengespeichert. Der Stand verfällt nach sieben Tagen
       und wird beim nächsten Zugriff entfernt. Die Daten sind nicht verschlüsselt und keine gespeicherte Datei oder
       Bestätigung von Kundenangaben. Auf gemeinsam genutzten Geräten nicht empfohlen.
@@ -129,7 +173,7 @@ defineEmits<{
         </button>
       </template>
     </div>
-    <p v-if="message" class="recovery-status" :role="conflict ? 'alert' : 'status'" aria-live="polite">
+    <p v-if="message" class="recovery-status" :role="conflict || saveStatus === 'error' ? 'alert' : undefined">
       {{ message }}
     </p>
   </section>
@@ -162,8 +206,7 @@ defineEmits<{
   color: #28664d;
   border-color: #a2cdb9;
 }
-.recovery-header-status[data-state='error'],
-.recovery-header-status[data-state='unsaved'] {
+.recovery-header-status[data-state='error'] {
   color: #97402c;
   border-color: #d9ab9d;
 }
@@ -195,6 +238,32 @@ defineEmits<{
 .recovery-panel {
   margin-block: 1.25rem;
   min-width: 0;
+}
+.recovery-panel--compact {
+  margin-block: 0.7rem;
+  padding: 0.85rem 1rem;
+  box-shadow: none;
+}
+.recovery-panel--compact .recovery-heading h2 {
+  font-size: 0.95rem;
+}
+.recovery-description--short {
+  margin-block: 0.3rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+.recovery-details {
+  color: var(--color-text-muted, #475569);
+  font-size: 0.875rem;
+}
+.recovery-details summary {
+  cursor: pointer;
+  width: fit-content;
+  min-height: 2rem;
+}
+.recovery-details p {
+  max-width: 75ch;
+  margin-block: 0.5rem;
 }
 .recovery-heading,
 .recovery-actions {

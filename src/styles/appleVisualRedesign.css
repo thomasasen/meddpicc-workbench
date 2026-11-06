@@ -1128,3 +1128,44 @@ body {
     gap: 0.5rem;
   }
 }
+
+
+/* RT-04: Auf schmalen Screens führt die Aufgabe, nicht der Produkt-Chrome. */
+@media (max-width: 640px) {
+  #app .site-shell .header-inner {
+    min-height: 56px;
+    padding-block: 0.45rem;
+    gap: 0.5rem;
+  }
+
+  #app .site-shell .brand-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  #app .site-shell .brand-copy > span {
+    display: none;
+  }
+
+  #app .site-shell :is(.metric-intro, .cod-intro, .vb-intro, .quick-hero, .tool-intro) {
+    margin-block: 0.45rem 0.65rem;
+    padding-block: 0.45rem;
+  }
+
+  #app .site-shell :is(.metric-intro, .cod-intro, .vb-intro, .quick-hero, .tool-intro) .intro-text {
+    line-height: 1.48;
+    margin-block: 0.45rem 0.65rem;
+  }
+
+  #app .site-shell :is(.metric-steps, .cod-steps, .vb-steps, .tool-step-navigation) {
+    margin-block: 0.8rem;
+  }
+
+  #app .site-shell .recovery-header-status {
+    min-inline-size: 0;
+    min-block-size: 36px;
+    margin-inline-start: 0;
+    padding: 0.35rem 0.6rem;
+    white-space: normal;
+  }
+}
