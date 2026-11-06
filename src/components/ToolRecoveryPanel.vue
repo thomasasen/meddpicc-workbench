@@ -34,7 +34,6 @@ watch(
   },
 )
 
-
 const statusContent = computed(() => {
   switch (props.saveStatus) {
     case 'checking':
@@ -103,7 +102,13 @@ defineEmits<{
       <span>{{ statusContent.text }}</span>
     </span>
   </Teleport>
-  <span class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-testid="recovery-announcement">
+  <span
+    class="sr-only"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+    data-testid="recovery-announcement"
+  >
     {{ statusAnnouncement }}
   </span>
   <section
