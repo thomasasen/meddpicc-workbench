@@ -6,15 +6,7 @@ import { validMetricBuilderDraft } from '../services/recoveryDrafts'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import {
-  ArrowRight,
-  ArrowDownToLine,
-  Calculator,
-  ClipboardCopy,
-  FileCheck2,
-  Lightbulb,
-  RotateCcw,
-} from '@lucide/vue'
+import { ArrowRight, ArrowDownToLine, Calculator, ClipboardCopy, FileCheck2, Lightbulb, RotateCcw } from '@lucide/vue'
 import {
   buildMetric,
   decimal,
