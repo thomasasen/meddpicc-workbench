@@ -1,14 +1,6 @@
 <script setup lang="ts">
 import ToolboxHeader from '../components/ToolboxHeader.vue'
-import {
-  BookOpen,
-  CheckCircle2,
-  CircleAlert,
-  Compass,
-  ListChecks,
-  MessageCircleQuestion,
-  Route,
-} from '@lucide/vue'
+import { BookOpen, CheckCircle2, CircleAlert, Compass, ListChecks, MessageCircleQuestion, Route } from '@lucide/vue'
 
 import { painImplicationKnowledge as pain } from '../content/meddpicc/painImplication'
 import KnowledgeSectionNav from '../components/KnowledgeSectionNav.vue'
