@@ -418,9 +418,7 @@ const knowledgeTopics = [
               </component>
             </div>
             <details v-if="cluster.tools.some((entry) => !entry.route)" class="tool-cluster-planned">
-              <summary>
-                Weitere geplante Tools ({{ cluster.tools.filter((entry) => !entry.route).length }})
-              </summary>
+              <summary>Weitere geplante Tools ({{ cluster.tools.filter((entry) => !entry.route).length }})</summary>
               <div class="tool-cluster-list">
                 <component
                   :is="tool.route ? 'RouterLink' : 'div'"
