@@ -471,6 +471,15 @@ jobs:
           done < <(find test-results -type f -name '*.png' -print0 | sort -z)
           echo "Ausgewaehlte Screenshots: $count; Bytes: $bytes (Maximum 30 MiB)."
 
+      - name: Go-Live-Prozesskarten als echte Browserbilder bereitstellen
+        if: always() && startsWith(github.head_ref, 'fix/reverse-timeline-')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: reverse-timeline-visual-review
+          path: test-results/**/reverse-timeline-compact-*.png
+          if-no-files-found: warn
+          retention-days: 3
+
       - name: Kompakte Abnahme-Screenshots bereitstellen
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
