@@ -195,7 +195,9 @@ test('Globale Löschung invalidiert auch einen noch offenen Tab vor dessen erste
   await settings.goto('/meddpicc-workbench/#/settings')
   settings.once('dialog', (dialog) => void dialog.accept())
   await settings.getByRole('button', { name: 'Alle lokalen Recoverydaten löschen' }).click()
-  await expect(settings.getByText('Alle lokalen Recovery-Arbeitsstände wurden gelöscht.', { exact: false })).toBeVisible()
+  await expect(
+    settings.getByText('Alle lokalen Recovery-Arbeitsstände wurden gelöscht.', { exact: false }),
+  ).toBeVisible()
 
   await customer(editor).fill('Darf nach globalem Löschen nicht erneut entstehen')
   await editor.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
