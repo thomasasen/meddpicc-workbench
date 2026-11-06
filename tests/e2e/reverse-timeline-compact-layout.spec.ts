@@ -104,24 +104,27 @@ test('Drag-Leiste fuellt die Kartenhoehe; Nummer, Eingabe und Papierkorb liegen 
   for (const width of [1024, 1440]) {
     await page.setViewportSize({ width, height: 900 })
     await page.goto(route)
-    const geometry = await page.locator('.reverse-step-card').first().evaluate((card) => {
-      const get = (selector: string) => {
-        const element = card.querySelector<HTMLElement>(selector)
-        if (!element) throw new Error(`Element fehlt: ${selector}`)
-        const rect = element.getBoundingClientRect()
-        return { top: rect.top, bottom: rect.bottom, height: rect.height }
-      }
-      const rect = card.getBoundingClientRect()
-      return {
-        card: { top: rect.top, bottom: rect.bottom, height: rect.height },
-        grip: get('.reverse-drag-handle'),
-        badge: get('.reverse-step-position'),
-        name: get('.reverse-step-name input'),
-        duration: get('.reverse-step-fields input[type="number"]'),
-        unit: get('.reverse-step-fields select'),
-        deleteButton: get('.reverse-step-controls button'),
-      }
-    })
+    const geometry = await page
+      .locator('.reverse-step-card')
+      .first()
+      .evaluate((card) => {
+        const get = (selector: string) => {
+          const element = card.querySelector<HTMLElement>(selector)
+          if (!element) throw new Error(`Element fehlt: ${selector}`)
+          const rect = element.getBoundingClientRect()
+          return { top: rect.top, bottom: rect.bottom, height: rect.height }
+        }
+        const rect = card.getBoundingClientRect()
+        return {
+          card: { top: rect.top, bottom: rect.bottom, height: rect.height },
+          grip: get('.reverse-drag-handle'),
+          badge: get('.reverse-step-position'),
+          name: get('.reverse-step-name input'),
+          duration: get('.reverse-step-fields input[type="number"]'),
+          unit: get('.reverse-step-fields select'),
+          deleteButton: get('.reverse-step-controls button'),
+        }
+      })
 
     for (const control of [geometry.badge, geometry.duration, geometry.unit, geometry.deleteButton]) {
       expect(Math.abs(control.top - geometry.name.top), `Oberkante bei ${width}px`).toBeLessThanOrEqual(2)
@@ -166,25 +169,28 @@ test('Touch-Ansicht behaelt den durchgehenden Drag-Griff und gut erreichbare Akt
     await page.setViewportSize({ width, height: 900 })
     await page.goto(route)
 
-    const geometry = await page.locator('.reverse-step-card').first().evaluate((card) => {
-      const drag = card.querySelector<HTMLElement>('.reverse-drag-handle')
-      const badge = card.querySelector<HTMLElement>('.reverse-step-position')
-      const deleteButton = card.querySelector<HTMLElement>('.reverse-step-controls button')
-      if (!drag || !badge || !deleteButton) throw new Error('Bedienelement fehlt')
-      const a = card.getBoundingClientRect()
-      const d = drag.getBoundingClientRect()
-      const b = badge.getBoundingClientRect()
-      const del = deleteButton.getBoundingClientRect()
-      return {
-        cardHeight: a.height,
-        dragHeight: d.height,
-        dragWidth: d.width,
-        dragBottomGap: a.bottom - d.bottom,
-        badgeHeight: b.height,
-        deleteWidth: del.width,
-        deleteHeight: del.height,
-      }
-    })
+    const geometry = await page
+      .locator('.reverse-step-card')
+      .first()
+      .evaluate((card) => {
+        const drag = card.querySelector<HTMLElement>('.reverse-drag-handle')
+        const badge = card.querySelector<HTMLElement>('.reverse-step-position')
+        const deleteButton = card.querySelector<HTMLElement>('.reverse-step-controls button')
+        if (!drag || !badge || !deleteButton) throw new Error('Bedienelement fehlt')
+        const a = card.getBoundingClientRect()
+        const d = drag.getBoundingClientRect()
+        const b = badge.getBoundingClientRect()
+        const del = deleteButton.getBoundingClientRect()
+        return {
+          cardHeight: a.height,
+          dragHeight: d.height,
+          dragWidth: d.width,
+          dragBottomGap: a.bottom - d.bottom,
+          badgeHeight: b.height,
+          deleteWidth: del.width,
+          deleteHeight: del.height,
+        }
+      })
 
     expect(geometry.dragHeight).toBeGreaterThan(geometry.cardHeight - 35)
     expect(geometry.dragBottomGap).toBeLessThanOrEqual(17)
