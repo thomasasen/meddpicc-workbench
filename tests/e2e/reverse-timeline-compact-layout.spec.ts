@@ -48,9 +48,10 @@ test('Prozesskarten sind bei allen relevanten Breiten kompakt und ohne Überlauf
     }
     if (width <= 375) {
       expect(Math.max(...result.cardHeights)).toBeLessThan(330)
-      const unitWidth = await cards.first().locator('.reverse-step-fields select').evaluate(
-        (element) => element.getBoundingClientRect().width,
-      )
+      const unitWidth = await cards
+        .first()
+        .locator('.reverse-step-fields select')
+        .evaluate((element) => element.getBoundingClientRect().width)
       expect(unitWidth, `Einheitenauswahl bei ${width}px`).toBeGreaterThanOrEqual(160)
     }
     if ([320, 375, 1440].includes(width) && test.info().project.name === 'desktop-chromium') {
