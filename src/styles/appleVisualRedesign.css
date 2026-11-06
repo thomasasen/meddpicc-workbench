@@ -1068,3 +1068,63 @@ body {
     margin-top: 0.6rem;
   }
 }
+
+
+/*
+ * RT-02/07 – Semantische Sekundärtexte und mobile Touch-Geometrie.
+ * Keine pauschale Anhebung aller Mikro-Metadaten: Kicker und numerische
+ * Diagrammachsen bleiben visuell nachgeordnet. Nutz-/Hilfetext hat
+ * mindestens 0.875rem und genügend Zeilenabstand.
+ */
+:root {
+  --type-content-help: 0.875rem;
+  --type-content-caption: 0.8125rem;
+  --touch-target: 44px;
+}
+
+#app .site-shell
+  :is(
+    .tool-row small,
+    .tool-cluster-heading p,
+    .checklist-preview-card p,
+    .checklist-item-footer small,
+    .checklist-detail-grid p,
+    .checklist-detail-grid ul,
+    .knowledge-card small,
+    .knowledge-benefit p,
+    .knowledge-concept-card p,
+    .knowledge-concept-card ul,
+    .knowledge-detail > p,
+    .knowledge-question-list li,
+    .knowledge-action-list li,
+    .section-note,
+    .tool-source-note,
+    .field-help,
+    .entity-target-note,
+    .recovery-description
+  ) {
+  font-size: var(--type-content-help);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+#app .site-shell :is(.field > span, .cod-field > span, .vb-field > span) {
+  font-size: var(--type-content-help);
+  line-height: 1.4;
+}
+
+@media (max-width: 760px), (pointer: coarse) {
+  /* Buttons und vollwertige Navigationsaktionen müssen mit dem Finger
+   * bedienbar sein, auch wenn ihre sichtbare Beschriftung kompakt bleibt.
+   * Inline-Textlinks behalten ihre natürliche Textgeometrie.
+   */
+  #app .site-shell button,
+  #app .site-shell :is(.button, .icon-link, .toolbox-settings-link, .toolbox-primary-nav a) {
+    min-block-size: var(--touch-target);
+    min-inline-size: var(--touch-target);
+  }
+
+  #app .site-shell :is(.toolbox-primary-nav, .header-actions) {
+    gap: 0.5rem;
+  }
+}
