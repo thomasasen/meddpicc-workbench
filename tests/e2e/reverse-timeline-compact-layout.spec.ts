@@ -46,6 +46,11 @@ test('Prozesskarten sind bei allen relevanten Breiten kompakt und ohne Überlauf
       expect(Math.max(...result.cardHeights)).toBeLessThan(170)
     }
     if (width <= 375) expect(Math.max(...result.cardHeights)).toBeLessThan(330)
+    if ([320, 375, 1440].includes(width)) {
+      await page.locator('.reverse-steps-section').screenshot({
+        path: test.info().outputPath(`reverse-timeline-compact-${width}.png`),
+      })
+    }
   }
 })
 
