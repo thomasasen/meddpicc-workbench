@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ArrowLeft, BookOpen, CheckSquare2, CircleAlert, Lightbulb, MessageCircleQuestion } from '@lucide/vue'
+import ToolboxHeader from '../components/ToolboxHeader.vue'
+import { BookOpen, CheckSquare2, CircleAlert, Lightbulb, MessageCircleQuestion } from '@lucide/vue'
 import { computed, ref, watch } from 'vue'
 
 import { championChecklist } from '../content/meddpicc/champion'
@@ -86,21 +87,7 @@ function checkboxId(itemId: string): string {
   <div class="site-shell checklist-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
 
-    <header class="site-header">
-      <div class="container header-inner toolbox-header">
-        <RouterLink class="brand" to="/" aria-label="Zurück zur MEDDPICC Toolbox">
-          <span class="brand-mark">M</span>
-          <span class="brand-copy">
-            <strong>MEDDPICC Toolbox</strong>
-            <span>Checklists</span>
-          </span>
-        </RouterLink>
-        <RouterLink class="button button-quiet button-with-icon" to="/#checklists">
-          <ArrowLeft :size="17" aria-hidden="true" />
-          Zur Checklist-Übersicht
-        </RouterLink>
-      </div>
-    </header>
+    <ToolboxHeader area="Checklists" back-to="/#checklists" back-label="class="button button-quiet button-with-icon" to="/#checklists"> Zur Checklist-Übersicht" />
 
     <main id="main-content" class="checklist-main">
       <section class="container checklist-hero" aria-labelledby="checklist-title">
