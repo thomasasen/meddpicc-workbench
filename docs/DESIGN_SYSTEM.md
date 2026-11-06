@@ -156,6 +156,10 @@ Jede Visualisierung braucht eine textuelle Alternative mit den wesentlichen Wert
 
 Keine Radar-Charts, Gauges, 3D-Charts oder dekorativen Diagramme.
 
+### Kompakte Go-Live-Rückwärtsplanung
+
+Die sortierbaren Prozesskarten haben eine konsistente Feld-Geometrie: Auf Desktop beginnen Schritt, Dauer und Einheit mit gemeinsamen Control-Oberkanten; Nummer und Entfernen-Aktion sitzen exakt in der Control-Zeile und sind gleich hoch. Der Drag-Griff ist als durchgängige, mindestens 44 px breite Bedienzone über die gesamte Kartenhöhe ausgebildet. Mobile Reflow darf Bedienelemente getrennt anordnen, wenn sonst Controls zu schmal oder Inhalte abgeschnitten würden. Ein kompakter Recovery-Hinweis auf der Seite zeigt die optionale Funktion, ihre Aktivierung und einen erreichbaren Datenschutzhinweis, ohne die Arbeitsaufgabe zu dominieren. Alle Änderungen müssen Tastaturbedienbarkeit, 200%-Zoom und Reduced Motion erhalten.
+
 ## 10. Design Tokens
 
 Bestehende zentrale Tokens für Farben, Spacing, Typografie, Radii, Borders, Focus und Motion weiterverwenden. Keine verstreuten Einzelwerte, wenn ein Token sinnvoll existiert. Für neue UI-Anforderungen benötigte Motion-, Material- und Kontrastvarianten als gemeinsame Tokens vorsehen statt pro View Einzelwerte zu erfinden. Gesten-Animationen dürfen nicht durch pauschale globale CSS-Transitions blockiert werden.

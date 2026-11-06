@@ -9,6 +9,7 @@ const props = defineProps<{
   candidate: { savedAt: string } | null
   message: string
   saveStatus: ToolSaveState
+  compactLayout?: boolean
 }>()
 
 const recoveryHeading = ref<HTMLElement | null>(null)
@@ -110,7 +111,7 @@ defineEmits<{
   </span>
   <section
     class="quick-panel recovery-panel"
-    :class="{ 'recovery-panel--compact': compact }"
+    :class="{ 'recovery-panel--compact': compact, 'recovery-panel--inline': compactLayout }"
     role="region"
     aria-labelledby="recovery-heading"
   >
@@ -119,7 +120,10 @@ defineEmits<{
       <span v-if="enabled" class="recovery-label">Aktiv</span>
     </div>
     <template v-if="compact">
-      <p class="recovery-description recovery-description--short">
+      <p v-if="compactLayout" class="recovery-description recovery-description--short">
+        Auf Wunsch Eingaben sieben Tage lokal zwischenspeichern. Unverschlüsselt, ohne Cloud.
+      </p>
+      <p v-else class="recovery-description recovery-description--short">
         Optional: sieben Tage unverschlüsselt in diesem Browser zwischenspeichern. Keine Cloud, keine Datei. Nicht für
         gemeinsam genutzte Geräte empfohlen.
       </p>
