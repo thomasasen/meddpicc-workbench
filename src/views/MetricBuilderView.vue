@@ -209,7 +209,7 @@ const recovery = useToolRecovery({
 <template>
   <div class="site-shell metric-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
-    <ToolboxHeader area="Value & Metrics" back-to="/" back-label="class="button button-quiet button-with-icon" to="/"> Alle Microtools" document-design />
+    <ToolboxHeader area="Value &amp; Metrics" back-to="/" back-label="Alle Microtools" document-design />
 
     <main id="main-content" class="container metric-main">
       <section class="metric-intro">
