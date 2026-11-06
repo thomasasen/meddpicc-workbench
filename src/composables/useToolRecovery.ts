@@ -3,6 +3,7 @@ import { onBeforeRouteLeave } from 'vue-router'
 import {
   deleteRecovery,
   readRecovery,
+  readRecoveryEpoch,
   RecoveryStorageError,
   writeRecovery,
   type RecoverySnapshot,
@@ -31,6 +32,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
   const modified = computed(() => JSON.stringify(project(value.value)) !== initialTracked)
   let lastSaved = initial
   let observedToken: string | null = null
+  let observedEpoch: string | null = null
   let timer: ReturnType<typeof setTimeout> | undefined
   // Serialisiert parallele Debounce-, Navigations- und Löschvorgänge.
   let pendingFlush: Promise<void> = Promise.resolve()
@@ -50,7 +52,9 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
     busy.value = true
     try {
       const result = await readRecovery(tool, validate)
+      const epoch = await readRecoveryEpoch()
       if (disposed) return
+      observedEpoch = epoch
       if (result.kind === 'available') {
         candidate.value = result.snapshot
         observedToken = result.snapshot.token
@@ -77,7 +81,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
         return false
       }
       try {
-        const saved = await writeRecovery(tool, value.value, observedToken, validate)
+        const saved = await writeRecovery(tool, value.value, observedToken, validate, Date.now(), observedEpoch)
         if (disposed) return false
         observedToken = saved.token
         lastSaved = serialized
@@ -146,6 +150,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
     busy.value = true
     try {
       const current = await readRecovery(tool, validate)
+      const epoch = await readRecoveryEpoch()
       if (current.kind !== 'available' || current.snapshot.token !== pending.token) {
         conflict.value = true
         message.value = 'Der lokale Stand hat sich geändert. Bitte neu laden und erneut prüfen.'
@@ -154,6 +159,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
       // Ein Tool muss seine Werte über EINEN synchronen Commit ersetzen.
       restore(structuredClone(current.snapshot.data))
       observedToken = current.snapshot.token
+      observedEpoch = epoch
       lastSaved = JSON.stringify(value.value)
       candidate.value = null
       enabled.value = true
