@@ -23,6 +23,8 @@ import {
 } from '../domain/reverseTimeline'
 import { buildCustomerTimelineSvg, downloadTimelinePng, downloadTimelineSvg } from '../services/timelineExport'
 import { loadBrandForReport } from '../services/brandProfileStore'
+import { useToolRecovery } from '../composables/useToolRecovery'
+import ToolRecoveryPanel from '../components/ToolRecoveryPanel.vue'
 
 type EditableStep = ReverseTimelineStepInput
 
@@ -391,6 +393,69 @@ async function exportTimeline(kind: 'svg' | 'png'): Promise<void> {
     exportBusy.value = false
   }
 }
+
+type TimelineRecovery = {
+  customerName: string
+  planTitle: string
+  referenceDate: string
+  targetGoLiveDate: string
+  compellingEvent: string
+  steps: EditableStep[]
+}
+
+function validTimelineRecovery(value: unknown): value is TimelineRecovery {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false
+  const record = value as Record<string, unknown>
+  const fields = ['customerName', 'planTitle', 'referenceDate', 'targetGoLiveDate', 'compellingEvent']
+  if (Object.keys(record).length !== 6 || !fields.every((key) => typeof record[key] === 'string')) return false
+  if (!Array.isArray(record.steps) || record.steps.length < 1 || record.steps.length > 100) return false
+  if (!fields.every((key) => (record[key] as string).length <= 5000)) return false
+  const ids = new Set<string>()
+  return record.steps.every((step: unknown) => {
+    if (!step || typeof step !== 'object' || Array.isArray(step)) return false
+    const item = step as Record<string, unknown>
+    const allowed = ['id', 'label', 'duration', 'durationUnit', 'owner', 'area', 'ownerDetail']
+    if (Object.keys(item).some((key) => !allowed.includes(key))) return false
+    if (typeof item.id !== 'string' || !item.id || item.id.length > 120 || ids.has(item.id)) return false
+    ids.add(item.id)
+    return (
+      typeof item.label === 'string' &&
+      item.label.length <= 250 &&
+      (item.duration === '' ||
+        (typeof item.duration === 'number' &&
+          Number.isFinite(item.duration) &&
+          item.duration >= 0 &&
+          item.duration <= 10000)) &&
+      (item.durationUnit === 'business-days' || item.durationUnit === 'calendar-days') &&
+      (item.owner === 'customer' || item.owner === 'seller' || item.owner === 'shared') &&
+      (item.area === 'decision-process' || item.area === 'paper-process' || item.area === 'implementation') &&
+      (item.ownerDetail === undefined || (typeof item.ownerDetail === 'string' && item.ownerDetail.length <= 200))
+    )
+  })
+}
+
+const recoveryState = computed<TimelineRecovery>(() => ({
+  customerName: customerName.value,
+  planTitle: planTitle.value,
+  referenceDate: referenceDate.value,
+  targetGoLiveDate: targetGoLiveDate.value,
+  compellingEvent: compellingEvent.value,
+  steps: steps.value,
+}))
+
+const recovery = useToolRecovery({
+  tool: 'reverse-timeline',
+  value: recoveryState,
+  validate: validTimelineRecovery,
+  restore: (snapshot: TimelineRecovery) => {
+    customerName.value = snapshot.customerName
+    planTitle.value = snapshot.planTitle
+    referenceDate.value = snapshot.referenceDate
+    targetGoLiveDate.value = snapshot.targetGoLiveDate
+    compellingEvent.value = snapshot.compellingEvent
+    steps.value = structuredClone(snapshot.steps)
+  },
+})
 </script>
 
 <template>
@@ -435,6 +500,19 @@ async function exportTimeline(kind: 'svg' | 'png'): Promise<void> {
           </p>
         </aside>
       </section>
+
+      <div class="container">
+        <ToolRecoveryPanel
+          :candidate="recovery.candidate.value"
+          :enabled="recovery.enabled.value"
+          :busy="recovery.busy.value"
+          :conflict="recovery.conflict.value"
+          :message="recovery.message.value"
+          @activate="recovery.activate"
+          @recover="recovery.recover"
+          @discard="recovery.discard"
+        />
+      </div>
 
       <section class="container reverse-config" aria-labelledby="plan-input-title">
         <div class="section-heading-row">

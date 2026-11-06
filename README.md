@@ -8,6 +8,14 @@ Die Toolbox soll einem Account Manager vor allem eine Frage beantworten:
 
 > **Was hilft mir bei meiner aktuellen Aufgabe – und wie komme ich schnell zu einem brauchbaren Ergebnis?**
 
+### Optionales lokales Recovery (Issue #65, PR #95)
+
+Längere Microtools wie **Go-Live-Rückwärtsplanung, Software-Payback, Metric Builder, Cost of Delay und Value Bridge** können Eingaben nach einer ausdrücklichen Aktivierung lokal in **IndexedDB** zwischensichern. Beim erneuten Öffnen gibt es die bewusste Auswahl zwischen Wiederherstellen und Verwerfen. Zusätzlich wird vor unbeabsichtigtem Verlassen ungesicherter Eingaben gewarnt. Unter **Einstellungen → Lokale Speicherung und Datensicherung** lassen sich sämtliche Recovery-Snapshots löschen.
+
+**Wichtig:** Das Recovery ist zunächst ausgeschaltet und kein Datei-Export. Es erzeugt keine `.meddpicc`-Projektdatei, bestätigt keine Kundenevidenz und aktiviert übertragene Metrics nicht automatisch. Snapshots sind **nicht verschlüsselt**, verfallen nach sieben Tagen und werden beim nächsten Zugriff entfernt; ohne erneuten Zugriff können Browserdaten technisch länger vorhanden bleiben. Ein Browserabsturz kurz vor dem nächsten Schreibvorgang kann die letzten Eingaben verlieren. Für vertrauliche Daten auf gemeinsam genutzten Geräten sollte Recovery nicht aktiviert werden.
+
+Auswahl der Tools, Datenschutzgrenzen, Verhalten bei fehlerhaften Snapshots und Mehr-Tab-Konflikten: [Lokales Recovery – Architektur und QS](docs/LOCAL_RECOVERY.md).
+
 ### Aktueller Issue-Backlog (11.10.2026)
 
 **Zuerst P0:** [#65 Datenverlust/Recovery](https://github.com/thomasasen/meddpicc-workbench/issues/65) und [#66 Privacy/Security](https://github.com/thomasasen/meddpicc-workbench/issues/66). **Danach P1:** [#67 Accessibility](https://github.com/thomasasen/meddpicc-workbench/issues/67), [#68 Offline](https://github.com/thomasasen/meddpicc-workbench/issues/68), [#69 Migrationen](https://github.com/thomasasen/meddpicc-workbench/issues/69), [#70 Performance](https://github.com/thomasasen/meddpicc-workbench/issues/70). **P2:** sechs neue fachliche Tool-Slices [#71–#76](https://github.com/thomasasen/meddpicc-workbench/issues/6) und das optionale [Exportpaket #77](https://github.com/thomasasen/meddpicc-workbench/issues/77).

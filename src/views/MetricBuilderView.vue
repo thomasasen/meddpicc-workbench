@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ToolRecoveryPanel from '../components/ToolRecoveryPanel.vue'
+import { useToolRecovery } from '../composables/useToolRecovery'
+import { validMetricBuilderDraft } from '../services/recoveryDrafts'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -144,32 +147,63 @@ async function exportPdf(): Promise<void> {
 
 async function transfer(): Promise<void> {
   if (!result.value.complete || !result.value.transfer.length) return
+  if (!(await recovery.prepareHandoff())) return
   try {
     queueMetricHandoff(result.value.transfer, window.sessionStorage)
     await router.push({ path: '/tools/quick-payback', query: { importMetric: '1' } })
   } catch {
     message.value = 'Lokale Übergabe nicht möglich. Bitte Browserspeicher für diese Sitzung erlauben.'
+  } finally {
+    recovery.clearHandoffApproval()
   }
 }
 async function transferToDelay(): Promise<void> {
   if (!result.value.complete || result.value.realizedEur === null || result.value.realizedEur <= 0) return
+  if (!(await recovery.prepareHandoff())) return
   try {
     queueCostOfDelayHandoff(draft.value, result.value, window.sessionStorage)
     await router.push('/tools/cost-of-delay')
   } catch {
     message.value = 'Cost-of-Delay-Übergabe nicht möglich. Nur realisierbare Metrics können übertragen werden.'
+  } finally {
+    recovery.clearHandoffApproval()
   }
 }
 async function transferToBridge(): Promise<void> {
   if (!result.value.complete) return
+  if (!(await recovery.prepareHandoff())) return
   try {
     queueBuilderToBridge(draft.value, result.value, window.sessionStorage)
     await router.push('/tools/value-bridge')
   } catch {
     message.value = 'Value-Bridge-Übergabe nicht möglich. Bitte Eingaben prüfen.'
+  } finally {
+    recovery.clearHandoffApproval()
   }
 }
 import ToolStepNavigation from '../components/ToolStepNavigation.vue'
+
+type MetricRecovery = { draft: MetricBuilderDraft; step: 1 | 2 | 3 }
+function validMetricRecovery(value: unknown): value is MetricRecovery {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false
+  const entry = value as Record<string, unknown>
+  return (
+    Object.keys(entry).length === 2 &&
+    validMetricBuilderDraft(entry.draft) &&
+    (entry.step === 1 || entry.step === 2 || entry.step === 3)
+  )
+}
+const recoveryState = computed<MetricRecovery>(() => ({ draft: draft.value, step: step.value }))
+const recovery = useToolRecovery({
+  tool: 'metric-builder',
+  value: recoveryState,
+  validate: validMetricRecovery,
+  tracked: (snapshot) => snapshot.draft,
+  restore: (snapshot: MetricRecovery) => {
+    draft.value = structuredClone(snapshot.draft)
+    step.value = snapshot.step
+  },
+})
 </script>
 
 <template>
@@ -200,6 +234,17 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
           Zeit ist nicht automatisch eine Kostenersparnis.
         </p>
       </section>
+
+      <ToolRecoveryPanel
+        :candidate="recovery.candidate.value"
+        :enabled="recovery.enabled.value"
+        :busy="recovery.busy.value"
+        :conflict="recovery.conflict.value"
+        :message="recovery.message.value"
+        @activate="recovery.activate"
+        @recover="recovery.recover"
+        @discard="recovery.discard"
+      />
 
       <ToolStepNavigation
         v-model="step"

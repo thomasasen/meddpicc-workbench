@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ToolRecoveryPanel from './ToolRecoveryPanel.vue'
+import { useToolRecovery } from '../composables/useToolRecovery'
+import { validSoftwareCost, validSoftwareMetric } from '../services/recoveryDrafts'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
 import { consumeMetricHandoff, consumePaybackReturn, queuePaybackReturn } from '../domain/metricBuilderHandoff'
@@ -128,6 +131,7 @@ function addCost(kind: CostKind) {
   })
 }
 async function openMetricBuilder() {
+  if (!(await recovery.prepareHandoff())) return
   try {
     queuePaybackReturn(
       { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
@@ -136,9 +140,12 @@ async function openMetricBuilder() {
     await router.push('/tools/metric-builder')
   } catch {
     transferMessage.value = 'Der aktuelle Payback-Entwurf konnte nicht lokal zwischengespeichert werden.'
+  } finally {
+    recovery.clearHandoffApproval()
   }
 }
 async function transferToBridge(): Promise<void> {
+  if (!(await recovery.prepareHandoff())) return
   try {
     queuePaybackToBridge(
       { horizonMonths: horizon.value, costs: costs.value, metrics: metrics.value },
@@ -147,6 +154,8 @@ async function transferToBridge(): Promise<void> {
     await router.push('/tools/value-bridge')
   } catch {
     transferMessage.value = 'Value-Bridge-Übergabe nicht möglich. Maximal 15 Metrics und gültige Eingaben erforderlich.'
+  } finally {
+    recovery.clearHandoffApproval()
   }
 }
 function addMetric(formula: MetricFormula = 'direct') {
@@ -385,10 +394,116 @@ async function downloadReport(kind: 'customer' | 'finance') {
     reportStatus.value = 'PDF-Erstellung fehlgeschlagen. Bitte Eingaben prüfen und erneut versuchen.'
   }
 }
+
+type PaybackRecovery = {
+  costs: SoftwareCost[]
+  metrics: CustomerMetric[]
+  horizon: 36 | 60
+  selectedScenario: BusinessScenarioId
+  scenarioSettings: ScenarioSettings
+  reportCustomer: string
+  reportProject: string
+  reportAuthor: string
+  reportPain: string
+  reportGoal: string
+  reportDate: string
+}
+function validPaybackRecovery(value: unknown): value is PaybackRecovery {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false
+  const record = value as Record<string, unknown>
+  const keys = [
+    'costs',
+    'metrics',
+    'horizon',
+    'selectedScenario',
+    'scenarioSettings',
+    'reportCustomer',
+    'reportProject',
+    'reportAuthor',
+    'reportPain',
+    'reportGoal',
+    'reportDate',
+  ]
+  if (Object.keys(record).length !== keys.length || !keys.every((key) => Object.hasOwn(record, key))) return false
+  if (!Array.isArray(record.costs) || record.costs.length > 100 || !record.costs.every(validSoftwareCost)) return false
+  if (!Array.isArray(record.metrics) || record.metrics.length > 100 || !record.metrics.every(validSoftwareMetric))
+    return false
+  if (record.horizon !== 36 && record.horizon !== 60) return false
+  if (
+    record.selectedScenario !== 'base' &&
+    record.selectedScenario !== 'conservative' &&
+    record.selectedScenario !== 'optimistic'
+  )
+    return false
+  if (
+    ['reportCustomer', 'reportProject', 'reportAuthor', 'reportPain', 'reportGoal', 'reportDate'].some(
+      (key) => typeof record[key] !== 'string' || (record[key] as string).length > 5000,
+    )
+  )
+    return false
+  const settings = record.scenarioSettings
+  if (!settings || typeof settings !== 'object' || Array.isArray(settings)) return false
+  const item = settings as Record<string, unknown>
+  if (Object.keys(item).length !== 2 || !Object.hasOwn(item, 'conservative') || !Object.hasOwn(item, 'optimistic'))
+    return false
+  return ['conservative', 'optimistic'].every((key) => {
+    const scenario = item[key]
+    if (!scenario || typeof scenario !== 'object' || Array.isArray(scenario)) return false
+    const fields = scenario as Record<string, unknown>
+    return (
+      Object.keys(fields).length === 3 &&
+      ['benefitPercent', 'oneTimeCostPercent', 'benefitDelayMonths'].every(
+        (name) => fields[name] === '' || (typeof fields[name] === 'number' && Number.isFinite(fields[name])),
+      )
+    )
+  })
+}
+const recoveryState = computed<PaybackRecovery>(() => ({
+  costs: costs.value,
+  metrics: metrics.value,
+  horizon: horizon.value,
+  selectedScenario: selectedScenario.value,
+  scenarioSettings: scenarioSettings.value,
+  reportCustomer: reportCustomer.value,
+  reportProject: reportProject.value,
+  reportAuthor: reportAuthor.value,
+  reportPain: reportPain.value,
+  reportGoal: reportGoal.value,
+  reportDate: reportDate.value,
+}))
+const recovery = useToolRecovery({
+  tool: 'software-payback',
+  value: recoveryState,
+  validate: validPaybackRecovery,
+  restore: (snapshot: PaybackRecovery) => {
+    costs.value = structuredClone(snapshot.costs)
+    metrics.value = structuredClone(snapshot.metrics)
+    horizon.value = snapshot.horizon
+    selectedScenario.value = snapshot.selectedScenario
+    scenarioSettings.value = structuredClone(snapshot.scenarioSettings)
+    reportCustomer.value = snapshot.reportCustomer
+    reportProject.value = snapshot.reportProject
+    reportAuthor.value = snapshot.reportAuthor
+    reportPain.value = snapshot.reportPain
+    reportGoal.value = snapshot.reportGoal
+    reportDate.value = snapshot.reportDate
+  },
+})
+defineExpose({ canLeave: recovery.canLeave })
 </script>
 
 <template>
   <div class="software-panel">
+    <ToolRecoveryPanel
+      :candidate="recovery.candidate.value"
+      :enabled="recovery.enabled.value"
+      :busy="recovery.busy.value"
+      :conflict="recovery.conflict.value"
+      :message="recovery.message.value"
+      @activate="recovery.activate"
+      @recover="recovery.recover"
+      @discard="recovery.discard"
+    />
     <section class="quick-panel software-block" aria-labelledby="software-cost-heading">
       <div class="software-heading">
         <div>

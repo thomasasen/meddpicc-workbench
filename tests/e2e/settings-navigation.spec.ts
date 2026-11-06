@@ -80,6 +80,11 @@ test('Go-Live-Rückwärtsplanung verlinkt Einstellungen zentral statt direkt Dok
   await page.getByLabel('Target Go-Live').fill('2026-12-31')
   const settings = page.getByRole('link', { name: 'Einstellungen', exact: true })
   await expect(settings).toBeVisible()
+  page.once('dialog', async (dialog) => {
+    expect(dialog.type()).toBe('confirm')
+    expect(dialog.message()).toContain('Ungesicherte Eingaben')
+    await dialog.accept()
+  })
   await settings.click()
   await expect(page).toHaveURL(settingsRoute)
 })

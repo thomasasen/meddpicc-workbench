@@ -78,6 +78,10 @@ test('Value Bridge: Metric-Builder-Übergabe ist einmalig, lässt Evidenz unver�
   await page.goto('/meddpicc-workbench/#/tools/metric-builder')
   await page.getByRole('button', { name: 'Servicekosten' }).click()
   await page.getByRole('button', { name: 'Weiter', exact: false }).click()
+  page.once('dialog', async (dialog) => {
+    expect(dialog.type()).toBe('confirm')
+    await dialog.accept()
+  })
   await page.getByRole('button', { name: 'In Value Bridge übernehmen' }).click()
   await expect(page).toHaveURL(/#\/tools\/value-bridge/)
   await expect(page.getByText('Daten ausdrücklich übernommen.', { exact: false })).toBeVisible()

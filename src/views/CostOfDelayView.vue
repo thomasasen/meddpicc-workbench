@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ToolRecoveryPanel from '../components/ToolRecoveryPanel.vue'
+import { useToolRecovery } from '../composables/useToolRecovery'
+import { validCostOfDelayInput } from '../services/recoveryDrafts'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
 import { ArrowLeft, ArrowRight, Download, RotateCcw } from '@lucide/vue'
@@ -125,14 +128,58 @@ onMounted(() => {
   }
 })
 async function transferToBridge(): Promise<void> {
+  if (!(await recovery.prepareHandoff())) return
   try {
     queueDelayToBridge(draft.value, window.sessionStorage)
     await router.push('/tools/value-bridge')
   } catch {
     notice.value = 'Value-Bridge-Übergabe nicht möglich.'
+  } finally {
+    recovery.clearHandoffApproval()
   }
 }
 import ToolStepNavigation from '../components/ToolStepNavigation.vue'
+
+type DelayRecovery = {
+  draft: CostOfDelayInput
+  step: 1 | 2 | 3
+  chosenDelay: number
+  benefitEntryPeriod: 'annual' | 'monthly'
+  customDelay: number | null
+}
+function validDelayRecovery(value: unknown): value is DelayRecovery {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false
+  const entry = value as Record<string, unknown>
+  return (
+    Object.keys(entry).length === 5 &&
+    validCostOfDelayInput(entry.draft) &&
+    (entry.step === 1 || entry.step === 2 || entry.step === 3) &&
+    typeof entry.chosenDelay === 'number' &&
+    Number.isFinite(entry.chosenDelay) &&
+    (entry.benefitEntryPeriod === 'annual' || entry.benefitEntryPeriod === 'monthly') &&
+    (entry.customDelay === null || (typeof entry.customDelay === 'number' && Number.isFinite(entry.customDelay)))
+  )
+}
+const recoveryState = computed<DelayRecovery>(() => ({
+  draft: draft.value,
+  step: step.value,
+  chosenDelay: chosenDelay.value,
+  benefitEntryPeriod: benefitEntryPeriod.value,
+  customDelay: customDelay.value,
+}))
+const recovery = useToolRecovery({
+  tool: 'cost-of-delay',
+  value: recoveryState,
+  validate: validDelayRecovery,
+  tracked: (snapshot) => snapshot.draft,
+  restore: (snapshot: DelayRecovery) => {
+    draft.value = structuredClone(snapshot.draft)
+    step.value = snapshot.step
+    chosenDelay.value = snapshot.chosenDelay
+    benefitEntryPeriod.value = snapshot.benefitEntryPeriod
+    customDelay.value = snapshot.customDelay
+  },
+})
 </script>
 
 <template>
@@ -170,6 +217,17 @@ import ToolStepNavigation from '../components/ToolStepNavigation.vue'
         </div>
         <p v-if="notice" role="status" class="cod-notice">{{ notice }}</p>
       </section>
+
+      <ToolRecoveryPanel
+        :candidate="recovery.candidate.value"
+        :enabled="recovery.enabled.value"
+        :busy="recovery.busy.value"
+        :conflict="recovery.conflict.value"
+        :message="recovery.message.value"
+        @activate="recovery.activate"
+        @recover="recovery.recover"
+        @discard="recovery.discard"
+      />
 
       <ToolStepNavigation
         v-model="step"

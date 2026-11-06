@@ -51,7 +51,7 @@ test('Export fällt bei gesperrtem IndexedDB sichtbar neutral zurück', async ({
   const result = await download
   const svg = await readFile((await result.path())!, 'utf8')
   expect(svg).not.toContain('data-brand-name')
-  await expect(page.getByRole('status')).toContainText('neutral ohne Firmenbranding')
+  await expect(page.locator('.export-message[role="status"]')).toContainText('neutral ohne Firmenbranding')
 })
 
 test('Dokumentgestaltung ist tastaturbedienbar und stellt Statusmeldungen semantisch dar', async ({ page }, info) => {

@@ -109,6 +109,10 @@ test('Cost of Delay: finanzielle Metric nur nach bewusster Übergabe aus Metric 
   await page.goto('/meddpicc-workbench/#/tools/metric-builder')
   await page.getByRole('button', { name: 'Servicekosten' }).click()
   await page.getByRole('button', { name: 'Weiter', exact: false }).click()
+  page.once('dialog', async (dialog) => {
+    expect(dialog.type()).toBe('confirm')
+    await dialog.accept()
+  })
   await page.getByRole('button', { name: 'Realisierbare Metric in Cost of Delay übernehmen' }).click()
   await expect(page).toHaveURL(/#\/tools\/cost-of-delay/)
   await expect(
