@@ -122,7 +122,9 @@ test('Echte Statusübergänge einschließlich Pending und Saving sind sichtbar',
 
   await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
   await expect(status).toHaveAttribute('data-state', 'saving')
-  await page.screenshot({ path: testInfo.outputPath('saving-375.png'), fullPage: true })
+  // Ein flüchtiger Schreibstatus wird als echtes Element-Screenshot erfasst:
+  // Full-Page-Screenshots können einen Sticky-Header beim Scrollen versetzen.
+  await status.screenshot({ path: testInfo.outputPath('saving-375.png') })
   await expect(status).toHaveAttribute('data-state', 'saved')
   await customer.fill('Noch nicht geschrieben')
   await expect(status).toHaveAttribute('data-state', 'pending')
