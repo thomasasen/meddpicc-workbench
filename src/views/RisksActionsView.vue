@@ -253,9 +253,10 @@ function saveProject() {
       <div class="container header-inner">
         <RouterLink class="brand" to="/" aria-label="Zur MEDDPICC Toolbox">
           <span class="brand-mark" aria-hidden="true">M</span>
-          <span class="brand-copy"
-            ><strong>MEDDPICC Toolbox</strong><span>Legacy · Projektverwaltung</span></span
-          >
+          <span class="brand-copy">
+            <strong>MEDDPICC Toolbox</strong>
+            <span>Legacy · Projektverwaltung</span>
+          </span>
         </RouterLink>
         <div class="header-actions">
           <RouterLink class="icon-link heading-with-icon" to="/"
