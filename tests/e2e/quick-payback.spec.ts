@@ -112,6 +112,9 @@ test('Quick Payback: Back-Navigation und korrekte aktive sowie geplante Tools', 
   const planned = page.locator('.tool-row').filter({
     has: page.getByText('Competition / Alternatives Map', { exact: true }),
   })
+  const plannedSection = page.locator('.tool-cluster-planned').filter({ has: planned })
+  await expect(plannedSection.locator('summary')).toBeVisible()
+  await plannedSection.locator('summary').click()
   await expect(planned.getByText('Geplant')).toBeVisible()
   await expect(planned).not.toHaveAttribute('href')
   await page.goto(route)
