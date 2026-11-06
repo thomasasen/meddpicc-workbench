@@ -197,7 +197,8 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
       enabled.value = true
       message.value = 'Arbeitsstand wiederhergestellt. Wirtschaftliche Annahmen und Evidenz sind nicht neu bestätigt.'
     } catch {
-      message.value = 'Wiederherstellung fehlgeschlagen. Bestehende Eingaben bleiben erhalten.'
+      saveFailed.value = true
+      message.value = 'Wiederherstellung fehlgeschlagen. Bestehende Eingaben bleiben erhalten; der lokale Stand konnte nicht geprüft werden.'
     } finally {
       busy.value = false
     }
