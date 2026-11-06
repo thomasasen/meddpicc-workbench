@@ -395,7 +395,7 @@ const knowledgeTopics = [
             <div class="tool-cluster-list">
               <component
                 :is="tool.route ? 'RouterLink' : 'div'"
-                v-for="tool in cluster.tools"
+                v-for="tool in cluster.tools.filter((entry) => Boolean(entry.route))"
                 :key="tool.label"
                 class="tool-row"
                 :class="{ 'tool-row--active': tool.route }"
@@ -417,6 +417,34 @@ const knowledgeTopics = [
                 </span>
               </component>
             </div>
+            <details v-if="cluster.tools.some((entry) => !entry.route)" class="tool-cluster-planned">
+              <summary>Weitere geplante Tools ({{ cluster.tools.filter((entry) => !entry.route).length }})</summary>
+              <div class="tool-cluster-list">
+                <component
+                  :is="tool.route ? 'RouterLink' : 'div'"
+                  v-for="tool in cluster.tools.filter((entry) => !entry.route)"
+                  :key="tool.label"
+                  class="tool-row"
+                  :class="{ 'tool-row--active': tool.route }"
+                  :to="tool.route"
+                >
+                  <span class="tool-row-primary">
+                    <span v-if="tool.route && tool.icon" class="tool-row-icon">
+                      <component :is="tool.icon" :size="19" aria-hidden="true" />
+                    </span>
+                    <span class="tool-row-copy">
+                      <strong>{{ tool.label }}</strong>
+                      <small>{{ tool.note }}</small>
+                    </span>
+                  </span>
+                  <span class="tool-row-meta">
+                    <span v-if="tool.customerReady" class="tool-kind tool-kind--customer">Kundenfähig</span>
+                    <ArrowRight v-if="tool.route" :size="17" aria-hidden="true" />
+                    <span v-else class="microtool-planned">Geplant</span>
+                  </span>
+                </component>
+              </div>
+            </details>
           </article>
         </div>
       </section>

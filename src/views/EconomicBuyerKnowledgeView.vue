@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ArrowLeft, CheckCircle2, CircleAlert, Lightbulb, MessageCircleQuestion, Route, UserRound } from '@lucide/vue'
+import ToolboxHeader from '../components/ToolboxHeader.vue'
+import { CheckCircle2, CircleAlert, Lightbulb, MessageCircleQuestion, Route, UserRound } from '@lucide/vue'
 import { computed } from 'vue'
 
 import { economicBuyerConcepts, economicBuyerKnowledge } from '../content/meddpicc/economicBuyer'
@@ -18,21 +19,7 @@ import KnowledgeSectionNav from '../components/KnowledgeSectionNav.vue'
   <div class="site-shell knowledge-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
 
-    <header class="site-header">
-      <div class="container header-inner toolbox-header">
-        <RouterLink class="brand" to="/" aria-label="Zurück zur MEDDPICC Toolbox">
-          <span class="brand-mark">M</span>
-          <span class="brand-copy">
-            <strong>MEDDPICC Toolbox</strong>
-            <span>Wissen · Economic Buyer</span>
-          </span>
-        </RouterLink>
-        <RouterLink class="button button-quiet button-with-icon" to="/#knowledge">
-          <ArrowLeft :size="17" aria-hidden="true" />
-          Zur Wissensübersicht
-        </RouterLink>
-      </div>
-    </header>
+    <ToolboxHeader area="Wissen · Economic Buyer" back-to="/#knowledge" back-label="Zur Wissensübersicht" />
 
     <main id="main-content" class="knowledge-main">
       <section class="container knowledge-hero" aria-labelledby="knowledge-title">

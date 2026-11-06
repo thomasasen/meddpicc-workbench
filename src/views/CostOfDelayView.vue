@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import ToolboxHeader from '../components/ToolboxHeader.vue'
 import ToolRecoveryPanel from '../components/ToolRecoveryPanel.vue'
 import { useToolRecovery } from '../composables/useToolRecovery'
 import { validCostOfDelayInput } from '../services/recoveryDrafts'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
-import { ArrowLeft, ArrowRight, Download, RotateCcw } from '@lucide/vue'
+import { ArrowRight, Download, RotateCcw } from '@lucide/vue'
 import {
   calculateCostOfDelay,
   costOfDelayDemos,
@@ -185,18 +186,7 @@ const recovery = useToolRecovery({
 <template>
   <div class="site-shell cod-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
-    <header class="site-header">
-      <div class="container header-inner toolbox-header">
-        <RouterLink class="brand" to="/" aria-label="Zurück zur MEDDPICC Toolbox">
-          <span class="brand-mark">M</span>
-          <span class="brand-copy"><strong>MEDDPICC Toolbox</strong><span>Value &amp; Metrics</span></span>
-        </RouterLink>
-        <RouterLink class="button button-quiet" to="/settings/document-design">Dokumentgestaltung</RouterLink>
-        <RouterLink class="button button-quiet button-with-icon" to="/">
-          <ArrowLeft :size="17" aria-hidden="true" /> Alle Microtools
-        </RouterLink>
-      </div>
-    </header>
+    <ToolboxHeader area="Value &amp; Metrics" back-to="/" back-label="Alle Microtools" document-design />
 
     <main id="main-content" class="container cod-main">
       <section class="cod-intro">

@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import ToolboxHeader from '../components/ToolboxHeader.vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
-import { ArrowLeft, Download, Eye, ImagePlus, RotateCcw, Save, Upload } from '@lucide/vue'
+import { Download, Eye, ImagePlus, RotateCcw, Save, Upload } from '@lucide/vue'
 import { createCrmSaasDemo } from '../data/softwarePaybackDemo'
 import {
   BRAND_SCHEMA_VERSION,
@@ -240,19 +241,7 @@ function downloadPreview(): void {
 <template>
   <div class="site-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
-    <header class="site-header">
-      <div class="container header-inner toolbox-header">
-        <RouterLink class="brand" to="/" aria-label="MEDDPICC Toolbox Startseite">
-          <span class="brand-mark">M</span>
-          <span class="brand-copy"
-            ><strong>MEDDPICC Toolbox</strong><span>Einstellungen · Dokumentgestaltung</span></span
-          >
-        </RouterLink>
-        <RouterLink class="button button-quiet button-with-icon" to="/settings">
-          <ArrowLeft :size="17" aria-hidden="true" /> Einstellungen
-        </RouterLink>
-      </div>
-    </header>
+    <ToolboxHeader area="Einstellungen · Dokumentgestaltung" back-to="/settings" back-label="Einstellungen" />
     <main id="main-content" class="container branding-settings">
       <header class="branding-intro">
         <p class="eyebrow">Einstellungen</p>

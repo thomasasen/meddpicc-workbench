@@ -23,6 +23,7 @@ function choose(index: number): void {
       type="button"
       class="tool-step-navigation__item"
       :aria-current="modelValue === index + 1 ? 'step' : undefined"
+      :data-step-state="modelValue === index + 1 ? 'current' : modelValue > index + 1 ? 'completed' : 'upcoming'"
       @click="choose(index)"
     >
       {{ title }}

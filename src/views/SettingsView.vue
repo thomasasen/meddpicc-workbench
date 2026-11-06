@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import ToolboxHeader from '../components/ToolboxHeader.vue'
 import { onMounted, ref } from 'vue'
-import { ArrowLeft, ArrowRight, FileText, Settings, ShieldCheck } from '@lucide/vue'
+import { ArrowRight, FileText, Settings, ShieldCheck } from '@lucide/vue'
 
 import { loadBrandProfile } from '../services/brandProfileStore'
 import { deleteAllRecovery } from '../services/toolRecovery'
@@ -48,21 +49,7 @@ onMounted(async () => {
 <template>
   <div class="site-shell toolbox-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
-    <header class="site-header">
-      <div class="container header-inner toolbox-header">
-        <RouterLink class="brand" to="/" aria-label="MEDDPICC Toolbox Startseite">
-          <span class="brand-mark">M</span>
-          <span class="brand-copy">
-            <strong>MEDDPICC Toolbox</strong>
-            <span>Einstellungen</span>
-          </span>
-        </RouterLink>
-        <RouterLink class="button button-quiet button-with-icon" to="/">
-          <ArrowLeft :size="17" aria-hidden="true" />
-          Zur Startseite
-        </RouterLink>
-      </div>
-    </header>
+    <ToolboxHeader area="Einstellungen" back-to="/" back-label="Zur Startseite" />
 
     <main id="main-content" class="container settings-main">
       <header>

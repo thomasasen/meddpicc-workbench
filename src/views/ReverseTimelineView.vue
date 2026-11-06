@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import ToolboxHeader from '../components/ToolboxHeader.vue'
 import {
-  ArrowLeft,
   CalendarDays,
   ChevronDown,
   Download,
@@ -462,21 +462,7 @@ const recovery = useToolRecovery({
   <div class="site-shell reverse-tool-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
 
-    <header class="site-header">
-      <div class="container header-inner toolbox-header">
-        <RouterLink class="brand" to="/" aria-label="Zurück zur MEDDPICC Toolbox">
-          <span class="brand-mark">M</span>
-          <span class="brand-copy">
-            <strong>MEDDPICC Toolbox</strong>
-            <span>Decision Process</span>
-          </span>
-        </RouterLink>
-        <RouterLink class="button button-quiet button-with-icon" to="/">
-          <ArrowLeft :size="17" aria-hidden="true" />
-          Alle Microtools
-        </RouterLink>
-      </div>
-    </header>
+    <ToolboxHeader area="Decision Process" back-to="/" back-label="Alle Microtools" />
 
     <main id="main-content" class="reverse-tool-main">
       <section class="container tool-intro" aria-labelledby="reverse-title">

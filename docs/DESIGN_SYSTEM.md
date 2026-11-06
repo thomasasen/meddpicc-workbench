@@ -310,3 +310,37 @@ Die Anwendung bleibt MEDDPICC Toolbox; nur ihre PDF-Ausgaben werden firmenneutra
 ## Zentrale Einstellungsnavigation
 
 Die Startseite erhält im rechten Kopfbereich einen sekundären Zahnrad-Einstieg **Einstellungen** mit Lucide-`Settings` und sichtbarem Text (schmale Mobilansicht: Icon mit zugänglichem Namen). Die Route `/settings` ist die zentrale Einstellungsübersicht. Aktuell gibt es genau einen tatsächlich editierbaren Bereich: **Dokumentgestaltung**, dessen bisheriger Formular- und Datenpersistenzpfad unverändert bleibt. Keine leeren Schalter oder vorgetäuschten Konfigurationen. Der bisherige Deep Link `/settings/document-design` bleibt kompatibel. Einstellungsseiten führen zurück zur Übersicht; der Eingang zur Übersicht führt zum Hauptbildschirm. Tastaturfokus, 375/768/1024/1440 px und kein horizontaler Überlauf müssen geprüft werden.
+
+
+## Red-Team-Korrekturen vom 06.11.2026
+
+### CSS-Ownership und tatsächliche Importreihenfolge
+
+Der Einstieg `src/main.ts` importiert die Styles in genau dieser Reihenfolge:
+
+1. `main.css`: bestehende Grundregeln, Token-Fallbacks und teilweise Legacy-Selektoren.
+2. `reverseTimelineDragElevation.css`: eng begrenzte Drag-Darstellung.
+3. `redesignFoundations.css`: gemeinsame Tool-/Checklist-/Knowledge-Grundlagen.
+4. `appleInteractions.css`: Interaktion, Fokus und Bewegung.
+5. `appleVisualRedesign.css`: aktuelle produktive Apple-inspirierte Präsentation und responsive Regeln.
+6. **`formRowAlignment.css` als letzter Import:** verbindliche Label-/Control-/Hilfetext-Geometrie über mehrere Komponenten.
+
+Vue-Komponenten mit `<style scoped>` oder direkt importierten tool-spezifischen CSS-Dateien folgen zusätzlich den Regeln der realen CSS-Kaskade; die Reihenfolge des Einstiegs ist kein globales `!important`-Versprechen. `appleVisualRedesign.css` ist **nicht** der letzte Stylesheet-Import. Für neue Regeln ist zuerst die bestehende Owner-Datei festzulegen. Neue Doppel-Overrides ohne browserseitig nachgewiesene Notwendigkeit sind zu vermeiden.
+
+### Gemeinsamer Produkt-Header
+
+`src/components/ToolboxHeader.vue` stellt Brand, Bereich, Rückweg und auf breiten Ansichten eine bereichsübergreifende Navigation zur Verfügung. Die Startseite besitzt ihre eigene primäre Bereichsnavigation. Der Header muss den bestehenden Container `.site-header .header-inner` für den Vue-Teleport des Recovery-Status beibehalten. Auf schmalen Viewports wird keine zusätzliche permanente Zweitnavigation erzwungen. Das zentrale Router-Skip-Link-Fokusmanagement bleibt unabhängig vom Header.
+
+### Typografie und Touch
+
+Erklärende und handlungsrelevante Inhalte verwenden grundsätzlich mindestens `--type-content-help: 0.875rem` bei normaler 16px-Root-Größe, bevorzugt 14–16px mit ausreichender Zeilenhöhe. Rein untergeordnete Kicker dürfen kleiner sein, soweit die gerenderte Oberfläche verständlich bleibt. Vollwertige Buttons und Navigationsaktionen benötigen auf Mobile oder coarse-Pointer-Flächen mindestens `--touch-target: 44px` je Achse. Ausnahmen für echte Fließtext-Links sind bewusst zu beurteilen.
+
+### Recovery und Wizard
+
+Recovery bleibt ein ausdrückliches Opt-in. Ein deaktiviertes Recovery ist ein neutraler Zustand; nur reale Konflikte oder Speicherfehler rechtfertigen Warnsemantik. Die sichtbare Statusanzeige wird von einer selektiven Live-Region für wichtige, bestätigte Zustände getrennt. Im kompakten Opt-out-Zustand müssen die wichtigsten Datenschutzgrenzen vor der Aktivierung sichtbar bleiben, vollständige Erläuterungen sind per `details` erreichbar.
+
+Schrittleisten markieren mit `aria-current="step"` den aktiven Schritt und unterscheiden über `data-step-state` `current`, `completed` und `upcoming`. Die drei fachlichen Workflows dürfen unterschiedlich bleiben, der aktuelle Zustand und die Tastaturnavigation müssen konsistent sein. Bereits eingegebene Daten dürfen bei einem Schrittwechsel nicht verloren gehen.
+
+### Legacy
+
+Die Routen `/evidence`, `/risks-actions` und `/references` bleiben funktionsfähig und über ihre Deep Links erreichbar. Sie kennzeichnen sich sichtbar als **Legacy-Bereich**, besitzen einen Rückweg zur aktuellen Toolbox und werden nicht als zentraler Toolbox-Produktkern oder neues CRM dargestellt.

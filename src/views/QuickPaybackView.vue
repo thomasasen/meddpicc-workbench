@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ArrowLeft, Calculator, ClipboardCopy, RotateCcw } from '@lucide/vue'
+import ToolboxHeader from '../components/ToolboxHeader.vue'
+import { Calculator, ClipboardCopy, RotateCcw } from '@lucide/vue'
 import { computed, ref } from 'vue'
 import SoftwarePaybackPanel from '../components/SoftwarePaybackPanel.vue'
 import AnnualBenefitComparison from '../components/AnnualBenefitComparison.vue'
@@ -78,22 +79,7 @@ async function copySummary() {
 <template>
   <div class="site-shell quick-shell">
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
-    <header class="site-header">
-      <div class="container header-inner toolbox-header">
-        <RouterLink class="brand" to="/" aria-label="Zurück zur MEDDPICC Toolbox">
-          <span class="brand-mark">M</span>
-          <span class="brand-copy">
-            <strong>MEDDPICC Toolbox</strong>
-            <span>Value &amp; Metrics</span>
-          </span>
-        </RouterLink>
-        <RouterLink class="button button-quiet" to="/settings/document-design">Dokumentgestaltung</RouterLink>
-        <RouterLink class="button button-quiet button-with-icon" to="/">
-          <ArrowLeft :size="17" aria-hidden="true" />
-          Alle Microtools
-        </RouterLink>
-      </div>
-    </header>
+    <ToolboxHeader area="Value &amp; Metrics" back-to="/" back-label="Alle Microtools" document-design />
 
     <main id="main-content" class="quick-main">
       <section class="container quick-hero" aria-labelledby="quick-title">
