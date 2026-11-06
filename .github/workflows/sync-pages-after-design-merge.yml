@@ -1,0 +1,59 @@
+name: Einmaliger Pages-Sync nach Design-PR-Merges
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/sync-pages-after-design-merge.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: design-pages-root-sync
+  cancel-in-progress: false
+
+jobs:
+  build-and-sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Aktuellen Main auschecken
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Abhaengigkeiten installieren
+        run: npm ci --no-audit --no-fund
+
+      - name: Format, Lint und Unit-Tests pruefen
+        run: |
+          npm run format:check
+          npm run lint
+          npm test
+
+      - name: Produktionsbuild erzeugen und Pages-Root synchronisieren
+        run: |
+          npm run build
+          node scripts/sync-pages-root.mjs
+          npm run pages:check
+
+      - name: Generierte Pages-Dateien auf Main committen
+        run: |
+          set -euo pipefail
+          git add -A -- index.html assets pages-build.json
+          if git diff --cached --quiet; then
+            echo "Pages-Root ist bereits synchron."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "build(pages): synchronize app after design remediation PR merges"
+          git push origin HEAD:main
