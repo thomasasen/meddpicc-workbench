@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 import { Clock3, FileClock, LoaderCircle, SaveCheck, SaveOff, TriangleAlert } from '@lucide/vue'
-import type { ToolSaveStatus } from '../composables/useToolRecovery'
+import type { ToolSaveState } from '../composables/useToolRecovery'
 const props = defineProps<{
   enabled: boolean
   busy: boolean
   conflict: boolean
   candidate: { savedAt: string } | null
   message: string
-  saveStatus: ToolSaveStatus
+  saveStatus: ToolSaveState
 }>()
 
 const recoveryHeading = ref<HTMLElement | null>(null)
