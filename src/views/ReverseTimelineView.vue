@@ -611,33 +611,44 @@ const recovery = useToolRecovery({
                   <option value="calendar-days">Kalendertage</option>
                 </select>
               </label>
-              <label class="field">
-                <span>Verantwortlich</span>
-                <select v-model="step.owner">
-                  <option value="customer">Kunde</option>
-                  <option value="seller">Anbieter</option>
-                  <option value="shared">Gemeinsam</option>
-                </select>
-              </label>
-              <label class="field">
-                <span>Bereich</span>
-                <select v-model="step.area">
-                  <option value="decision-process">Decision Process</option>
-                  <option value="paper-process">Paper Process</option>
-                  <option value="implementation">Implementierung</option>
-                </select>
-              </label>
-              <label class="field reverse-step-owner-detail">
-                <span>Name / Rolle <small>optional</small></span>
-                <input
-                  v-model="step.ownerDetail"
-                  type="text"
-                  maxlength="120"
-                  placeholder="z. B. Einkauf, Dr. Müller / Legal"
-                />
-              </label>
             </div>
 
+            <details class="reverse-step-more">
+              <summary>
+                <span class="reverse-step-overview">{{ areaLabels[step.area] }} · {{ ownerDisplay(step) }}</span>
+                <span class="reverse-step-more-action">
+                  Details bearbeiten
+                  <ChevronDown :size="17" aria-hidden="true" />
+                </span>
+              </summary>
+              <div class="reverse-step-detail-grid">
+                <label class="field">
+                  <span>Verantwortlich</span>
+                  <select v-model="step.owner">
+                    <option value="customer">Kunde</option>
+                    <option value="seller">Anbieter</option>
+                    <option value="shared">Gemeinsam</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Bereich</span>
+                  <select v-model="step.area">
+                    <option value="decision-process">Decision Process</option>
+                    <option value="paper-process">Paper Process</option>
+                    <option value="implementation">Implementierung</option>
+                  </select>
+                </label>
+                <label class="field reverse-step-owner-detail">
+                  <span>Name / Rolle <small>optional</small></span>
+                  <input
+                    v-model="step.ownerDetail"
+                    type="text"
+                    maxlength="120"
+                    placeholder="z. B. Einkauf, Dr. Müller / Legal"
+                  />
+                </label>
+              </div>
+            </details>
             <div class="reverse-step-controls" aria-label="Schritt entfernen">
               <button
                 class="icon-action icon-action--danger"

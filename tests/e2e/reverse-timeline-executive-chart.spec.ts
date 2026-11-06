@@ -11,11 +11,10 @@ test('zeigt eine dynamische kundenfähige Executive-Timeline', async ({ page }, 
   await page.getByLabel('Planungsdatum').fill('2027-01-04')
   await page.getByLabel('Target Go-Live').fill('2027-07-01')
   await page.getByLabel(/Warum dieses Datum/).fill('Altvertrag endet am 30.06.')
-  await page
-    .locator('.reverse-step-card')
-    .first()
-    .getByLabel(/Name \/ Rolle/)
-    .fill('Projektteam')
+  const firstStep = page.locator('.reverse-step-card').first()
+  await firstStep.locator('.reverse-step-more summary').click()
+  await firstStep.getByLabel(/Name \/ Rolle/).fill('Projektteam')
+  await firstStep.locator('.reverse-step-more summary').click()
 
   const chart = page.getByTestId('executive-timeline-chart')
   await expect(chart).toBeVisible()

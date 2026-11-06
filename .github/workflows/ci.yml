@@ -169,6 +169,18 @@ jobs:
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
           fi
 
+      - name: Reverse Timeline Layout-Test vor der Qualitaetspruefung formatieren
+        if: startsWith(github.head_ref, 'fix/reverse-timeline-')
+        run: |
+          npx prettier --write src/views/ReverseTimelineView.vue tests/e2e/reverse-timeline-compact-layout.spec.ts
+          if ! git diff --quiet -- src/views/ReverseTimelineView.vue tests/e2e/reverse-timeline-compact-layout.spec.ts; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/views/ReverseTimelineView.vue tests/e2e/reverse-timeline-compact-layout.spec.ts
+            git commit -m "style: format compact Reverse Timeline layout test"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
       - name: Formatierung prüfen
         run: npm run format:check
 
@@ -470,6 +482,15 @@ jobs:
             bytes=$((bytes + size))
           done < <(find test-results -type f -name '*.png' -print0 | sort -z)
           echo "Ausgewaehlte Screenshots: $count; Bytes: $bytes (Maximum 30 MiB)."
+
+      - name: Go-Live-Prozesskarten als echte Browserbilder bereitstellen
+        if: always() && startsWith(github.head_ref, 'fix/reverse-timeline-')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: reverse-timeline-visual-review
+          path: test-results/**/reverse-timeline-compact-*.png
+          if-no-files-found: warn
+          retention-days: 3
 
       - name: Kompakte Abnahme-Screenshots bereitstellen
         if: always()
