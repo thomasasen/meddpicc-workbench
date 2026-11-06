@@ -39,6 +39,8 @@ test('Recovery-Stand zeigt Warnung und Aktionen, lange Hinweise bleiben einklapp
   await page.goto(route)
   await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
   await page.getByPlaceholder('z. B. Beispielwerke GmbH').fill('Testkunde')
+  // Die Sicherung erfolgt asynchron; Reload erst nach bestätigtem Snapshot.
+  await expect(page.getByText('Nur lokal zwischengesichert.', { exact: false })).toBeVisible()
   await page.reload()
 
   const panel = page.locator('.recovery-panel')
