@@ -19,10 +19,8 @@ for (const route of routes) {
       await expect(page.locator('main')).toBeVisible()
 
       const results = await page.evaluate(() => {
-        const buttons = Array.from(
-          document.querySelectorAll<HTMLButtonElement>('.site-shell button:not([disabled])'),
-        )
-        const smallButtons = buttons
+        const buttons = document.querySelectorAll<HTMLButtonElement>('.site-shell button:not([disabled])')
+        const smallButtons = Array.from(buttons)
           .map((button) => {
             const bounds = button.getBoundingClientRect()
             const styles = getComputedStyle(button)
@@ -43,9 +41,8 @@ for (const route of routes) {
       })
 
       expect(results.smallButtons, route + ' bei ' + width + ' px: zu kleine Buttons').toEqual([])
-      expect(results.scrollWidth, route + ' bei ' + width + ' px: horizontaler Overflow').toBeLessThanOrEqual(
-        results.viewportWidth + 1,
-      )
+      const maxWidth = results.viewportWidth + 1
+      expect(results.scrollWidth, route + ' bei ' + width + ' px').toBeLessThanOrEqual(maxWidth)
     }
   })
 }
