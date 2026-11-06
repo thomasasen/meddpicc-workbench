@@ -134,8 +134,8 @@ defineEmits<{
           </div>
         </div>
         <p v-else-if="compact" class="recovery-description">
-          Optional: sieben Tage unverschlüsselt im Browser zwischenspeichern. Keine Cloud, keine Datei.
-          Nicht für gemeinsam genutzte Geräte empfohlen.
+          Optional: sieben Tage unverschlüsselt im Browser zwischenspeichern. Keine Cloud, keine Datei. Nicht für
+          gemeinsam genutzte Geräte empfohlen.
         </p>
         <p v-else class="recovery-description">
           Die lokale Zwischensicherung ist optional und bleibt auf diesen Browser beschränkt. Sie ersetzt keine
@@ -151,10 +151,10 @@ defineEmits<{
             <ChevronDown :size="15" aria-hidden="true" />
           </summary>
           <p>
-            Die lokale Sicherung beginnt erst nach ausdrücklicher Aktivierung. Der Stand verfällt nach sieben Tagen
-            und wird beim nächsten Zugriff entfernt. Die Daten sind nicht verschlüsselt, werden nicht in eine Cloud
-            übertragen und sind keine gespeicherte Datei oder Bestätigung von Kundenangaben.
-            Auf gemeinsam genutzten Geräten nicht empfohlen.
+            Die lokale Sicherung beginnt erst nach ausdrücklicher Aktivierung. Der Stand verfällt nach sieben Tagen und
+            wird beim nächsten Zugriff entfernt. Die Daten sind nicht verschlüsselt, werden nicht in eine Cloud
+            übertragen und sind keine gespeicherte Datei oder Bestätigung von Kundenangaben. Auf gemeinsam genutzten
+            Geräten nicht empfohlen.
           </p>
         </details>
       </div>
