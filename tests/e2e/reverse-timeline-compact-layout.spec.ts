@@ -19,8 +19,9 @@ test('Prozesskarten sind bei allen relevanten Breiten kompakt und ohne Überlauf
       if (!section || !list || !details || cards.length !== 5) throw new Error('Prozesskarten fehlen')
 
       const bounds = cards.map((card) => card.getBoundingClientRect())
-      const labels = [...cards[0].querySelectorAll<HTMLElement>('.reverse-step-fields .field > span')]
-        .map((label) => label.textContent?.trim())
+      const labels = [...cards[0].querySelectorAll<HTMLElement>('.reverse-step-fields .field > span')].map((label) =>
+        label.textContent?.trim(),
+      )
 
       return {
         viewport: window.innerWidth,
