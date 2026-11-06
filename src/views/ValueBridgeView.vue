@@ -228,6 +228,7 @@ const recovery = useToolRecovery({
           :key="item.label"
           type="button"
           :aria-current="step === index + 1 ? 'step' : undefined"
+          :data-step-state="step === index + 1 ? 'current' : step > index + 1 ? 'completed' : 'upcoming'"
           :class="{ active: step === index + 1 }"
           @click="step = (index + 1) as 1 | 2 | 3"
         >
