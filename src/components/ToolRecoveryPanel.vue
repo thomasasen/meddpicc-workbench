@@ -77,6 +77,7 @@ defineEmits<{
       data-testid="recovery-header-status"
       role="status"
       aria-live="polite"
+      aria-atomic="true"
       :title="statusContent.detail"
     >
       <component :is="statusContent.icon" :size="16" aria-hidden="true" />
@@ -140,16 +141,22 @@ defineEmits<{
   align-items: center;
   gap: 0.4rem;
   flex: 0 0 auto;
+  justify-content: center;
+  min-inline-size: 10.75rem;
+  min-block-size: 2rem;
   margin-inline-start: auto;
   padding: 0.36rem 0.6rem;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--color-border, #cbd5e1);
   border-radius: 999px;
   background: var(--color-surface, #fff);
-  color: #475569;
-  font-size: 0.76rem;
+  color: var(--color-text-muted, #475569);
+  font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;
+}
+.recovery-header-status > svg {
+  flex-shrink: 0;
 }
 .recovery-header-status[data-state='saved'] {
   color: #28664d;
