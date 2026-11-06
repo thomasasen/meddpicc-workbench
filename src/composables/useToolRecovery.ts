@@ -21,15 +21,7 @@ type RecoveryOptions<T> = {
 const CHANNEL = 'meddpicc-tool-recovery-events'
 
 /** Explizite, ausschließlich auf dem aktiven Microtool basierende Sicherungsanzeige. */
-export type ToolSaveStatus =
-  | 'checking'
-  | 'available'
-  | 'inactive'
-  | 'unsaved'
-  | 'pending'
-  | 'saving'
-  | 'saved'
-  | 'error'
+export type ToolSaveState = 'checking' | 'available' | 'inactive' | 'unsaved' | 'pending' | 'saving' | 'saved' | 'error'
 
 export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: RecoveryOptions<T>) {
   const enabled = ref(false)
@@ -54,7 +46,7 @@ export function useToolRecovery<T>({ tool, value, validate, restore, tracked }: 
   let acknowledgedNavigation = false
   let channel: BroadcastChannel | null = null
 
-  const saveStatus = computed<ToolSaveStatus>(() => {
+  const saveStatus = computed<ToolSaveState>(() => {
     if (conflict.value || saveFailed.value) return 'error'
     if (candidate.value) return 'available'
     if (busy.value) return 'checking'
