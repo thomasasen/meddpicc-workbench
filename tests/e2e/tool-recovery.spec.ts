@@ -183,6 +183,30 @@ test('Zwei Tabs erkennen auch ohne BroadcastChannel den Schreibkonflikt', async 
   await expect(customer(second)).toHaveValue('Stand aus Tab A')
 })
 
+test('Globale Löschung invalidiert auch einen noch offenen Tab vor dessen erster Sicherung', async ({ context }) => {
+  const editor = await context.newPage()
+  await editor.addInitScript(() => {
+    Object.defineProperty(window, 'BroadcastChannel', { configurable: true, value: undefined })
+  })
+  await editor.goto(timeline)
+  await expect(editor.getByRole('button', { name: 'Lokales Recovery aktivieren' })).toBeEnabled()
+
+  const settings = await context.newPage()
+  await settings.goto('/meddpicc-workbench/#/settings')
+  settings.once('dialog', (dialog) => void dialog.accept())
+  await settings.getByRole('button', { name: 'Alle lokalen Recoverydaten löschen' }).click()
+  await expect(settings.getByText('Alle lokalen Recovery-Arbeitsstände wurden gelöscht.', { exact: false })).toBeVisible()
+
+  await customer(editor).fill('Darf nach globalem Löschen nicht erneut entstehen')
+  await editor.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+  await expect(editor.getByText('in einem anderen Tab verändert', { exact: false })).toBeVisible()
+
+  await editor.reload()
+  await expect(editor.getByRole('button', { name: 'Wiederherstellen' })).toHaveCount(0)
+  await editor.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
+  await expect(editor.getByText('Nur lokal zwischengesichert.', { exact: false })).toBeVisible()
+})
+
 test('Globale Löschung bleibt auch bei blockiertem BroadcastChannel erfolgreich', async ({ page }) => {
   await page.addInitScript(() => {
     Object.defineProperty(window, 'BroadcastChannel', {
