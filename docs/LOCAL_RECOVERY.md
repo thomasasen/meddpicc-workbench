@@ -69,6 +69,12 @@ Zwei zusätzliche Datenintegritätsrisiken wurden anhand des Quellcodes untersuc
 
 Die Regressionstests wurden erweitert. **Die erfolgreiche Ausführung aller Quality Gates und die visuelle Nutzerfreigabe stehen separat aus; dieser Abschnitt ist kein Test-Erfolgsnachweis.**
 
+## Globales Löschen und konkurrierende Tabs
+
+Eine globale Löschung entfernt alle Snapshots innerhalb einer `readwrite`-Transaktion und schreibt in derselben Transaktion eine neue zufällige Löschgeneration in den Recovery-Store. Beim Laden eines Tools wird diese Generation gelesen; jeder spätere Schreibversuch prüft sie zusammen mit dem Revisionstoken innerhalb seiner Schreibtransaktion. Ein bereits geöffneter Tab mit einem älteren Stand kann somit auch dann keine zuvor gelöschten Inhalte wieder anlegen, wenn sein erster Schreibversuch erst nach der Löschung erfolgt und `BroadcastChannel` nicht verfügbar ist. Nach einem Reload kann der Benutzer Recovery ausdrücklich neu aktivieren.
+
+Die Löschgeneration enthält keine Kundendaten. Wie bei den übrigen Recoverydaten garantiert die Browser-API keine physische Bereinigung aus Backups und Kopien. Ein Playwright-Regressionstest reproduziert den Konflikt aus einem noch geöffneten Tab vor dessen erster Sicherung; die endgültige Testaussage ergibt sich aus der CI auf dem jeweiligen Commit.
+
 ## Gezielte Handoff-Navigationsprüfung
 
 Ein ausdrücklicher Session-Handoff überträgt ausschließlich die fachlich vereinbarten Felder, nicht zwingend den vollständigen Ursprungsentwurf. Der bisherige Sonderpfad `acknowledgeNavigation` konnte ohne Opt-in die normale Verlustwarnung überspringen. Bei tatsächlich veränderten ungesicherten Eingaben wird nun auch vor einem solchen bewussten Toolwechsel eine Bestätigung verlangt. Abbrechen erhält den bisherigen Entwurf; ausdrücklich bestätigtes Fortfahren ist weiterhin möglich. Browser-Regressionen prüfen beide Entscheidungen sowie die regulären fachlichen Übergaben.
