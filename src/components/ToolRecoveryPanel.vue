@@ -121,7 +121,7 @@ defineEmits<{
     </div>
     <template v-if="compact">
       <p v-if="compactLayout" class="recovery-description recovery-description--short">
-        Auf Wunsch Eingaben sieben Tage lokal zwischenspeichern. Unverschlüsselt, ohne Cloud.
+        Eingaben auf Wunsch bis zu sieben Tage unverschlüsselt im Browser zwischenspeichern. Keine Cloud.
       </p>
       <p v-else class="recovery-description recovery-description--short">
         Optional: sieben Tage unverschlüsselt in diesem Browser zwischenspeichern. Keine Cloud, keine Datei. Nicht für
