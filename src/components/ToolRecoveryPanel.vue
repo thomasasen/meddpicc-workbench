@@ -70,7 +70,7 @@ defineEmits<{
 </script>
 
 <template>
-  <Teleport to=".site-header .header-inner">
+  <Teleport defer to=".site-header .header-inner">
     <span
       class="recovery-header-status"
       :data-state="saveStatus"
