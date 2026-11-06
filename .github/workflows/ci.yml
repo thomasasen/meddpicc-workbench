@@ -170,14 +170,14 @@ jobs:
           fi
 
       - name: Reverse Timeline Layout-Test vor der Qualitaetspruefung formatieren
-        if: startsWith(github.head_ref, 'fix/reverse-timeline-') || github.head_ref == 'fix/recovery-panel-layout-20261107'
+        if: startsWith(github.head_ref, 'fix/reverse-timeline-')
         run: |
-          npx prettier --write src/views/ReverseTimelineView.vue tests/e2e/reverse-timeline-compact-layout.spec.ts src/components/ToolRecoveryPanel.vue
-          if ! git diff --quiet -- src/views/ReverseTimelineView.vue tests/e2e/reverse-timeline-compact-layout.spec.ts src/components/ToolRecoveryPanel.vue; then
+          npx prettier --write src/views/ReverseTimelineView.vue tests/e2e/reverse-timeline-compact-layout.spec.ts
+          if ! git diff --quiet -- src/views/ReverseTimelineView.vue tests/e2e/reverse-timeline-compact-layout.spec.ts; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src/views/ReverseTimelineView.vue tests/e2e/reverse-timeline-compact-layout.spec.ts src/components/ToolRecoveryPanel.vue
-            git commit -m "style: normalize Recovery component formatting"
+            git add src/views/ReverseTimelineView.vue tests/e2e/reverse-timeline-compact-layout.spec.ts
+            git commit -m "style: format compact Reverse Timeline layout test"
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
           fi
 
