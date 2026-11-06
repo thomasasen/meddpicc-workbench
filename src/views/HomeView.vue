@@ -31,12 +31,6 @@ function scrollToSection(id: string): void {
   })
 }
 
-function focusMainContent(): void {
-  const main = document.getElementById('main-content')
-  main?.focus()
-  main?.scrollIntoView({ block: 'start' })
-}
-
 const pillars = [
   {
     id: 'tools',
@@ -299,7 +293,7 @@ const knowledgeTopics = [
 
 <template>
   <div class="site-shell toolbox-shell">
-    <a class="skip-link" href="#main-content" @click.prevent="focusMainContent">Zum Inhalt springen</a>
+    <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
 
     <header class="site-header">
       <div class="container header-inner toolbox-header">

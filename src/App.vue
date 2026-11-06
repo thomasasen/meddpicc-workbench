@@ -23,13 +23,40 @@ function handleSelectWheel() {
   if (active instanceof HTMLSelectElement) active.blur()
 }
 
+/**
+ * Native Fragment-Links würden bei createWebHashHistory() die Vue-Route
+ * verändern. Das Skip-Link-Ziel bleibt stattdessen in der aktiven View.
+ */
+function handleSkipLinkClick(event: MouseEvent) {
+  const source = event.target
+  if (!(source instanceof Element) || !source.closest('a.skip-link[href="#main-content"]')) return
+
+  event.preventDefault()
+
+  const main = document.getElementById('main-content')
+  if (!(main instanceof HTMLElement)) return
+
+  if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1')
+  main.focus({ preventScroll: true })
+
+  const sectionMargin = Number.parseFloat(window.getComputedStyle(main).scrollMarginTop) || 0
+  const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height ?? 0
+  const scrollOffset = Math.max(sectionMargin, headerHeight + 16)
+  window.scrollTo({
+    top: Math.max(0, window.scrollY + main.getBoundingClientRect().top - scrollOffset),
+    behavior: 'auto',
+  })
+}
+
 onMounted(() => {
   window.addEventListener('beforeunload', handleBeforeUnload)
   document.addEventListener('wheel', handleSelectWheel, { capture: true })
+  document.addEventListener('click', handleSkipLinkClick, { capture: true })
 })
 onBeforeUnmount(() => {
   window.removeEventListener('beforeunload', handleBeforeUnload)
   document.removeEventListener('wheel', handleSelectWheel, { capture: true })
+  document.removeEventListener('click', handleSkipLinkClick, { capture: true })
 })
 </script>
 
