@@ -152,6 +152,7 @@ test('Eingabefehler halten die Detailaktion frei und den Drag-Griff bedienbar', 
     await expect(errors).toHaveCount(2)
     await expect(errors.first()).toBeVisible()
     await expect(errors.last()).toBeVisible()
+    await expect(errors.last()).toHaveText('0–1000 Tage.')
 
     const geometry = await card.evaluate((element) => {
       const hints = [...element.querySelectorAll<HTMLElement>('.reverse-step-fields .tool-field-error')]
