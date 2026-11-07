@@ -2,6 +2,13 @@ import { expect, test } from '@playwright/test'
 
 const base = '/meddpicc-workbench/#/tools/'
 
+const openRecovery = async (page: import('@playwright/test').Page) => {
+  const toggle = page.getByTestId('recovery-toggle')
+  await expect(toggle).toBeVisible()
+  if ((await toggle.getAttribute('aria-expanded')) === 'false') await toggle.click()
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+}
+
 const tools = [
   {
     id: 'reverse-timeline',
@@ -54,6 +61,8 @@ test('Der Headerstatus funktioniert in allen fünf Tools auf 320 bis 1440 Pixeln
     await expect(field).toBeVisible()
     await field.fill(tool.value)
     await expect(status).toHaveAttribute('data-state', 'unsaved')
+
+    await openRecovery(page)
 
     await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
     await expect(status).toHaveAttribute('data-state', 'saved')
@@ -120,6 +129,8 @@ test('Echte Statusübergänge einschließlich Pending und Saving sind sichtbar',
   await expect(status).toHaveAttribute('data-state', 'unsaved')
   await page.screenshot({ path: testInfo.outputPath('unsaved-375.png'), fullPage: true })
 
+  await openRecovery(page)
+
   await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
   await expect(status).toHaveAttribute('data-state', 'saving')
   // Ein flüchtiger Schreibstatus wird als echtes Element-Screenshot erfasst:
@@ -143,6 +154,7 @@ test('Ein fehlgeschlagener Restore erscheint als Fehler statt als wiederherstell
 }, testInfo) => {
   await page.goto(base + 'reverse-timeline')
   await page.getByPlaceholder('z. B. Beispielwerke GmbH').fill('Vertraulicher Entwurf')
+  await openRecovery(page)
   await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
   const status = page.getByTestId('recovery-header-status')
   await expect(status).toHaveAttribute('data-state', 'saved')
@@ -157,6 +169,7 @@ test('Ein fehlgeschlagener Restore erscheint als Fehler statt als wiederherstell
       },
     })
   })
+  await openRecovery(page)
   await page.getByRole('button', { name: 'Wiederherstellen' }).click()
   await expect(status).toHaveAttribute('data-state', 'error')
   await expect(status).toContainText('Speicherproblem')
@@ -172,6 +185,8 @@ test('Reduced Motion und Tastaturbedienung bleiben im Header verlässlich', asyn
   await expect(status).toBeVisible()
   await expect(status).toHaveAttribute('role', 'status')
   await expect(status).toHaveAttribute('aria-atomic', 'true')
+
+  await openRecovery(page)
 
   const activate = page.getByRole('button', { name: 'Lokales Recovery aktivieren' })
   await activate.focus()

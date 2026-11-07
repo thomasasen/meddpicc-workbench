@@ -12,10 +12,16 @@ for (const route of routes) {
     for (const width of [320, 375]) {
       await page.setViewportSize({ width, height: 900 })
       await page.goto('/meddpicc-workbench/#' + route)
+      // Derselbe Hash-Pfad remountet Vue nicht: ein Reload prüft den tatsächlichen Startzustand.
+      await page.reload()
       const panel = page.locator('.recovery-panel')
       await expect(panel).toHaveClass(/recovery-panel--compact/)
       await expect(panel).toContainText('unverschlüsselt')
       await expect(panel).toContainText('Keine Cloud')
+      const toggle = panel.getByTestId('recovery-toggle')
+      await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+      await toggle.click()
+      await expect(toggle).toHaveAttribute('aria-expanded', 'true')
       await expect(panel.getByText('Datenschutz- und Speicherhinweise')).toBeVisible()
       await expect(page.getByRole('button', { name: 'Lokales Recovery aktivieren' })).toBeVisible()
 
@@ -44,6 +50,7 @@ test('Recovery-Header liest nicht jeden technischen Zwischenzustand vor', async 
   await expect(header).toHaveAttribute('data-state', 'unsaved')
   await expect(announcement).toBeEmpty()
 
+  await page.getByTestId('recovery-toggle').click()
   await page.getByRole('button', { name: 'Lokales Recovery aktivieren' }).click()
   await expect(header).toHaveAttribute('data-state', 'saved')
   await expect(announcement).toContainText('lokal im Browser gesichert')
