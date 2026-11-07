@@ -144,6 +144,11 @@ test('Recovery bleibt eine kompakte Optionszeile und legt den Datenschutztext of
   const recovery = page.locator('.recovery-panel')
   await expect(recovery).toHaveCount(1)
   await expect(recovery.getByRole('heading', { name: 'Optionales lokales Recovery' })).toBeVisible()
+  const toggle = recovery.getByTestId('recovery-toggle')
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  const collapsedHeight = await recovery.evaluate((panel) => panel.getBoundingClientRect().height)
+  expect(collapsedHeight).toBeLessThanOrEqual(80)
+  await toggle.click()
   await expect(recovery.getByRole('button', { name: 'Lokales Recovery aktivieren' })).toBeVisible()
 
   const geometry = await recovery.evaluate((panel) => {
@@ -153,7 +158,7 @@ test('Recovery bleibt eine kompakte Optionszeile und legt den Datenschutztext of
     const b = button.getBoundingClientRect()
     return { height: a.height, buttonTop: b.top, panelTop: a.top, buttonHeight: b.height }
   })
-  expect(geometry.height).toBeLessThanOrEqual(150)
+  expect(geometry.height).toBeGreaterThan(collapsedHeight)
   expect(geometry.buttonHeight).toBeGreaterThanOrEqual(44)
   expect(geometry.buttonTop - geometry.panelTop).toBeGreaterThanOrEqual(0)
 
