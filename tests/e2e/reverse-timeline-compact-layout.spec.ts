@@ -235,12 +235,16 @@ test('Touch-Ansicht behaelt den durchgehenden Drag-Griff und gut erreichbare Akt
         const drag = card.querySelector<HTMLElement>('.reverse-drag-handle')
         const badge = card.querySelector<HTMLElement>('.reverse-step-position')
         const deleteButton = card.querySelector<HTMLElement>('.reverse-step-controls button')
-        if (!drag || !badge || !deleteButton) throw new Error('Bedienelement fehlt')
+        const detailAction = card.querySelector<HTMLElement>('.reverse-step-more-action')
+        if (!drag || !badge || !deleteButton || !detailAction) throw new Error('Bedienelement fehlt')
         const a = card.getBoundingClientRect()
         const d = drag.getBoundingClientRect()
         const b = badge.getBoundingClientRect()
         const del = deleteButton.getBoundingClientRect()
+        const action = detailAction.getBoundingClientRect()
         return {
+          actionDeleteOverlap:
+            action.left < del.right && action.right > del.left && action.top < del.bottom && action.bottom > del.top,
           cardHeight: a.height,
           dragHeight: d.height,
           dragWidth: d.width,
@@ -257,6 +261,7 @@ test('Touch-Ansicht behaelt den durchgehenden Drag-Griff und gut erreichbare Akt
     expect(geometry.badgeHeight).toBeGreaterThanOrEqual(44)
     expect(geometry.deleteWidth).toBeGreaterThanOrEqual(44)
     expect(geometry.deleteHeight).toBeGreaterThanOrEqual(44)
+    expect(geometry.actionDeleteOverlap, `Detailaktion überdeckt Löschen bei ${width}px`).toBe(false)
     await expect(page.locator('.recovery-panel')).toBeVisible()
   }
 })
