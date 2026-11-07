@@ -42,9 +42,10 @@ test('Prozesskarten sind bei allen relevanten Breiten kompakt und ohne Überlauf
     expect(result.detailsInitiallyClosed).toBe(true)
     expect(result.labels).toEqual(['Schritt', 'Dauer', 'Einheit'])
     expect(result.cardGaps.every((value) => value >= 7 && value <= 20)).toBe(true)
-    if (width === 1440) {
-      expect(result.listWidth).toBeLessThanOrEqual(1041)
-      expect(Math.max(...result.cardHeights)).toBeLessThan(170)
+    if ([1024, 1440].includes(width)) {
+      if (width === 1440) expect(result.listWidth).toBeLessThanOrEqual(1041)
+      // Einträge bleiben einschließlich 44px-Detailaktion und 46px-Eingaben kompakt.
+      expect(Math.max(...result.cardHeights), `Kartenhöhe bei ${width}px`).toBeLessThanOrEqual(130)
     }
     if (width <= 375) {
       expect(Math.max(...result.cardHeights)).toBeLessThan(330)
@@ -137,6 +138,55 @@ test('Drag-Leiste fuellt die Kartenhoehe; Nummer, Eingabe und Papierkorb liegen 
   }
 })
 
+test('Eingabefehler halten die Detailaktion frei und den Drag-Griff bedienbar', async ({ page }) => {
+  for (const width of [320, 375, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto(route)
+    await page.reload()
+
+    const card = page.locator('.reverse-step-card').first()
+    await card.locator('.reverse-step-name input').fill('')
+    await card.locator('.reverse-step-fields input[type="number"]').fill('-1')
+
+    const errors = card.locator('.reverse-step-fields .tool-field-error')
+    await expect(errors).toHaveCount(2)
+    await expect(errors.first()).toBeVisible()
+    await expect(errors.last()).toBeVisible()
+    await expect(errors.last()).toHaveText('0–1000 Tage.')
+
+    const geometry = await card.evaluate((element) => {
+      const hints = [...element.querySelectorAll<HTMLElement>('.reverse-step-fields .tool-field-error')]
+      const details = element.querySelector<HTMLElement>('.reverse-step-more > summary')
+      const drag = element.querySelector<HTMLElement>('.reverse-drag-handle')
+      const nameInput = element.querySelector<HTMLElement>('.reverse-step-name input')
+      if (!details || !drag || !nameInput) throw new Error('Interaktive Prozesskarte unvollständig')
+
+      const cardBox = element.getBoundingClientRect()
+      const summaryBox = details.getBoundingClientRect()
+      const dragBox = drag.getBoundingClientRect()
+      return {
+        errorBottom: Math.max(...hints.map((hint) => hint.getBoundingClientRect().bottom)),
+        summaryTop: summaryBox.top,
+        summaryHeight: summaryBox.height,
+        dragHeight: dragBox.height,
+        cardHeight: cardBox.height,
+        inputHeight: nameInput.getBoundingClientRect().height,
+      }
+    })
+
+    expect(geometry.summaryTop, `Fehlermeldung und Detailaktion überlappen bei ${width}px`).toBeGreaterThanOrEqual(
+      geometry.errorBottom - 1,
+    )
+    expect(geometry.summaryHeight, `Detailaktion bei ${width}px`).toBeGreaterThanOrEqual(44)
+    expect(geometry.inputHeight, `Eingabefeld bei ${width}px`).toBeGreaterThanOrEqual(46)
+    expect(geometry.dragHeight, `Griff bei ${width}px`).toBeGreaterThanOrEqual(geometry.cardHeight - 34)
+
+    const summary = card.locator('.reverse-step-more summary')
+    await summary.click()
+    await expect(card.locator('.reverse-step-more')).toHaveAttribute('open', '')
+  }
+})
+
 test('Recovery bleibt eine kompakte Optionszeile und legt den Datenschutztext offen', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto(route)
@@ -185,12 +235,16 @@ test('Touch-Ansicht behaelt den durchgehenden Drag-Griff und gut erreichbare Akt
         const drag = card.querySelector<HTMLElement>('.reverse-drag-handle')
         const badge = card.querySelector<HTMLElement>('.reverse-step-position')
         const deleteButton = card.querySelector<HTMLElement>('.reverse-step-controls button')
-        if (!drag || !badge || !deleteButton) throw new Error('Bedienelement fehlt')
+        const detailAction = card.querySelector<HTMLElement>('.reverse-step-more-action')
+        if (!drag || !badge || !deleteButton || !detailAction) throw new Error('Bedienelement fehlt')
         const a = card.getBoundingClientRect()
         const d = drag.getBoundingClientRect()
         const b = badge.getBoundingClientRect()
         const del = deleteButton.getBoundingClientRect()
+        const action = detailAction.getBoundingClientRect()
         return {
+          actionDeleteOverlap:
+            action.left < del.right && action.right > del.left && action.top < del.bottom && action.bottom > del.top,
           cardHeight: a.height,
           dragHeight: d.height,
           dragWidth: d.width,
@@ -207,6 +261,7 @@ test('Touch-Ansicht behaelt den durchgehenden Drag-Griff und gut erreichbare Akt
     expect(geometry.badgeHeight).toBeGreaterThanOrEqual(44)
     expect(geometry.deleteWidth).toBeGreaterThanOrEqual(44)
     expect(geometry.deleteHeight).toBeGreaterThanOrEqual(44)
+    expect(geometry.actionDeleteOverlap, `Detailaktion überdeckt Löschen bei ${width}px`).toBe(false)
     await expect(page.locator('.recovery-panel')).toBeVisible()
   }
 })

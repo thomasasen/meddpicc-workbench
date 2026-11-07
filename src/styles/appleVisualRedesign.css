@@ -1375,7 +1375,7 @@ body {
 }
 
 #app .reverse-tool-shell .reverse-step-list {
-  gap: 0.65rem;
+  gap: 0.5rem;
 }
 
 /*
@@ -1385,11 +1385,11 @@ body {
  */
 #app .reverse-tool-shell .reverse-step-card {
   grid-template-columns: 44px 32px minmax(0, 1fr) 44px;
-  grid-template-rows: calc(1.225rem + var(--form-row-track-gap)) var(--form-row-control-height) minmax(44px, auto);
+  grid-template-rows: calc(1.2rem + 0.15rem) var(--form-row-control-height) minmax(44px, auto);
   align-items: stretch;
   column-gap: 0.65rem;
   row-gap: 0;
-  padding: 0.75rem 0.85rem;
+  padding: 0.35rem 0.65rem;
   border-radius: 0.95rem;
 }
 
@@ -1427,8 +1427,8 @@ body {
 
 #app .reverse-tool-shell .reverse-step-fields > label.field {
   grid-row: auto;
-  grid-template-rows: minmax(1.5em, auto) var(--form-row-control-height);
-  row-gap: var(--form-row-track-gap);
+  grid-template-rows: minmax(1.2rem, auto) var(--form-row-control-height);
+  row-gap: 0.15rem;
   padding-bottom: 0;
 }
 
@@ -1542,13 +1542,31 @@ body {
   }
 }
 
+/* Fehlermeldungen erhalten ihre eigene Spur und verdrängen die Detailaktion nach unten. */
+#app .reverse-tool-shell .reverse-step-card:has(.reverse-step-fields .tool-field-error) {
+  grid-template-rows: calc(1.2rem + 0.15rem) var(--form-row-control-height) minmax(1.75rem, auto) minmax(44px, auto);
+}
+
+#app .reverse-tool-shell .reverse-step-card:has(.reverse-step-fields .tool-field-error) .reverse-step-fields {
+  grid-row: 1 / 4;
+}
+
+#app .reverse-tool-shell .reverse-step-card:has(.reverse-step-fields .tool-field-error) .reverse-step-more {
+  grid-row: 4;
+}
+
+#app .reverse-tool-shell .reverse-step-card:has(.reverse-step-fields .tool-field-error) .reverse-drag-handle {
+  grid-row: 1 / 5;
+}
+
 @media (max-width: 760px) {
   /* Enge Breiten: die Hauptfelder bekommen die verfuegbare Breite,
    * waehrend Griff, Positionsnummer und Loeschen ihre Touchgroessen behalten. */
   #app .reverse-tool-shell .reverse-step-card {
     grid-template-columns: 44px minmax(0, 1fr) 44px;
     grid-template-rows: var(--form-row-control-height) auto minmax(44px, auto);
-    gap: 0.4rem 0.6rem;
+    gap: 0.3rem 0.6rem;
+    padding: 0.45rem 0.65rem;
   }
 
   #app .reverse-tool-shell .reverse-drag-handle {
@@ -1588,6 +1606,23 @@ body {
   #app .reverse-tool-shell .reverse-step-owner-detail {
     grid-column: 1 / -1;
   }
+
+  /* In der gestapelten Tabletansicht wächst die ganze Feldzeile bei einem Eingabefehler. */
+  #app .reverse-tool-shell .reverse-step-card:has(.reverse-step-fields .tool-field-error) {
+    grid-template-rows: var(--form-row-control-height) auto minmax(44px, auto);
+  }
+
+  #app .reverse-tool-shell .reverse-step-card:has(.reverse-step-fields .tool-field-error) .reverse-step-fields {
+    grid-row: 2;
+  }
+
+  #app .reverse-tool-shell .reverse-step-card:has(.reverse-step-fields .tool-field-error) .reverse-step-more {
+    grid-row: 3;
+  }
+
+  #app .reverse-tool-shell .reverse-step-card:has(.reverse-step-fields .tool-field-error) .reverse-drag-handle {
+    grid-row: 1 / 4;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1602,10 +1637,10 @@ body {
 
   #app .reverse-tool-shell .reverse-step-card {
     grid-template-columns: 44px 32px minmax(0, 1fr);
-    grid-template-rows: calc(1.17rem + var(--form-row-track-gap)) var(--form-row-control-height) auto auto auto;
+    grid-template-rows: calc(1.2rem + 0.15rem) var(--form-row-control-height) auto auto auto;
     column-gap: 0.5rem;
     row-gap: 0;
-    padding: 0.7rem;
+    padding: 0.5rem;
   }
 
   /* Die Nummer liegt neben der ersten Eingabe. Die folgenden Felder
@@ -1625,8 +1660,8 @@ body {
   }
 
   #app .reverse-tool-shell .reverse-step-fields > label.field {
-    grid-template-rows: minmax(1.5em, auto) var(--form-row-control-height);
-    row-gap: var(--form-row-track-gap);
+    grid-template-rows: minmax(1.2rem, auto) var(--form-row-control-height);
+    row-gap: 0.15rem;
   }
 
   #app .reverse-tool-shell .reverse-step-fields > .reverse-step-name {
@@ -1637,19 +1672,33 @@ body {
   #app .reverse-tool-shell .reverse-step-fields > label.field:nth-child(2) {
     grid-column: 2 / 4;
     grid-row: 3;
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
   }
 
   #app .reverse-tool-shell .reverse-step-fields > label.field:nth-child(3) {
     grid-column: 2 / 4;
     grid-row: 4;
-    margin-top: 0.25rem;
+    margin-top: 0.125rem;
   }
 
   #app .reverse-tool-shell .reverse-step-more {
     grid-column: 2 / 4;
     grid-row: 5;
     padding-right: 3.1rem;
+  }
+
+  /* Bei 320px darf die Detailaktion nicht unter die Entfernen-Schaltfläche ragen. */
+  #app .reverse-tool-shell .reverse-step-overview {
+    font-size: 0.8rem;
+    overflow-wrap: normal;
+  }
+
+  #app .reverse-tool-shell .reverse-step-more-action {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    font-size: 0.8rem;
+    white-space: normal;
   }
 
   #app .reverse-tool-shell .reverse-step-controls {
@@ -1666,6 +1715,36 @@ body {
 
   #app .reverse-tool-shell .reverse-step-owner-detail {
     grid-column: auto;
+  }
+
+  /* Mobile: die Namensmeldung belegt eine eigene Zeile vor Dauer und Einheit. */
+  #app .reverse-tool-shell .reverse-step-card:has(.reverse-step-fields .tool-field-error) {
+    grid-template-rows: calc(1.2rem + 0.15rem) var(--form-row-control-height) auto auto auto;
+  }
+
+  #app .reverse-tool-shell .reverse-step-card:has(.reverse-step-name .tool-field-error) {
+    grid-template-rows: calc(1.2rem + 0.15rem) var(--form-row-control-height) auto auto auto auto;
+  }
+
+  #app .reverse-tool-shell .reverse-step-card:has(.reverse-step-name .tool-field-error) .reverse-step-name {
+    grid-row: 1 / 4;
+  }
+
+  #app .reverse-tool-shell .reverse-step-card:has(.reverse-step-name .tool-field-error) .reverse-step-fields > label.field:nth-child(2) {
+    grid-row: 4;
+  }
+
+  #app .reverse-tool-shell .reverse-step-card:has(.reverse-step-name .tool-field-error) .reverse-step-fields > label.field:nth-child(3) {
+    grid-row: 5;
+  }
+
+  #app .reverse-tool-shell .reverse-step-card:has(.reverse-step-name .tool-field-error) .reverse-step-more,
+  #app .reverse-tool-shell .reverse-step-card:has(.reverse-step-name .tool-field-error) .reverse-step-controls {
+    grid-row: 6;
+  }
+
+  #app .reverse-tool-shell .reverse-step-card:has(.reverse-step-name .tool-field-error) .reverse-drag-handle {
+    grid-row: 1 / 7;
   }
 }
 
