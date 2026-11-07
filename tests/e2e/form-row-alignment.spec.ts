@@ -10,7 +10,10 @@ test('Planungsrahmen: gleich hohe und ausgerichtete Controls trotz unterschiedli
       elements.map((field) => {
         const input = field.querySelector('input, select')
         const label = field.querySelector(':scope > span')
-        const help = field.querySelector(':scope > small')
+        // Ungültige Felder blenden den normalen Hilfetext aus und zeigen stattdessen die Fehlermeldung.
+        const help = [...field.querySelectorAll(':scope > small, :scope > [role="alert"]')].find(
+          (element) => element.getClientRects().length > 0,
+        )
         if (!input || !label) throw new Error('Feld ohne Beschriftung oder Eingabebox')
         const control = input.getBoundingClientRect()
         const labelRect = label.getBoundingClientRect()

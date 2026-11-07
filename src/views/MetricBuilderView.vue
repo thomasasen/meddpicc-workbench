@@ -5,6 +5,7 @@ import { useToolRecovery } from '../composables/useToolRecovery'
 import { validMetricBuilderDraft } from '../services/recoveryDrafts'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, ref } from 'vue'
+import { requiredAmount, requiredMonth, requiredText } from '../domain/requiredFieldRules'
 import { useRouter } from 'vue-router'
 import { ArrowRight, ArrowDownToLine, Calculator, ClipboardCopy, FileCheck2, Lightbulb, RotateCcw } from '@lucide/vue'
 import {
@@ -33,6 +34,65 @@ const message = ref('')
 const demoName = ref('')
 const result = computed(() => buildMetric(draft.value))
 const summary = computed(() => metricSummary(draft.value, result.value))
+function metricIssue(field: keyof MetricBuilderDraft): string | undefined {
+  const value = draft.value
+  if (field === 'problem' || field === 'process' || field === 'outcome') return requiredText(value[field])
+  if (field === 'beforeText' || field === 'afterText')
+    return value.formula === 'qualitative' ? requiredText(value[field]) : undefined
+  if (field === 'volume')
+    return !['direct', 'qualitative'].includes(value.formula) ? requiredAmount(value.volume) : undefined
+  if (field === 'before' || field === 'after') {
+    if (value.formula === 'qualitative') return undefined
+    const issue = requiredAmount(value[field])
+    if (issue) return issue
+    const current = value[field]
+    if (typeof current !== 'number') return undefined
+    if (['conversion', 'quality'].includes(value.formula) && current > 100)
+      return 'Prozentwerte müssen zwischen 0 und 100 liegen.'
+    if (field === 'after' && typeof value.before === 'number') {
+      const improvement = value.formula === 'conversion' ? current - value.before : value.before - current
+      if (improvement <= 0) return 'Der Zielwert muss eine messbare Verbesserung darstellen.'
+    }
+    return undefined
+  }
+  if (field === 'hourlyCost') return value.formula === 'time' ? requiredAmount(value.hourlyCost) : undefined
+  if (field === 'valuePerEvent')
+    return ['conversion', 'quality'].includes(value.formula) ? requiredAmount(value.valuePerEvent) : undefined
+  const selected = value.mechanism !== 'unresolved' && !['risk', 'qualitative'].includes(value.formula)
+  if (field === 'realizedAnnual' && selected) {
+    const issue = requiredAmount(value.realizedAnnual)
+    if (issue) return issue
+    if (
+      typeof value.realizedAnnual === 'number' &&
+      result.value.potentialEur !== null &&
+      value.realizedAnnual > result.value.potentialEur + 0.005
+    )
+      return 'Der Betrag darf das berechnete Potenzial nicht übersteigen.'
+  }
+  if (
+    field === 'realizationNote' &&
+    selected &&
+    typeof value.realizedAnnual === 'number' &&
+    value.realizedAnnual > 0 &&
+    value.realizationNote.trim().length < 12
+  )
+    return 'Bitte den Realisierungsmechanismus mit mindestens 12 Zeichen erläutern.'
+  if (field === 'effectGroup' && selected) return requiredText(value.effectGroup)
+  if (field === 'assumptionNote' && value.evidence === 'customer-reviewed') return requiredText(value.assumptionNote)
+  if (field === 'startMonth') return requiredMonth(value.startMonth, 1, 60)
+  if (field === 'rampMonths') {
+    const issue = requiredMonth(value.rampMonths, 1, 60)
+    if (issue) return issue
+    if (
+      typeof value.startMonth === 'number' &&
+      typeof value.rampMonths === 'number' &&
+      value.startMonth + value.rampMonths > 61
+    )
+      return 'Nutzenbeginn und Hochlauf müssen innerhalb von 60 Monaten liegen.'
+  }
+  return undefined
+}
+
 const numericTypes: MetricFormula[] = ['direct', 'process', 'time', 'conversion', 'quality', 'risk']
 const moneyTypes: MetricFormula[] = ['direct', 'process', 'time', 'conversion', 'quality']
 const isNumeric = computed(() => numericTypes.includes(draft.value.formula))
@@ -242,20 +302,30 @@ const recovery = useToolRecovery({
           <label class="field"
             ><span>Welches konkrete Problem besteht?</span>
             <textarea
+              :aria-invalid="Boolean(metricIssue('problem'))"
+              :aria-describedby="metricIssue('problem') ? 'metric-problem-error' : undefined"
               v-model="draft.problem"
               rows="3"
               maxlength="240"
               placeholder="Unsere Servicemitarbeiter verbringen zu viel Zeit mit manueller Datenpflege."
             />
+            <small v-if="metricIssue('problem')" id="metric-problem-error" class="tool-field-error">{{
+              metricIssue('problem')
+            }}</small>
           </label>
           <label class="field"
             ><span>Betroffener Geschäftsprozess</span>
             <input
+              :aria-invalid="Boolean(metricIssue('process'))"
+              :aria-describedby="metricIssue('process') ? 'metric-process-error' : undefined"
               v-model="draft.process"
               type="text"
               maxlength="140"
               placeholder="z. B. Bearbeitung von Kundenanfragen"
             />
+            <small v-if="metricIssue('process')" id="metric-process-error" class="tool-field-error">{{
+              metricIssue('process')
+            }}</small>
           </label>
           <label class="field"
             ><span>Welche negativen Folgen entstehen?</span>
@@ -263,7 +333,17 @@ const recovery = useToolRecovery({
           </label>
           <label class="field"
             ><span>Welcher bessere Zustand wird angestrebt?</span>
-            <textarea v-model="draft.outcome" rows="2" maxlength="240" placeholder="z. B. weniger Zeit je Vorgang" />
+            <textarea
+              :aria-invalid="Boolean(metricIssue('outcome'))"
+              :aria-describedby="metricIssue('outcome') ? 'metric-outcome-error' : undefined"
+              v-model="draft.outcome"
+              rows="2"
+              maxlength="240"
+              placeholder="z. B. weniger Zeit je Vorgang"
+            />
+            <small v-if="metricIssue('outcome')" id="metric-outcome-error" class="tool-field-error">{{
+              metricIssue('outcome')
+            }}</small>
           </label>
         </div>
         <div class="metric-demo">
@@ -304,6 +384,8 @@ const recovery = useToolRecovery({
           <label v-if="hasVolume" class="field"
             ><span>Betroffene Vorgänge pro {{ draft.period === 'monthly' ? 'Monat' : 'Jahr' }}</span>
             <input
+              :aria-invalid="Boolean(metricIssue('volume'))"
+              :aria-describedby="metricIssue('volume') ? 'metric-volume-error' : undefined"
               v-model.number="draft.volume"
               type="number"
               inputmode="numeric"
@@ -312,11 +394,16 @@ const recovery = useToolRecovery({
               step="1"
               placeholder="Anzahl"
             />
+            <small v-if="metricIssue('volume')" id="metric-volume-error" class="tool-field-error">{{
+              metricIssue('volume')
+            }}</small>
           </label>
           <template v-if="isNumeric">
             <label class="field"
               ><span>Ausgangswert ({{ numberLabel }})</span>
               <input
+                :aria-invalid="Boolean(metricIssue('before'))"
+                :aria-describedby="metricIssue('before') ? 'metric-before-error' : undefined"
                 v-model.number="draft.before"
                 type="number"
                 inputmode="decimal"
@@ -325,10 +412,15 @@ const recovery = useToolRecovery({
                 step="any"
                 placeholder="Ist-Wert"
               />
+              <small v-if="metricIssue('before')" id="metric-before-error" class="tool-field-error">{{
+                metricIssue('before')
+              }}</small>
             </label>
             <label class="field"
               ><span>Zielwert ({{ numberLabel }})</span>
               <input
+                :aria-invalid="Boolean(metricIssue('after'))"
+                :aria-describedby="metricIssue('after') ? 'metric-after-error' : undefined"
                 v-model.number="draft.after"
                 type="number"
                 inputmode="decimal"
@@ -337,22 +429,54 @@ const recovery = useToolRecovery({
                 step="any"
                 placeholder="Ziel-Wert"
               />
+              <small v-if="metricIssue('after')" id="metric-after-error" class="tool-field-error">{{
+                metricIssue('after')
+              }}</small>
             </label>
           </template>
           <template v-if="draft.formula === 'qualitative'">
             <label class="field"
               ><span>Heutiger Zustand</span>
-              <textarea v-model="draft.beforeText" rows="3" maxlength="200" />
+              <textarea
+                :aria-invalid="Boolean(metricIssue('beforeText'))"
+                :aria-describedby="metricIssue('beforeText') ? 'metric-beforeText-error' : undefined"
+                v-model="draft.beforeText"
+                rows="3"
+                maxlength="200"
+              />
+              <small v-if="metricIssue('beforeText')" id="metric-beforeText-error" class="tool-field-error">{{
+                metricIssue('beforeText')
+              }}</small>
             </label>
             <label class="field"
               ><span>Angestrebter Zustand</span>
-              <textarea v-model="draft.afterText" rows="3" maxlength="200" />
+              <textarea
+                :aria-invalid="Boolean(metricIssue('afterText'))"
+                :aria-describedby="metricIssue('afterText') ? 'metric-afterText-error' : undefined"
+                v-model="draft.afterText"
+                rows="3"
+                maxlength="200"
+              />
+              <small v-if="metricIssue('afterText')" id="metric-afterText-error" class="tool-field-error">{{
+                metricIssue('afterText')
+              }}</small>
             </label>
           </template>
           <label v-if="draft.formula === 'time'" class="field"
             ><span>Vollkostensatz in EUR je Stunde</span>
-            <input v-model.number="draft.hourlyCost" type="number" inputmode="decimal" min="0" step="any" />
+            <input
+              :aria-invalid="Boolean(metricIssue('hourlyCost'))"
+              :aria-describedby="metricIssue('hourlyCost') ? 'metric-hourlyCost-error' : undefined"
+              v-model.number="draft.hourlyCost"
+              type="number"
+              inputmode="decimal"
+              min="0"
+              step="any"
+            />
             <small>Ein Vollkostensatz bewertet zunächst Kapazität, nicht realisierte Einsparung.</small>
+            <small v-if="metricIssue('hourlyCost')" id="metric-hourlyCost-error" class="tool-field-error">{{
+              metricIssue('hourlyCost')
+            }}</small>
           </label>
           <label v-if="draft.formula === 'conversion' || draft.formula === 'quality'" class="field">
             <span>{{
@@ -360,8 +484,19 @@ const recovery = useToolRecovery({
                 ? 'Zusätzlicher Deckungsbeitrag je Abschluss (EUR)'
                 : 'Vermeidbare Fehlerkosten je Fehler (EUR)'
             }}</span>
-            <input v-model.number="draft.valuePerEvent" type="number" inputmode="decimal" min="0" step="any" />
+            <input
+              :aria-invalid="Boolean(metricIssue('valuePerEvent'))"
+              :aria-describedby="metricIssue('valuePerEvent') ? 'metric-valuePerEvent-error' : undefined"
+              v-model.number="draft.valuePerEvent"
+              type="number"
+              inputmode="decimal"
+              min="0"
+              step="any"
+            />
             <small>Keine bloßen Umsatzerlöse oder unbelegten Pauschalbeträge ansetzen.</small>
+            <small v-if="metricIssue('valuePerEvent')" id="metric-valuePerEvent-error" class="tool-field-error">{{
+              metricIssue('valuePerEvent')
+            }}</small>
           </label>
         </div>
         <div class="metric-inline-result" aria-live="polite">
@@ -408,22 +543,47 @@ const recovery = useToolRecovery({
           <template v-if="realizationPossible && draft.mechanism !== 'unresolved'">
             <label class="field"
               ><span>Tatsächlich realisierbarer Betrag in EUR pro Jahr</span>
-              <input v-model.number="draft.realizedAnnual" type="number" min="0" step="any" inputmode="decimal" />
+              <input
+                :aria-invalid="Boolean(metricIssue('realizedAnnual'))"
+                :aria-describedby="metricIssue('realizedAnnual') ? 'metric-realizedAnnual-error' : undefined"
+                v-model.number="draft.realizedAnnual"
+                type="number"
+                min="0"
+                step="any"
+                inputmode="decimal"
+              />
               <small>Darf nicht höher sein als das berechnete Potenzial.</small>
+              <small v-if="metricIssue('realizedAnnual')" id="metric-realizedAnnual-error" class="tool-field-error">{{
+                metricIssue('realizedAnnual')
+              }}</small>
             </label>
             <label class="field field--longform"
               ><span>Welche konkrete Ausgabe entfällt oder welcher Deckungsbeitrag entsteht?</span>
               <textarea
+                :aria-invalid="Boolean(metricIssue('realizationNote'))"
+                :aria-describedby="metricIssue('realizationNote') ? 'metric-realizationNote-error' : undefined"
                 v-model="draft.realizationNote"
                 rows="3"
                 maxlength="240"
                 placeholder="Konkrete Maßnahme und nachvollziehbare Datenbasis"
               />
+              <small v-if="metricIssue('realizationNote')" id="metric-realizationNote-error" class="tool-field-error">{{
+                metricIssue('realizationNote')
+              }}</small>
             </label>
             <label class="field"
               ><span>Wirkungsgruppe gegen Doppelzählung</span>
-              <input v-model="draft.effectGroup" maxlength="80" placeholder="z. B. Service-extern" />
+              <input
+                :aria-invalid="Boolean(metricIssue('effectGroup'))"
+                :aria-describedby="metricIssue('effectGroup') ? 'metric-effectGroup-error' : undefined"
+                v-model="draft.effectGroup"
+                maxlength="80"
+                placeholder="z. B. Service-extern"
+              />
               <small>Gleiche Wirkung bei mehreren Metrics immer derselben Gruppe zuordnen.</small>
+              <small v-if="metricIssue('effectGroup')" id="metric-effectGroup-error" class="tool-field-error">{{
+                metricIssue('effectGroup')
+              }}</small>
             </label>
           </template>
           <p v-if="!realizationPossible" class="metric-muted">
@@ -441,20 +601,47 @@ const recovery = useToolRecovery({
           <label class="field field--longform"
             ><span>Quellen, geprüfte Annahmen oder offene Datenbasis</span>
             <textarea
+              :aria-invalid="Boolean(metricIssue('assumptionNote'))"
+              :aria-describedby="metricIssue('assumptionNote') ? 'metric-assumptionNote-error' : undefined"
               v-model="draft.assumptionNote"
               rows="3"
               maxlength="360"
               placeholder="Wer hat wann welche Mengen, Werte und Zielannahmen genannt oder geprüft?"
             />
+            <small v-if="metricIssue('assumptionNote')" id="metric-assumptionNote-error" class="tool-field-error">{{
+              metricIssue('assumptionNote')
+            }}</small>
           </label>
           <div class="metric-timing">
             <label class="field"
               ><span>Nutzenbeginn im Projektmonat</span>
-              <input v-model.number="draft.startMonth" type="number" min="1" max="60" step="1" />
+              <input
+                :aria-invalid="Boolean(metricIssue('startMonth'))"
+                :aria-describedby="metricIssue('startMonth') ? 'metric-startMonth-error' : undefined"
+                v-model.number="draft.startMonth"
+                type="number"
+                min="1"
+                max="60"
+                step="1"
+              />
+              <small v-if="metricIssue('startMonth')" id="metric-startMonth-error" class="tool-field-error">{{
+                metricIssue('startMonth')
+              }}</small>
             </label>
             <label class="field"
               ><span>Ramp-up in Monaten</span>
-              <input v-model.number="draft.rampMonths" type="number" min="1" max="60" step="1" />
+              <input
+                :aria-invalid="Boolean(metricIssue('rampMonths'))"
+                :aria-describedby="metricIssue('rampMonths') ? 'metric-rampMonths-error' : undefined"
+                v-model.number="draft.rampMonths"
+                type="number"
+                min="1"
+                max="60"
+                step="1"
+              />
+              <small v-if="metricIssue('rampMonths')" id="metric-rampMonths-error" class="tool-field-error">{{
+                metricIssue('rampMonths')
+              }}</small>
             </label>
           </div>
         </div>

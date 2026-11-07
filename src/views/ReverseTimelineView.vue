@@ -12,6 +12,7 @@ import {
   Trash2,
 } from '@lucide/vue'
 import { computed, nextTick, onBeforeUnmount, ref } from 'vue'
+import { requiredDate, requiredMonth, requiredText } from '../domain/requiredFieldRules'
 
 import CustomerTimelineChart from '../components/CustomerTimelineChart.vue'
 import {
@@ -174,6 +175,10 @@ const calculation = computed(() =>
     steps: steps.value,
   }),
 )
+
+function stepIssue(step: EditableStep, field: 'label' | 'duration'): string | undefined {
+  return field === 'label' ? requiredText(step.label) : requiredMonth(step.duration, 0, 1000)
+}
 
 const plan = computed(() => (calculation.value.success ? calculation.value.plan : null))
 const issues = computed(() => (calculation.value.success ? [] : calculation.value.issues))
@@ -521,13 +526,31 @@ const recovery = useToolRecovery({
           </label>
           <label class="field">
             <span>Planungsdatum</span>
-            <input v-model="referenceDate" type="date" required />
+            <input
+              :aria-invalid="Boolean(requiredDate(referenceDate))"
+              :aria-describedby="requiredDate(referenceDate) ? 'reverse-reference-error' : undefined"
+              v-model="referenceDate"
+              type="date"
+              required
+            />
             <small>Referenz für die Vorlaufprüfung</small>
+            <small v-if="requiredDate(referenceDate)" id="reverse-reference-error" class="tool-field-error">{{
+              requiredDate(referenceDate)
+            }}</small>
           </label>
           <label class="field">
             <span>Target Go-Live</span>
-            <input v-model="targetGoLiveDate" type="date" required />
+            <input
+              :aria-invalid="Boolean(requiredDate(targetGoLiveDate))"
+              :aria-describedby="requiredDate(targetGoLiveDate) ? 'reverse-target-error' : undefined"
+              v-model="targetGoLiveDate"
+              type="date"
+              required
+            />
             <small>Von diesem Kundenziel wird rückwärts gerechnet</small>
+            <small v-if="requiredDate(targetGoLiveDate)" id="reverse-target-error" class="tool-field-error">{{
+              requiredDate(targetGoLiveDate)
+            }}</small>
           </label>
           <label class="field reverse-compelling-event">
             <span>Warum dieses Datum? <small>optional</small></span>
@@ -597,11 +620,37 @@ const recovery = useToolRecovery({
             <div class="reverse-step-fields">
               <label class="field reverse-step-name">
                 <span>Schritt</span>
-                <input v-model="step.label" type="text" maxlength="160" />
+                <input
+                  :aria-invalid="Boolean(stepIssue(step, 'label'))"
+                  :aria-describedby="stepIssue(step, 'label') ? 'reverse-step-name-' + step.id : undefined"
+                  required
+                  v-model="step.label"
+                  type="text"
+                  maxlength="160"
+                />
+                <small v-if="stepIssue(step, 'label')" :id="'reverse-step-name-' + step.id" class="tool-field-error">{{
+                  stepIssue(step, 'label')
+                }}</small>
               </label>
               <label class="field">
                 <span>Dauer</span>
-                <input v-model.number="step.duration" type="number" min="0" max="1000" step="1" inputmode="numeric" />
+                <input
+                  :aria-invalid="Boolean(stepIssue(step, 'duration'))"
+                  :aria-describedby="stepIssue(step, 'duration') ? 'reverse-step-duration-' + step.id : undefined"
+                  required
+                  v-model.number="step.duration"
+                  type="number"
+                  min="0"
+                  max="1000"
+                  step="1"
+                  inputmode="numeric"
+                />
+                <small
+                  v-if="stepIssue(step, 'duration')"
+                  :id="'reverse-step-duration-' + step.id"
+                  class="tool-field-error"
+                  >{{ stepIssue(step, 'duration') }}</small
+                >
               </label>
               <label class="field">
                 <span>Einheit</span>

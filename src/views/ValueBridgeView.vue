@@ -5,6 +5,7 @@ import { useToolRecovery } from '../composables/useToolRecovery'
 import { validValueBridgeInput } from '../services/recoveryDrafts'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
+import { optionalAmount, requiredAmount, requiredMonth, requiredText } from '../domain/requiredFieldRules'
 import {
   ArrowRight,
   ChartColumnIncreasing,
@@ -42,6 +43,68 @@ const message = ref('')
 const isDemo = ref(false)
 let counter = 1
 const result = computed(() => evaluateValueBridge(draft.value))
+type BridgeInputField =
+  | 'name'
+  | 'before'
+  | 'after'
+  | 'source'
+  | 'annualPotentialEur'
+  | 'calculation'
+  | 'annualRealizedEur'
+  | 'realization'
+  | 'effectGroup'
+  | 'startMonth'
+  | 'rampMonths'
+
+function bridgeIssue(metric: BridgeMetric, field: BridgeInputField): string | undefined {
+  const counted = metric.included && (metric.kind === 'saving' || metric.kind === 'margin')
+  if (field === 'name' || field === 'before' || field === 'after')
+    return counted ? requiredText(metric[field]) : undefined
+  if (field === 'source') return metric.evidence === 'customer-reviewed' ? requiredText(metric.source) : undefined
+  if (field === 'calculation' || field === 'realization' || field === 'effectGroup')
+    return counted ? requiredText(metric[field]) : undefined
+  if (field === 'annualPotentialEur') return optionalAmount(metric.annualPotentialEur)
+  if (field === 'annualRealizedEur') {
+    const issue = counted ? requiredAmount(metric.annualRealizedEur) : optionalAmount(metric.annualRealizedEur)
+    if (issue) return issue
+    if (counted && metric.annualRealizedEur === 0) return 'Nur ein positiver Jahresbetrag kann angerechnet werden.'
+    if (
+      counted &&
+      metric.annualRealizedEur !== null &&
+      metric.annualPotentialEur !== null &&
+      metric.annualRealizedEur > metric.annualPotentialEur
+    )
+      return 'Der realisierte Betrag übersteigt das angegebene Potenzial.'
+  }
+  if (field === 'startMonth' || field === 'rampMonths')
+    return requiredMonth(metric[field], 1, draft.value.horizonMonths)
+  return undefined
+}
+
+function bridgeFinanceIncomplete(metric: BridgeMetric): boolean {
+  return (
+    metric.included &&
+    (
+      [
+        'name',
+        'before',
+        'after',
+        'calculation',
+        'annualRealizedEur',
+        'realization',
+        'effectGroup',
+        'startMonth',
+        'rampMonths',
+      ] as const
+    ).some((field) => Boolean(bridgeIssue(metric, field)))
+  )
+}
+
+function bridgeCaseIssue(field: 'investmentEur' | 'saasMonthlyEur'): string | undefined {
+  // Erst das bewusst geöffnete optionale Finanzmodell benötigt beide Kostenangaben.
+  return showFinance.value ? requiredAmount(draft.value[field]) : optionalAmount(draft.value[field])
+}
+
 const money = (value: number): string =>
   new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(value)
 
@@ -327,15 +390,55 @@ const recovery = useToolRecovery({
               </div>
               <label class="vb-field"
                 ><span>Was wird gemessen?</span>
-                <input v-model="metric.name" maxlength="180" placeholder="z. B. Kosten externer Nachbearbeitung" />
+                <input
+                  :aria-invalid="Boolean(bridgeIssue(metric, 'name'))"
+                  :aria-describedby="bridgeIssue(metric, 'name') ? 'bridge-' + metric.id + '-name-error' : undefined"
+                  v-model="metric.name"
+                  maxlength="180"
+                  placeholder="z. B. Kosten externer Nachbearbeitung"
+                />
+                <small
+                  v-if="bridgeIssue(metric, 'name')"
+                  :id="'bridge-' + metric.id + '-name-error'"
+                  class="tool-field-error"
+                  >{{ bridgeIssue(metric, 'name') }}</small
+                >
               </label>
               <div class="vb-fields-two">
                 <label class="vb-field"
-                  ><span>Ausgangswert</span><input v-model="metric.before" maxlength="100" placeholder="z. B. 6.000"
-                /></label>
+                  ><span>Ausgangswert</span
+                  ><input
+                    :aria-invalid="Boolean(bridgeIssue(metric, 'before'))"
+                    :aria-describedby="
+                      bridgeIssue(metric, 'before') ? 'bridge-' + metric.id + '-before-error' : undefined
+                    "
+                    v-model="metric.before"
+                    maxlength="100"
+                    placeholder="z. B. 6.000"
+                  /><small
+                    v-if="bridgeIssue(metric, 'before')"
+                    :id="'bridge-' + metric.id + '-before-error'"
+                    class="tool-field-error"
+                    >{{ bridgeIssue(metric, 'before') }}</small
+                  >
+                </label>
                 <label class="vb-field"
-                  ><span>Zielwert</span><input v-model="metric.after" maxlength="100" placeholder="z. B. 3.000"
-                /></label>
+                  ><span>Zielwert</span
+                  ><input
+                    :aria-invalid="Boolean(bridgeIssue(metric, 'after'))"
+                    :aria-describedby="
+                      bridgeIssue(metric, 'after') ? 'bridge-' + metric.id + '-after-error' : undefined
+                    "
+                    v-model="metric.after"
+                    maxlength="100"
+                    placeholder="z. B. 3.000"
+                  /><small
+                    v-if="bridgeIssue(metric, 'after')"
+                    :id="'bridge-' + metric.id + '-after-error'"
+                    class="tool-field-error"
+                    >{{ bridgeIssue(metric, 'after') }}</small
+                  >
+                </label>
               </div>
               <label class="vb-field"
                 ><span>Einheit</span>
@@ -358,18 +461,39 @@ const recovery = useToolRecovery({
               <label class="vb-field"
                 ><span>Datenquelle und Annahmen</span>
                 <textarea
+                  :aria-invalid="Boolean(bridgeIssue(metric, 'source'))"
+                  :aria-describedby="
+                    bridgeIssue(metric, 'source') ? 'bridge-' + metric.id + '-source-error' : undefined
+                  "
                   v-model="metric.source"
                   rows="2"
                   maxlength="1000"
                   placeholder="Wer hat was anhand welcher Daten gesagt oder geprüft?"
                 />
+                <small
+                  v-if="bridgeIssue(metric, 'source')"
+                  :id="'bridge-' + metric.id + '-source-error'"
+                  class="tool-field-error"
+                  >{{ bridgeIssue(metric, 'source') }}</small
+                >
               </label>
               <details class="vb-details">
-                <summary>Wirtschaftliche Details (optional)</summary>
+                <summary>
+                  Wirtschaftliche Details (optional)
+                  <span v-if="bridgeFinanceIncomplete(metric)" class="tool-details-alert">
+                    · Pflichtangaben fehlen</span
+                  >
+                </summary>
                 <div class="vb-detail-content">
                   <label class="vb-field"
                     ><span>Theoretisches Potenzial in EUR/Jahr (optional)</span>
                     <input
+                      :aria-invalid="Boolean(bridgeIssue(metric, 'annualPotentialEur'))"
+                      :aria-describedby="
+                        bridgeIssue(metric, 'annualPotentialEur')
+                          ? 'bridge-' + metric.id + '-annualPotentialEur-error'
+                          : undefined
+                      "
                       :value="metric.annualPotentialEur ?? ''"
                       @input="setMetricAmount(metric, 'annualPotentialEur', $event)"
                       type="number"
@@ -378,20 +502,42 @@ const recovery = useToolRecovery({
                       step="any"
                       placeholder="Nicht ermittelt"
                     />
+                    <small
+                      v-if="bridgeIssue(metric, 'annualPotentialEur')"
+                      :id="'bridge-' + metric.id + '-annualPotentialEur-error'"
+                      class="tool-field-error"
+                      >{{ bridgeIssue(metric, 'annualPotentialEur') }}</small
+                    >
                   </label>
                   <template v-if="metric.kind === 'saving' || metric.kind === 'margin'">
                     <label class="vb-field"
                       ><span>Wie wird der Jahreswert aus Ausgangs- und Zielwert ermittelt?</span>
                       <textarea
+                        :aria-invalid="Boolean(bridgeIssue(metric, 'calculation'))"
+                        :aria-describedby="
+                          bridgeIssue(metric, 'calculation') ? 'bridge-' + metric.id + '-calculation-error' : undefined
+                        "
                         v-model="metric.calculation"
                         rows="2"
                         maxlength="1000"
                         placeholder="z. B. (6.000 - 3.000) EUR/Monat × 12 = 36.000 EUR/Jahr"
                       />
+                      <small
+                        v-if="bridgeIssue(metric, 'calculation')"
+                        :id="'bridge-' + metric.id + '-calculation-error'"
+                        class="tool-field-error"
+                        >{{ bridgeIssue(metric, 'calculation') }}</small
+                      >
                     </label>
                     <label class="vb-field"
                       ><span>Wirtschaftlich realisierbarer Betrag EUR/Jahr</span>
                       <input
+                        :aria-invalid="Boolean(bridgeIssue(metric, 'annualRealizedEur'))"
+                        :aria-describedby="
+                          bridgeIssue(metric, 'annualRealizedEur')
+                            ? 'bridge-' + metric.id + '-annualRealizedEur-error'
+                            : undefined
+                        "
                         :value="metric.annualRealizedEur ?? ''"
                         @input="setMetricAmount(metric, 'annualRealizedEur', $event)"
                         type="number"
@@ -400,19 +546,49 @@ const recovery = useToolRecovery({
                         step="any"
                         placeholder="Noch unbewiesen"
                       />
+                      <small
+                        v-if="bridgeIssue(metric, 'annualRealizedEur')"
+                        :id="'bridge-' + metric.id + '-annualRealizedEur-error'"
+                        class="tool-field-error"
+                        >{{ bridgeIssue(metric, 'annualRealizedEur') }}</small
+                      >
                     </label>
                     <label class="vb-field"
                       ><span>Wie entsteht der Betrag tatsächlich?</span>
                       <textarea
+                        :aria-invalid="Boolean(bridgeIssue(metric, 'realization'))"
+                        :aria-describedby="
+                          bridgeIssue(metric, 'realization') ? 'bridge-' + metric.id + '-realization-error' : undefined
+                        "
                         v-model="metric.realization"
                         rows="2"
                         maxlength="800"
                         placeholder="z. B. Externer Vertragsbetrag entfällt, zusätzlicher Deckungsbeitrag nach Kosten"
                       />
+                      <small
+                        v-if="bridgeIssue(metric, 'realization')"
+                        :id="'bridge-' + metric.id + '-realization-error'"
+                        class="tool-field-error"
+                        >{{ bridgeIssue(metric, 'realization') }}</small
+                      >
                     </label>
                     <label class="vb-field"
                       ><span>Wirkungsgruppe (Doppelzählungen vermeiden)</span>
-                      <input v-model="metric.effectGroup" maxlength="120" placeholder="z. B. externes-servicebudget" />
+                      <input
+                        :aria-invalid="Boolean(bridgeIssue(metric, 'effectGroup'))"
+                        :aria-describedby="
+                          bridgeIssue(metric, 'effectGroup') ? 'bridge-' + metric.id + '-effectGroup-error' : undefined
+                        "
+                        v-model="metric.effectGroup"
+                        maxlength="120"
+                        placeholder="z. B. externes-servicebudget"
+                      />
+                      <small
+                        v-if="bridgeIssue(metric, 'effectGroup')"
+                        :id="'bridge-' + metric.id + '-effectGroup-error'"
+                        class="tool-field-error"
+                        >{{ bridgeIssue(metric, 'effectGroup') }}</small
+                      >
                     </label>
                     <label class="vb-check">
                       <input v-model="metric.included" type="checkbox" />
@@ -424,11 +600,43 @@ const recovery = useToolRecovery({
                   <div class="vb-fields-two">
                     <label class="vb-field"
                       ><span>Nutzenbeginn, Monat</span>
-                      <input v-model.number="metric.startMonth" type="number" min="1" max="60" step="1" />
+                      <input
+                        :aria-invalid="Boolean(bridgeIssue(metric, 'startMonth'))"
+                        :aria-describedby="
+                          bridgeIssue(metric, 'startMonth') ? 'bridge-' + metric.id + '-startMonth-error' : undefined
+                        "
+                        v-model.number="metric.startMonth"
+                        type="number"
+                        min="1"
+                        max="60"
+                        step="1"
+                      />
+                      <small
+                        v-if="bridgeIssue(metric, 'startMonth')"
+                        :id="'bridge-' + metric.id + '-startMonth-error'"
+                        class="tool-field-error"
+                        >{{ bridgeIssue(metric, 'startMonth') }}</small
+                      >
                     </label>
                     <label class="vb-field"
                       ><span>Hochlauf, Monate</span>
-                      <input v-model.number="metric.rampMonths" type="number" min="1" max="60" step="1" />
+                      <input
+                        :aria-invalid="Boolean(bridgeIssue(metric, 'rampMonths'))"
+                        :aria-describedby="
+                          bridgeIssue(metric, 'rampMonths') ? 'bridge-' + metric.id + '-rampMonths-error' : undefined
+                        "
+                        v-model.number="metric.rampMonths"
+                        type="number"
+                        min="1"
+                        max="60"
+                        step="1"
+                      />
+                      <small
+                        v-if="bridgeIssue(metric, 'rampMonths')"
+                        :id="'bridge-' + metric.id + '-rampMonths-error'"
+                        class="tool-field-error"
+                        >{{ bridgeIssue(metric, 'rampMonths') }}</small
+                      >
                     </label>
                   </div>
                 </div>
@@ -462,6 +670,8 @@ const recovery = useToolRecovery({
                 <label class="vb-field"
                   ><span>Einmalige Projektkosten, EUR</span>
                   <input
+                    :aria-invalid="Boolean(bridgeCaseIssue('investmentEur'))"
+                    :aria-describedby="bridgeCaseIssue('investmentEur') ? 'bridge-investmentEur-error' : undefined"
                     :value="draft.investmentEur ?? ''"
                     @input="setCaseAmount('investmentEur', $event)"
                     type="number"
@@ -470,10 +680,18 @@ const recovery = useToolRecovery({
                     step="any"
                     placeholder="Noch offen"
                   />
+                  <small
+                    v-if="bridgeCaseIssue('investmentEur')"
+                    id="bridge-investmentEur-error"
+                    class="tool-field-error"
+                    >{{ bridgeCaseIssue('investmentEur') }}</small
+                  >
                 </label>
                 <label class="vb-field"
                   ><span>Zusätzliche laufende Kosten, EUR/Monat</span>
                   <input
+                    :aria-invalid="Boolean(bridgeCaseIssue('saasMonthlyEur'))"
+                    :aria-describedby="bridgeCaseIssue('saasMonthlyEur') ? 'bridge-saasMonthlyEur-error' : undefined"
                     :value="draft.saasMonthlyEur ?? ''"
                     @input="setCaseAmount('saasMonthlyEur', $event)"
                     type="number"
@@ -482,6 +700,12 @@ const recovery = useToolRecovery({
                     step="any"
                     placeholder="Noch offen"
                   />
+                  <small
+                    v-if="bridgeCaseIssue('saasMonthlyEur')"
+                    id="bridge-saasMonthlyEur-error"
+                    class="tool-field-error"
+                    >{{ bridgeCaseIssue('saasMonthlyEur') }}</small
+                  >
                 </label>
                 <p class="vb-hint">
                   Der wirtschaftliche Saldo und der Payback nutzen die vorhandene Software-Business-Case-Engine.
