@@ -12,6 +12,8 @@ for (const route of routes) {
     for (const width of [320, 375]) {
       await page.setViewportSize({ width, height: 900 })
       await page.goto('/meddpicc-workbench/#' + route)
+      // Derselbe Hash-Pfad remountet Vue nicht: ein Reload prüft den tatsächlichen Startzustand.
+      await page.reload()
       const panel = page.locator('.recovery-panel')
       await expect(panel).toHaveClass(/recovery-panel--compact/)
       await expect(panel).toContainText('unverschlüsselt')
