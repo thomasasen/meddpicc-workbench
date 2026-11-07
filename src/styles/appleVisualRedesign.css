@@ -1687,6 +1687,20 @@ body {
     padding-right: 3.1rem;
   }
 
+  /* Bei 320px darf die Detailaktion nicht unter die Entfernen-Schaltfläche ragen. */
+  #app .reverse-tool-shell .reverse-step-overview {
+    font-size: 0.8rem;
+    overflow-wrap: normal;
+  }
+
+  #app .reverse-tool-shell .reverse-step-more-action {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    font-size: 0.8rem;
+    white-space: normal;
+  }
+
   #app .reverse-tool-shell .reverse-step-controls {
     grid-column: 3;
     grid-row: 5;
