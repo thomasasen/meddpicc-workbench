@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { ChevronDown, Clock3, FileClock, LoaderCircle, SaveCheck, SaveOff, TriangleAlert } from '@lucide/vue'
 import type { ToolSaveState } from '../composables/useToolRecovery'
 const props = defineProps<{
@@ -11,7 +11,7 @@ const props = defineProps<{
   saveStatus: ToolSaveState
 }>()
 
-const recoveryHeading = ref<HTMLElement | null>(null)
+const expanded = ref(false)
 const compact = computed(() => !props.enabled && !props.candidate && !props.conflict && !props.message)
 const statusAnnouncement = ref('')
 let lastSavedAnnouncement = 0
@@ -74,12 +74,12 @@ const statusContent = computed(() => {
       }
   }
 })
+// Bei einem Speicherfehler müssen die Warnung und die Löschoption sichtbar sein.
+// Ein wiederherstellbarer Stand wird dagegen ohne automatischen Fokuswechsel angekündigt.
 watch(
-  () => props.candidate,
-  async (value) => {
-    if (!value) return
-    await nextTick()
-    if (document.activeElement === document.body) recoveryHeading.value?.focus()
+  () => props.conflict || props.saveStatus === 'error',
+  (error) => {
+    if (error) expanded.value = true
   },
 )
 
@@ -110,90 +110,108 @@ defineEmits<{
   </span>
   <section
     class="recovery-panel"
-    :class="{ 'recovery-panel--compact': compact }"
+    :class="{ 'recovery-panel--compact': compact, 'recovery-panel--open': expanded }"
     role="region"
     aria-labelledby="recovery-heading"
   >
-    <div class="recovery-layout">
-      <div class="recovery-copy">
-        <div class="recovery-heading">
-          <h2 id="recovery-heading" ref="recoveryHeading" tabindex="-1">Optionales lokales Recovery</h2>
-          <span v-if="enabled" class="recovery-label">Aktiv</span>
-        </div>
+    <h2 id="recovery-heading" class="recovery-summary-heading">
+      <button
+        type="button"
+        class="recovery-toggle"
+        data-testid="recovery-toggle"
+        :aria-expanded="expanded"
+        aria-controls="recovery-body"
+        @click="expanded = !expanded"
+      >
+        <span class="recovery-toggle-title">Optionales lokales Recovery</span>
+        <span class="recovery-toggle-status">
+          <FileClock v-if="candidate" :size="17" aria-hidden="true" />
+          <TriangleAlert v-else-if="conflict || saveStatus === 'error'" :size="17" aria-hidden="true" />
+          <SaveCheck v-else-if="enabled" :size="17" aria-hidden="true" />
+          <SaveOff v-else :size="17" aria-hidden="true" />
+          <span v-if="candidate">
+            Lokaler Arbeitsstand vom
+            <strong>{{ new Date(candidate.savedAt).toLocaleString('de-DE') }}</strong>
+          </span>
+          <span v-else-if="conflict || saveStatus === 'error'">Speicherproblem · Details prüfen</span>
+          <span v-else-if="enabled">Aktiv · {{ statusContent.text }}</span>
+          <span v-else>Nicht aktiviert</span>
+        </span>
+        <ChevronDown class="recovery-toggle-chevron" :size="19" aria-hidden="true" />
+      </button>
+    </h2>
 
-        <div v-if="candidate" class="recovery-snapshot">
-          <FileClock :size="20" aria-hidden="true" class="recovery-snapshot-icon" />
-          <div>
-            <p class="recovery-snapshot-title">
-              Lokaler Arbeitsstand vom
-              <strong>{{ new Date(candidate.savedAt).toLocaleString('de-DE') }}</strong>
-            </p>
+    <div v-show="expanded" id="recovery-body" class="recovery-expanded">
+      <div class="recovery-layout">
+        <div class="recovery-copy">
+          <div v-if="candidate" class="recovery-snapshot">
+            <TriangleAlert :size="19" aria-hidden="true" class="recovery-snapshot-icon" />
             <p class="recovery-snapshot-warning">
               Wiederherstellen ersetzt die aktuell sichtbaren Eingaben. Eine Zusammenführung findet nicht statt.
             </p>
           </div>
-        </div>
-        <p v-else-if="compact" class="recovery-description">
-          Optional: sieben Tage unverschlüsselt im Browser zwischenspeichern. Keine Cloud, keine Datei. Nicht für
-          gemeinsam genutzte Geräte empfohlen.
-        </p>
-        <p v-else class="recovery-description">
-          Die lokale Zwischensicherung ist optional und bleibt auf diesen Browser beschränkt. Sie ersetzt keine
-          gespeicherte Datei oder Bestätigung von Kundenangaben.
-        </p>
-
-        <p v-if="candidate || !compact" class="recovery-privacy-summary">
-          Unverschlüsselt im Browser · maximal sieben Tage · nicht für gemeinsam genutzte Geräte
-        </p>
-        <details class="recovery-details">
-          <summary>
-            Datenschutz- und Speicherhinweise
-            <ChevronDown :size="15" aria-hidden="true" />
-          </summary>
-          <p>
-            Die lokale Sicherung beginnt erst nach ausdrücklicher Aktivierung. Der Stand verfällt nach sieben Tagen und
-            wird beim nächsten Zugriff entfernt. Die Daten sind nicht verschlüsselt, werden nicht in eine Cloud
-            übertragen und sind keine gespeicherte Datei oder Bestätigung von Kundenangaben. Auf gemeinsam genutzten
-            Geräten nicht empfohlen.
+          <p v-else-if="compact" class="recovery-description">
+            Optional: sieben Tage unverschlüsselt im Browser zwischenspeichern. Keine Cloud, keine Datei. Nicht für
+            gemeinsam genutzte Geräte empfohlen.
           </p>
-        </details>
+          <p v-else class="recovery-description">
+            Die lokale Zwischensicherung ist optional und bleibt auf diesen Browser beschränkt. Sie ersetzt keine
+            gespeicherte Datei oder Bestätigung von Kundenangaben.
+          </p>
+
+          <p v-if="candidate || !compact" class="recovery-privacy-summary">
+            Unverschlüsselt im Browser · maximal sieben Tage · nicht für gemeinsam genutzte Geräte
+          </p>
+          <details class="recovery-details">
+            <summary>
+              Datenschutz- und Speicherhinweise
+              <ChevronDown :size="15" aria-hidden="true" />
+            </summary>
+            <p>
+              Die lokale Sicherung beginnt erst nach ausdrücklicher Aktivierung. Der Stand verfällt nach sieben Tagen
+              und wird beim nächsten Zugriff entfernt. Die Daten sind nicht verschlüsselt, werden nicht in eine Cloud
+              übertragen und sind keine gespeicherte Datei oder Bestätigung von Kundenangaben. Auf gemeinsam genutzten
+              Geräten nicht empfohlen.
+            </p>
+          </details>
+        </div>
+
+        <div class="recovery-actions">
+          <template v-if="candidate">
+            <button class="button button-primary" type="button" :disabled="busy || conflict" @click="$emit('recover')">
+              Wiederherstellen
+            </button>
+            <button class="button button-secondary" type="button" :disabled="busy" @click="$emit('discard')">
+              Verwerfen und löschen
+            </button>
+          </template>
+          <template v-else>
+            <button
+              v-if="!enabled"
+              class="button button-secondary"
+              type="button"
+              :disabled="busy || conflict"
+              @click="$emit('activate')"
+            >
+              Lokales Recovery aktivieren
+            </button>
+            <button
+              v-if="enabled || message"
+              class="button button-quiet"
+              type="button"
+              :disabled="busy"
+              @click="$emit('discard')"
+            >
+              Recoverydaten löschen und deaktivieren
+            </button>
+          </template>
+        </div>
       </div>
 
-      <div class="recovery-actions">
-        <template v-if="candidate">
-          <button class="button button-primary" type="button" :disabled="busy || conflict" @click="$emit('recover')">
-            Wiederherstellen
-          </button>
-          <button class="button button-secondary" type="button" :disabled="busy" @click="$emit('discard')">
-            Verwerfen und löschen
-          </button>
-        </template>
-        <template v-else>
-          <button
-            v-if="!enabled"
-            class="button button-secondary"
-            type="button"
-            :disabled="busy || conflict"
-            @click="$emit('activate')"
-          >
-            Lokales Recovery aktivieren
-          </button>
-          <button
-            v-if="enabled || message"
-            class="button button-quiet"
-            type="button"
-            :disabled="busy"
-            @click="$emit('discard')"
-          >
-            Recoverydaten löschen und deaktivieren
-          </button>
-        </template>
-      </div>
+      <p v-if="message" class="recovery-status" :role="conflict || saveStatus === 'error' ? 'alert' : undefined">
+        {{ message }}
+      </p>
     </div>
-
-    <p v-if="message" class="recovery-status" :role="conflict || saveStatus === 'error' ? 'alert' : undefined">
-      {{ message }}
-    </p>
   </section>
 </template>
 
@@ -254,12 +272,11 @@ defineEmits<{
   }
 }
 
+
 .recovery-panel {
-  display: grid;
   min-width: 0;
-  margin-block: 0.9rem;
-  padding: clamp(1rem, 1.6vw, 1.35rem);
-  gap: 0.75rem;
+  margin-block: 0.75rem;
+  overflow: hidden;
   border: 1px solid var(--color-border, #dce3ee);
   border-radius: var(--radius-panel, 1rem);
   background: var(--color-surface, #fff);
@@ -267,8 +284,82 @@ defineEmits<{
 }
 
 .recovery-panel--compact {
-  padding: 0.85rem 1rem;
   box-shadow: none;
+}
+
+.recovery-summary-heading {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.recovery-toggle {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) 20px;
+  align-items: center;
+  column-gap: 1rem;
+  width: 100%;
+  min-height: 56px;
+  padding: 0.65rem 1rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.recovery-toggle:hover {
+  background: var(--color-surface-muted, #f6f8fb);
+}
+
+.recovery-toggle:focus-visible {
+  outline: 3px solid var(--color-focus, #175cd3);
+  outline-offset: -4px;
+  border-radius: inherit;
+}
+
+.recovery-toggle-title {
+  min-width: 0;
+  font-size: 1rem;
+  font-weight: 720;
+  line-height: 1.4;
+}
+
+.recovery-toggle-status {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  min-width: 0;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  font-weight: 450;
+  line-height: 1.45;
+}
+
+.recovery-toggle-status svg {
+  flex: 0 0 auto;
+  color: var(--color-accent-strong);
+}
+
+.recovery-toggle-status strong {
+  color: var(--color-text);
+  font-weight: 680;
+  font-variant-numeric: tabular-nums;
+}
+
+.recovery-toggle-chevron {
+  justify-self: end;
+  transition: transform var(--apple-motion-gentle, 180ms ease);
+}
+
+.recovery-panel--open .recovery-toggle-chevron {
+  transform: rotate(180deg);
+}
+
+.recovery-expanded {
+  border-top: 1px solid var(--color-divider);
+  padding: 0.85rem 1rem 1rem;
 }
 
 .recovery-layout {
@@ -284,33 +375,7 @@ defineEmits<{
   gap: 0.45rem;
 }
 
-.recovery-heading {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-.recovery-heading h2 {
-  margin: 0;
-  color: var(--color-text);
-  font-size: 1.025rem;
-  font-weight: 720;
-  line-height: 1.35;
-}
-
-.recovery-label {
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  padding: 0.15rem 0.55rem;
-  color: var(--color-text-muted);
-  font-size: 0.75rem;
-  font-weight: 650;
-  line-height: 1.4;
-}
-
 .recovery-description,
-.recovery-snapshot-title,
 .recovery-snapshot-warning,
 .recovery-privacy-summary,
 .recovery-status {
@@ -338,25 +403,8 @@ defineEmits<{
   margin-top: 0.15rem;
 }
 
-.recovery-snapshot > div {
-  display: grid;
-  gap: 0.2rem;
-  min-width: 0;
-}
-
-.recovery-snapshot-title {
-  color: var(--color-text);
-  font-size: 0.9rem;
-  line-height: 1.45;
-}
-
-.recovery-snapshot-title strong {
-  font-weight: 720;
-  font-variant-numeric: tabular-nums;
-}
-
 .recovery-snapshot-warning {
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font-size: 0.875rem;
   line-height: 1.5;
 }
@@ -427,6 +475,7 @@ defineEmits<{
 
 .recovery-status {
   max-width: 90ch;
+  margin-top: 0.7rem;
   border-top: 1px solid var(--color-divider);
   padding-top: 0.7rem;
   color: var(--color-text-muted);
@@ -450,10 +499,34 @@ defineEmits<{
   }
 }
 
+@media (max-width: 640px) {
+  .recovery-toggle {
+    grid-template-columns: minmax(0, 1fr) 20px;
+    gap: 0.2rem 0.65rem;
+    min-height: 62px;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .recovery-toggle-title {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .recovery-toggle-status {
+    grid-column: 1;
+    grid-row: 2;
+    justify-content: flex-start;
+  }
+
+  .recovery-toggle-chevron {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}
+
 @media (max-width: 480px) {
-  .recovery-panel,
-  .recovery-panel--compact {
-    padding: 0.85rem;
+  .recovery-expanded {
+    padding: 0.8rem;
   }
 
   .recovery-actions {
@@ -465,13 +538,10 @@ defineEmits<{
   .recovery-actions > button {
     width: 100%;
   }
-
-  .recovery-heading h2 {
-    font-size: 1rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .recovery-toggle-chevron,
   .recovery-details summary svg {
     transition: none;
   }
