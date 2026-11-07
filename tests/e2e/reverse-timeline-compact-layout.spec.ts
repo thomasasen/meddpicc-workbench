@@ -141,7 +141,7 @@ test('Recovery bleibt eine kompakte Optionszeile und legt den Datenschutztext of
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto(route)
 
-  const recovery = page.locator('.recovery-panel--inline')
+  const recovery = page.locator('.recovery-panel')
   await expect(recovery).toHaveCount(1)
   await expect(recovery.getByRole('heading', { name: 'Optionales lokales Recovery' })).toBeVisible()
   await expect(recovery.getByRole('button', { name: 'Lokales Recovery aktivieren' })).toBeVisible()
@@ -202,7 +202,7 @@ test('Touch-Ansicht behaelt den durchgehenden Drag-Griff und gut erreichbare Akt
     expect(geometry.badgeHeight).toBeGreaterThanOrEqual(44)
     expect(geometry.deleteWidth).toBeGreaterThanOrEqual(44)
     expect(geometry.deleteHeight).toBeGreaterThanOrEqual(44)
-    await expect(page.locator('.recovery-panel--inline')).toBeVisible()
+    await expect(page.locator('.recovery-panel')).toBeVisible()
   }
 })
 
