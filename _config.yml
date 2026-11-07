@@ -1,0 +1,27 @@
+# Pages publishes from main / (root) via GitHub's Jekyll pipeline.
+# Keep the site limited to the already-built SPA (index.html and assets/).
+# In particular, docs/review-screenshots contains >130 MB of review images,
+# which caused the Pages deployment to remain in syncing_files until timeout.
+# Source code, reports and documentation remain in Git, but not on the website.
+exclude:
+  - app
+  - docs
+  - examples
+  - schema
+  - scripts
+  - src
+  - tests
+  - AGENTS.md
+  - CONTRIBUTING.md
+  - LICENSE
+  - README.md
+  - SECURITY.md
+  - THIRD_PARTY_NOTICES.md
+  - eslint.config.js
+  - package-lock.json
+  - package.json
+  - pages-build.json
+  - playwright.config.ts
+  - tsconfig.json
+  - vite.config.ts
+  - vitest.config.ts
