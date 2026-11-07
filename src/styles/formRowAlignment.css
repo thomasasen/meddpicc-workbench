@@ -251,7 +251,7 @@
 }
 
 /* Hilfetexte bleiben im gültigen Zustand sichtbar, sonst hat die Feldmeldung Vorrang. */
-#app :is(label.field, label.cod-field, label.vb-field):has(> [aria-invalid='true']) > small:not(.tool-field-error) {
+#app :is(label.field, label.cod-field, label.vb-field):has(> [aria-invalid='true']) > small:not(.tool-field-error):not(.quick-error) {
   display: none;
 }
 
