@@ -130,7 +130,10 @@ async function auditVisibleRows(page: Page) {
           const textRange = !labelText && textNode?.nodeType === Node.TEXT_NODE ? document.createRange() : null
           if (textRange && textNode) textRange.selectNodeContents(textNode)
           const labelBottom = labelText?.getBoundingClientRect().bottom ?? textRange?.getBoundingClientRect().bottom
-          const hint = label.querySelector<HTMLElement>(':scope > small, :scope > .field-help, :scope > [role="alert"]')
+          // Bei ungültigen Eingaben ist der statische Hilfetext ausgeblendet; nur sichtbare Hinweise messen.
+          const hint = [...label.querySelectorAll<HTMLElement>(':scope > small, :scope > .field-help, :scope > [role="alert"]')].find(
+            (element) => element.getClientRects().length > 0,
+          )
           return {
             label: label.innerText.replace(/\s+/g, ' ').slice(0, 60),
             controlType: control.tagName.toLowerCase(),
