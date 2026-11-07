@@ -12,7 +12,7 @@ import {
   Trash2,
 } from '@lucide/vue'
 import { computed, nextTick, onBeforeUnmount, ref } from 'vue'
-import { requiredDate, requiredMonth, requiredText } from '../domain/requiredFieldRules'
+import { requiredDate, requiredText } from '../domain/requiredFieldRules'
 
 import CustomerTimelineChart from '../components/CustomerTimelineChart.vue'
 import {
@@ -177,7 +177,12 @@ const calculation = computed(() =>
 )
 
 function stepIssue(step: EditableStep, field: 'label' | 'duration'): string | undefined {
-  return field === 'label' ? requiredText(step.label) : requiredMonth(step.duration, 0, 1000)
+  if (field === 'label') return requiredText(step.label)
+  const duration: unknown = step.duration
+  if (duration === '' || duration === null || duration === undefined) return 'Dauer fehlt.'
+  if (typeof duration !== 'number' || !Number.isInteger(duration) || duration < 0 || duration > 1000)
+    return '0–1000 Tage.'
+  return undefined
 }
 
 const plan = computed(() => (calculation.value.success ? calculation.value.plan : null))
