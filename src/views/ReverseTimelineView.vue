@@ -495,6 +495,7 @@ const recovery = useToolRecovery({
           :conflict="recovery.conflict.value"
           :message="recovery.message.value"
           :save-status="recovery.saveStatus.value"
+          compact-layout
           @activate="recovery.activate"
           @recover="recovery.recover"
           @discard="recovery.discard"
@@ -578,22 +579,20 @@ const recovery = useToolRecovery({
             :style="stepDragStyle(step.id, index)"
             :data-step-id="step.id"
           >
-            <div class="reverse-step-leading">
-              <button
-                class="reverse-drag-handle"
-                type="button"
-                :aria-label="`${step.label} verschieben. Ziehen oder Pfeiltasten verwenden.`"
-                title="Ziehen zum Sortieren · Pfeiltasten für Tastatur"
-                @pointerdown="startStepDrag($event, index)"
-                @pointermove="moveDraggedStep"
-                @pointerup="finishStepDrag"
-                @pointercancel="finishStepDrag"
-                @keydown="handleDragKey($event, index)"
-              >
-                <GripVertical :size="18" aria-hidden="true" />
-              </button>
-              <div class="reverse-step-position" :aria-label="`Position ${index + 1}`">{{ index + 1 }}</div>
-            </div>
+            <button
+              class="reverse-drag-handle"
+              type="button"
+              :aria-label="`${step.label} verschieben. Ziehen oder Pfeiltasten verwenden.`"
+              title="Ziehen zum Sortieren · Pfeiltasten für Tastatur"
+              @pointerdown="startStepDrag($event, index)"
+              @pointermove="moveDraggedStep"
+              @pointerup="finishStepDrag"
+              @pointercancel="finishStepDrag"
+              @keydown="handleDragKey($event, index)"
+            >
+              <GripVertical :size="18" aria-hidden="true" />
+            </button>
+            <div class="reverse-step-position" :aria-label="`Position ${index + 1}`">{{ index + 1 }}</div>
 
             <div class="reverse-step-fields">
               <label class="field reverse-step-name">
