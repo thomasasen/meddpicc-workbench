@@ -11,6 +11,7 @@ import {
   calculateQuickPayback,
   formatEuro,
   formatMonths,
+  parseEuroInput,
   type QuickPaybackInput,
 } from '../domain/quickPayback'
 
@@ -49,6 +50,8 @@ const isDemo = computed(
 function errorFor(field: keyof QuickPaybackInput): string | undefined {
   // Fehlende Startwerte sind ebenso sichtbar wie syntaktisch ungültige Beträge.
   if (!inputs.value[field].trim()) return 'Für die Payback-Berechnung erforderlich.'
+  if (parseEuroInput(inputs.value[field]) === null)
+    return 'Bitte eine nicht negative Zahl bis 1 Billion EUR eingeben (z. B. 12.345,67).'
   return calculation.value.kind === 'invalid' ? calculation.value.issues[field] : undefined
 }
 
