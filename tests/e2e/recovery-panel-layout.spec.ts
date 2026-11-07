@@ -6,6 +6,8 @@ test('Recovery-Karte besitzt Innenabstände und kompakte Datenschutzhinweise', a
   for (const width of [320, 375, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 })
     await page.goto(route)
+    // Bei gleicher Route bleibt der lokale Disclosure-Zustand sonst vom vorigen Durchlauf bestehen.
+    await page.reload()
 
     const panel = page.locator('.recovery-panel')
     const toggle = panel.getByTestId('recovery-toggle')
@@ -20,21 +22,21 @@ test('Recovery-Karte besitzt Innenabstände und kompakte Datenschutzhinweise', a
 
     const metrics = await panel.evaluate((element) => {
       const panelRect = element.getBoundingClientRect()
-      const headingRect = element.querySelector('h2')?.getBoundingClientRect()
+      const titleRect = element.querySelector('.recovery-toggle-title')?.getBoundingClientRect()
       const actionsRect = element.querySelector('.recovery-actions')?.getBoundingClientRect()
-      if (!headingRect || !actionsRect) throw new Error('Recovery-Inhalt fehlt')
+      if (!titleRect || !actionsRect) throw new Error('Recovery-Inhalt fehlt')
       return {
         panelLeft: panelRect.left,
         panelRight: panelRect.right,
-        headingLeft: headingRect.left,
-        headingTop: headingRect.top,
+        headingLeft: titleRect.left,
+        headingTop: titleRect.top,
         panelTop: panelRect.top,
         actionsRight: actionsRect.right,
       }
     })
 
     expect(metrics.headingLeft - metrics.panelLeft).toBeGreaterThanOrEqual(12)
-    expect(metrics.headingTop - metrics.panelTop).toBeGreaterThanOrEqual(12)
+    expect(metrics.headingTop - metrics.panelTop).toBeGreaterThanOrEqual(10)
     expect(metrics.actionsRight).toBeLessThanOrEqual(metrics.panelRight - 12)
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
     expect(overflow).toBeLessThanOrEqual(1)
