@@ -47,6 +47,8 @@ const isDemo = computed(
 )
 
 function errorFor(field: keyof QuickPaybackInput): string | undefined {
+  // Fehlende Startwerte sind ebenso sichtbar wie syntaktisch ungültige Beträge.
+  if (!inputs.value[field].trim()) return 'Für die Payback-Berechnung erforderlich.'
   return calculation.value.kind === 'invalid' ? calculation.value.issues[field] : undefined
 }
 
