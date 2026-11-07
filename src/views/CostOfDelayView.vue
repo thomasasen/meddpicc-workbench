@@ -43,11 +43,12 @@ type DelayField = keyof CostOfDelayInput | 'customDelay'
 function delayIssue(field: DelayField): string | undefined {
   const value = draft.value
   if (field === 'annualBenefitEur')
-    return value.financialTreatment === 'realized' ? requiredAmount(value.annualBenefitEur) : optionalAmount(value.annualBenefitEur)
+    return value.financialTreatment === 'realized'
+      ? requiredAmount(value.annualBenefitEur)
+      : optionalAmount(value.annualBenefitEur)
   if (field === 'effectGroup')
     return value.financialTreatment === 'realized' ? requiredText(value.effectGroup) : undefined
-  if (field === 'source')
-    return value.evidence === 'customer-reviewed' ? requiredText(value.source) : undefined
+  if (field === 'source') return value.evidence === 'customer-reviewed' ? requiredText(value.source) : undefined
   if (field === 'legacyEffectGroup')
     return (value.legacyMonthlyEur ?? 0) > 0 ? requiredText(value.legacyEffectGroup) : undefined
   if (field === 'extraCostSource')
@@ -60,8 +61,7 @@ function delayIssue(field: DelayField): string | undefined {
     if (value.benefitEndMonth === null) return undefined
     return requiredMonth(value.benefitEndMonth, value.benefitStartMonth, 120)
   }
-  if (field === 'customDelay')
-    return customDelay.value === null ? undefined : requiredMonth(customDelay.value, 0, 120)
+  if (field === 'customDelay') return customDelay.value === null ? undefined : requiredMonth(customDelay.value, 0, 120)
   if (field === 'legacyMonthlyEur' || field === 'projectOnceEur' || field === 'extraCostPerMonthEur')
     return optionalAmount(value[field])
   return undefined
@@ -288,7 +288,9 @@ const recovery = useToolRecovery({
                   ? 'Einmaliger Betrag in EUR'
                   : 'Realisierbarer Nutzen in EUR/' + (benefitEntryPeriod === 'monthly' ? 'Monat' : 'Jahr')
               }}</span>
-              <input :aria-invalid="Boolean(delayIssue('annualBenefitEur'))" :aria-describedby="delayIssue('annualBenefitEur') ? 'delay-annualBenefitEur-error' : undefined"
+              <input
+                :aria-invalid="Boolean(delayIssue('annualBenefitEur'))"
+                :aria-describedby="delayIssue('annualBenefitEur') ? 'delay-annualBenefitEur-error' : undefined"
                 :value="
                   draft.annualBenefitEur === null
                     ? ''
@@ -304,7 +306,9 @@ const recovery = useToolRecovery({
                 placeholder="Noch offen"
                 @input="setAmount('annualBenefitEur', $event)"
               />
-            <small v-if="delayIssue('annualBenefitEur')" id="delay-annualBenefitEur-error" class="tool-field-error">{{ delayIssue('annualBenefitEur') }}</small>
+              <small v-if="delayIssue('annualBenefitEur')" id="delay-annualBenefitEur-error" class="tool-field-error">{{
+                delayIssue('annualBenefitEur')
+              }}</small>
             </label>
             <label v-if="draft.benefitKind === 'recurring'" class="cod-field">
               <span>Eingabezeitraum für realisierten Nutzen</span>
@@ -322,19 +326,42 @@ const recovery = useToolRecovery({
             </label>
             <label class="cod-field"
               ><span>Wirkungsgruppe (Doppelzählungsschutz)</span>
-              <input :aria-invalid="Boolean(delayIssue('effectGroup'))" :aria-describedby="delayIssue('effectGroup') ? 'delay-effectGroup-error' : undefined" v-model="draft.effectGroup" maxlength="90" placeholder="z. B. service-extern" />
-            <small v-if="delayIssue('effectGroup')" id="delay-effectGroup-error" class="tool-field-error">{{ delayIssue('effectGroup') }}</small>
+              <input
+                :aria-invalid="Boolean(delayIssue('effectGroup'))"
+                :aria-describedby="delayIssue('effectGroup') ? 'delay-effectGroup-error' : undefined"
+                v-model="draft.effectGroup"
+                maxlength="90"
+                placeholder="z. B. service-extern"
+              />
+              <small v-if="delayIssue('effectGroup')" id="delay-effectGroup-error" class="tool-field-error">{{
+                delayIssue('effectGroup')
+              }}</small>
             </label>
           </template>
           <div class="cod-field-row">
             <label class="cod-field"
               ><span>Nutzenbeginn (Monat)</span>
-              <input :aria-invalid="Boolean(delayIssue('benefitStartMonth'))" :aria-describedby="delayIssue('benefitStartMonth') ? 'delay-benefitStartMonth-error' : undefined" v-model.number="draft.benefitStartMonth" type="number" min="1" max="120" step="1" />
-            <small v-if="delayIssue('benefitStartMonth')" id="delay-benefitStartMonth-error" class="tool-field-error">{{ delayIssue('benefitStartMonth') }}</small>
+              <input
+                :aria-invalid="Boolean(delayIssue('benefitStartMonth'))"
+                :aria-describedby="delayIssue('benefitStartMonth') ? 'delay-benefitStartMonth-error' : undefined"
+                v-model.number="draft.benefitStartMonth"
+                type="number"
+                min="1"
+                max="120"
+                step="1"
+              />
+              <small
+                v-if="delayIssue('benefitStartMonth')"
+                id="delay-benefitStartMonth-error"
+                class="tool-field-error"
+                >{{ delayIssue('benefitStartMonth') }}</small
+              >
             </label>
             <label class="cod-field"
               ><span>Ramp-up (Monate)</span>
-              <input :aria-invalid="Boolean(delayIssue('rampMonths'))" :aria-describedby="delayIssue('rampMonths') ? 'delay-rampMonths-error' : undefined"
+              <input
+                :aria-invalid="Boolean(delayIssue('rampMonths'))"
+                :aria-describedby="delayIssue('rampMonths') ? 'delay-rampMonths-error' : undefined"
                 v-model.number="draft.rampMonths"
                 type="number"
                 min="1"
@@ -342,7 +369,9 @@ const recovery = useToolRecovery({
                 step="1"
                 :disabled="draft.benefitKind === 'one-time'"
               />
-            <small v-if="delayIssue('rampMonths')" id="delay-rampMonths-error" class="tool-field-error">{{ delayIssue('rampMonths') }}</small>
+              <small v-if="delayIssue('rampMonths')" id="delay-rampMonths-error" class="tool-field-error">{{
+                delayIssue('rampMonths')
+              }}</small>
             </label>
           </div>
           <label class="cod-field"
@@ -356,14 +385,18 @@ const recovery = useToolRecovery({
           </label>
           <label class="cod-field"
             ><span>Datenquelle und tatsächlicher Realisierungsmechanismus</span>
-            <textarea :aria-invalid="Boolean(delayIssue('source'))" :aria-describedby="delayIssue('source') ? 'delay-source-error' : undefined"
+            <textarea
+              :aria-invalid="Boolean(delayIssue('source'))"
+              :aria-describedby="delayIssue('source') ? 'delay-source-error' : undefined"
               v-model="draft.source"
               rows="3"
               maxlength="600"
               placeholder="Vertragsposition, Rechnung, Kundenaussage oder offene Annahme"
             />
-          <small v-if="delayIssue('source')" id="delay-source-error" class="tool-field-error">{{ delayIssue('source') }}</small>
-            </label>
+            <small v-if="delayIssue('source')" id="delay-source-error" class="tool-field-error">{{
+              delayIssue('source')
+            }}</small>
+          </label>
         </div>
       </section>
 
@@ -384,7 +417,9 @@ const recovery = useToolRecovery({
           </label>
           <label class="cod-field"
             ><span>Eigene Verzögerung in Monaten (optional)</span>
-            <input :aria-invalid="Boolean(delayIssue('customDelay'))" :aria-describedby="delayIssue('customDelay') ? 'delay-customDelay-error' : undefined"
+            <input
+              :aria-invalid="Boolean(delayIssue('customDelay'))"
+              :aria-describedby="delayIssue('customDelay') ? 'delay-customDelay-error' : undefined"
               :value="customDelay ?? ''"
               type="number"
               min="0"
@@ -393,14 +428,18 @@ const recovery = useToolRecovery({
               placeholder="Standard: 0 / 3 / 6 / 12"
               @input="setCustomDelay"
             />
-          <small v-if="delayIssue('customDelay')" id="delay-customDelay-error" class="tool-field-error">{{ delayIssue('customDelay') }}</small>
-            </label>
+            <small v-if="delayIssue('customDelay')" id="delay-customDelay-error" class="tool-field-error">{{
+              delayIssue('customDelay')
+            }}</small>
+          </label>
           <details class="cod-details">
             <summary>Hat die Wirkung ein festes Ende?</summary>
             <div class="cod-fields">
               <label class="cod-field"
                 ><span>Letzter Monat mit Nutzen (optional)</span>
-                <input :aria-invalid="Boolean(delayIssue('benefitEndMonth'))" :aria-describedby="delayIssue('benefitEndMonth') ? 'delay-benefitEndMonth-error' : undefined"
+                <input
+                  :aria-invalid="Boolean(delayIssue('benefitEndMonth'))"
+                  :aria-describedby="delayIssue('benefitEndMonth') ? 'delay-benefitEndMonth-error' : undefined"
                   :value="draft.benefitEndMonth ?? ''"
                   type="number"
                   min="1"
@@ -409,8 +448,10 @@ const recovery = useToolRecovery({
                   placeholder="Ohne festes Ende"
                   @input="setEndMonth"
                 />
-              <small v-if="delayIssue('benefitEndMonth')" id="delay-benefitEndMonth-error" class="tool-field-error">{{ delayIssue('benefitEndMonth') }}</small>
-            </label>
+                <small v-if="delayIssue('benefitEndMonth')" id="delay-benefitEndMonth-error" class="tool-field-error">{{
+                  delayIssue('benefitEndMonth')
+                }}</small>
+              </label>
               <label class="cod-field"
                 ><span>Wie verändert sich der Endtermin?</span>
                 <select v-model="draft.expiry">
@@ -429,7 +470,9 @@ const recovery = useToolRecovery({
             <div class="cod-fields">
               <label class="cod-field"
                 ><span>Entfallender Altvertrag in EUR/Monat</span>
-                <input :aria-invalid="Boolean(delayIssue('legacyMonthlyEur'))" :aria-describedby="delayIssue('legacyMonthlyEur') ? 'delay-legacyMonthlyEur-error' : undefined"
+                <input
+                  :aria-invalid="Boolean(delayIssue('legacyMonthlyEur'))"
+                  :aria-describedby="delayIssue('legacyMonthlyEur') ? 'delay-legacyMonthlyEur-error' : undefined"
                   :value="draft.legacyMonthlyEur ?? ''"
                   type="number"
                   min="0"
@@ -437,25 +480,56 @@ const recovery = useToolRecovery({
                   placeholder="Offen"
                   @input="setAmount('legacyMonthlyEur', $event)"
                 />
-              <small v-if="delayIssue('legacyMonthlyEur')" id="delay-legacyMonthlyEur-error" class="tool-field-error">{{ delayIssue('legacyMonthlyEur') }}</small>
-            </label>
+                <small
+                  v-if="delayIssue('legacyMonthlyEur')"
+                  id="delay-legacyMonthlyEur-error"
+                  class="tool-field-error"
+                  >{{ delayIssue('legacyMonthlyEur') }}</small
+                >
+              </label>
               <label class="cod-field"
                 ><span>Abschaltung ohne Verzögerung (Monat)</span>
-                <input :aria-invalid="Boolean(delayIssue('legacyStartMonth'))" :aria-describedby="delayIssue('legacyStartMonth') ? 'delay-legacyStartMonth-error' : undefined" v-model.number="draft.legacyStartMonth" type="number" min="1" max="120" step="1" />
-              <small v-if="delayIssue('legacyStartMonth')" id="delay-legacyStartMonth-error" class="tool-field-error">{{ delayIssue('legacyStartMonth') }}</small>
-            </label>
+                <input
+                  :aria-invalid="Boolean(delayIssue('legacyStartMonth'))"
+                  :aria-describedby="delayIssue('legacyStartMonth') ? 'delay-legacyStartMonth-error' : undefined"
+                  v-model.number="draft.legacyStartMonth"
+                  type="number"
+                  min="1"
+                  max="120"
+                  step="1"
+                />
+                <small
+                  v-if="delayIssue('legacyStartMonth')"
+                  id="delay-legacyStartMonth-error"
+                  class="tool-field-error"
+                  >{{ delayIssue('legacyStartMonth') }}</small
+                >
+              </label>
               <label class="cod-field"
                 ><span>Wirkungsgruppe des Altvertrags</span>
-                <input :aria-invalid="Boolean(delayIssue('legacyEffectGroup'))" :aria-describedby="delayIssue('legacyEffectGroup') ? 'delay-legacyEffectGroup-error' : undefined" v-model="draft.legacyEffectGroup" placeholder="z. B. altlizenz" maxlength="90" />
-              <small v-if="delayIssue('legacyEffectGroup')" id="delay-legacyEffectGroup-error" class="tool-field-error">{{ delayIssue('legacyEffectGroup') }}</small>
-            </label>
+                <input
+                  :aria-invalid="Boolean(delayIssue('legacyEffectGroup'))"
+                  :aria-describedby="delayIssue('legacyEffectGroup') ? 'delay-legacyEffectGroup-error' : undefined"
+                  v-model="draft.legacyEffectGroup"
+                  placeholder="z. B. altlizenz"
+                  maxlength="90"
+                />
+                <small
+                  v-if="delayIssue('legacyEffectGroup')"
+                  id="delay-legacyEffectGroup-error"
+                  class="tool-field-error"
+                  >{{ delayIssue('legacyEffectGroup') }}</small
+                >
+              </label>
               <label class="cod-check"
                 ><input v-model="draft.legacyMovesWithProject" type="checkbox" />
                 <span>Die Abschaltung verschiebt sich mit dem Projekt.</span></label
               >
               <label class="cod-field"
                 ><span>Einmalige Projektkosten (EUR)</span>
-                <input :aria-invalid="Boolean(delayIssue('projectOnceEur'))" :aria-describedby="delayIssue('projectOnceEur') ? 'delay-projectOnceEur-error' : undefined"
+                <input
+                  :aria-invalid="Boolean(delayIssue('projectOnceEur'))"
+                  :aria-describedby="delayIssue('projectOnceEur') ? 'delay-projectOnceEur-error' : undefined"
                   :value="draft.projectOnceEur ?? ''"
                   type="number"
                   min="0"
@@ -463,20 +537,39 @@ const recovery = useToolRecovery({
                   placeholder="Offen"
                   @input="setAmount('projectOnceEur', $event)"
                 />
-              <small v-if="delayIssue('projectOnceEur')" id="delay-projectOnceEur-error" class="tool-field-error">{{ delayIssue('projectOnceEur') }}</small>
-            </label>
+                <small v-if="delayIssue('projectOnceEur')" id="delay-projectOnceEur-error" class="tool-field-error">{{
+                  delayIssue('projectOnceEur')
+                }}</small>
+              </label>
               <label class="cod-field"
                 ><span>Projektkostentermin (Monat)</span>
-                <input :aria-invalid="Boolean(delayIssue('projectCostMonth'))" :aria-describedby="delayIssue('projectCostMonth') ? 'delay-projectCostMonth-error' : undefined" v-model.number="draft.projectCostMonth" type="number" min="0" max="120" step="1" />
-              <small v-if="delayIssue('projectCostMonth')" id="delay-projectCostMonth-error" class="tool-field-error">{{ delayIssue('projectCostMonth') }}</small>
-            </label>
+                <input
+                  :aria-invalid="Boolean(delayIssue('projectCostMonth'))"
+                  :aria-describedby="delayIssue('projectCostMonth') ? 'delay-projectCostMonth-error' : undefined"
+                  v-model.number="draft.projectCostMonth"
+                  type="number"
+                  min="0"
+                  max="120"
+                  step="1"
+                />
+                <small
+                  v-if="delayIssue('projectCostMonth')"
+                  id="delay-projectCostMonth-error"
+                  class="tool-field-error"
+                  >{{ delayIssue('projectCostMonth') }}</small
+                >
+              </label>
               <label class="cod-check"
                 ><input v-model="draft.projectCostsMove" type="checkbox" />
                 <span>Diese Projektkosten verschieben sich ebenfalls.</span></label
               >
               <label class="cod-field"
                 ><span>Belegte Zusatzkosten je Verzögerungsmonat (EUR)</span>
-                <input :aria-invalid="Boolean(delayIssue('extraCostPerMonthEur'))" :aria-describedby="delayIssue('extraCostPerMonthEur') ? 'delay-extraCostPerMonthEur-error' : undefined"
+                <input
+                  :aria-invalid="Boolean(delayIssue('extraCostPerMonthEur'))"
+                  :aria-describedby="
+                    delayIssue('extraCostPerMonthEur') ? 'delay-extraCostPerMonthEur-error' : undefined
+                  "
                   :value="draft.extraCostPerMonthEur ?? ''"
                   type="number"
                   min="0"
@@ -484,18 +577,27 @@ const recovery = useToolRecovery({
                   placeholder="Offen"
                   @input="setAmount('extraCostPerMonthEur', $event)"
                 />
-              <small v-if="delayIssue('extraCostPerMonthEur')" id="delay-extraCostPerMonthEur-error" class="tool-field-error">{{ delayIssue('extraCostPerMonthEur') }}</small>
-            </label>
+                <small
+                  v-if="delayIssue('extraCostPerMonthEur')"
+                  id="delay-extraCostPerMonthEur-error"
+                  class="tool-field-error"
+                  >{{ delayIssue('extraCostPerMonthEur') }}</small
+                >
+              </label>
               <label class="cod-field"
                 ><span>Datenquelle der Zusatzkosten</span>
-                <textarea :aria-invalid="Boolean(delayIssue('extraCostSource'))" :aria-describedby="delayIssue('extraCostSource') ? 'delay-extraCostSource-error' : undefined"
+                <textarea
+                  :aria-invalid="Boolean(delayIssue('extraCostSource'))"
+                  :aria-describedby="delayIssue('extraCostSource') ? 'delay-extraCostSource-error' : undefined"
                   v-model="draft.extraCostSource"
                   rows="2"
                   maxlength="360"
                   placeholder="z. B. befristeter Dienstleistervertrag"
                 />
-              <small v-if="delayIssue('extraCostSource')" id="delay-extraCostSource-error" class="tool-field-error">{{ delayIssue('extraCostSource') }}</small>
-            </label>
+                <small v-if="delayIssue('extraCostSource')" id="delay-extraCostSource-error" class="tool-field-error">{{
+                  delayIssue('extraCostSource')
+                }}</small>
+              </label>
             </div>
           </details>
         </div>
