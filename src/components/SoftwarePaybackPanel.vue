@@ -4,6 +4,7 @@ import { useToolRecovery } from '../composables/useToolRecovery'
 import { validSoftwareCost, validSoftwareMetric } from '../services/recoveryDrafts'
 import { loadBrandForReport } from '../services/brandProfileStore'
 import { computed, onMounted, ref } from 'vue'
+import { requiredAmount, requiredMonth, requiredText } from '../domain/requiredFieldRules'
 import { consumeMetricHandoff, consumePaybackReturn, queuePaybackReturn } from '../domain/metricBuilderHandoff'
 import { queuePaybackToBridge } from '../domain/valueBridgeHandoff'
 import { useRouter } from 'vue-router'
@@ -114,6 +115,67 @@ const result = computed(() =>
     metrics: metrics.value,
   }),
 )
+
+type PaybackCostField = 'name' | 'amountEur' | 'startMonth' | 'endMonth' | 'effectGroup'
+type PaybackMetricField = 'name' | 'annualAmountEur' | 'annualVolume' | 'before' | 'after' |
+  'hourlyCostEur' | 'valuePerEventEur' | 'evidenceNote' | 'effectGroup' | 'startMonth' | 'rampMonths' | 'endMonth'
+
+function paybackCostIssue(cost: SoftwareCost, field: PaybackCostField): string | undefined {
+  if (field === 'name') return requiredText(cost.name)
+  if (field === 'amountEur') return requiredAmount(cost.amountEur)
+  if (field === 'startMonth') return requiredMonth(cost.startMonth, 0, horizon.value)
+  if (field === 'effectGroup')
+    return cost.kind === 'avoided-legacy' && cost.amountEur > 0
+      ? requiredText(cost.effectGroup ?? '') : undefined
+  if (field === 'endMonth' && cost.endMonth !== undefined)
+    return requiredMonth(cost.endMonth, cost.startMonth, horizon.value)
+  return undefined
+}
+
+function paybackMetricIssue(metric: CustomerMetric, field: PaybackMetricField): string | undefined {
+  const formula = metric.formula
+  const quantified = ['process', 'time', 'conversion', 'quality'].includes(formula)
+  if (field === 'name') return requiredText(metric.name)
+  if (field === 'annualAmountEur')
+    return ['direct', 'risk'].includes(formula) ? requiredAmount(metric.annualAmountEur) : undefined
+  if (field === 'annualVolume') return quantified ? requiredAmount(metric.annualVolume) : undefined
+  if (field === 'before' || field === 'after') {
+    if (!quantified) return undefined
+    const issue = requiredAmount(metric[field])
+    if (issue) return issue
+    if (['conversion', 'quality'].includes(formula) && metric[field] > 100)
+      return 'Prozentwerte müssen zwischen 0 und 100 liegen.'
+    if (field === 'after') {
+      const difference = formula === 'conversion' ? metric.after - metric.before : metric.before - metric.after
+      if (difference < 0) return 'Der Zielwert würde einen negativen Nutzen ergeben.'
+    }
+    return undefined
+  }
+  if (field === 'hourlyCostEur') return formula === 'time' ? requiredAmount(metric.hourlyCostEur) : undefined
+  if (field === 'valuePerEventEur')
+    return ['conversion', 'quality'].includes(formula) ? requiredAmount(metric.valuePerEventEur) : undefined
+  if (field === 'evidenceNote' || field === 'effectGroup')
+    return metric.included && metric.treatment === 'realized' ? requiredText(metric[field]) : undefined
+  if (field === 'startMonth') return requiredMonth(metric.startMonth, 1, horizon.value)
+  if (field === 'rampMonths') return requiredMonth(metric.rampMonths, 1, horizon.value)
+  if (field === 'endMonth' && metric.endMonth !== undefined)
+    return requiredMonth(metric.endMonth, metric.startMonth, horizon.value)
+  return undefined
+}
+
+function paybackDetailIncomplete(metric: CustomerMetric): boolean {
+  return (['effectGroup', 'startMonth', 'rampMonths', 'endMonth'] as const)
+    .some((field) => Boolean(paybackMetricIssue(metric, field)))
+}
+
+function scenarioIssue(kind: 'conservative' | 'optimistic',
+    field: 'benefitPercent' | 'oneTimeCostPercent' | 'benefitDelayMonths'): string | undefined {
+  const value = scenarioSettings.value[kind][field]
+  if (typeof value !== 'number' || !Number.isFinite(value))
+    return 'Für die Szenarioberechnung ist eine gültige Zahl erforderlich.'
+  if (field === 'benefitDelayMonths') return requiredMonth(value, 0, horizon.value)
+  return value < -100 || value > 200 ? 'Bitte einen Prozentwert zwischen −100 und +200 eingeben.' : undefined
+}
 
 function id(prefix: string): string {
   idCounter += 1
@@ -560,10 +622,12 @@ defineExpose({ canLeave: recovery.canLeave })
           </button>
         </div>
         <div class="software-fields">
-          <label class="field"><span>Position</span><input v-model="cost.name" type="text" maxlength="120" /></label>
+          <label class="field"><span>Position</span><input :aria-invalid="Boolean(paybackCostIssue(cost, 'name'))" :aria-describedby="paybackCostIssue(cost, 'name') ? 'payback-cost-' + cost.id + '-name-error' : undefined" v-model="cost.name" type="text" maxlength="120" /><small v-if="paybackCostIssue(cost, 'name')" :id="'payback-cost-' + cost.id + '-name-error'" class="tool-field-error">{{ paybackCostIssue(cost, 'name') }}</small>
+          </label>
           <label class="field"
-            ><span>Betrag in EUR</span> <input v-model.number="cost.amountEur" type="number" min="0" step="0.01"
-          /></label>
+            ><span>Betrag in EUR</span> <input :aria-invalid="Boolean(paybackCostIssue(cost, 'amountEur'))" :aria-describedby="paybackCostIssue(cost, 'amountEur') ? 'payback-cost-' + cost.id + '-amountEur-error' : undefined" v-model.number="cost.amountEur" type="number" min="0" step="0.01"
+          /><small v-if="paybackCostIssue(cost, 'amountEur')" :id="'payback-cost-' + cost.id + '-amountEur-error'" class="tool-field-error">{{ paybackCostIssue(cost, 'amountEur') }}</small>
+          </label>
           <label v-if="cost.kind !== 'one-time'" class="field"
             ><span>Betrag gilt pro</span>
             <select v-model="cost.period">
@@ -573,22 +637,25 @@ defineExpose({ canLeave: recovery.canLeave })
           </label>
           <label class="field"
             ><span>{{ cost.kind === 'one-time' ? 'Kosten im Projektmonat' : 'Wirksam ab Projektmonat' }}</span>
-            <input v-model.number="cost.startMonth" type="number" min="0" :max="horizon" step="1"
-          /></label>
+            <input :aria-invalid="Boolean(paybackCostIssue(cost, 'startMonth'))" :aria-describedby="paybackCostIssue(cost, 'startMonth') ? 'payback-cost-' + cost.id + '-startMonth-error' : undefined" v-model.number="cost.startMonth" type="number" min="0" :max="horizon" step="1"
+          /><small v-if="paybackCostIssue(cost, 'startMonth')" :id="'payback-cost-' + cost.id + '-startMonth-error'" class="tool-field-error">{{ paybackCostIssue(cost, 'startMonth') }}</small>
+          </label>
           <label v-if="cost.kind !== 'one-time'" class="field"
             ><span>Endmonat (optional)</span>
-            <input
+            <input :aria-invalid="Boolean(paybackCostIssue(cost, 'endMonth'))" :aria-describedby="paybackCostIssue(cost, 'endMonth') ? 'payback-cost-' + cost.id + '-endMonth-error' : undefined"
               :value="cost.endMonth ?? ''"
               @input="setOptionalEndMonth(cost, $event)"
               type="number"
               min="0"
               :max="horizon"
               placeholder="Bis zum Ende"
-          /></label>
+          /><small v-if="paybackCostIssue(cost, 'endMonth')" :id="'payback-cost-' + cost.id + '-endMonth-error'" class="tool-field-error">{{ paybackCostIssue(cost, 'endMonth') }}</small>
+          </label>
           <label v-if="cost.kind === 'avoided-legacy'" class="field"
             ><span>Wirkungsgruppe gegen Doppelerfassung</span>
-            <input v-model="cost.effectGroup" type="text" maxlength="80"
-          /></label>
+            <input :aria-invalid="Boolean(paybackCostIssue(cost, 'effectGroup'))" :aria-describedby="paybackCostIssue(cost, 'effectGroup') ? 'payback-cost-' + cost.id + '-effectGroup-error' : undefined" v-model="cost.effectGroup" type="text" maxlength="80"
+          /><small v-if="paybackCostIssue(cost, 'effectGroup')" :id="'payback-cost-' + cost.id + '-effectGroup-error'" class="tool-field-error">{{ paybackCostIssue(cost, 'effectGroup') }}</small>
+          </label>
         </div>
       </article>
     </section>
@@ -626,8 +693,9 @@ defineExpose({ canLeave: recovery.canLeave })
         </div>
         <div class="software-fields">
           <label class="field"
-            ><span>Bezeichnung / Kundenproblem</span><input v-model="metric.name" type="text" maxlength="140"
-          /></label>
+            ><span>Bezeichnung / Kundenproblem</span><input :aria-invalid="Boolean(paybackMetricIssue(metric, 'name'))" :aria-describedby="paybackMetricIssue(metric, 'name') ? 'payback-metric-' + metric.id + '-name-error' : undefined" v-model="metric.name" type="text" maxlength="140"
+          /><small v-if="paybackMetricIssue(metric, 'name')" :id="'payback-metric-' + metric.id + '-name-error'" class="tool-field-error">{{ paybackMetricIssue(metric, 'name') }}</small>
+          </label>
           <label class="field"
             ><span>Wie wird der Nutzen berechnet?</span>
             <select :value="metric.formula" @change="setFormula(metric, $event)">
@@ -638,13 +706,15 @@ defineExpose({ canLeave: recovery.canLeave })
           </label>
           <label v-if="metric.formula === 'direct' || metric.formula === 'risk'" class="field">
             <span>Jährlicher Nutzen (EUR)</span>
-            <input v-model.number="metric.annualAmountEur" type="number" min="0" step="0.01" />
+            <input :aria-invalid="Boolean(paybackMetricIssue(metric, 'annualAmountEur'))" :aria-describedby="paybackMetricIssue(metric, 'annualAmountEur') ? 'payback-metric-' + metric.id + '-annualAmountEur-error' : undefined" v-model.number="metric.annualAmountEur" type="number" min="0" step="0.01" />
+          <small v-if="paybackMetricIssue(metric, 'annualAmountEur')" :id="'payback-metric-' + metric.id + '-annualAmountEur-error'" class="tool-field-error">{{ paybackMetricIssue(metric, 'annualAmountEur') }}</small>
           </label>
           <template v-if="['process', 'time', 'conversion', 'quality'].includes(metric.formula)">
             <label class="field"
               ><span>Vorgänge pro Jahr</span>
-              <input v-model.number="metric.annualVolume" type="number" min="0" step="1"
-            /></label>
+              <input :aria-invalid="Boolean(paybackMetricIssue(metric, 'annualVolume'))" :aria-describedby="paybackMetricIssue(metric, 'annualVolume') ? 'payback-metric-' + metric.id + '-annualVolume-error' : undefined" v-model.number="metric.annualVolume" type="number" min="0" step="1"
+            /><small v-if="paybackMetricIssue(metric, 'annualVolume')" :id="'payback-metric-' + metric.id + '-annualVolume-error'" class="tool-field-error">{{ paybackMetricIssue(metric, 'annualVolume') }}</small>
+          </label>
             <label class="field"
               ><span
                 >Ist-Wert
@@ -656,8 +726,9 @@ defineExpose({ canLeave: recovery.canLeave })
                       : '(EUR/Vorgang)'
                 }}</span
               >
-              <input v-model.number="metric.before" type="number" min="0" step="any"
-            /></label>
+              <input :aria-invalid="Boolean(paybackMetricIssue(metric, 'before'))" :aria-describedby="paybackMetricIssue(metric, 'before') ? 'payback-metric-' + metric.id + '-before-error' : undefined" v-model.number="metric.before" type="number" min="0" step="any"
+            /><small v-if="paybackMetricIssue(metric, 'before')" :id="'payback-metric-' + metric.id + '-before-error'" class="tool-field-error">{{ paybackMetricIssue(metric, 'before') }}</small>
+          </label>
             <label class="field"
               ><span
                 >Ziel-Wert
@@ -669,20 +740,23 @@ defineExpose({ canLeave: recovery.canLeave })
                       : '(EUR/Vorgang)'
                 }}</span
               >
-              <input v-model.number="metric.after" type="number" min="0" step="any"
-            /></label>
+              <input :aria-invalid="Boolean(paybackMetricIssue(metric, 'after'))" :aria-describedby="paybackMetricIssue(metric, 'after') ? 'payback-metric-' + metric.id + '-after-error' : undefined" v-model.number="metric.after" type="number" min="0" step="any"
+            /><small v-if="paybackMetricIssue(metric, 'after')" :id="'payback-metric-' + metric.id + '-after-error'" class="tool-field-error">{{ paybackMetricIssue(metric, 'after') }}</small>
+          </label>
             <label v-if="metric.formula === 'time'" class="field"
               ><span>Vollkostensatz (EUR/Stunde)</span>
-              <input v-model.number="metric.hourlyCostEur" type="number" min="0" step="any"
-            /></label>
+              <input :aria-invalid="Boolean(paybackMetricIssue(metric, 'hourlyCostEur'))" :aria-describedby="paybackMetricIssue(metric, 'hourlyCostEur') ? 'payback-metric-' + metric.id + '-hourlyCostEur-error' : undefined" v-model.number="metric.hourlyCostEur" type="number" min="0" step="any"
+            /><small v-if="paybackMetricIssue(metric, 'hourlyCostEur')" :id="'payback-metric-' + metric.id + '-hourlyCostEur-error'" class="tool-field-error">{{ paybackMetricIssue(metric, 'hourlyCostEur') }}</small>
+          </label>
             <label v-if="metric.formula === 'conversion' || metric.formula === 'quality'" class="field">
               <span>{{
                 metric.formula === 'conversion'
                   ? 'Zusätzlicher Deckungsbeitrag je Abschluss (EUR)'
                   : 'Tatsächlich vermeidbare Kosten je Fehler (EUR)'
               }}</span>
-              <input v-model.number="metric.valuePerEventEur" type="number" min="0" step="any" />
-            </label>
+              <input :aria-invalid="Boolean(paybackMetricIssue(metric, 'valuePerEventEur'))" :aria-describedby="paybackMetricIssue(metric, 'valuePerEventEur') ? 'payback-metric-' + metric.id + '-valuePerEventEur-error' : undefined" v-model.number="metric.valuePerEventEur" type="number" min="0" step="any" />
+            <small v-if="paybackMetricIssue(metric, 'valuePerEventEur')" :id="'payback-metric-' + metric.id + '-valuePerEventEur-error'" class="tool-field-error">{{ paybackMetricIssue(metric, 'valuePerEventEur') }}</small>
+          </label>
           </template>
         </div>
         <div class="software-metric-footer">
@@ -711,17 +785,20 @@ defineExpose({ canLeave: recovery.canLeave })
         <div v-if="metric.included && metric.treatment === 'realized'" class="software-evidence">
           <label class="field software-full"
             ><span>Wie wird der EUR-Nutzen tatsächlich realisiert?</span>
-            <textarea
+            <textarea :aria-invalid="Boolean(paybackMetricIssue(metric, 'evidenceNote'))" :aria-describedby="paybackMetricIssue(metric, 'evidenceNote') ? 'payback-metric-' + metric.id + '-evidenceNote-error' : undefined"
               v-model="metric.evidenceNote"
               rows="2"
               maxlength="600"
               placeholder="z. B. nachweislich entfallende Fremdleistung, künftig vermiedene Einstellung oder kundenseitig geprüfter Deckungsbeitrag"
             />
+          <small v-if="paybackMetricIssue(metric, 'evidenceNote')" :id="'payback-metric-' + metric.id + '-evidenceNote-error'" class="tool-field-error">{{ paybackMetricIssue(metric, 'evidenceNote') }}</small>
           </label>
         </div>
         <details class="software-more">
           <summary>
-            <span class="software-more-label">Zeitplan &amp; Herkunft</span>
+            <span class="software-more-label">Zeitplan &amp; Herkunft
+              <span v-if="paybackDetailIncomplete(metric)" class="tool-details-alert"> · Angaben prüfen</span>
+            </span>
             <span class="software-more-hint"
               >Start Monat {{ metric.startMonth }} · {{ evidenceLabel(metric.evidence) }}</span
             >
@@ -750,30 +827,34 @@ defineExpose({ canLeave: recovery.canLeave })
             </label>
             <label class="field"
               ><span>Wirkungsgruppe</span>
-              <input v-model="metric.effectGroup" type="text" maxlength="80" />
+              <input :aria-invalid="Boolean(paybackMetricIssue(metric, 'effectGroup'))" :aria-describedby="paybackMetricIssue(metric, 'effectGroup') ? 'payback-metric-' + metric.id + '-effectGroup-error' : undefined" v-model="metric.effectGroup" type="text" maxlength="80" />
               <small
                 >Identische wirtschaftliche Ursachen in dieselbe Gruppe einordnen. Dann verhindert der Rechner
                 Mehrfachanrechnung.</small
               >
-            </label>
+            <small v-if="paybackMetricIssue(metric, 'effectGroup')" :id="'payback-metric-' + metric.id + '-effectGroup-error'" class="tool-field-error">{{ paybackMetricIssue(metric, 'effectGroup') }}</small>
+          </label>
             <label class="field"
               ><span>Erster Nutzenmonat</span>
-              <input v-model.number="metric.startMonth" type="number" min="1" :max="horizon" step="1"
-            /></label>
+              <input :aria-invalid="Boolean(paybackMetricIssue(metric, 'startMonth'))" :aria-describedby="paybackMetricIssue(metric, 'startMonth') ? 'payback-metric-' + metric.id + '-startMonth-error' : undefined" v-model.number="metric.startMonth" type="number" min="1" :max="horizon" step="1"
+            /><small v-if="paybackMetricIssue(metric, 'startMonth')" :id="'payback-metric-' + metric.id + '-startMonth-error'" class="tool-field-error">{{ paybackMetricIssue(metric, 'startMonth') }}</small>
+          </label>
             <label class="field"
               ><span>Ramp-up bis 100 % (Monate)</span>
-              <input v-model.number="metric.rampMonths" type="number" min="1" :max="horizon" step="1"
-            /></label>
+              <input :aria-invalid="Boolean(paybackMetricIssue(metric, 'rampMonths'))" :aria-describedby="paybackMetricIssue(metric, 'rampMonths') ? 'payback-metric-' + metric.id + '-rampMonths-error' : undefined" v-model.number="metric.rampMonths" type="number" min="1" :max="horizon" step="1"
+            /><small v-if="paybackMetricIssue(metric, 'rampMonths')" :id="'payback-metric-' + metric.id + '-rampMonths-error'" class="tool-field-error">{{ paybackMetricIssue(metric, 'rampMonths') }}</small>
+          </label>
             <label class="field"
               ><span>Letzter Nutzenmonat (optional)</span>
-              <input
+              <input :aria-invalid="Boolean(paybackMetricIssue(metric, 'endMonth'))" :aria-describedby="paybackMetricIssue(metric, 'endMonth') ? 'payback-metric-' + metric.id + '-endMonth-error' : undefined"
                 :value="metric.endMonth ?? ''"
                 @input="setOptionalEndMonth(metric, $event)"
                 type="number"
                 min="1"
                 :max="horizon"
                 placeholder="Bis zum Ende"
-            /></label>
+            /><small v-if="paybackMetricIssue(metric, 'endMonth')" :id="'payback-metric-' + metric.id + '-endMonth-error'" class="tool-field-error">{{ paybackMetricIssue(metric, 'endMonth') }}</small>
+          </label>
           </div>
         </details>
         <p class="software-muted">
@@ -894,7 +975,7 @@ defineExpose({ canLeave: recovery.canLeave })
                   <legend>{{ kind === 'conservative' ? 'Konservativ' : 'Optimistisch' }}</legend>
                   <label class="field">
                     <span>Änderung des angerechneten Kundennutzens (%)</span>
-                    <input
+                    <input :aria-invalid="Boolean(scenarioIssue(kind, 'benefitPercent'))" :aria-describedby="scenarioIssue(kind, 'benefitPercent') ? 'payback-scenario-' + kind + '-benefitPercent-error' : undefined"
                       v-model.number="scenarioSettings[kind].benefitPercent"
                       :data-testid="'scenario-benefit-' + kind"
                       type="number"
@@ -902,10 +983,11 @@ defineExpose({ canLeave: recovery.canLeave })
                       min="-100"
                       max="200"
                     />
+                  <small v-if="scenarioIssue(kind, 'benefitPercent')" :id="'payback-scenario-' + kind + '-benefitPercent-error'" class="tool-field-error">{{ scenarioIssue(kind, 'benefitPercent') }}</small>
                   </label>
                   <label class="field">
                     <span>Änderung einmaliger Projektkosten (%)</span>
-                    <input
+                    <input :aria-invalid="Boolean(scenarioIssue(kind, 'oneTimeCostPercent'))" :aria-describedby="scenarioIssue(kind, 'oneTimeCostPercent') ? 'payback-scenario-' + kind + '-oneTimeCostPercent-error' : undefined"
                       v-model.number="scenarioSettings[kind].oneTimeCostPercent"
                       :data-testid="'scenario-cost-' + kind"
                       type="number"
@@ -913,10 +995,11 @@ defineExpose({ canLeave: recovery.canLeave })
                       min="-100"
                       max="200"
                     />
+                  <small v-if="scenarioIssue(kind, 'oneTimeCostPercent')" :id="'payback-scenario-' + kind + '-oneTimeCostPercent-error'" class="tool-field-error">{{ scenarioIssue(kind, 'oneTimeCostPercent') }}</small>
                   </label>
                   <label class="field">
                     <span>Verzögerung des Kundennutzens (Monate)</span>
-                    <input
+                    <input :aria-invalid="Boolean(scenarioIssue(kind, 'benefitDelayMonths'))" :aria-describedby="scenarioIssue(kind, 'benefitDelayMonths') ? 'payback-scenario-' + kind + '-benefitDelayMonths-error' : undefined"
                       v-model.number="scenarioSettings[kind].benefitDelayMonths"
                       :data-testid="'scenario-delay-' + kind"
                       type="number"
@@ -924,6 +1007,7 @@ defineExpose({ canLeave: recovery.canLeave })
                       min="0"
                       :max="horizon"
                     />
+                  <small v-if="scenarioIssue(kind, 'benefitDelayMonths')" :id="'payback-scenario-' + kind + '-benefitDelayMonths-error'" class="tool-field-error">{{ scenarioIssue(kind, 'benefitDelayMonths') }}</small>
                   </label>
                 </fieldset>
               </div>
