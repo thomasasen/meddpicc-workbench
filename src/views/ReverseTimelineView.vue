@@ -529,7 +529,6 @@ const recovery = useToolRecovery({
             <input
               :aria-invalid="Boolean(requiredDate(referenceDate))"
               :aria-describedby="requiredDate(referenceDate) ? 'reverse-reference-error' : undefined"
-              required
               v-model="referenceDate"
               type="date"
               required
@@ -544,7 +543,6 @@ const recovery = useToolRecovery({
             <input
               :aria-invalid="Boolean(requiredDate(targetGoLiveDate))"
               :aria-describedby="requiredDate(targetGoLiveDate) ? 'reverse-target-error' : undefined"
-              required
               v-model="targetGoLiveDate"
               type="date"
               required
