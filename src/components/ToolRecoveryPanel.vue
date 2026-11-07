@@ -272,7 +272,6 @@ defineEmits<{
   }
 }
 
-
 .recovery-panel {
   min-width: 0;
   margin-block: 0.75rem;
