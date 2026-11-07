@@ -526,15 +526,33 @@ const recovery = useToolRecovery({
           </label>
           <label class="field">
             <span>Planungsdatum</span>
-            <input :aria-invalid="Boolean(requiredDate(referenceDate))" :aria-describedby="requiredDate(referenceDate) ? 'reverse-reference-error' : undefined" required v-model="referenceDate" type="date" required />
+            <input
+              :aria-invalid="Boolean(requiredDate(referenceDate))"
+              :aria-describedby="requiredDate(referenceDate) ? 'reverse-reference-error' : undefined"
+              required
+              v-model="referenceDate"
+              type="date"
+              required
+            />
             <small>Referenz für die Vorlaufprüfung</small>
-          <small v-if="requiredDate(referenceDate)" id="reverse-reference-error" class="tool-field-error">{{ requiredDate(referenceDate) }}</small>
+            <small v-if="requiredDate(referenceDate)" id="reverse-reference-error" class="tool-field-error">{{
+              requiredDate(referenceDate)
+            }}</small>
           </label>
           <label class="field">
             <span>Target Go-Live</span>
-            <input :aria-invalid="Boolean(requiredDate(targetGoLiveDate))" :aria-describedby="requiredDate(targetGoLiveDate) ? 'reverse-target-error' : undefined" required v-model="targetGoLiveDate" type="date" required />
+            <input
+              :aria-invalid="Boolean(requiredDate(targetGoLiveDate))"
+              :aria-describedby="requiredDate(targetGoLiveDate) ? 'reverse-target-error' : undefined"
+              required
+              v-model="targetGoLiveDate"
+              type="date"
+              required
+            />
             <small>Von diesem Kundenziel wird rückwärts gerechnet</small>
-          <small v-if="requiredDate(targetGoLiveDate)" id="reverse-target-error" class="tool-field-error">{{ requiredDate(targetGoLiveDate) }}</small>
+            <small v-if="requiredDate(targetGoLiveDate)" id="reverse-target-error" class="tool-field-error">{{
+              requiredDate(targetGoLiveDate)
+            }}</small>
           </label>
           <label class="field reverse-compelling-event">
             <span>Warum dieses Datum? <small>optional</small></span>
@@ -604,14 +622,38 @@ const recovery = useToolRecovery({
             <div class="reverse-step-fields">
               <label class="field reverse-step-name">
                 <span>Schritt</span>
-                <input :aria-invalid="Boolean(stepIssue(step, 'label'))" :aria-describedby="stepIssue(step, 'label') ? 'reverse-step-name-' + step.id : undefined" required v-model="step.label" type="text" maxlength="160" />
-              <small v-if="stepIssue(step, 'label')" :id="'reverse-step-name-' + step.id" class="tool-field-error">{{ stepIssue(step, 'label') }}</small>
-          </label>
+                <input
+                  :aria-invalid="Boolean(stepIssue(step, 'label'))"
+                  :aria-describedby="stepIssue(step, 'label') ? 'reverse-step-name-' + step.id : undefined"
+                  required
+                  v-model="step.label"
+                  type="text"
+                  maxlength="160"
+                />
+                <small v-if="stepIssue(step, 'label')" :id="'reverse-step-name-' + step.id" class="tool-field-error">{{
+                  stepIssue(step, 'label')
+                }}</small>
+              </label>
               <label class="field">
                 <span>Dauer</span>
-                <input :aria-invalid="Boolean(stepIssue(step, 'duration'))" :aria-describedby="stepIssue(step, 'duration') ? 'reverse-step-duration-' + step.id : undefined" required v-model.number="step.duration" type="number" min="0" max="1000" step="1" inputmode="numeric" />
-              <small v-if="stepIssue(step, 'duration')" :id="'reverse-step-duration-' + step.id" class="tool-field-error">{{ stepIssue(step, 'duration') }}</small>
-          </label>
+                <input
+                  :aria-invalid="Boolean(stepIssue(step, 'duration'))"
+                  :aria-describedby="stepIssue(step, 'duration') ? 'reverse-step-duration-' + step.id : undefined"
+                  required
+                  v-model.number="step.duration"
+                  type="number"
+                  min="0"
+                  max="1000"
+                  step="1"
+                  inputmode="numeric"
+                />
+                <small
+                  v-if="stepIssue(step, 'duration')"
+                  :id="'reverse-step-duration-' + step.id"
+                  class="tool-field-error"
+                  >{{ stepIssue(step, 'duration') }}</small
+                >
+              </label>
               <label class="field">
                 <span>Einheit</span>
                 <select v-model="step.durationUnit">
